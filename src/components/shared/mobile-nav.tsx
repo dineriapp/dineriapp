@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-// import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
 
 export function MobileNav() {
@@ -11,7 +11,7 @@ export function MobileNav() {
 
     return (
         <div className="md:hidden">
-            {/* <Sheet open={open} onOpenChange={setOpen}>
+            <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
                     <Button variant="ghost" size="icon" className="text-slate-700">
                         <Menu className="h-6 w-6" />
@@ -65,7 +65,7 @@ export function MobileNav() {
                         </div>
                     </div>
                 </SheetContent>
-            </Sheet> */}
+            </Sheet>
         </div>
     )
 }
