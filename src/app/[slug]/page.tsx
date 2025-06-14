@@ -358,7 +358,7 @@ const trackLinkClick = async (linkId: string) => {
     console.log(`Link clicked: ${linkId}`)
 }
 
-export default function ClientPage({ params }: { params: { slug: string } }) {
+export default function ClientPage() {
     const pathname = usePathname()
     const isMenuPage = pathname.endsWith("/menu")
 
@@ -413,7 +413,7 @@ export default function ClientPage({ params }: { params: { slug: string } }) {
         }
 
         loadData()
-    }, [params.slug])
+    }, [])
 
     const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
         e.currentTarget.style.display = "none"
