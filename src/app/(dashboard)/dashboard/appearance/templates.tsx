@@ -162,7 +162,7 @@ export function TemplatesSection() {
                 <CardDescription className="text-slate-500">Choose from our professionally designed templates</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
                     {templates.map((template) => (
                         <motion.div
                             key={template.id}
@@ -191,20 +191,20 @@ export function TemplatesSection() {
                                     <p className="text-sm text-white/90 mb-4">{template.description}</p>
                                     <Button
                                         onClick={() => handleApplyTemplate(template)}
-                                        className={`w-full ${selectedTemplate === template.id
-                                                ? "bg-teal-600 text-white hover:bg-teal-700"
-                                                : "bg-white/90 backdrop-blur-sm text-slate-900 hover:bg-white"
+                                        className={`w-full flex items-center justify-center gap-1 text-xs ${selectedTemplate === template.id
+                                            ? "bg-teal-600 text-white hover:bg-teal-700"
+                                            : "bg-white/90 backdrop-blur-sm text-slate-900 hover:bg-white"
                                             }`}
                                         disabled={selectedTemplate === template.id || applying}
                                     >
                                         {selectedTemplate === template.id ? (
                                             <>
-                                                <Check className="h-4 w-4 mr-2" />
+                                                <Check className="h-4 w-4 " />
                                                 Applied
                                             </>
                                         ) : template.premium ? (
                                             <>
-                                                <Sparkles className="h-4 w-4 mr-2" />
+                                                <Sparkles className="h-4 w-4" />
                                                 Upgrade to Apply
                                             </>
                                         ) : applying ? (

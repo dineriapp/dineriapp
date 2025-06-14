@@ -3,6 +3,7 @@ export interface Restaurant {
     user_id: string;
     name: string;
     bio: string;
+    website: string;
     logo_url: string | null;
     bg_color: string;
     accent_color: string;
@@ -48,4 +49,79 @@ export interface Restaurant {
     max_events_in_popup?: number;
     event_rotation_speed?: number;
     welcome_popup_show_button?: boolean;
+}
+
+export interface Link {
+    id: string;
+    restaurant_id: string;
+    title: string;
+    url: string;
+    sort_order: number;
+    created_at: string;
+    show_icon: boolean;
+}
+
+export interface User {
+    id: string;
+    email: string;
+}
+
+export interface MenuCategory {
+    id: string;
+    restaurant_id: string;
+    name: string;
+    description?: string;
+    sort_order: number;
+    created_at: string;
+    updated_at: string;
+    menu_items?: MenuItem[];
+}
+
+export interface MenuItem {
+    id: string;
+    category_id: string;
+    name: string;
+    description?: string;
+    price: number;
+    sort_order: number;
+    created_at: string;
+    updated_at: string;
+    allergens?: string[];
+    is_halal?: boolean;
+    allergen_info?: string;
+}
+
+export interface Event {
+    id: string;
+    restaurant_id: string;
+    title: string;
+    description?: string;
+    date: string;
+    ticket_url?: string;
+    sort_order: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface FAQCategory {
+    id: string;
+    restaurant_id: string;
+    name: string;
+    description?: string;
+    sort_order: number;
+    created_at: string;
+    updated_at: string;
+    faqs?: FAQ[];
+}
+
+export interface FAQ {
+    id: string;
+    category_id: string;
+    question: string;
+    answer: string;
+    sort_order: number;
+    is_featured: boolean;
+    view_count: number;
+    created_at: string;
+    updated_at: string;
 }
