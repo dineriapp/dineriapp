@@ -22,6 +22,7 @@ import {
     Star,
     MapPinIcon,
     Calendar,
+    ShieldAlert,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -93,6 +94,12 @@ const sections = [
         title: "Contact Information",
         icon: Phone,
         description: "How customers can reach you",
+    },
+    {
+        id: "change-password",
+        title: "Change Password",
+        icon: ShieldAlert,
+        description: "Update your profile password.",
     },
     {
         id: "hours",
@@ -665,6 +672,78 @@ export default function SettingsPage() {
                                                 placeholder="e.g. -74.0060"
                                                 className="focus:border-emerald-500 focus:ring-emerald-500"
                                             />
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        {/* change-password Section */}
+                        <div className={activeSection === "change-password" ? "block" : "hidden"}>
+                            <Card className="shadow-sm border-gray-200">
+                                <CardHeader className="bg-gray-50/50">
+                                    <CardTitle className="text-gray-900">Edit Profile</CardTitle>
+                                    <CardDescription>Update your profile settings and password</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-6 pt-6">
+                                    {/* Change Password */}
+                                    <div className="space-y-4">
+                                        <h3 className="text-lg font-semibold text-gray-800">Change Password</h3>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="old-password">Old Password</Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="old-password"
+                                                    type="password"
+                                                    //   value={oldPassword}
+                                                    //   onChange={(e) => handleInputChange(setOldPassword, e.target.value)}
+                                                    placeholder="Enter your old password"
+                                                    className="focus:border-emerald-500 focus:ring-emerald-500"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="new-password">New Password</Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="new-password"
+                                                    type="password"
+                                                    //   value={newPassword}
+                                                    //   onChange={(e) => handleInputChange(setNewPassword, e.target.value)}
+                                                    placeholder="Enter your new password"
+                                                    className="focus:border-emerald-500 focus:ring-emerald-500"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="confirm-new-password">Confirm New Password</Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="confirm-new-password"
+                                                    type="password"
+                                                    //   value={confirmNewPassword}
+                                                    //   onChange={(e) => handleInputChange(setConfirmNewPassword, e.target.value)}
+                                                    placeholder="Confirm your new password"
+                                                    className="focus:border-emerald-500 focus:ring-emerald-500"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center justify-between">
+                                            <Button
+                                                // onClick={handleChangePassword}
+                                                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                            >
+                                                Change Password
+                                            </Button>
+                                            <Button
+                                                variant="link"
+                                                //    onClick={handleForgotPassword} 
+                                                className="text-emerald-600 hover:text-emerald-700">
+                                                Forgot Password?
+                                            </Button>
                                         </div>
                                     </div>
                                 </CardContent>

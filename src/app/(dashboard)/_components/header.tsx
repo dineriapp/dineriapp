@@ -1,28 +1,5 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
-import Link from "next/link"
-import { useRouter, usePathname } from "next/navigation"
-import {
-  Utensils,
-  Menu,
-  Settings,
-  LinkIcon,
-  Home,
-  LogOut,
-  BarChart,
-  Palette,
-  UtensilsCrossed,
-  Calendar,
-  ChevronDown,
-  Globe2,
-  Crown,
-  Layout,
-  QrCode,
-  HelpCircle,
-  Plus,
-  User,
-} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -32,6 +9,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  BarChart,
+  Calendar,
+  ChevronDown,
+  Crown,
+  Globe2,
+  HelpCircle,
+  Home,
+  Layout,
+  LinkIcon,
+  LogOut,
+  Palette,
+  Plus,
+  QrCode,
+  Settings,
+  User,
+  Utensils,
+  UtensilsCrossed
+} from "lucide-react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
 // Define Restaurant type
@@ -175,7 +174,7 @@ export function DashboardHeader() {
             <div className="bg-gradient-to-r from-teal-600 to-blue-600 p-2 rounded-xl transition-transform group-hover:scale-110">
               <Utensils className="h-5 w-5 text-white" />
             </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent hidden sm:inline-block">
+            <span className="font-bold text-xl bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent inline-block">
               dineri.app
             </span>
           </Link>
@@ -330,67 +329,7 @@ export function DashboardHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Navigation</DropdownMenuLabel>
-              <DropdownMenuSeparator />
 
-              {navigationGroups.map((group) => (
-                <div key={group.label}>
-                  <DropdownMenuLabel className="text-xs text-slate-500">{group.label}</DropdownMenuLabel>
-                  {group.items.map((item) => {
-                    const Icon = item.icon
-                    return (
-                      <button key={item.href} onClick={() => handleNavigation(item.href)} className="w-full">
-                        <DropdownMenuItem className="cursor-pointer">
-                          <Icon className="h-4 w-4 mr-2" />
-                          {item.label}
-                        </DropdownMenuItem>
-                      </button>
-                    )
-                  })}
-                  <DropdownMenuSeparator />
-                </div>
-              ))}
-
-              <Link href="/dashboard/create">
-                <DropdownMenuItem className="cursor-pointer">
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Restaurant
-                </DropdownMenuItem>
-              </Link>
-
-              {!isPremium && (
-                <Link href="/dashboard/upgrade">
-                  <DropdownMenuItem className="bg-gradient-to-r from-teal-600 to-blue-600 text-white hover:from-teal-700 hover:to-blue-700 cursor-pointer">
-                    <Crown className="h-4 w-4 mr-2" />
-                    Upgrade to Pro
-                  </DropdownMenuItem>
-                </Link>
-              )}
-
-              {restaurant && (
-                <Link href={`/${restaurant.slug}`} target="_blank">
-                  <DropdownMenuItem className="cursor-pointer">
-                    <Globe2 className="h-4 w-4 mr-2" />
-                    Visit Site
-                  </DropdownMenuItem>
-                </Link>
-              )}
-
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </header>
