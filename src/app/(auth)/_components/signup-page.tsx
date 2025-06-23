@@ -1,60 +1,57 @@
 "use client"
 
-import type React from "react"
 
-import { SocialButton } from "@/components/social-button"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { AlertCircle, Loader2, Lock, Mail } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useTransition } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { signup } from "../login/actions"
+
+const SignupSchema = z.object({
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z.string().min(8, { message: "Password must be at least 8 characters" }),
+})
+
+type SignupFormData = z.infer<typeof SignupSchema>
 
 export default function SignupPage() {
     const router = useRouter()
-    const [isLoading, setIsLoading] = useState(false)
+    const [isPending, startTransition] = useTransition()
     const [error, setError] = useState("")
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-        agreeTerms: false,
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<SignupFormData>({
+        resolver: zodResolver(SignupSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
     })
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
-    }
-
-    const handleCheckboxChange = (checked: boolean) => {
-        setFormData((prev) => ({ ...prev, agreeTerms: checked }))
-    }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-
-        if (!formData.agreeTerms) {
-            setError("You must agree to the terms and conditions")
-            return
-        }
-
-        setIsLoading(true)
+    const onSubmit = (data: SignupFormData) => {
         setError("")
+        startTransition(() => {
+            const formdata = new FormData()
+            formdata.append("email", data.email)
+            formdata.append("password", data.password)
 
-        try {
-            // Simulate registration delay
-            await new Promise((resolve) => setTimeout(resolve, 1500))
-
-            // For demo purposes, just redirect to home
-            // In a real app, you would register with your backend
-            router.push("/dashboard")
-        } catch {
-            setError("Something went wrong. Please try again.")
-        } finally {
-            setIsLoading(false)
-        }
+            signup(formdata).then((res) => {
+                if (res?.error) {
+                    setError(res.error)
+                } else {
+                    router.push("/dashboard")
+                }
+            })
+        })
     }
 
     return (
@@ -71,24 +68,23 @@ export default function SignupPage() {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
 
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="email"
-                            name="email"
                             type="email"
                             placeholder="you@restaurant.com"
-                            value={formData.email}
-                            onChange={handleChange}
                             className="pl-10 h-[44px]"
-                            required
-                            disabled={isLoading}
+                            disabled={isPending}
+                            {...register("email")}
                         />
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                     </div>
+                    {errors.email && <p className="text-xs text-red-600">{errors.email.message}</p>}
+
                 </div>
 
                 <div className="space-y-2">
@@ -96,46 +92,23 @@ export default function SignupPage() {
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="password"
-                            name="password"
                             type="password"
                             placeholder="••••••••"
-                            value={formData.password}
-                            onChange={handleChange}
                             className="pl-10 h-[44px]"
-                            required
-                            disabled={isLoading}
-                            minLength={8}
+                            disabled={isPending}
+                            {...register("password")}
                         />
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                     </div>
-                    <p className="text-xs text-slate-500">Password must be at least 8 characters</p>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                    <Checkbox
-                        id="agreeTerms"
-                        checked={formData.agreeTerms}
-                        onCheckedChange={handleCheckboxChange}
-                        disabled={isLoading}
-                    />
-                    <Label htmlFor="agreeTerms" className="text-xs font-normal">
-                        I agree to the{" "}
-                        <Link href="/terms" className="text-teal-600 hover:underline">
-                            Terms of Service
-                        </Link>{" "}
-                        and{" "}
-                        <Link href="/privacy" className="text-teal-600 hover:underline">
-                            Privacy Policy
-                        </Link>
-                    </Label>
+                    {errors.password && <p className="text-xs text-red-600">{errors.password.message}</p>}
                 </div>
 
                 <Button
                     type="submit"
                     className="w-full bg-gradient-to-r h-[44px] from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
-                    disabled={isLoading || !formData.agreeTerms}
+                    disabled={isPending}
                 >
-                    {isLoading ? (
+                    {isPending ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account...
                         </>
@@ -144,7 +117,7 @@ export default function SignupPage() {
                     )}
                 </Button>
             </form>
-
+            {/* <>
             <div className="relative my-5">
                 <div className="absolute inset-0 flex items-center">
                     <Separator className="w-full" />
@@ -158,10 +131,11 @@ export default function SignupPage() {
                 <SocialButton provider="google" />
                 <SocialButton provider="facebook" />
             </div>
+</> */}
 
             <div className="mt-6 text-center text-sm">
                 Already have an account?{" "}
-                <Link href="/auth/login" className="font-medium text-teal-600 hover:underline">
+                <Link href="/login" className="font-medium text-teal-600 hover:underline">
                     Log in
                 </Link>
             </div>

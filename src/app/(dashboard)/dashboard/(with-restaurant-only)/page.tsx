@@ -25,7 +25,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "sonner"
-import { DashboardHeader } from "../_components/header"
+import { DashboardHeader } from "../../_components/header"
 
 // Define types
 interface Restaurant {

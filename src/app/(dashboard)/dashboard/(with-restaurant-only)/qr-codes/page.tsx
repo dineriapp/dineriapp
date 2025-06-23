@@ -8,8 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 import type { Restaurant } from "@/lib/types"
 import { QRCodeGenerator } from "@/lib/qr-generator"
-import { QRCodeGeneratorComponent } from "../../_components/qr-code-generator"
-import { DashboardHeader } from "../../_components/header"
+import { QRCodeGeneratorComponent } from "../../../_components/qr-code-generator"
+import { DashboardHeader } from "../../../_components/header"
 
 interface QRCode {
     id: string

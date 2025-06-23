@@ -32,12 +32,12 @@ export function Header() {
                 </div>
 
                 <div className="hidden space-x-4 md:flex">
-                    <Link href="/auth/login">
+                    <Link href="/login">
                         <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
                             Log in
                         </Button>
                     </Link>
-                    <Link href="/auth/signup">
+                    <Link href="/signup">
                         <Button className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 hover:scale-105 transition-transform">
                             Sign up free
                         </Button>

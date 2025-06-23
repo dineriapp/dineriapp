@@ -51,12 +51,12 @@ export function MobileNav() {
 
                         <div className="border-t border-slate-200 pt-4">
                             <div className="flex flex-col space-y-3">
-                                <Link href="/auth/login" onClick={() => setOpen(false)}>
+                                <Link href="/login" onClick={() => setOpen(false)}>
                                     <Button variant="outline" className="w-full">
                                         Log in
                                     </Button>
                                 </Link>
-                                <Link href="/auth/signup" onClick={() => setOpen(false)}>
+                                <Link href="/signup" onClick={() => setOpen(false)}>
                                     <Button className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700">
                                         Sign up free
                                     </Button>

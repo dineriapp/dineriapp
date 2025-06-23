@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { DashboardHeader } from "../../_components/header"
+import { DashboardHeader } from "../../../_components/header"
 
 // Define types
 interface Restaurant {

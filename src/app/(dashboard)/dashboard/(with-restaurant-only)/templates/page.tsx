@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "sonner"
-import { DashboardHeader } from "../../_components/header"
+import { DashboardHeader } from "../../../_components/header"
 
 interface Restaurant {
     id: string

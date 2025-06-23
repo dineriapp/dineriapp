@@ -1,54 +1,61 @@
 "use client"
 
-import type React from "react"
-
-import { SocialButton } from "@/components/social-button"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { AlertCircle, Loader2, Lock, Mail } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useTransition } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { login } from "../login/actions"
+
+const loginSchema = z.object({
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z.string().min(8, { message: "Password must be at least 8 characters" }),
+    rememberMe: z.boolean().optional(),
+})
+
+type LoginFormData = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
     const router = useRouter()
-    const [isLoading, setIsLoading] = useState(false)
+    const [isPending, startTransition] = useTransition()
     const [error, setError] = useState("")
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-        rememberMe: false,
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setValue,
+        watch,
+    } = useForm<LoginFormData>({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+            rememberMe: false,
+        },
     })
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
-    }
-
-    const handleCheckboxChange = (checked: boolean) => {
-        setFormData((prev) => ({ ...prev, rememberMe: checked }))
-    }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsLoading(true)
+    const onSubmit = (data: LoginFormData) => {
         setError("")
+        startTransition(() => {
+            const formdata = new FormData()
+            formdata.append("email", data.email)
+            formdata.append("password", data.password)
 
-        try {
-            // Simulate authentication delay
-            await new Promise((resolve) => setTimeout(resolve, 1500))
-
-            // For demo purposes, just redirect to home
-            // In a real app, you would authenticate with your backend
-            router.push("/dashboard")
-        } catch {
-            setError("Invalid email or password. Please try again.")
-        } finally {
-            setIsLoading(false)
-        }
+            login(formdata).then((res) => {
+                if (res?.error) {
+                    setError(res.error)
+                } else {
+                    router.push("/dashboard")
+                }
+            })
+        })
     }
 
     return (
@@ -64,54 +71,50 @@ export default function LoginPage() {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="email"
-                            name="email"
                             type="email"
                             placeholder="you@restaurant.com"
-                            value={formData.email}
-                            onChange={handleChange}
                             className="pl-10 h-[44px]"
-                            required
-                            disabled={isLoading}
+                            disabled={isPending}
+                            {...register("email")}
                         />
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                     </div>
+                    {errors.email && <p className="text-xs text-red-600">{errors.email.message}</p>}
                 </div>
 
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
                         <Label htmlFor="password">Password</Label>
-                        <Link href="/auth/forgot-password" className="text-xs text-teal-600 hover:underline">
+                        {/* <Link href="/auth/forgot-password" className="text-xs text-teal-600 hover:underline">
                             Forgot password?
-                        </Link>
+                        </Link> */}
                     </div>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="password"
-                            name="password"
                             type="password"
                             placeholder="••••••••"
-                            value={formData.password}
-                            onChange={handleChange}
                             className="pl-10 h-[44px]"
-                            required
-                            disabled={isLoading}
+                            disabled={isPending}
+                            {...register("password")}
                         />
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                     </div>
+                    {errors.password && <p className="text-xs text-red-600">{errors.password.message}</p>}
                 </div>
 
                 <div className="flex items-center space-x-2">
                     <Checkbox
                         id="rememberMe"
-                        checked={formData.rememberMe}
-                        onCheckedChange={handleCheckboxChange}
-                        disabled={isLoading}
+                        checked={watch("rememberMe")}
+                        onCheckedChange={(checked: boolean) => setValue("rememberMe", checked)}
+                        disabled={isPending}
                     />
                     <Label htmlFor="rememberMe" className="text-sm font-normal">
                         Remember me for 30 days
@@ -121,9 +124,9 @@ export default function LoginPage() {
                 <Button
                     type="submit"
                     className="w-full bg-gradient-to-r h-[44px] from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
-                    disabled={isLoading}
+                    disabled={isPending}
                 >
-                    {isLoading ? (
+                    {isPending ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...
                         </>
@@ -133,7 +136,7 @@ export default function LoginPage() {
                 </Button>
             </form>
 
-            <div className="relative my-5">
+            {/* <div className="relative my-5">
                 <div className="absolute inset-0 flex items-center">
                     <Separator className="w-full" />
                 </div>
@@ -145,11 +148,11 @@ export default function LoginPage() {
             <div className="grid grid-cols-1 gap-3">
                 <SocialButton provider="google" />
                 <SocialButton provider="facebook" />
-            </div>
+            </div> */}
 
             <div className="mt-6 text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <Link href="/auth/signup" className="font-medium text-teal-600 hover:underline">
+                <Link href="/signup" className="font-medium text-teal-600 hover:underline">
                     Sign up
                 </Link>
             </div>

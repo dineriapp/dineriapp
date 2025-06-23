@@ -27,7 +27,7 @@ import {
     ImageIcon,
     Facebook,
 } from "lucide-react"
-import { DashboardHeader } from "../../_components/header"
+import { DashboardHeader } from "../../../_components/header"
 
 // Define types
 interface Restaurant {

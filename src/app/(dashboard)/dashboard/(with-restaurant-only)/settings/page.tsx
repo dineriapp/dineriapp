@@ -32,7 +32,7 @@ import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
-import { DashboardHeader } from "../../_components/header"
+import { DashboardHeader } from "../../../_components/header"
 
 // Mock restaurant data type
 interface Restaurant {

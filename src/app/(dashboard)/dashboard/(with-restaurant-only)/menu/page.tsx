@@ -32,7 +32,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
-import { DashboardHeader } from "../../_components/header"
+import { DashboardHeader } from "../../../_components/header"
 
 // Types
 interface MenuItem {
