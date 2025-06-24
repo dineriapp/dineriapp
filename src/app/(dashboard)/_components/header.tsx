@@ -9,11 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { supabase } from "@/supabase/clients/client"
 import {
   BarChart,
   Calendar,
   ChevronDown,
   Crown,
+  Dot,
   Globe2,
   HelpCircle,
   Home,
@@ -21,7 +23,6 @@ import {
   LinkIcon,
   LogOut,
   Palette,
-  Plus,
   QrCode,
   Settings,
   User,
@@ -151,7 +152,10 @@ export function DashboardHeader() {
   }, [])
 
   const handleSignOut = async () => {
-    toast("Signed out")
+    toast("Signed out successfully", {
+      description: "You have been logged out of your account.",
+    })
+    await supabase.auth.signOut()
     router.push("/")
   }
 
@@ -165,6 +169,30 @@ export function DashboardHeader() {
   }
 
   const isPremium = restaurant?.subscription_plan === "pro" || restaurant?.subscription_plan === "enterprise"
+
+
+  const restaurants = [
+    {
+      id: "ssadasdasdasdasd",
+      name: "Food Mac"
+    },
+    {
+      id: "ssadasdsdasdasdasdasdasd",
+      name: "Holly Hens"
+    },
+    {
+      id: "ssasdasdasdaadasdasdasdasd",
+      name: "KFC"
+    },
+    {
+      id: "ssadassdasdasddasdasdasd",
+      name: "Food Panda"
+    },
+    {
+      id: "ssadaasdasdassdasdasdasd",
+      name: "Macdonals"
+    },
+  ]
 
   return (
     <header className="border-b border-slate-200 bg-white shadow-sm">
@@ -223,16 +251,33 @@ export function DashboardHeader() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Link href="/dashboard/create" className="hidden sm:flex">
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-slate-200 !h-[38px] text-slate-700 hover:bg-slate-50 hover:text-teal-600 flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              <span>New Restaurant</span>
-            </Button>
-          </Link>
+          {restaurants.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="border-slate-200 !h-[38px] text-slate-700 hover:bg-slate-50 hover:text-teal-600 flex items-center gap-2"
+                >
+                  <Utensils className="h-4 w-4" />
+                  Macdonals
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {restaurants.map((rest) => (
+                  <DropdownMenuItem
+                    key={rest.id}
+                    // onClick={() => setSelectedRestaurant(rest)}
+                    className="cursor-pointer"
+                  >
+                    <Dot />
+                    {rest.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
 
           {!isPremium && (
             <Link href="/dashboard/upgrade">
@@ -322,7 +367,7 @@ export function DashboardHeader() {
 
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+              <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer hover:!bg-red-500 hover:text-white">
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
               </DropdownMenuItem>

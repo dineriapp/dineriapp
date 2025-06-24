@@ -1,17 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { motion } from "motion/react"
-import { Check, Crown, Sparkles, Layout, ImageIcon, LinkIcon } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Check, Crown, ImageIcon, Layout, LinkIcon, Sparkles } from "lucide-react"
+import { motion } from "motion/react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { DashboardHeader } from "../../../_components/header"
 
 interface Restaurant {
     id: string
@@ -357,212 +356,206 @@ export default function TemplatesPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50">
-                <DashboardHeader />
-                <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
-                    <div className="flex items-center space-x-2 text-slate-500">
-                        <svg
-                            className="animate-spin h-5 w-5 text-teal-600"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                        </svg>
-                        <span>Loading...</span>
-                    </div>
+            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
+                <div className="flex items-center space-x-2 text-slate-500">
+                    <svg
+                        className="animate-spin h-5 w-5 text-teal-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    <span>Loading...</span>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-            <DashboardHeader />
 
-            <main className="max-w-[1200px] mx-auto px-4 py-12">
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mx-auto mb-12 max-w-3xl text-center"
+        <main className="max-w-[1200px] mx-auto px-4 py-12">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mx-auto mb-12 max-w-3xl text-center"
+            >
+                <h1 className="mb-4 bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-4xl font-bold text-transparent">
+                    Choose Your Template
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                    Select from our professionally designed templates or use a custom background
+                </p>
+            </motion.div>
+
+            <div className="mx-auto mb-12 max-w-3xl">
+                <RadioGroup
+                    value={bgType}
+                    onValueChange={(value) => setBgType(value as "template" | "custom")}
+                    className="grid grid-cols-2 gap-4"
                 >
-                    <h1 className="mb-4 bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-4xl font-bold text-transparent">
-                        Choose Your Template
-                    </h1>
-                    <p className="text-lg text-muted-foreground">
-                        Select from our professionally designed templates or use a custom background
-                    </p>
-                </motion.div>
+                    <div>
+                        <RadioGroupItem value="template" id="template" className="peer sr-only" />
+                        <Label
+                            htmlFor="template"
+                            className="flex cursor-pointer flex-col items-center justify-between rounded-xl border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-emerald-500 [&:has([data-state=checked])]:border-emerald-500"
+                        >
+                            <div className="mb-2">
+                                <Layout className="h-6 w-6 text-emerald-600" />
+                            </div>
+                            <span className="font-medium">Use Template</span>
+                            <span className="text-sm text-muted-foreground">Choose from our pre-designed templates</span>
+                        </Label>
+                    </div>
 
-                <div className="mx-auto mb-12 max-w-3xl">
-                    <RadioGroup
-                        value={bgType}
-                        onValueChange={(value) => setBgType(value as "template" | "custom")}
-                        className="grid grid-cols-2 gap-4"
-                    >
-                        <div>
-                            <RadioGroupItem value="template" id="template" className="peer sr-only" />
-                            <Label
-                                htmlFor="template"
-                                className="flex cursor-pointer flex-col items-center justify-between rounded-xl border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-emerald-500 [&:has([data-state=checked])]:border-emerald-500"
-                            >
-                                <div className="mb-2">
-                                    <Layout className="h-6 w-6 text-emerald-600" />
-                                </div>
-                                <span className="font-medium">Use Template</span>
-                                <span className="text-sm text-muted-foreground">Choose from our pre-designed templates</span>
-                            </Label>
-                        </div>
+                    <div>
+                        <RadioGroupItem value="custom" id="custom" className="peer sr-only" />
+                        <Label
+                            htmlFor="custom"
+                            className="flex cursor-pointer flex-col items-center justify-between rounded-xl border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-emerald-500 [&:has([data-state=checked])]:border-emerald-500"
+                        >
+                            <div className="mb-2">
+                                <ImageIcon className="h-6 w-6 text-emerald-600" />
+                            </div>
+                            <span className="font-medium">Custom Background</span>
+                            <span className="text-sm text-muted-foreground">Use your own background image</span>
+                        </Label>
+                    </div>
+                </RadioGroup>
+            </div>
 
-                        <div>
-                            <RadioGroupItem value="custom" id="custom" className="peer sr-only" />
-                            <Label
-                                htmlFor="custom"
-                                className="flex cursor-pointer flex-col items-center justify-between rounded-xl border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-emerald-500 [&:has([data-state=checked])]:border-emerald-500"
-                            >
-                                <div className="mb-2">
-                                    <ImageIcon className="h-6 w-6 text-emerald-600" />
-                                </div>
-                                <span className="font-medium">Custom Background</span>
-                                <span className="text-sm text-muted-foreground">Use your own background image</span>
-                            </Label>
-                        </div>
-                    </RadioGroup>
-                </div>
+            {bgType === "template" ? (
+                <motion.div
+                    variants={container}
+                    initial="hidden"
+                    animate="show"
+                    className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+                >
+                    {templates.map((template) => (
+                        <motion.div key={template.id} variants={item} className="group relative">
+                            <div className="aspect-[3/4] overflow-hidden rounded-xl shadow-lg transition-all duration-300 group-hover:shadow-xl">
+                                <div className="absolute inset-0 bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100" />
 
-                {bgType === "template" ? (
-                    <motion.div
-                        variants={container}
-                        initial="hidden"
-                        animate="show"
-                        className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
-                    >
-                        {templates.map((template) => (
-                            <motion.div key={template.id} variants={item} className="group relative">
-                                <div className="aspect-[3/4] overflow-hidden rounded-xl shadow-lg transition-all duration-300 group-hover:shadow-xl">
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100" />
+                                <img
+                                    src={template.preview || "/placeholder.svg"}
+                                    alt={template.name}
+                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                />
 
-                                    <img
-                                        src={template.preview || "/placeholder.svg"}
-                                        alt={template.name}
-                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                    />
-
-                                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6">
-                                        <div className="mb-3 flex items-center justify-between">
-                                            <h3 className="text-xl font-semibold text-white">{template.name}</h3>
-                                            {template.premium && (
-                                                <Badge
-                                                    variant="secondary"
-                                                    className="border-none bg-gradient-to-r from-amber-400 to-amber-500 text-amber-950 shadow-lg"
-                                                >
-                                                    <Crown className="mr-1 h-3.5 w-3.5" />
-                                                    Premium
-                                                </Badge>
-                                            )}
-                                        </div>
-
-                                        <p className="mb-4 line-clamp-2 text-sm text-white/90">{template.description}</p>
-
-                                        <Button
-                                            onClick={() => handleApplyTemplate(template)}
-                                            className={`w-full transition-all duration-300 ${selectedTemplate === template.id
-                                                ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                                                : template.premium &&
-                                                    (!restaurant?.subscription_plan || restaurant.subscription_plan === "basic")
-                                                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-amber-950 hover:from-amber-500 hover:to-amber-600"
-                                                    : "bg-white/95 backdrop-blur-sm text-gray-900 hover:bg-white"
-                                                }`}
-                                            disabled={applying}
-                                        >
-                                            {selectedTemplate === template.id ? (
-                                                <>
-                                                    <Check className="mr-2 h-4 w-4" />
-                                                    Currently Active
-                                                </>
-                                            ) : template.premium &&
-                                                (!restaurant?.subscription_plan || restaurant.subscription_plan === "basic") ? (
-                                                <>
-                                                    <Sparkles className="mr-2 h-4 w-4" />
-                                                    Upgrade to Apply
-                                                </>
-                                            ) : applying ? (
-                                                "Applying..."
-                                            ) : (
-                                                "Use This Template"
-                                            )}
-                                        </Button>
+                                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6">
+                                    <div className="mb-3 flex items-center justify-between">
+                                        <h3 className="text-xl font-semibold text-white">{template.name}</h3>
+                                        {template.premium && (
+                                            <Badge
+                                                variant="secondary"
+                                                className="border-none bg-gradient-to-r from-amber-400 to-amber-500 text-amber-950 shadow-lg"
+                                            >
+                                                <Crown className="mr-1 h-3.5 w-3.5" />
+                                                Premium
+                                            </Badge>
+                                        )}
                                     </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                ) : (
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mx-auto max-w-xl">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Custom Background</CardTitle>
-                                <CardDescription>Enter the URL of your background image</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-6">
-                                {customBgUrl && (
-                                    <div className="relative mb-6 aspect-[3/2] overflow-hidden rounded-lg">
-                                        <img
-                                            src={customBgUrl || "/placeholder.svg"}
-                                            alt="Current background"
-                                            className="h-full w-full object-cover"
-                                            onError={(e) => {
-                                                e.currentTarget.src = "/placeholder.svg?height=400&width=600&text=Invalid+Image+URL"
-                                            }}
-                                        />
-                                    </div>
-                                )}
 
-                                <div className="space-y-4">
-                                    <Label>Image URL</Label>
-                                    <div className="grid grid-cols-[1fr,auto] gap-4">
-                                        <Input
-                                            type="url"
-                                            value={customBgUrl}
-                                            onChange={(e) => setCustomBgUrl(e.target.value)}
-                                            placeholder="https://example.com/your-image.jpg"
-                                            className="bg-white focus:border-emerald-500 focus:ring-emerald-500"
-                                        />
-                                        <Button
-                                            onClick={handleSaveCustomBackground}
-                                            disabled={!customBgUrl || saving}
-                                            className="bg-emerald-600 hover:bg-emerald-700"
-                                        >
-                                            {saving ? (
-                                                "Saving..."
-                                            ) : (
-                                                <>
-                                                    <LinkIcon className="mr-2 h-4 w-4" />
-                                                    Save
-                                                </>
-                                            )}
-                                        </Button>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">
-                                        Enter the URL of your background image. Recommended size: 1920x1080px.
-                                    </p>
-                                </div>
+                                    <p className="mb-4 line-clamp-2 text-sm text-white/90">{template.description}</p>
 
-                                <div className="pt-4 border-t">
-                                    <Button onClick={resetToDefaults} variant="outline" className="w-full">
-                                        Reset to Default Template
+                                    <Button
+                                        onClick={() => handleApplyTemplate(template)}
+                                        className={`w-full transition-all duration-300 ${selectedTemplate === template.id
+                                            ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                                            : template.premium &&
+                                                (!restaurant?.subscription_plan || restaurant.subscription_plan === "basic")
+                                                ? "bg-gradient-to-r from-amber-400 to-amber-500 text-amber-950 hover:from-amber-500 hover:to-amber-600"
+                                                : "bg-white/95 backdrop-blur-sm text-gray-900 hover:bg-white"
+                                            }`}
+                                        disabled={applying}
+                                    >
+                                        {selectedTemplate === template.id ? (
+                                            <>
+                                                <Check className="mr-2 h-4 w-4" />
+                                                Currently Active
+                                            </>
+                                        ) : template.premium &&
+                                            (!restaurant?.subscription_plan || restaurant.subscription_plan === "basic") ? (
+                                            <>
+                                                <Sparkles className="mr-2 h-4 w-4" />
+                                                Upgrade to Apply
+                                            </>
+                                        ) : applying ? (
+                                            "Applying..."
+                                        ) : (
+                                            "Use This Template"
+                                        )}
                                     </Button>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-                )}
-            </main>
-        </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </motion.div>
+            ) : (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mx-auto max-w-xl">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Custom Background</CardTitle>
+                            <CardDescription>Enter the URL of your background image</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            {customBgUrl && (
+                                <div className="relative mb-6 aspect-[3/2] overflow-hidden rounded-lg">
+                                    <img
+                                        src={customBgUrl || "/placeholder.svg"}
+                                        alt="Current background"
+                                        className="h-full w-full object-cover"
+                                        onError={(e) => {
+                                            e.currentTarget.src = "/placeholder.svg?height=400&width=600&text=Invalid+Image+URL"
+                                        }}
+                                    />
+                                </div>
+                            )}
+
+                            <div className="space-y-4">
+                                <Label>Image URL</Label>
+                                <div className="grid grid-cols-[1fr,auto] gap-4">
+                                    <Input
+                                        type="url"
+                                        value={customBgUrl}
+                                        onChange={(e) => setCustomBgUrl(e.target.value)}
+                                        placeholder="https://example.com/your-image.jpg"
+                                        className="bg-white focus:border-emerald-500 focus:ring-emerald-500"
+                                    />
+                                    <Button
+                                        onClick={handleSaveCustomBackground}
+                                        disabled={!customBgUrl || saving}
+                                        className="bg-emerald-600 hover:bg-emerald-700"
+                                    >
+                                        {saving ? (
+                                            "Saving..."
+                                        ) : (
+                                            <>
+                                                <LinkIcon className="mr-2 h-4 w-4" />
+                                                Save
+                                            </>
+                                        )}
+                                    </Button>
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                    Enter the URL of your background image. Recommended size: 1920x1080px.
+                                </p>
+                            </div>
+
+                            <div className="pt-4 border-t">
+                                <Button onClick={resetToDefaults} variant="outline" className="w-full">
+                                    Reset to Default Template
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+            )}
+        </main>
     )
 }

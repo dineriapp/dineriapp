@@ -1,9 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { DashboardHeader } from "../../../_components/header"
+import { useEffect, useState } from "react"
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 // Define types
 interface Restaurant {
@@ -88,130 +87,124 @@ export default function StatsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-slate-50">
-                <DashboardHeader />
-                <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
-                    <div className="flex items-center space-x-2 text-slate-500">
-                        <svg
-                            className="animate-spin h-5 w-5 text-teal-600"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                        </svg>
-                        <span>Loading...</span>
-                    </div>
+            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
+                <div className="flex items-center space-x-2 text-slate-500">
+                    <svg
+                        className="animate-spin h-5 w-5 text-teal-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    <span>Loading...</span>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            <DashboardHeader />
 
-            <main className="max-w-[1200px] mx-auto px-4 py-8">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-slate-900">Analytics</h1>
-                    <p className="mt-1 text-slate-600">View statistics for your restaurant links</p>
-                </div>
+        <main className="max-w-[1200px] mx-auto px-4 py-8">
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-slate-900">Analytics</h1>
+                <p className="mt-1 text-slate-600">View statistics for your restaurant links</p>
+            </div>
 
-                <div className="mb-8 grid gap-6 md:grid-cols-2">
-                    <Card className="border-slate-200 shadow-sm">
-                        <CardHeader>
-                            <CardTitle className="text-slate-900">Total Views</CardTitle>
-                            <CardDescription className="text-slate-500">All-time link clicks</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-4xl font-bold text-slate-900">{totalViews.toLocaleString()}</div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="border-slate-200 shadow-sm">
-                        <CardHeader>
-                            <CardTitle className="text-slate-900">Unique Views</CardTitle>
-                            <CardDescription className="text-slate-500">Unique visitors</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-4xl font-bold text-slate-900">{totalUniqueViews.toLocaleString()}</div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                <Card className="mb-8 border-slate-200 shadow-sm">
+            <div className="mb-8 grid gap-6 md:grid-cols-2">
+                <Card className="border-slate-200 shadow-sm">
                     <CardHeader>
-                        <CardTitle className="text-slate-900">Link Performance</CardTitle>
-                        <CardDescription className="text-slate-500">Views by link</CardDescription>
+                        <CardTitle className="text-slate-900">Total Views</CardTitle>
+                        <CardDescription className="text-slate-500">All-time link clicks</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="h-[400px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={linkStats}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                                    <XAxis
-                                        dataKey="title"
-                                        tick={{ fontSize: 12, fill: "#64748b" }}
-                                        interval={0}
-                                        angle={-45}
-                                        textAnchor="end"
-                                        height={100}
-                                    />
-                                    <YAxis stroke="#64748b" />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: "white",
-                                            border: "1px solid #e2e8f0",
-                                            borderRadius: "8px",
-                                            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                                        }}
-                                    />
-                                    <Bar dataKey="view_count" fill="#0d9488" name="Total Views" />
-                                    <Bar dataKey="unique_views" fill="#0ea5e9" name="Unique Views" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
+                        <div className="text-4xl font-bold text-slate-900">{totalViews.toLocaleString()}</div>
                     </CardContent>
                 </Card>
 
                 <Card className="border-slate-200 shadow-sm">
                     <CardHeader>
-                        <CardTitle className="text-slate-900">Detailed Statistics</CardTitle>
-                        <CardDescription className="text-slate-500">Breakdown by link</CardDescription>
+                        <CardTitle className="text-slate-900">Unique Views</CardTitle>
+                        <CardDescription className="text-slate-500">Unique visitors</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="border-b border-slate-200">
-                                        <th className="px-4 py-3 text-left text-slate-700 font-medium">Link</th>
-                                        <th className="px-4 py-3 text-right text-slate-700 font-medium">Total Views</th>
-                                        <th className="px-4 py-3 text-right text-slate-700 font-medium">Unique Views</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {linkStats.map((stat) => (
-                                        <tr key={stat.id} className="border-b border-slate-100">
-                                            <td className="px-4 py-3">
-                                                <div className="font-medium text-slate-900">{stat.title}</div>
-                                                <div className="max-w-xs truncate text-sm text-slate-500">{stat.url}</div>
-                                            </td>
-                                            <td className="px-4 py-3 text-right font-medium text-slate-900">{stat.view_count}</td>
-                                            <td className="px-4 py-3 text-right font-medium text-slate-900">{stat.unique_views}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <div className="text-4xl font-bold text-slate-900">{totalUniqueViews.toLocaleString()}</div>
                     </CardContent>
                 </Card>
-            </main>
-        </div>
+            </div>
+
+            <Card className="mb-8 border-slate-200 shadow-sm">
+                <CardHeader>
+                    <CardTitle className="text-slate-900">Link Performance</CardTitle>
+                    <CardDescription className="text-slate-500">Views by link</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="h-[400px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={linkStats}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                <XAxis
+                                    dataKey="title"
+                                    tick={{ fontSize: 12, fill: "#64748b" }}
+                                    interval={0}
+                                    angle={-45}
+                                    textAnchor="end"
+                                    height={100}
+                                />
+                                <YAxis stroke="#64748b" />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: "white",
+                                        border: "1px solid #e2e8f0",
+                                        borderRadius: "8px",
+                                        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                                    }}
+                                />
+                                <Bar dataKey="view_count" fill="#0d9488" name="Total Views" />
+                                <Bar dataKey="unique_views" fill="#0ea5e9" name="Unique Views" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card className="border-slate-200 shadow-sm">
+                <CardHeader>
+                    <CardTitle className="text-slate-900">Detailed Statistics</CardTitle>
+                    <CardDescription className="text-slate-500">Breakdown by link</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b border-slate-200">
+                                    <th className="px-4 py-3 text-left text-slate-700 font-medium">Link</th>
+                                    <th className="px-4 py-3 text-right text-slate-700 font-medium">Total Views</th>
+                                    <th className="px-4 py-3 text-right text-slate-700 font-medium">Unique Views</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {linkStats.map((stat) => (
+                                    <tr key={stat.id} className="border-b border-slate-100">
+                                        <td className="px-4 py-3">
+                                            <div className="font-medium text-slate-900">{stat.title}</div>
+                                            <div className="max-w-xs truncate text-sm text-slate-500">{stat.url}</div>
+                                        </td>
+                                        <td className="px-4 py-3 text-right font-medium text-slate-900">{stat.view_count}</td>
+                                        <td className="px-4 py-3 text-right font-medium text-slate-900">{stat.unique_views}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </CardContent>
+            </Card>
+        </main>
     )
 }
 

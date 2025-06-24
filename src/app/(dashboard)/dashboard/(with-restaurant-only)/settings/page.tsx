@@ -1,38 +1,37 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { motion } from "motion/react"
-import {
-    Building2,
-    MapPin,
-    Phone,
-    Mail,
-    Instagram,
-    Facebook,
-    MessageCircle,
-    Clock,
-    Globe2,
-    ChevronRight,
-    Save,
-    AlertCircle,
-    Zap,
-    Eye,
-    Timer,
-    MessageSquare,
-    Star,
-    MapPinIcon,
-    Calendar,
-    ShieldAlert,
-} from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
+import {
+    AlertCircle,
+    Building2,
+    Calendar,
+    ChevronRight,
+    Clock,
+    Eye,
+    Facebook,
+    Globe2,
+    Instagram,
+    Mail,
+    MapPin,
+    MapPinIcon,
+    MessageCircle,
+    MessageSquare,
+    Phone,
+    Save,
+    ShieldAlert,
+    Star,
+    Timer,
+    Zap,
+} from "lucide-react"
+import { motion } from "motion/react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { DashboardHeader } from "../../../_components/header"
 
 // Mock restaurant data type
 interface Restaurant {
@@ -438,885 +437,879 @@ export default function SettingsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-                <DashboardHeader />
-                <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
-                    <div className="flex items-center space-x-2 text-slate-500">
-                        <svg
-                            className="animate-spin h-5 w-5 text-teal-600"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                        </svg>
-                        <span>Loading settings...</span>
-                    </div>
+            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
+                <div className="flex items-center space-x-2 text-slate-500">
+                    <svg
+                        className="animate-spin h-5 w-5 text-teal-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    <span>Loading settings...</span>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-gray-50/50">
-            <DashboardHeader />
 
-            <main className="max-w-[1200px] mx-auto px-4 py-8">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-                    <p className="mt-1 text-muted-foreground">Manage your restaurant profile and settings</p>
-                    <div className="mt-4 flex gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={resetToDefaults}
-                            className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
-                        >
-                            Reset to Defaults
-                        </Button>
-                    </div>
+        <main className="max-w-[1200px] mx-auto px-4 py-8">
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+                <p className="mt-1 text-muted-foreground">Manage your restaurant profile and settings</p>
+                <div className="mt-4 flex gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={resetToDefaults}
+                        className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                    >
+                        Reset to Defaults
+                    </Button>
+                </div>
+            </div>
+
+            <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+                {/* Sidebar Navigation */}
+                <div className="space-y-4">
+                    {sections.map((section) => {
+                        const Icon = section.icon
+                        return (
+                            <button
+                                key={section.id}
+                                onClick={() => setActiveSection(section.id)}
+                                className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center justify-between group ${activeSection === section.id
+                                    ? "bg-emerald-50 text-emerald-900 border border-emerald-200"
+                                    : "hover:bg-gray-50 border border-transparent"
+                                    }`}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <Icon
+                                        className={`h-5 w-5 ${activeSection === section.id ? "text-emerald-600" : "text-gray-500"}`}
+                                    />
+                                    <div>
+                                        <div className="font-medium">{section.title}</div>
+                                        <div className="text-sm text-muted-foreground">{section.description}</div>
+                                    </div>
+                                </div>
+                                <ChevronRight
+                                    className={`h-5 w-5 transition-transform ${activeSection === section.id
+                                        ? "text-emerald-600 translate-x-1"
+                                        : "text-gray-400 group-hover:translate-x-1"
+                                        }`}
+                                />
+                            </button>
+                        )
+                    })}
                 </div>
 
-                <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-                    {/* Sidebar Navigation */}
-                    <div className="space-y-4">
-                        {sections.map((section) => {
-                            const Icon = section.icon
-                            return (
-                                <button
-                                    key={section.id}
-                                    onClick={() => setActiveSection(section.id)}
-                                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center justify-between group ${activeSection === section.id
-                                        ? "bg-emerald-50 text-emerald-900 border border-emerald-200"
-                                        : "hover:bg-gray-50 border border-transparent"
-                                        }`}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <Icon
-                                            className={`h-5 w-5 ${activeSection === section.id ? "text-emerald-600" : "text-gray-500"}`}
-                                        />
-                                        <div>
-                                            <div className="font-medium">{section.title}</div>
-                                            <div className="text-sm text-muted-foreground">{section.description}</div>
-                                        </div>
-                                    </div>
-                                    <ChevronRight
-                                        className={`h-5 w-5 transition-transform ${activeSection === section.id
-                                            ? "text-emerald-600 translate-x-1"
-                                            : "text-gray-400 group-hover:translate-x-1"
-                                            }`}
+                {/* Main Content */}
+                <div className="space-y-6">
+                    {/* Business Information */}
+                    <div className={activeSection === "business" ? "block" : "hidden"}>
+                        <Card className="shadow-sm border-gray-200">
+                            <CardHeader className="bg-gray-50/50">
+                                <CardTitle className="text-gray-900">Business Information</CardTitle>
+                                <CardDescription>Update your restaurant&apos;s basic information</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6 pt-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="name">Restaurant Name</Label>
+                                    <Input
+                                        id="name"
+                                        value={name}
+                                        onChange={(e) => handleInputChange(setName, e.target.value)}
+                                        placeholder="e.g. Trattoria Milano"
+                                        required
+                                        className="focus:border-emerald-500 focus:ring-emerald-500"
                                     />
-                                </button>
-                            )
-                        })}
-                    </div>
+                                </div>
 
-                    {/* Main Content */}
-                    <div className="space-y-6">
-                        {/* Business Information */}
-                        <div className={activeSection === "business" ? "block" : "hidden"}>
-                            <Card className="shadow-sm border-gray-200">
-                                <CardHeader className="bg-gray-50/50">
-                                    <CardTitle className="text-gray-900">Business Information</CardTitle>
-                                    <CardDescription>Update your restaurant&apos;s basic information</CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-6 pt-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="name">Restaurant Name</Label>
+                                <div className="space-y-2">
+                                    <Label htmlFor="slug">Page URL</Label>
+                                    <div className="flex items-center">
+                                        <span className="mr-2 text-muted-foreground">dineri.app/</span>
                                         <Input
-                                            id="name"
-                                            value={name}
-                                            onChange={(e) => handleInputChange(setName, e.target.value)}
-                                            placeholder="e.g. Trattoria Milano"
+                                            id="slug"
+                                            value={slug}
+                                            onChange={(e) => handleInputChange(setSlug, e.target.value)}
+                                            placeholder="your-restaurant"
                                             required
                                             className="focus:border-emerald-500 focus:ring-emerald-500"
                                         />
                                     </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        This will be the URL of your public page. Only use letters, numbers, and hyphens.
+                                    </p>
+                                </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="slug">Page URL</Label>
-                                        <div className="flex items-center">
-                                            <span className="mr-2 text-muted-foreground">dineri.app/</span>
-                                            <Input
-                                                id="slug"
-                                                value={slug}
-                                                onChange={(e) => handleInputChange(setSlug, e.target.value)}
-                                                placeholder="your-restaurant"
-                                                required
-                                                className="focus:border-emerald-500 focus:ring-emerald-500"
-                                            />
-                                        </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            This will be the URL of your public page. Only use letters, numbers, and hyphens.
-                                        </p>
-                                    </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="bio">Short Description</Label>
+                                    <Textarea
+                                        id="bio"
+                                        value={bio}
+                                        onChange={(e) => handleInputChange(setBio, e.target.value)}
+                                        placeholder="Tell customers about your restaurant in a few words (max 200 characters)"
+                                        maxLength={200}
+                                        rows={3}
+                                        className="focus:border-emerald-500 focus:ring-emerald-500"
+                                    />
+                                    <div className="text-right text-xs text-muted-foreground">{bio.length}/200 characters</div>
+                                </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="bio">Short Description</Label>
-                                        <Textarea
-                                            id="bio"
-                                            value={bio}
-                                            onChange={(e) => handleInputChange(setBio, e.target.value)}
-                                            placeholder="Tell customers about your restaurant in a few words (max 200 characters)"
-                                            maxLength={200}
-                                            rows={3}
-                                            className="focus:border-emerald-500 focus:ring-emerald-500"
-                                        />
-                                        <div className="text-right text-xs text-muted-foreground">{bio.length}/200 characters</div>
-                                    </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="logo">Logo URL</Label>
+                                    <Input
+                                        id="logo"
+                                        value={logoUrl}
+                                        onChange={(e) => handleInputChange(setLogoUrl, e.target.value)}
+                                        placeholder="https://example.com/your-logo.png"
+                                        className="focus:border-emerald-500 focus:ring-emerald-500"
+                                    />
+                                    <p className="text-xs text-muted-foreground">
+                                        Enter a URL to your restaurant logo (image upload coming soon)
+                                    </p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="logo">Logo URL</Label>
+                    {/* Contact Information */}
+                    <div className={activeSection === "contact" ? "block" : "hidden"}>
+                        <Card className="shadow-sm border-gray-200">
+                            <CardHeader className="bg-gray-50/50">
+                                <CardTitle className="text-gray-900">Contact Information</CardTitle>
+                                <CardDescription>Add your contact details and location</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6 pt-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="phone">Phone Number</Label>
+                                    <div className="relative">
+                                        <Phone className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
                                         <Input
-                                            id="logo"
-                                            value={logoUrl}
-                                            onChange={(e) => handleInputChange(setLogoUrl, e.target.value)}
-                                            placeholder="https://example.com/your-logo.png"
+                                            id="phone"
+                                            type="tel"
+                                            value={phone}
+                                            onChange={(e) => handleInputChange(setPhone, e.target.value)}
+                                            placeholder="+1 (555) 123-4567"
+                                            className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email Address</Label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            value={email}
+                                            onChange={(e) => handleInputChange(setEmail, e.target.value)}
+                                            placeholder="contact@example.com"
+                                            className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="address">Address</Label>
+                                    <div className="relative">
+                                        <MapPin className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
+                                        <Textarea
+                                            id="address"
+                                            value={address}
+                                            onChange={(e) => handleInputChange(setAddress, e.target.value)}
+                                            placeholder="123 Restaurant Street, City, Country"
+                                            rows={2}
+                                            className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="latitude">Latitude</Label>
+                                        <Input
+                                            id="latitude"
+                                            type="number"
+                                            step="any"
+                                            value={latitude || ""}
+                                            onChange={(e) =>
+                                                handleInputChange(setLatitude, e.target.value ? Number.parseFloat(e.target.value) : "")
+                                            }
+                                            placeholder="e.g. 40.7128"
                                             className="focus:border-emerald-500 focus:ring-emerald-500"
                                         />
-                                        <p className="text-xs text-muted-foreground">
-                                            Enter a URL to your restaurant logo (image upload coming soon)
-                                        </p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-
-                        {/* Contact Information */}
-                        <div className={activeSection === "contact" ? "block" : "hidden"}>
-                            <Card className="shadow-sm border-gray-200">
-                                <CardHeader className="bg-gray-50/50">
-                                    <CardTitle className="text-gray-900">Contact Information</CardTitle>
-                                    <CardDescription>Add your contact details and location</CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-6 pt-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="phone">Phone Number</Label>
-                                        <div className="relative">
-                                            <Phone className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
-                                            <Input
-                                                id="phone"
-                                                type="tel"
-                                                value={phone}
-                                                onChange={(e) => handleInputChange(setPhone, e.target.value)}
-                                                placeholder="+1 (555) 123-4567"
-                                                className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
-                                            />
-                                        </div>
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="email">Email Address</Label>
-                                        <div className="relative">
-                                            <Mail className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
-                                            <Input
-                                                id="email"
-                                                type="email"
-                                                value={email}
-                                                onChange={(e) => handleInputChange(setEmail, e.target.value)}
-                                                placeholder="contact@example.com"
-                                                className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
-                                            />
-                                        </div>
+                                        <Label htmlFor="longitude">Longitude</Label>
+                                        <Input
+                                            id="longitude"
+                                            type="number"
+                                            step="any"
+                                            value={longitude || ""}
+                                            onChange={(e) =>
+                                                handleInputChange(
+                                                    setLongitude,
+                                                    e.target.value ? Number.parseFloat(e.target.value) : "",
+                                                )
+                                            }
+                                            placeholder="e.g. -74.0060"
+                                            className="focus:border-emerald-500 focus:ring-emerald-500"
+                                        />
                                     </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
 
+                    {/* change-password Section */}
+                    <div className={activeSection === "change-password" ? "block" : "hidden"}>
+                        <Card className="shadow-sm border-gray-200">
+                            <CardHeader className="bg-gray-50/50">
+                                <CardTitle className="text-gray-900">Edit Profile</CardTitle>
+                                <CardDescription>Update your profile settings and password</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6 pt-6">
+                                {/* Change Password */}
+                                <div className="space-y-4">
+                                    <h3 className="text-lg font-semibold text-gray-800">Change Password</h3>
                                     <div className="space-y-2">
-                                        <Label htmlFor="address">Address</Label>
+                                        <Label htmlFor="old-password">Old Password</Label>
                                         <div className="relative">
-                                            <MapPin className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
-                                            <Textarea
-                                                id="address"
-                                                value={address}
-                                                onChange={(e) => handleInputChange(setAddress, e.target.value)}
-                                                placeholder="123 Restaurant Street, City, Country"
-                                                rows={2}
-                                                className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="latitude">Latitude</Label>
                                             <Input
-                                                id="latitude"
-                                                type="number"
-                                                step="any"
-                                                value={latitude || ""}
-                                                onChange={(e) =>
-                                                    handleInputChange(setLatitude, e.target.value ? Number.parseFloat(e.target.value) : "")
-                                                }
-                                                placeholder="e.g. 40.7128"
-                                                className="focus:border-emerald-500 focus:ring-emerald-500"
-                                            />
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="longitude">Longitude</Label>
-                                            <Input
-                                                id="longitude"
-                                                type="number"
-                                                step="any"
-                                                value={longitude || ""}
-                                                onChange={(e) =>
-                                                    handleInputChange(
-                                                        setLongitude,
-                                                        e.target.value ? Number.parseFloat(e.target.value) : "",
-                                                    )
-                                                }
-                                                placeholder="e.g. -74.0060"
+                                                id="old-password"
+                                                type="password"
+                                                //   value={oldPassword}
+                                                //   onChange={(e) => handleInputChange(setOldPassword, e.target.value)}
+                                                placeholder="Enter your old password"
                                                 className="focus:border-emerald-500 focus:ring-emerald-500"
                                             />
                                         </div>
                                     </div>
-                                </CardContent>
-                            </Card>
-                        </div>
 
-                        {/* change-password Section */}
-                        <div className={activeSection === "change-password" ? "block" : "hidden"}>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="new-password">New Password</Label>
+                                        <div className="relative">
+                                            <Input
+                                                id="new-password"
+                                                type="password"
+                                                //   value={newPassword}
+                                                //   onChange={(e) => handleInputChange(setNewPassword, e.target.value)}
+                                                placeholder="Enter your new password"
+                                                className="focus:border-emerald-500 focus:ring-emerald-500"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="confirm-new-password">Confirm New Password</Label>
+                                        <div className="relative">
+                                            <Input
+                                                id="confirm-new-password"
+                                                type="password"
+                                                //   value={confirmNewPassword}
+                                                //   onChange={(e) => handleInputChange(setConfirmNewPassword, e.target.value)}
+                                                placeholder="Confirm your new password"
+                                                className="focus:border-emerald-500 focus:ring-emerald-500"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between">
+                                        <Button
+                                            // onClick={handleChangePassword}
+                                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                        >
+                                            Change Password
+                                        </Button>
+                                        <Button
+                                            variant="link"
+                                            //    onClick={handleForgotPassword} 
+                                            className="text-emerald-600 hover:text-emerald-700">
+                                            Forgot Password?
+                                        </Button>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Opening Hours */}
+                    <div className={activeSection === "hours" ? "block" : "hidden"}>
+                        <Card className="shadow-sm border-gray-200">
+                            <CardHeader className="bg-gray-50/50">
+                                <CardTitle className="text-gray-900">Opening Hours</CardTitle>
+                                <CardDescription>Set your restaurant&apos;s opening hours</CardDescription>
+                            </CardHeader>
+                            <CardContent className="pt-6">
+                                <div className="space-y-4">
+                                    {openingHours.map((day, index) => {
+                                        const [openTime = "", closeTime = ""] = day.hours.split("-").map((t) => t.trim())
+
+                                        return (
+                                            <div key={day.day} className="grid grid-cols-[1fr_2fr_2fr_auto] items-center gap-4">
+                                                <Label>{day.day}</Label>
+                                                <Select value={openTime} onValueChange={(value) => updateOpeningHours(index, "open", value)}>
+                                                    <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
+                                                        <SelectValue placeholder="Opening time" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {timeSlots.map((slot) => (
+                                                            <SelectItem key={slot.value} value={slot.value}>
+                                                                {slot.label}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                                <Select
+                                                    value={closeTime}
+                                                    onValueChange={(value) => updateOpeningHours(index, "close", value)}
+                                                >
+                                                    <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
+                                                        <SelectValue placeholder="Closing time" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {timeSlots.map((slot) => (
+                                                            <SelectItem key={slot.value} value={slot.value}>
+                                                                {slot.label}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => clearHours(index)}
+                                                    className="text-muted-foreground hover:text-destructive"
+                                                >
+                                                    Clear
+                                                </Button>
+                                            </div>
+                                        )
+                                    })}
+                                    <p className="mt-2 text-xs text-muted-foreground">Clear the times for days when you&apos;re closed</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Social Media */}
+                    <div className={activeSection === "social" ? "block" : "hidden"}>
+                        <Card className="shadow-sm border-gray-200">
+                            <CardHeader className="bg-gray-50/50">
+                                <CardTitle className="text-gray-900">Social Media</CardTitle>
+                                <CardDescription>Connect your social media accounts</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6 pt-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="instagram">Instagram Profile URL</Label>
+                                    <div className="relative">
+                                        <Instagram className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
+                                        <Input
+                                            id="instagram"
+                                            value={instagram}
+                                            onChange={(e) => handleInputChange(setInstagram, e.target.value)}
+                                            placeholder="https://instagram.com/your.restaurant"
+                                            className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="facebook">Facebook URL</Label>
+                                    <div className="relative">
+                                        <Facebook className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
+                                        <Input
+                                            id="facebook"
+                                            value={facebook}
+                                            onChange={(e) => handleInputChange(setFacebook, e.target.value)}
+                                            placeholder="https://facebook.com/your.restaurant"
+                                            className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="whatsapp">WhatsApp Number</Label>
+                                    <div className="relative">
+                                        <MessageCircle className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
+                                        <Input
+                                            id="whatsapp"
+                                            value={whatsapp}
+                                            onChange={(e) => handleInputChange(setWhatsapp, e.target.value)}
+                                            placeholder="+1234567890"
+                                            className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Enter your WhatsApp number with country code (e.g., +1234567890)
+                                    </p>
+                                </div>
+
+                                <div className="space-y-4 border-t pt-4">
+                                    <Label>Social Icons Position</Label>
+                                    <Select
+                                        value={socialIconsPosition}
+                                        onValueChange={(value: "top" | "bottom") => {
+                                            setSocialIconsPosition(value)
+                                            setHasChanges(true)
+                                        }}
+                                    >
+                                        <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
+                                            <SelectValue placeholder="Select position" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="top">Top</SelectItem>
+                                            <SelectItem value="bottom">Below</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Popups Section */}
+                    <div className={activeSection === "popups" ? "block" : "hidden"}>
+                        <div className="space-y-6">
                             <Card className="shadow-sm border-gray-200">
                                 <CardHeader className="bg-gray-50/50">
-                                    <CardTitle className="text-gray-900">Edit Profile</CardTitle>
-                                    <CardDescription>Update your profile settings and password</CardDescription>
+                                    <CardTitle className="flex items-center gap-2 text-gray-900">
+                                        <Zap className="h-5 w-5 text-emerald-600" />
+                                        Welcome Popup
+                                    </CardTitle>
+                                    <CardDescription>Show a welcome message to first-time visitors</CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-6 pt-6">
-                                    {/* Change Password */}
-                                    <div className="space-y-4">
-                                        <h3 className="text-lg font-semibold text-gray-800">Change Password</h3>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="old-password">Old Password</Label>
-                                            <div className="relative">
-                                                <Input
-                                                    id="old-password"
-                                                    type="password"
-                                                    //   value={oldPassword}
-                                                    //   onChange={(e) => handleInputChange(setOldPassword, e.target.value)}
-                                                    placeholder="Enter your old password"
-                                                    className="focus:border-emerald-500 focus:ring-emerald-500"
-                                                />
-                                            </div>
+                                    {/* Enable/Disable Toggle */}
+                                    <div className="flex items-center justify-between">
+                                        <div className="space-y-0.5">
+                                            <Label className="text-base">Enable Welcome Popup</Label>
+                                            <p className="text-sm text-muted-foreground">Show a welcome popup to new visitors</p>
                                         </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="new-password">New Password</Label>
-                                            <div className="relative">
-                                                <Input
-                                                    id="new-password"
-                                                    type="password"
-                                                    //   value={newPassword}
-                                                    //   onChange={(e) => handleInputChange(setNewPassword, e.target.value)}
-                                                    placeholder="Enter your new password"
-                                                    className="focus:border-emerald-500 focus:ring-emerald-500"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="confirm-new-password">Confirm New Password</Label>
-                                            <div className="relative">
-                                                <Input
-                                                    id="confirm-new-password"
-                                                    type="password"
-                                                    //   value={confirmNewPassword}
-                                                    //   onChange={(e) => handleInputChange(setConfirmNewPassword, e.target.value)}
-                                                    placeholder="Confirm your new password"
-                                                    className="focus:border-emerald-500 focus:ring-emerald-500"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center justify-between">
-                                            <Button
-                                                // onClick={handleChangePassword}
-                                                className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                                            >
-                                                Change Password
-                                            </Button>
-                                            <Button
-                                                variant="link"
-                                                //    onClick={handleForgotPassword} 
-                                                className="text-emerald-600 hover:text-emerald-700">
-                                                Forgot Password?
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-
-                        {/* Opening Hours */}
-                        <div className={activeSection === "hours" ? "block" : "hidden"}>
-                            <Card className="shadow-sm border-gray-200">
-                                <CardHeader className="bg-gray-50/50">
-                                    <CardTitle className="text-gray-900">Opening Hours</CardTitle>
-                                    <CardDescription>Set your restaurant&apos;s opening hours</CardDescription>
-                                </CardHeader>
-                                <CardContent className="pt-6">
-                                    <div className="space-y-4">
-                                        {openingHours.map((day, index) => {
-                                            const [openTime = "", closeTime = ""] = day.hours.split("-").map((t) => t.trim())
-
-                                            return (
-                                                <div key={day.day} className="grid grid-cols-[1fr_2fr_2fr_auto] items-center gap-4">
-                                                    <Label>{day.day}</Label>
-                                                    <Select value={openTime} onValueChange={(value) => updateOpeningHours(index, "open", value)}>
-                                                        <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
-                                                            <SelectValue placeholder="Opening time" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {timeSlots.map((slot) => (
-                                                                <SelectItem key={slot.value} value={slot.value}>
-                                                                    {slot.label}
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <Select
-                                                        value={closeTime}
-                                                        onValueChange={(value) => updateOpeningHours(index, "close", value)}
-                                                    >
-                                                        <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
-                                                            <SelectValue placeholder="Closing time" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {timeSlots.map((slot) => (
-                                                                <SelectItem key={slot.value} value={slot.value}>
-                                                                    {slot.label}
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => clearHours(index)}
-                                                        className="text-muted-foreground hover:text-destructive"
-                                                    >
-                                                        Clear
-                                                    </Button>
-                                                </div>
-                                            )
-                                        })}
-                                        <p className="mt-2 text-xs text-muted-foreground">Clear the times for days when you&apos;re closed</p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-
-                        {/* Social Media */}
-                        <div className={activeSection === "social" ? "block" : "hidden"}>
-                            <Card className="shadow-sm border-gray-200">
-                                <CardHeader className="bg-gray-50/50">
-                                    <CardTitle className="text-gray-900">Social Media</CardTitle>
-                                    <CardDescription>Connect your social media accounts</CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-6 pt-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="instagram">Instagram Profile URL</Label>
-                                        <div className="relative">
-                                            <Instagram className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
-                                            <Input
-                                                id="instagram"
-                                                value={instagram}
-                                                onChange={(e) => handleInputChange(setInstagram, e.target.value)}
-                                                placeholder="https://instagram.com/your.restaurant"
-                                                className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="facebook">Facebook URL</Label>
-                                        <div className="relative">
-                                            <Facebook className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
-                                            <Input
-                                                id="facebook"
-                                                value={facebook}
-                                                onChange={(e) => handleInputChange(setFacebook, e.target.value)}
-                                                placeholder="https://facebook.com/your.restaurant"
-                                                className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="whatsapp">WhatsApp Number</Label>
-                                        <div className="relative">
-                                            <MessageCircle className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
-                                            <Input
-                                                id="whatsapp"
-                                                value={whatsapp}
-                                                onChange={(e) => handleInputChange(setWhatsapp, e.target.value)}
-                                                placeholder="+1234567890"
-                                                className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
-                                            />
-                                        </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Enter your WhatsApp number with country code (e.g., +1234567890)
-                                        </p>
-                                    </div>
-
-                                    <div className="space-y-4 border-t pt-4">
-                                        <Label>Social Icons Position</Label>
-                                        <Select
-                                            value={socialIconsPosition}
-                                            onValueChange={(value: "top" | "bottom") => {
-                                                setSocialIconsPosition(value)
+                                        <Switch
+                                            checked={welcomePopupEnabled}
+                                            onCheckedChange={(checked) => {
+                                                setWelcomePopupEnabled(checked)
                                                 setHasChanges(true)
                                             }}
-                                        >
-                                            <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
-                                                <SelectValue placeholder="Select position" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="top">Top</SelectItem>
-                                                <SelectItem value="bottom">Below</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                        />
                                     </div>
-                                </CardContent>
-                            </Card>
-                        </div>
 
-                        {/* Popups Section */}
-                        <div className={activeSection === "popups" ? "block" : "hidden"}>
-                            <div className="space-y-6">
-                                <Card className="shadow-sm border-gray-200">
-                                    <CardHeader className="bg-gray-50/50">
-                                        <CardTitle className="flex items-center gap-2 text-gray-900">
-                                            <Zap className="h-5 w-5 text-emerald-600" />
-                                            Welcome Popup
-                                        </CardTitle>
-                                        <CardDescription>Show a welcome message to first-time visitors</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-6 pt-6">
-                                        {/* Enable/Disable Toggle */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="space-y-0.5">
-                                                <Label className="text-base">Enable Welcome Popup</Label>
-                                                <p className="text-sm text-muted-foreground">Show a welcome popup to new visitors</p>
+                                    {welcomePopupEnabled && (
+                                        <>
+                                            {/* Custom Message */}
+                                            <div className="space-y-2">
+                                                <Label htmlFor="popup-message" className="flex items-center gap-2">
+                                                    <MessageSquare className="h-4 w-4" />
+                                                    Welcome Message
+                                                </Label>
+                                                <Textarea
+                                                    id="popup-message"
+                                                    value={welcomePopupMessage}
+                                                    onChange={(e) => {
+                                                        setWelcomePopupMessage(e.target.value)
+                                                        setHasChanges(true)
+                                                    }}
+                                                    placeholder="Welcome! We're excited to have you visit us."
+                                                    rows={3}
+                                                    maxLength={200}
+                                                    className="focus:border-emerald-500 focus:ring-emerald-500"
+                                                />
+                                                <div className="text-right text-xs text-muted-foreground">
+                                                    {welcomePopupMessage.length}/200 characters
+                                                </div>
                                             </div>
-                                            <Switch
-                                                checked={welcomePopupEnabled}
-                                                onCheckedChange={(checked) => {
-                                                    setWelcomePopupEnabled(checked)
-                                                    setHasChanges(true)
-                                                }}
-                                            />
-                                        </div>
 
-                                        {welcomePopupEnabled && (
-                                            <>
-                                                {/* Custom Message */}
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="popup-message" className="flex items-center gap-2">
-                                                        <MessageSquare className="h-4 w-4" />
-                                                        Welcome Message
-                                                    </Label>
-                                                    <Textarea
-                                                        id="popup-message"
-                                                        value={welcomePopupMessage}
-                                                        onChange={(e) => {
-                                                            setWelcomePopupMessage(e.target.value)
-                                                            setHasChanges(true)
-                                                        }}
-                                                        placeholder="Welcome! We're excited to have you visit us."
-                                                        rows={3}
-                                                        maxLength={200}
-                                                        className="focus:border-emerald-500 focus:ring-emerald-500"
-                                                    />
-                                                    <div className="text-right text-xs text-muted-foreground">
-                                                        {welcomePopupMessage.length}/200 characters
+                                            {/* Timing Control */}
+                                            <div className="space-y-2">
+                                                <Label className="flex items-center gap-2">
+                                                    <Timer className="h-4 w-4" />
+                                                    Show Delay
+                                                </Label>
+                                                <Select
+                                                    value={welcomePopupDelay.toString()}
+                                                    onValueChange={(value) => {
+                                                        setWelcomePopupDelay(Number.parseInt(value))
+                                                        setHasChanges(true)
+                                                    }}
+                                                >
+                                                    <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((seconds) => (
+                                                            <SelectItem key={seconds} value={seconds.toString()}>
+                                                                {seconds} second{seconds > 1 ? "s" : ""}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                                <p className="text-xs text-muted-foreground">How long to wait before showing the popup</p>
+                                            </div>
+
+                                            {/* Show Button Toggle */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="space-y-0.5">
+                                                    <Label className="text-base">Show Action Button</Label>
+                                                    <p className="text-sm text-muted-foreground">Display the &quot;Explore&quot; button in the popup</p>
+                                                </div>
+                                                <Switch
+                                                    checked={welcomePopupShowButton}
+                                                    onCheckedChange={(checked) => {
+                                                        setWelcomePopupShowButton(checked)
+                                                        setHasChanges(true)
+                                                    }}
+                                                />
+                                            </div>
+
+                                            {/* Information Display Options */}
+                                            <div className="space-y-4">
+                                                <Label className="text-base">Show Information</Label>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="flex items-center space-x-2">
+                                                        <Switch
+                                                            id="show-ratings"
+                                                            checked={welcomePopupShowInfo.ratings}
+                                                            onCheckedChange={(checked) => handlePopupInfoChange("ratings", checked)}
+                                                        />
+                                                        <Label htmlFor="show-ratings" className="flex items-center gap-2">
+                                                            <Star className="h-4 w-4" />
+                                                            Ratings
+                                                        </Label>
+                                                    </div>
+
+                                                    <div className="flex items-center space-x-2">
+                                                        <Switch
+                                                            id="show-address"
+                                                            checked={welcomePopupShowInfo.address}
+                                                            onCheckedChange={(checked) => handlePopupInfoChange("address", checked)}
+                                                        />
+                                                        <Label htmlFor="show-address" className="flex items-center gap-2">
+                                                            <MapPinIcon className="h-4 w-4" />
+                                                            Address
+                                                        </Label>
+                                                    </div>
+
+                                                    <div className="flex items-center space-x-2">
+                                                        <Switch
+                                                            id="show-hours"
+                                                            checked={welcomePopupShowInfo.hours}
+                                                            onCheckedChange={(checked) => handlePopupInfoChange("hours", checked)}
+                                                        />
+                                                        <Label htmlFor="show-hours" className="flex items-center gap-2">
+                                                            <Clock className="h-4 w-4" />
+                                                            Opening Hours
+                                                        </Label>
+                                                    </div>
+
+                                                    <div className="flex items-center space-x-2">
+                                                        <Switch
+                                                            id="show-phone"
+                                                            checked={welcomePopupShowInfo.phone}
+                                                            onCheckedChange={(checked) => handlePopupInfoChange("phone", checked)}
+                                                        />
+                                                        <Label htmlFor="show-phone" className="flex items-center gap-2">
+                                                            <Phone className="h-4 w-4" />
+                                                            Phone Number
+                                                        </Label>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                {/* Timing Control */}
-                                                <div className="space-y-2">
-                                                    <Label className="flex items-center gap-2">
-                                                        <Timer className="h-4 w-4" />
-                                                        Show Delay
-                                                    </Label>
-                                                    <Select
-                                                        value={welcomePopupDelay.toString()}
-                                                        onValueChange={(value) => {
-                                                            setWelcomePopupDelay(Number.parseInt(value))
-                                                            setHasChanges(true)
-                                                        }}
-                                                    >
-                                                        <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
-                                                            <SelectValue />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((seconds) => (
-                                                                <SelectItem key={seconds} value={seconds.toString()}>
-                                                                    {seconds} second{seconds > 1 ? "s" : ""}
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <p className="text-xs text-muted-foreground">How long to wait before showing the popup</p>
-                                                </div>
-
-                                                {/* Show Button Toggle */}
-                                                <div className="flex items-center justify-between">
-                                                    <div className="space-y-0.5">
-                                                        <Label className="text-base">Show Action Button</Label>
-                                                        <p className="text-sm text-muted-foreground">Display the &quot;Explore&quot; button in the popup</p>
-                                                    </div>
-                                                    <Switch
-                                                        checked={welcomePopupShowButton}
-                                                        onCheckedChange={(checked) => {
-                                                            setWelcomePopupShowButton(checked)
-                                                            setHasChanges(true)
-                                                        }}
-                                                    />
-                                                </div>
-
-                                                {/* Information Display Options */}
-                                                <div className="space-y-4">
-                                                    <Label className="text-base">Show Information</Label>
-                                                    <div className="grid grid-cols-2 gap-4">
-                                                        <div className="flex items-center space-x-2">
-                                                            <Switch
-                                                                id="show-ratings"
-                                                                checked={welcomePopupShowInfo.ratings}
-                                                                onCheckedChange={(checked) => handlePopupInfoChange("ratings", checked)}
-                                                            />
-                                                            <Label htmlFor="show-ratings" className="flex items-center gap-2">
-                                                                <Star className="h-4 w-4" />
-                                                                Ratings
-                                                            </Label>
-                                                        </div>
-
-                                                        <div className="flex items-center space-x-2">
-                                                            <Switch
-                                                                id="show-address"
-                                                                checked={welcomePopupShowInfo.address}
-                                                                onCheckedChange={(checked) => handlePopupInfoChange("address", checked)}
-                                                            />
-                                                            <Label htmlFor="show-address" className="flex items-center gap-2">
-                                                                <MapPinIcon className="h-4 w-4" />
-                                                                Address
-                                                            </Label>
-                                                        </div>
-
-                                                        <div className="flex items-center space-x-2">
-                                                            <Switch
-                                                                id="show-hours"
-                                                                checked={welcomePopupShowInfo.hours}
-                                                                onCheckedChange={(checked) => handlePopupInfoChange("hours", checked)}
-                                                            />
-                                                            <Label htmlFor="show-hours" className="flex items-center gap-2">
-                                                                <Clock className="h-4 w-4" />
-                                                                Opening Hours
-                                                            </Label>
-                                                        </div>
-
-                                                        <div className="flex items-center space-x-2">
-                                                            <Switch
-                                                                id="show-phone"
-                                                                checked={welcomePopupShowInfo.phone}
-                                                                onCheckedChange={(checked) => handlePopupInfoChange("phone", checked)}
-                                                            />
-                                                            <Label htmlFor="show-phone" className="flex items-center gap-2">
-                                                                <Phone className="h-4 w-4" />
-                                                                Phone Number
-                                                            </Label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Live Preview */}
-                                                <div className="space-y-2">
-                                                    <Label className="flex items-center gap-2">
-                                                        <Eye className="h-4 w-4" />
-                                                        Preview
-                                                    </Label>
-                                                    <div className="rounded-lg border bg-muted/50 p-4">
-                                                        <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-lg">
-                                                            <div className="p-6 text-center">
-                                                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600">
-                                                                    <span className="text-2xl font-bold text-white">
-                                                                        {restaurant?.name?.charAt(0) || "R"}
-                                                                    </span>
-                                                                </div>
-                                                                <h3 className="mb-2 text-lg font-bold">
-                                                                    Welcome to {restaurant?.name || "Your Restaurant"}!
-                                                                </h3>
-                                                                <p className="mb-4 text-sm text-gray-600">{welcomePopupMessage}</p>
-                                                                <div className="space-y-2 text-xs text-gray-500">
-                                                                    {welcomePopupShowInfo.ratings && restaurant?.average_rating && (
-                                                                        <div className="flex items-center justify-center gap-1">
-                                                                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                                                            <span>
-                                                                                {restaurant.average_rating.toFixed(1)} ({restaurant.review_count} reviews)
-                                                                            </span>
-                                                                        </div>
-                                                                    )}
-                                                                    {welcomePopupShowInfo.address && restaurant?.address && (
-                                                                        <div className="flex items-center justify-center gap-1">
-                                                                            <MapPinIcon className="h-3 w-3" />
-                                                                            <span>{restaurant.address.split(",")[0]}</span>
-                                                                        </div>
-                                                                    )}
-                                                                    {welcomePopupShowInfo.hours && (
-                                                                        <div className="flex items-center justify-center gap-1">
-                                                                            <Clock className="h-3 w-3" />
-                                                                            <span>Open Today</span>
-                                                                        </div>
-                                                                    )}
-                                                                    {welcomePopupShowInfo.phone && restaurant?.phone && (
-                                                                        <div className="flex items-center justify-center gap-1">
-                                                                            <Phone className="h-3 w-3" />
-                                                                            <span>{restaurant.phone}</span>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                {welcomePopupShowButton && (
-                                                                    <Button size="sm" className="mt-4 bg-emerald-600 hover:bg-emerald-700">
-                                                                        Explore
-                                                                    </Button>
+                                            {/* Live Preview */}
+                                            <div className="space-y-2">
+                                                <Label className="flex items-center gap-2">
+                                                    <Eye className="h-4 w-4" />
+                                                    Preview
+                                                </Label>
+                                                <div className="rounded-lg border bg-muted/50 p-4">
+                                                    <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-lg">
+                                                        <div className="p-6 text-center">
+                                                            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600">
+                                                                <span className="text-2xl font-bold text-white">
+                                                                    {restaurant?.name?.charAt(0) || "R"}
+                                                                </span>
+                                                            </div>
+                                                            <h3 className="mb-2 text-lg font-bold">
+                                                                Welcome to {restaurant?.name || "Your Restaurant"}!
+                                                            </h3>
+                                                            <p className="mb-4 text-sm text-gray-600">{welcomePopupMessage}</p>
+                                                            <div className="space-y-2 text-xs text-gray-500">
+                                                                {welcomePopupShowInfo.ratings && restaurant?.average_rating && (
+                                                                    <div className="flex items-center justify-center gap-1">
+                                                                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                                                                        <span>
+                                                                            {restaurant.average_rating.toFixed(1)} ({restaurant.review_count} reviews)
+                                                                        </span>
+                                                                    </div>
+                                                                )}
+                                                                {welcomePopupShowInfo.address && restaurant?.address && (
+                                                                    <div className="flex items-center justify-center gap-1">
+                                                                        <MapPinIcon className="h-3 w-3" />
+                                                                        <span>{restaurant.address.split(",")[0]}</span>
+                                                                    </div>
+                                                                )}
+                                                                {welcomePopupShowInfo.hours && (
+                                                                    <div className="flex items-center justify-center gap-1">
+                                                                        <Clock className="h-3 w-3" />
+                                                                        <span>Open Today</span>
+                                                                    </div>
+                                                                )}
+                                                                {welcomePopupShowInfo.phone && restaurant?.phone && (
+                                                                    <div className="flex items-center justify-center gap-1">
+                                                                        <Phone className="h-3 w-3" />
+                                                                        <span>{restaurant.phone}</span>
+                                                                    </div>
                                                                 )}
                                                             </div>
+                                                            {welcomePopupShowButton && (
+                                                                <Button size="sm" className="mt-4 bg-emerald-600 hover:bg-emerald-700">
+                                                                    Explore
+                                                                </Button>
+                                                            )}
                                                         </div>
                                                     </div>
-                                                    <p className="text-xs text-muted-foreground">
-                                                        This is how your welcome popup will appear to visitors
-                                                    </p>
                                                 </div>
-                                            </>
-                                        )}
-                                    </CardContent>
-                                </Card>
-
-                                {/* Event Announcements Card */}
-                                <Card className="shadow-sm border-gray-200">
-                                    <CardHeader className="bg-gray-50/50">
-                                        <CardTitle className="flex items-center gap-2 text-gray-900">
-                                            <Calendar className="h-5 w-5 text-emerald-600" />
-                                            Event Announcements
-                                        </CardTitle>
-                                        <CardDescription>Automatically promote your upcoming events in the welcome popup</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-6 pt-6">
-                                        {/* Enable/Disable Event Announcements */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="space-y-0.5">
-                                                <Label className="text-base">Enable Event Announcements</Label>
-                                                <p className="text-sm text-muted-foreground">
-                                                    Show upcoming events instead of welcome message when available
+                                                <p className="text-xs text-muted-foreground">
+                                                    This is how your welcome popup will appear to visitors
                                                 </p>
                                             </div>
-                                            <Switch
-                                                checked={eventAnnouncementsEnabled}
-                                                onCheckedChange={(checked) => {
-                                                    setEventAnnouncementsEnabled(checked)
-                                                    setHasChanges(true)
-                                                }}
-                                            />
-                                        </div>
+                                        </>
+                                    )}
+                                </CardContent>
+                            </Card>
 
-                                        {eventAnnouncementsEnabled && (
-                                            <>
-                                                {/* Event Time Range */}
-                                                <div className="space-y-2">
-                                                    <Label>Event Time Range</Label>
-                                                    <Select
-                                                        value={eventAnnouncementDays.toString()}
-                                                        onValueChange={(value) => {
-                                                            setEventAnnouncementDays(Number.parseInt(value))
-                                                            setHasChanges(true)
-                                                        }}
-                                                    >
-                                                        <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
-                                                            <SelectValue />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="7">Next 7 days</SelectItem>
-                                                            <SelectItem value="14">Next 2 weeks</SelectItem>
-                                                            <SelectItem value="30">Next 30 days</SelectItem>
-                                                            <SelectItem value="60">Next 2 months</SelectItem>
-                                                            <SelectItem value="90">Next 3 months</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <p className="text-xs text-muted-foreground">
-                                                        Only show events happening within this time period
-                                                    </p>
-                                                </div>
-
-                                                {/* Maximum Events */}
-                                                <div className="space-y-2">
-                                                    <Label>Maximum Events in Popup</Label>
-                                                    <Select
-                                                        value={maxEventsInPopup.toString()}
-                                                        onValueChange={(value) => {
-                                                            setMaxEventsInPopup(Number.parseInt(value))
-                                                            setHasChanges(true)
-                                                        }}
-                                                    >
-                                                        <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
-                                                            <SelectValue />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="1">1 event</SelectItem>
-                                                            <SelectItem value="2">2 events</SelectItem>
-                                                            <SelectItem value="3">3 events</SelectItem>
-                                                            <SelectItem value="5">5 events</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <p className="text-xs text-muted-foreground">
-                                                        How many events to show at once (most urgent first)
-                                                    </p>
-                                                </div>
-
-                                                {/* Rotation Speed */}
-                                                <div className="space-y-2">
-                                                    <Label>Event Rotation Speed</Label>
-                                                    <Select
-                                                        value={eventRotationSpeed.toString()}
-                                                        onValueChange={(value) => {
-                                                            setEventRotationSpeed(Number.parseInt(value))
-                                                            setHasChanges(true)
-                                                        }}
-                                                    >
-                                                        <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
-                                                            <SelectValue />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="3">3 seconds</SelectItem>
-                                                            <SelectItem value="5">5 seconds</SelectItem>
-                                                            <SelectItem value="7">7 seconds</SelectItem>
-                                                            <SelectItem value="10">10 seconds</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <p className="text-xs text-muted-foreground">How fast to rotate between multiple events</p>
-                                                </div>
-
-                                                {/* Event Preview */}
-                                                <div className="space-y-2">
-                                                    <Label className="flex items-center gap-2">
-                                                        <Eye className="h-4 w-4" />
-                                                        Event Announcement Preview
-                                                    </Label>
-                                                    <div className="rounded-lg border bg-muted/50 p-4">
-                                                        <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-lg">
-                                                            <div className="p-6 text-center">
-                                                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600">
-                                                                    <span className="text-2xl font-bold text-white">
-                                                                        {restaurant?.name?.charAt(0) || "R"}
-                                                                    </span>
-                                                                </div>
-                                                                <h3 className="mb-2 text-lg font-bold">
-                                                                    Welcome to {restaurant?.name || "Your Restaurant"}!
-                                                                </h3>
-
-                                                                {/* Mock Event */}
-                                                                <div className="space-y-3">
-                                                                    <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-800">
-                                                                        <Calendar className="h-4 w-4" />
-                                                                        <span>This Friday</span>
-                                                                    </div>
-
-                                                                    <h4 className="text-lg font-semibold text-gray-900">Live Jazz Night</h4>
-
-                                                                    <p className="text-sm text-gray-600">
-                                                                        Join us for an evening of smooth jazz and great food
-                                                                    </p>
-
-                                                                    <div className="mt-3 flex justify-center gap-2">
-                                                                        <div className="h-2 w-2 rounded-full bg-emerald-600"></div>
-                                                                        <div className="h-2 w-2 rounded-full bg-gray-300"></div>
-                                                                        <div className="h-2 w-2 rounded-full bg-gray-300"></div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <Button size="sm" className="mt-4 w-full bg-emerald-600 hover:bg-emerald-700">
-                                                                    Get Event Tickets
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <p className="text-xs text-muted-foreground">
-                                                        This is how event announcements will appear in your popup
-                                                    </p>
-                                                </div>
-                                            </>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </div>
-
-                        {/* Integrations */}
-                        <div className={activeSection === "integrations" ? "block" : "hidden"}>
+                            {/* Event Announcements Card */}
                             <Card className="shadow-sm border-gray-200">
                                 <CardHeader className="bg-gray-50/50">
-                                    <CardTitle className="text-gray-900">Google Places Integration</CardTitle>
-                                    <CardDescription>Connect your Google Places listing to show ratings and reviews</CardDescription>
+                                    <CardTitle className="flex items-center gap-2 text-gray-900">
+                                        <Calendar className="h-5 w-5 text-emerald-600" />
+                                        Event Announcements
+                                    </CardTitle>
+                                    <CardDescription>Automatically promote your upcoming events in the welcome popup</CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-6 pt-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="googlePlaceId">Google Place ID</Label>
-                                        <div className="relative">
-                                            <Globe2 className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
-                                            <Input
-                                                id="googlePlaceId"
-                                                value={googlePlaceId}
-                                                onChange={(e) => handleInputChange(setGooglePlaceId, e.target.value)}
-                                                placeholder="e.g. ChIJN1t_tDeuEmsRUsoyG83frY4"
-                                                className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
-                                            />
+                                    {/* Enable/Disable Event Announcements */}
+                                    <div className="flex items-center justify-between">
+                                        <div className="space-y-0.5">
+                                            <Label className="text-base">Enable Event Announcements</Label>
+                                            <p className="text-sm text-muted-foreground">
+                                                Show upcoming events instead of welcome message when available
+                                            </p>
                                         </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Find your Place ID using the{" "}
-                                            <a
-                                                href="https://developers.google.com/maps/documentation/places/web-service/place-id"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-emerald-600 hover:underline"
-                                            >
-                                                Place ID Finder
-                                            </a>
-                                        </p>
+                                        <Switch
+                                            checked={eventAnnouncementsEnabled}
+                                            onCheckedChange={(checked) => {
+                                                setEventAnnouncementsEnabled(checked)
+                                                setHasChanges(true)
+                                            }}
+                                        />
                                     </div>
+
+                                    {eventAnnouncementsEnabled && (
+                                        <>
+                                            {/* Event Time Range */}
+                                            <div className="space-y-2">
+                                                <Label>Event Time Range</Label>
+                                                <Select
+                                                    value={eventAnnouncementDays.toString()}
+                                                    onValueChange={(value) => {
+                                                        setEventAnnouncementDays(Number.parseInt(value))
+                                                        setHasChanges(true)
+                                                    }}
+                                                >
+                                                    <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="7">Next 7 days</SelectItem>
+                                                        <SelectItem value="14">Next 2 weeks</SelectItem>
+                                                        <SelectItem value="30">Next 30 days</SelectItem>
+                                                        <SelectItem value="60">Next 2 months</SelectItem>
+                                                        <SelectItem value="90">Next 3 months</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Only show events happening within this time period
+                                                </p>
+                                            </div>
+
+                                            {/* Maximum Events */}
+                                            <div className="space-y-2">
+                                                <Label>Maximum Events in Popup</Label>
+                                                <Select
+                                                    value={maxEventsInPopup.toString()}
+                                                    onValueChange={(value) => {
+                                                        setMaxEventsInPopup(Number.parseInt(value))
+                                                        setHasChanges(true)
+                                                    }}
+                                                >
+                                                    <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="1">1 event</SelectItem>
+                                                        <SelectItem value="2">2 events</SelectItem>
+                                                        <SelectItem value="3">3 events</SelectItem>
+                                                        <SelectItem value="5">5 events</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <p className="text-xs text-muted-foreground">
+                                                    How many events to show at once (most urgent first)
+                                                </p>
+                                            </div>
+
+                                            {/* Rotation Speed */}
+                                            <div className="space-y-2">
+                                                <Label>Event Rotation Speed</Label>
+                                                <Select
+                                                    value={eventRotationSpeed.toString()}
+                                                    onValueChange={(value) => {
+                                                        setEventRotationSpeed(Number.parseInt(value))
+                                                        setHasChanges(true)
+                                                    }}
+                                                >
+                                                    <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="3">3 seconds</SelectItem>
+                                                        <SelectItem value="5">5 seconds</SelectItem>
+                                                        <SelectItem value="7">7 seconds</SelectItem>
+                                                        <SelectItem value="10">10 seconds</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <p className="text-xs text-muted-foreground">How fast to rotate between multiple events</p>
+                                            </div>
+
+                                            {/* Event Preview */}
+                                            <div className="space-y-2">
+                                                <Label className="flex items-center gap-2">
+                                                    <Eye className="h-4 w-4" />
+                                                    Event Announcement Preview
+                                                </Label>
+                                                <div className="rounded-lg border bg-muted/50 p-4">
+                                                    <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-lg">
+                                                        <div className="p-6 text-center">
+                                                            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600">
+                                                                <span className="text-2xl font-bold text-white">
+                                                                    {restaurant?.name?.charAt(0) || "R"}
+                                                                </span>
+                                                            </div>
+                                                            <h3 className="mb-2 text-lg font-bold">
+                                                                Welcome to {restaurant?.name || "Your Restaurant"}!
+                                                            </h3>
+
+                                                            {/* Mock Event */}
+                                                            <div className="space-y-3">
+                                                                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-800">
+                                                                    <Calendar className="h-4 w-4" />
+                                                                    <span>This Friday</span>
+                                                                </div>
+
+                                                                <h4 className="text-lg font-semibold text-gray-900">Live Jazz Night</h4>
+
+                                                                <p className="text-sm text-gray-600">
+                                                                    Join us for an evening of smooth jazz and great food
+                                                                </p>
+
+                                                                <div className="mt-3 flex justify-center gap-2">
+                                                                    <div className="h-2 w-2 rounded-full bg-emerald-600"></div>
+                                                                    <div className="h-2 w-2 rounded-full bg-gray-300"></div>
+                                                                    <div className="h-2 w-2 rounded-full bg-gray-300"></div>
+                                                                </div>
+                                                            </div>
+
+                                                            <Button size="sm" className="mt-4 w-full bg-emerald-600 hover:bg-emerald-700">
+                                                                Get Event Tickets
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    This is how event announcements will appear in your popup
+                                                </p>
+                                            </div>
+                                        </>
+                                    )}
                                 </CardContent>
                             </Card>
                         </div>
                     </div>
-                </div>
 
-                {/* Floating Save Button */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{
-                        opacity: hasChanges ? 1 : 0,
-                        y: hasChanges ? 0 : 20,
-                    }}
-                    className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-4"
-                >
-                    <div className="rounded-lg border bg-white/80 px-4 py-2 shadow-sm backdrop-blur-sm">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <AlertCircle className="h-4 w-4" />
-                            <span>You have unsaved changes</span>
-                        </div>
+                    {/* Integrations */}
+                    <div className={activeSection === "integrations" ? "block" : "hidden"}>
+                        <Card className="shadow-sm border-gray-200">
+                            <CardHeader className="bg-gray-50/50">
+                                <CardTitle className="text-gray-900">Google Places Integration</CardTitle>
+                                <CardDescription>Connect your Google Places listing to show ratings and reviews</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6 pt-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="googlePlaceId">Google Place ID</Label>
+                                    <div className="relative">
+                                        <Globe2 className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
+                                        <Input
+                                            id="googlePlaceId"
+                                            value={googlePlaceId}
+                                            onChange={(e) => handleInputChange(setGooglePlaceId, e.target.value)}
+                                            placeholder="e.g. ChIJN1t_tDeuEmsRUsoyG83frY4"
+                                            className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Find your Place ID using the{" "}
+                                        <a
+                                            href="https://developers.google.com/maps/documentation/places/web-service/place-id"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-emerald-600 hover:underline"
+                                        >
+                                            Place ID Finder
+                                        </a>
+                                    </p>
+                                </div>
+                            </CardContent>
+                        </Card>
                     </div>
-                    <Button
-                        onClick={saveProfile}
-                        disabled={saving || !hasChanges}
-                        size="lg"
-                        className="bg-emerald-600 shadow-lg transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl"
-                    >
-                        <Save className="mr-2 h-4 w-4" />
-                        {saving ? "Saving..." : "Save Changes"}
-                    </Button>
-                </motion.div>
-            </main>
-        </div>
+                </div>
+            </div>
+
+            {/* Floating Save Button */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{
+                    opacity: hasChanges ? 1 : 0,
+                    y: hasChanges ? 0 : 20,
+                }}
+                className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-4"
+            >
+                <div className="rounded-lg border bg-white/80 px-4 py-2 shadow-sm backdrop-blur-sm">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>You have unsaved changes</span>
+                    </div>
+                </div>
+                <Button
+                    onClick={saveProfile}
+                    disabled={saving || !hasChanges}
+                    size="lg"
+                    className="bg-emerald-600 shadow-lg transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl"
+                >
+                    <Save className="mr-2 h-4 w-4" />
+                    {saving ? "Saving..." : "Save Changes"}
+                </Button>
+            </motion.div>
+        </main>
     )
 }

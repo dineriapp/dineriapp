@@ -1,15 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { motion } from "motion/react"
-import { QrCode, BarChart3, Download, Eye } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { toast } from "sonner"
-import type { Restaurant } from "@/lib/types"
 import { QRCodeGenerator } from "@/lib/qr-generator"
+import type { Restaurant } from "@/lib/types"
+import { BarChart3, Download, Eye, QrCode } from "lucide-react"
+import { motion } from "motion/react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { QRCodeGeneratorComponent } from "../../../_components/qr-code-generator"
-import { DashboardHeader } from "../../../_components/header"
 
 interface QRCode {
     id: string
@@ -258,25 +257,22 @@ export default function QRCodesPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-                <DashboardHeader />
-                <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
-                    <div className="flex items-center space-x-2 text-slate-500">
-                        <svg
-                            className="animate-spin h-5 w-5 text-teal-600"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                        </svg>
-                        <span>Loading...</span>
-                    </div>
+            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
+                <div className="flex items-center space-x-2 text-slate-500">
+                    <svg
+                        className="animate-spin h-5 w-5 text-teal-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    <span>Loading...</span>
                 </div>
             </div>
         )
@@ -284,25 +280,22 @@ export default function QRCodesPage() {
 
     if (!restaurant) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-                <DashboardHeader />
-                <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
-                    <div className="flex items-center space-x-2 text-slate-500">
-                        <svg
-                            className="animate-spin h-5 w-5 text-teal-600"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                        </svg>
-                        <span>Restaurant not found</span>
-                    </div>
+            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
+                <div className="flex items-center space-x-2 text-slate-500">
+                    <svg
+                        className="animate-spin h-5 w-5 text-teal-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    <span>Restaurant not found</span>
                 </div>
             </div>
 
@@ -310,118 +303,115 @@ export default function QRCodesPage() {
     }
 
     return (
-        <div className="min-h-screen  bg-gradient-to-b from-slate-50 to-white">
-            <DashboardHeader />
 
-            <main className="max-w-[1200px] mx-auto px-4 py-8">
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-                    <h1 className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-4xl font-bold text-transparent">
-                        QR Codes
-                    </h1>
-                    <p className="mt-2 text-muted-foreground">Generate branded QR codes for your restaurant</p>
-                </motion.div>
+        <main className="max-w-[1200px] mx-auto px-4 py-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+                <h1 className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-4xl font-bold text-transparent">
+                    QR Codes
+                </h1>
+                <p className="mt-2 text-muted-foreground">Generate branded QR codes for your restaurant</p>
+            </motion.div>
 
-                <Tabs defaultValue="generator" className="space-y-6">
-                    <TabsList className="grid w-full grid-cols-2 h-[44px]">
-                        <TabsTrigger value="generator" className="flex items-center gap-2">
-                            <QrCode className="h-4 w-4" />
-                            Generator
-                        </TabsTrigger>
-                        <TabsTrigger value="analytics" className="flex items-center gap-2">
-                            <BarChart3 className="h-4 w-4" />
-                            Analytics
-                        </TabsTrigger>
-                    </TabsList>
+            <Tabs defaultValue="generator" className="space-y-6">
+                <TabsList className="grid w-full grid-cols-2 h-[44px]">
+                    <TabsTrigger value="generator" className="flex items-center gap-2">
+                        <QrCode className="h-4 w-4" />
+                        Generator
+                    </TabsTrigger>
+                    <TabsTrigger value="analytics" className="flex items-center gap-2">
+                        <BarChart3 className="h-4 w-4" />
+                        Analytics
+                    </TabsTrigger>
+                </TabsList>
 
-                    <TabsContent value="generator">
-                        <QRCodeGeneratorComponent restaurant={restaurant} />
-                    </TabsContent>
+                <TabsContent value="generator">
+                    <QRCodeGeneratorComponent restaurant={restaurant} />
+                </TabsContent>
 
-                    <TabsContent value="analytics">
-                        <div className="space-y-6">
-                            {/* Stats Overview */}
-                            <div className="grid gap-6 md:grid-cols-3">
-                                <Card className="bg-gradient-to-br from-teal-50 to-white border-teal-200">
-                                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                        <CardTitle className="text-sm font-medium text-muted-foreground">Total QR Codes</CardTitle>
-                                        <QrCode className="h-4 w-4 text-teal-600" />
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="text-3xl font-bold text-teal-700">{totalQRCodes}</div>
-                                        <p className="mt-1 text-xs text-muted-foreground">Generated this month</p>
-                                    </CardContent>
-                                </Card>
-
-                                <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-200">
-                                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                        <CardTitle className="text-sm font-medium text-muted-foreground">Total Scans</CardTitle>
-                                        <Eye className="h-4 w-4 text-blue-600" />
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="text-3xl font-bold text-blue-700">{totalScans}</div>
-                                        <p className="mt-1 text-xs text-muted-foreground">Scans this month</p>
-                                    </CardContent>
-                                </Card>
-
-                                <Card className="bg-gradient-to-br from-purple-50 to-white border-purple-200">
-                                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                        <CardTitle className="text-sm font-medium text-muted-foreground">Downloads</CardTitle>
-                                        <Download className="h-4 w-4 text-purple-600" />
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="text-3xl font-bold text-purple-700">{totalDownloads}</div>
-                                        <p className="mt-1 text-xs text-muted-foreground">Downloads this month</p>
-                                    </CardContent>
-                                </Card>
-                            </div>
-
-                            {/* QR Code History */}
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>QR Code History</CardTitle>
-                                    <CardDescription>Track your generated QR codes and their performance</CardDescription>
+                <TabsContent value="analytics">
+                    <div className="space-y-6">
+                        {/* Stats Overview */}
+                        <div className="grid gap-6 md:grid-cols-3">
+                            <Card className="bg-gradient-to-br from-teal-50 to-white border-teal-200">
+                                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                    <CardTitle className="text-sm font-medium text-muted-foreground">Total QR Codes</CardTitle>
+                                    <QrCode className="h-4 w-4 text-teal-600" />
                                 </CardHeader>
                                 <CardContent>
-                                    {qrStats.length > 0 ? (
-                                        <div className="space-y-4">
-                                            {qrStats.map((qr) => (
-                                                <div
-                                                    key={qr.id}
-                                                    className="flex items-center justify-between p-4 rounded-lg border bg-gradient-to-r from-gray-50 to-white"
-                                                >
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-teal-100 to-blue-100">
-                                                            <QrCode className="h-5 w-5 text-teal-600" />
-                                                        </div>
-                                                        <div>
-                                                            <p className="font-medium capitalize">{qr.type} QR Code</p>
-                                                            <p className="text-sm text-muted-foreground">
-                                                                Created {new Date(qr.created_at).toLocaleDateString()}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <p className="font-medium">{qr.scans} scans</p>
-                                                        <p className="text-sm text-muted-foreground">{Math.floor(qr.scans * 0.15)} downloads</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="py-12 text-center">
-                                            <QrCode className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                                            <h3 className="mb-2 text-lg font-semibold">No QR codes yet</h3>
-                                            <p className="mb-4 text-muted-foreground">
-                                                Generate your first QR code to start tracking analytics
-                                            </p>
-                                        </div>
-                                    )}
+                                    <div className="text-3xl font-bold text-teal-700">{totalQRCodes}</div>
+                                    <p className="mt-1 text-xs text-muted-foreground">Generated this month</p>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-200">
+                                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Scans</CardTitle>
+                                    <Eye className="h-4 w-4 text-blue-600" />
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-3xl font-bold text-blue-700">{totalScans}</div>
+                                    <p className="mt-1 text-xs text-muted-foreground">Scans this month</p>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="bg-gradient-to-br from-purple-50 to-white border-purple-200">
+                                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                    <CardTitle className="text-sm font-medium text-muted-foreground">Downloads</CardTitle>
+                                    <Download className="h-4 w-4 text-purple-600" />
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-3xl font-bold text-purple-700">{totalDownloads}</div>
+                                    <p className="mt-1 text-xs text-muted-foreground">Downloads this month</p>
                                 </CardContent>
                             </Card>
                         </div>
-                    </TabsContent>
-                </Tabs>
-            </main>
-        </div>
+
+                        {/* QR Code History */}
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>QR Code History</CardTitle>
+                                <CardDescription>Track your generated QR codes and their performance</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                {qrStats.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {qrStats.map((qr) => (
+                                            <div
+                                                key={qr.id}
+                                                className="flex items-center justify-between p-4 rounded-lg border bg-gradient-to-r from-gray-50 to-white"
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-teal-100 to-blue-100">
+                                                        <QrCode className="h-5 w-5 text-teal-600" />
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-medium capitalize">{qr.type} QR Code</p>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            Created {new Date(qr.created_at).toLocaleDateString()}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="font-medium">{qr.scans} scans</p>
+                                                    <p className="text-sm text-muted-foreground">{Math.floor(qr.scans * 0.15)} downloads</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="py-12 text-center">
+                                        <QrCode className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+                                        <h3 className="mb-2 text-lg font-semibold">No QR codes yet</h3>
+                                        <p className="mb-4 text-muted-foreground">
+                                            Generate your first QR code to start tracking analytics
+                                        </p>
+                                    </div>
+                                )}
+                            </CardContent>
+                        </Card>
+                    </div>
+                </TabsContent>
+            </Tabs>
+        </main>
     )
 }

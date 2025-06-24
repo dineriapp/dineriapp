@@ -47,7 +47,7 @@ export async function signup(formData: FormData) {
         email,
         password,
         options: {
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/confirm`,
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`,
         },
     })
 
