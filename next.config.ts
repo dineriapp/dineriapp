@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
     ],
 
   },
+  optimizePackageImports: [
+    '@prisma/client',
+  ],
   // webpack: (config) => {
   //   // Suppress the "Critical dependency: the request of a dependency is an expression" warning
   //   config.module.exprContextCritical = false;
