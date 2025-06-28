@@ -1,0 +1,248 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ButtonStyle {
+  rounded
+  square
+  pill
+}
+
+enum BgType {
+  color
+  gradient
+  image
+}
+
+enum GradientDirection {
+  top
+  bottom
+  left
+  right
+  top_right
+  top_left
+  bottom_right
+  bottom_left
+}
+
+enum ButtonVariant {
+  solid
+  outline
+}
+
+enum SocialIconsPosition {
+  top
+  bottom
+}
+
+enum SubscriptionPlan {
+  basic
+  pro
+  enterprise
+}
+
+enum SubscriptionStatus {
+  active
+  inactive
+  past_due
+}
+
+model User {
+  id                     String             @id @default(uuid()) @db.Uuid
+  supabase_id            String             @unique
+  email                  String             @unique
+  subscription_plan      SubscriptionPlan   @default(basic)
+  subscription_status    SubscriptionStatus @default(inactive)
+  stripe_customer_id     String?
+  stripe_subscription_id String?
+  restaurants            Restaurant[]
+
+  @@map("users")
+}
+
+model Restaurant {
+  id                          String              @id @default(uuid()) @db.Uuid
+  user_id                     String              @db.Uuid
+  name                        String
+  bio                         String?             @default("")
+  logo_url                    String?
+  bg_color                    String?             @default("#ffffff")
+  accent_color                String?             @default("#10b981")
+  button_style                ButtonStyle         @default(rounded)
+  font_family                 String?             @default("Inter")
+  bg_type                     BgType              @default(color)
+  bg_gradient_start           String?             @default("#ffffff")
+  bg_gradient_end             String?             @default("#f3f4f6")
+  gradient_direction          GradientDirection   @default(bottom_right)
+  button_variant              ButtonVariant       @default(solid)
+  slug                        String              @unique
+  address                     String?
+  phone                       String?
+  email                       String?
+  instagram                   String?
+  facebook                    String?
+  whatsapp                    String?
+  opening_hours               Json?
+  latitude                    Float?
+  longitude                   Float?
+  review_count                Int?                @default(0)
+  average_rating              Float?
+  google_place_id             String?
+  bg_image_url                String?
+  welcome_popup_enabled       Boolean?            @default(true)
+  welcome_popup_message       String?             @default("Welcome! We're excited to have you visit us.")
+  welcome_popup_delay         Int?                @default(2)
+  welcome_popup_show_info     Json?               @default("{\"hours\": true, \"phone\": true, \"address\": true, \"ratings\": true}")
+  social_icons_position       SocialIconsPosition @default(top)
+  event_announcements_enabled Boolean?            @default(true)
+  event_announcement_days     Int?                @default(30)
+  max_events_in_popup         Int?                @default(3)
+  event_rotation_speed        Int?                @default(5)
+  welcome_popup_show_button   Boolean?            @default(true)
+  createdAt                   DateTime            @default(now()) @map("created_at")
+  updatedAt                   DateTime            @default(now()) @updatedAt @map("updated_at")
+
+  events         Event[]
+  faqCategories  FaqCategory[]
+  links          Link[]
+  menuCategories MenuCategory[]
+  reviews        Review[]
+  user           User           @relation(fields: [user_id], references: [id])
+
+  @@map("restaurants")
+}
+
+model Event {
+  id            String   @id @default(uuid()) @db.Uuid
+  restaurant_id String   @db.Uuid
+  title         String
+  description   String?
+  date          DateTime
+  ticket_url    String?
+  sort_order    Int      @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
+
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+
+  @@map("events")
+}
+
+model FaqCategory {
+  id            String   @id @default(uuid()) @db.Uuid
+  restaurant_id String   @db.Uuid
+  name          String
+  description   String?
+  sort_order    Int      @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
+
+  faqs       Faq[]
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+
+  @@map("faq_categories")
+}
+
+model Faq {
+  id          String   @id @default(uuid()) @db.Uuid
+  category_id String   @db.Uuid
+  question    String
+  answer      String
+  sort_order  Int      @default(0)
+  is_featured Boolean? @default(false)
+  view_count  Int?     @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  category FaqCategory @relation(fields: [category_id], references: [id])
+
+  @@map("faqs")
+}
+
+model Link {
+  id            String   @id @default(uuid()) @db.Uuid
+  restaurant_id String   @db.Uuid
+  title         String
+  url           String
+  sort_order    Int      @default(0)
+  show_icon     Boolean? @default(true)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  views      LinkView[]
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+
+  @@map("links")
+}
+
+model LinkView {
+  id         String   @id @default(uuid()) @db.Uuid
+  link_id    String   @db.Uuid
+  ip_hash    String
+  user_agent String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  link Link @relation(fields: [link_id], references: [id])
+
+  @@map("link_views")
+}
+
+model MenuCategory {
+  id            String   @id @default(uuid()) @db.Uuid
+  restaurant_id String   @db.Uuid
+  name          String
+  description   String?
+  sort_order    Int      @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
+
+  items      MenuItem[]
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+
+  @@map("menu_categories")
+}
+
+model MenuItem {
+  id            String   @id @default(uuid()) @db.Uuid
+  category_id   String   @db.Uuid
+  name          String
+  description   String?
+  price         Float
+  sort_order    Int      @default(0)
+  allergens     String[] @default([])
+  is_halal      Boolean? @default(false)
+  allergen_info String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
+
+  category MenuCategory @relation(fields: [category_id], references: [id])
+
+  @@map("menu_items")
+}
+
+model Review {
+  id            String   @id @default(uuid()) @db.Uuid
+  restaurant_id String   @db.Uuid
+  rating        Int
+  comment       String?
+  author_name   String
+  time          DateTime @default(now())
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
+
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+
+  @@map("reviews")
+}

@@ -1,5 +1,6 @@
 'use server'
 
+import prisma from '@/lib/prisma'
 import { createClient } from '@/supabase/clients/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -43,7 +44,7 @@ export async function signup(formData: FormData) {
         return { error: "Email and password are required." };
     }
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -60,7 +61,37 @@ export async function signup(formData: FormData) {
         return { error: message };
     }
 
-    // Try to sign in immediately (only works if email confirmation is not required)
+    // Sync with local DB
+    if (data.user) {
+        try {
+            const existingUser = await prisma.user.findFirst({
+                where: {
+                    OR: [
+                        { supabase_id: data.user.id },
+                        { email: data.user.email! },
+                        { id: data.user.id, },
+                    ],
+                },
+            })
+
+            if (!existingUser) {
+                await prisma.user.create({
+                    data: {
+                        email: data.user.email!,
+                        supabase_id: data.user.id,
+                        id: data.user.id,
+                    },
+                })
+            }
+        } catch (err) {
+            console.error(
+                '❌ Failed to create user in local DB:',
+                err instanceof Error ? err.message : err
+            )
+        }
+    }
+
+    // Attempt to sign in immediately
     const { error: signInError } = await supabase.auth.signInWithPassword({
         email, password,
 
@@ -77,4 +108,10 @@ export async function signup(formData: FormData) {
 
     revalidatePath('/dashboard', 'layout')
     redirect('/dashboard')
+}
+
+export async function signout() {
+    const supabase = await createClient()
+    await supabase.auth.signOut()
+    redirect('/')
 }

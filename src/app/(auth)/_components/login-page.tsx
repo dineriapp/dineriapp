@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { login } from "../login/actions"
+import { login } from "../../../actions/auth"
 
 const loginSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),

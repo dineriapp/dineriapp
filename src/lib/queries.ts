@@ -1,0 +1,266 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
+import ky from "./ky"
+
+interface Link {
+    id: string
+    restaurant_id: string
+    title: string
+    url: string
+    sort_order: number
+    show_icon?: boolean
+    createdAt: Date
+}
+
+export function useLinks(restaurantId: string | undefined) {
+    return useQuery({
+        queryKey: ["links", restaurantId],
+        queryFn: async () => {
+            if (!restaurantId) return []
+            const response = await ky.get(`/api/links?restaurant_id=${restaurantId}`).json<{ data: Link[] }>()
+            return response.data
+        },
+        enabled: !!restaurantId, // Only run query when restaurantId is available
+        staleTime: 60 * 1000, // 1 minute
+    })
+}
+
+export function useCreateLink(restaurantId: string | undefined) {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (data: { title: string; url: string }) => {
+            if (!restaurantId) throw new Error("Restaurant ID is required")
+
+            try {
+                const response = await ky
+                    .post("/api/links", {
+                        json: { ...data, restaurant_id: restaurantId },
+                    })
+                    .json<{ data: Link }>();
+
+                return response.data;
+            } catch (error: any) {
+                if (error.name === "HTTPError" && error.response) {
+                    const errorBody = await error.response.json();
+                    throw new Error(errorBody?.error || "Something went wrong while creating the link.");
+                }
+
+                throw new Error("Unexpected error occurred.");
+            }
+        },
+        onMutate: async (newLink) => {
+            if (!restaurantId) return
+
+            await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
+
+            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+
+            const optimisticLink: Link = {
+                id: `temp-${Date.now()}`,
+                restaurant_id: restaurantId,
+                title: newLink.title,
+                url: newLink.url.startsWith("http") ? newLink.url : `https://${newLink.url}`,
+                sort_order: previousLinks ? Math.max(...previousLinks.map((l) => l.sort_order)) + 1 : 0,
+                show_icon: true,
+                createdAt: new Date(),
+            }
+
+            queryClient.setQueryData<Link[]>(["links", restaurantId], (old) =>
+                old ? [...old, optimisticLink] : [optimisticLink],
+            )
+
+            return { previousLinks, optimisticLink }
+        },
+        onError: (err, newLink, context) => {
+            if (restaurantId && context?.previousLinks) {
+                queryClient.setQueryData(["links", restaurantId], context.previousLinks)
+            }
+            toast.error("Error", {
+                description: err.message
+            })
+        },
+        onSuccess: () => {
+            toast.success("Link added successfully")
+        },
+        onSettled: () => {
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
+        },
+    })
+}
+
+export function useUpdateLink(restaurantId: string | undefined) {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async ({ id, ...data }: { id: string; title: string; url: string }) => {
+            const response = await ky.put(`/api/links/${id}`, { json: data }).json<{ data: Link }>()
+            return response.data
+        },
+        onMutate: async (updatedLink) => {
+            if (!restaurantId) return
+
+            await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
+
+            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+
+            queryClient.setQueryData<Link[]>(
+                ["links", restaurantId],
+                (old) =>
+                    old?.map((link) =>
+                        link.id === updatedLink.id ? { ...link, title: updatedLink.title, url: updatedLink.url } : link,
+                    ) || [],
+            )
+
+            return { previousLinks }
+        },
+        onError: (err, updatedLink, context) => {
+            if (restaurantId && context?.previousLinks) {
+                queryClient.setQueryData(["links", restaurantId], context.previousLinks)
+            }
+            toast.error("Failed to update link")
+        },
+        onSuccess: () => {
+            toast.success("Link updated successfully")
+        },
+        onSettled: () => {
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
+        },
+    })
+}
+
+export function useDeleteLink(restaurantId: string | undefined) {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            await ky.delete(`/api/links/${id}`)
+            return id
+        },
+        onMutate: async (deletedId) => {
+            if (!restaurantId) return
+
+            await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
+
+            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+
+            queryClient.setQueryData<Link[]>(
+                ["links", restaurantId],
+                (old) => old?.filter((link) => link.id !== deletedId) || [],
+            )
+
+            return { previousLinks }
+        },
+        onError: (err, deletedId, context) => {
+            if (restaurantId && context?.previousLinks) {
+                queryClient.setQueryData(["links", restaurantId], context.previousLinks)
+            }
+            toast.error("Failed to delete link")
+        },
+        onSuccess: () => {
+            toast.success("Link deleted successfully")
+        },
+        onSettled: () => {
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
+        },
+    })
+}
+
+export function useBulkDeleteLinks(restaurantId: string | undefined) {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (linkIds: string[]) => {
+            const response = await ky
+                .delete("/api/links/bulk-delete", {
+                    json: { linkIds },
+                })
+                .json<{ data: { deletedCount: number } }>()
+            return response.data
+        },
+        onMutate: async (deletedIds) => {
+            if (!restaurantId) return
+
+            await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
+
+            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+
+            queryClient.setQueryData<Link[]>(
+                ["links", restaurantId],
+                (old) => old?.filter((link) => !deletedIds.includes(link.id)) || [],
+            )
+
+            return { previousLinks }
+        },
+        onError: (err, deletedIds, context) => {
+            if (restaurantId && context?.previousLinks) {
+                queryClient.setQueryData(["links", restaurantId], context.previousLinks)
+            }
+            toast.error("Failed to delete links")
+        },
+        onSuccess: (data) => {
+            toast.success(`Successfully deleted ${data.deletedCount} link${data.deletedCount > 1 ? "s" : ""}`)
+        },
+        onSettled: () => {
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
+        },
+    })
+}
+
+export function useReorderLink(restaurantId: string | undefined) {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async ({ linkId, direction }: { linkId: string; direction: "up" | "down" }) => {
+            const response = await ky
+                .put("/api/links/reorder", {
+                    json: { linkId, direction },
+                })
+                .json<{ data: Link[] }>()
+            return response.data
+        },
+        onMutate: async ({ linkId, direction }) => {
+            if (!restaurantId) return
+
+            await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
+
+            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+
+            if (previousLinks) {
+                const currentIndex = previousLinks.findIndex((link) => link.id === linkId)
+                const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1
+
+                if (newIndex >= 0 && newIndex < previousLinks.length) {
+                    const newLinks = [...previousLinks]
+                    const temp = newLinks[currentIndex].sort_order
+                    newLinks[currentIndex].sort_order = newLinks[newIndex].sort_order
+                    newLinks[newIndex].sort_order = temp
+                    newLinks.sort((a, b) => a.sort_order - b.sort_order)
+
+                    queryClient.setQueryData(["links", restaurantId], newLinks)
+                }
+            }
+
+            return { previousLinks }
+        },
+        onError: (err, variables, context) => {
+            if (restaurantId && context?.previousLinks) {
+                queryClient.setQueryData(["links", restaurantId], context.previousLinks)
+            }
+            toast.error("Failed to reorder link")
+        },
+        onSettled: () => {
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
+        },
+    })
+}

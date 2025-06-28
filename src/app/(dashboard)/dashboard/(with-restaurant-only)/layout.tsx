@@ -1,6 +1,7 @@
+import prisma from "@/lib/prisma";
 import { createClient } from "@/supabase/clients/server";
 import { redirect } from "next/navigation";
-import { DashboardHeader } from "../../_components/header";
+import { DashboardHeaderClientSide } from "../../_components/header-client-side";
 
 export default async function WithResttaurantLayout({
     children,
@@ -26,9 +27,17 @@ export default async function WithResttaurantLayout({
         redirect('/dashboard/create')
     }
 
+    const prismaUser = await prisma.user.findFirst({
+        where: {
+            id: user.id
+        }
+    })
+
+    if (!prismaUser) redirect("/login")
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-            <DashboardHeader />
+            <DashboardHeaderClientSide user={user} prismaUser={prismaUser} />
             {children}
         </div>
     );

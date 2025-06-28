@@ -27,37 +27,24 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+    useBulkDeleteLinks,
+    useCreateLink,
+    useDeleteLink,
+    useLinks,
+    useReorderLink,
+    useUpdateLink,
+} from "@/lib/queries"
+import { useUserStore } from "@/stores/auth-store"
+import { useRestaurantStore } from "@/stores/restaurant-store"
+import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { ArrowDown, ArrowUp, Edit, Grip, Plus, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
+import { useState } from "react"
 
-// Define types
-interface Restaurant {
-    id: string
-    user_id: string
-    name: string
-    slug: string
-}
-
-interface RestaurantLink {
-    id: string
-    restaurant_id: string
-    title: string
-    url: string
-    sort_order: number
-    created_at: string
-}
-
-// Animation variants
 const container = {
     hidden: { opacity: 0 },
-    show: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-        },
-    },
+    show: { opacity: 1, transition: { staggerChildren: 0.1 } },
 }
 
 const item = {
@@ -65,185 +52,60 @@ const item = {
     show: { opacity: 1, y: 0 },
 }
 
-// Dummy data
-const dummyRestaurant: Restaurant = {
-    id: "2",
-    user_id: "dummy-user-2",
-    name: "Bistro Delight",
-    slug: "bistro-delight",
-}
-
-const initialDummyLinks: RestaurantLink[] = [
-    {
-        id: "1",
-        restaurant_id: "2",
-        title: "View Our Menu",
-        url: "https://example.com/menu",
-        sort_order: 0,
-        created_at: new Date().toISOString(),
-    },
-    {
-        id: "2",
-        restaurant_id: "2",
-        title: "Make a Reservation",
-        url: "https://example.com/reservation",
-        sort_order: 1,
-        created_at: new Date().toISOString(),
-    },
-    {
-        id: "3",
-        restaurant_id: "2",
-        title: "Follow us on Instagram",
-        url: "https://instagram.com/bistrodelight",
-        sort_order: 2,
-        created_at: new Date().toISOString(),
-    },
-    {
-        id: "4",
-        restaurant_id: "2",
-        title: "Get Directions",
-        url: "https://maps.google.com",
-        sort_order: 3,
-        created_at: new Date().toISOString(),
-    },
-]
-
 export default function LinksPage() {
-    const [restaurant, setRestaurant] = useState<Restaurant | null>(null)
-    const [links, setLinks] = useState<RestaurantLink[]>([])
+    const { restaurants, selectedRestaurant } = useRestaurantStore()
+    const { prismaUser } = useUserStore()
+    const openPopup = useUpgradePopupStore(state => state.open)
+
     const [newTitle, setNewTitle] = useState("")
     const [newUrl, setNewUrl] = useState("")
-    const [editingLink, setEditingLink] = useState<RestaurantLink | null>(null)
-    const [loading, setLoading] = useState(true)
+    const [editingLink, setEditingLink] = useState<any>(null)
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-    const [isSubmitting, setIsSubmitting] = useState(false)
     const [selectedLinks, setSelectedLinks] = useState<Set<string>>(new Set())
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
-    useEffect(() => {
-        // Simulate loading data
-        const timer = setTimeout(() => {
-            setRestaurant(dummyRestaurant)
-            setLinks(initialDummyLinks)
-            setLoading(false)
-        }, 800)
+    const restaurantId = selectedRestaurant?.id
 
-        return () => clearTimeout(timer)
-    }, [])
+    const { data: links = [], isLoading, error } = useLinks(restaurantId)
+    const createMutation = useCreateLink(restaurantId)
+    const updateMutation = useUpdateLink(restaurantId)
+    const deleteMutation = useDeleteLink(restaurantId)
+    const bulkDeleteMutation = useBulkDeleteLinks(restaurantId)
+    const reorderMutation = useReorderLink(restaurantId)
 
-    const handleAddLink = async (e: React.FormEvent) => {
+    const handleAddLink = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!restaurant || isSubmitting) return
+        if (!newTitle.trim() || !newUrl.trim() || !restaurantId) return
 
-        try {
-            setIsSubmitting(true)
+        setIsAddDialogOpen(false)
+        setNewTitle("")
+        setNewUrl("")
 
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-
-            const nextOrder = links.length > 0 ? Math.max(...links.map((link) => link.sort_order)) + 1 : 0
-
-            const newLink: RestaurantLink = {
-                id: Date.now().toString(), // Simple ID generation for demo
-                restaurant_id: restaurant.id,
-                title: newTitle.trim(),
-                url: newUrl.trim().startsWith("http") ? newUrl.trim() : `https://${newUrl.trim()}`,
-                sort_order: nextOrder,
-                created_at: new Date().toISOString(),
-            }
-
-            setLinks([...links, newLink])
-            setNewTitle("")
-            setNewUrl("")
-            setIsAddDialogOpen(false)
-
-            toast("Link added successfully")
-        } catch {
-            toast("Error adding link")
-        } finally {
-            setIsSubmitting(false)
-        }
+        createMutation.mutate(
+            { title: newTitle.trim(), url: newUrl.trim() },
+        )
     }
 
-    const handleUpdateLink = async (e: React.FormEvent) => {
+    const handleUpdateLink = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!editingLink || isSubmitting) return
+        if (!editingLink || !newTitle.trim() || !newUrl.trim()) return
 
-        try {
-            setIsSubmitting(true)
+        setIsEditDialogOpen(false)
+        setEditingLink(null)
+        setNewTitle("")
+        setNewUrl("")
 
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-
-            const updatedUrl = newUrl.trim().startsWith("http") ? newUrl.trim() : `https://${newUrl.trim()}`
-
-            setLinks(
-                links.map((link) =>
-                    link.id === editingLink.id
-                        ? {
-                            ...link,
-                            title: newTitle.trim(),
-                            url: updatedUrl,
-                        }
-                        : link,
-                ),
-            )
-
-            setIsEditDialogOpen(false)
-            setEditingLink(null)
-
-            toast("Link updated successfully")
-        } catch {
-            toast("Error updating link")
-        } finally {
-            setIsSubmitting(false)
-        }
+        updateMutation.mutate(
+            { id: editingLink.id, title: newTitle.trim(), url: newUrl.trim() },
+        )
     }
 
-    const handleEditClick = (link: RestaurantLink) => {
+    const handleEditClick = (link: any) => {
         setEditingLink(link)
         setNewTitle(link.title)
         setNewUrl(link.url)
         setIsEditDialogOpen(true)
-    }
-
-    const deleteLink = async (linkId: string) => {
-        try {
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 500))
-
-            setLinks(links.filter((link) => link.id !== linkId))
-
-            toast("Link deleted successfully")
-        } catch {
-            toast("Error deleting link")
-        }
-    }
-
-    const moveLink = async (linkId: string, direction: "up" | "down") => {
-        const currentIndex = links.findIndex((link) => link.id === linkId)
-        if (currentIndex === -1) return
-
-        const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1
-
-        if (newIndex < 0 || newIndex >= links.length) return
-
-        try {
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 300))
-
-            const updatedLinks = [...links]
-            const temp = updatedLinks[currentIndex].sort_order
-            updatedLinks[currentIndex].sort_order = updatedLinks[newIndex].sort_order
-            updatedLinks[newIndex].sort_order = temp
-
-            updatedLinks.sort((a, b) => a.sort_order - b.sort_order)
-
-            setLinks(updatedLinks)
-        } catch {
-            toast("Error updating link order")
-        }
     }
 
     const toggleLinkSelection = (linkId: string) => {
@@ -264,26 +126,15 @@ export default function LinksPage() {
         }
     }
 
-    const deleteSelectedLinks = async () => {
-        if (selectedLinks.size === 0) return
-
-        try {
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 500))
-
-            setLinks(links.filter((link) => !selectedLinks.has(link.id)))
-            setSelectedLinks(new Set())
-            setIsDeleteDialogOpen(false)
-
-            toast(`Successfully deleted ${selectedLinks.size} link${selectedLinks.size > 1 ? "s" : ""}`)
-        } catch {
-            toast("Error deleting links")
-        }
+    const handleBulkDelete = () => {
+        bulkDeleteMutation.mutate(Array.from(selectedLinks), {})
+        setSelectedLinks(new Set())
+        setIsDeleteDialogOpen(false)
     }
 
-    if (loading) {
+    if (restaurants.length === 0 || !selectedRestaurant || isLoading) {
         return (
-            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
+            <div className="max-w-[1200px] mx-auto px-4 py-16 flex justify-center">
                 <div className="flex items-center space-x-2 text-slate-500">
                     <svg
                         className="animate-spin h-5 w-5 text-teal-600"
@@ -298,15 +149,32 @@ export default function LinksPage() {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         ></path>
                     </svg>
-                    <span>Loading...</span>
+                    <span>Loading your Link...</span>
                 </div>
             </div>
         )
     }
 
+    // Show error state
+    if (error) {
+        return (
+            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
+                <div className="text-center">
+                    <h2 className="text-2xl font-semibold text-red-600 mb-2">Error Loading Links</h2>
+                    <p className="text-slate-500">Failed to load links for {selectedRestaurant.name}.</p>
+                    <Button onClick={() => window.location.reload()} className="mt-4" variant="outline">
+                        Try Again
+                    </Button>
+                </div>
+            </div>
+        )
+    }
+
+    const isLinkLimitReached =
+        prismaUser?.subscription_plan === "basic" && links.length >= 4;
+
     return (
         <>
-
             <main className="max-w-[1200px] mx-auto px-4 py-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -317,7 +185,10 @@ export default function LinksPage() {
                         <h1 className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-4xl font-bold text-transparent">
                             Manage Links
                         </h1>
-                        <p className="mt-2 text-slate-500">Add, edit, or remove links from your restaurant page</p>
+                        <p className="mt-2 text-slate-500">
+                            Add, edit, or remove links for{" "}
+                            <span className="font-medium text-slate-700">{selectedRestaurant.name}</span>
+                        </p>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -327,10 +198,11 @@ export default function LinksPage() {
                                     <Button
                                         variant="destructive"
                                         size="lg"
+                                        disabled={bulkDeleteMutation.isPending}
                                         className="flex items-center gap-2 transition-transform hover:scale-105"
                                     >
                                         <Trash2 className="h-4 w-4" />
-                                        Delete Selected ({selectedLinks.size})
+                                        {bulkDeleteMutation.isPending ? "Deleting..." : `Delete Selected (${selectedLinks.size})`}
                                     </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
@@ -338,86 +210,110 @@ export default function LinksPage() {
                                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                                         <AlertDialogDescription>
                                             This will permanently delete {selectedLinks.size} selected link
-                                            {selectedLinks.size > 1 ? "s" : ""}. This action cannot be undone.
+                                            {selectedLinks.size > 1 ? "s" : ""} from {selectedRestaurant.name}. This action cannot be undone.
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogCancel disabled={bulkDeleteMutation.isPending}>Cancel</AlertDialogCancel>
                                         <AlertDialogAction
-                                            onClick={deleteSelectedLinks}
-                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                            onClick={handleBulkDelete}
+                                            disabled={bulkDeleteMutation.isPending}
+                                            className="bg-destructive text-white hover:opacity-80 hover:bg-destructive/90"
                                         >
-                                            Delete
+                                            {bulkDeleteMutation.isPending ? "Deleting..." : "Delete"}
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialog>
                         )}
 
-                        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button
-                                    size="lg"
-                                    className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
-                                >
-                                    <Plus className="h-4 w-4" />
-                                    Add new link
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <form onSubmit={handleAddLink}>
-                                    <DialogHeader>
-                                        <DialogTitle>Add new link</DialogTitle>
-                                        <DialogDescription>Add a link to your restaurant page</DialogDescription>
-                                    </DialogHeader>
+                        {
+                            !isLinkLimitReached ?
+                                <>
+                                    <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+                                        <DialogTrigger asChild>
 
-                                    <div className="space-y-4 py-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="title">Link Title</Label>
-                                            <Input
-                                                id="title"
-                                                value={newTitle}
-                                                onChange={(e) => setNewTitle(e.target.value)}
-                                                placeholder="e.g. View our menu"
-                                                required
-                                            />
-                                        </div>
+                                            <Button
+                                                size="lg"
+                                                disabled={!restaurantId}
+                                                className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
+                                            >
+                                                <Plus className="h-4 w-4" />
+                                                Add new link
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <form onSubmit={handleAddLink}>
+                                                <DialogHeader>
+                                                    <DialogTitle>Add new link</DialogTitle>
+                                                    <DialogDescription>Add a link to {selectedRestaurant.name}&apos;s page</DialogDescription>
+                                                </DialogHeader>
 
-                                        <div className="space-y-2">
-                                            <Label htmlFor="url">URL</Label>
-                                            <Input
-                                                id="url"
-                                                value={newUrl}
-                                                onChange={(e) => setNewUrl(e.target.value)}
-                                                placeholder="e.g. https://example.com/menu"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
+                                                <div className="space-y-4 py-4">
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="title">Link Title</Label>
+                                                        <Input
+                                                            id="title"
+                                                            value={newTitle}
+                                                            onChange={(e) => setNewTitle(e.target.value)}
+                                                            placeholder="e.g. View our menu"
+                                                            required
+                                                        />
+                                                    </div>
 
-                                    <DialogFooter>
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            onClick={() => {
-                                                setIsAddDialogOpen(false)
-                                                setNewTitle("")
-                                                setNewUrl("")
-                                            }}
-                                        >
-                                            Cancel
-                                        </Button>
-                                        <Button
-                                            type="submit"
-                                            disabled={!newTitle || !newUrl || isSubmitting}
-                                            className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
-                                        >
-                                            {isSubmitting ? "Adding..." : "Add Link"}
-                                        </Button>
-                                    </DialogFooter>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="url">URL</Label>
+                                                        <Input
+                                                            id="url"
+                                                            value={newUrl}
+                                                            onChange={(e) => setNewUrl(e.target.value)}
+                                                            placeholder="e.g. https://example.com/menu"
+                                                            required
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <DialogFooter>
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        onClick={() => {
+                                                            setIsAddDialogOpen(false)
+                                                            setNewTitle("")
+                                                            setNewUrl("")
+                                                        }}
+                                                        disabled={createMutation.isPending}
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                    <Button
+                                                        type="submit"
+                                                        disabled={!newTitle.trim() || !newUrl.trim() || createMutation.isPending || !restaurantId}
+                                                        className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                                    >
+                                                        {createMutation.isPending ? "Adding..." : "Add Link"}
+                                                    </Button>
+                                                </DialogFooter>
+                                            </form>
+                                        </DialogContent>
+                                    </Dialog>
+                                </>
+                                :
+                                <>
+                                    <Button
+                                        size="lg"
+                                        onClick={() => {
+                                            openPopup("You are limited to 4 links on the Basic plan. Upgrade to pro or enterprise plan.")
+                                        }}
+                                        className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
+                                    >
+                                        <Plus className="h-4 w-4" />
+                                        Add new link
+                                    </Button>
+                                </>
+                        }
+
+
                     </div>
                 </motion.div>
 
@@ -481,6 +377,7 @@ export default function LinksPage() {
                                                             variant="ghost"
                                                             size="sm"
                                                             className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                            disabled={deleteMutation.isPending}
                                                         >
                                                             <Trash2 className="h-4 w-4" />
                                                             <span className="sr-only">Delete</span>
@@ -490,15 +387,15 @@ export default function LinksPage() {
                                                         <AlertDialogHeader>
                                                             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                                                             <AlertDialogDescription>
-                                                                This action cannot be undone. This will permanently delete the link from your restaurant
-                                                                page.
+                                                                This action cannot be undone. This will permanently delete the link &quot;{link.title}&quot; from{" "}
+                                                                {selectedRestaurant.name}&apos;s page.
                                                             </AlertDialogDescription>
                                                         </AlertDialogHeader>
                                                         <AlertDialogFooter>
                                                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                                                             <AlertDialogAction
-                                                                onClick={() => deleteLink(link.id)}
-                                                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                                onClick={() => deleteMutation.mutate(link.id)}
+                                                                className="bg-destructive text-white hover:opacity-80 hover:bg-destructive/90"
                                                             >
                                                                 Delete
                                                             </AlertDialogAction>
@@ -509,8 +406,8 @@ export default function LinksPage() {
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    onClick={() => moveLink(link.id, "up")}
-                                                    disabled={index === 0}
+                                                    onClick={() => reorderMutation.mutate({ linkId: link.id, direction: "up" })}
+                                                    disabled={index === 0 || reorderMutation.isPending}
                                                     className="h-8 w-8 p-0 transition-transform hover:scale-110"
                                                 >
                                                     <ArrowUp className="h-4 w-4" />
@@ -520,8 +417,8 @@ export default function LinksPage() {
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    onClick={() => moveLink(link.id, "down")}
-                                                    disabled={index === links.length - 1}
+                                                    onClick={() => reorderMutation.mutate({ linkId: link.id, direction: "down" })}
+                                                    disabled={index === links.length - 1 || reorderMutation.isPending}
                                                     className="h-8 w-8 p-0 transition-transform hover:scale-110"
                                                 >
                                                     <ArrowDown className="h-4 w-4" />
@@ -537,10 +434,11 @@ export default function LinksPage() {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="py-12 text-center"
                                 >
-                                    <p className="mb-4 text-slate-500">No links added yet</p>
+                                    <p className="mb-4 text-slate-500">No links added yet for {selectedRestaurant.name}</p>
                                     <Button
                                         onClick={() => setIsAddDialogOpen(true)}
                                         size="lg"
+                                        disabled={!restaurantId}
                                         className="bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
                                     >
                                         Add your first link
@@ -557,7 +455,7 @@ export default function LinksPage() {
                     <form onSubmit={handleUpdateLink}>
                         <DialogHeader>
                             <DialogTitle>Edit link</DialogTitle>
-                            <DialogDescription>Update the details of your link</DialogDescription>
+                            <DialogDescription>Update the details of your link for {selectedRestaurant.name}</DialogDescription>
                         </DialogHeader>
 
                         <div className="space-y-4 py-4">
@@ -582,15 +480,16 @@ export default function LinksPage() {
                                     setNewTitle("")
                                     setNewUrl("")
                                 }}
+                                disabled={updateMutation.isPending}
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
-                                disabled={!newTitle || !newUrl || isSubmitting}
+                                disabled={!newTitle.trim() || !newUrl.trim() || updateMutation.isPending}
                                 className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
                             >
-                                {isSubmitting ? "Saving..." : "Save Changes"}
+                                {updateMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>
                         </DialogFooter>
                     </form>

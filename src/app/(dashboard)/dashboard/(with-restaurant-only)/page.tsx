@@ -2,62 +2,26 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useRestaurantStore } from "@/stores/restaurant-store"
 import {
     BarChart2,
     Battery,
-    Calendar,
     Copy,
     ExternalLink,
-    Facebook,
-    Instagram,
     LinkIcon,
-    MapPin,
-    MenuIcon,
     Plus,
     QrCode,
     Settings,
     Signal,
     TrendingUp,
     Users,
-    Wifi,
+    Wifi
 } from "lucide-react"
 import { motion } from "motion/react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 
-// Define types
-interface Restaurant {
-    id: string
-    user_id: string
-    name: string
-    bio: string
-    logo_url: string | null
-    bg_color: string
-    accent_color: string
-    bg_type: string
-    bg_gradient_start: string
-    bg_gradient_end: string
-    button_style: string
-    button_variant: string
-    font_family: string
-    slug: string
-    created_at: string
-    subscription_plan: string
-    subscription_status: string
-    instagram?: string
-    facebook?: string
-}
-
-interface RestaurantLink {
-    id: string
-    restaurant_id: string
-    title: string
-    url: string
-    sort_order: number
-    clicks: number
-    created_at: string
-}
 
 // Animation variants
 const container = {
@@ -75,104 +39,31 @@ const item = {
     show: { opacity: 1, y: 0 },
 }
 
-// Dummy data
-const dummyRestaurant: Restaurant = {
-    id: "2",
-    user_id: "dummy-user-2",
-    name: "Bistro Delight",
-    bio: "Casual and cozy bistro serving fresh, locally-sourced ingredients with a modern twist on classic favorites.",
-    logo_url: null,
-    bg_color: "#ffffff",
-    accent_color: "#0ea5e9",
-    bg_type: "gradient",
-    bg_gradient_start: "#f8fafc",
-    bg_gradient_end: "#f1f5f9",
-    button_style: "rounded",
-    button_variant: "solid",
-    font_family: "Inter",
-    slug: "bistro-delight",
-    created_at: new Date().toISOString(),
-    subscription_plan: "free",
-    subscription_status: "active",
-    instagram: "https://instagram.com/bistrodelight",
-    facebook: "https://facebook.com/bistrodelight",
-}
-
-const dummyLinks: RestaurantLink[] = [
-    {
-        id: "1",
-        restaurant_id: "2",
-        title: "View Our Menu",
-        url: "https://example.com/menu",
-        sort_order: 1,
-        clicks: 42,
-        created_at: new Date().toISOString(),
-    },
-    {
-        id: "2",
-        restaurant_id: "2",
-        title: "Make a Reservation",
-        url: "https://example.com/reservation",
-        sort_order: 2,
-        clicks: 28,
-        created_at: new Date().toISOString(),
-    },
-    {
-        id: "3",
-        restaurant_id: "2",
-        title: "Follow us on Instagram",
-        url: "https://instagram.com/bistrodelight",
-        sort_order: 3,
-        clicks: 15,
-        created_at: new Date().toISOString(),
-    },
-    {
-        id: "4",
-        restaurant_id: "2",
-        title: "Get Directions",
-        url: "https://maps.google.com",
-        sort_order: 4,
-        clicks: 19,
-        created_at: new Date().toISOString(),
-    },
-]
 
 export default function DashboardPage() {
-    const [restaurant, setRestaurant] = useState<Restaurant | null>(null)
-    const [links, setLinks] = useState<RestaurantLink[]>([])
-    const [loading, setLoading] = useState(true)
+    const { restaurants, selectedRestaurant } = useRestaurantStore()
+
     const [currentTime] = useState(() => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }))
 
-    useEffect(() => {
-        // Simulate loading data
-        const timer = setTimeout(() => {
-            setRestaurant(dummyRestaurant)
-            setLinks(dummyLinks)
-            setLoading(false)
-        }, 800)
+    // const getIconForLink = (title: string) => {
+    //     const lowerTitle = title.toLowerCase()
 
-        return () => clearTimeout(timer)
-    }, [])
+    //     if (lowerTitle.includes("instagram") || lowerTitle.includes("follow")) return <Instagram className="h-4 w-4" />
+    //     if (lowerTitle.includes("reservation") || lowerTitle.includes("book")) return <Calendar className="h-4 w-4" />
+    //     if (lowerTitle.includes("direction") || lowerTitle.includes("location")) return <MapPin className="h-4 w-4" />
+    //     if (lowerTitle.includes("menu")) return <MenuIcon className="h-4 w-4" />
 
-    const getIconForLink = (title: string) => {
-        const lowerTitle = title.toLowerCase()
-
-        if (lowerTitle.includes("instagram") || lowerTitle.includes("follow")) return <Instagram className="h-4 w-4" />
-        if (lowerTitle.includes("reservation") || lowerTitle.includes("book")) return <Calendar className="h-4 w-4" />
-        if (lowerTitle.includes("direction") || lowerTitle.includes("location")) return <MapPin className="h-4 w-4" />
-        if (lowerTitle.includes("menu")) return <MenuIcon className="h-4 w-4" />
-
-        return <ExternalLink className="h-4 w-4" />
-    }
+    //     return <ExternalLink className="h-4 w-4" />
+    // }
 
     const copyToClipboard = () => {
-        if (restaurant) {
-            navigator.clipboard.writeText(`https://dineri.app/${restaurant.slug}`)
+        if (selectedRestaurant) {
+            navigator.clipboard.writeText(`https://dineri.app/${selectedRestaurant.slug}`)
             toast("URL copied to clipboard")
         }
     }
 
-    if (loading) {
+    if (restaurants.length === 0 || !selectedRestaurant) {
         return (
             <div className="max-w-[1200px] mx-auto px-4 py-16 flex justify-center">
                 <div className="flex items-center space-x-2 text-slate-500">
@@ -196,7 +87,6 @@ export default function DashboardPage() {
     }
 
     return (
-
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                 <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600">
@@ -220,7 +110,7 @@ export default function DashboardPage() {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold text-slate-900">{links.length}</div>
+                            <div className="text-3xl font-bold text-slate-900">0</div>
                             <p className="text-xs text-slate-500 mt-1">Active links on your page</p>
                         </CardContent>
                     </Card>
@@ -235,7 +125,7 @@ export default function DashboardPage() {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold text-slate-900">104</div>
+                            <div className="text-3xl font-bold text-slate-900">0</div>
                             <p className="text-xs text-slate-500 mt-1">Link clicks this month</p>
                         </CardContent>
                     </Card>
@@ -250,7 +140,7 @@ export default function DashboardPage() {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold text-slate-900">78</div>
+                            <div className="text-3xl font-bold text-slate-900">0</div>
                             <p className="text-xs text-slate-500 mt-1">Unique visitors this month</p>
                         </CardContent>
                     </Card>
@@ -273,7 +163,7 @@ export default function DashboardPage() {
                                         See how your page looks on mobile devices
                                     </CardDescription>
                                 </div>
-                                <Link href={`/${restaurant?.slug}`} target="_blank">
+                                <Link href={`/${selectedRestaurant?.slug}`} target="_blank">
                                     <Button variant="outline" size="sm" className="text-slate-700 border-slate-200">
                                         <ExternalLink className="h-4 w-4 mr-2" />
                                         Visit
@@ -308,7 +198,7 @@ export default function DashboardPage() {
                                         </div>
 
                                         <div className="mt-1">
-                                            <div
+                                            {/* <div
                                                 className="min-h-[480px]"
                                                 style={{
                                                     background:
@@ -427,8 +317,10 @@ export default function DashboardPage() {
                                                         </div>
                                                     )}
                                                 </motion.div>
+                                            </div> */}
+                                            <div className="w-full min-h-[500px] flex text-white text-xs items-center justify-center">
+                                                no preview yet.
                                             </div>
-
                                             <div className="absolute bottom-1 inset-x-0 flex justify-center pb-1">
                                                 <div className="w-[100px] h-1 bg-white/30 rounded-full"></div>
                                             </div>
@@ -501,7 +393,7 @@ export default function DashboardPage() {
                                 className="p-4 rounded-lg bg-gradient-to-r from-slate-50 to-white border border-slate-200 shadow-sm"
                             >
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-slate-700">dineri.app/{restaurant?.slug}</span>
+                                    <span className="text-sm font-medium text-slate-700">dineri.app/{selectedRestaurant?.slug}</span>
                                     <div className="flex gap-2">
                                         <Button
                                             size="sm"
@@ -512,7 +404,7 @@ export default function DashboardPage() {
                                             <Copy className="h-4 w-4" />
                                             <span className="sr-only">Copy URL</span>
                                         </Button>
-                                        <Link href={`/${restaurant?.slug}`} target="_blank">
+                                        <Link href={`/${selectedRestaurant?.slug}`} target="_blank">
                                             <Button
                                                 size="sm"
                                                 variant="ghost"
@@ -548,7 +440,7 @@ export default function DashboardPage() {
                         </CardHeader>
                         <CardContent className="p-0">
                             <div className="px-6">
-                                {links.slice(0, 3).map((link, index) => (
+                                {/* {links.slice(0, 3).map((link, index) => (
                                     <div
                                         key={link.id}
                                         className={`py-3 flex items-center justify-between ${index < links.slice(0, 3).length - 1 ? "border-b border-slate-100" : ""
@@ -567,7 +459,10 @@ export default function DashboardPage() {
                                         </div>
                                         <div className="text-sm font-medium text-teal-600">+{Math.floor(Math.random() * 5) + 1}</div>
                                     </div>
-                                ))}
+                                ))} */}
+                                <p className="text-xs text-center text-neutral-500">
+                                    You don&apos;t have any link yet.
+                                </p>
                             </div>
                         </CardContent>
                         <CardFooter className="border-t border-slate-100 pt-4">

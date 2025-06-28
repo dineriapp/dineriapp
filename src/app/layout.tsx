@@ -1,8 +1,10 @@
+import { Toaster } from "@/components/ui/sonner";
+import { UpgradePopup } from "@/components/upgrade-plan-popup";
+import ReactQueryProvider from "@/providers/react-query-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/providers/theme-provider"
-import { Toaster } from "@/components/ui/sonner"
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -27,8 +29,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ReactQueryProvider>
+            {children}
+          </ReactQueryProvider>
           <Toaster richColors />
+          <UpgradePopup />
         </ThemeProvider>
       </body>
     </html>
