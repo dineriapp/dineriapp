@@ -10,7 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { User as prismaUserType } from "@/generated/prisma"
+import { User as prismaUserType } from "@prisma/client"
 import kyInstance from "@/lib/ky"; // adjust the path as needed
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ky from "./ky"
 import { toast } from "sonner"
-import { MenuCategory, MenuItem } from "@/generated/prisma"
+import { MenuCategory, MenuItem } from "@prisma/client"
 
 // Use Prisma types with relations
 type MenuCategoryWithItems = MenuCategory & {

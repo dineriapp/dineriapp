@@ -16,7 +16,7 @@ import {
     DialogTitle
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { SubscriptionPlan } from '@/generated/prisma'
+import { SubscriptionPlan } from '@prisma/client'
 import { useUpgradePopupStore } from '@/stores/upgrade-popup-store'
 import {
     CheckIcon

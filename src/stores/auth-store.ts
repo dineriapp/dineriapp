@@ -1,4 +1,4 @@
-import { User as PrismaUser } from '@/generated/prisma'
+import { User as PrismaUser } from '@prisma/client'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { User } from '@supabase/supabase-js'

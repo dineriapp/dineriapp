@@ -1,4 +1,4 @@
-import { Restaurant } from '@/generated/prisma'
+import { Restaurant } from '@prisma/client'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { customStorage } from './storage'
