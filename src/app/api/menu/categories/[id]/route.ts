@@ -2,13 +2,15 @@ import prisma from "@/lib/prisma"
 import { updateCategorySchema } from "@/lib/validations"
 import { type NextRequest, NextResponse } from "next/server"
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params
+
         const body = await request.json()
         const validated = updateCategorySchema.parse(body)
 
         const category = await prisma.menuCategory.update({
-            where: { id: params.id },
+            where: { id: id },
             data: {
                 name: validated.name.trim(),
                 description: validated.description?.trim(),
@@ -27,16 +29,18 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+
     try {
+        const { id } = await params
         // Delete all menu items in this category first (cascade delete)
         await prisma.menuItem.deleteMany({
-            where: { category_id: params.id },
+            where: { category_id: id },
         })
 
         // Then delete the category
         await prisma.menuCategory.delete({
-            where: { id: params.id },
+            where: { id: id },
         })
 
         return NextResponse.json({ data: { success: true } })

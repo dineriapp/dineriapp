@@ -2,13 +2,15 @@ import prisma from "@/lib/prisma"
 import { updateItemSchema } from "@/lib/validations"
 import { type NextRequest, NextResponse } from "next/server"
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params
+
         const body = await request.json()
         const validated = updateItemSchema.parse(body)
 
         const item = await prisma.menuItem.update({
-            where: { id: params.id },
+            where: { id: id },
             data: {
                 name: validated.name.trim(),
                 description: validated.description?.trim(),
@@ -26,10 +28,13 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+
+        const { id } = await params
+
         await prisma.menuItem.delete({
-            where: { id: params.id },
+            where: { id: id },
         })
 
         return NextResponse.json({ data: { success: true } })
