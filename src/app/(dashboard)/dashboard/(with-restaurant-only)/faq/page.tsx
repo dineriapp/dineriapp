@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import type { FaqCategory, Faq } from "@prisma/client"
 
 import {
     AlertDialog,
@@ -28,10 +29,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { Edit, Eye, Grip, HelpCircle, Lightbulb, Plus, Search, Star, Trash2 } from "lucide-react"
+import { useRestaurantStore } from "@/stores/restaurant-store"
+import {
+    useFaqCategories,
+    useCreateFaqCategory,
+    useUpdateFaqCategory,
+    useDeleteFaqCategory,
+    useReorderFaqCategory,
+    useCreateFaq,
+    useUpdateFaq,
+    useDeleteFaq,
+    useReorderFaq,
+} from "@/lib/faq-queries"
+import { ArrowDown, ArrowUp, Edit, Eye, Grip, HelpCircle, Lightbulb, Plus, Search, Star, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
-import { useEffect, useMemo, useState } from "react"
-import { toast } from "sonner"
+import { useMemo, useState } from "react"
 
 // Animation variants
 const container = {
@@ -49,28 +61,6 @@ const item = {
     show: { opacity: 1, y: 0 },
 }
 
-// Types
-interface FAQ {
-    id: string
-    question: string
-    answer: string
-    is_featured: boolean
-    view_count: number
-    sort_order: number
-    created_at: string
-    updated_at: string
-}
-
-interface FAQCategory {
-    id: string
-    name: string
-    description?: string
-    sort_order: number
-    faqs: FAQ[]
-    created_at: string
-    updated_at: string
-}
-
 // Common FAQ templates for quick setup
 const FAQ_TEMPLATES = [
     {
@@ -82,8 +72,6 @@ const FAQ_TEMPLATES = [
                 question: "Where are you located?",
                 answer: "You can find our address and directions in the contact section above.",
             },
-            { question: "Do you have parking available?", answer: "Yes, we have free parking available for our customers." },
-            { question: "Are you wheelchair accessible?", answer: "Yes, our restaurant is fully wheelchair accessible." },
         ],
     },
     {
@@ -95,14 +83,6 @@ const FAQ_TEMPLATES = [
                 answer: "Yes, we accept reservations. You can book a table using the reservation link above.",
             },
             { question: "How far in advance can I book?", answer: "You can make reservations up to 30 days in advance." },
-            {
-                question: "What is your cancellation policy?",
-                answer: "Please cancel at least 2 hours before your reservation time.",
-            },
-            {
-                question: "Do you have a waiting list?",
-                answer: "Yes, if we're fully booked, we can add you to our waiting list.",
-            },
         ],
     },
     {
@@ -117,14 +97,6 @@ const FAQ_TEMPLATES = [
                 question: "Do you offer vegan meals?",
                 answer: "Yes, we have several vegan options available. Please ask your server for details.",
             },
-            {
-                question: "Can you accommodate food allergies?",
-                answer: "Yes, please inform us of any allergies when ordering and we'll ensure your meal is prepared safely.",
-            },
-            {
-                question: "Do you have gluten-free options?",
-                answer: "Yes, we offer gluten-free alternatives for many of our dishes.",
-            },
         ],
     },
     {
@@ -136,108 +108,38 @@ const FAQ_TEMPLATES = [
                 question: "Do you deliver?",
                 answer: "Yes, we offer delivery through our delivery partners. Check our delivery section for details.",
             },
-            {
-                question: "What payment methods do you accept?",
-                answer: "We accept cash, all major credit cards, and contactless payments.",
-            },
-            { question: "Do you have WiFi?", answer: "Yes, we offer free WiFi for all our customers." },
-        ],
-    },
-]
-
-// Initial dummy data
-const INITIAL_CATEGORIES: FAQCategory[] = [
-    {
-        id: "1",
-        name: "General Information",
-        description: "Basic information about our restaurant",
-        sort_order: 0,
-        created_at: "2024-01-01T00:00:00Z",
-        updated_at: "2024-01-01T00:00:00Z",
-        faqs: [
-            {
-                id: "1",
-                question: "What type of cuisine do you serve?",
-                answer: "We specialize in modern European cuisine with a focus on fresh, locally-sourced ingredients.",
-                is_featured: true,
-                view_count: 156,
-                sort_order: 0,
-                created_at: "2024-01-01T00:00:00Z",
-                updated_at: "2024-01-01T00:00:00Z",
-            },
-            {
-                id: "2",
-                question: "Do you have outdoor seating?",
-                answer: "Yes, we have a beautiful outdoor terrace that is available during good weather conditions.",
-                is_featured: false,
-                view_count: 89,
-                sort_order: 1,
-                created_at: "2024-01-01T00:00:00Z",
-                updated_at: "2024-01-01T00:00:00Z",
-            },
-        ],
-    },
-    {
-        id: "2",
-        name: "Reservations",
-        description: "Information about booking and reservations",
-        sort_order: 1,
-        created_at: "2024-01-01T00:00:00Z",
-        updated_at: "2024-01-01T00:00:00Z",
-        faqs: [
-            {
-                id: "3",
-                question: "How can I make a reservation?",
-                answer: "You can make a reservation through our website, by calling us directly, or using our mobile app.",
-                is_featured: true,
-                view_count: 234,
-                sort_order: 0,
-                created_at: "2024-01-01T00:00:00Z",
-                updated_at: "2024-01-01T00:00:00Z",
-            },
-            {
-                id: "4",
-                question: "Can I modify my reservation?",
-                answer: "Yes, you can modify your reservation up to 2 hours before your scheduled time by contacting us.",
-                is_featured: false,
-                view_count: 67,
-                sort_order: 1,
-                created_at: "2024-01-01T00:00:00Z",
-                updated_at: "2024-01-01T00:00:00Z",
-            },
         ],
     },
 ]
 
 export default function FAQPage() {
-    const [categories, setCategories] = useState<FAQCategory[]>(INITIAL_CATEGORIES)
-    const [loading, setLoading] = useState(true)
+    const { restaurants, selectedRestaurant } = useRestaurantStore()
+
     const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState(false)
     const [isEditCategoryDialogOpen, setIsEditCategoryDialogOpen] = useState(false)
     const [isAddFAQDialogOpen, setIsAddFAQDialogOpen] = useState(false)
     const [isEditFAQDialogOpen, setIsEditFAQDialogOpen] = useState(false)
     const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
-    const [selectedCategory, setSelectedCategory] = useState<FAQCategory | null>(null)
-    const [selectedFAQ, setSelectedFAQ] = useState<FAQ | null>(null)
+    const [selectedCategory, setSelectedCategory] = useState<FaqCategory | null>(null)
+    const [selectedFAQ, setSelectedFAQ] = useState<Faq | null>(null)
     const [newCategoryName, setNewCategoryName] = useState("")
     const [newCategoryDescription, setNewCategoryDescription] = useState("")
     const [newFAQQuestion, setNewFAQQuestion] = useState("")
     const [newFAQAnswer, setNewFAQAnswer] = useState("")
     const [isFeatured, setIsFeatured] = useState(false)
-    const [isSubmitting, setIsSubmitting] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
 
-    useEffect(() => {
-        // Simulate loading data
-        const timer = setTimeout(() => {
-            setLoading(false)
-        }, 800)
+    const restaurantId = selectedRestaurant?.id
 
-        return () => clearTimeout(timer)
-    }, [])
-
-    // Helper function to generate unique IDs
-    const generateId = () => Date.now().toString()
+    const { data: categories = [], isLoading, error } = useFaqCategories(restaurantId)
+    const createCategoryMutation = useCreateFaqCategory(restaurantId)
+    const updateCategoryMutation = useUpdateFaqCategory(restaurantId)
+    const deleteCategoryMutation = useDeleteFaqCategory(restaurantId)
+    const reorderCategoryMutation = useReorderFaqCategory(restaurantId)
+    const createFaqMutation = useCreateFaq(restaurantId)
+    const updateFaqMutation = useUpdateFaq(restaurantId)
+    const deleteFaqMutation = useDeleteFaq(restaurantId)
+    const reorderFaqMutation = useReorderFaq(restaurantId)
 
     // Memoized filtered categories for better performance
     const filteredCategories = useMemo(() => {
@@ -273,256 +175,112 @@ export default function FAQPage() {
         }
     }, [categories])
 
-    const handleAddCategory = async (e: React.FormEvent) => {
+    const handleAddCategory = (e: React.FormEvent) => {
         e.preventDefault()
-        if (isSubmitting) return
+        if (!newCategoryName.trim() || !restaurantId) return
 
-        try {
-            setIsSubmitting(true)
-
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 500))
-
-            const nextOrder = categories.length > 0 ? Math.max(...categories.map((cat) => cat.sort_order)) + 1 : 0
-
-            const newCategory: FAQCategory = {
-                id: generateId(),
+        createCategoryMutation.mutate(
+            {
                 name: newCategoryName.trim(),
                 description: newCategoryDescription.trim() || undefined,
-                sort_order: nextOrder,
-                faqs: [],
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-            }
-
-            setCategories([...categories, newCategory])
-            setNewCategoryName("")
-            setNewCategoryDescription("")
-            setIsAddCategoryDialogOpen(false)
-
-            toast.success("Category added successfully")
-        } catch {
-            toast.error("Failed to add category")
-        } finally {
-            setIsSubmitting(false)
-        }
+            },
+            {
+                onSuccess: () => {
+                    setNewCategoryName("")
+                    setNewCategoryDescription("")
+                    setIsAddCategoryDialogOpen(false)
+                },
+            },
+        )
     }
 
-    const handleEditCategory = async (e: React.FormEvent) => {
+    const handleEditCategory = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!selectedCategory || isSubmitting) return
+        if (!selectedCategory || !newCategoryName.trim()) return
 
-        try {
-            setIsSubmitting(true)
-
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 500))
-
-            setCategories(
-                categories.map((cat) =>
-                    cat.id === selectedCategory.id
-                        ? {
-                            ...cat,
-                            name: newCategoryName.trim(),
-                            description: newCategoryDescription.trim() || undefined,
-                            updated_at: new Date().toISOString(),
-                        }
-                        : cat,
-                ),
-            )
-
-            setIsEditCategoryDialogOpen(false)
-            setSelectedCategory(null)
-            setNewCategoryName("")
-            setNewCategoryDescription("")
-
-            toast.success("Category updated successfully")
-        } catch {
-            toast.error("Failed to update category")
-        } finally {
-            setIsSubmitting(false)
-        }
+        updateCategoryMutation.mutate(
+            {
+                id: selectedCategory.id,
+                name: newCategoryName.trim(),
+                description: newCategoryDescription.trim() || undefined,
+            },
+            {
+                onSuccess: () => {
+                    setIsEditCategoryDialogOpen(false)
+                    setSelectedCategory(null)
+                    setNewCategoryName("")
+                    setNewCategoryDescription("")
+                },
+            },
+        )
     }
 
-    const handleDeleteCategory = async (categoryId: string) => {
-        try {
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 300))
-
-            const categoryToDelete = categories.find((cat) => cat.id === categoryId)
-            const faqCount = categoryToDelete?.faqs?.length || 0
-
-            setCategories(categories.filter((cat) => cat.id !== categoryId))
-
-            toast.success(`Category deleted successfully${faqCount > 0 ? ` (${faqCount} FAQs removed)` : ""}`)
-        } catch {
-            toast.error("Failed to delete category")
-        }
-    }
-
-    const handleAddFAQ = async (e: React.FormEvent) => {
+    const handleAddFAQ = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!selectedCategory || isSubmitting) return
+        if (!selectedCategory || !newFAQQuestion.trim() || !newFAQAnswer.trim()) return
 
-        try {
-            setIsSubmitting(true)
-
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 500))
-
-            const faqs = selectedCategory.faqs || []
-            const nextOrder = faqs.length > 0 ? Math.max(...faqs.map((faq) => faq.sort_order)) + 1 : 0
-
-            const newFAQ: FAQ = {
-                id: generateId(),
+        createFaqMutation.mutate(
+            {
+                category_id: selectedCategory.id,
                 question: newFAQQuestion.trim(),
                 answer: newFAQAnswer.trim(),
                 is_featured: isFeatured,
-                view_count: 0,
-                sort_order: nextOrder,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-            }
-
-            setCategories(
-                categories.map((cat) =>
-                    cat.id === selectedCategory.id
-                        ? {
-                            ...cat,
-                            faqs: [...(cat.faqs || []), newFAQ],
-                            updated_at: new Date().toISOString(),
-                        }
-                        : cat,
-                ),
-            )
-
-            setNewFAQQuestion("")
-            setNewFAQAnswer("")
-            setIsFeatured(false)
-            setIsAddFAQDialogOpen(false)
-
-            toast.success("FAQ added successfully")
-        } catch {
-            toast.error("Failed to add FAQ")
-        } finally {
-            setIsSubmitting(false)
-        }
+            },
+            {
+                onSuccess: () => {
+                    resetForm()
+                    setIsAddFAQDialogOpen(false)
+                },
+            },
+        )
     }
 
-    const handleEditFAQ = async (e: React.FormEvent) => {
+    const handleEditFAQ = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!selectedFAQ || !selectedCategory || isSubmitting) return
+        if (!selectedFAQ || !newFAQQuestion.trim() || !newFAQAnswer.trim()) return
 
-        try {
-            setIsSubmitting(true)
-
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 500))
-
-            setCategories(
-                categories.map((cat) =>
-                    cat.id === selectedCategory.id
-                        ? {
-                            ...cat,
-                            faqs: (cat.faqs || []).map((faq) =>
-                                faq.id === selectedFAQ.id
-                                    ? {
-                                        ...faq,
-                                        question: newFAQQuestion.trim(),
-                                        answer: newFAQAnswer.trim(),
-                                        is_featured: isFeatured,
-                                        updated_at: new Date().toISOString(),
-                                    }
-                                    : faq,
-                            ),
-                            updated_at: new Date().toISOString(),
-                        }
-                        : cat,
-                ),
-            )
-
-            setIsEditFAQDialogOpen(false)
-            setSelectedFAQ(null)
-            setSelectedCategory(null)
-            setNewFAQQuestion("")
-            setNewFAQAnswer("")
-            setIsFeatured(false)
-
-            toast.success("FAQ updated successfully")
-        } catch {
-            toast.error("Failed to update FAQ")
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
-
-    const handleDeleteFAQ = async (categoryId: string, faqId: string) => {
-        try {
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 300))
-
-            setCategories(
-                categories.map((cat) =>
-                    cat.id === categoryId
-                        ? {
-                            ...cat,
-                            faqs: (cat.faqs || []).filter((faq) => faq.id !== faqId),
-                            updated_at: new Date().toISOString(),
-                        }
-                        : cat,
-                ),
-            )
-
-            toast.success("FAQ deleted successfully")
-        } catch {
-            toast.error("Failed to delete FAQ")
-        }
+        updateFaqMutation.mutate(
+            {
+                id: selectedFAQ.id,
+                question: newFAQQuestion.trim(),
+                answer: newFAQAnswer.trim(),
+                is_featured: isFeatured,
+            },
+            {
+                onSuccess: () => {
+                    setIsEditFAQDialogOpen(false)
+                    setSelectedFAQ(null)
+                    setSelectedCategory(null)
+                    resetForm()
+                },
+            },
+        )
     }
 
     const handleAddFromTemplate = async (templateCategory: any) => {
-        if (isSubmitting) return
+        if (!restaurantId) return
 
         try {
-            setIsSubmitting(true)
 
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 800))
-
-            const nextCategoryOrder = categories.length > 0 ? Math.max(...categories.map((cat) => cat.sort_order)) + 1 : 0
-
-            const categoryId = generateId()
-            const now = new Date().toISOString()
-
-            const newFAQs: FAQ[] = templateCategory.faqs.map((faq: { question: string, answer: string }, index: number) => ({
-                id: generateId(),
-                question: faq.question,
-                answer: faq.answer,
-                is_featured: index === 0, // Make first FAQ featured
-                view_count: Math.floor(Math.random() * 50), // Random view count for demo
-                sort_order: index,
-                created_at: now,
-                updated_at: now,
-            }))
-
-            const newCategory: FAQCategory = {
-                id: categoryId,
+            // First create the category
+            const categoryResult = await createCategoryMutation.mutateAsync({
                 name: templateCategory.category,
-                description:
-                    templateCategory.description || `Common questions about ${templateCategory.category.toLowerCase()}`,
-                sort_order: nextCategoryOrder,
-                faqs: newFAQs,
-                created_at: now,
-                updated_at: now,
+                description: templateCategory.description,
+            })
+
+            // Then add all FAQs to the category
+            for (const [index, faq] of templateCategory.faqs.entries()) {
+                await createFaqMutation.mutateAsync({
+                    category_id: categoryResult.id,
+                    question: faq.question,
+                    answer: faq.answer,
+                    is_featured: index === 0, // Make first FAQ featured
+                })
             }
 
-            setCategories([...categories, newCategory])
             setIsTemplateDialogOpen(false)
-
-            toast.success(`Added ${templateCategory.category} with ${templateCategory.faqs.length} FAQs`)
         } catch {
-            toast.error("Failed to add template")
-        } finally {
-            setIsSubmitting(false)
+            // Error handling is done in the mutations
         }
     }
 
@@ -536,31 +294,36 @@ export default function FAQPage() {
         setSelectedFAQ(null)
     }
 
-    if (loading) {
+
+    // Show loading state when FAQs are being fetched
+    if (isLoading || !selectedRestaurant || !restaurants) {
         return (
             <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
                 <div className="flex items-center space-x-2 text-slate-500">
-                    <svg
-                        className="animate-spin h-5 w-5 text-teal-600"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                    >
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                    </svg>
-                    <span>Loading...</span>
+                    <div className="animate-spin h-5 w-5 border-2 border-teal-600 border-t-transparent rounded-full" />
+                    <span>Loading FAQs...</span>
+                </div>
+            </div>
+        )
+    }
+
+    // Show error state
+    if (error) {
+        return (
+            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
+                <div className="text-center">
+                    <h2 className="text-2xl font-semibold text-red-600 mb-2">Error Loading FAQs</h2>
+                    <p className="text-slate-500">Failed to load FAQs for {selectedRestaurant.name}.</p>
+                    <Button onClick={() => window.location.reload()} className="mt-4" variant="outline">
+                        Try Again
+                    </Button>
                 </div>
             </div>
         )
     }
 
     return (
-        < >
+        <>
             <main className="max-w-[1200px] mx-auto px-4 py-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -571,20 +334,21 @@ export default function FAQPage() {
                         <h1 className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-4xl font-bold text-transparent">
                             FAQ Management
                         </h1>
-                        <p className="mt-2 text-muted-foreground">
-                            Create and manage frequently asked questions for your customers
+                        <p className="mt-2 text-slate-500">
+                            Create and manage frequently asked questions for{" "}
+                            <span className="font-medium text-slate-700">{selectedRestaurant.name}</span>
                         </p>
                     </div>
 
                     <div className="flex items-center gap-2">
                         <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
                             <DialogTrigger asChild>
-                                <Button variant="outline" size="lg" className="flex items-center gap-2">
+                                <Button variant="outline" size="lg" className="flex items-center gap-2 bg-transparent">
                                     <Lightbulb className="h-4 w-4" />
                                     Quick Setup
                                 </Button>
                             </DialogTrigger>
-                            <DialogContent className="flex max-h-[85vh] w-full 800:min-w-[700px] max-w-4xl flex-col overflow-hidden">
+                            <DialogContent className="flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden">
                                 <DialogHeader className="flex-shrink-0">
                                     <DialogTitle>Quick FAQ Setup</DialogTitle>
                                     <DialogDescription>
@@ -597,32 +361,38 @@ export default function FAQPage() {
                                         {FAQ_TEMPLATES.map((template, index) => (
                                             <Card
                                                 key={index}
-                                                className="h-fit cursor-pointer transition-all hover:shadow-lg hover:scale-[1.02]"
+                                                className="cursor-pointer full py-4 h-full gap-1 transition-all hover:shadow-lg"
                                             >
-                                                <CardHeader className="pb-3">
-                                                    <CardTitle className="text-lg">{template.category}</CardTitle>
+                                                <CardHeader className="pb-3 gap-2 px-4">
+                                                    <CardTitle className="text-lg leading-[1.3]">{template.category}</CardTitle>
                                                     <CardDescription>{template.faqs.length} common questions</CardDescription>
                                                 </CardHeader>
-                                                <CardContent className="pt-0">
-                                                    <div className="mb-4 space-y-2">
-                                                        {template.faqs.slice(0, 2).map((faq, faqIndex) => (
-                                                            <p key={faqIndex} className="text-sm text-muted-foreground">
-                                                                • {faq.question}
-                                                            </p>
-                                                        ))}
+                                                <CardContent className="pt-0 flex px-4 flex-col h-full items-start justify-between">
+                                                    <div className="mb-4 space-y-1 pl-4">
+                                                        <ul className="list-disc">
+                                                            {template.faqs.slice(0, 2).map((faq, faqIndex) => (
+                                                                <li key={faqIndex} className="text-sm text-slate-500">
+                                                                    {faq.question}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
                                                         {template.faqs.length > 2 && (
-                                                            <p className="text-sm text-muted-foreground">
-                                                                + {template.faqs.length - 2} more questions
-                                                            </p>
+                                                            <p className="text-sm text-slate-500">+ {template.faqs.length - 2} more questions</p>
                                                         )}
                                                     </div>
-                                                    <Button
-                                                        onClick={() => handleAddFromTemplate(template)}
-                                                        className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
-                                                        disabled={isSubmitting}
-                                                    >
-                                                        {isSubmitting ? "Adding..." : "Add This Category"}
-                                                    </Button>
+                                                    <div className="w-full">
+
+                                                        <Button
+                                                            onClick={() => handleAddFromTemplate(template)}
+                                                            className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                                            disabled={createCategoryMutation.isPending || createFaqMutation.isPending}
+                                                        >
+                                                            {createCategoryMutation.isPending || createFaqMutation.isPending
+                                                                ? "Adding..."
+                                                                : "Add This Category"}
+                                                        </Button>
+                                                    </div>
+
                                                 </CardContent>
                                             </Card>
                                         ))}
@@ -635,6 +405,7 @@ export default function FAQPage() {
                             <DialogTrigger asChild>
                                 <Button
                                     size="lg"
+                                    disabled={!restaurantId}
                                     className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
                                 >
                                     <Plus className="h-4 w-4" />
@@ -680,15 +451,16 @@ export default function FAQPage() {
                                                 setIsAddCategoryDialogOpen(false)
                                                 resetForm()
                                             }}
+                                            disabled={createCategoryMutation.isPending}
                                         >
                                             Cancel
                                         </Button>
                                         <Button
                                             type="submit"
-                                            disabled={!newCategoryName || isSubmitting}
+                                            disabled={!newCategoryName || createCategoryMutation.isPending || !restaurantId}
                                             className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
                                         >
-                                            {isSubmitting ? "Adding..." : "Add Category"}
+                                            {createCategoryMutation.isPending ? "Adding..." : "Add Category"}
                                         </Button>
                                     </DialogFooter>
                                 </form>
@@ -702,12 +474,12 @@ export default function FAQPage() {
                     <motion.div variants={item}>
                         <Card className="bg-gradient-to-br from-teal-50 to-white transition-all hover:shadow-lg hover:scale-[1.02]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium text-muted-foreground">Total Categories</CardTitle>
+                                <CardTitle className="text-sm font-medium text-slate-500">Total Categories</CardTitle>
                                 <HelpCircle className="h-4 w-4 text-teal-600" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold text-teal-700">{statistics.totalCategories}</div>
-                                <p className="mt-1 text-xs text-muted-foreground">FAQ categories</p>
+                                <p className="mt-1 text-xs text-slate-500">FAQ categories</p>
                             </CardContent>
                         </Card>
                     </motion.div>
@@ -715,12 +487,12 @@ export default function FAQPage() {
                     <motion.div variants={item}>
                         <Card className="bg-gradient-to-br from-blue-50 to-white transition-all hover:shadow-lg hover:scale-[1.02]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium text-muted-foreground">Total FAQs</CardTitle>
+                                <CardTitle className="text-sm font-medium text-slate-500">Total FAQs</CardTitle>
                                 <Eye className="h-4 w-4 text-blue-600" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold text-blue-700">{statistics.totalFAQs}</div>
-                                <p className="mt-1 text-xs text-muted-foreground">Questions answered</p>
+                                <p className="mt-1 text-xs text-slate-500">Questions answered</p>
                             </CardContent>
                         </Card>
                     </motion.div>
@@ -728,12 +500,12 @@ export default function FAQPage() {
                     <motion.div variants={item}>
                         <Card className="bg-gradient-to-br from-purple-50 to-white transition-all hover:shadow-lg hover:scale-[1.02]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium text-muted-foreground">Featured FAQs</CardTitle>
+                                <CardTitle className="text-sm font-medium text-slate-500">Featured FAQs</CardTitle>
                                 <Star className="h-4 w-4 text-purple-600" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold text-purple-700">{statistics.featuredFAQs}</div>
-                                <p className="mt-1 text-xs text-muted-foreground">Popular questions</p>
+                                <p className="mt-1 text-xs text-slate-500">Popular questions</p>
                             </CardContent>
                         </Card>
                     </motion.div>
@@ -747,7 +519,7 @@ export default function FAQPage() {
                     className="mb-6"
                 >
                     <div className="relative">
-                        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                         <Input
                             placeholder="Search FAQs..."
                             value={searchTerm}
@@ -760,7 +532,7 @@ export default function FAQPage() {
                 {/* FAQ Categories */}
                 <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
                     {filteredCategories.length > 0 ? (
-                        filteredCategories.map((category) => (
+                        filteredCategories.map((category, categoryIndex) => (
                             <motion.div key={category.id} variants={item} className="space-y-4">
                                 <Card className="bg-white/80 backdrop-blur-sm transition-all hover:shadow-lg">
                                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -796,6 +568,7 @@ export default function FAQPage() {
                                                         variant="ghost"
                                                         size="sm"
                                                         className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                        disabled={deleteCategoryMutation.isPending}
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                         <span className="sr-only">Delete category</span>
@@ -812,7 +585,7 @@ export default function FAQPage() {
                                                     <AlertDialogFooter>
                                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                                                         <AlertDialogAction
-                                                            onClick={() => handleDeleteCategory(category.id)}
+                                                            onClick={() => deleteCategoryMutation.mutate(category.id)}
                                                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                                         >
                                                             Delete Category
@@ -820,6 +593,28 @@ export default function FAQPage() {
                                                     </AlertDialogFooter>
                                                 </AlertDialogContent>
                                             </AlertDialog>
+
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => reorderCategoryMutation.mutate({ categoryId: category.id, direction: "up" })}
+                                                disabled={categoryIndex === 0 || reorderCategoryMutation.isPending}
+                                                className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                            >
+                                                <ArrowUp className="h-4 w-4" />
+                                                <span className="sr-only">Move up</span>
+                                            </Button>
+
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => reorderCategoryMutation.mutate({ categoryId: category.id, direction: "down" })}
+                                                disabled={categoryIndex === filteredCategories.length - 1 || reorderCategoryMutation.isPending}
+                                                className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                            >
+                                                <ArrowDown className="h-4 w-4" />
+                                                <span className="sr-only">Move down</span>
+                                            </Button>
                                         </div>
                                     </CardHeader>
 
@@ -829,18 +624,20 @@ export default function FAQPage() {
                                                 <DialogTrigger asChild>
                                                     <Button
                                                         variant="outline"
-                                                        className="w-full justify-center transition-all hover:scale-[1.02] hover:bg-teal-50"
+                                                        className="w-full justify-center transition-all hover:scale-[1.02] hover:bg-teal-50 bg-transparent"
                                                         onClick={() => setSelectedCategory(category)}
                                                     >
                                                         <Plus className="mr-2 h-4 w-4" />
-                                                        Add FAQ
+                                                        Add FAQ to {category.name}
                                                     </Button>
                                                 </DialogTrigger>
                                                 <DialogContent className="max-w-2xl">
                                                     <form onSubmit={handleAddFAQ}>
                                                         <DialogHeader>
                                                             <DialogTitle>Add FAQ</DialogTitle>
-                                                            <DialogDescription>Add a new question and answer to {category.name}</DialogDescription>
+                                                            <DialogDescription>
+                                                                Add a new question and answer to {selectedCategory?.name}
+                                                            </DialogDescription>
                                                         </DialogHeader>
 
                                                         <div className="space-y-4 py-4">
@@ -884,15 +681,18 @@ export default function FAQPage() {
                                                                     setIsAddFAQDialogOpen(false)
                                                                     resetForm()
                                                                 }}
+                                                                disabled={createFaqMutation.isPending}
                                                             >
                                                                 Cancel
                                                             </Button>
                                                             <Button
                                                                 type="submit"
-                                                                disabled={!newFAQQuestion || !newFAQAnswer || isSubmitting}
+                                                                disabled={
+                                                                    !newFAQQuestion || !newFAQAnswer || createFaqMutation.isPending || !selectedCategory
+                                                                }
                                                                 className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
                                                             >
-                                                                {isSubmitting ? "Adding..." : "Add FAQ"}
+                                                                {createFaqMutation.isPending ? "Adding..." : "Add FAQ"}
                                                             </Button>
                                                         </DialogFooter>
                                                     </form>
@@ -901,13 +701,13 @@ export default function FAQPage() {
 
                                             {category.faqs && category.faqs.length > 0 ? (
                                                 <div className="space-y-3">
-                                                    {category.faqs.map((faq) => (
+                                                    {category.faqs.map((faq, faqIndex) => (
                                                         <div
                                                             key={faq.id}
                                                             className="flex items-start gap-3 rounded-lg border bg-white/90 p-4 backdrop-blur-sm transition-all hover:shadow-md hover:scale-[1.01]"
                                                         >
                                                             <div className="mt-1 flex-shrink-0 cursor-move">
-                                                                <Grip className="h-4 w-4 text-muted-foreground" />
+                                                                <Grip className="h-4 w-4 text-slate-400" />
                                                             </div>
 
                                                             <div className="min-w-0 flex-grow">
@@ -915,11 +715,11 @@ export default function FAQPage() {
                                                                     <h4 className="text-sm font-medium">{faq.question}</h4>
                                                                     {faq.is_featured && <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />}
                                                                 </div>
-                                                                <p className="text-sm leading-relaxed text-muted-foreground">{faq.answer}</p>
-                                                                {faq.view_count > 0 && (
+                                                                <p className="text-sm leading-relaxed text-slate-500">{faq.answer}</p>
+                                                                {faq.view_count && faq.view_count > 0 && (
                                                                     <div className="mt-2 flex items-center gap-1">
-                                                                        <Eye className="h-3 w-3 text-muted-foreground" />
-                                                                        <span className="text-xs text-muted-foreground">{faq.view_count} views</span>
+                                                                        <Eye className="h-3 w-3 text-slate-400" />
+                                                                        <span className="text-xs text-slate-400">{faq.view_count} views</span>
                                                                     </div>
                                                                 )}
                                                             </div>
@@ -948,6 +748,7 @@ export default function FAQPage() {
                                                                             variant="ghost"
                                                                             size="sm"
                                                                             className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                                            disabled={deleteFaqMutation.isPending}
                                                                         >
                                                                             <Trash2 className="h-4 w-4" />
                                                                             <span className="sr-only">Delete FAQ</span>
@@ -964,7 +765,7 @@ export default function FAQPage() {
                                                                         <AlertDialogFooter>
                                                                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                                                                             <AlertDialogAction
-                                                                                onClick={() => handleDeleteFAQ(category.id, faq.id)}
+                                                                                onClick={() => deleteFaqMutation.mutate(faq.id)}
                                                                                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                                                             >
                                                                                 Delete FAQ
@@ -972,6 +773,30 @@ export default function FAQPage() {
                                                                         </AlertDialogFooter>
                                                                     </AlertDialogContent>
                                                                 </AlertDialog>
+
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    onClick={() => reorderFaqMutation.mutate({ faqId: faq.id, direction: "up" })}
+                                                                    disabled={faqIndex === 0 || reorderFaqMutation.isPending}
+                                                                    className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                                >
+                                                                    <ArrowUp className="h-4 w-4" />
+                                                                    <span className="sr-only">Move up</span>
+                                                                </Button>
+
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    onClick={() => reorderFaqMutation.mutate({ faqId: faq.id, direction: "down" })}
+                                                                    disabled={
+                                                                        faqIndex === (category.faqs?.length || 0) - 1 || reorderFaqMutation.isPending
+                                                                    }
+                                                                    className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                                >
+                                                                    <ArrowDown className="h-4 w-4" />
+                                                                    <span className="sr-only">Move down</span>
+                                                                </Button>
                                                             </div>
                                                         </div>
                                                     ))}
@@ -979,7 +804,18 @@ export default function FAQPage() {
                                             ) : (
                                                 <div className="py-8 text-center">
                                                     <HelpCircle className="mx-auto mb-2 h-8 w-8 text-gray-400" />
-                                                    <p className="text-muted-foreground">No FAQs in this category yet</p>
+                                                    <p className="text-slate-500 mb-4">No FAQs in this category yet</p>
+                                                    <Button
+                                                        variant="outline"
+                                                        onClick={() => {
+                                                            setSelectedCategory(category)
+                                                            setIsAddFAQDialogOpen(true)
+                                                        }}
+                                                        className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
+                                                    >
+                                                        <Plus className="mr-2 h-4 w-4" />
+                                                        Add First FAQ
+                                                    </Button>
                                                 </div>
                                             )}
                                         </div>
@@ -991,7 +827,7 @@ export default function FAQPage() {
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-16 text-center">
                             <HelpCircle className="mx-auto mb-4 h-16 w-16 text-gray-400" />
                             <h3 className="mb-2 text-lg font-semibold">No FAQs yet</h3>
-                            <p className="mb-6 text-muted-foreground">
+                            <p className="mb-6 text-slate-500">
                                 Get started by adding FAQ categories or using our quick setup templates
                             </p>
                             <div className="flex justify-center gap-4">
@@ -1007,6 +843,7 @@ export default function FAQPage() {
                                 <Button
                                     onClick={() => setIsAddCategoryDialogOpen(true)}
                                     size="lg"
+                                    disabled={!restaurantId}
                                     className="bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
                                 >
                                     Add your first category
@@ -1017,7 +854,7 @@ export default function FAQPage() {
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-12 text-center">
                             <Search className="mx-auto mb-4 h-16 w-16 text-gray-400" />
                             <h3 className="mb-2 text-lg font-semibold">No results found</h3>
-                            <p className="text-muted-foreground">
+                            <p className="text-slate-500">
                                 Try adjusting your search terms or{" "}
                                 <button onClick={() => setSearchTerm("")} className="text-teal-600 hover:underline">
                                     clear the search
@@ -1067,15 +904,16 @@ export default function FAQPage() {
                                     setIsEditCategoryDialogOpen(false)
                                     resetForm()
                                 }}
+                                disabled={updateCategoryMutation.isPending}
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
-                                disabled={!newCategoryName || isSubmitting}
+                                disabled={!newCategoryName || updateCategoryMutation.isPending}
                                 className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
                             >
-                                {isSubmitting ? "Saving..." : "Save Changes"}
+                                {updateCategoryMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>
                         </DialogFooter>
                     </form>
@@ -1130,15 +968,16 @@ export default function FAQPage() {
                                     setIsEditFAQDialogOpen(false)
                                     resetForm()
                                 }}
+                                disabled={updateFaqMutation.isPending}
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
-                                disabled={!newFAQQuestion || !newFAQAnswer || isSubmitting}
+                                disabled={!newFAQQuestion || !newFAQAnswer || updateFaqMutation.isPending}
                                 className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
                             >
-                                {isSubmitting ? "Saving..." : "Save Changes"}
+                                {updateFaqMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>
                         </DialogFooter>
                     </form>

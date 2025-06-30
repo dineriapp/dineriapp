@@ -12,7 +12,7 @@
 /src/generated
 # testing
 /coverage
-
+.drafts
 # next.js
 /.next/
 /out/

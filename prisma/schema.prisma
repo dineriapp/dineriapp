@@ -163,7 +163,7 @@ model Faq {
   question    String
   answer      String
   sort_order  Int      @default(0)
-  is_featured Boolean? @default(false)
+  is_featured Boolean  @default(false)
   view_count  Int?     @default(0)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
