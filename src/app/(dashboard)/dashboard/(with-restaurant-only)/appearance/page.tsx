@@ -280,10 +280,10 @@ export default function AppearancePage() {
 
     if (!selectedRestaurant) {
         return (
-            <div className="max-w-[1200px] mx-auto px-4 py-16 flex justify-center">
-                <div className="text-center">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-2">No Restaurant Selected</h2>
-                    <p className="text-gray-600">Please select a restaurant to customize its appearance.</p>
+            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
+                <div className="flex items-center space-x-2 text-slate-500">
+                    <div className="animate-spin h-5 w-5 border-2 border-teal-600 border-t-transparent rounded-full" />
+                    <span>Loading appearance...</span>
                 </div>
             </div>
         )
