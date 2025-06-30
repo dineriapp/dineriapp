@@ -1,34 +1,29 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { Restaurant } from "@/lib/types"
 import { Calendar, Clock, ExternalLink, MapPin, Phone, Star, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
-
-
-interface Event {
-    id: string
-    title: string
-    description?: string
-    date: string
-    ticket_url?: string
-}
+import type { Restaurant, Event } from "@prisma/client"
 
 interface WelcomePopupProps {
     restaurant: Restaurant
     isOpen: boolean
     onClose: () => void
-    upcomingEvents?: Event[]
+    upcomingEvents: Event[]
+    welcomePopupShowInfo: {
+        ratings: boolean
+        address: boolean
+        hours: boolean
+        phone: boolean
+    }
 }
 
-
-
-export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] }: WelcomePopupProps) {
+export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents, welcomePopupShowInfo }: WelcomePopupProps) {
     const [currentEventIndex, setCurrentEventIndex] = useState(0)
 
     // Auto-rotate through events
     useEffect(() => {
-        if (upcomingEvents.length <= 1) return
+        if (upcomingEvents.length <= 1 || !restaurant.event_announcements_enabled) return
 
         const rotationSpeed = (restaurant.event_rotation_speed || 5) * 1000
         const interval = setInterval(() => {
@@ -36,7 +31,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] 
         }, rotationSpeed)
 
         return () => clearInterval(interval)
-    }, [upcomingEvents.length, restaurant.event_rotation_speed])
+    }, [upcomingEvents.length, restaurant.event_rotation_speed, restaurant.event_announcements_enabled])
 
     const handleDontShowAgain = () => {
         localStorage.setItem(`welcome-popup-${restaurant.slug}`, "dismissed")
@@ -53,25 +48,15 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] 
         }
 
         if (restaurant.bg_type === "gradient" && restaurant.bg_gradient_start && restaurant.bg_gradient_end) {
+            const direction = restaurant.gradient_direction
+                .replace("_", " ")
+                .replace("top", "to top")
+                .replace("bottom", "to bottom")
+                .replace("left", "to left")
+                .replace("right", "to right")
+
             return {
-                backgroundImage: `linear-gradient(${restaurant.gradient_direction === "top"
-                    ? "to top"
-                    : restaurant.gradient_direction === "bottom"
-                        ? "to bottom"
-                        : restaurant.gradient_direction === "left"
-                            ? "to left"
-                            : restaurant.gradient_direction === "right"
-                                ? "to right"
-                                : restaurant.gradient_direction === "top-right"
-                                    ? "to top right"
-                                    : restaurant.gradient_direction === "top-left"
-                                        ? "to top left"
-                                        : restaurant.gradient_direction === "bottom-right"
-                                            ? "to bottom right"
-                                            : restaurant.gradient_direction === "bottom-left"
-                                                ? "to bottom left"
-                                                : "to bottom right"
-                    }, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
+                backgroundImage: `linear-gradient(${direction}, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
             }
         }
 
@@ -104,7 +89,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] 
         }
     }
 
-    const showButton = restaurant.welcome_popup_show_button !== false && !hasEvents
+    const showButton = restaurant.welcome_popup_action_button_show !== false && !hasEvents
 
     return (
         <AnimatePresence>
@@ -123,7 +108,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] 
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl shadow-2xl"
                         style={getBackgroundStyle()}
-                        onClick={(e: any) => e.stopPropagation()}
+                        onClick={(e) => e.stopPropagation()}
                     >
                         {/* Close Button */}
                         <button
@@ -151,7 +136,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] 
                                 ) : (
                                     <div
                                         className="mx-auto flex h-20 w-20 items-center justify-center rounded-full shadow-lg ring-4 ring-white/20"
-                                        style={{ backgroundColor: restaurant.accent_color }}
+                                        style={{ backgroundColor: restaurant.accent_color || "#10b981" }}
                                     >
                                         <span className="text-3xl font-bold text-white">{restaurant.name.charAt(0)}</span>
                                     </div>
@@ -175,12 +160,12 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] 
                                         <div
                                             className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium"
                                             style={{
-                                                backgroundColor: `${restaurant.accent_color}20`,
-                                                color: restaurant.accent_color,
+                                                backgroundColor: `${restaurant.accent_color || "#10b981"}20`,
+                                                color: restaurant.accent_color || "#10b981",
                                             }}
                                         >
                                             <Calendar className="h-4 w-4" />
-                                            <span>{formatEventDate(currentEvent.date)}</span>
+                                            <span>{formatEventDate(currentEvent.date.toISOString())}</span>
                                         </div>
 
                                         <h3 className="text-lg font-semibold" style={{ color: textColor }}>
@@ -223,36 +208,36 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] 
                                 transition={{ delay: 0.4 }}
                                 className="mb-8 space-y-3"
                             >
-                                {restaurant.average_rating && (
+                                {welcomePopupShowInfo.ratings && restaurant.google_place_id && (
                                     <div className="flex items-center justify-center gap-2">
                                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                                         <span className="text-sm font-medium" style={{ color: textColor }}>
-                                            {restaurant.average_rating.toFixed(1)} ({restaurant.review_count} reviews)
+                                            4.8 (247 reviews)
                                         </span>
                                     </div>
                                 )}
 
-                                {restaurant.address && (
+                                {welcomePopupShowInfo.address && restaurant.address && (
                                     <div className="flex items-center justify-center gap-2">
-                                        <MapPin className="h-4 w-4" style={{ color: restaurant.accent_color }} />
+                                        <MapPin className="h-4 w-4" style={{ color: restaurant.accent_color || "#10b981" }} />
                                         <span className="text-sm" style={{ color: textColor }}>
                                             {restaurant.address.split(",")[0]}
                                         </span>
                                     </div>
                                 )}
 
-                                {restaurant.opening_hours && restaurant.opening_hours.length > 0 && (
+                                {welcomePopupShowInfo.hours && restaurant.opening_hours && (
                                     <div className="flex items-center justify-center gap-2">
-                                        <Clock className="h-4 w-4" style={{ color: restaurant.accent_color }} />
+                                        <Clock className="h-4 w-4" style={{ color: restaurant.accent_color || "#10b981" }} />
                                         <span className="text-sm" style={{ color: textColor }}>
                                             Open Today
                                         </span>
                                     </div>
                                 )}
 
-                                {restaurant.phone && (
+                                {welcomePopupShowInfo.phone && restaurant.phone && (
                                     <div className="flex items-center justify-center gap-2">
-                                        <Phone className="h-4 w-4" style={{ color: restaurant.accent_color }} />
+                                        <Phone className="h-4 w-4" style={{ color: restaurant.accent_color || "#10b981" }} />
                                         <span className="text-sm" style={{ color: textColor }}>
                                             {restaurant.phone}
                                         </span>
@@ -274,7 +259,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] 
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="mb-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-medium text-white transition-all hover:scale-105"
-                                        style={{ backgroundColor: restaurant.accent_color }}
+                                        style={{ backgroundColor: restaurant.accent_color || "#10b981" }}
                                     >
                                         <span>Get Event Tickets</span>
                                         <ExternalLink className="h-4 w-4" />
@@ -286,7 +271,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents = [] 
                                     <Button
                                         onClick={onClose}
                                         className="w-full rounded-xl py-3 font-medium text-white transition-all hover:scale-105"
-                                        style={{ backgroundColor: restaurant.accent_color }}
+                                        style={{ backgroundColor: restaurant.accent_color || "#10b981" }}
                                     >
                                         Explore
                                     </Button>

@@ -1,0 +1,668 @@
+"use client"
+
+import type React from "react"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+    AlertTriangle,
+    Calendar,
+    ExternalLink,
+    Facebook,
+    HelpCircle,
+    Instagram,
+    Leaf,
+    Mail,
+    MapPin,
+    MenuIcon,
+    MessageCircle,
+} from "lucide-react"
+import { motion } from "motion/react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
+import { GoogleRating } from "./_components/google-rating"
+import { OpeningHoursStatus } from "./_components/opening-hours-status"
+import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
+import { WelcomePopup } from "./_components/welcome-popup"
+import { FAQSection } from "./_components/faq-section"
+import type { Restaurant, Link as PrismaLink, MenuCategory, MenuItem, Event, FaqCategory, Faq } from "@prisma/client"
+
+// Define the complete types with relations using Prisma types
+type RestaurantWithRelations = Restaurant & {
+    links: PrismaLink[]
+    menuCategories: (MenuCategory & {
+        items: MenuItem[]
+    })[]
+    events: Event[]
+    faqCategories: (FaqCategory & {
+        faqs: Faq[]
+    })[]
+}
+
+interface OpeningHoursData {
+    [key: string]: {
+        open: string
+        close: string
+        closed: boolean
+    }
+}
+
+interface ClientPageProps {
+    restaurant: RestaurantWithRelations
+}
+
+const container = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+        },
+    },
+}
+
+const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+}
+
+const trackLinkClick = async (linkId: string) => {
+    try {
+        await fetch("/api/links/track-view", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ linkId }),
+        })
+    } catch (error) {
+        console.error("Error tracking link click:", error)
+    }
+}
+
+export default function ClientPage({ restaurant }: ClientPageProps) {
+    const pathname = usePathname()
+    const isMenuPage = pathname.endsWith("/menu")
+
+    const [showMenuDialog, setShowMenuDialog] = useState(false)
+    const [showEventsDialog, setShowEventsDialog] = useState(false)
+    const [showFAQDialog, setShowFAQDialog] = useState(false)
+    const [showWelcomePopup, setShowWelcomePopup] = useState(false)
+    const [showOpeningHoursDialog, setShowOpeningHoursDialog] = useState(false)
+
+    // Parse JSON fields
+    const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : null
+    const welcomePopupShowInfo = restaurant.welcome_popup_show_info
+        ? (restaurant.welcome_popup_show_info as { ratings: boolean; address: boolean; hours: boolean; phone: boolean })
+        : { ratings: true, address: true, hours: true, phone: true }
+
+    useEffect(() => {
+        // Show welcome popup after component mounts
+        const timer = setTimeout(
+            () => {
+                const dismissed = localStorage.getItem(`welcome-popup-${restaurant.slug}`)
+                if (!dismissed && restaurant.welcome_popup_enabled) {
+                    setShowWelcomePopup(true)
+                }
+            },
+            (restaurant.welcome_popup_delay || 2) * 1000,
+        )
+
+        return () => clearTimeout(timer)
+    }, [restaurant.slug, restaurant.welcome_popup_enabled, restaurant.welcome_popup_delay])
+
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+        e.currentTarget.style.display = "none"
+        const fallback = e.currentTarget.parentElement?.querySelector(".fallback-initial")
+        if (fallback) {
+            fallback.classList.remove("hidden")
+        }
+    }
+
+    const getBackgroundStyle = () => {
+        if (restaurant.bg_type === "image" && restaurant.bg_image_url) {
+            return {
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${restaurant.bg_image_url})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }
+        }
+
+        if (restaurant.bg_type === "gradient" && restaurant.bg_gradient_start && restaurant.bg_gradient_end) {
+            const direction = restaurant.gradient_direction
+                .replace("_", " ")
+                .replace("top", "to top")
+                .replace("bottom", "to bottom")
+                .replace("left", "to left")
+                .replace("right", "to right")
+
+            return {
+                backgroundImage: `linear-gradient(${direction}, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
+            }
+        }
+
+        return { backgroundColor: restaurant.bg_color || "#ffffff" }
+    }
+
+    const headingsColor = restaurant.headings_text_color || "#ffffff"
+    const buttonTextColor = restaurant.button_text_icons_color || "#000000"
+
+    const SocialIcons = () => (
+        <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mb-8 flex flex-wrap items-center justify-center gap-3"
+        >
+            {restaurant.instagram && (
+                <a
+                    href={restaurant.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: restaurant.accent_color || "#10b981" }}
+                >
+                    <Instagram className="h-6 w-6" />
+                </a>
+            )}
+            {restaurant.facebook && (
+                <a
+                    href={restaurant.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: restaurant.accent_color || "#10b981" }}
+                >
+                    <Facebook className="h-6 w-6" />
+                </a>
+            )}
+            {restaurant.whatsapp && (
+                <a
+                    href={`https://wa.me/${restaurant.whatsapp.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: restaurant.accent_color || "#10b981" }}
+                >
+                    <MessageCircle className="h-6 w-6" />
+                </a>
+            )}
+            {restaurant.email && (
+                <a
+                    href={`mailto:${restaurant.email}`}
+                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: restaurant.accent_color || "#10b981" }}
+                >
+                    <Mail className="h-6 w-6" />
+                </a>
+            )}
+            {restaurant.address && (
+                <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(restaurant.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: restaurant.accent_color || "#10b981" }}
+                >
+                    <MapPin className="h-6 w-6" />
+                </a>
+            )}
+        </motion.div>
+    )
+
+    return (
+        <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
+            <div
+                className="pointer-events-none absolute bottom-0 left-0 right-0 h-32"
+                style={{
+                    background:
+                        restaurant.bg_type === "gradient"
+                            ? `linear-gradient(to bottom, transparent, ${restaurant.bg_gradient_end})`
+                            : restaurant.bg_type === "image"
+                                ? "linear-gradient(to bottom, transparent, rgba(0,0,0,0.6))"
+                                : `linear-gradient(to bottom, transparent, ${restaurant.bg_color || "#ffffff"})`,
+                }}
+            />
+
+            <div className="container relative mx-auto flex max-w-md flex-grow flex-col px-4 py-8">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col items-center text-center"
+                >
+                    {restaurant.logo_url ? (
+                        <motion.img
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                            src={restaurant.logo_url}
+                            alt={restaurant.name}
+                            onError={handleImageError}
+                            className="mb-5 h-24 w-24 rounded-full object-cover"
+                            loading="eager"
+                        />
+                    ) : (
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                            className="mb-5 flex h-24 w-24 items-center justify-center rounded-full shadow-lg ring-4 ring-white/20 fallback-initial"
+                            style={{ backgroundColor: restaurant.accent_color || "#10b981" }}
+                        >
+                            <span className="text-2xl font-bold text-white">{restaurant.name.charAt(0)}</span>
+                        </motion.div>
+                    )}
+
+                    <motion.h2
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="mb-3 text-2xl font-bold"
+                        style={{
+                            color: headingsColor,
+                            fontFamily: restaurant.font_family || "Inter",
+                        }}
+                    >
+                        {restaurant.name}
+                    </motion.h2>
+
+                    {/* Opening Hours Status */}
+                    {openingHours && (
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.25 }}
+                            className="mb-4"
+                        >
+                            <OpeningHoursStatus
+                                openingHours={openingHours}
+                                color={restaurant.headings_text_color || "#000000"}
+                                className="text-white cursor-pointer"
+                                accentColor={restaurant.accent_color || "#10b981"}
+                                onClick={() => setShowOpeningHoursDialog(true)}
+                            />
+                        </motion.div>
+                    )}
+
+                    {restaurant.google_place_id && (
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.25 }}
+                            className="mb-4"
+                        >
+                            <GoogleRating placeId={restaurant.google_place_id} className="text-white" />
+                        </motion.div>
+                    )}
+
+                    {restaurant.bio && (
+                        <motion.p
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="mx-auto mb-6 max-w-md text-sm"
+                            style={{
+                                color: headingsColor,
+                                fontFamily: restaurant.font_family || "Inter",
+                                opacity: 0.9,
+                            }}
+                        >
+                            {restaurant.bio}
+                        </motion.p>
+                    )}
+
+                    {(restaurant.instagram ||
+                        restaurant.facebook ||
+                        restaurant.email ||
+                        restaurant.address ||
+                        restaurant.whatsapp) &&
+                        restaurant.social_icons_position === "top" && <SocialIcons />}
+                </motion.div>
+
+                <motion.div variants={container} initial="hidden" animate="show" className="flex-grow space-y-4">
+                    {restaurant.links.map((link) => (
+                        <motion.a
+                            key={link.id}
+                            variants={item}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => trackLinkClick(link.id)}
+                            className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                                ? "rounded-full"
+                                : restaurant.button_style === "square"
+                                    ? "rounded-md"
+                                    : "rounded-xl"
+                                }`}
+                            style={{
+                                backgroundColor:
+                                    restaurant.button_variant === "solid"
+                                        ? restaurant.accent_color || "#10b981"
+                                        : "rgba(255, 255, 255, 0.95)",
+                                backdropFilter: "blur(8px)",
+                                border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                                fontFamily: restaurant.font_family || "Inter",
+                                letterSpacing: "0.01em",
+                            }}
+                        >
+                            <span
+                                className={`relative text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                    } transition-colors duration-300 font-medium`}
+                                style={{
+                                    color:
+                                        restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                }}
+                            >
+                                {link.title}
+                            </span>
+                        </motion.a>
+                    ))}
+
+                    {restaurant.menuCategories.length > 0 && !isMenuPage && (
+                        <motion.button
+                            variants={item}
+                            onClick={() => setShowMenuDialog(true)}
+                            className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                                ? "rounded-full"
+                                : restaurant.button_style === "square"
+                                    ? "rounded-md"
+                                    : "rounded-xl"
+                                }`}
+                            style={{
+                                backgroundColor:
+                                    restaurant.button_variant === "solid"
+                                        ? restaurant.accent_color || "#10b981"
+                                        : "rgba(255, 255, 255, 0.95)",
+                                backdropFilter: "blur(8px)",
+                                border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                                fontFamily: restaurant.font_family || "Inter",
+                                letterSpacing: "0.01em",
+                            }}
+                        >
+
+                            <span
+                                className={`relative text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                    } transition-colors duration-300 font-medium`}
+                                style={{
+                                    color:
+                                        restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                }}
+                            >
+                                Menu
+                            </span>
+                        </motion.button>
+                    )}
+
+                    {restaurant.events.length > 0 && (
+                        <motion.button
+                            variants={item}
+                            onClick={() => setShowEventsDialog(true)}
+                            className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                                ? "rounded-full"
+                                : restaurant.button_style === "square"
+                                    ? "rounded-md"
+                                    : "rounded-xl"
+                                }`}
+                            style={{
+                                backgroundColor:
+                                    restaurant.button_variant === "solid"
+                                        ? restaurant.accent_color || "#10b981"
+                                        : "rgba(255, 255, 255, 0.95)",
+                                backdropFilter: "blur(8px)",
+                                border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                                fontFamily: restaurant.font_family || "Inter",
+                                letterSpacing: "0.01em",
+                            }}
+                        >
+
+
+                            <span
+                                className={`relative text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                    } transition-colors duration-300 font-medium`}
+                                style={{
+                                    color:
+                                        restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                }}
+                            >
+                                Events
+                            </span>
+                        </motion.button>
+                    )}
+
+                    {/* FAQ Button - Always show if there are FAQ categories */}
+                    {restaurant.faqCategories.length > 0 && (
+                        <motion.button
+                            variants={item}
+                            onClick={() => setShowFAQDialog(true)}
+                            className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                                ? "rounded-full"
+                                : restaurant.button_style === "square"
+                                    ? "rounded-md"
+                                    : "rounded-xl"
+                                }`}
+                            style={{
+                                backgroundColor:
+                                    restaurant.button_variant === "solid"
+                                        ? restaurant.accent_color || "#10b981"
+                                        : "rgba(255, 255, 255, 0.95)",
+                                backdropFilter: "blur(8px)",
+                                border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                                fontFamily: restaurant.font_family || "Inter",
+                                letterSpacing: "0.01em",
+                            }}
+                        >
+
+                            <span
+                                className={`relative text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                    } transition-colors duration-300 font-medium`}
+                                style={{
+                                    color:
+                                        restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                }}
+                            >
+                                FAQ
+                            </span>
+                        </motion.button>
+                    )}
+
+                    {restaurant.links.length === 0 && !restaurant.menuCategories.length && !restaurant.events.length && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="py-8 text-center"
+                            style={{ color: headingsColor, opacity: 0.7 }}
+                        >
+                            No links added yet
+                        </motion.div>
+                    )}
+
+                    {(restaurant.instagram ||
+                        restaurant.facebook ||
+                        restaurant.email ||
+                        restaurant.address ||
+                        restaurant.whatsapp) &&
+                        restaurant.social_icons_position === "bottom" && <SocialIcons />}
+                </motion.div>
+
+                {/* Opening Hours Dialog */}
+                <OpeningHoursDialog
+                    isOpen={showOpeningHoursDialog}
+                    onClose={() => setShowOpeningHoursDialog(false)}
+                    openingHours={openingHours}
+                    restaurantName={restaurant.name}
+                    accentColor={restaurant.accent_color || "#10b981"}
+                />
+
+                {/* Menu Dialog */}
+                <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}>
+                    <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+                        <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                                <MenuIcon className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
+                                <span>Menu</span>
+                            </DialogTitle>
+                            <DialogDescription>
+                                {restaurant.menuCategories.length > 0 && (
+                                    <>
+                                        Last updated{" "}
+                                        {new Date(
+                                            Math.max(...restaurant.menuCategories.map((cat) => new Date(cat.updatedAt).getTime())),
+                                        ).toLocaleString("en-US", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
+                                    </>
+                                )}
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <div className="space-y-8 py-4">
+                            {restaurant.menuCategories.map((category) => (
+                                <div key={category.id} className="space-y-4">
+                                    <h3 className="border-b pb-2 text-lg font-bold">{category.name}</h3>
+                                    {category.description && (
+                                        <p className="-mt-2 mb-4 text-sm text-muted-foreground">{category.description}</p>
+                                    )}
+
+                                    <div className="space-y-6">
+                                        {category.items?.map((item) => (
+                                            <div key={item.id} className="flex justify-between gap-4">
+                                                <div className="space-y-1">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="font-medium">{item.name}</span>
+                                                        {item.is_halal && (
+                                                            <span
+                                                                className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800"
+                                                                title="Halal"
+                                                            >
+                                                                <Leaf className="h-3 w-3" />
+                                                                Halal
+                                                            </span>
+                                                        )}
+                                                        {item.allergens && item.allergens.length > 0 && (
+                                                            <span
+                                                                className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800"
+                                                                title={`Contains: ${item.allergens.join(", ")}`}
+                                                            >
+                                                                <AlertTriangle className="h-3 w-3" />
+                                                                Allergens
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    {item.description && <p className="text-sm text-muted-foreground">{item.description}</p>}
+                                                    {item.allergen_info && <p className="text-xs italic text-yellow-700">{item.allergen_info}</p>}
+                                                </div>
+                                                <div className="flex-shrink-0 font-medium">&euro;{item.price.toFixed(2)}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </DialogContent>
+                </Dialog>
+
+                {/* Events Dialog */}
+                <Dialog open={showEventsDialog} onOpenChange={setShowEventsDialog}>
+                    <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+                        <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                                <Calendar className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
+                                <span>Upcoming Events</span>
+                            </DialogTitle>
+                            <DialogDescription>
+                                {restaurant.events.length} upcoming {restaurant.events.length === 1 ? "event" : "events"}
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <div className="space-y-6 py-4">
+                            {restaurant.events.map((event) => (
+                                <div key={event.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                                    <h3 className="mb-2 text-lg font-semibold">{event.title}</h3>
+                                    {event.description && <p className="mb-4 text-muted-foreground">{event.description}</p>}
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <Calendar className="h-4 w-4" style={{ color: restaurant.accent_color || "#10b981" }} />
+                                        <span>
+                                            {new Date(event.date).toLocaleDateString("en-US", {
+                                                weekday: "long",
+                                                year: "numeric",
+                                                month: "long",
+                                                day: "numeric",
+                                                hour: "numeric",
+                                                minute: "numeric",
+                                            })}
+                                        </span>
+                                    </div>
+                                    {event.ticket_url && (
+                                        <div className="mt-4">
+                                            <a
+                                                href={event.ticket_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-white transition-transform hover:scale-105"
+                                                style={{ backgroundColor: restaurant.accent_color || "#10b981" }}
+                                            >
+                                                Get Tickets
+                                                <ExternalLink className="h-4 w-4" />
+                                            </a>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </DialogContent>
+                </Dialog>
+
+                {/* FAQ Dialog */}
+                <Dialog open={showFAQDialog} onOpenChange={setShowFAQDialog}>
+                    <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+                        <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                                <HelpCircle className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
+                                <span>Frequently Asked Questions</span>
+                            </DialogTitle>
+                            <DialogDescription>Find answers to common questions</DialogDescription>
+                        </DialogHeader>
+
+                        <div className="py-4">
+                            <FAQSection faqCategories={restaurant.faqCategories} accentColor={restaurant.accent_color || "#10b981"} />
+                        </div>
+                    </DialogContent>
+                </Dialog>
+
+                <motion.footer
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.7 }}
+                    className="mt-12 pb-6 text-center"
+                >
+                    <p className="text-xs" style={{ color: headingsColor, opacity: 0.7 }}>
+                        Powered by{" "}
+                        <Link href="/" className="hover:underline" style={{ color: restaurant.accent_color || "#10b981" }}>
+                            dineri.app
+                        </Link>
+                    </p>
+                </motion.footer>
+            </div>
+
+            {/* Welcome Popup */}
+            <WelcomePopup
+                restaurant={restaurant}
+                isOpen={showWelcomePopup}
+                onClose={() => setShowWelcomePopup(false)}
+                upcomingEvents={restaurant.events}
+                welcomePopupShowInfo={welcomePopupShowInfo}
+            />
+        </div>
+    )
+}
