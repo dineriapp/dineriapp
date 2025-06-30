@@ -43,10 +43,6 @@ const container = {
     },
 }
 
-const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-}
 
 export default function EventsPage() {
     const { selectedRestaurant } = useRestaurantStore()

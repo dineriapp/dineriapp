@@ -42,10 +42,6 @@ import { ArrowDown, ArrowUp, Edit, Grip, Plus, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
 
-const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-}
 
 export default function LinksPage() {
     const { restaurants, selectedRestaurant } = useRestaurantStore()
