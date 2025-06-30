@@ -14,9 +14,10 @@ const updateRestaurantSchema = z.object({
     logo_url: z.string().url("Logo URL must be a valid URL").nullable().optional(),
 })
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const restaurantId = params.id
+        const { id } = await params
+        const restaurantId = id
 
         // Authenticate and authorize
         const authResult = await authenticateAndAuthorize(restaurantId)
@@ -82,9 +83,11 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 }
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const restaurantId = params.id
+        const { id } = await params
+
+        const restaurantId = id
 
         // Authenticate and authorize
         const authResult = await authenticateAndAuthorize(restaurantId)

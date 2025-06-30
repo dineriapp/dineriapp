@@ -21,9 +21,9 @@ const updatePopupsSchema = z.object({
     event_rotation_speed: z.number().min(1).max(30).optional(),
 })
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = params
+        const { id } = await params
         const body = await request.json()
 
         // Validate request body
