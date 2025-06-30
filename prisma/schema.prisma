@@ -82,6 +82,8 @@ model Restaurant {
   logo_url                         String?
   bg_color                         String?             @default("#ffffff")
   accent_color                     String?             @default("#10b981")
+  headings_text_color              String?             @default("#ffffff")
+  button_text_icons_color          String?             @default("#000000")
   button_style                     ButtonStyle         @default(rounded)
   font_family                      String?             @default("Inter")
   bg_type                          BgType              @default(color)
