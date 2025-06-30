@@ -5,13 +5,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'images.unsplash.com',
-      },
-      {
-        hostname: 'media.licdn.com',
+        protocol: 'https',
+        hostname: '**', // Match all hostnames
       },
     ],
-
   },
 };
 

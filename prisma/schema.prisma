@@ -75,46 +75,47 @@ model User {
 }
 
 model Restaurant {
-  id                          String              @id @default(uuid()) @db.Uuid
-  user_id                     String              @db.Uuid
-  name                        String
-  bio                         String?             @default("")
-  logo_url                    String?
-  bg_color                    String?             @default("#ffffff")
-  accent_color                String?             @default("#10b981")
-  button_style                ButtonStyle         @default(rounded)
-  font_family                 String?             @default("Inter")
-  bg_type                     BgType              @default(color)
-  bg_gradient_start           String?             @default("#ffffff")
-  bg_gradient_end             String?             @default("#f3f4f6")
-  gradient_direction          GradientDirection   @default(bottom_right)
-  button_variant              ButtonVariant       @default(solid)
-  slug                        String              @unique
-  address                     String?
-  phone                       String?
-  email                       String?
-  instagram                   String?
-  facebook                    String?
-  whatsapp                    String?
-  opening_hours               Json?
-  latitude                    Float?
-  longitude                   Float?
-  review_count                Int?                @default(0)
-  average_rating              Float?
-  google_place_id             String?
-  bg_image_url                String?
-  welcome_popup_enabled       Boolean?            @default(true)
-  welcome_popup_message       String?             @default("Welcome! We're excited to have you visit us.")
-  welcome_popup_delay         Int?                @default(2)
-  welcome_popup_show_info     Json?               @default("{\"hours\": true, \"phone\": true, \"address\": true, \"ratings\": true}")
-  social_icons_position       SocialIconsPosition @default(top)
-  event_announcements_enabled Boolean?            @default(true)
-  event_announcement_days     Int?                @default(30)
-  max_events_in_popup         Int?                @default(3)
-  event_rotation_speed        Int?                @default(5)
-  welcome_popup_show_button   Boolean?            @default(true)
-  createdAt                   DateTime            @default(now()) @map("created_at")
-  updatedAt                   DateTime            @default(now()) @updatedAt @map("updated_at")
+  id                               String              @id @default(uuid()) @db.Uuid
+  user_id                          String              @db.Uuid
+  name                             String
+  bio                              String?             @default("")
+  logo_url                         String?
+  bg_color                         String?             @default("#ffffff")
+  accent_color                     String?             @default("#10b981")
+  button_style                     ButtonStyle         @default(rounded)
+  font_family                      String?             @default("Inter")
+  bg_type                          BgType              @default(color)
+  bg_gradient_start                String?             @default("#ffffff")
+  bg_gradient_end                  String?             @default("#f3f4f6")
+  gradient_direction               GradientDirection   @default(bottom_right)
+  button_variant                   ButtonVariant       @default(solid)
+  slug                             String              @unique
+  address                          String?
+  phone                            String?
+  email                            String?
+  instagram                        String?
+  facebook                         String?
+  whatsapp                         String?
+  social_icons_position            SocialIconsPosition @default(top)
+  opening_hours                    Json?
+  latitude                         Float?
+  longitude                        Float?
+  review_count                     Int?                @default(0)
+  average_rating                   Float?
+  google_place_id                  String?
+  bg_image_url                     String?
+  welcome_popup_enabled            Boolean?            @default(true)
+  welcome_popup_message            String?             @default("Welcome! We're excited to have you visit us.")
+  welcome_popup_delay              Int?                @default(2)
+  welcome_popup_action_button_show Boolean?            @default(true)
+  welcome_popup_show_info          Json?               @default("{\"hours\": true, \"phone\": true, \"address\": true, \"ratings\": true}")
+  event_announcements_enabled      Boolean?            @default(true)
+  event_announcement_days          Int?                @default(30)
+  max_events_in_popup              Int?                @default(3)
+  event_rotation_speed             Int?                @default(5)
+  welcome_popup_show_button        Boolean?            @default(true)
+  createdAt                        DateTime            @default(now()) @map("created_at")
+  updatedAt                        DateTime            @default(now()) @updatedAt @map("updated_at")
 
   events         Event[]
   faqCategories  FaqCategory[]

@@ -4,49 +4,83 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AlertCircle, Globe2, Save } from "lucide-react"
+import { AlertCircle, Globe2, RotateCcw, Save } from "lucide-react"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { useRestaurantStore } from "@/stores/restaurant-store"
 
-// Mock integration data
-const mockIntegrationData = {
-    google_place_id: "ChIJN1t_tDeuEmsRUsoyG83frY4",
+interface IntegrationFormData {
+    google_place_id: string
 }
 
 export default function IntegrationsPage() {
-    const [googlePlaceId, setGooglePlaceId] = useState("")
-    const [loading, setLoading] = useState(true)
+    const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
+
+    const [formData, setFormData] = useState<IntegrationFormData>({
+        google_place_id: "",
+    })
+
+    const [initialData, setInitialData] = useState<IntegrationFormData>(formData)
     const [saving, setSaving] = useState(false)
-    const [hasChanges, setHasChanges] = useState(false)
 
+    // Load data from restaurant store
     useEffect(() => {
-        const loadData = () => {
-            setLoading(true)
-            setTimeout(() => {
-                const data = mockIntegrationData
-                setGooglePlaceId(data.google_place_id || "")
-                setLoading(false)
-            }, 400)
-        }
-        loadData()
-    }, [])
+        if (selectedRestaurant) {
+            const data: IntegrationFormData = {
+                google_place_id: selectedRestaurant.google_place_id || "",
+            }
 
-    const handleInputChange = (setter: any, value: string) => {
-        setter(value)
-        setHasChanges(true)
+            setFormData(data)
+            setInitialData(data)
+        }
+    }, [selectedRestaurant])
+
+    // Check if form has changes
+    const hasChanges = JSON.stringify(formData) !== JSON.stringify(initialData)
+
+    const resetForm = () => {
+        setFormData(initialData)
+        toast.success("Form reset", {
+            description: "All changes have been discarded",
+        })
     }
 
-    const saveProfile = async () => {
+    const saveSettings = async () => {
+        if (!selectedRestaurant) {
+            toast.error("No restaurant selected")
+            return
+        }
+
         try {
             setSaving(true)
-            await new Promise((resolve) => setTimeout(resolve, 1500))
+
+            const response = await fetch(`/api/restaurants/${selectedRestaurant.id}/integrations`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData.error || "Failed to update integration settings")
+            }
+
+            const result = await response.json()
+
+            // Update store with response data
+            updateSelectedRestaurant(result.data)
+
+            // Update initial data to reflect saved state
+            setInitialData(formData)
 
             toast.success("Integration settings updated", {
                 description: "Your integration settings have been updated successfully",
             })
-            setHasChanges(false)
         } catch (error: any) {
+            console.error("Error updating integration settings:", error)
             toast.error("Error updating integration settings", {
                 description: error.message || "An error occurred while updating your integration settings",
             })
@@ -55,7 +89,7 @@ export default function IntegrationsPage() {
         }
     }
 
-    if (loading) {
+    if (!selectedRestaurant) {
         return (
             <div className="flex justify-center py-16">
                 <div className="flex items-center space-x-2 text-slate-500">
@@ -72,7 +106,7 @@ export default function IntegrationsPage() {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         ></path>
                     </svg>
-                    <span>Loading integration settings...</span>
+                    <span>Loading integrations information...</span>
                 </div>
             </div>
         )
@@ -92,8 +126,10 @@ export default function IntegrationsPage() {
                             <Globe2 className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
                             <Input
                                 id="googlePlaceId"
-                                value={googlePlaceId}
-                                onChange={(e) => handleInputChange(setGooglePlaceId, e.target.value)}
+                                value={formData.google_place_id}
+                                onChange={(e) => {
+                                    setFormData((prev) => ({ ...prev, google_place_id: e.target.value }))
+                                }}
                                 placeholder="e.g. ChIJN1t_tDeuEmsRUsoyG83frY4"
                                 className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
                             />
@@ -110,10 +146,25 @@ export default function IntegrationsPage() {
                             </a>
                         </p>
                     </div>
+
+                    {formData.google_place_id && (
+                        <div className="rounded-lg bg-emerald-50 p-4">
+                            <div className="flex items-start gap-3">
+                                <Globe2 className="h-5 w-5 text-emerald-600 mt-0.5" />
+                                <div>
+                                    <h4 className="font-medium text-emerald-900">Integration Active</h4>
+                                    <p className="text-sm text-emerald-700 mt-1">
+                                        Your restaurant is connected to Google Places. Reviews and ratings will be displayed on your page.
+                                    </p>
+                                    <p className="text-xs text-emerald-600 mt-2 font-mono">Place ID: {formData.google_place_id}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
 
-            {/* Floating Save Button */}
+            {/* Floating Action Buttons */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{
@@ -128,15 +179,27 @@ export default function IntegrationsPage() {
                         <span>You have unsaved changes</span>
                     </div>
                 </div>
-                <Button
-                    onClick={saveProfile}
-                    disabled={saving || !hasChanges}
-                    size="lg"
-                    className="bg-emerald-600 shadow-lg transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl"
-                >
-                    <Save className="mr-2 h-4 w-4" />
-                    {saving ? "Saving..." : "Save Changes"}
-                </Button>
+                <div className="flex gap-2">
+                    <Button
+                        onClick={resetForm}
+                        disabled={saving || !hasChanges}
+                        variant="outline"
+                        size="lg"
+                        className="shadow-lg bg-transparent"
+                    >
+                        <RotateCcw className="mr-2 h-4 w-4" />
+                        Reset
+                    </Button>
+                    <Button
+                        onClick={saveSettings}
+                        disabled={saving || !hasChanges}
+                        size="lg"
+                        className="bg-emerald-600 shadow-lg transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl"
+                    >
+                        <Save className="mr-2 h-4 w-4" />
+                        {saving ? "Saving..." : "Save Changes"}
+                    </Button>
+                </div>
             </motion.div>
         </>
     )

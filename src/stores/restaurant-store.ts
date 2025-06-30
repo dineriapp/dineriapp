@@ -8,15 +8,30 @@ interface RestaurantState {
     selectedRestaurant: Restaurant | null
     setRestaurants: (restaurants: Restaurant[]) => void
     setSelectedRestaurant: (restaurant: Restaurant) => void
+    updateSelectedRestaurant: (updates: Partial<Restaurant>) => void
 }
 
 export const useRestaurantStore = create<RestaurantState>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             restaurants: [],
             selectedRestaurant: null,
             setRestaurants: (restaurants) => set({ restaurants }),
             setSelectedRestaurant: (restaurant) => set({ selectedRestaurant: restaurant }),
+            updateSelectedRestaurant: (updates) => {
+                const { selectedRestaurant } = get()
+                if (selectedRestaurant) {
+                    const updatedRestaurant = { ...selectedRestaurant, ...updates }
+                    set({ selectedRestaurant: updatedRestaurant })
+
+                    // Also update in restaurants array if it exists
+                    const { restaurants } = get()
+                    if (restaurants) {
+                        const updatedRestaurants = restaurants.map((r) => (r.id === selectedRestaurant.id ? updatedRestaurant : r))
+                        set({ restaurants: updatedRestaurants })
+                    }
+                }
+            },
         }),
         {
             name: 'restaurant-store', // LocalStorage key

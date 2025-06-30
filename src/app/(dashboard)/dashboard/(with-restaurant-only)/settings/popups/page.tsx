@@ -14,6 +14,7 @@ import {
     MapPinIcon,
     MessageSquare,
     Phone,
+    RotateCcw,
     Save,
     Star,
     Timer,
@@ -22,107 +23,130 @@ import {
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { useRestaurantStore } from "@/stores/restaurant-store"
 
-// Mock restaurant data for preview
-const mockRestaurant = {
-    name: "Bella Vista Restaurant",
-    address: "123 Restaurant Street, Downtown, New York, NY 10001",
-    phone: "+1 (555) 123-4567",
-    average_rating: 4.8,
-    review_count: 247,
-}
-
-// Mock popup settings data
-const mockPopupData = {
-    welcome_popup_enabled: true,
-    welcome_popup_message: "Welcome to Bella Vista! We're excited to serve you authentic Italian cuisine.",
-    welcome_popup_delay: 3,
-    welcome_popup_show_button: true,
+interface PopupFormData {
+    welcome_popup_enabled: boolean
+    welcome_popup_message: string
+    welcome_popup_delay: number
+    welcome_popup_show_button: boolean
     welcome_popup_show_info: {
-        ratings: true,
-        address: true,
-        hours: true,
-        phone: true,
-    },
-    event_announcements_enabled: true,
-    event_announcement_days: 30,
-    max_events_in_popup: 3,
-    event_rotation_speed: 5,
+        ratings: boolean
+        address: boolean
+        hours: boolean
+        phone: boolean
+    }
+    event_announcements_enabled: boolean
+    event_announcement_days: number
+    max_events_in_popup: number
+    event_rotation_speed: number
 }
 
 export default function PopupsPage() {
-    // Welcome popup settings
-    const [welcomePopupEnabled, setWelcomePopupEnabled] = useState(true)
-    const [welcomePopupMessage, setWelcomePopupMessage] = useState("Welcome! We're excited to have you visit us.")
-    const [welcomePopupDelay, setWelcomePopupDelay] = useState(2)
-    const [welcomePopupShowButton, setWelcomePopupShowButton] = useState(true)
-    const [welcomePopupShowInfo, setWelcomePopupShowInfo] = useState({
-        ratings: true,
-        address: true,
-        hours: true,
-        phone: true,
+    const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
+
+    const [formData, setFormData] = useState<PopupFormData>({
+        welcome_popup_enabled: true,
+        welcome_popup_message: "Welcome! We're excited to have you visit us.",
+        welcome_popup_delay: 2,
+        welcome_popup_show_button: true,
+        welcome_popup_show_info: {
+            ratings: true,
+            address: true,
+            hours: true,
+            phone: true,
+        },
+        event_announcements_enabled: true,
+        event_announcement_days: 30,
+        max_events_in_popup: 3,
+        event_rotation_speed: 5,
     })
 
-    // Event announcement settings
-    const [eventAnnouncementsEnabled, setEventAnnouncementsEnabled] = useState(true)
-    const [eventAnnouncementDays, setEventAnnouncementDays] = useState(30)
-    const [maxEventsInPopup, setMaxEventsInPopup] = useState(3)
-    const [eventRotationSpeed, setEventRotationSpeed] = useState(5)
-
-    const [loading, setLoading] = useState(true)
+    const [initialData, setInitialData] = useState<PopupFormData>(formData)
     const [saving, setSaving] = useState(false)
-    const [hasChanges, setHasChanges] = useState(false)
 
+    // Load data from restaurant store
     useEffect(() => {
-        const loadData = () => {
-            setLoading(true)
-            setTimeout(() => {
-                const data = mockPopupData
+        if (selectedRestaurant) {
+            const welcomePopupShowInfo = selectedRestaurant.welcome_popup_show_info
+                ? typeof selectedRestaurant.welcome_popup_show_info === "string"
+                    ? JSON.parse(selectedRestaurant.welcome_popup_show_info)
+                    : selectedRestaurant.welcome_popup_show_info
+                : { ratings: true, address: true, hours: true, phone: true }
 
-                // Load popup settings
-                setWelcomePopupEnabled(data.welcome_popup_enabled ?? true)
-                setWelcomePopupMessage(data.welcome_popup_message || "Welcome! We're excited to have you visit us.")
-                setWelcomePopupDelay(data.welcome_popup_delay || 2)
-                setWelcomePopupShowButton(data.welcome_popup_show_button ?? true)
-                setWelcomePopupShowInfo(
-                    data.welcome_popup_show_info || {
-                        ratings: true,
-                        address: true,
-                        hours: true,
-                        phone: true,
-                    },
-                )
+            const data: PopupFormData = {
+                welcome_popup_enabled: selectedRestaurant.welcome_popup_enabled ?? true,
+                welcome_popup_message:
+                    selectedRestaurant.welcome_popup_message || "Welcome! We're excited to have you visit us.",
+                welcome_popup_delay: selectedRestaurant.welcome_popup_delay || 2,
+                welcome_popup_show_button: selectedRestaurant.welcome_popup_show_button ?? true,
+                welcome_popup_show_info: welcomePopupShowInfo,
+                event_announcements_enabled: selectedRestaurant.event_announcements_enabled ?? true,
+                event_announcement_days: selectedRestaurant.event_announcement_days || 30,
+                max_events_in_popup: selectedRestaurant.max_events_in_popup || 3,
+                event_rotation_speed: selectedRestaurant.event_rotation_speed || 5,
+            }
 
-                // Load event announcement settings
-                setEventAnnouncementsEnabled(data.event_announcements_enabled ?? true)
-                setEventAnnouncementDays(data.event_announcement_days || 30)
-                setMaxEventsInPopup(data.max_events_in_popup || 3)
-                setEventRotationSpeed(data.event_rotation_speed || 5)
-
-                setLoading(false)
-            }, 400)
+            setFormData(data)
+            setInitialData(data)
         }
-        loadData()
-    }, [])
+    }, [selectedRestaurant])
 
-    const handlePopupInfoChange = (key: keyof typeof welcomePopupShowInfo, value: boolean) => {
-        setWelcomePopupShowInfo((prev) => ({
+    // Check if form has changes
+    const hasChanges = JSON.stringify(formData) !== JSON.stringify(initialData)
+
+    const handlePopupInfoChange = (key: keyof typeof formData.welcome_popup_show_info, value: boolean) => {
+        setFormData((prev) => ({
             ...prev,
-            [key]: value,
+            welcome_popup_show_info: {
+                ...prev.welcome_popup_show_info,
+                [key]: value,
+            },
         }))
-        setHasChanges(true)
     }
 
-    const saveProfile = async () => {
+    const resetForm = () => {
+        setFormData(initialData)
+        toast.success("Form reset", {
+            description: "All changes have been discarded",
+        })
+    }
+
+    const saveSettings = async () => {
+        if (!selectedRestaurant) {
+            toast.error("No restaurant selected")
+            return
+        }
+
         try {
             setSaving(true)
-            await new Promise((resolve) => setTimeout(resolve, 1500))
+
+            const response = await fetch(`/api/restaurants/${selectedRestaurant.id}/popups`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData.error || "Failed to update popup settings")
+            }
+
+            const result = await response.json()
+
+            // Update store with response data
+            updateSelectedRestaurant(result.data)
+
+            // Update initial data to reflect saved state
+            setInitialData(formData)
 
             toast.success("Popup settings updated", {
                 description: "Your popup settings have been updated successfully",
             })
-            setHasChanges(false)
         } catch (error: any) {
+            console.error("Error updating popup settings:", error)
             toast.error("Error updating popup settings", {
                 description: error.message || "An error occurred while updating your popup settings",
             })
@@ -131,7 +155,7 @@ export default function PopupsPage() {
         }
     }
 
-    if (loading) {
+    if (!selectedRestaurant) {
         return (
             <div className="flex justify-center py-16">
                 <div className="flex items-center space-x-2 text-slate-500">
@@ -148,7 +172,7 @@ export default function PopupsPage() {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         ></path>
                     </svg>
-                    <span>Loading popup settings...</span>
+                    <span>Loading popups information...</span>
                 </div>
             </div>
         )
@@ -173,15 +197,14 @@ export default function PopupsPage() {
                                 <p className="text-sm text-muted-foreground">Show a welcome popup to new visitors</p>
                             </div>
                             <Switch
-                                checked={welcomePopupEnabled}
+                                checked={formData.welcome_popup_enabled}
                                 onCheckedChange={(checked) => {
-                                    setWelcomePopupEnabled(checked)
-                                    setHasChanges(true)
+                                    setFormData((prev) => ({ ...prev, welcome_popup_enabled: checked }))
                                 }}
                             />
                         </div>
 
-                        {welcomePopupEnabled && (
+                        {formData.welcome_popup_enabled && (
                             <>
                                 {/* Custom Message */}
                                 <div className="space-y-2">
@@ -191,10 +214,9 @@ export default function PopupsPage() {
                                     </Label>
                                     <Textarea
                                         id="popup-message"
-                                        value={welcomePopupMessage}
+                                        value={formData.welcome_popup_message}
                                         onChange={(e) => {
-                                            setWelcomePopupMessage(e.target.value)
-                                            setHasChanges(true)
+                                            setFormData((prev) => ({ ...prev, welcome_popup_message: e.target.value }))
                                         }}
                                         placeholder="Welcome! We're excited to have you visit us."
                                         rows={3}
@@ -202,7 +224,7 @@ export default function PopupsPage() {
                                         className="focus:border-emerald-500 focus:ring-emerald-500"
                                     />
                                     <div className="text-right text-xs text-muted-foreground">
-                                        {welcomePopupMessage.length}/200 characters
+                                        {formData.welcome_popup_message.length}/200 characters
                                     </div>
                                 </div>
 
@@ -213,10 +235,9 @@ export default function PopupsPage() {
                                         Show Delay
                                     </Label>
                                     <Select
-                                        value={welcomePopupDelay.toString()}
+                                        value={formData.welcome_popup_delay.toString()}
                                         onValueChange={(value) => {
-                                            setWelcomePopupDelay(Number.parseInt(value))
-                                            setHasChanges(true)
+                                            setFormData((prev) => ({ ...prev, welcome_popup_delay: Number.parseInt(value) }))
                                         }}
                                     >
                                         <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
@@ -240,10 +261,9 @@ export default function PopupsPage() {
                                         <p className="text-sm text-muted-foreground">Display the &quot;Explore&quot; button in the popup</p>
                                     </div>
                                     <Switch
-                                        checked={welcomePopupShowButton}
+                                        checked={formData.welcome_popup_show_button}
                                         onCheckedChange={(checked) => {
-                                            setWelcomePopupShowButton(checked)
-                                            setHasChanges(true)
+                                            setFormData((prev) => ({ ...prev, welcome_popup_show_button: checked }))
                                         }}
                                     />
                                 </div>
@@ -255,7 +275,7 @@ export default function PopupsPage() {
                                         <div className="flex items-center space-x-2">
                                             <Switch
                                                 id="show-ratings"
-                                                checked={welcomePopupShowInfo.ratings}
+                                                checked={formData.welcome_popup_show_info.ratings}
                                                 onCheckedChange={(checked) => handlePopupInfoChange("ratings", checked)}
                                             />
                                             <Label htmlFor="show-ratings" className="flex items-center gap-2">
@@ -267,7 +287,7 @@ export default function PopupsPage() {
                                         <div className="flex items-center space-x-2">
                                             <Switch
                                                 id="show-address"
-                                                checked={welcomePopupShowInfo.address}
+                                                checked={formData.welcome_popup_show_info.address}
                                                 onCheckedChange={(checked) => handlePopupInfoChange("address", checked)}
                                             />
                                             <Label htmlFor="show-address" className="flex items-center gap-2">
@@ -279,7 +299,7 @@ export default function PopupsPage() {
                                         <div className="flex items-center space-x-2">
                                             <Switch
                                                 id="show-hours"
-                                                checked={welcomePopupShowInfo.hours}
+                                                checked={formData.welcome_popup_show_info.hours}
                                                 onCheckedChange={(checked) => handlePopupInfoChange("hours", checked)}
                                             />
                                             <Label htmlFor="show-hours" className="flex items-center gap-2">
@@ -291,7 +311,7 @@ export default function PopupsPage() {
                                         <div className="flex items-center space-x-2">
                                             <Switch
                                                 id="show-phone"
-                                                checked={welcomePopupShowInfo.phone}
+                                                checked={formData.welcome_popup_show_info.phone}
                                                 onCheckedChange={(checked) => handlePopupInfoChange("phone", checked)}
                                             />
                                             <Label htmlFor="show-phone" className="flex items-center gap-2">
@@ -313,42 +333,43 @@ export default function PopupsPage() {
                                             <div className="p-6 text-center">
                                                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600">
                                                     <span className="text-2xl font-bold text-white">
-                                                        {mockRestaurant?.name?.charAt(0) || "R"}
+                                                        {selectedRestaurant?.name?.charAt(0) || "R"}
                                                     </span>
                                                 </div>
                                                 <h3 className="mb-2 text-lg font-bold">
-                                                    Welcome to {mockRestaurant?.name || "Your Restaurant"}!
+                                                    Welcome to {selectedRestaurant?.name || "Your Restaurant"}!
                                                 </h3>
-                                                <p className="mb-4 text-sm text-gray-600">{welcomePopupMessage}</p>
+                                                <p className="mb-4 text-sm text-gray-600">{formData.welcome_popup_message}</p>
                                                 <div className="space-y-2 text-xs text-gray-500">
-                                                    {welcomePopupShowInfo.ratings && mockRestaurant?.average_rating && (
+                                                    {formData.welcome_popup_show_info.ratings && selectedRestaurant?.average_rating && (
                                                         <div className="flex items-center justify-center gap-1">
                                                             <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                                                             <span>
-                                                                {mockRestaurant.average_rating.toFixed(1)} ({mockRestaurant.review_count} reviews)
+                                                                {selectedRestaurant.average_rating.toFixed(1)} ({selectedRestaurant.review_count}{" "}
+                                                                reviews)
                                                             </span>
                                                         </div>
                                                     )}
-                                                    {welcomePopupShowInfo.address && mockRestaurant?.address && (
+                                                    {formData.welcome_popup_show_info.address && selectedRestaurant?.address && (
                                                         <div className="flex items-center justify-center gap-1">
                                                             <MapPinIcon className="h-3 w-3" />
-                                                            <span>{mockRestaurant.address.split(",")[0]}</span>
+                                                            <span>{selectedRestaurant.address.split(",")[0]}</span>
                                                         </div>
                                                     )}
-                                                    {welcomePopupShowInfo.hours && (
+                                                    {formData.welcome_popup_show_info.hours && (
                                                         <div className="flex items-center justify-center gap-1">
                                                             <Clock className="h-3 w-3" />
                                                             <span>Open Today</span>
                                                         </div>
                                                     )}
-                                                    {welcomePopupShowInfo.phone && mockRestaurant?.phone && (
+                                                    {formData.welcome_popup_show_info.phone && selectedRestaurant?.phone && (
                                                         <div className="flex items-center justify-center gap-1">
                                                             <Phone className="h-3 w-3" />
-                                                            <span>{mockRestaurant.phone}</span>
+                                                            <span>{selectedRestaurant.phone}</span>
                                                         </div>
                                                     )}
                                                 </div>
-                                                {welcomePopupShowButton && (
+                                                {formData.welcome_popup_show_button && (
                                                     <Button size="sm" className="mt-4 bg-emerald-600 hover:bg-emerald-700">
                                                         Explore
                                                     </Button>
@@ -384,24 +405,22 @@ export default function PopupsPage() {
                                 </p>
                             </div>
                             <Switch
-                                checked={eventAnnouncementsEnabled}
+                                checked={formData.event_announcements_enabled}
                                 onCheckedChange={(checked) => {
-                                    setEventAnnouncementsEnabled(checked)
-                                    setHasChanges(true)
+                                    setFormData((prev) => ({ ...prev, event_announcements_enabled: checked }))
                                 }}
                             />
                         </div>
 
-                        {eventAnnouncementsEnabled && (
+                        {formData.event_announcements_enabled && (
                             <>
                                 {/* Event Time Range */}
                                 <div className="space-y-2">
                                     <Label>Event Time Range</Label>
                                     <Select
-                                        value={eventAnnouncementDays.toString()}
+                                        value={formData.event_announcement_days.toString()}
                                         onValueChange={(value) => {
-                                            setEventAnnouncementDays(Number.parseInt(value))
-                                            setHasChanges(true)
+                                            setFormData((prev) => ({ ...prev, event_announcement_days: Number.parseInt(value) }))
                                         }}
                                     >
                                         <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
@@ -422,10 +441,9 @@ export default function PopupsPage() {
                                 <div className="space-y-2">
                                     <Label>Maximum Events in Popup</Label>
                                     <Select
-                                        value={maxEventsInPopup.toString()}
+                                        value={formData.max_events_in_popup.toString()}
                                         onValueChange={(value) => {
-                                            setMaxEventsInPopup(Number.parseInt(value))
-                                            setHasChanges(true)
+                                            setFormData((prev) => ({ ...prev, max_events_in_popup: Number.parseInt(value) }))
                                         }}
                                     >
                                         <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
@@ -445,10 +463,9 @@ export default function PopupsPage() {
                                 <div className="space-y-2">
                                     <Label>Event Rotation Speed</Label>
                                     <Select
-                                        value={eventRotationSpeed.toString()}
+                                        value={formData.event_rotation_speed.toString()}
                                         onValueChange={(value) => {
-                                            setEventRotationSpeed(Number.parseInt(value))
-                                            setHasChanges(true)
+                                            setFormData((prev) => ({ ...prev, event_rotation_speed: Number.parseInt(value) }))
                                         }}
                                     >
                                         <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
@@ -475,11 +492,11 @@ export default function PopupsPage() {
                                             <div className="p-6 text-center">
                                                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600">
                                                     <span className="text-2xl font-bold text-white">
-                                                        {mockRestaurant?.name?.charAt(0) || "R"}
+                                                        {selectedRestaurant?.name?.charAt(0) || "R"}
                                                     </span>
                                                 </div>
                                                 <h3 className="mb-2 text-lg font-bold">
-                                                    Welcome to {mockRestaurant?.name || "Your Restaurant"}!
+                                                    Welcome to {selectedRestaurant?.name || "Your Restaurant"}!
                                                 </h3>
 
                                                 {/* Mock Event */}
@@ -516,7 +533,7 @@ export default function PopupsPage() {
                 </Card>
             </div>
 
-            {/* Floating Save Button */}
+            {/* Floating Action Buttons */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{
@@ -531,15 +548,27 @@ export default function PopupsPage() {
                         <span>You have unsaved changes</span>
                     </div>
                 </div>
-                <Button
-                    onClick={saveProfile}
-                    disabled={saving || !hasChanges}
-                    size="lg"
-                    className="bg-emerald-600 shadow-lg transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl"
-                >
-                    <Save className="mr-2 h-4 w-4" />
-                    {saving ? "Saving..." : "Save Changes"}
-                </Button>
+                <div className="flex gap-2">
+                    <Button
+                        onClick={resetForm}
+                        disabled={saving || !hasChanges}
+                        variant="outline"
+                        size="lg"
+                        className="shadow-lg bg-transparent"
+                    >
+                        <RotateCcw className="mr-2 h-4 w-4" />
+                        Reset
+                    </Button>
+                    <Button
+                        onClick={saveSettings}
+                        disabled={saving || !hasChanges}
+                        size="lg"
+                        className="bg-emerald-600 shadow-lg transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl"
+                    >
+                        <Save className="mr-2 h-4 w-4" />
+                        {saving ? "Saving..." : "Save Changes"}
+                    </Button>
+                </div>
             </motion.div>
         </>
     )

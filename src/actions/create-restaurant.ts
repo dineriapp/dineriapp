@@ -54,6 +54,7 @@ export async function createRestaurant(formData: FormData) {
         },
         select: {
             subscription_plan: true,
+            email: true
         }
     });
 
@@ -82,6 +83,7 @@ export async function createRestaurant(formData: FormData) {
     await prisma.restaurant.create({
         data: {
             name,
+            email: prismaUser.email,
             slug,
             bio: bio || "",
             user_id: data.user.id,
