@@ -355,7 +355,7 @@ export default function MenuPage() {
 
                 <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
                     {filteredCategories.map((category, categoryIndex) => (
-                        <motion.div key={category.id} variants={item} className="space-y-4">
+                        <div key={category.id} className="space-y-4">
                             <Card className="bg-white/50 backdrop-blur-sm gap-1 shadow-lg border">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <div className="space-y-1">
@@ -438,6 +438,19 @@ export default function MenuPage() {
 
                                 <CardContent>
                                     <div className="space-y-4">
+                                        {
+                                            category.items && category.items.length > 0 && <Button
+                                                variant="outline"
+                                                onClick={() => {
+                                                    setSelectedCategory(category)
+                                                    setIsAddItemDialogOpen(true)
+                                                }}
+                                                className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
+                                            >
+                                                <Plus className="mr-2 h-4 w-4" />
+                                                Add Item
+                                            </Button>
+                                        }
 
 
                                         {category.items && category.items.length > 0 ? (
@@ -584,7 +597,7 @@ export default function MenuPage() {
                                     </div>
                                 </CardContent>
                             </Card>
-                        </motion.div>
+                        </div>
                     ))}
 
                     {categories.length === 0 && (

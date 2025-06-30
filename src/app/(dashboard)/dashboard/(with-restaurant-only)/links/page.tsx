@@ -34,18 +34,13 @@ import {
     useLinks,
     useReorderLink,
     useUpdateLink,
-} from "@/lib/queries"
+} from "@/lib/link-queries"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { ArrowDown, ArrowUp, Edit, Grip, Plus, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
-
-const container = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.1 } },
-}
 
 const item = {
     hidden: { opacity: 0, y: 20 },
@@ -338,11 +333,10 @@ export default function LinksPage() {
                         </CardHeader>
                         <CardContent>
                             {links.length > 0 ? (
-                                <motion.div variants={container} initial="hidden" animate="show" className="space-y-3">
+                                <div className="space-y-3">
                                     {links.map((link, index) => (
-                                        <motion.div
+                                        <div
                                             key={link.id}
-                                            variants={item}
                                             className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white/80 p-4 backdrop-blur-sm transition-shadow hover:shadow-md"
                                         >
                                             <Checkbox
@@ -425,9 +419,9 @@ export default function LinksPage() {
                                                     <span className="sr-only">Move down</span>
                                                 </Button>
                                             </div>
-                                        </motion.div>
+                                        </div>
                                     ))}
-                                </motion.div>
+                                </div>
                             ) : (
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}

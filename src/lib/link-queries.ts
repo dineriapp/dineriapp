@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { toast } from "sonner"
 import ky from "./ky"
+import { toast } from "sonner"
 
 interface Link {
     id: string
@@ -32,22 +32,12 @@ export function useCreateLink(restaurantId: string | undefined) {
         mutationFn: async (data: { title: string; url: string }) => {
             if (!restaurantId) throw new Error("Restaurant ID is required")
 
-            try {
-                const response = await ky
-                    .post("/api/links", {
-                        json: { ...data, restaurant_id: restaurantId },
-                    })
-                    .json<{ data: Link }>();
-
-                return response.data;
-            } catch (error: any) {
-                if (error.name === "HTTPError" && error.response) {
-                    const errorBody = await error.response.json();
-                    throw new Error(errorBody?.error || "Something went wrong while creating the link.");
-                }
-
-                throw new Error("Unexpected error occurred.");
-            }
+            const response = await ky
+                .post("/api/links", {
+                    json: { ...data, restaurant_id: restaurantId },
+                })
+                .json<{ data: Link }>()
+            return response.data
         },
         onMutate: async (newLink) => {
             if (!restaurantId) return
@@ -61,7 +51,8 @@ export function useCreateLink(restaurantId: string | undefined) {
                 restaurant_id: restaurantId,
                 title: newLink.title,
                 url: newLink.url.startsWith("http") ? newLink.url : `https://${newLink.url}`,
-                sort_order: previousLinks ? Math.max(...previousLinks.map((l) => l.sort_order)) + 1 : 0,
+                sort_order:
+                    !previousLinks || previousLinks.length === 0 ? 0 : Math.max(...previousLinks.map((l) => l.sort_order)) + 1,
                 show_icon: true,
                 createdAt: new Date(),
             }
@@ -76,12 +67,14 @@ export function useCreateLink(restaurantId: string | undefined) {
             if (restaurantId && context?.previousLinks) {
                 queryClient.setQueryData(["links", restaurantId], context.previousLinks)
             }
-            toast.error("Error", {
-                description: err.message
-            })
+            toast.error("Failed to add link")
         },
         onSuccess: () => {
             toast.success("Link added successfully")
+            // Force refetch to ensure fresh data
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
         },
         onSettled: () => {
             if (restaurantId) {
@@ -124,6 +117,10 @@ export function useUpdateLink(restaurantId: string | undefined) {
         },
         onSuccess: () => {
             toast.success("Link updated successfully")
+            // Force refetch to ensure fresh data
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
         },
         onSettled: () => {
             if (restaurantId) {
@@ -163,6 +160,10 @@ export function useDeleteLink(restaurantId: string | undefined) {
         },
         onSuccess: () => {
             toast.success("Link deleted successfully")
+            // Force refetch to ensure fresh data
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
         },
         onSettled: () => {
             if (restaurantId) {
@@ -206,6 +207,10 @@ export function useBulkDeleteLinks(restaurantId: string | undefined) {
         },
         onSuccess: (data) => {
             toast.success(`Successfully deleted ${data.deletedCount} link${data.deletedCount > 1 ? "s" : ""}`)
+            // Force refetch to ensure fresh data
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
         },
         onSettled: () => {
             if (restaurantId) {
@@ -256,6 +261,12 @@ export function useReorderLink(restaurantId: string | undefined) {
                 queryClient.setQueryData(["links", restaurantId], context.previousLinks)
             }
             toast.error("Failed to reorder link")
+        },
+        onSuccess: () => {
+            // Force refetch to ensure fresh data
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
+            }
         },
         onSettled: () => {
             if (restaurantId) {

@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import {
     AlertDialog,
     AlertDialogAction,
@@ -27,21 +25,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useCreateEvent, useDeleteEvent, useEvents, useReorderEvent, useUpdateEvent } from "@/lib/event-queries"
+import { useRestaurantStore } from "@/stores/restaurant-store"
+import type { Event } from "@prisma/client"
 import { ArrowDown, ArrowUp, Calendar, Edit, ExternalLink, Grip, Plus, Search, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
-
-interface Event {
-    id: string
-    title: string
-    description: string
-    date: string
-    ticket_url?: string
-    sort_order: number
-    created_at: string
-    updated_at: string
-}
+import type React from "react"
+import { useState } from "react"
 
 const container = {
     hidden: { opacity: 0 },
@@ -58,52 +48,16 @@ const item = {
     show: { opacity: 1, y: 0 },
 }
 
-// Dummy data for events
-const initialEvents: Event[] = [
-    {
-        id: "1",
-        title: "Wine Tasting Evening",
-        description: "Join us for an exclusive wine tasting featuring premium selections from local vineyards.",
-        date: "2024-02-15T19:00:00",
-        ticket_url: "https://eventbrite.com/wine-tasting",
-        sort_order: 0,
-        created_at: "2024-01-15T10:00:00Z",
-        updated_at: "2024-01-15T10:00:00Z",
-    },
-    {
-        id: "2",
-        title: "Chef's Table Experience",
-        description: "An intimate dining experience with our head chef preparing a 7-course tasting menu.",
-        date: "2024-02-22T18:30:00",
-        ticket_url: "https://opentable.com/chefs-table",
-        sort_order: 1,
-        created_at: "2024-01-16T10:00:00Z",
-        updated_at: "2024-01-16T10:00:00Z",
-    },
-    {
-        id: "3",
-        title: "Live Jazz Night",
-        description: "Enjoy smooth jazz music while dining on our signature dishes.",
-        date: "2024-03-01T20:00:00",
-        sort_order: 2,
-        created_at: "2024-01-17T10:00:00Z",
-        updated_at: "2024-01-17T10:00:00Z",
-    },
-    {
-        id: "4",
-        title: "Valentine's Day Special",
-        description: "Romantic dinner for two with special menu and complimentary champagne.",
-        date: "2024-02-14T19:30:00",
-        ticket_url: "https://resy.com/valentines-special",
-        sort_order: 3,
-        created_at: "2024-01-18T10:00:00Z",
-        updated_at: "2024-01-18T10:00:00Z",
-    },
-]
-
 export default function EventsPage() {
-    const [events, setEvents] = useState<Event[]>(initialEvents)
-    const [loading, setLoading] = useState(true)
+    const { selectedRestaurant } = useRestaurantStore()
+    const restaurantId = selectedRestaurant?.id
+
+    const { data: events = [], isLoading } = useEvents(restaurantId)
+    const createEventMutation = useCreateEvent(restaurantId)
+    const updateEventMutation = useUpdateEvent(restaurantId)
+    const deleteEventMutation = useDeleteEvent(restaurantId)
+    const reorderEventMutation = useReorderEvent(restaurantId)
+
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [editingEvent, setEditingEvent] = useState<Event | null>(null)
@@ -111,23 +65,13 @@ export default function EventsPage() {
     const [description, setDescription] = useState("")
     const [date, setDate] = useState("")
     const [ticketUrl, setTicketUrl] = useState("")
-    const [isSubmitting, setIsSubmitting] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
-
-    useEffect(() => {
-        // Simulate loading data
-        const timer = setTimeout(() => {
-            setLoading(false)
-        }, 800)
-
-        return () => clearTimeout(timer)
-    }, [])
 
     // Filter events based on search query
     const filteredEvents = events.filter(
         (event) =>
             event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            event.description.toLowerCase().includes(searchQuery.toLowerCase()),
+            (event.description && event.description.toLowerCase().includes(searchQuery.toLowerCase())),
     )
 
     const resetForm = () => {
@@ -139,117 +83,57 @@ export default function EventsPage() {
 
     const handleAddEvent = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (isSubmitting) return
+        if (!restaurantId) return
 
         try {
-            setIsSubmitting(true)
-
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-
-            const nextOrder = events.length > 0 ? Math.max(...events.map((event) => event.sort_order)) + 1 : 0
-
-            const eventDate = new Date(date)
-            if (isNaN(eventDate.getTime())) {
-                throw new Error("Invalid date")
-            }
-
-            const newEvent: Event = {
-                id: Date.now().toString(),
+            await createEventMutation.mutateAsync({
                 title: title.trim(),
-                description: description.trim(),
-                date: eventDate.toISOString(),
+                description: description.trim() || undefined,
+                date: new Date(date).toISOString(),
                 ticket_url: ticketUrl.trim() || undefined,
-                sort_order: nextOrder,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-            }
+            })
 
-            setEvents([...events, newEvent])
             resetForm()
             setIsAddDialogOpen(false)
-
-            toast.success("Event added successfully!")
         } catch {
-            toast.error("Failed to add event")
-        } finally {
-            setIsSubmitting(false)
+            // Error handling is done in the mutation
         }
     }
 
     const handleUpdateEvent = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (!editingEvent || isSubmitting) return
+        if (!editingEvent || !restaurantId) return
 
         try {
-            setIsSubmitting(true)
-
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-
-            const eventDate = new Date(date)
-            if (isNaN(eventDate.getTime())) {
-                throw new Error("Invalid date")
-            }
-
-            setEvents(
-                events.map((event) =>
-                    event.id === editingEvent.id
-                        ? {
-                            ...event,
-                            title: title.trim(),
-                            description: description.trim(),
-                            date: eventDate.toISOString(),
-                            ticket_url: ticketUrl.trim() || undefined,
-                            updated_at: new Date().toISOString(),
-                        }
-                        : event,
-                ),
-            )
+            await updateEventMutation.mutateAsync({
+                id: editingEvent.id,
+                title: title.trim(),
+                description: description.trim() || undefined,
+                date: new Date(date).toISOString(),
+                ticket_url: ticketUrl.trim() || undefined,
+            })
 
             setIsEditDialogOpen(false)
             setEditingEvent(null)
             resetForm()
-
-            toast.success("Event updated successfully!")
         } catch {
-            toast.error("Failed to update event")
-        } finally {
-            setIsSubmitting(false)
+            // Error handling is done in the mutation
         }
     }
 
     const handleDeleteEvent = async (eventId: string) => {
         try {
-            // Simulate API delay
-            await new Promise((resolve) => setTimeout(resolve, 500))
-
-            setEvents(events.filter((event) => event.id !== eventId))
-            toast.success("Event deleted successfully!")
+            await deleteEventMutation.mutateAsync(eventId)
         } catch {
-            toast.error("Failed to delete event")
+            // Error handling is done in the mutation
         }
     }
 
     const moveEvent = (eventId: string, direction: "up" | "down") => {
-        const currentIndex = events.findIndex((event) => event.id === eventId)
-        if (currentIndex === -1) return
-
-        const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1
-        if (newIndex < 0 || newIndex >= events.length) return
-
-        const newEvents = [...events]
-            ;[newEvents[currentIndex], newEvents[newIndex]] = [newEvents[newIndex], newEvents[currentIndex]]
-
-        // Update sort orders
-        newEvents[currentIndex].sort_order = currentIndex
-        newEvents[newIndex].sort_order = newIndex
-
-        setEvents(newEvents)
-        toast.success("Event order updated!")
+        reorderEventMutation.mutate({ eventId, direction })
     }
 
-    const formatEventDate = (dateString: string) => {
+    const formatEventDate = (dateString: Date) => {
         const date = new Date(dateString)
         const now = new Date()
         const isUpcoming = date > now
@@ -267,7 +151,7 @@ export default function EventsPage() {
         }
     }
 
-    if (loading) {
+    if (isLoading || !restaurantId) {
         return (
             <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
                 <div className="flex items-center space-x-2 text-slate-500">
@@ -289,6 +173,7 @@ export default function EventsPage() {
             </div>
         )
     }
+
 
     return (
         <>
@@ -393,10 +278,10 @@ export default function EventsPage() {
                                         </Button>
                                         <Button
                                             type="submit"
-                                            disabled={!title || !date || isSubmitting}
+                                            disabled={!title || !date || createEventMutation.isPending}
                                             className="bg-gradient-to-r from-teal-600 to-blue-600"
                                         >
-                                            {isSubmitting ? "Adding..." : "Add Event"}
+                                            {createEventMutation.isPending ? "Adding..." : "Add Event"}
                                         </Button>
                                     </DialogFooter>
                                 </form>
@@ -418,11 +303,9 @@ export default function EventsPage() {
                                 <motion.div variants={container} initial="hidden" animate="show" className="space-y-3">
                                     {filteredEvents.map((event, index) => {
                                         const { formatted: formattedDate, isUpcoming } = formatEventDate(event.date)
-
                                         return (
-                                            <motion.div
+                                            <div
                                                 key={event.id}
-                                                variants={item}
                                                 className="flex items-center gap-3 rounded-lg border bg-white/80 p-4 backdrop-blur-sm transition-shadow hover:shadow-md"
                                             >
                                                 <div className="flex-shrink-0 cursor-move">
@@ -513,7 +396,7 @@ export default function EventsPage() {
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() => moveEvent(event.id, "up")}
-                                                        disabled={index === 0}
+                                                        disabled={index === 0 || reorderEventMutation.isPending}
                                                         className="h-8 w-8 p-0 transition-transform hover:scale-110"
                                                     >
                                                         <ArrowUp className="h-4 w-4" />
@@ -524,14 +407,14 @@ export default function EventsPage() {
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() => moveEvent(event.id, "down")}
-                                                        disabled={index === filteredEvents.length - 1}
+                                                        disabled={index === filteredEvents.length - 1 || reorderEventMutation.isPending}
                                                         className="h-8 w-8 p-0 transition-transform hover:scale-110"
                                                     >
                                                         <ArrowDown className="h-4 w-4" />
                                                         <span className="sr-only">Move down</span>
                                                     </Button>
                                                 </div>
-                                            </motion.div>
+                                            </div>
                                         )
                                     })}
                                 </motion.div>
@@ -630,10 +513,10 @@ export default function EventsPage() {
                             </Button>
                             <Button
                                 type="submit"
-                                disabled={!title || !date || isSubmitting}
+                                disabled={!title || !date || updateEventMutation.isPending}
                                 className="bg-gradient-to-r from-teal-600 to-blue-600"
                             >
-                                {isSubmitting ? "Saving..." : "Save Changes"}
+                                {updateEventMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>
                         </DialogFooter>
                     </form>

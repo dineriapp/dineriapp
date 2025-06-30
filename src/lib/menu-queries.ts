@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ky from "./ky"
 import { toast } from "sonner"
-import { MenuCategory, MenuItem } from "@prisma/client"
+import type { MenuCategory, MenuItem } from "@prisma/client"
 
 // Use Prisma types with relations
 type MenuCategoryWithItems = MenuCategory & {
@@ -49,7 +49,10 @@ export function useCreateCategory(restaurantId: string | undefined) {
                 restaurant_id: restaurantId,
                 name: newCategory.name,
                 description: newCategory.description || null,
-                sort_order: previousCategories ? Math.max(...previousCategories.map((c) => c.sort_order)) + 1 : 0,
+                sort_order:
+                    previousCategories && previousCategories.length > 0
+                        ? Math.max(...previousCategories.map((c) => c.sort_order)) + 1
+                        : 0,
                 items: [],
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -69,6 +72,10 @@ export function useCreateCategory(restaurantId: string | undefined) {
         },
         onSuccess: () => {
             toast.success("Category added successfully")
+            // Force refetch to ensure fresh data
+            if (restaurantId) {
+                queryClient.invalidateQueries({ queryKey: ["menu-categories", restaurantId] })
+            }
         },
         onSettled: () => {
             if (restaurantId) {
@@ -263,7 +270,14 @@ export function useCreateItem(restaurantId: string | undefined) {
                         cat.id === variables.category_id
                             ? {
                                 ...cat,
-                                items: [...cat.items, { ...optimisticItem, sort_order: cat.items.length }],
+                                items: [
+                                    ...cat.items,
+                                    {
+                                        ...optimisticItem,
+                                        sort_order:
+                                            cat.items && cat.items.length > 0 ? Math.max(...cat.items.map((i) => i.sort_order)) + 1 : 0,
+                                    },
+                                ],
                             }
                             : cat,
                     ) || [],
