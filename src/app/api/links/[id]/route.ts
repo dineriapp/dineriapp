@@ -23,6 +23,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         const existingLink = await prisma.link.findUnique({
             where: { id: id },
             include: { restaurant: true },
+
         })
 
         if (!existingLink || existingLink.restaurant.user_id !== data.user.id) {
@@ -34,6 +35,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             data: {
                 title: validated.title.trim(),
                 url: validated.url,
+            },
+            include: {
+                _count: {
+                    select: { views: true },
+                },
             },
         })
 

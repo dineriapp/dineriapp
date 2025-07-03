@@ -1,14 +1,14 @@
-import { Restaurant } from '@prisma/client'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { customStorage } from './storage'
+import { RestaurantWithCount } from '@/types'
 
 interface RestaurantState {
-    restaurants: Restaurant[]
-    selectedRestaurant: Restaurant | null
-    setRestaurants: (restaurants: Restaurant[]) => void
-    setSelectedRestaurant: (restaurant: Restaurant) => void
-    updateSelectedRestaurant: (updates: Partial<Restaurant>) => void
+    restaurants: RestaurantWithCount[]
+    selectedRestaurant: RestaurantWithCount | null
+    setRestaurants: (restaurants: RestaurantWithCount[]) => void
+    setSelectedRestaurant: (restaurant: RestaurantWithCount) => void
+    updateSelectedRestaurant: (updates: Partial<RestaurantWithCount>) => void
 }
 
 export const useRestaurantStore = create<RestaurantState>()(

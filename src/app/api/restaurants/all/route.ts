@@ -15,6 +15,11 @@ export async function GET() {
             where: {
                 user_id: data.user.id,
             },
+            include: {
+                _count: {
+                    select: { restaurantViews: true, links: true, faqCategories: true, menuCategories: true, events: true },
+                },
+            },
         });
 
         if (restaurants.length > 0) {

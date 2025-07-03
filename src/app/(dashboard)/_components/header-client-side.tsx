@@ -10,11 +10,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { User as prismaUserType } from "@prisma/client"
-import kyInstance from "@/lib/ky"; // adjust the path as needed
+import { useRestaurants } from "@/lib/restaurents-queries"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
-import { GetRestaurantsResponse } from "@/types"
+import { User as prismaUserType } from "@prisma/client"
 import {
     BarChart,
     Calendar,
@@ -77,6 +76,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
     const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
     const navRef = useRef<HTMLDivElement>(null)
     const { setSupabaseUser, setPrismaUser } = useUserStore()
+    const { data } = useRestaurants();
 
     const router = useRouter()
     const pathname = usePathname()
@@ -85,34 +85,24 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
     }, [pathname])
 
     useEffect(() => {
-        const fetchRestaurants = async () => {
-            try {
-                const result: GetRestaurantsResponse = await kyInstance.get("/api/restaurants/all").json<GetRestaurantsResponse>();
+        if (data?.restaurants) {
+            setRestaurants(data.restaurants);
 
-                if (result.restaurants) {
-                    setRestaurants(result.restaurants);
+            const firstRestaurant = data.restaurants[0];
+            const restaurantID = localStorage.getItem("selected-restaurant-id");
 
-                    const firstRestaurant = result.restaurants[0];
-                    const restaurantID = localStorage.getItem("selected-restaurant-id");
-
-                    if (!restaurantID) {
-                        localStorage.setItem("selected-restaurant-id", firstRestaurant.id);
-                        setSelectedRestaurant(firstRestaurant);
-                    } else {
-                        const restaurantSelected = result.restaurants.find(res => res.id === restaurantID);
-                        if (restaurantSelected) {
-                            setSelectedRestaurant(restaurantSelected);
-                        } else {
-                            setSelectedRestaurant(firstRestaurant);
-                        }
-                    }
+            if (!restaurantID) {
+                localStorage.setItem("selected-restaurant-id", firstRestaurant.id);
+                setSelectedRestaurant(firstRestaurant);
+            } else {
+                const restaurantSelected = data.restaurants.find(res => res.id === restaurantID);
+                if (restaurantSelected) {
+                    setSelectedRestaurant(restaurantSelected);
+                } else {
+                    setSelectedRestaurant(firstRestaurant);
                 }
-            } catch (error) {
-                console.error("Failed to fetch restaurants:", error);
             }
-        };
-
-        fetchRestaurants();
+        }
     }, []);
 
     // Hydrate store with server data

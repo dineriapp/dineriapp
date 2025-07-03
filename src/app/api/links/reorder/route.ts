@@ -40,6 +40,11 @@ export async function PUT(request: NextRequest) {
         const updatedLinks = await prisma.link.findMany({
             where: { restaurant_id: currentLink.restaurant_id },
             orderBy: { sort_order: "asc" },
+            include: {
+                _count: {
+                    select: { views: true },
+                },
+            },
         })
 
         return NextResponse.json({ data: updatedLinks })

@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import ClientPage from "./client-page"
 import type { Restaurant, Link, MenuCategory, Event, FaqCategory } from "@prisma/client"
+import { ReviewsInfo } from "@/types"
 
 interface PageProps {
     params: Promise<{ slug: string }>
@@ -83,7 +84,38 @@ export default async function RestaurantPage({ params }: PageProps) {
             notFound()
         }
 
-        return <ClientPage restaurant={restaurant as RestaurantWithRelations} />
+        let reviewsData: ReviewsInfo = null;
+
+        if (restaurant.google_place_id) {
+            try {
+                const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+                const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${restaurant.google_place_id}&fields=rating,user_ratings_total&key=${apiKey}`;
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (
+                    response.ok &&
+                    data.status === "OK" &&
+                    data.result?.rating !== undefined &&
+                    data.result?.user_ratings_total !== undefined
+                ) {
+                    reviewsData = {
+                        rating: data.result.rating,
+                        user_ratings_total: data.result.user_ratings_total,
+                    };
+                } else {
+                    console.warn("Google Place API error or missing fields:", data);
+                    reviewsData = null;
+                }
+            } catch (err) {
+                console.error("Error fetching Google Place reviews:", err);
+                reviewsData = null;
+            }
+        }
+
+
+        return <ClientPage restaurant={restaurant as RestaurantWithRelations} reviewsInfo={reviewsData} />
     } catch (error) {
         console.error("Error fetching restaurant data:", error)
         notFound()

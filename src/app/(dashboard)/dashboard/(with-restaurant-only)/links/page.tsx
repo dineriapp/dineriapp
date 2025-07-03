@@ -331,91 +331,101 @@ export default function LinksPage() {
                             {links.length > 0 ? (
                                 <div className="space-y-3">
                                     {links.map((link, index) => (
-                                        <div
-                                            key={link.id}
-                                            className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white/80 p-4 backdrop-blur-sm transition-shadow hover:shadow-md"
-                                        >
-                                            <Checkbox
-                                                checked={selectedLinks.has(link.id)}
-                                                onCheckedChange={() => toggleLinkSelection(link.id)}
-                                                aria-label={`Select ${link.title}`}
-                                            />
+                                        <div key={link.id} className="border border-slate-200 rounded-lg  bg-white/80 p-4 backdrop-blur-sm transition-shadow hover:shadow-md">
 
-                                            <div className="flex-shrink-0 cursor-move">
-                                                <Grip className="h-5 w-5 text-slate-400" />
-                                            </div>
+                                            <div
+                                                className="flex items-center gap-3 "
+                                            >
+                                                <Checkbox
+                                                    checked={selectedLinks.has(link.id)}
+                                                    onCheckedChange={() => toggleLinkSelection(link.id)}
+                                                    aria-label={`Select ${link.title}`}
+                                                />
 
-                                            <div className="min-w-0 flex-grow">
-                                                <h3 className="truncate font-medium text-slate-900">{link.title}</h3>
-                                                <p className="truncate text-sm text-slate-500">{link.url}</p>
-                                            </div>
+                                                <div className="flex-shrink-0 cursor-move">
+                                                    <Grip className="h-5 w-5 text-slate-400" />
+                                                </div>
 
-                                            <div className="flex flex-shrink-0 items-center gap-1">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleEditClick(link)}
-                                                    className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                >
-                                                    <Edit className="h-4 w-4" />
-                                                    <span className="sr-only">Edit</span>
-                                                </Button>
+                                                <div className="min-w-0 flex-grow">
+                                                    <h3 className="truncate font-medium text-slate-900">{link.title}</h3>
+                                                    <p className="truncate text-sm text-slate-500">{link.url}</p>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <span className="text-sm font-medium text-gray-700">Clicks:</span>
+                                                    <div className="inline-block bg-gray-200 text-gray-800 text-sm font-semibold px-3 py-1 rounded-full shadow-sm">
+                                                        {link?._count?.views}
+                                                    </div>
+                                                </div>
 
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
-                                                            disabled={deleteMutation.isPending}
-                                                        >
-                                                            <Trash2 className="h-4 w-4" />
-                                                            <span className="sr-only">Delete</span>
-                                                        </Button>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent>
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                                            <AlertDialogDescription>
-                                                                This action cannot be undone. This will permanently delete the link &quot;{link.title}&quot; from{" "}
-                                                                {selectedRestaurant.name}&apos;s page.
-                                                            </AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                            <AlertDialogAction
-                                                                onClick={() => deleteMutation.mutate(link.id)}
-                                                                className="bg-destructive text-white hover:opacity-80 hover:bg-destructive/90"
+                                                <div className="flex flex-shrink-0 items-center gap-1">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => handleEditClick(link)}
+                                                        className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                    >
+                                                        <Edit className="h-4 w-4" />
+                                                        <span className="sr-only">Edit</span>
+                                                    </Button>
+
+                                                    <AlertDialog>
+                                                        <AlertDialogTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                                disabled={deleteMutation.isPending}
                                                             >
-                                                                Delete
-                                                            </AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
+                                                                <Trash2 className="h-4 w-4" />
+                                                                <span className="sr-only">Delete</span>
+                                                            </Button>
+                                                        </AlertDialogTrigger>
+                                                        <AlertDialogContent>
+                                                            <AlertDialogHeader>
+                                                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                                <AlertDialogDescription>
+                                                                    This action cannot be undone. This will permanently delete the link &quot;{link.title}&quot; from{" "}
+                                                                    {selectedRestaurant.name}&apos;s page.
+                                                                </AlertDialogDescription>
+                                                            </AlertDialogHeader>
+                                                            <AlertDialogFooter>
+                                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                <AlertDialogAction
+                                                                    onClick={() => deleteMutation.mutate(link.id)}
+                                                                    className="bg-destructive text-white hover:opacity-80 hover:bg-destructive/90"
+                                                                >
+                                                                    Delete
+                                                                </AlertDialogAction>
+                                                            </AlertDialogFooter>
+                                                        </AlertDialogContent>
+                                                    </AlertDialog>
 
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => reorderMutation.mutate({ linkId: link.id, direction: "up" })}
-                                                    disabled={index === 0 || reorderMutation.isPending}
-                                                    className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                >
-                                                    <ArrowUp className="h-4 w-4" />
-                                                    <span className="sr-only">Move up</span>
-                                                </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => reorderMutation.mutate({ linkId: link.id, direction: "up" })}
+                                                        disabled={index === 0 || reorderMutation.isPending}
+                                                        className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                    >
+                                                        <ArrowUp className="h-4 w-4" />
+                                                        <span className="sr-only">Move up</span>
+                                                    </Button>
 
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => reorderMutation.mutate({ linkId: link.id, direction: "down" })}
-                                                    disabled={index === links.length - 1 || reorderMutation.isPending}
-                                                    className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                >
-                                                    <ArrowDown className="h-4 w-4" />
-                                                    <span className="sr-only">Move down</span>
-                                                </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => reorderMutation.mutate({ linkId: link.id, direction: "down" })}
+                                                        disabled={index === links.length - 1 || reorderMutation.isPending}
+                                                        className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                    >
+                                                        <ArrowDown className="h-4 w-4" />
+                                                        <span className="sr-only">Move down</span>
+                                                    </Button>
+                                                </div>
                                             </div>
+
                                         </div>
+
                                     ))}
                                 </div>
                             ) : (

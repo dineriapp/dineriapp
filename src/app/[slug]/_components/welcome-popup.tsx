@@ -89,7 +89,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents, welc
         }
     }
 
-    const showButton = restaurant.welcome_popup_action_button_show !== false && !hasEvents
+    const showButton = restaurant.welcome_popup_show_button !== false && !hasEvents
 
     return (
         <AnimatePresence>

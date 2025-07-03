@@ -1,15 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ky from "./ky"
 import { toast } from "sonner"
+import { Link } from "@prisma/client"
 
-interface Link {
-    id: string
-    restaurant_id: string
-    title: string
-    url: string
-    sort_order: number
-    show_icon?: boolean
-    createdAt: Date
+type LinkWithCount = Link & {
+    _count: {
+        views: number
+    }
 }
 
 export function useLinks(restaurantId: string | undefined) {
@@ -17,7 +14,7 @@ export function useLinks(restaurantId: string | undefined) {
         queryKey: ["links", restaurantId],
         queryFn: async () => {
             if (!restaurantId) return []
-            const response = await ky.get(`/api/links?restaurant_id=${restaurantId}`).json<{ data: Link[] }>()
+            const response = await ky.get(`/api/links?restaurant_id=${restaurantId}`).json<{ data: LinkWithCount[] }>()
             return response.data
         },
         enabled: !!restaurantId, // Only run query when restaurantId is available
@@ -36,7 +33,7 @@ export function useCreateLink(restaurantId: string | undefined) {
                 .post("/api/links", {
                     json: { ...data, restaurant_id: restaurantId },
                 })
-                .json<{ data: Link }>()
+                .json<{ data: LinkWithCount }>()
             return response.data
         },
         onMutate: async (newLink) => {
@@ -44,9 +41,9 @@ export function useCreateLink(restaurantId: string | undefined) {
 
             await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
 
-            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+            const previousLinks = queryClient.getQueryData<LinkWithCount[]>(["links", restaurantId])
 
-            const optimisticLink: Link = {
+            const optimisticLink: LinkWithCount = {
                 id: `temp-${Date.now()}`,
                 restaurant_id: restaurantId,
                 title: newLink.title,
@@ -55,9 +52,12 @@ export function useCreateLink(restaurantId: string | undefined) {
                     !previousLinks || previousLinks.length === 0 ? 0 : Math.max(...previousLinks.map((l) => l.sort_order)) + 1,
                 show_icon: true,
                 createdAt: new Date(),
+                _count: {
+                    views: 0
+                }
             }
 
-            queryClient.setQueryData<Link[]>(["links", restaurantId], (old) =>
+            queryClient.setQueryData<LinkWithCount[]>(["links", restaurantId], (old) =>
                 old ? [...old, optimisticLink] : [optimisticLink],
             )
 
@@ -89,7 +89,7 @@ export function useUpdateLink(restaurantId: string | undefined) {
 
     return useMutation({
         mutationFn: async ({ id, ...data }: { id: string; title: string; url: string }) => {
-            const response = await ky.put(`/api/links/${id}`, { json: data }).json<{ data: Link }>()
+            const response = await ky.put(`/api/links/${id}`, { json: data }).json<{ data: LinkWithCount }>()
             return response.data
         },
         onMutate: async (updatedLink) => {
@@ -97,9 +97,9 @@ export function useUpdateLink(restaurantId: string | undefined) {
 
             await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
 
-            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+            const previousLinks = queryClient.getQueryData<LinkWithCount[]>(["links", restaurantId])
 
-            queryClient.setQueryData<Link[]>(
+            queryClient.setQueryData<LinkWithCount[]>(
                 ["links", restaurantId],
                 (old) =>
                     old?.map((link) =>
@@ -143,9 +143,9 @@ export function useDeleteLink(restaurantId: string | undefined) {
 
             await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
 
-            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+            const previousLinks = queryClient.getQueryData<LinkWithCount[]>(["links", restaurantId])
 
-            queryClient.setQueryData<Link[]>(
+            queryClient.setQueryData<LinkWithCount[]>(
                 ["links", restaurantId],
                 (old) => old?.filter((link) => link.id !== deletedId) || [],
             )
@@ -190,9 +190,9 @@ export function useBulkDeleteLinks(restaurantId: string | undefined) {
 
             await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
 
-            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+            const previousLinks = queryClient.getQueryData<LinkWithCount[]>(["links", restaurantId])
 
-            queryClient.setQueryData<Link[]>(
+            queryClient.setQueryData<LinkWithCount[]>(
                 ["links", restaurantId],
                 (old) => old?.filter((link) => !deletedIds.includes(link.id)) || [],
             )
@@ -229,7 +229,7 @@ export function useReorderLink(restaurantId: string | undefined) {
                 .put("/api/links/reorder", {
                     json: { linkId, direction },
                 })
-                .json<{ data: Link[] }>()
+                .json<{ data: LinkWithCount[] }>()
             return response.data
         },
         onMutate: async ({ linkId, direction }) => {
@@ -237,7 +237,7 @@ export function useReorderLink(restaurantId: string | undefined) {
 
             await queryClient.cancelQueries({ queryKey: ["links", restaurantId] })
 
-            const previousLinks = queryClient.getQueryData<Link[]>(["links", restaurantId])
+            const previousLinks = queryClient.getQueryData<LinkWithCount[]>(["links", restaurantId])
 
             if (previousLinks) {
                 const currentIndex = previousLinks.findIndex((link) => link.id === linkId)

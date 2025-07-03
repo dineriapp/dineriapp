@@ -1,25 +1,39 @@
 "use client"
 
+import { GoogleRating } from "@/app/[slug]/_components/google-rating"
+import { OpeningHoursStatus } from "@/app/[slug]/_components/opening-hours-status"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useLinks } from "@/lib/link-queries"
+import { useRecentActivity, useRestaurants } from "@/lib/restaurents-queries"
 import { useRestaurantStore } from "@/stores/restaurant-store"
+import { GetRestaurantsResponse, OpeningHoursData } from "@/types"
+import { QueryObserverResult } from "@tanstack/react-query"
 import {
     BarChart2,
     Battery,
+    Calendar,
     Copy,
     ExternalLink,
+    Facebook,
+    HelpCircle,
+    Instagram,
     LinkIcon,
+    Mail,
+    MapPin,
+    MessageCircle,
     Plus,
     QrCode,
     Settings,
     Signal,
     TrendingUp,
     Users,
+    UtensilsCrossed,
     Wifi
 } from "lucide-react"
 import { motion } from "motion/react"
 import Link from "next/link"
-import { useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { toast } from "sonner"
 
 
@@ -41,20 +55,57 @@ const item = {
 
 
 export default function DashboardPage() {
-    const { restaurants, selectedRestaurant } = useRestaurantStore()
+    const { restaurants, selectedRestaurant, setRestaurants, setSelectedRestaurant } = useRestaurantStore()
+    const { isLoading, refetch, isFetching } = useRestaurants();
+    const { data: links = [], isLoading: linksLoading, } = useLinks(selectedRestaurant?.id)
+    const [monthlyVisits, setMonthlyVisits] = useState<number | null>(null);
+    const { data: activityData, isLoading: activityLoading } = useRecentActivity(selectedRestaurant?.id);
+
+    useEffect(() => {
+        const fetchMonthlyVisits = async () => {
+            try {
+                const res = await fetch(`/api/restaurants/${selectedRestaurant?.id}/monthly-visits`);
+                const data = await res.json();
+                setMonthlyVisits(data.count);
+            } catch (error) {
+                console.error("Failed to fetch monthly visitors:", error);
+            }
+        };
+        if (selectedRestaurant?.id) {
+            fetchMonthlyVisits();
+        }
+    }, [selectedRestaurant?.id]);
+
+    useEffect(() => {
+        const fetchAndSet = async () => {
+            const { data }: QueryObserverResult<GetRestaurantsResponse, unknown> = await refetch();
+            if (data) {
+                setRestaurants(data.restaurants);
+
+                const firstRestaurant = data.restaurants[0];
+                const restaurantID = localStorage.getItem("selected-restaurant-id");
+
+                if (!restaurantID) {
+                    localStorage.setItem("selected-restaurant-id", firstRestaurant.id);
+                    setSelectedRestaurant(firstRestaurant);
+                } else {
+                    const restaurantSelected = data.restaurants.find(res => res.id === restaurantID);
+                    if (restaurantSelected) {
+                        setSelectedRestaurant(restaurantSelected);
+                    } else {
+                        setSelectedRestaurant(firstRestaurant);
+                    }
+                }
+            }
+            if (data?.restaurants) {
+                setRestaurants(data?.restaurants); // ✅ update store with new data
+            }
+        };
+
+        fetchAndSet();
+    }, []);
 
     const [currentTime] = useState(() => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }))
-
-    // const getIconForLink = (title: string) => {
-    //     const lowerTitle = title.toLowerCase()
-
-    //     if (lowerTitle.includes("instagram") || lowerTitle.includes("follow")) return <Instagram className="h-4 w-4" />
-    //     if (lowerTitle.includes("reservation") || lowerTitle.includes("book")) return <Calendar className="h-4 w-4" />
-    //     if (lowerTitle.includes("direction") || lowerTitle.includes("location")) return <MapPin className="h-4 w-4" />
-    //     if (lowerTitle.includes("menu")) return <MenuIcon className="h-4 w-4" />
-
-    //     return <ExternalLink className="h-4 w-4" />
-    // }
 
     const copyToClipboard = () => {
         if (selectedRestaurant) {
@@ -63,7 +114,7 @@ export default function DashboardPage() {
         }
     }
 
-    if (restaurants.length === 0 || !selectedRestaurant) {
+    if (restaurants.length === 0 || !selectedRestaurant || isLoading || isFetching) {
         return (
             <div className="max-w-[1200px] mx-auto px-4 py-16 flex justify-center">
                 <div className="flex items-center space-x-2 text-slate-500">
@@ -85,6 +136,102 @@ export default function DashboardPage() {
             </div>
         )
     }
+
+    const getBackgroundStyle = () => {
+        if (selectedRestaurant?.bg_type === "image" && selectedRestaurant?.bg_image_url) {
+            return {
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${selectedRestaurant?.bg_image_url})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }
+        }
+
+        if (selectedRestaurant?.bg_type === "gradient" && selectedRestaurant?.bg_gradient_start && selectedRestaurant?.bg_gradient_end) {
+            const directionMap: Record<string, string> = {
+                top: "to top",
+                bottom: "to bottom",
+                left: "to left",
+                right: "to right",
+                "top-right": "to top right",
+                "top-left": "to top left",
+                "bottom-right": "to bottom right",
+                "bottom-left": "to bottom left",
+            }
+
+            return {
+                backgroundImage: `linear-gradient(${directionMap[selectedRestaurant?.gradient_direction] || "to bottom right"}, ${selectedRestaurant?.bg_gradient_start}, ${selectedRestaurant?.bg_gradient_end})`,
+            }
+        }
+
+        return { backgroundColor: selectedRestaurant?.bg_color || "#ffffff" }
+    }
+
+    const SocialIcons = memo(() => {
+        return <div
+            // initial={{ y: 20, opacity: 0 }}
+            // animate={{ y: 0, opacity: 1 }}
+            // transition={{ delay: 0.4 }}
+            className="mb-4 flex flex-wrap items-center justify-center gap-3"
+        >
+            {selectedRestaurant?.instagram && (
+                <a
+                    href={selectedRestaurant?.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <Instagram className="h-6 w-6" />
+                </a>
+            )}
+            {selectedRestaurant?.facebook && (
+                <a
+                    href={selectedRestaurant?.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <Facebook className="h-6 w-6" />
+                </a>
+            )}
+            {selectedRestaurant?.whatsapp && (
+                <a
+                    href={`https://wa.me/${selectedRestaurant?.whatsapp.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <MessageCircle className="h-6 w-6" />
+                </a>
+            )}
+            {selectedRestaurant?.email && (
+                <a
+                    href={`mailto:${selectedRestaurant?.email}`}
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <Mail className="h-6 w-6" />
+                </a>
+            )}
+            {selectedRestaurant?.address && (
+                <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(selectedRestaurant?.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <MapPin className="h-6 w-6" />
+                </a>
+            )}
+        </div>
+    },
+    )
+    SocialIcons.displayName = "SocialIcons";
+
+    const openingHours = selectedRestaurant?.opening_hours ? (selectedRestaurant?.opening_hours as OpeningHoursData) : null
 
     return (
         <main className="max-w-[1200px] mx-auto px-4 py-8">
@@ -110,8 +257,58 @@ export default function DashboardPage() {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold text-slate-900">0</div>
+                            <div className="text-3xl font-bold text-slate-900">
+                                {selectedRestaurant?._count?.links}
+                            </div>
                             <p className="text-xs text-slate-500 mt-1">Active links on your page</p>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+                <motion.div variants={item}>
+                    <Card className="bg-gradient-to-br from-slate-50 to-white hover:shadow-md transition-shadow border-slate-200">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium text-slate-500">Total Menus</CardTitle>
+                            <div className="h-8 w-8 rounded-full bg-teal-50 flex items-center justify-center">
+                                <UtensilsCrossed className="h-4 w-4 text-teal-600" />
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold text-slate-900">
+                                {selectedRestaurant?._count?.menuCategories}
+                            </div>
+                            <p className="text-xs text-slate-500 mt-1">Active menus on your page</p>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+                <motion.div variants={item}>
+                    <Card className="bg-gradient-to-br from-slate-50 to-white hover:shadow-md transition-shadow border-slate-200">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium text-slate-500">Total Events</CardTitle>
+                            <div className="h-8 w-8 rounded-full bg-teal-50 flex items-center justify-center">
+                                <Calendar className="h-4 w-4 text-teal-600" />
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold text-slate-900">
+                                {selectedRestaurant?._count?.events}
+                            </div>
+                            <p className="text-xs text-slate-500 mt-1">Active events on your page</p>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+                <motion.div variants={item}>
+                    <Card className="bg-gradient-to-br from-slate-50 to-white hover:shadow-md transition-shadow border-slate-200">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium text-slate-500">Total Faqs</CardTitle>
+                            <div className="h-8 w-8 rounded-full bg-teal-50 flex items-center justify-center">
+                                <HelpCircle className="h-4 w-4 text-teal-600" />
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold text-slate-900">
+                                {selectedRestaurant?._count?.faqCategories}
+                            </div>
+                            <p className="text-xs text-slate-500 mt-1">Active faq categories on your page</p>
                         </CardContent>
                     </Card>
                 </motion.div>
@@ -119,14 +316,14 @@ export default function DashboardPage() {
                 <motion.div variants={item}>
                     <Card className="bg-gradient-to-br from-blue-50 to-white hover:shadow-md transition-shadow border-slate-200">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-500">Total Views</CardTitle>
+                            <CardTitle className="text-sm font-medium text-slate-500">Visitors This Month</CardTitle>
                             <div className="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center">
                                 <BarChart2 className="h-4 w-4 text-blue-600" />
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold text-slate-900">0</div>
-                            <p className="text-xs text-slate-500 mt-1">Link clicks this month</p>
+                            <div className="text-3xl font-bold text-slate-900">{monthlyVisits ?? "Loading..."}</div>
+                            <p className="text-xs text-slate-500 mt-1">Vistors this month</p>
                         </CardContent>
                     </Card>
                 </motion.div>
@@ -134,14 +331,14 @@ export default function DashboardPage() {
                 <motion.div variants={item}>
                     <Card className="bg-gradient-to-br from-teal-50 to-white hover:shadow-md transition-shadow border-slate-200">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-500">Unique Visitors</CardTitle>
+                            <CardTitle className="text-sm font-medium text-slate-500">Total Visitors</CardTitle>
                             <div className="h-8 w-8 rounded-full bg-teal-50 flex items-center justify-center">
                                 <Users className="h-4 w-4 text-teal-600" />
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold text-slate-900">0</div>
-                            <p className="text-xs text-slate-500 mt-1">Unique visitors this month</p>
+                            <div className="text-3xl font-bold text-slate-900">{selectedRestaurant?._count?.restaurantViews}</div>
+                            <p className="text-xs text-slate-500 mt-1">Total visitors all time</p>
                         </CardContent>
                     </Card>
                 </motion.div>
@@ -172,7 +369,7 @@ export default function DashboardPage() {
                             </div>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <div className="mx-auto max-w-[300px] p-6">
+                            <div className="mx-auto max-w-[350px] p-6">
                                 <div className="relative">
                                     <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-teal-500/20 to-blue-500/20 blur-xl opacity-30 scale-105 translate-y-2"></div>
 
@@ -198,38 +395,26 @@ export default function DashboardPage() {
                                         </div>
 
                                         <div className="mt-1">
-                                            {/* <div
-                                                className="min-h-[480px]"
-                                                style={{
-                                                    background:
-                                                        restaurant?.bg_type === "gradient" &&
-                                                            restaurant?.bg_gradient_start &&
-                                                            restaurant?.bg_gradient_end
-                                                            ? `linear-gradient(to bottom right, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`
-                                                            : restaurant?.bg_color || "#ffffff",
-                                                }}
-                                            >
+                                            <div className="min-h-[600px] overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
                                                 <div className="p-4 flex flex-col items-center">
-                                                    {restaurant?.logo_url ? (
+                                                    {selectedRestaurant?.logo_url ? (
                                                         <motion.img
                                                             initial={{ scale: 0.8, opacity: 0 }}
                                                             animate={{ scale: 1, opacity: 1 }}
                                                             transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                                                            src={restaurant.logo_url}
-                                                            alt={restaurant.name}
-                                                            className="w-16 h-16 rounded-full object-cover mb-3 shadow-lg ring-4 ring-black/10"
-                                                        />
+                                                            src={selectedRestaurant.logo_url}
+                                                            alt={selectedRestaurant.name}
+                                                            className="mb-5 h-24 w-24 rounded-full object-cover"
+                                                            loading="eager" />
                                                     ) : (
                                                         <motion.div
                                                             initial={{ scale: 0.8, opacity: 0 }}
                                                             animate={{ scale: 1, opacity: 1 }}
                                                             transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                                                            className="w-16 h-16 rounded-full flex items-center justify-center mb-3 shadow-lg ring-4 ring-black/10"
-                                                            style={{
-                                                                background: `linear-gradient(to right, #0ea5e9, #0284c7)`,
-                                                            }}
+                                                            className="mb-5 flex h-24 w-24 items-center justify-center rounded-full shadow-lg ring-4 ring-white/20 fallback-initial"
+                                                            style={{ backgroundColor: selectedRestaurant?.accent_color || "blue" }}
                                                         >
-                                                            <span className="text-xl font-bold text-white">{restaurant?.name.charAt(0)}</span>
+                                                            <span className="text-xl font-bold text-white">{selectedRestaurant?.name.charAt(0)}</span>
                                                         </motion.div>
                                                     )}
 
@@ -237,90 +422,127 @@ export default function DashboardPage() {
                                                         initial={{ y: 20, opacity: 0 }}
                                                         animate={{ y: 0, opacity: 1 }}
                                                         transition={{ delay: 0.2 }}
-                                                        className="text-lg font-bold mb-1"
+                                                        className="mb-3 text-2xl font-bold"
                                                         style={{
-                                                            color: restaurant?.bg_color === "#ffffff" ? "#000000" : "#ffffff",
+                                                            color: selectedRestaurant?.headings_text_color || "#000000",
+                                                            fontFamily: selectedRestaurant?.font_family || "Inter",
                                                         }}
                                                     >
-                                                        {restaurant?.name}
+                                                        {selectedRestaurant?.name}
                                                     </motion.h2>
 
-                                                    {restaurant?.bio && (
+                                                    {/* Opening Hours Status */}
+                                                    {openingHours && (
+                                                        <motion.div
+                                                            initial={{ y: 20, opacity: 0 }}
+                                                            animate={{ y: 0, opacity: 1 }}
+                                                            transition={{ delay: 0.25 }}
+                                                            className="mb-4"
+                                                        >
+                                                            <OpeningHoursStatus
+                                                                openingHours={openingHours}
+                                                                color={selectedRestaurant?.headings_text_color || "#000000"}
+                                                                className="text-white cursor-pointer text-center"
+                                                                accentColor={selectedRestaurant?.accent_color || "#10b981"}
+                                                            />
+                                                        </motion.div>
+                                                    )}
+
+                                                    <motion.div
+                                                        initial={{ y: 20, opacity: 0 }}
+                                                        animate={{ y: 0, opacity: 1 }}
+                                                        transition={{ delay: 0.25 }}
+                                                        className="mb-4"
+                                                    >
+                                                        <GoogleRating info={{
+                                                            rating: 5,
+                                                            user_ratings_total: 17
+                                                        }}
+                                                            color={selectedRestaurant?.headings_text_color || "#000000"}
+                                                            className="text-white" />
+                                                    </motion.div>
+
+                                                    {selectedRestaurant?.bio && (
                                                         <motion.p
                                                             initial={{ y: 20, opacity: 0 }}
                                                             animate={{ y: 0, opacity: 1 }}
                                                             transition={{ delay: 0.3 }}
-                                                            className="text-xs opacity-90 text-center"
+                                                            className="mx-auto mb-4 text-center max-w-md text-sm"
                                                             style={{
-                                                                color:
-                                                                    restaurant?.bg_color === "#ffffff" ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.9)",
+                                                                color: selectedRestaurant?.headings_text_color || "#000000",
+                                                                opacity: 0.9,
+                                                                fontFamily: selectedRestaurant?.font_family || "Inter",
                                                             }}
                                                         >
-                                                            {restaurant.bio}
+                                                            {selectedRestaurant?.bio}
                                                         </motion.p>
                                                     )}
 
-                                                    {(restaurant?.instagram || restaurant?.facebook) && (
-                                                        <motion.div
-                                                            initial={{ y: 20, opacity: 0 }}
-                                                            animate={{ y: 0, opacity: 1 }}
-                                                            transition={{ delay: 0.4 }}
-                                                            className="flex items-center justify-center gap-4 mb-6 mt-4"
-                                                        >
-                                                            {restaurant.instagram && (
-                                                                <a
-                                                                    href={restaurant.instagram}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-transform hover:scale-110"
-                                                                    style={{ color: "#0ea5e9" }}
-                                                                >
-                                                                    <Instagram className="h-5 w-5" />
-                                                                </a>
-                                                            )}
-                                                            {restaurant.facebook && (
-                                                                <a
-                                                                    href={restaurant.facebook}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-transform hover:scale-110"
-                                                                    style={{ color: "#0ea5e9" }}
-                                                                >
-                                                                    <Facebook className="h-5 w-5" />
-                                                                </a>
-                                                            )}
-                                                        </motion.div>
-                                                    )}
+                                                    {(selectedRestaurant?.instagram ||
+                                                        selectedRestaurant?.facebook ||
+                                                        selectedRestaurant?.email ||
+                                                        selectedRestaurant?.address ||
+                                                        selectedRestaurant?.whatsapp) && <SocialIcons />}
                                                 </div>
 
-                                                <motion.div variants={container} initial="hidden" animate="show" className="px-3 space-y-2">
-                                                    {links.length > 0 ? (
-                                                        links.map((link) => (
-                                                            <motion.div
-                                                                key={link.id}
-                                                                variants={item}
-                                                                className="flex items-center gap-2 p-3 w-full transition-all hover:scale-[1.02] active:scale-[0.98] rounded-xl"
-                                                                style={{
-                                                                    border: `1px solid rgba(14, 165, 233, 0.3)`,
-                                                                    backgroundColor: "rgba(255, 255, 255, 0.9)",
-                                                                    backdropFilter: "blur(8px)",
-                                                                    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.05)",
-                                                                }}
-                                                            >
-                                                                <span style={{ color: "#0ea5e9" }}>{getIconForLink(link.title)}</span>
-                                                                <span className="font-medium text-xs">{link.title}</span>
-                                                            </motion.div>
-                                                        ))
-                                                    ) : (
-                                                        <div className="text-center py-6">
-                                                            <p className="text-slate-500 text-xs">No links added yet</p>
-                                                        </div>
-                                                    )}
+                                                <motion.div variants={container} initial="hidden" animate="show" className="flex-grow px-4 mb-4 space-y-4">
+                                                    {
+                                                        linksLoading ?
+                                                            <p className="w-full text-center text-sm">
+                                                                Loading..
+                                                            </p>
+                                                            :
+                                                            <>
+                                                                {
+                                                                    links?.length > 0 ?
+                                                                        <>
+                                                                            {links?.map((link) => (
+                                                                                <div
+                                                                                    key={link.id}
+                                                                                    rel="noopener noreferrer"
+                                                                                    className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant?.button_style === "pill"
+                                                                                        ? "rounded-full"
+                                                                                        : selectedRestaurant?.button_style === "square"
+                                                                                            ? "rounded-md"
+                                                                                            : "rounded-xl"
+                                                                                        }`}
+                                                                                    style={{
+                                                                                        backgroundColor:
+                                                                                            selectedRestaurant?.button_variant === "solid"
+                                                                                                ? selectedRestaurant?.accent_color || "#10b981"
+                                                                                                : "rgba(255, 255, 255, 0.95)",
+                                                                                        backdropFilter: "blur(8px)",
+                                                                                        border: `2px solid ${selectedRestaurant?.accent_color || "#10b981"}`,
+                                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                                                                        color: selectedRestaurant?.button_variant === "solid" ? selectedRestaurant?.button_text_icons_color || "#000000" : selectedRestaurant?.accent_color || "#10b981",
+                                                                                        fontFamily: selectedRestaurant?.font_family || "Inter",
+                                                                                        letterSpacing: "0.01em",
+                                                                                    }}
+                                                                                >
+                                                                                    <span
+                                                                                        className={`relative text-[15px] ${selectedRestaurant?.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                                            } transition-colors duration-300 font-medium`}
+                                                                                        style={{
+                                                                                            color:
+                                                                                                selectedRestaurant?.button_variant === "outline" ? selectedRestaurant?.accent_color || "#10b981" : selectedRestaurant?.button_text_icons_color || "#000000",
+                                                                                        }}
+                                                                                    >
+                                                                                        {link.title}
+                                                                                    </span>
+                                                                                </div>
+                                                                            ))}
+                                                                        </>
+                                                                        :
+                                                                        <p className="w-full text-center text-sm">
+                                                                            No links yet add some to see preview.
+                                                                        </p>
+                                                                }
+                                                            </>
+                                                    }
+
                                                 </motion.div>
-                                            </div> */}
-                                            <div className="w-full min-h-[500px] flex text-white text-xs items-center justify-center">
-                                                no preview yet.
                                             </div>
+
                                             <div className="absolute bottom-1 inset-x-0 flex justify-center pb-1">
                                                 <div className="w-[100px] h-1 bg-white/30 rounded-full"></div>
                                             </div>
@@ -436,36 +658,27 @@ export default function DashboardPage() {
                     <Card className="hover:shadow-md transition-shadow border-slate-200">
                         <CardHeader className="pb-3">
                             <CardTitle className="text-slate-900">Recent Activity</CardTitle>
-                            <CardDescription className="text-slate-500">Latest clicks on your links</CardDescription>
+                            <CardDescription className="text-slate-500">Latest activities of your restaurent{" "}<span className="font-bold text-black">{selectedRestaurant?.name}</span></CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <div className="px-6">
-                                {/* {links.slice(0, 3).map((link, index) => (
-                                    <div
-                                        key={link.id}
-                                        className={`py-3 flex items-center justify-between ${index < links.slice(0, 3).length - 1 ? "border-b border-slate-100" : ""
-                                            }`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-8 w-8 rounded-full bg-teal-50 flex items-center justify-center text-teal-600">
-                                                {getIconForLink(link.title)}
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-medium text-slate-700">{link.title}</p>
-                                                <p className="text-xs text-slate-500">
-                                                    {Math.floor(Math.random() * 24) + 1} hours ago • {link.clicks} clicks
-                                                </p>
+                            <div className="px-6 space-y-2">
+                                {activityLoading && <p className="text-sm text-center text-gray-400">Loading...</p>}
+                                {!activityLoading && activityData?.activity.length === 0 && (
+                                    <p className="text-xs text-center text-neutral-500">You don&apos;t have any yet.</p>
+                                )}
+                                {!activityLoading &&
+                                    activityData?.activity.map((item, i) => (
+                                        <div key={i} className="text-sm text-slate-700 border-b py-1 last:border-none">
+                                            {item.message}
+                                            <div className="text-xs text-slate-400">
+                                                {new Date(item.createdAt).toLocaleString()}
                                             </div>
                                         </div>
-                                        <div className="text-sm font-medium text-teal-600">+{Math.floor(Math.random() * 5) + 1}</div>
-                                    </div>
-                                ))} */}
-                                <p className="text-xs text-center text-neutral-500">
-                                    You don&apos;t have any link yet.
-                                </p>
+                                    ))}
                             </div>
+
                         </CardContent>
-                        <CardFooter className="border-t border-slate-100 pt-4">
+                        {/* <CardFooter className="border-t border-slate-100 pt-4">
                             <Link href="/dashboard/stats" className="w-full">
                                 <Button
                                     variant="outline"
@@ -475,7 +688,7 @@ export default function DashboardPage() {
                                     View all activity
                                 </Button>
                             </Link>
-                        </CardFooter>
+                        </CardFooter> */}
                     </Card>
                 </motion.div>
             </div>

@@ -14,7 +14,13 @@ export async function GET(request: NextRequest) {
         const links = await prisma.link.findMany({
             where: { restaurant_id: restaurantId },
             orderBy: { sort_order: "asc" },
+            include: {
+                _count: {
+                    select: { views: true },
+                },
+            },
         })
+
 
         return NextResponse.json({ data: links })
     } catch {
@@ -80,6 +86,11 @@ export async function POST(request: NextRequest) {
                 ...validated,
                 title: validated.title.trim(),
                 sort_order: lastLink ? lastLink.sort_order + 1 : 0,
+            },
+            include: {
+                _count: {
+                    select: { views: true },
+                },
             },
         })
 

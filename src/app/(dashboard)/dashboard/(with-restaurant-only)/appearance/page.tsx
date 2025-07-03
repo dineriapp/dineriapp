@@ -1,5 +1,7 @@
 "use client"
 
+import { GoogleRating } from "@/app/[slug]/_components/google-rating"
+import { OpeningHoursStatus } from "@/app/[slug]/_components/opening-hours-status"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -7,26 +9,27 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useLinks } from "@/lib/link-queries"
+import { useRestaurantStore } from "@/stores/restaurant-store"
+import { OpeningHoursData } from "@/types"
 import {
     Battery,
-    Calendar,
-    ExternalLink,
     Facebook,
     ImageIcon,
     Instagram,
+    Mail,
     MapPin,
-    MenuIcon,
+    MessageCircle,
     Paintbrush,
     Palette,
     RotateCcw,
     Signal,
     Type,
-    Wifi,
+    Wifi
 } from "lucide-react"
 import { motion } from "motion/react"
-import { useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { toast } from "sonner"
-import { useRestaurantStore } from "@/stores/restaurant-store"
 
 // Define types based on Prisma schema
 interface AppearanceFormData {
@@ -44,14 +47,6 @@ interface AppearanceFormData {
     bg_image_url?: string
 }
 
-// Dummy links for preview
-const dummyLinks = [
-    { id: "1", title: "View Menu", url: "#", sort_order: 1 },
-    { id: "2", title: "Make Reservation", url: "#", sort_order: 2 },
-    { id: "3", title: "Follow on Instagram", url: "#", sort_order: 3 },
-    { id: "4", title: "Get Directions", url: "#", sort_order: 4 },
-    { id: "5", title: "Order Online", url: "#", sort_order: 5 },
-]
 
 // Animation variants
 const container = {
@@ -63,11 +58,6 @@ const container = {
             delayChildren: 0.3,
         },
     },
-}
-
-const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
 }
 
 // Font options
@@ -122,6 +112,7 @@ const textColorPresets = [
 
 export default function AppearancePage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
+    const { data: links = [], isLoading: linksLoading, } = useLinks(selectedRestaurant?.id)
 
     // Form state
     const [formData, setFormData] = useState<AppearanceFormData>({
@@ -220,16 +211,83 @@ export default function AppearancePage() {
         }
     }
 
-    const getIconForLink = (title: string) => {
-        const lowerTitle = title.toLowerCase()
+    const SocialIcons = memo(() => {
+        return <div
+            // initial={{ y: 20, opacity: 0 }}
+            // animate={{ y: 0, opacity: 1 }}
+            // transition={{ delay: 0.4 }}
+            className="mb-4 flex flex-wrap items-center justify-center gap-3"
+        >
+            {selectedRestaurant?.instagram && (
+                <a
+                    href={selectedRestaurant?.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <Instagram className="h-6 w-6" />
+                </a>
+            )}
+            {selectedRestaurant?.facebook && (
+                <a
+                    href={selectedRestaurant?.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <Facebook className="h-6 w-6" />
+                </a>
+            )}
+            {selectedRestaurant?.whatsapp && (
+                <a
+                    href={`https://wa.me/${selectedRestaurant?.whatsapp.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <MessageCircle className="h-6 w-6" />
+                </a>
+            )}
+            {selectedRestaurant?.email && (
+                <a
+                    href={`mailto:${selectedRestaurant?.email}`}
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <Mail className="h-6 w-6" />
+                </a>
+            )}
+            {selectedRestaurant?.address && (
+                <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(selectedRestaurant?.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
+                >
+                    <MapPin className="h-6 w-6" />
+                </a>
+            )}
+        </div>
+    },
+    )
 
-        if (lowerTitle.includes("instagram") || lowerTitle.includes("follow")) return <Instagram className="h-4 w-4" />
-        if (lowerTitle.includes("reservation") || lowerTitle.includes("book")) return <Calendar className="h-4 w-4" />
-        if (lowerTitle.includes("direction") || lowerTitle.includes("location")) return <MapPin className="h-4 w-4" />
-        if (lowerTitle.includes("menu")) return <MenuIcon className="h-4 w-4" />
+    SocialIcons.displayName = "SocialIcons";
 
-        return <ExternalLink className="h-4 w-4" />
-    }
+
+    // const getIconForLink = (title: string) => {
+    //     const lowerTitle = title.toLowerCase()
+
+    //     if (lowerTitle.includes("instagram") || lowerTitle.includes("follow")) return <Instagram className="h-4 w-4" />
+    //     if (lowerTitle.includes("reservation") || lowerTitle.includes("book")) return <Calendar className="h-4 w-4" />
+    //     if (lowerTitle.includes("direction") || lowerTitle.includes("location")) return <MapPin className="h-4 w-4" />
+    //     if (lowerTitle.includes("menu")) return <MenuIcon className="h-4 w-4" />
+
+    //     return <ExternalLink className="h-4 w-4" />
+    // }
 
     const getBackgroundStyle = () => {
         if (formData.bg_type === "image" && formData.bg_image_url) {
@@ -260,23 +318,8 @@ export default function AppearancePage() {
         return { backgroundColor: formData.bg_color || "#ffffff" }
     }
 
-    // Get button styles based on variant
-    const getButtonStyle = () => {
-        if (formData.button_variant === "solid") {
-            return {
-                backgroundColor: formData.accent_color,
-                color: formData.button_text_icons_color,
-                border: `2px solid ${formData.accent_color}`,
-            }
-        } else {
-            // Outline variant
-            return {
-                backgroundColor: "transparent",
-                color: formData.button_text_icons_color,
-                border: `2px solid ${formData.accent_color}`,
-            }
-        }
-    }
+    const openingHours = selectedRestaurant?.opening_hours ? (selectedRestaurant?.opening_hours as OpeningHoursData) : null
+
 
     if (!selectedRestaurant) {
         return (
@@ -288,6 +331,8 @@ export default function AppearancePage() {
             </div>
         )
     }
+
+
 
     return (
         <main className="max-w-[1200px] mx-auto px-4 py-8">
@@ -770,7 +815,7 @@ export default function AppearancePage() {
                             <CardDescription className="text-slate-500">See how your page looks on mobile devices</CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <div className="mx-auto max-w-[300px] p-6">
+                            <div className="mx-auto max-w-[350px] p-6">
                                 <div className="relative">
                                     <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-teal-500/20 to-blue-500/20 blur-xl opacity-30 scale-105 translate-y-2"></div>
 
@@ -796,7 +841,7 @@ export default function AppearancePage() {
                                         </div>
 
                                         <div className="mt-1">
-                                            <div className="min-h-[520px]" style={getBackgroundStyle()}>
+                                            <div className="min-h-[600px] overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
                                                 <div className="p-4 flex flex-col items-center">
                                                     {selectedRestaurant?.logo_url ? (
                                                         <motion.img
@@ -805,14 +850,14 @@ export default function AppearancePage() {
                                                             transition={{ type: "spring", stiffness: 200, damping: 15 }}
                                                             src={selectedRestaurant.logo_url}
                                                             alt={selectedRestaurant.name}
-                                                            className="w-16 h-16 rounded-full object-cover mb-3 shadow-lg ring-4 ring-black/10"
-                                                        />
+                                                            className="mb-5 h-24 w-24 rounded-full object-cover"
+                                                            loading="eager" />
                                                     ) : (
                                                         <motion.div
                                                             initial={{ scale: 0.8, opacity: 0 }}
                                                             animate={{ scale: 1, opacity: 1 }}
                                                             transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                                                            className="w-16 h-16 rounded-full flex items-center justify-center mb-3 shadow-lg ring-4 ring-black/10"
+                                                            className="mb-5 flex h-24 w-24 items-center justify-center rounded-full shadow-lg ring-4 ring-white/20 fallback-initial"
                                                             style={{ backgroundColor: formData.accent_color }}
                                                         >
                                                             <span className="text-xl font-bold text-white">{selectedRestaurant?.name.charAt(0)}</span>
@@ -823,7 +868,7 @@ export default function AppearancePage() {
                                                         initial={{ y: 20, opacity: 0 }}
                                                         animate={{ y: 0, opacity: 1 }}
                                                         transition={{ delay: 0.2 }}
-                                                        className="text-lg font-bold mb-1"
+                                                        className="mb-3 text-2xl font-bold"
                                                         style={{
                                                             color: formData.headings_text_color,
                                                             fontFamily: formData.font_family,
@@ -832,12 +877,43 @@ export default function AppearancePage() {
                                                         {selectedRestaurant?.name}
                                                     </motion.h2>
 
+                                                    {/* Opening Hours Status */}
+                                                    {openingHours && (
+                                                        <motion.div
+                                                            initial={{ y: 20, opacity: 0 }}
+                                                            animate={{ y: 0, opacity: 1 }}
+                                                            transition={{ delay: 0.25 }}
+                                                            className="mb-4"
+                                                        >
+                                                            <OpeningHoursStatus
+                                                                openingHours={openingHours}
+                                                                color={formData.headings_text_color || "#000000"}
+                                                                className="text-white cursor-pointer text-center"
+                                                                accentColor={formData.accent_color || "#10b981"}
+                                                            />
+                                                        </motion.div>
+                                                    )}
+
+                                                    <motion.div
+                                                        initial={{ y: 20, opacity: 0 }}
+                                                        animate={{ y: 0, opacity: 1 }}
+                                                        transition={{ delay: 0.25 }}
+                                                        className="mb-4"
+                                                    >
+                                                        <GoogleRating info={{
+                                                            rating: 5,
+                                                            user_ratings_total: 17
+                                                        }}
+                                                            color={formData.headings_text_color || "#000000"}
+                                                            className="text-white" />
+                                                    </motion.div>
+
                                                     {selectedRestaurant?.bio && (
                                                         <motion.p
                                                             initial={{ y: 20, opacity: 0 }}
                                                             animate={{ y: 0, opacity: 1 }}
                                                             transition={{ delay: 0.3 }}
-                                                            className="text-xs text-center mb-6"
+                                                            className="mx-auto mb-4 text-center max-w-md text-sm"
                                                             style={{
                                                                 color: formData.headings_text_color,
                                                                 opacity: 0.9,
@@ -848,65 +924,69 @@ export default function AppearancePage() {
                                                         </motion.p>
                                                     )}
 
-                                                    {(selectedRestaurant?.instagram || selectedRestaurant?.facebook) && (
-                                                        <motion.div
-                                                            initial={{ y: 20, opacity: 0 }}
-                                                            animate={{ y: 0, opacity: 1 }}
-                                                            transition={{ delay: 0.4 }}
-                                                            className="flex items-center justify-center gap-4 mb-4"
-                                                        >
-                                                            {selectedRestaurant.instagram && (
-                                                                <a
-                                                                    href={selectedRestaurant.instagram}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-transform hover:scale-110"
-                                                                    style={{ color: formData.accent_color }}
-                                                                >
-                                                                    <Instagram className="h-5 w-5" />
-                                                                </a>
-                                                            )}
-                                                            {selectedRestaurant.facebook && (
-                                                                <a
-                                                                    href={selectedRestaurant.facebook}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-transform hover:scale-110"
-                                                                    style={{ color: formData.accent_color }}
-                                                                >
-                                                                    <Facebook className="h-5 w-5" />
-                                                                </a>
-                                                            )}
-                                                        </motion.div>
-                                                    )}
+                                                    {(selectedRestaurant?.instagram ||
+                                                        selectedRestaurant?.facebook ||
+                                                        selectedRestaurant?.email ||
+                                                        selectedRestaurant?.address ||
+                                                        selectedRestaurant?.whatsapp) && <SocialIcons />}
                                                 </div>
 
-                                                <motion.div variants={container} initial="hidden" animate="show" className="px-3 space-y-2">
-                                                    {dummyLinks.map((link) => (
-                                                        <motion.div
-                                                            key={link.id}
-                                                            variants={item}
-                                                            className={`flex items-center gap-2 px-3 py-2.5 w-full transition-all hover:scale-[1.02] active:scale-[0.98] ${formData.button_style === "pill"
-                                                                ? "rounded-full"
-                                                                : formData.button_style === "square"
-                                                                    ? "rounded-md"
-                                                                    : "rounded-xl"
-                                                                }`}
-                                                            style={{
-                                                                ...getButtonStyle(),
-                                                                backdropFilter: formData.button_variant === "outline" ? "blur(8px)" : "none",
-                                                                boxShadow: "0 2px 10px rgba(0, 0, 0, 0.05)",
-                                                                fontFamily: formData.font_family,
-                                                            }}
-                                                        >
-                                                            <span style={{ color: formData.button_text_icons_color }}>
-                                                                {getIconForLink(link.title)}
-                                                            </span>
-                                                            <span className="font-medium text-xs" style={{ color: formData.button_text_icons_color }}>
-                                                                {link.title}
-                                                            </span>
-                                                        </motion.div>
-                                                    ))}
+                                                <motion.div variants={container} initial="hidden" animate="show" className="flex-grow px-4 mb-4 space-y-4">
+                                                    {
+                                                        linksLoading ?
+                                                            <p className="w-full text-center text-sm">
+                                                                Loading..
+                                                            </p>
+                                                            :
+                                                            <>
+                                                                {
+                                                                    links?.length > 0
+                                                                        ?
+                                                                        <>
+                                                                            {links?.map((link) => (
+                                                                                <div
+                                                                                    key={link.id}
+                                                                                    rel="noopener noreferrer"
+                                                                                    className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
+                                                                                        ? "rounded-full"
+                                                                                        : formData.button_style === "square"
+                                                                                            ? "rounded-md"
+                                                                                            : "rounded-xl"
+                                                                                        }`}
+                                                                                    style={{
+                                                                                        backgroundColor:
+                                                                                            formData.button_variant === "solid"
+                                                                                                ? formData.accent_color || "#10b981"
+                                                                                                : "rgba(255, 255, 255, 0.95)",
+                                                                                        backdropFilter: "blur(8px)",
+                                                                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
+                                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                                                                        color: formData.button_variant === "solid" ? formData.button_text_icons_color || "#000000" : formData.accent_color || "#10b981",
+                                                                                        fontFamily: formData.font_family || "Inter",
+                                                                                        letterSpacing: "0.01em",
+                                                                                    }}
+                                                                                >
+                                                                                    <span
+                                                                                        className={`relative text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                                            } transition-colors duration-300 font-medium`}
+                                                                                        style={{
+                                                                                            color:
+                                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : formData.button_text_icons_color || "#000000",
+                                                                                        }}
+                                                                                    >
+                                                                                        {link.title}
+                                                                                    </span>
+                                                                                </div>
+                                                                            ))}
+                                                                        </>
+                                                                        :
+                                                                        <p className="w-full text-center text-sm">
+                                                                            No links yet add some to see preview.
+                                                                        </p>
+                                                                }
+
+                                                            </>
+                                                    }
                                                 </motion.div>
                                             </div>
 

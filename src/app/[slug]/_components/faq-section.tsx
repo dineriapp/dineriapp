@@ -19,20 +19,30 @@ interface FAQSectionProps {
 export function FAQSection({ faqCategories, accentColor = "#0f766e", className = "" }: FAQSectionProps) {
     const [searchTerm, setSearchTerm] = useState("")
     const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null)
+    const [viewedFAQs, setViewedFAQs] = useState<Set<string>>(new Set())
 
     const handleFAQClick = async (faqId: string) => {
-        // Track FAQ view
-        setExpandedFAQ(expandedFAQ === faqId ? null : faqId)
-        try {
-            await fetch("/api/faq/track-view", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ faqId }),
-            })
-        } catch (error) {
-            console.error("Error tracking FAQ view:", error)
+        const isCurrentlyExpanded = expandedFAQ === faqId
+        const isFirstTimeViewing = !viewedFAQs.has(faqId)
+
+        // Toggle the expanded state
+        setExpandedFAQ(isCurrentlyExpanded ? null : faqId)
+        // Only track view if this is the first time opening this FAQ
+        if (!isCurrentlyExpanded && isFirstTimeViewing) {
+            try {
+                await fetch("/api/faq/track-view", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ faqId }),
+                })
+
+                // Mark this FAQ as viewed
+                setViewedFAQs((prev) => new Set(prev).add(faqId))
+            } catch (error) {
+                console.error("Error tracking FAQ view:", error)
+            }
         }
 
     }

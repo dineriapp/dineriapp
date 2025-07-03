@@ -18,13 +18,14 @@ import {
 import { motion } from "motion/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 import { GoogleRating } from "./_components/google-rating"
 import { OpeningHoursStatus } from "./_components/opening-hours-status"
 import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
 import { WelcomePopup } from "./_components/welcome-popup"
 import { FAQSection } from "./_components/faq-section"
 import type { Restaurant, Link as PrismaLink, MenuCategory, MenuItem, Event, FaqCategory, Faq } from "@prisma/client"
+import { OpeningHoursData, ReviewsInfo } from "@/types"
 
 // Define the complete types with relations using Prisma types
 type RestaurantWithRelations = Restaurant & {
@@ -38,16 +39,11 @@ type RestaurantWithRelations = Restaurant & {
     })[]
 }
 
-interface OpeningHoursData {
-    [key: string]: {
-        open: string
-        close: string
-        closed: boolean
-    }
-}
+
 
 interface ClientPageProps {
     restaurant: RestaurantWithRelations
+    reviewsInfo: ReviewsInfo
 }
 
 const container = {
@@ -79,9 +75,10 @@ const trackLinkClick = async (linkId: string) => {
     }
 }
 
-export default function ClientPage({ restaurant }: ClientPageProps) {
+export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps) {
     const pathname = usePathname()
     const isMenuPage = pathname.endsWith("/menu")
+    const hasTracked = useRef(false);
 
     const [showMenuDialog, setShowMenuDialog] = useState(false)
     const [showEventsDialog, setShowEventsDialog] = useState(false)
@@ -146,19 +143,19 @@ export default function ClientPage({ restaurant }: ClientPageProps) {
     const headingsColor = restaurant.headings_text_color || "#ffffff"
     const buttonTextColor = restaurant.button_text_icons_color || "#000000"
 
-    const SocialIcons = () => (
-        <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="mb-8 flex flex-wrap items-center justify-center gap-3"
+    const SocialIcons = memo(() => {
+        return <div
+            // initial={{ y: 20, opacity: 0 }}
+            // animate={{ y: 0, opacity: 1 }}
+            // transition={{ delay: 0.4 }}
+            className="sm:mb-8 flex flex-wrap items-center justify-center gap-3"
         >
             {restaurant.instagram && (
                 <a
                     href={restaurant.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
                     style={{ color: restaurant.accent_color || "#10b981" }}
                 >
                     <Instagram className="h-6 w-6" />
@@ -169,7 +166,7 @@ export default function ClientPage({ restaurant }: ClientPageProps) {
                     href={restaurant.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
                     style={{ color: restaurant.accent_color || "#10b981" }}
                 >
                     <Facebook className="h-6 w-6" />
@@ -180,7 +177,7 @@ export default function ClientPage({ restaurant }: ClientPageProps) {
                     href={`https://wa.me/${restaurant.whatsapp.replace(/\D/g, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
                     style={{ color: restaurant.accent_color || "#10b981" }}
                 >
                     <MessageCircle className="h-6 w-6" />
@@ -189,7 +186,7 @@ export default function ClientPage({ restaurant }: ClientPageProps) {
             {restaurant.email && (
                 <a
                     href={`mailto:${restaurant.email}`}
-                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
                     style={{ color: restaurant.accent_color || "#10b981" }}
                 >
                     <Mail className="h-6 w-6" />
@@ -200,14 +197,26 @@ export default function ClientPage({ restaurant }: ClientPageProps) {
                     href={`https://maps.google.com/?q=${encodeURIComponent(restaurant.address)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
                     style={{ color: restaurant.accent_color || "#10b981" }}
                 >
                     <MapPin className="h-6 w-6" />
                 </a>
             )}
-        </motion.div>
+        </div>
+    },
     )
+    SocialIcons.displayName = "SocialIcons";
+
+    useEffect(() => {
+        if (!hasTracked.current) {
+            hasTracked.current = true;
+
+            fetch(`/api/restaurants/${restaurant.id}/track-view`, {
+                method: "POST",
+            });
+        }
+    }, [restaurant.id]);
 
     return (
         <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
@@ -223,7 +232,7 @@ export default function ClientPage({ restaurant }: ClientPageProps) {
                 }}
             />
 
-            <div className="container relative mx-auto flex max-w-md flex-grow flex-col px-4 py-8">
+            <div className="container relative mx-auto flex max-w-[450px] flex-grow flex-col px-4 py-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -276,7 +285,7 @@ export default function ClientPage({ restaurant }: ClientPageProps) {
                             <OpeningHoursStatus
                                 openingHours={openingHours}
                                 color={restaurant.headings_text_color || "#000000"}
-                                className="text-white cursor-pointer"
+                                className="text-white cursor-pointer text-center"
                                 accentColor={restaurant.accent_color || "#10b981"}
                                 onClick={() => setShowOpeningHoursDialog(true)}
                             />
@@ -290,7 +299,9 @@ export default function ClientPage({ restaurant }: ClientPageProps) {
                             transition={{ delay: 0.25 }}
                             className="mb-4"
                         >
-                            <GoogleRating placeId={restaurant.google_place_id} className="text-white" />
+                            <GoogleRating info={reviewsInfo}
+                                color={restaurant.headings_text_color || "#000000"}
+                                className="text-white" />
                         </motion.div>
                     )}
 
@@ -299,7 +310,7 @@ export default function ClientPage({ restaurant }: ClientPageProps) {
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="mx-auto mb-6 max-w-md text-sm"
+                            className="mx-auto mb-4 sm:mb-6 max-w-md text-sm"
                             style={{
                                 color: headingsColor,
                                 fontFamily: restaurant.font_family || "Inter",
