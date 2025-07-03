@@ -23,7 +23,6 @@ import {
     Globe2,
     HelpCircle,
     Home,
-    Layout,
     LinkIcon,
     LogOut,
     Palette,
@@ -63,7 +62,7 @@ const navigationGroups = [
     {
         label: "Customization",
         items: [
-            { href: "/dashboard/templates", label: "Templates", icon: Layout },
+            // { href: "/dashboard/templates", label: "Templates", icon: Layout },
             { href: "/dashboard/appearance", label: "Appearance", icon: Palette },
             { href: "/dashboard/settings", label: "Settings", icon: Settings },
         ],

@@ -64,7 +64,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents, welc
     }
 
     const textColor =
-        restaurant.bg_type === "image" ? "#ffffff" : restaurant.bg_color === "#ffffff" ? "#000000" : "#ffffff"
+        restaurant.headings_text_color || "#000000"
 
     const currentEvent = upcomingEvents[currentEventIndex]
     const hasEvents = upcomingEvents.length > 0 && restaurant.event_announcements_enabled !== false

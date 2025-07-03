@@ -125,20 +125,25 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
         }
 
         if (restaurant.bg_type === "gradient" && restaurant.bg_gradient_start && restaurant.bg_gradient_end) {
-            const direction = restaurant.gradient_direction
-                .replace("_", " ")
-                .replace("top", "to top")
-                .replace("bottom", "to bottom")
-                .replace("left", "to left")
-                .replace("right", "to right")
+            const directionMap: Record<string, string> = {
+                top: "to top",
+                bottom: "to bottom",
+                left: "to left",
+                right: "to right",
+                "top-right": "to top right",
+                "top-left": "to top left",
+                "bottom-right": "to bottom right",
+                "bottom-left": "to bottom left",
+            }
 
             return {
-                backgroundImage: `linear-gradient(${direction}, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
+                backgroundImage: `linear-gradient(${directionMap[restaurant.gradient_direction] || "to bottom right"}, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
             }
         }
 
         return { backgroundColor: restaurant.bg_color || "#ffffff" }
     }
+
 
     const headingsColor = restaurant.headings_text_color || "#ffffff"
     const buttonTextColor = restaurant.button_text_icons_color || "#000000"

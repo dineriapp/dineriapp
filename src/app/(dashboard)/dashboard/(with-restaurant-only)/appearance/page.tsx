@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useLinks } from "@/lib/link-queries"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { OpeningHoursData } from "@/types"
+import { GradientDirection } from "@prisma/client"
 import {
     Battery,
     Facebook,
@@ -24,6 +25,7 @@ import {
     Palette,
     RotateCcw,
     Signal,
+    Sparkles,
     Type,
     Wifi
 } from "lucide-react"
@@ -42,7 +44,7 @@ interface AppearanceFormData {
     bg_type: "color" | "gradient" | "image"
     bg_gradient_start: string
     bg_gradient_end: string
-    gradient_direction: string
+    gradient_direction: GradientDirection
     button_variant: "solid" | "outline"
     bg_image_url?: string
 }
@@ -84,10 +86,10 @@ const gradientDirections = [
     { value: "top", label: "Top", preview: "Bottom to Top" },
     { value: "right", label: "Right", preview: "Left to Right" },
     { value: "left", label: "Left", preview: "Right to Left" },
-    { value: "bottom-right", label: "Bottom Right", preview: "Top Left to Bottom Right" },
-    { value: "bottom-left", label: "Bottom Left", preview: "Top Right to Bottom Left" },
-    { value: "top-right", label: "Top Right", preview: "Bottom Left to Top Right" },
-    { value: "top-left", label: "Top Left", preview: "Bottom Right to Top Left" },
+    { value: "bottom_right", label: "Bottom Right", preview: "Top Left to Bottom Right" },
+    { value: "bottom_left", label: "Bottom Left", preview: "Top Right to Bottom Left" },
+    { value: "top_right", label: "Top Right", preview: "Bottom Left to Top Right" },
+    { value: "top_left", label: "Top Left", preview: "Bottom Right to Top Left" },
 ]
 
 // Color presets
@@ -109,6 +111,140 @@ const textColorPresets = [
     { name: "Gray Dark", color: "#374151" },
     { name: "Gray Light", color: "#9ca3af" },
 ]
+
+// Template interface
+interface Template {
+    id: string
+    name: string
+    description: string
+    preview: AppearanceFormData
+    category: string
+}
+
+// Design templates
+const templates: Template[] = [
+    {
+        id: "classic-elegant",
+        name: "Classic Elegant",
+        description: "Sophisticated dark theme with gold accents",
+        category: "Premium",
+        preview: {
+            bg_type: "gradient",
+            bg_gradient_start: "#1a1a1a",
+            bg_gradient_end: "#2d2d2d",
+            gradient_direction: "bottom_right",
+            bg_color: "#1a1a1a",
+            accent_color: "#d4af37",
+            headings_text_color: "#ffffff",
+            button_text_icons_color: "#000000",
+            button_style: "rounded",
+            button_variant: "solid",
+            font_family: "Playfair Display",
+            bg_image_url: "",
+        }
+    },
+    {
+        id: "modern-minimalist",
+        name: "Modern Minimalist",
+        description: "Clean and simple with subtle gradients",
+        category: "Modern",
+        preview: {
+            bg_type: "gradient",
+            bg_gradient_start: "#f8fafc",
+            bg_gradient_end: "#e2e8f0",
+            gradient_direction: "bottom",
+            bg_color: "#ffffff",
+            accent_color: "#0f172a",
+            headings_text_color: "#1e293b",
+            button_text_icons_color: "#ffffff",
+            button_style: "square",
+            button_variant: "solid",
+            font_family: "Inter",
+            bg_image_url: "",
+        }
+    },
+    {
+        id: "warm-cozy",
+        name: "Warm & Cozy",
+        description: "Inviting warm colors perfect for cafes",
+        category: "Cozy",
+        preview: {
+            bg_type: "gradient",
+            bg_gradient_start: "#fef3c7",
+            bg_gradient_end: "#fed7aa",
+            gradient_direction: "bottom_right",
+            bg_color: "#fef3c7",
+            accent_color: "#c2410c",
+            headings_text_color: "#7c2d12",
+            button_text_icons_color: "#ffffff",
+            button_style: "pill",
+            button_variant: "solid",
+            font_family: "Roboto",
+            bg_image_url: "",
+        }
+    },
+    {
+        id: "ocean-fresh",
+        name: "Ocean Fresh",
+        description: "Cool blues and teals for seafood restaurants",
+        category: "Fresh",
+        preview: {
+            bg_type: "gradient",
+            bg_gradient_start: "#0891b2",
+            bg_gradient_end: "#0d9488",
+            gradient_direction: "bottom_left",
+            bg_color: "#0891b2",
+            accent_color: "#ffffff",
+            headings_text_color: "#ffffff",
+            button_text_icons_color: "#0d9488",
+            button_style: "rounded",
+            button_variant: "solid",
+            font_family: "SF Pro Display",
+            bg_image_url: "",
+        }
+    },
+    {
+        id: "sunset-vibes",
+        name: "Sunset Vibes",
+        description: "Vibrant sunset colors for energetic venues",
+        category: "Vibrant",
+        preview: {
+            bg_type: "gradient",
+            bg_gradient_start: "#f97316",
+            bg_gradient_end: "#dc2626",
+            gradient_direction: "top_right",
+            bg_color: "#f97316",
+            accent_color: "#ffffff",
+            headings_text_color: "#ffffff",
+            button_text_icons_color: "#dc2626",
+            button_style: "pill",
+            button_variant: "solid",
+            font_family: "Helvetica Neue",
+            bg_image_url: "",
+        }
+    },
+    {
+        id: "forest-green",
+        name: "Forest Green",
+        description: "Natural green theme for organic restaurants",
+        category: "Natural",
+        preview: {
+            bg_type: "gradient",
+            bg_gradient_start: "#166534",
+            bg_gradient_end: "#15803d",
+            gradient_direction: "bottom",
+            bg_color: "#166534",
+            accent_color: "#fbbf24",
+            headings_text_color: "#ffffff",
+            button_text_icons_color: "#166534",
+            button_style: "rounded",
+            button_variant: "solid",
+            font_family: "Inter",
+            bg_image_url: "",
+        }
+    }
+]
+
 
 export default function AppearancePage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
@@ -320,6 +456,11 @@ export default function AppearancePage() {
 
     const openingHours = selectedRestaurant?.opening_hours ? (selectedRestaurant?.opening_hours as OpeningHoursData) : null
 
+    // Apply template
+    const applyTemplate = async (template: Template) => {
+        const templateData = template.preview
+        setFormData(templateData)
+    }
 
     if (!selectedRestaurant) {
         return (
@@ -346,7 +487,7 @@ export default function AppearancePage() {
             <div className="grid lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                     <Tabs defaultValue="style" className="space-y-6">
-                        <TabsList className="grid grid-cols-3 gap-4">
+                        <TabsList className="grid grid-cols-4 gap-4">
                             <TabsTrigger value="style" className="flex items-center gap-2">
                                 <Paintbrush className="h-4 w-4" />
                                 <span>Style</span>
@@ -358,6 +499,10 @@ export default function AppearancePage() {
                             <TabsTrigger value="typography" className="flex items-center gap-2">
                                 <Type className="h-4 w-4" />
                                 <span>Typography</span>
+                            </TabsTrigger>
+                            <TabsTrigger value="templates" className="flex items-center gap-2">
+                                <Sparkles className="h-4 w-4" />
+                                <span>Templates</span>
                             </TabsTrigger>
                         </TabsList>
 
@@ -452,6 +597,107 @@ export default function AppearancePage() {
                             </Card>
                         </TabsContent>
 
+                        <TabsContent value="templates">
+                            <Card className="border-slate-200">
+                                <CardHeader>
+                                    <CardTitle className="text-slate-900">Design Templates</CardTitle>
+                                    <CardDescription className="text-slate-500">
+                                        Choose from professionally designed templates to quickly style your restaurant page
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="grid md:grid-cols-2 gap-6">
+                                        {templates.map((template) => (
+                                            <motion.div
+                                                key={template.id}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white hover:shadow-lg transition-all duration-300"
+                                            >
+                                                {/* Template Preview */}
+                                                <div className="aspect-[4/3] relative overflow-hidden">
+                                                    <div
+                                                        className="absolute inset-0 p-4 flex flex-col items-center justify-center text-center"
+                                                        style={{
+                                                            background: template.preview.bg_type === "gradient"
+                                                                ? `linear-gradient(to bottom right, ${template.preview.bg_gradient_start}, ${template.preview.bg_gradient_end})`
+                                                                : template.preview.bg_color,
+                                                            fontFamily: template.preview.font_family
+                                                        }}
+                                                    >
+                                                        {/* Mock Restaurant Name */}
+                                                        <h3
+                                                            className="text-lg font-bold mb-2"
+                                                            style={{ color: template.preview.headings_text_color }}
+                                                        >
+                                                            {selectedRestaurant?.name}
+                                                        </h3>
+
+                                                        {/* Mock Bio */}
+                                                        <p
+                                                            className="text-sm mb-4 opacity-90"
+                                                            style={{ color: template.preview.headings_text_color }}
+                                                        >
+                                                            Delicious food & great atmosphere
+                                                        </p>
+
+                                                        {/* Mock Button */}
+                                                        <div
+                                                            className={`px-4 py-2 text-sm font-medium transition-all ${template.preview.button_style === "pill"
+                                                                ? "rounded-full"
+                                                                : template.preview.button_style === "square"
+                                                                    ? "rounded-md"
+                                                                    : "rounded-xl"
+                                                                }`}
+                                                            style={{
+                                                                backgroundColor: template.preview.button_variant === "solid"
+                                                                    ? template.preview.accent_color
+                                                                    : "transparent",
+                                                                color: template.preview.button_variant === "solid"
+                                                                    ? template.preview.button_text_icons_color
+                                                                    : template.preview.accent_color,
+                                                                border: template.preview.button_variant === "outline"
+                                                                    ? `2px solid ${template.preview.accent_color}`
+                                                                    : "none"
+                                                            }}
+                                                        >
+                                                            View Menu
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Overlay on hover */}
+                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
+                                                </div>
+
+                                                {/* Template Info */}
+                                                <div className="p-4">
+                                                    <div className="flex items-start justify-between mb-2">
+                                                        <div>
+                                                            <h4 className="font-semibold text-slate-900">{template.name}</h4>
+                                                            <span className="inline-block px-2 py-1 text-xs bg-slate-100 text-slate-600 rounded-full mt-1">
+                                                                {template.category}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-sm text-slate-600 mb-4">{template.description}</p>
+
+                                                    <Button
+                                                        onClick={() => applyTemplate(template)}
+                                                        disabled={saving}
+                                                        className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white"
+                                                        size="sm"
+                                                    >
+                                                        {saving ? "Applying..." : "Apply Template"}
+                                                    </Button>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </TabsContent>
+
                         <TabsContent value="colors">
                             <div className="space-y-6">
                                 <Card className="border-slate-200">
@@ -526,7 +772,7 @@ export default function AppearancePage() {
                                             <div className="space-y-6">
                                                 <div className="space-y-4">
                                                     <Label className="text-slate-700">Gradient Presets</Label>
-                                                    <div className="grid grid-cols-5 gap-2">
+                                                    <div className="grid grid-cols-8 gap-2">
                                                         {gradientPresets.map((preset) => (
                                                             <button
                                                                 key={preset.name}
@@ -550,7 +796,7 @@ export default function AppearancePage() {
                                                     <Label className="text-slate-700">Gradient Direction</Label>
                                                     <Select
                                                         value={formData.gradient_direction}
-                                                        onValueChange={(value) => updateFormData({ gradient_direction: value })}
+                                                        onValueChange={(value) => updateFormData({ gradient_direction: value as GradientDirection })}
                                                     >
                                                         <SelectTrigger className="border-slate-200">
                                                             <SelectValue placeholder="Select direction" />
@@ -636,7 +882,7 @@ export default function AppearancePage() {
                                     <CardContent className="space-y-6">
                                         <div className="space-y-4">
                                             <Label className="text-slate-700">Color Presets</Label>
-                                            <div className="grid grid-cols-4 gap-2">
+                                            <div className="grid grid-cols-8 gap-2">
                                                 {colorPresets.map((preset) => (
                                                     <button
                                                         key={preset.name}
@@ -676,7 +922,7 @@ export default function AppearancePage() {
                                             <Label className="text-slate-700">Headings Text Color</Label>
                                             <p className="text-xs text-slate-500">Color for restaurant name and bio text</p>
                                             <div className="space-y-4">
-                                                <div className="grid grid-cols-4 gap-2">
+                                                <div className="grid grid-cols-8 gap-2">
                                                     {textColorPresets.map((preset) => (
                                                         <button
                                                             key={preset.name}
@@ -706,7 +952,7 @@ export default function AppearancePage() {
                                             <Label className="text-slate-700">Button Text & Icons Color</Label>
                                             <p className="text-xs text-slate-500">Color for text and icons inside buttons</p>
                                             <div className="space-y-4">
-                                                <div className="grid grid-cols-4 gap-2">
+                                                <div className="grid grid-cols-8 gap-2">
                                                     {textColorPresets.map((preset) => (
                                                         <button
                                                             key={preset.name}
@@ -841,7 +1087,7 @@ export default function AppearancePage() {
                                         </div>
 
                                         <div className="mt-1">
-                                            <div className="min-h-[600px] overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
+                                            <div className="min-h-[600px] no-scroll overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
                                                 <div className="p-4 flex flex-col items-center">
                                                     {selectedRestaurant?.logo_url ? (
                                                         <motion.img

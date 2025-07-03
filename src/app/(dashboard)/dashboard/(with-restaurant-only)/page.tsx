@@ -395,7 +395,7 @@ export default function DashboardPage() {
                                         </div>
 
                                         <div className="mt-1">
-                                            <div className="min-h-[600px] overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
+                                            <div className="min-h-[600px] no-scroll overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
                                                 <div className="p-4 flex flex-col items-center">
                                                     {selectedRestaurant?.logo_url ? (
                                                         <motion.img
