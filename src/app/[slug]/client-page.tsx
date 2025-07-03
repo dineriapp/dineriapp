@@ -148,7 +148,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
             // initial={{ y: 20, opacity: 0 }}
             // animate={{ y: 0, opacity: 1 }}
             // transition={{ delay: 0.4 }}
-            className="sm:mb-8 flex flex-wrap items-center justify-center gap-3"
+            className="mb-4 sm:mb-8 flex flex-wrap items-center justify-center gap-3"
         >
             {restaurant.instagram && (
                 <a
