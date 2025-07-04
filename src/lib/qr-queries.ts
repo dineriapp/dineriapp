@@ -3,7 +3,6 @@ import { toast } from "sonner"
 import type { CreateQRCodeInput, UpdateQRCodeInput } from "./qr-validations"
 import { qr_codes as QRCode } from "@prisma/client"
 
-
 export interface QRCodeStats {
     qrCodes: QRCode[]
     totalQRCodes: number
@@ -85,13 +84,13 @@ export function useCreateQRCode(restaurantId: string) {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async (data: CreateQRCodeInput): Promise<QRCode> => {
+        mutationFn: async (data: CreateQRCodeInput & { dataUrl: string, id: string }): Promise<QRCode> => {
             const response = await fetch(`/api/qr-codes?restaurant_id=${restaurantId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify({ ...data }),
             })
 
             if (!response.ok) {

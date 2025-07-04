@@ -3,7 +3,6 @@ import { createQRCodeSchema } from "@/lib/qr-validations"
 import prisma from "@/lib/prisma"
 import { z } from "zod"
 import { createClient } from "@/supabase/clients/server"
-import { ServerQRCodeGenerator } from "@/lib/server-qr"
 
 export async function GET(request: NextRequest) {
     try {
@@ -88,9 +87,14 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
         }
 
+
         const body = await request.json()
         console.log(body)
         const validatedData = createQRCodeSchema.parse(body)
+
+        if (!body.id) {
+            return NextResponse.json({ error: "UUID as id in body required!" }, { status: 404 })
+        }
 
         // Determine target URL based on type
         let targetUrl = ""
@@ -129,6 +133,7 @@ export async function POST(request: NextRequest) {
         // Create QR code record first
         const qrCode = await prisma.qr_codes.create({
             data: {
+                id: body.id,
                 restaurant_id: restaurantId,
                 name: validatedData.name,
                 type: validatedData.type,
@@ -152,18 +157,8 @@ export async function POST(request: NextRequest) {
             },
         })
 
-        // Generate QR code image with scan URL
-        const scanUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/qr-codes/scan/${qrCode.id}`
-
         try {
-            const qrDataUrl = await ServerQRCodeGenerator.generateBrandedQR(scanUrl, {
-                size: validatedData.size,
-                accentColor: validatedData.color,
-                logoUrl: validatedData.include_logo ? restaurant.logo_url ?? undefined : undefined,
-                includeFrame: validatedData.include_frame,
-                frameText: validatedData.include_frame ? validatedData.frame_text : undefined,
-                restaurantName: restaurant.name,
-            })
+            const qrDataUrl = body?.dataUrl
 
             // Update QR code with generated image
             const updatedQRCode = await prisma.qr_codes.update({

@@ -87,7 +87,7 @@ export default function QRCodesPage() {
 
     const loading = qrCodesLoading || statsLoading
 
-    if (loading) {
+    if (loading || !restaurant) {
         return (
             <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
                 <div className="flex items-center space-x-2 text-slate-500">
@@ -121,16 +121,6 @@ export default function QRCodesPage() {
         )
     }
 
-    if (!restaurant) {
-        return (
-            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
-                <div className="text-center">
-                    <h2 className="text-xl font-semibold text-gray-900">Restaurant not found</h2>
-                    <p className="text-gray-600">Please select a restaurant to manage QR codes.</p>
-                </div>
-            </div>
-        )
-    }
 
     return (
         <main className="max-w-[1200px] mx-auto px-4 py-8">

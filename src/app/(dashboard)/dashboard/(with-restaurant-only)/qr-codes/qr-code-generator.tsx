@@ -15,6 +15,7 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { Switch } from "@/components/ui/switch"
 
+import { v4 as uuidv4 } from 'uuid';
 
 interface QRCodeGeneratorProps {
     restaurant: any
@@ -36,7 +37,7 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
     const { data: links } = useLinks(restaurant.id)
     const [qrDataUrl, setQrDataUrl] = useState<string>("")
     const [generating, setGenerating] = useState(false)
-
+    const [currentuuid, setUID] = useState("")
     const createQRCodeMutation = useCreateQRCode(restaurant?.id || "")
 
     useEffect(() => {
@@ -48,20 +49,10 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
         if (!restaurant) return
 
         setGenerating(true)
+        const qrId = uuidv4();
         try {
-            let targetUrl = ""
-            switch (formData.type) {
-                case "restaurant_page":
-                    targetUrl = `${window.location.origin}/${restaurant.slug}`
-                    break
-                case "link":
-                    const selectedLink = links?.find((l) => l.id === formData.link_id)
-                    targetUrl = selectedLink?.url || ""
-                    break
-                case "custom":
-                    targetUrl = formData.custom_url
-                    break
-            }
+            // Generate QR code image with scan URL
+            const targetUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/qr-codes/scan/${qrId}`
 
             if (targetUrl) {
                 // For preview, use the actual target URL instead of scan URL
@@ -73,25 +64,14 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                     frameText: formData.include_frame ? formData.frame_text : undefined,
                     restaurantName: restaurant.name,
                 })
+                setUID(qrId)
                 setQrDataUrl(dataUrl)
             }
         } catch (error) {
             console.error("Error generating preview:", error)
             // Fallback to basic QR code
             try {
-                let targetUrl = ""
-                switch (formData.type) {
-                    case "restaurant_page":
-                        targetUrl = `${window.location.origin}/${restaurant.slug}`
-                        break
-                    case "link":
-                        const selectedLink = links?.find((l) => l.id === formData.link_id)
-                        targetUrl = selectedLink?.url || ""
-                        break
-                    case "custom":
-                        targetUrl = formData.custom_url
-                        break
-                }
+                const targetUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/qr-codes/scan/${qrId}`
 
                 if (targetUrl) {
                     const basicQR = await QRCodeGenerator.generateBasicQR(targetUrl, {
@@ -101,6 +81,7 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                             light: "#FFFFFF",
                         },
                     })
+                    setUID(qrId)
                     setQrDataUrl(basicQR)
                 }
             } catch (fallbackError) {
@@ -131,7 +112,7 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
         }
 
         try {
-            await createQRCodeMutation.mutateAsync(formData)
+            await createQRCodeMutation.mutateAsync({ ...formData, dataUrl: qrDataUrl, id: currentuuid })
 
             // Reset form
             setFormData({
