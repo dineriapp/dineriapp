@@ -147,8 +147,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
@@ -157,7 +158,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
         // Verify user owns the QR code
         const qrCode = await prisma.qr_codes.findUnique({
-            where: { id: params.id },
+            where: { id: id },
             include: {
                 restaurant: {
                     select: {
@@ -177,7 +178,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
         }
 
         await prisma.qr_codes.delete({
-            where: { id: params.id },
+            where: { id: id },
         })
 
         return NextResponse.json({ success: true })
