@@ -156,8 +156,9 @@ export class QRCodeGenerator {
         color?: string
     ): void {
         ctx.fillStyle = color || '#000000';
-        ctx.font = 'bold 50px Inter, sans-serif';
+        ctx.font = 'bold 50px Sans';
         ctx.textAlign = 'center';
+
         ctx.fillText(text, canvasWidth / 2, y);
     }
 

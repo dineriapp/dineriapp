@@ -85,7 +85,7 @@ export function useCreateQRCode(restaurantId: string) {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async (data: CreateQRCodeInput & { qrDataUrl: string }): Promise<QRCode> => {
+        mutationFn: async (data: CreateQRCodeInput): Promise<QRCode> => {
             const response = await fetch(`/api/qr-codes?restaurant_id=${restaurantId}`, {
                 method: "POST",
                 headers: {

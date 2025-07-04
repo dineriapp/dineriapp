@@ -131,7 +131,7 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
         }
 
         try {
-            await createQRCodeMutation.mutateAsync({ ...formData, qrDataUrl: qrDataUrl })
+            await createQRCodeMutation.mutateAsync(formData)
 
             // Reset form
             setFormData({

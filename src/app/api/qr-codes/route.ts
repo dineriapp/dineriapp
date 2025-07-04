@@ -3,6 +3,7 @@ import { createQRCodeSchema } from "@/lib/qr-validations"
 import prisma from "@/lib/prisma"
 import { z } from "zod"
 import { createClient } from "@/supabase/clients/server"
+import { ServerQRCodeGenerator } from "@/lib/server-qr"
 
 export async function GET(request: NextRequest) {
     try {
@@ -88,6 +89,7 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json()
+        console.log(body)
         const validatedData = createQRCodeSchema.parse(body)
 
         // Determine target URL based on type
@@ -96,7 +98,7 @@ export async function POST(request: NextRequest) {
 
         switch (validatedData.type) {
             case "restaurant_page":
-                targetUrl = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/${restaurant.slug}`
+                targetUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/${restaurant.slug}`
                 break
             case "link":
                 if (!validatedData.link_id) {
@@ -151,9 +153,17 @@ export async function POST(request: NextRequest) {
         })
 
         // Generate QR code image with scan URL
+        const scanUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/qr-codes/scan/${qrCode.id}`
 
         try {
-            const qrDataUrl = body.qrDataUrl
+            const qrDataUrl = await ServerQRCodeGenerator.generateBrandedQR(scanUrl, {
+                size: validatedData.size,
+                accentColor: validatedData.color,
+                logoUrl: validatedData.include_logo ? restaurant.logo_url ?? undefined : undefined,
+                includeFrame: validatedData.include_frame,
+                frameText: validatedData.include_frame ? validatedData.frame_text : undefined,
+                restaurantName: restaurant.name,
+            })
 
             // Update QR code with generated image
             const updatedQRCode = await prisma.qr_codes.update({
@@ -178,6 +188,7 @@ export async function POST(request: NextRequest) {
         }
     } catch (error) {
         if (error instanceof z.ZodError) {
+            console.log(error.errors)
             return NextResponse.json({ error: "Invalid input", details: error.errors }, { status: 400 })
         }
 

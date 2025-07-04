@@ -101,7 +101,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         let qrDataUrl = qrCode.qr_data_url
         if (visualPropsChanged) {
             try {
-                const scanUrl = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/qr-codes/scan/${id}`
+                const scanUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/qr-codes/scan/${id}`
                 qrDataUrl = await QRCodeGenerator.generateBrandedQR(scanUrl, {
                     size: validatedData.size || qrCode.size,
                     accentColor: validatedData.color || qrCode.color,
