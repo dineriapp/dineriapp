@@ -126,6 +126,7 @@ model Restaurant {
   reviews         Review[]
   user            User             @relation(fields: [user_id], references: [id])
   restaurantViews RestaurantView[]
+  qrCodes         qr_codes[]
 
   @@map("restaurants")
 }
@@ -200,6 +201,7 @@ model Link {
 
   views      LinkView[]
   restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+  qrCodes    qr_codes[]
 
   @@map("links")
 }
@@ -262,4 +264,54 @@ model Review {
   restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
 
   @@map("reviews")
+}
+
+enum qr_code_type {
+  restaurant_page
+  link
+  custom
+}
+
+model qr_codes {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  restaurant_id   String          @db.Uuid
+  restaurant      Restaurant      @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
+  name            String          @db.VarChar
+  type            qr_code_type
+  target_url      String          @db.Text
+  link_id         String?         @db.Uuid
+  link            Link?           @relation(fields: [link_id], references: [id], onDelete: SetNull)
+  custom_url      String?         @db.Text
+  size            Int             @default(300)
+  color           String          @default("#000000") @db.VarChar
+  include_logo    Boolean         @default(true)
+  include_frame   Boolean         @default(true)
+  frame_text      String?         @db.VarChar
+  qr_data_url     String?         @db.Text
+  scan_count      Int             @default(0)
+  is_active       Boolean         @default(true)
+  last_scanned_at DateTime?       @db.Timestamptz
+  created_at      DateTime        @default(now()) @db.Timestamptz
+  updated_at      DateTime        @default(now()) @db.Timestamptz
+  qr_code_scans   qr_code_scans[]
+
+  @@index([restaurant_id], name: "idx_qr_codes_restaurant_id")
+  @@index([link_id], name: "idx_qr_codes_link_id")
+  @@index([type], name: "idx_qr_codes_type")
+  @@index([is_active], name: "idx_qr_codes_is_active")
+  @@index([created_at], name: "idx_qr_codes_created_at")
+}
+
+model qr_code_scans {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  qr_code_id String   @db.Uuid
+  qr_code    qr_codes @relation(fields: [qr_code_id], references: [id], onDelete: Cascade)
+  ip_hash    String   @db.VarChar
+  user_agent String?  @db.Text
+  referer    String?  @db.Text
+  scanned_at DateTime @default(now()) @db.Timestamptz
+
+  @@index([qr_code_id], name: "idx_qr_code_scans_qr_code_id")
+  @@index([scanned_at], name: "idx_qr_code_scans_scanned_at")
+  @@index([ip_hash], name: "idx_qr_code_scans_ip_hash")
 }
