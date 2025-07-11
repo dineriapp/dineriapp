@@ -143,7 +143,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
 
     return (
         <header className="border-b border-slate-200 bg-[#002147] shadow-sm">
-            <div className="max-w-[1200px] mx-auto px-4 h-16 flex items-center justify-between">
+            <div className="max-w-[1200px] mx-auto px-4 h-18 flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                     <Link href="/dashboard" className="flex items-center space-x-2 group">
                         <Image
@@ -151,7 +151,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                             alt="noBgColorColorWhite.png"
                             width={250}
                             height={100}
-                            className="w-full max-w-[210px] "
+                            className="w-full max-w-[180px] "
                         />
                     </Link>
 
@@ -294,7 +294,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                             className="bg-gradient-to-r from-teal-600 !h-[38px] to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white hidden sm:flex items-center gap-2 shadow-sm hover:shadow transition-all"
                         >
                             <Crown className="h-4 w-4" />
-                            <span className="font-medium">Upgrade to Pro</span>
+                            <span className="font-medium">Upgrade</span>
                         </Button>
                     )}
 
@@ -303,10 +303,10 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="hidden sm:flex items-center gap-2 !h-[38px] text-slate-300 hover:text-teal-600 hover:bg-slate-50"
+                                className="hidden sm:flex items-center gap-1 !h-[38px] text-slate-300 hover:text-teal-600 hover:bg-slate-50"
                             >
                                 <Globe2 className="h-4 w-4" />
-                                <span>Visit Site</span>
+                                <span>Visit</span>
                             </Button>
                         </Link>
                     )}
