@@ -28,7 +28,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { MenuCategory, MenuItem } from "@prisma/client"
+import { MenuCategory, MenuItem, SubscriptionPlan } from "@prisma/client"
 import {
     useCreateCategory,
     useCreateItem,
@@ -46,6 +46,7 @@ import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { AlertTriangle, ArrowDown, ArrowUp, Edit, Grip, Leaf, Plus, Search, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
+import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
 
 const container = {
     hidden: { opacity: 0 },
@@ -232,8 +233,11 @@ export default function MenuPage() {
         )
     }
 
-    const isCategoryLimitReached =
-        prismaUser?.subscription_plan === "basic" && categories.length >= 3;
+    const isCategoryLimitReached = isLimitReached({
+        userPlan: prismaUser?.subscription_plan as SubscriptionPlan,
+        resourceType: "menu_categories",
+        currentCount: categories.length,
+    });
 
     return (
         <>
@@ -336,7 +340,11 @@ export default function MenuPage() {
                                     <Button
                                         size="lg"
                                         onClick={() => {
-                                            openPopup("You are limited to 4 menu categories on the Basic plan. Upgrade to Pro or Enterprise to add more.")
+                                            const plan = prismaUser?.subscription_plan ?? "basic"
+                                            const planName = STRIPE_PLANS[plan].name
+                                            const limit = STRIPE_PLANS[plan].limits?.menuCategories
+
+                                            openPopup(`You are limited to ${limit} menu categories on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`)
                                         }}
                                         className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105"
                                     >
@@ -438,8 +446,16 @@ export default function MenuPage() {
                                             category.items && category.items.length > 0 && <Button
                                                 variant="outline"
                                                 onClick={() => {
-                                                    setSelectedCategory(category)
-                                                    setIsAddItemDialogOpen(true)
+                                                    const plan = prismaUser?.subscription_plan ?? "basic";
+                                                    const limit = STRIPE_PLANS[plan].limits?.menuItemsPerCategory;
+
+                                                    if (limit !== undefined && category.items.length >= limit) {
+                                                        const planName = STRIPE_PLANS[plan].name;
+                                                        openPopup(`You are limited to ${limit} menu items per category on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`);
+                                                    } else {
+                                                        setSelectedCategory(category);
+                                                        setIsAddItemDialogOpen(true);
+                                                    }
                                                 }}
                                                 className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
                                             >

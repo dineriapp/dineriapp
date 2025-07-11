@@ -15,8 +15,8 @@ export function PricingCard({ name, price, period, description, features, highli
     return (
         <div
             className={`relative rounded-xl p-8 transition-all duration-200 ${highlight
-                    ? "bg-gradient-to-r from-teal-600 to-blue-600 text-white shadow-lg shadow-blue-600/10 transform hover:-translate-y-1"
-                    : "bg-white border border-slate-200 hover:border-slate-300 hover:shadow-md"
+                ? "bg-gradient-to-r from-teal-600 to-blue-600 text-white shadow-lg shadow-blue-600/10 transform hover:-translate-y-1"
+                : "bg-white border border-slate-200 hover:border-slate-300 hover:shadow-md"
                 }`}
         >
             {highlight && (
@@ -46,8 +46,8 @@ export function PricingCard({ name, price, period, description, features, highli
             <Link href="/auth/signup">
                 <Button
                     className={`w-full ${highlight
-                            ? "bg-white text-blue-600 hover:bg-slate-100"
-                            : "bg-gradient-to-r from-teal-600 to-blue-600 text-white hover:from-teal-700 hover:to-blue-700"
+                        ? "bg-white text-blue-600 hover:bg-slate-100"
+                        : "bg-gradient-to-r from-teal-600 to-blue-600 text-white hover:from-teal-700 hover:to-blue-700"
                         }`}
                 >
                     Get started

@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AlertCircle, Globe2, RotateCcw, Save } from "lucide-react"
+import { AlertCircle, Globe2, Lock, RotateCcw, Save } from "lucide-react"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { useRestaurantStore } from "@/stores/restaurant-store"
+import { useUserStore } from "@/stores/auth-store"
+import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 
 interface IntegrationFormData {
     google_place_id: string
@@ -16,6 +18,9 @@ interface IntegrationFormData {
 
 export default function IntegrationsPage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
+    const { prismaUser } = useUserStore()
+    const openPopup = useUpgradePopupStore(state => state.open)
+    const isBasicPlan = prismaUser?.subscription_plan === "basic"
 
     const [formData, setFormData] = useState<IntegrationFormData>({
         google_place_id: "",
@@ -122,18 +127,45 @@ export default function IntegrationsPage() {
                 <CardContent className="space-y-6 pt-6">
                     <div className="space-y-2">
                         <Label htmlFor="googlePlaceId">Google Place ID</Label>
-                        <div className="relative">
-                            <Globe2 className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
-                            <Input
-                                id="googlePlaceId"
-                                value={formData.google_place_id}
-                                onChange={(e) => {
-                                    setFormData((prev) => ({ ...prev, google_place_id: e.target.value }))
+                        {isBasicPlan ? (
+                            <div
+                                onClick={() => {
+                                    openPopup("This feature is available on the premium plan.")
                                 }}
-                                placeholder="e.g. ChIJN1t_tDeuEmsRUsoyG83frY4"
-                                className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
-                            />
-                        </div>
+                                className="relative cursor-pointer group"
+                            >
+                                <Input
+                                    id="googlePlaceId"
+                                    readOnly
+                                    value={formData.google_place_id}
+                                    placeholder="Upgrade to enter Place ID"
+                                    className="pl-10 opacity-60 cursor-not-allowed group-hover:opacity-80 transition"
+                                />
+                                <Globe2 className="absolute left-3 top-3 h-4 w-4 text-emerald-500" />
+                                <div className="absolute right-3 top-2.5 flex items-center gap-1 text-sm text-muted-foreground">
+                                    <Lock className="h-4 w-4 text-red-500" />
+                                    <span className="text-xs">Basic Plan</span>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="relative">
+                                <Globe2 className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
+                                <Input
+                                    id="googlePlaceId"
+                                    value={formData.google_place_id}
+                                    onChange={(e) => {
+                                        if (!isBasicPlan) {
+                                            setFormData((prev) => ({ ...prev, google_place_id: e.target.value }))
+                                        }
+                                    }}
+                                    onFocus={() => {
+                                        if (isBasicPlan) openPopup("This feature is available on the premium plan.")
+                                    }}
+                                    placeholder="e.g. ChIJN1t_tDeuEmsRUsoyG83frY4"
+                                    className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
+                                />
+                            </div>
+                        )}
                         <p className="text-xs text-muted-foreground">
                             Find your Place ID using the{" "}
                             <a
@@ -148,15 +180,38 @@ export default function IntegrationsPage() {
                     </div>
 
                     {formData.google_place_id && (
-                        <div className="rounded-lg bg-emerald-50 p-4">
+                        <div
+                            className={`rounded-lg p-4 space-y-2 border ${isBasicPlan
+                                    ? "bg-yellow-50 border-yellow-200"
+                                    : "bg-emerald-50 border-emerald-200"
+                                }`}
+                        >
                             <div className="flex items-start gap-3">
-                                <Globe2 className="h-5 w-5 text-emerald-600 mt-0.5" />
+                                <Globe2
+                                    className={`h-5 w-5 mt-0.5 ${isBasicPlan ? "text-yellow-600" : "text-emerald-600"
+                                        }`}
+                                />
                                 <div>
-                                    <h4 className="font-medium text-emerald-900">Integration Active</h4>
-                                    <p className="text-sm text-emerald-700 mt-1">
-                                        Your restaurant is connected to Google Places. Reviews and ratings will be displayed on your page.
+                                    <h4
+                                        className={`font-medium ${isBasicPlan ? "text-yellow-900" : "text-emerald-900"
+                                            }`}
+                                    >
+                                        Integration Detected
+                                    </h4>
+                                    <p
+                                        className={`text-sm mt-1 ${isBasicPlan ? "text-yellow-800" : "text-emerald-700"
+                                            }`}
+                                    >
+                                        {isBasicPlan
+                                            ? "Your restaurant is connected to Google Places, but this feature is only visible on your restaurant page if you're on the Pro or Enterprise plan."
+                                            : "Your restaurant is connected to Google Places. Reviews and ratings will be displayed on your page."}
                                     </p>
-                                    <p className="text-xs text-emerald-600 mt-2 font-mono">Place ID: {formData.google_place_id}</p>
+                                    <p
+                                        className={`text-xs mt-2 font-mono ${isBasicPlan ? "text-yellow-700" : "text-emerald-600"
+                                            }`}
+                                    >
+                                        Place ID: {formData.google_place_id}
+                                    </p>
                                 </div>
                             </div>
                         </div>

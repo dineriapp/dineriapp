@@ -1,3 +1,4 @@
+import { authenticateAndAuthorize } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
 import { updateLinkSchema, formatUrl } from "@/lib/validations"
 import { createClient } from "@/supabase/clients/server"
@@ -12,22 +13,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             url: formatUrl(body.url),
         })
 
-        const supabase = await createClient()
-        const { data } = await supabase.auth.getUser()
-
-        if (!data.user) {
-            return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
-        }
-
-        // Fetch the link along with restaurant to check ownership
+        // First get the link to check ownership
         const existingLink = await prisma.link.findUnique({
             where: { id: id },
-            include: { restaurant: true },
-
         })
 
-        if (!existingLink || existingLink.restaurant.user_id !== data.user.id) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+        if (!existingLink) {
+            return NextResponse.json({ error: "Link not found" }, { status: 404 })
+        }
+
+        const authResult = await authenticateAndAuthorize(existingLink.restaurant_id)
+        if (authResult.error) {
+            return NextResponse.json({ error: authResult.error }, { status: authResult.status || 500 })
         }
 
         const link = await prisma.link.update({
@@ -69,7 +66,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         if (!existingLink || existingLink.restaurant.user_id !== data.user.id) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
         }
-
 
         await prisma.linkView.deleteMany({ where: { link_id: id } })
         await prisma.link.delete({ where: { id: id } })

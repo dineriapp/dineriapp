@@ -56,6 +56,13 @@ const sections = [
         description: "Connect third-party services",
         href: "/dashboard/settings/integrations",
     },
+    {
+        id: "subscription",
+        title: "Subscription",
+        icon: Globe2,
+        description: "Manage Subscription",
+        href: "/dashboard/settings/subscription",
+    },
 ]
 
 export default function SettingsLayout({

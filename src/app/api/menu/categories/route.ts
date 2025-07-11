@@ -1,6 +1,6 @@
+import { authenticateAndAuthorize, checkSubscriptionLimitsWithPlans } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
 import { createCategorySchema } from "@/lib/validations"
-import { createClient } from "@/supabase/clients/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 
@@ -31,49 +31,21 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
 
-
-        const supabase = await createClient()
-        const { data } = await supabase.auth.getUser()
-
-        if (!data.user) {
-            return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
-        }
-
-        const prismaUser = await prisma.user.findFirst({
-            where: { id: data.user.id },
-        })
-
-        if (!prismaUser) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 })
-        }
-
         const body = await request.json()
         const validated = createCategorySchema.parse(body)
 
-        // ✅ Check restaurant ownership
-        const restaurant = await prisma.restaurant.findUnique({
-            where: { id: validated.restaurant_id },
-        })
-
-        if (!restaurant || restaurant.user_id !== data.user.id) {
-            return NextResponse.json(
-                { error: "Unauthorized: You do not own this restaurant." },
-                { status: 403 }
-            )
+        const authResult = await authenticateAndAuthorize(validated.restaurant_id)
+        if (authResult.error) {
+            return NextResponse.json({ error: authResult.error }, { status: authResult.status || 500 })
         }
 
-        // ✅ Limit number of categories
-        const categoryCount = await prisma.menuCategory.count({
-            where: { restaurant_id: validated.restaurant_id },
-        })
+        const { user, restaurant } = authResult.data!
 
-        if (prismaUser.subscription_plan === "basic" && categoryCount >= 4) {
-            return NextResponse.json(
-                { error: "You are limited to 4 menu categories on the Basic plan." },
-                { status: 403 }
-            )
+        // Check subscription limits before creating link
+        const limitResult = await checkSubscriptionLimitsWithPlans(user.id, restaurant.id, "menu_categories")
+        if (limitResult.error) {
+            return NextResponse.json({ error: limitResult.error }, { status: limitResult.status || 500 })
         }
-
 
         const lastCategory = await prisma.menuCategory.findFirst({
             where: { restaurant_id: validated.restaurant_id },

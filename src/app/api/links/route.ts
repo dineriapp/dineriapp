@@ -1,6 +1,6 @@
+import { authenticateAndAuthorize, checkSubscriptionLimitsWithPlans } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
 import { createLinkSchema, formatUrl } from "@/lib/validations"
-import { createClient } from "@/supabase/clients/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
@@ -30,50 +30,24 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-
-        const supabase = await createClient();
-        const { data } = await supabase.auth.getUser();
-
-        if (!data.user) {
-            return NextResponse.json({ error: "Not authenticated", restaurants: [] }, { status: 401 });
-        }
-
-        const prismaUser = await prisma.user.findFirst({
-            where: {
-                id: data.user.id
-            }
-        })
-
-        if (!prismaUser) {
-            return NextResponse.json({ error: "User not found", restaurants: [] }, { status: 404 });
-        }
-
         const body = await request.json()
+
         const validated = createLinkSchema.parse({
             ...body,
             url: formatUrl(body.url),
         })
 
-        // ✅ Ownership check
-        const restaurant = await prisma.restaurant.findUnique({
-            where: { id: validated.restaurant_id },
-        });
-
-        if (!restaurant || restaurant.user_id !== data.user.id) {
-            return NextResponse.json({ error: "Unauthorized: You do not own this restaurant." }, { status: 403 });
+        const authResult = await authenticateAndAuthorize(validated.restaurant_id)
+        if (authResult.error) {
+            return NextResponse.json({ error: authResult.error }, { status: authResult.status || 500 })
         }
 
-        const linksCount = await prisma.link.count({
-            where: {
-                restaurant_id: restaurant.id,
-            }
-        })
+        const { user, restaurant } = authResult.data!
 
-        if (prismaUser.subscription_plan === "basic" && linksCount >= 4) {
-            return NextResponse.json(
-                { error: "You are limited to 4 links on the Basic plan." },
-                { status: 403 } // 403 is more appropriate than 401 here
-            );
+        // Check subscription limits before creating link
+        const limitResult = await checkSubscriptionLimitsWithPlans(user.id, restaurant.id, "links")
+        if (limitResult.error) {
+            return NextResponse.json({ error: limitResult.error }, { status: limitResult.status || 500 })
         }
 
         const lastLink = await prisma.link.findFirst({

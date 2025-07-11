@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import type { FaqCategory, Faq } from "@prisma/client"
+import type { FaqCategory, Faq, SubscriptionPlan } from "@prisma/client"
 
 import {
     AlertDialog,
@@ -44,6 +44,9 @@ import {
 import { ArrowDown, ArrowUp, Edit, Eye, Grip, HelpCircle, Lightbulb, Plus, Search, Star, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useMemo, useState } from "react"
+import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
+import { useUserStore } from "@/stores/auth-store"
+import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 
 // Animation variants
 const container = {
@@ -114,7 +117,8 @@ const FAQ_TEMPLATES = [
 
 export default function FAQPage() {
     const { restaurants, selectedRestaurant } = useRestaurantStore()
-
+    const { prismaUser } = useUserStore()
+    const openPopup = useUpgradePopupStore(state => state.open)
     const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState(false)
     const [isEditCategoryDialogOpen, setIsEditCategoryDialogOpen] = useState(false)
     const [isAddFAQDialogOpen, setIsAddFAQDialogOpen] = useState(false)
@@ -322,6 +326,15 @@ export default function FAQPage() {
         )
     }
 
+
+    const isFaqCategoryLimitReached = isLimitReached({
+        userPlan: prismaUser?.subscription_plan as SubscriptionPlan,
+        resourceType: "faq_categories",
+        currentCount: categories.length,
+    });
+
+
+
     return (
         <>
             <main className="max-w-[1200px] mx-auto px-4 py-8">
@@ -341,131 +354,180 @@ export default function FAQPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button variant="outline" size="lg" className="flex items-center gap-2 bg-transparent">
-                                    <Lightbulb className="h-4 w-4" />
-                                    Quick Setup
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent className="flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden">
-                                <DialogHeader className="flex-shrink-0">
-                                    <DialogTitle>Quick FAQ Setup</DialogTitle>
-                                    <DialogDescription>
-                                        Choose from common restaurant FAQ templates to get started quickly
-                                    </DialogDescription>
-                                </DialogHeader>
+                        {
+                            isFaqCategoryLimitReached ?
+                                <>
+                                    <Button
+                                        onClick={() => {
+                                            const plan = prismaUser?.subscription_plan ?? "basic";
+                                            const limit = STRIPE_PLANS[plan].limits?.faqCategories;
+                                            const planName = STRIPE_PLANS[plan].name;
 
-                                <div className="flex-1 overflow-y-auto py-4">
-                                    <div className="grid gap-4 pr-2 md:grid-cols-2">
-                                        {FAQ_TEMPLATES.map((template, index) => (
-                                            <Card
-                                                key={index}
-                                                className="cursor-pointer full py-4 h-full gap-1 transition-all hover:shadow-lg"
-                                            >
-                                                <CardHeader className="pb-3 gap-2 px-4">
-                                                    <CardTitle className="text-lg leading-[1.3]">{template.category}</CardTitle>
-                                                    <CardDescription>{template.faqs.length} common questions</CardDescription>
-                                                </CardHeader>
-                                                <CardContent className="pt-0 flex px-4 flex-col h-full items-start justify-between">
-                                                    <div className="mb-4 space-y-1 pl-4">
-                                                        <ul className="list-disc">
-                                                            {template.faqs.slice(0, 2).map((faq, faqIndex) => (
-                                                                <li key={faqIndex} className="text-sm text-slate-500">
-                                                                    {faq.question}
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                        {template.faqs.length > 2 && (
-                                                            <p className="text-sm text-slate-500">+ {template.faqs.length - 2} more questions</p>
-                                                        )}
-                                                    </div>
-                                                    <div className="w-full">
+                                            if (limit !== undefined && categories.length >= limit) {
+                                                openPopup(`You are limited to ${limit} FAQ categories on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`);
+                                            } else {
+                                            }
+                                        }}
+                                        variant="outline" size="lg" className="flex items-center gap-2 bg-transparent">
+                                        <Lightbulb className="h-4 w-4" />
+                                        Quick Setup
+                                    </Button>
+                                </>
+                                :
+                                <>
+                                    <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
+                                        <DialogTrigger asChild>
+                                            <Button variant="outline" size="lg" className="flex items-center gap-2 bg-transparent">
+                                                <Lightbulb className="h-4 w-4" />
+                                                Quick Setup
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden">
+                                            <DialogHeader className="flex-shrink-0">
+                                                <DialogTitle>Quick FAQ Setup</DialogTitle>
+                                                <DialogDescription>
+                                                    Choose from common restaurant FAQ templates to get started quickly
+                                                </DialogDescription>
+                                            </DialogHeader>
 
-                                                        <Button
-                                                            onClick={() => handleAddFromTemplate(template)}
-                                                            className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
-                                                            disabled={createCategoryMutation.isPending || createFaqMutation.isPending}
+                                            <div className="flex-1 overflow-y-auto py-4">
+                                                <div className="grid gap-4 pr-2 md:grid-cols-2">
+                                                    {FAQ_TEMPLATES.map((template, index) => (
+                                                        <Card
+                                                            key={index}
+                                                            className="cursor-pointer full py-4 h-full gap-1 transition-all hover:shadow-lg"
                                                         >
-                                                            {createCategoryMutation.isPending || createFaqMutation.isPending
-                                                                ? "Adding..."
-                                                                : "Add This Category"}
-                                                        </Button>
-                                                    </div>
+                                                            <CardHeader className="pb-3 gap-2 px-4">
+                                                                <CardTitle className="text-lg leading-[1.3]">{template.category}</CardTitle>
+                                                                <CardDescription>{template.faqs.length} common questions</CardDescription>
+                                                            </CardHeader>
+                                                            <CardContent className="pt-0 flex px-4 flex-col h-full items-start justify-between">
+                                                                <div className="mb-4 space-y-1 pl-4">
+                                                                    <ul className="list-disc">
+                                                                        {template.faqs.slice(0, 2).map((faq, faqIndex) => (
+                                                                            <li key={faqIndex} className="text-sm text-slate-500">
+                                                                                {faq.question}
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                    {template.faqs.length > 2 && (
+                                                                        <p className="text-sm text-slate-500">+ {template.faqs.length - 2} more questions</p>
+                                                                    )}
+                                                                </div>
+                                                                <div className="w-full">
 
-                                                </CardContent>
-                                            </Card>
-                                        ))}
-                                    </div>
-                                </div>
-                            </DialogContent>
-                        </Dialog>
+                                                                    <Button
+                                                                        onClick={() => handleAddFromTemplate(template)}
+                                                                        className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                                                        disabled={createCategoryMutation.isPending || createFaqMutation.isPending}
+                                                                    >
+                                                                        {createCategoryMutation.isPending || createFaqMutation.isPending
+                                                                            ? "Adding..."
+                                                                            : "Add This Category"}
+                                                                    </Button>
+                                                                </div>
 
-                        <Dialog open={isAddCategoryDialogOpen} onOpenChange={setIsAddCategoryDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button
-                                    size="lg"
-                                    disabled={!restaurantId}
-                                    className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
-                                >
-                                    <Plus className="h-4 w-4" />
-                                    Add Category
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <form onSubmit={handleAddCategory}>
-                                    <DialogHeader>
-                                        <DialogTitle>Add FAQ Category</DialogTitle>
-                                        <DialogDescription>Create a new category to organize your FAQs</DialogDescription>
-                                    </DialogHeader>
+                                                            </CardContent>
+                                                        </Card>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </DialogContent>
+                                    </Dialog>
+                                </>
+                        }
 
-                                    <div className="space-y-4 py-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="categoryName">Category Name</Label>
-                                            <Input
-                                                id="categoryName"
-                                                value={newCategoryName}
-                                                onChange={(e) => setNewCategoryName(e.target.value)}
-                                                placeholder="e.g. Reservations"
-                                                required
-                                            />
-                                        </div>
+                        {
+                            isFaqCategoryLimitReached ?
+                                <>
+                                    <Button
+                                        size="lg"
+                                        disabled={!restaurantId}
+                                        onClick={() => {
+                                            const plan = prismaUser?.subscription_plan ?? "basic";
+                                            const limit = STRIPE_PLANS[plan].limits?.faqCategories;
+                                            const planName = STRIPE_PLANS[plan].name;
 
-                                        <div className="space-y-2">
-                                            <Label htmlFor="categoryDescription">Description (Optional)</Label>
-                                            <Textarea
-                                                id="categoryDescription"
-                                                value={newCategoryDescription}
-                                                onChange={(e) => setNewCategoryDescription(e.target.value)}
-                                                placeholder="Brief description of this category"
-                                                rows={3}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <DialogFooter>
+                                            if (limit !== undefined && categories.length >= limit) {
+                                                openPopup(`You are limited to ${limit} FAQ categories on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`);
+                                            } else {
+                                            }
+                                        }}
+                                        className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
+                                    >
+                                        <Plus className="h-4 w-4" />
+                                        Add Category
+                                    </Button>
+                                </>
+                                :
+                                <Dialog open={isAddCategoryDialogOpen} onOpenChange={setIsAddCategoryDialogOpen}>
+                                    <DialogTrigger asChild>
                                         <Button
-                                            type="button"
-                                            variant="outline"
-                                            onClick={() => {
-                                                setIsAddCategoryDialogOpen(false)
-                                                resetForm()
-                                            }}
-                                            disabled={createCategoryMutation.isPending}
+                                            size="lg"
+                                            disabled={!restaurantId}
+                                            className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
                                         >
-                                            Cancel
+                                            <Plus className="h-4 w-4" />
+                                            Add Category
                                         </Button>
-                                        <Button
-                                            type="submit"
-                                            disabled={!newCategoryName || createCategoryMutation.isPending || !restaurantId}
-                                            className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
-                                        >
-                                            {createCategoryMutation.isPending ? "Adding..." : "Add Category"}
-                                        </Button>
-                                    </DialogFooter>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <form onSubmit={handleAddCategory}>
+                                            <DialogHeader>
+                                                <DialogTitle>Add FAQ Category</DialogTitle>
+                                                <DialogDescription>Create a new category to organize your FAQs</DialogDescription>
+                                            </DialogHeader>
+
+                                            <div className="space-y-4 py-4">
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="categoryName">Category Name</Label>
+                                                    <Input
+                                                        id="categoryName"
+                                                        value={newCategoryName}
+                                                        onChange={(e) => setNewCategoryName(e.target.value)}
+                                                        placeholder="e.g. Reservations"
+                                                        required
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="categoryDescription">Description (Optional)</Label>
+                                                    <Textarea
+                                                        id="categoryDescription"
+                                                        value={newCategoryDescription}
+                                                        onChange={(e) => setNewCategoryDescription(e.target.value)}
+                                                        placeholder="Brief description of this category"
+                                                        rows={3}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <DialogFooter>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    onClick={() => {
+                                                        setIsAddCategoryDialogOpen(false)
+                                                        resetForm()
+                                                    }}
+                                                    disabled={createCategoryMutation.isPending}
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <Button
+                                                    type="submit"
+                                                    disabled={!newCategoryName || createCategoryMutation.isPending || !restaurantId}
+                                                    className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                                >
+                                                    {createCategoryMutation.isPending ? "Adding..." : "Add Category"}
+                                                </Button>
+                                            </DialogFooter>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
+
+                        }
+
                     </div>
                 </motion.div>
 
@@ -532,8 +594,13 @@ export default function FAQPage() {
                 {/* FAQ Categories */}
                 <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
                     {filteredCategories.length > 0 ? (
-                        filteredCategories.map((category, categoryIndex) => (
-                            <motion.div key={category.id} variants={item} className="space-y-4">
+                        filteredCategories.map((category, categoryIndex) => {
+                            const plan = prismaUser?.subscription_plan ?? "basic";
+                            const planName = STRIPE_PLANS[plan].name;
+                            const faqLimit = STRIPE_PLANS[plan].limits?.faqsPerCategory ?? Infinity;
+                            const isLimited = (category.faqs?.length ?? 0) >= faqLimit;
+
+                            return <motion.div key={category.id} variants={item} className="space-y-4">
                                 <Card className="bg-white/80 backdrop-blur-sm transition-all hover:shadow-lg">
                                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                         <div className="space-y-1">
@@ -620,84 +687,104 @@ export default function FAQPage() {
 
                                     <CardContent>
                                         <div className="space-y-4">
-                                            <Dialog open={isAddFAQDialogOpen} onOpenChange={setIsAddFAQDialogOpen}>
-                                                <DialogTrigger asChild>
+                                            {isLimited
+                                                ?
+                                                <>
                                                     <Button
                                                         variant="outline"
                                                         className="w-full justify-center transition-all hover:scale-[1.02] hover:bg-teal-50 bg-transparent"
-                                                        onClick={() => setSelectedCategory(category)}
-                                                    >
+                                                        onClick={() =>
+                                                            openPopup(
+                                                                `You are limited to ${faqLimit} FAQs per category on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`
+                                                            )
+                                                        }                                                    >
                                                         <Plus className="mr-2 h-4 w-4" />
                                                         Add FAQ to {category.name}
                                                     </Button>
-                                                </DialogTrigger>
-                                                <DialogContent className="max-w-2xl">
-                                                    <form onSubmit={handleAddFAQ}>
-                                                        <DialogHeader>
-                                                            <DialogTitle>Add FAQ</DialogTitle>
-                                                            <DialogDescription>
-                                                                Add a new question and answer to {selectedCategory?.name}
-                                                            </DialogDescription>
-                                                        </DialogHeader>
-
-                                                        <div className="space-y-4 py-4">
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="faqQuestion">Question</Label>
-                                                                <Input
-                                                                    id="faqQuestion"
-                                                                    value={newFAQQuestion}
-                                                                    onChange={(e) => setNewFAQQuestion(e.target.value)}
-                                                                    placeholder="e.g. Do you take reservations?"
-                                                                    required
-                                                                />
-                                                            </div>
-
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="faqAnswer">Answer</Label>
-                                                                <Textarea
-                                                                    id="faqAnswer"
-                                                                    value={newFAQAnswer}
-                                                                    onChange={(e) => setNewFAQAnswer(e.target.value)}
-                                                                    placeholder="Provide a clear and helpful answer"
-                                                                    rows={4}
-                                                                    required
-                                                                />
-                                                            </div>
-
-                                                            <div className="flex items-center space-x-2">
-                                                                <Switch id="featured" checked={isFeatured} onCheckedChange={setIsFeatured} />
-                                                                <Label htmlFor="featured" className="flex items-center gap-2">
-                                                                    <Star className="h-4 w-4" />
-                                                                    Mark as featured (show prominently)
-                                                                </Label>
-                                                            </div>
-                                                        </div>
-
-                                                        <DialogFooter>
+                                                </>
+                                                :
+                                                <>
+                                                    <Dialog open={isAddFAQDialogOpen} onOpenChange={setIsAddFAQDialogOpen}>
+                                                        <DialogTrigger asChild>
                                                             <Button
-                                                                type="button"
                                                                 variant="outline"
-                                                                onClick={() => {
-                                                                    setIsAddFAQDialogOpen(false)
-                                                                    resetForm()
-                                                                }}
-                                                                disabled={createFaqMutation.isPending}
+                                                                className="w-full justify-center transition-all hover:scale-[1.02] hover:bg-teal-50 bg-transparent"
+                                                                onClick={() => setSelectedCategory(category)}
                                                             >
-                                                                Cancel
+                                                                <Plus className="mr-2 h-4 w-4" />
+                                                                Add FAQ to {category.name}
                                                             </Button>
-                                                            <Button
-                                                                type="submit"
-                                                                disabled={
-                                                                    !newFAQQuestion || !newFAQAnswer || createFaqMutation.isPending || !selectedCategory
-                                                                }
-                                                                className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
-                                                            >
-                                                                {createFaqMutation.isPending ? "Adding..." : "Add FAQ"}
-                                                            </Button>
-                                                        </DialogFooter>
-                                                    </form>
-                                                </DialogContent>
-                                            </Dialog>
+                                                        </DialogTrigger>
+                                                        <DialogContent className="max-w-2xl">
+                                                            <form onSubmit={handleAddFAQ}>
+                                                                <DialogHeader>
+                                                                    <DialogTitle>Add FAQ</DialogTitle>
+                                                                    <DialogDescription>
+                                                                        Add a new question and answer to {selectedCategory?.name}
+                                                                    </DialogDescription>
+                                                                </DialogHeader>
+
+                                                                <div className="space-y-4 py-4">
+                                                                    <div className="space-y-2">
+                                                                        <Label htmlFor="faqQuestion">Question</Label>
+                                                                        <Input
+                                                                            id="faqQuestion"
+                                                                            value={newFAQQuestion}
+                                                                            onChange={(e) => setNewFAQQuestion(e.target.value)}
+                                                                            placeholder="e.g. Do you take reservations?"
+                                                                            required
+                                                                        />
+                                                                    </div>
+
+                                                                    <div className="space-y-2">
+                                                                        <Label htmlFor="faqAnswer">Answer</Label>
+                                                                        <Textarea
+                                                                            id="faqAnswer"
+                                                                            value={newFAQAnswer}
+                                                                            onChange={(e) => setNewFAQAnswer(e.target.value)}
+                                                                            placeholder="Provide a clear and helpful answer"
+                                                                            rows={4}
+                                                                            required
+                                                                        />
+                                                                    </div>
+
+                                                                    <div className="flex items-center space-x-2">
+                                                                        <Switch id="featured" checked={isFeatured} onCheckedChange={setIsFeatured} />
+                                                                        <Label htmlFor="featured" className="flex items-center gap-2">
+                                                                            <Star className="h-4 w-4" />
+                                                                            Mark as featured (show prominently)
+                                                                        </Label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <DialogFooter>
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="outline"
+                                                                        onClick={() => {
+                                                                            setIsAddFAQDialogOpen(false)
+                                                                            resetForm()
+                                                                        }}
+                                                                        disabled={createFaqMutation.isPending}
+                                                                    >
+                                                                        Cancel
+                                                                    </Button>
+                                                                    <Button
+                                                                        type="submit"
+                                                                        disabled={
+                                                                            !newFAQQuestion || !newFAQAnswer || createFaqMutation.isPending || !selectedCategory
+                                                                        }
+                                                                        className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                                                    >
+                                                                        {createFaqMutation.isPending ? "Adding..." : "Add FAQ"}
+                                                                    </Button>
+                                                                </DialogFooter>
+                                                            </form>
+                                                        </DialogContent>
+                                                    </Dialog>
+                                                </>
+                                            }
+
 
                                             {category.faqs && category.faqs.length > 0 ? (
                                                 <div className="space-y-3">
@@ -716,12 +803,12 @@ export default function FAQPage() {
                                                                     {faq.is_featured && <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />}
                                                                 </div>
                                                                 <p className="text-sm leading-relaxed text-slate-500">{faq.answer}</p>
-                                                                {faq.view_count && faq.view_count > 0 && (
+                                                                {faq?.view_count && faq?.view_count > 0 ? (
                                                                     <div className="mt-2 flex items-center gap-1">
                                                                         <Eye className="h-3 w-3 text-slate-400" />
-                                                                        <span className="text-xs text-slate-400">{faq.view_count} views</span>
+                                                                        <span className="text-xs text-slate-400">{faq?.view_count} views</span>
                                                                     </div>
-                                                                )}
+                                                                ) : <></>}
                                                             </div>
 
                                                             <div className="flex flex-shrink-0 items-center gap-1">
@@ -822,7 +909,7 @@ export default function FAQPage() {
                                     </CardContent>
                                 </Card>
                             </motion.div>
-                        ))
+                        })
                     ) : categories.length === 0 ? (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-16 text-center">
                             <HelpCircle className="mx-auto mb-4 h-16 w-16 text-gray-400" />

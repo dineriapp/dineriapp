@@ -13,6 +13,7 @@ import {
 import { useRestaurants } from "@/lib/restaurents-queries"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
+import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { User as prismaUserType } from "@prisma/client"
 import {
     BarChart,
@@ -77,6 +78,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
     const { setSupabaseUser, setPrismaUser } = useUserStore()
     const { data } = useRestaurants();
 
+    const openPopup = useUpgradePopupStore(state => state.open)
     const router = useRouter()
     const pathname = usePathname()
     useEffect(() => {
@@ -136,6 +138,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
     }
 
     const isPremium = prismaUser?.subscription_plan === "basic" ? false : true
+    const hasMultiAccess = prismaUser?.subscription_plan === "enterprise" ? true : false
 
     return (
         <header className="border-b border-slate-200 bg-white shadow-sm">
@@ -148,51 +151,76 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                         <span className="font-bold text-xl bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent inline-block">
                             dineri.app
                         </span>
+
                     </Link>
 
                     <nav ref={navRef} className="hidden lg:flex items-center space-x-1">
-                        {navigationGroups.map((group) => (
-                            <div key={group.label} className="relative group">
-                                <button
-                                    onClick={() => toggleGroup(group.label)}
-                                    className={`px-3 py-2 rounded-md text-sm font-medium !h-[38px] transition-colors flex items-center gap-2 ${expandedGroup === group.label
-                                        ? "bg-slate-100 text-teal-600"
-                                        : "text-slate-600 hover:bg-slate-50 hover:text-teal-600"
-                                        }`}
-                                >
-                                    {group.label}
-                                    <ChevronDown
-                                        className={`h-4 w-4 transition-transform ${expandedGroup === group.label ? "rotate-180" : ""}`}
-                                    />
-                                </button>
+                        {navigationGroups.map((group) => {
+                            const filteredItems = group.items.filter(() => true);
+                            if (filteredItems.length === 0) return null;
 
-                                {expandedGroup === group.label && (
-                                    <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-slate-200 py-1 z-50">
-                                        {group.items.map((item) => {
-                                            const Icon = item.icon
-                                            const isActive = pathname === item.href
+                            return (
+                                <div key={group.label} className="relative group">
+                                    <button
+                                        onClick={() => toggleGroup(group.label)}
+                                        className={`px-3 py-2 rounded-md text-sm font-medium !h-[38px] transition-colors flex items-center gap-2 ${expandedGroup === group.label
+                                            ? "bg-slate-100 text-teal-600"
+                                            : "text-slate-600 hover:bg-slate-50 hover:text-teal-600"
+                                            }`}
+                                    >
+                                        {group.label}
+                                        <ChevronDown
+                                            className={`h-4 w-4 transition-transform ${expandedGroup === group.label ? "rotate-180" : ""
+                                                }`}
+                                        />
+                                    </button>
 
-                                            return (
-                                                <Link
-                                                    key={item.href}
-                                                    href={item.href}
-                                                    onClick={() => {
-                                                        setExpandedGroup(null)
-                                                    }}
-                                                    className={`flex items-center gap-2 px-4 py-2 text-sm w-full text-left ${isActive
-                                                        ? "bg-gradient-to-r from-teal-50 to-blue-50 text-teal-600"
-                                                        : "text-slate-700 hover:bg-slate-50 hover:text-teal-600"
-                                                        }`}
-                                                >
-                                                    <Icon className="h-4 w-4" />
-                                                    {item.label}
-                                                </Link>
-                                            )
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
+                                    {expandedGroup === group.label && (
+                                        <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-slate-200 py-1 z-50">
+                                            {filteredItems.map((item) => {
+                                                const Icon = item.icon;
+                                                const isActive = pathname === item.href;
+
+                                                const isLocked =
+                                                    !isPremium && (item.label === "Analytics" || item.label === "QR Codes");
+
+                                                const handleClick = (e: React.MouseEvent) => {
+                                                    if (isLocked) {
+                                                        e.preventDefault();
+                                                        openPopup("This feature is available on the premium plan.");
+                                                    } else {
+                                                        setExpandedGroup(null);
+                                                    }
+                                                };
+
+                                                return (
+                                                    <div key={item.href} className="relative">
+                                                        <Link
+                                                            href={isLocked ? "#" : item.href}
+                                                            onClick={handleClick}
+                                                            className={`flex items-center gap-2 px-4 py-2 text-sm w-full text-left rounded-md ${isActive
+                                                                ? "bg-gradient-to-r from-teal-50 to-blue-50 text-teal-600"
+                                                                : "text-slate-700 hover:bg-slate-50 hover:text-teal-600"
+                                                                } ${isLocked ? "cursor-not-allowed opacity-100" : ""}`}
+                                                        >
+                                                            <Icon className="h-4 w-4" />
+                                                            {item.label}
+                                                        </Link>
+
+                                                        {/* PRO Badge */}
+                                                        {isLocked && (
+                                                            <div className="absolute top-1 right-2 bg-yellow-400 text-white text-[8px] px-1 py-[1px] rounded font-semibold">
+                                                                PRO
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </nav>
                 </div>
 
@@ -224,37 +252,49 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                                         </DropdownMenuItem>
                                     ))}
                                 </div>
+                                {
+                                    hasMultiAccess ?
+                                        <>
+                                        </>
+                                        :
+                                        <>
+                                            <div className="border-t border-slate-200 mt-2 pt-2 px-3 pb-3">
+                                                <div className="bg-slate-50 p-3 rounded-md text-xs text-slate-600">
+                                                    <p className="mb-1 font-medium text-slate-700">Need more?</p>
+                                                    <p>
+                                                        Multiple restaurant management is available in the{" "}
+                                                        <span className="text-teal-600 font-semibold">Enterprise Plan</span>.
+                                                    </p>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="secondary"
+                                                        onClick={() => {
+                                                            openPopup("Multiple restaurant management is available in the Enterprise Plan.")
+                                                        }}
+                                                        className="mt-2 w-full text-sm bg-teal-600 hover:bg-teal-700 text-white"
+                                                    >
+                                                        Upgrade Plan
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </>
 
-                                <div className="border-t border-slate-200 mt-2 pt-2 px-3 pb-3">
-                                    <div className="bg-slate-50 p-3 rounded-md text-xs text-slate-600">
-                                        <p className="mb-1 font-medium text-slate-700">Need more?</p>
-                                        <p>
-                                            Multiple restaurant management is available in the{" "}
-                                            <span className="text-teal-600 font-semibold">Enterprise Plan</span>.
-                                        </p>
-                                        <Button
-                                            size="sm"
-                                            variant="secondary"
-                                            className="mt-2 w-full text-sm bg-teal-600 hover:bg-teal-700 text-white"
-                                        // onClick={() => router.push('/pricing')} // optional
-                                        >
-                                            Upgrade Plan
-                                        </Button>
-                                    </div>
-                                </div>
+                                }
+
                             </DropdownMenuContent>
                         </DropdownMenu>
                     )}
                     {!isPremium && (
-                        <Link href="/dashboard/upgrade">
-                            <Button
-                                size="sm"
-                                className="bg-gradient-to-r from-teal-600 !h-[38px] to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white hidden sm:flex items-center gap-2 shadow-sm hover:shadow transition-all"
-                            >
-                                <Crown className="h-4 w-4" />
-                                <span className="font-medium">Upgrade to Pro</span>
-                            </Button>
-                        </Link>
+                        <Button
+                            size="sm"
+                            onClick={() => {
+                                openPopup("Upgrade to Pro or Enterprise to unlock premium features and tools.");
+                            }}
+                            className="bg-gradient-to-r from-teal-600 !h-[38px] to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white hidden sm:flex items-center gap-2 shadow-sm hover:shadow transition-all"
+                        >
+                            <Crown className="h-4 w-4" />
+                            <span className="font-medium">Upgrade to Pro</span>
+                        </Button>
                     )}
 
                     {selectedRestaurant && (

@@ -26,8 +26,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useCreateEvent, useDeleteEvent, useEvents, useReorderEvent, useUpdateEvent } from "@/lib/event-queries"
+import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
+import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
-import type { Event } from "@prisma/client"
+import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
+import type { Event, SubscriptionPlan } from "@prisma/client"
 import { ArrowDown, ArrowUp, Calendar, Edit, ExternalLink, Grip, Plus, Search, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import type React from "react"
@@ -47,6 +50,8 @@ const container = {
 export default function EventsPage() {
     const { selectedRestaurant } = useRestaurantStore()
     const restaurantId = selectedRestaurant?.id
+    const { prismaUser } = useUserStore()
+    const openPopup = useUpgradePopupStore(state => state.open)
 
     const { data: events = [], isLoading } = useEvents(restaurantId)
     const createEventMutation = useCreateEvent(restaurantId)
@@ -170,6 +175,12 @@ export default function EventsPage() {
         )
     }
 
+    const isEventsLimitReached = isLimitReached({
+        userPlan: prismaUser?.subscription_plan as SubscriptionPlan,
+        resourceType: "events",
+        currentCount: events.length,
+    });
+
 
     return (
         <>
@@ -196,93 +207,115 @@ export default function EventsPage() {
                                 className="pl-10 w-64"
                             />
                         </div>
-
-                        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                            <DialogTrigger asChild>
+                        {isEventsLimitReached ?
+                            <>
                                 <Button
                                     size="lg"
+                                    onClick={() => {
+                                        const plan = prismaUser?.subscription_plan ?? "basic";
+                                        const limit = STRIPE_PLANS[plan].limits?.events;
+                                        const planName = STRIPE_PLANS[plan].name;
+
+                                        if (limit !== undefined && events.length >= limit) {
+                                            openPopup(`You are limited to ${limit} events on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`);
+                                        } else {
+                                        }
+                                    }}
                                     className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105"
                                 >
                                     <Plus className="h-4 w-4" />
                                     Add Event
                                 </Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-[500px]">
-                                <form onSubmit={handleAddEvent}>
-                                    <DialogHeader>
-                                        <DialogTitle>Add Event</DialogTitle>
-                                        <DialogDescription>Create a new event for your restaurant</DialogDescription>
-                                    </DialogHeader>
+                            </>
+                            :
+                            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+                                <DialogTrigger asChild>
+                                    <Button
+                                        size="lg"
+                                        className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105"
+                                    >
+                                        <Plus className="h-4 w-4" />
+                                        Add Event
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[500px]">
+                                    <form onSubmit={handleAddEvent}>
+                                        <DialogHeader>
+                                            <DialogTitle>Add Event</DialogTitle>
+                                            <DialogDescription>Create a new event for your restaurant</DialogDescription>
+                                        </DialogHeader>
 
-                                    <div className="space-y-4 py-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="title">Event Title</Label>
-                                            <Input
-                                                id="title"
-                                                value={title}
-                                                onChange={(e) => setTitle(e.target.value)}
-                                                placeholder="e.g. Wine Tasting Night"
-                                                required
-                                            />
+                                        <div className="space-y-4 py-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="title">Event Title</Label>
+                                                <Input
+                                                    id="title"
+                                                    value={title}
+                                                    onChange={(e) => setTitle(e.target.value)}
+                                                    placeholder="e.g. Wine Tasting Night"
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <Label htmlFor="description">Description</Label>
+                                                <Textarea
+                                                    id="description"
+                                                    value={description}
+                                                    onChange={(e) => setDescription(e.target.value)}
+                                                    placeholder="Add details about your event"
+                                                    rows={3}
+                                                />
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <Label htmlFor="date">Date & Time</Label>
+                                                <Input
+                                                    id="date"
+                                                    type="datetime-local"
+                                                    value={date}
+                                                    onChange={(e) => setDate(e.target.value)}
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <Label htmlFor="ticketUrl">Ticket Link (Optional)</Label>
+                                                <Input
+                                                    id="ticketUrl"
+                                                    type="url"
+                                                    value={ticketUrl}
+                                                    onChange={(e) => setTicketUrl(e.target.value)}
+                                                    placeholder="https://ticketseller.com/your-event"
+                                                />
+                                                <p className="text-xs text-muted-foreground">Add a link where customers can buy tickets</p>
+                                            </div>
                                         </div>
 
-                                        <div className="space-y-2">
-                                            <Label htmlFor="description">Description</Label>
-                                            <Textarea
-                                                id="description"
-                                                value={description}
-                                                onChange={(e) => setDescription(e.target.value)}
-                                                placeholder="Add details about your event"
-                                                rows={3}
-                                            />
-                                        </div>
+                                        <DialogFooter>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => {
+                                                    setIsAddDialogOpen(false)
+                                                    resetForm()
+                                                }}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                type="submit"
+                                                disabled={!title || !date || createEventMutation.isPending}
+                                                className="bg-gradient-to-r from-teal-600 to-blue-600"
+                                            >
+                                                {createEventMutation.isPending ? "Adding..." : "Add Event"}
+                                            </Button>
+                                        </DialogFooter>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
+                        }
 
-                                        <div className="space-y-2">
-                                            <Label htmlFor="date">Date & Time</Label>
-                                            <Input
-                                                id="date"
-                                                type="datetime-local"
-                                                value={date}
-                                                onChange={(e) => setDate(e.target.value)}
-                                                required
-                                            />
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label htmlFor="ticketUrl">Ticket Link (Optional)</Label>
-                                            <Input
-                                                id="ticketUrl"
-                                                type="url"
-                                                value={ticketUrl}
-                                                onChange={(e) => setTicketUrl(e.target.value)}
-                                                placeholder="https://ticketseller.com/your-event"
-                                            />
-                                            <p className="text-xs text-muted-foreground">Add a link where customers can buy tickets</p>
-                                        </div>
-                                    </div>
-
-                                    <DialogFooter>
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            onClick={() => {
-                                                setIsAddDialogOpen(false)
-                                                resetForm()
-                                            }}
-                                        >
-                                            Cancel
-                                        </Button>
-                                        <Button
-                                            type="submit"
-                                            disabled={!title || !date || createEventMutation.isPending}
-                                            className="bg-gradient-to-r from-teal-600 to-blue-600"
-                                        >
-                                            {createEventMutation.isPending ? "Adding..." : "Add Event"}
-                                        </Button>
-                                    </DialogFooter>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
                     </div>
                 </motion.div>
 

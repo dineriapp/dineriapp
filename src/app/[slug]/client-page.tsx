@@ -24,7 +24,7 @@ import { OpeningHoursStatus } from "./_components/opening-hours-status"
 import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
 import { WelcomePopup } from "./_components/welcome-popup"
 import { FAQSection } from "./_components/faq-section"
-import type { Restaurant, Link as PrismaLink, MenuCategory, MenuItem, Event, FaqCategory, Faq } from "@prisma/client"
+import type { Restaurant, Link as PrismaLink, MenuCategory, MenuItem, Event, FaqCategory, Faq, User } from "@prisma/client"
 import { OpeningHoursData, ReviewsInfo } from "@/types"
 
 // Define the complete types with relations using Prisma types
@@ -34,6 +34,7 @@ type RestaurantWithRelations = Restaurant & {
         items: MenuItem[]
     })[]
     events: Event[]
+    user: User
     faqCategories: (FaqCategory & {
         faqs: Faq[]
     })[]
@@ -222,7 +223,6 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
             });
         }
     }, [restaurant.id]);
-
     return (
         <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
             <div
@@ -297,7 +297,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                         </motion.div>
                     )}
 
-                    {restaurant.google_place_id && (
+                    {restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && (
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
@@ -656,7 +656,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                     </DialogContent>
                 </Dialog>
 
-                <motion.footer
+                {restaurant?.user?.subscription_plan === "basic" && <motion.footer
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.7 }}
@@ -668,13 +668,14 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             dineri.app
                         </Link>
                     </p>
-                </motion.footer>
+                </motion.footer>}
             </div>
 
             {/* Welcome Popup */}
             <WelcomePopup
                 restaurant={restaurant}
                 isOpen={showWelcomePopup}
+                RatingInfo={reviewsInfo}
                 onClose={() => setShowWelcomePopup(false)}
                 upcomingEvents={restaurant.events}
                 welcomePopupShowInfo={welcomePopupShowInfo}

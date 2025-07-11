@@ -1,16 +1,35 @@
+import { authenticateAndAuthorize } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
 import { updateItemSchema } from "@/lib/validations"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = await params
-
         const body = await request.json()
+        const { id } = await params
+        const itemId = id
         const validated = updateItemSchema.parse(body)
 
+        // First get the item to check ownership
+        const existingItem = await prisma.menuItem.findUnique({
+            where: { id: itemId },
+            include: {
+                category: true,
+            },
+        })
+
+        if (!existingItem) {
+            return NextResponse.json({ error: "Menu item not found" }, { status: 404 })
+        }
+
+        // Authenticate and authorize user
+        const authResult = await authenticateAndAuthorize(existingItem.category.restaurant_id)
+        if (authResult.error) {
+            return NextResponse.json({ error: authResult.error }, { status: authResult.status || 500 })
+        }
+
         const item = await prisma.menuItem.update({
-            where: { id: id },
+            where: { id: itemId },
             data: {
                 name: validated.name.trim(),
                 description: validated.description?.trim(),
@@ -32,9 +51,29 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     try {
 
         const { id } = await params
+        const itemId = id
 
+        // First get the item to check ownership
+        const existingItem = await prisma.menuItem.findUnique({
+            where: { id: itemId },
+            include: {
+                category: true,
+            },
+        })
+
+        if (!existingItem) {
+            return NextResponse.json({ error: "Menu item not found" }, { status: 404 })
+        }
+
+        // Authenticate and authorize user
+        const authResult = await authenticateAndAuthorize(existingItem.category.restaurant_id)
+        if (authResult.error) {
+            return NextResponse.json({ error: authResult.error }, { status: authResult.status || 500 })
+        }
+
+        // Delete the menu item
         await prisma.menuItem.delete({
-            where: { id: id },
+            where: { id: itemId },
         })
 
         return NextResponse.json({ data: { success: true } })

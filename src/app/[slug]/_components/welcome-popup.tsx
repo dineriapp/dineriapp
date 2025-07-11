@@ -1,14 +1,17 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, ExternalLink, MapPin, Phone, Star, X } from "lucide-react"
+import { OpeningHoursData, RestaurantWithRelations, ReviewsInfo } from "@/types"
+import type { Event } from "@prisma/client"
+import { Calendar, ExternalLink, MapPin, Phone, Star, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
-import type { Restaurant, Event } from "@prisma/client"
+import { OpeningHoursStatus } from "./opening-hours-status"
 
 interface WelcomePopupProps {
-    restaurant: Restaurant
+    restaurant: RestaurantWithRelations
     isOpen: boolean
     onClose: () => void
+    RatingInfo?: ReviewsInfo;
     upcomingEvents: Event[]
     welcomePopupShowInfo: {
         ratings: boolean
@@ -18,7 +21,7 @@ interface WelcomePopupProps {
     }
 }
 
-export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents, welcomePopupShowInfo }: WelcomePopupProps) {
+export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcomingEvents, welcomePopupShowInfo }: WelcomePopupProps) {
     const [currentEventIndex, setCurrentEventIndex] = useState(0)
 
     // Auto-rotate through events
@@ -41,28 +44,31 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents, welc
     const getBackgroundStyle = () => {
         if (restaurant.bg_type === "image" && restaurant.bg_image_url) {
             return {
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${restaurant.bg_image_url})`,
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${restaurant.bg_image_url})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }
         }
 
         if (restaurant.bg_type === "gradient" && restaurant.bg_gradient_start && restaurant.bg_gradient_end) {
-            const direction = restaurant.gradient_direction
-                .replace("_", " ")
-                .replace("top", "to top")
-                .replace("bottom", "to bottom")
-                .replace("left", "to left")
-                .replace("right", "to right")
+            const directionMap: Record<string, string> = {
+                top: "to top",
+                bottom: "to bottom",
+                left: "to left",
+                right: "to right",
+                "top-right": "to top right",
+                "top-left": "to top left",
+                "bottom-right": "to bottom right",
+                "bottom-left": "to bottom left",
+            }
 
             return {
-                backgroundImage: `linear-gradient(${direction}, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
+                backgroundImage: `linear-gradient(${directionMap[restaurant.gradient_direction] || "to bottom right"}, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
             }
         }
 
         return { backgroundColor: restaurant.bg_color || "#ffffff" }
     }
-
     const textColor =
         restaurant.headings_text_color || "#000000"
 
@@ -90,6 +96,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents, welc
     }
 
     const showButton = restaurant.welcome_popup_show_button !== false && !hasEvents
+    const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : null
 
     return (
         <AnimatePresence>
@@ -206,13 +213,22 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents, welc
                                 initial={{ y: 20, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.4 }}
-                                className="mb-8 space-y-3"
+                                className="mb-8 space-y-3 mx-autoflex items-center justify-center flex-col"
                             >
-                                {welcomePopupShowInfo.ratings && restaurant.google_place_id && (
-                                    <div className="flex items-center justify-center gap-2">
+                                {welcomePopupShowInfo.ratings && restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && (
+                                    <div className={`flex items-center justify-center gap-1 text-sm mx-auto w-full`}>
                                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                                        <span className="text-sm font-medium" style={{ color: textColor }}>
-                                            4.8 (247 reviews)
+                                        <span
+                                            style={{
+                                                color: restaurant.headings_text_color || "#000000"
+                                            }}
+                                        >{RatingInfo?.rating.toFixed(1)}</span>
+                                        <span
+                                            style={{
+                                                color: restaurant.headings_text_color || "#000000"
+                                            }}
+                                            className="opacity-80">
+                                            ({RatingInfo?.user_ratings_total || 0} {RatingInfo?.user_ratings_total === 1 ? "review" : "reviews"})
                                         </span>
                                     </div>
                                 )}
@@ -221,19 +237,32 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents, welc
                                     <div className="flex items-center justify-center gap-2">
                                         <MapPin className="h-4 w-4" style={{ color: restaurant.accent_color || "#10b981" }} />
                                         <span className="text-sm" style={{ color: textColor }}>
-                                            {restaurant.address.split(",")[0]}
+                                            {restaurant.address}
                                         </span>
                                     </div>
                                 )}
 
-                                {welcomePopupShowInfo.hours && restaurant.opening_hours && (
-                                    <div className="flex items-center justify-center gap-2">
-                                        <Clock className="h-4 w-4" style={{ color: restaurant.accent_color || "#10b981" }} />
-                                        <span className="text-sm" style={{ color: textColor }}>
-                                            Open Today
-                                        </span>
-                                    </div>
+                                {welcomePopupShowInfo.hours && restaurant.opening_hours && openingHours && (
+                                    <>
+                                        <motion.div
+                                            initial={{ y: 20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            transition={{ delay: 0.25 }}
+                                            className="mb-4"
+                                        >
+                                            <OpeningHoursStatus
+                                                openingHours={openingHours}
+                                                pop={true}
+                                                color={restaurant.headings_text_color || "#000000"}
+                                                className="text-white cursor-pointer text-center"
+                                                accentColor={restaurant.accent_color || "#10b981"}
+                                                onClick={() => { }}
+                                            />
+                                        </motion.div>
+
+                                    </>
                                 )}
+
 
                                 {welcomePopupShowInfo.phone && restaurant.phone && (
                                     <div className="flex items-center justify-center gap-2">
@@ -287,12 +316,6 @@ export function WelcomePopup({ restaurant, isOpen, onClose, upcomingEvents, welc
                             </motion.div>
                         </div>
 
-                        {/* Decorative Elements */}
-                        <div className="pointer-events-none absolute left-0 top-0 h-full w-full">
-                            <div className="absolute left-4 top-4 h-2 w-2 rounded-full bg-white/20"></div>
-                            <div className="absolute right-12 top-8 h-1 w-1 rounded-full bg-white/30"></div>
-                            <div className="absolute bottom-12 left-8 h-1.5 w-1.5 rounded-full bg-white/25"></div>
-                        </div>
                     </motion.div>
                 </motion.div>
             )}

@@ -15,6 +15,7 @@ interface OpeningHoursStatusProps {
     className?: string
     accentColor?: string
     color: string
+    pop?: boolean
     onClick?: () => void
 }
 
@@ -23,6 +24,7 @@ export function OpeningHoursStatus({
     className = "",
     accentColor = "#0f766e",
     color,
+    pop = false,
     onClick,
 }: OpeningHoursStatusProps) {
     const [status, setStatus] = useState<"open" | "closed" | "closing-soon" | "opening-soon">("open")
@@ -145,23 +147,39 @@ export function OpeningHoursStatus({
     }
 
     return (
-        <div
-            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full transition-all hover:scale-105 ${className} ${onClick ? "cursor-pointer" : ""}`}
-            style={{ backgroundColor: getStatusBgColor() }}
-            onClick={onClick}
-        >
-            <Clock className="h-4 w-4" style={{ color: getStatusColor() }} />
-            <div className="flex items-center gap-2">
-                <span className="text-sm font-medium" style={{ color: getStatusColor() }}>
-                    {status === "open" && "Open"}
-                    {status === "closed" && "Closed"}
-                    {status === "closing-soon" && "Closing Soon"}
-                    {status === "opening-soon" && "Opening Soon"}
-                </span>
-                {nextChange && <span style={{
-                    color
-                }} className="text-sm opacity-90">• {nextChange}</span>}
-            </div>
-        </div>
+        <>
+            {
+                pop ?
+                    <div className="flex items-center justify-center gap-2">
+                        <Clock className="h-4 w-4" style={{ color: accentColor || "#10b981" }} />
+                        <span className="text-sm" style={{ color: color }}>
+                            {status === "open" && "Open Today"}
+                            {status === "closed" && "Closed Today"}
+                            {status === "closing-soon" && "Closing Soon"}
+                            {status === "opening-soon" && "Opening Soon"}{" "}
+                        </span>
+                    </div>
+                    :
+                    <div
+                        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full transition-all hover:scale-105 ${className} ${onClick ? "cursor-pointer" : ""}`}
+                        style={{ backgroundColor: getStatusBgColor() }}
+                        onClick={onClick}
+                    >
+                        <Clock className="h-4 w-4" style={{ color: getStatusColor() }} />
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium" style={{ color: getStatusColor() }}>
+                                {status === "open" && "Open"}
+                                {status === "closed" && "Closed"}
+                                {status === "closing-soon" && "Closing Soon"}
+                                {status === "opening-soon" && "Opening Soon"}
+                            </span>
+                            {nextChange && <span style={{
+                                color
+                            }} className="text-sm opacity-90">• {nextChange}</span>}
+                        </div>
+                    </div>
+            }
+
+        </>
     )
 }

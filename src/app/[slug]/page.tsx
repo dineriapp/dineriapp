@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import ClientPage from "./client-page"
-import type { Restaurant, Link, MenuCategory, Event, FaqCategory } from "@prisma/client"
+import type { Restaurant, Link, MenuCategory, Event, FaqCategory, User } from "@prisma/client"
 import { ReviewsInfo } from "@/types"
 
 interface PageProps {
@@ -27,6 +27,7 @@ type RestaurantWithRelations = Restaurant & {
         }>
     })[]
     events: Event[]
+    user: User
     faqCategories: (FaqCategory & {
         faqs: Array<{
             id: string
@@ -77,6 +78,7 @@ export default async function RestaurantPage({ params }: PageProps) {
                     },
                     orderBy: { sort_order: "asc" },
                 },
+                user: true
             },
         })
 

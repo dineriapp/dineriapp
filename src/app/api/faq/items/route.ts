@@ -1,7 +1,7 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { authenticateAndAuthorize, checkSubscriptionLimitsWithPlans } from "@/lib/auth-utils"
 import { createFaqSchema } from "@/lib/faq-validations"
-import { authenticateAndAuthorize, checkSubscriptionLimits } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
     try {
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
         const { user, restaurant } = authResult.data!
 
         // Check subscription limits for FAQs per category
-        const limitResult = await checkSubscriptionLimits(user.id, restaurant.id, "faqs", validated.category_id)
+        const limitResult = await checkSubscriptionLimitsWithPlans(user.id, restaurant.id, "faqs", validated.category_id)
         if (limitResult.error) {
             return NextResponse.json({ error: limitResult.error }, { status: limitResult.status || 500 })
         }

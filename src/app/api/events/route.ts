@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createEventSchema } from "@/lib/validations"
-import { authenticateAndAuthorize, checkSubscriptionLimits } from "@/lib/auth-utils"
+import { authenticateAndAuthorize, checkSubscriptionLimitsWithPlans } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
 
 export async function GET(request: NextRequest) {
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         const { user, restaurant } = authResult.data!
 
         // Check subscription limits
-        const limitResult = await checkSubscriptionLimits(user.id, restaurant.id, "events")
+        const limitResult = await checkSubscriptionLimitsWithPlans(user.id, restaurant.id, "events")
         if (limitResult.error) {
             return NextResponse.json({ error: limitResult.error }, { status: limitResult.status || 500 })
         }

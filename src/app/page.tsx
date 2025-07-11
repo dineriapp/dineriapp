@@ -19,7 +19,6 @@ import {
 
 import { TestimonialCard } from "@/components/pages/home/testimonial-card"
 import { FeatureCard } from "@/components/pages/home/feature-card"
-import { PricingCard } from "@/components/pages/home/pricing-card"
 import { ContactCard } from "@/components/pages/home/contact-card"
 import { MobilePreview } from "@/components/pages/home/mobile-preview"
 import { StatsCounter } from "@/components/pages/home/stats-counter"
@@ -28,6 +27,7 @@ import { NewsletterForm } from "@/components/pages/home/newsletter-form"
 import { Header } from "@/components/shared/header"
 import { Footer } from "@/components/shared/footer"
 import Image from "next/image"
+import PricingSection from "@/components/pages/home/pricing"
 
 const features = [
   {
@@ -66,48 +66,7 @@ const features = [
   },
 ]
 
-const plans = [
-  {
-    name: "Basic",
-    price: "Free",
-    description: "Perfect for small restaurants just getting started online",
-    features: [
-      "Custom profile page",
-      "Basic analytics",
-      "Up to 5 menu items",
-      "Social media links",
-      "Mobile-optimized design",
-    ],
-  },
-  {
-    name: "Pro",
-    price: "€4.99",
-    period: "per month",
-    description: "Most popular for established restaurants",
-    features: [
-      "Everything in Basic",
-      "Unlimited menu items",
-      "Advanced analytics",
-      "Event management",
-      "Custom domain",
-      "Priority support",
-    ],
-    highlight: true,
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    description: "For restaurant groups and franchises",
-    features: [
-      "Everything in Pro",
-      "Multiple locations",
-      "API access",
-      "Custom integrations",
-      "Dedicated support",
-      "SLA guarantee",
-    ],
-  },
-]
+
 
 const testimonials = [
   {
@@ -347,31 +306,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Pricing Section */}
-        <section className="bg-slate-50 py-14 lg:py-24">
-          <div className="max-w-[1200px] mx-auto px-4">
-            <div className="mb-10 lg:mb-16 max-w-3xl mx-auto text-center">
-              <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl lg:text-5xl">
-                Simple, transparent pricing
-              </h2>
-              <p className="text-xl text-slate-600">Choose the plan that works best for your restaurant</p>
-            </div>
-
-            <div className="grid gap-5 lg:gap-8 md:grid-cols-3">
-              {plans.map((plan, index) => (
-                <PricingCard
-                  key={index}
-                  name={plan.name}
-                  price={plan.price}
-                  period={plan.period}
-                  description={plan.description}
-                  features={plan.features}
-                  highlight={plan.highlight}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
+        <PricingSection />
 
         {/* FAQ Section */}
         <section className="bg-white py-14 lg:py-24">

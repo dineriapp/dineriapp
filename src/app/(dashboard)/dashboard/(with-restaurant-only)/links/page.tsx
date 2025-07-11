@@ -41,6 +41,8 @@ import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { ArrowDown, ArrowUp, Edit, Grip, Plus, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
+import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
+import { SubscriptionPlan } from "@prisma/client"
 
 
 export default function LinksPage() {
@@ -161,8 +163,11 @@ export default function LinksPage() {
         )
     }
 
-    const isLinkLimitReached =
-        prismaUser?.subscription_plan === "basic" && links.length >= 4;
+    const isLinkLimitReached = isLimitReached({
+        userPlan: prismaUser?.subscription_plan as SubscriptionPlan,
+        resourceType: "links",
+        currentCount: links.length,
+    });
 
     return (
         <>
@@ -294,7 +299,11 @@ export default function LinksPage() {
                                     <Button
                                         size="lg"
                                         onClick={() => {
-                                            openPopup("You are limited to 4 links on the Basic plan. Upgrade to pro or enterprise plan.")
+                                            const plan = prismaUser?.subscription_plan ?? "basic"
+                                            const planName = STRIPE_PLANS[plan].name
+                                            const limit = STRIPE_PLANS[plan].limits?.links
+
+                                            openPopup(`You are limited to ${limit} links on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`)
                                         }}
                                         className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
                                     >
