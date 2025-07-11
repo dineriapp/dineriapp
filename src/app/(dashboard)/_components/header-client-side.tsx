@@ -33,6 +33,7 @@ import {
     Utensils,
     UtensilsCrossed
 } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
@@ -141,17 +142,17 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
     const hasMultiAccess = prismaUser?.subscription_plan === "enterprise" ? true : false
 
     return (
-        <header className="border-b border-slate-200 bg-white shadow-sm">
+        <header className="border-b border-slate-200 bg-[#002147] shadow-sm">
             <div className="max-w-[1200px] mx-auto px-4 h-16 flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                     <Link href="/dashboard" className="flex items-center space-x-2 group">
-                        <div className="bg-gradient-to-r from-teal-600 to-blue-600 p-2 rounded-xl transition-transform group-hover:scale-110">
-                            <Utensils className="h-5 w-5 text-white" />
-                        </div>
-                        <span className="font-bold text-xl bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent inline-block">
-                            dineri.app
-                        </span>
-
+                        <Image
+                            src={"/noBgColorColorWhite.png"}
+                            alt="noBgColorColorWhite.png"
+                            width={250}
+                            height={100}
+                            className="w-full max-w-[210px] "
+                        />
                     </Link>
 
                     <nav ref={navRef} className="hidden lg:flex items-center space-x-1">
@@ -165,7 +166,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                                         onClick={() => toggleGroup(group.label)}
                                         className={`px-3 py-2 rounded-md text-sm font-medium !h-[38px] transition-colors flex items-center gap-2 ${expandedGroup === group.label
                                             ? "bg-slate-100 text-teal-600"
-                                            : "text-slate-600 hover:bg-slate-50 hover:text-teal-600"
+                                            : "text-slate-300 hover:bg-slate-50 hover:text-teal-600"
                                             }`}
                                     >
                                         {group.label}
@@ -227,7 +228,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                 <div className="flex items-center space-x-4">
                     {restaurants.length > 0 && (
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
+                            <DropdownMenuTrigger asChild className="max-sm:hidden">
                                 <Button
                                     size="sm"
                                     variant="outline"
@@ -302,7 +303,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="hidden sm:flex items-center gap-2 !h-[38px] text-slate-600 hover:text-teal-600 hover:bg-slate-50"
+                                className="hidden sm:flex items-center gap-2 !h-[38px] text-slate-300 hover:text-teal-600 hover:bg-slate-50"
                             >
                                 <Globe2 className="h-4 w-4" />
                                 <span>Visit Site</span>
@@ -315,7 +316,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="rounded-full h-9 w-9 border border-slate-200 text-slate-700 hover:bg-slate-50"
+                                className="rounded-full h-9 w-9 border border-slate-300 text-slate-300 hover:bg-slate-50"
                             >
                                 <User className="h-5 w-5" />
                             </Button>

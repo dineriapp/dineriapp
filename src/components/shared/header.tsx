@@ -1,39 +1,40 @@
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Utensils } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 import { MobileNav } from "./mobile-nav"
 
 export function Header() {
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
-            <div className="max-w-[1200px] mx-auto flex h-16 items-center justify-between px-4">
+        <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-[#002147] backdrop-blur-md">
+            <div className="max-w-[1200px] mx-auto flex h-18 items-center justify-between px-4">
                 <Link href="/" className="flex items-center space-x-2 group">
-                    <div className="bg-gradient-to-r from-teal-600 to-blue-600 p-2 rounded-xl transition-transform group-hover:scale-110">
-                        <Utensils className="h-6 w-6 text-white" />
-                    </div>
-                    <span className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
-                        dineri.app
-                    </span>
+                    <Image
+                        src={"/noBgColorColorWhite.png"}
+                        alt="noBgColorColorWhite.png"
+                        width={250}
+                        height={100}
+                        className="w-full max-w-[210px] "
+                    />
                 </Link>
 
                 <div className="hidden items-center space-x-1 md:flex">
-                    <Link href="#features" className="px-4 py-2 text-slate-600 hover:text-slate-900">
+                    <Link href="#features" className="px-4 py-2 text-slate-200 hover:text-slate-100">
                         Features
                     </Link>
-                    <Link href="#pricing" className="px-4 py-2 text-slate-600 hover:text-slate-900">
+                    <Link href="#pricing" className="px-4 py-2 text-slate-200 hover:text-slate-100">
                         Pricing
                     </Link>
-                    <Link href="#testimonials" className="px-4 py-2 text-slate-600 hover:text-slate-900">
+                    <Link href="#testimonials" className="px-4 py-2 text-slate-200 hover:text-slate-100">
                         Testimonials
                     </Link>
-                    <Link href="#faq" className="px-4 py-2 text-slate-600 hover:text-slate-900">
+                    <Link href="#faq" className="px-4 py-2 text-slate-200 hover:text-slate-100">
                         FAQ
                     </Link>
                 </div>
 
                 <div className="hidden space-x-4 md:flex">
                     <Link href="/login">
-                        <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
+                        <Button variant="ghost" className="text-slate-200 hover:text-slate-800">
                             Log in
                         </Button>
                     </Link>
