@@ -35,7 +35,7 @@ const Testimonialssection = () => {
             <div className="max-w-[1200px] mx-auto px-4">
                 <div className="pb-10 lg:mb-16 max-w-3xl mx-auto text-center">
                     <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl lg:text-5xl">
-                        Need assistance?
+                        Need <span className='bg-gradient-to-r from-[#2ECC71] to-[#002147] bg-clip-text text-transparent'>assistance?</span>
                     </h2>
                     <p className="text-lg text-slate-600">Whether it’s setup or support, just get in touch</p>
                 </div>

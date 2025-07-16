@@ -48,16 +48,16 @@ const features = [
 
 const FeaturesSection = () => {
     return (
-        <section id="features" className="bg-white py-14 lg:py-24">
+        <section id="features" className="bg-main-background py-14 lg:py-24">
             <div className="max-w-[1200px] mx-auto px-4">
                 <div className="mb-10 lg:mb-16 max-w-3xl mx-auto text-center">
-                    <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl lg:text-5xl">
+                    <h2 className="mb-4 text-3xl font-bold text-main md:text-4xl lg:text-5xl">
                         Everything you need to{" "}
-                        <span className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-main-action to-main bg-clip-text text-transparent">
                             grow your restaurant
                         </span>
                     </h2>
-                    <p className="text-lg text-slate-600">
+                    <p className="text-lg text-main-text">
                         Powerful tools made for restaurants. Create a stunning profile page, share all
                         your links, take direct orders with payments, and track performance. No commissions. Just
                         your brand, fully in control.
@@ -66,7 +66,12 @@ const FeaturesSection = () => {
 
                 <div className="grid gap-4 lg:gap-8 md:grid-cols-2 lg:grid-cols-3">
                     {features.map((feature, index) => (
-                        <FeatureCard key={index} icon={feature.icon} title={feature.title} description={feature.description} />
+                        <FeatureCard
+                            key={index}
+                            icon={feature.icon}
+                            title={feature.title}
+                            description={feature.description}
+                        />
                     ))}
                 </div>
             </div>

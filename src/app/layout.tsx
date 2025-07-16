@@ -3,9 +3,9 @@ import { UpgradePopup } from "@/components/upgrade-plan-popup";
 import ReactQueryProvider from "@/providers/react-query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import "./globals.css";
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Dineri.app - Your restaurant, one link away',
@@ -21,7 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} antialiased`}
+        // className={`${inter.className} antialiased`}
+        className={`antialiased`}
       >
         <ThemeProvider
           attribute="class"

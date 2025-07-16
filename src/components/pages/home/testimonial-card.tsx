@@ -11,7 +11,7 @@ interface TestimonialCardProps {
 
 export function TestimonialCard({ name, role, image, content, rating }: TestimonialCardProps) {
     return (
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+        <div className="rounded-xl border border-main-action bg-white p-6 shadow-sm transition-all hover:shadow-md">
             <div className="mb-4 flex items-center gap-4">
                 <Image src={image || "/placeholder.svg"} alt={name} width={50} height={50} className="rounded-full" />
                 <div>

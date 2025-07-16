@@ -6,7 +6,7 @@ const HowItWorks = () => {
         <section className="bg-slate-50 py-14 lg:py-24">
             <div className="max-w-[1200px] mx-auto px-4">
                 <div className="mb-10 lg:mb-16 max-w-3xl mx-auto text-center">
-                    <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl lg:text-5xl">How dineri.app works</h2>
+                    <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl lg:text-5xl ">How <span className='bg-gradient-to-r from-[#2ECC71] to-[#002147] bg-clip-text text-transparent'>dineri.app</span> works</h2>
                     <p className="text-lg text-slate-600">Start using Dineri in a few clicks</p>
                 </div>
 
@@ -31,7 +31,7 @@ const HowItWorks = () => {
                         },
                     ].map((item, i) => (
                         <div key={i} className="relative rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md">
-                            <div className="mb-6 inline-block rounded-xl bg-gradient-to-r from-teal-600 to-blue-600 p-4 text-2xl font-bold text-white">
+                            <div className="mb-6 inline-block rounded-xl bg-gradient-to-r from-main-action to-main p-4 text-2xl font-bold text-white">
                                 {item.step}
                             </div>
                             <h3 className="mb-3 text-xl font-bold text-slate-900">{item.title}</h3>

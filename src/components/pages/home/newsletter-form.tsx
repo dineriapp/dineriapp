@@ -45,23 +45,23 @@ export function NewsletterForm() {
     return (
         <div>
             {status === "success" ? (
-                <div className="flex items-center gap-3 rounded-lg bg-teal-500/20 p-4 text-teal-300">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500/30">
+                <div className="flex items-center gap-3 rounded-lg bg-main-action/20 p-4 text-main-action">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-main-action/30">
                         <Check className="h-5 w-5" />
                     </div>
                     <div>
                         <p className="font-medium">Thank you for subscribing!</p>
-                        <p className="text-sm text-teal-300/80">We&apos;ll keep you updated with the latest news.</p>
+                        <p className="text-sm text-main-action/80">We&apos;ll keep you updated with the latest news.</p>
                     </div>
                 </div>
             ) : status === "error" ? (
-                <div className="flex items-center gap-3 rounded-lg bg-red-500/20 p-4 text-red-300">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500/30">
+                <div className="flex items-center gap-3 rounded-lg bg-main-warning/20 p-4 text-main-warning">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-main-warning/30">
                         <Check className="h-5 w-5" />
                     </div>
                     <div>
                         <p className="font-medium">Subscription failed</p>
-                        <p className="text-sm text-red-300/80">{errorMessage}</p>
+                        <p className="text-sm text-main-warning/80">{errorMessage}</p>
                     </div>
                 </div>
             ) : (
@@ -72,16 +72,20 @@ export function NewsletterForm() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="h-14 rounded-lg border-slate-700 bg-slate-700/50 pl-4 pr-12 text-white placeholder:text-slate-400 focus:border-teal-500 focus:ring-teal-500/20"
+                        className="h-14 rounded-lg border-[#334155] bg-[#334155]/50 pl-4 pr-12 text-white placeholder:text-[#94a3b8] focus:border-main-action focus:ring-main-action/20"
                         disabled={status === "loading"}
                     />
                     <Button
                         type="submit"
                         size="icon"
                         disabled={status === "loading"}
-                        className="absolute right-2 top-2 h-10 w-10 rounded-md bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"
+                        className="absolute right-2 top-2 h-10 w-10 rounded-md bg-gradient-to-r from-main-action to-main hover:from-[#29b765] hover:to-[#001e3a]"
                     >
-                        {status === "loading" ? <Loader2 className="h-5 w-5 animate-spin" /> : <ArrowRight className="h-5 w-5" />}
+                        {status === "loading" ? (
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                        ) : (
+                            <ArrowRight className="h-5 w-5" />
+                        )}
                     </Button>
                 </form>
             )}

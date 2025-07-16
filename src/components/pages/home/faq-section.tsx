@@ -28,21 +28,30 @@ const FaqSection = () => {
         <section className="bg-white py-14 lg:py-24">
             <div className="max-w-[1200px] mx-auto px-4">
                 <div className="mb-8 lg:mb-16 max-w-3xl mx-auto text-center">
-                    <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl lg:text-5xl">
+                    <h2 className="mb-4 text-3xl font-bold text-main md:text-4xl lg:text-5xl">
                         Frequently asked questions
                     </h2>
-                    <p className="text-xl text-slate-600">Everything you need to know about dineri.app</p>
+                    <p className="text-xl text-main-text">
+                        Everything you need to know about dineri.app
+                    </p>
                 </div>
 
                 <div className="mx-auto max-w-3xl">
                     <FAQAccordion items={faqs} />
 
-                    <div className="mt-8 lg:mt-12 rounded-2xl bg-gradient-to-r from-teal-600 to-blue-600 p-8 text-center text-white">
-                        <h3 className="mb-4 text-2xl font-bold">Need help getting started?</h3>
-                        <p className="mb-6">We’re here to answer your questions about
-                            Dineri.app.</p>
+                    <div className="mt-8 lg:mt-12 rounded-2xl bg-gradient-to-r from-main-action to-main p-8 text-center text-white">
+                        <h3 className="mb-4 text-2xl font-bold">
+                            Need help getting started?
+                        </h3>
+                        <p className="mb-6">
+                            We’re here to answer your questions about Dineri.app.
+                        </p>
                         <Link href="mailto:Dineri.app@proton.me">
-                            <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-slate-100">
+                            <Button
+                                size="lg"
+                                variant="secondary"
+                                className="bg-white text-main hover:bg-main-background"
+                            >
                                 Contact our team
                             </Button>
                         </Link>
