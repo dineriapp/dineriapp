@@ -36,9 +36,9 @@ export default async function WithResttaurantLayout({
     if (!prismaUser) redirect("/login")
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-            <DashboardHeaderClientSide user={user} prismaUser={prismaUser} />
-            {children}
-        </div>
+            <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+                <DashboardHeaderClientSide user={user} prismaUser={prismaUser} />
+                {children}
+            </div>
     );
 }

@@ -13,7 +13,7 @@ export function Footer() {
 
             <div className="container relative mx-auto max-w-[1200px] px-4 ">
                 {/* Footer Main */}
-                <div className="flex items-start justify-between 900:flex-row flex-col gap-10 pt-12 md:pt-16 pb-6 md:pb-14">
+                <div className="flex items-start justify-between 900:flex-row flex-col gap-10 pt-12 md:pt-16 pb-6 md:pb-6">
                     <div className="md:col-span-2 max-w-[400px]">
                         <Link href="/" className="flex items-center space-x-2">
                             <div className="bg-gradient-to-r from-teal-500 to-blue-500 p-2 rounded-xl">
@@ -52,7 +52,7 @@ export function Footer() {
                     <div className="flex items-start sm:flex-row flex-col justify-between 900:w-auto w-full 900:justify-center gap-6 sm:gap-30">
                         <div>
                             <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-teal-400">Product</h3>
-                            <ul className="space-y-4">
+                            <ul className="space-y-2">
                                 {["Features", "Pricing", "Testimonials", "FAQ", "Demo", "Support"].map((item) => (
                                     <li key={item}>
                                         <Link href={`#${item.toLowerCase()}`} className="text-slate-300 hover:text-teal-400">
@@ -65,10 +65,10 @@ export function Footer() {
 
                         <div>
                             <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-teal-400">Company</h3>
-                            <ul className="space-y-4">
-                                {["About", "Blog", "Careers", "Press", "Partners", "Contact"].map((item) => (
-                                    <li key={item}>
-                                        <Link href={`/${item.toLowerCase()}`} className="text-slate-300 hover:text-teal-400">
+                            <ul className="space-y-2">
+                                {["About", "Careers", "Help center"].map((item) => (
+                                    <li key={`#${item}`}>
+                                        <Link href={`#${item.toLowerCase()}`} className="text-slate-300 hover:text-teal-400">
                                             {item}
                                         </Link>
                                     </li>
@@ -79,9 +79,9 @@ export function Footer() {
                         <div>
                             <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-teal-400">Legal</h3>
                             <ul className="space-y-4">
-                                {["Terms", "Privacy", "Cookies", "Licenses", "Settings", "Contact"].map((item) => (
+                                {["Terms", "Privacy", "Cookies", "Licenses"].map((item) => (
                                     <li key={item}>
-                                        <Link href={`/${item.toLowerCase()}`} className="text-slate-300 hover:text-teal-400">
+                                        <Link href={`#${item.toLowerCase()}`} className="text-slate-300 hover:text-teal-400">
                                             {item}
                                         </Link>
                                     </li>
@@ -98,7 +98,7 @@ export function Footer() {
                             <h3 className="text-xl font-bold text-white md:text-2xl">Ready to get started?</h3>
                             <p className="mt-2 text-slate-300">Create your restaurant profile in minutes</p>
                         </div>
-                        <Link href="/auth/signup">
+                        <Link href="/signup">
                             <Button
                                 size="lg"
                                 className="group bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"
@@ -133,93 +133,3 @@ export function Footer() {
         </footer>
     )
 }
-
-// import Link from "next/link"
-// import { Utensils, Instagram, Twitter, Facebook, Linkedin } from "lucide-react"
-
-// export function Footer() {
-//     return (
-//         <footer className="border-t border-slate-200 bg-white">
-//             <div className="max-w-[1200px] mx-auto px-4 pt-8 pb-6 md:py-12">
-//                 <div className="flex items-start 800:flex-row flex-col w-full gap-8 sm:gap-8 justify-between">
-//                     <div>
-//                         <Link href="/" className="flex items-center space-x-2">
-//                             <div className="bg-gradient-to-r from-teal-600 to-blue-600 p-2 rounded-xl">
-//                                 <Utensils className="h-5 w-5 text-white" />
-//                             </div>
-//                             <span className="text-xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
-//                                 dineri.app
-//                             </span>
-//                         </Link>
-//                         <p className="mt-4 text-slate-600  max-w-[400px]">
-//                             The complete platform for restaurants to create a beautiful online presence.
-//                         </p>
-//                         <div className="mt-6 flex space-x-4">
-//                             <Link href="https://instagram.com" className="text-slate-400 hover:text-slate-600">
-//                                 <Instagram className="h-5 w-5" />
-//                                 <span className="sr-only">Instagram</span>
-//                             </Link>
-//                             <Link href="https://twitter.com" className="text-slate-400 hover:text-slate-600">
-//                                 <Twitter className="h-5 w-5" />
-//                                 <span className="sr-only">Twitter</span>
-//                             </Link>
-//                             <Link href="https://facebook.com" className="text-slate-400 hover:text-slate-600">
-//                                 <Facebook className="h-5 w-5" />
-//                                 <span className="sr-only">Facebook</span>
-//                             </Link>
-//                             <Link href="https://linkedin.com" className="text-slate-400 hover:text-slate-600">
-//                                 <Linkedin className="h-5 w-5" />
-//                                 <span className="sr-only">LinkedIn</span>
-//                             </Link>
-//                         </div>
-//                     </div>
-
-//                     <div className="flex items-start sm:flex-row flex-col justify-between 800:justify-center 800:w-auto w-full gap-5 sm:gap-20 lg:gap-30">
-//                         <div>
-//                             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">Product</h3>
-//                             <ul className="space-y-2">
-//                                 {["Features", "Pricing", "Testimonials", "FAQ"].map((item) => (
-//                                     <li key={item}>
-//                                         <Link href={`#${item.toLowerCase()}`} className="text-slate-600 hover:text-slate-900">
-//                                             {item}
-//                                         </Link>
-//                                     </li>
-//                                 ))}
-//                             </ul>
-//                         </div>
-
-//                         <div>
-//                             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">Company</h3>
-//                             <ul className="space-y-2">
-//                                 {["About", "Blog", "Careers", "Contact"].map((item) => (
-//                                     <li key={item}>
-//                                         <Link href={`/${item.toLowerCase()}`} className="text-slate-600 hover:text-slate-900">
-//                                             {item}
-//                                         </Link>
-//                                     </li>
-//                                 ))}
-//                             </ul>
-//                         </div>
-
-//                         <div>
-//                             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">Legal</h3>
-//                             <ul className="space-y-2">
-//                                 {["Terms", "Privacy", "Cookies"].map((item) => (
-//                                     <li key={item}>
-//                                         <Link href={`/${item.toLowerCase()}`} className="text-slate-600 hover:text-slate-900">
-//                                             {item}
-//                                         </Link>
-//                                     </li>
-//                                 ))}
-//                             </ul>
-//                         </div>
-//                     </div>
-//                 </div>
-
-//                 <div className="mt-12 border-t border-slate-200 pt-6 md:pt-8 text-center">
-//                     <p className="text-slate-600">© {new Date().getFullYear()} dineri.app. All rights reserved.</p>
-//                 </div>
-//             </div>
-//         </footer>
-//     )
-// }

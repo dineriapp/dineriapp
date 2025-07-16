@@ -60,7 +60,7 @@ const PricingSection = () => {
                     <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl lg:text-5xl">
                         Simple, transparent pricing
                     </h2>
-                    <p className="text-xl text-slate-600">Choose the plan that works best for your restaurant</p>
+                    <p className="text-lg text-slate-600">No hidden fees. No surprises - Select the plan that suits you best </p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">

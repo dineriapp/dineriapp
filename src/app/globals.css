@@ -22,6 +22,10 @@
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
+  /* cutom  */
+  --color-main: #1c2b39;
+  --color-gold: #f4b400;
+  --color-main-hover: #25364a;
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
