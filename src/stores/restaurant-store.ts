@@ -7,7 +7,7 @@ interface RestaurantState {
     restaurants: RestaurantWithCount[]
     selectedRestaurant: RestaurantWithCount | null
     setRestaurants: (restaurants: RestaurantWithCount[]) => void
-    setSelectedRestaurant: (restaurant: RestaurantWithCount) => void
+    setSelectedRestaurant: (restaurant: RestaurantWithCount, options?: { refresh: boolean }) => void
     updateSelectedRestaurant: (updates: Partial<RestaurantWithCount>) => void
 }
 
@@ -17,7 +17,14 @@ export const useRestaurantStore = create<RestaurantState>()(
             restaurants: [],
             selectedRestaurant: null,
             setRestaurants: (restaurants) => set({ restaurants }),
-            setSelectedRestaurant: (restaurant) => set({ selectedRestaurant: restaurant }),
+            setSelectedRestaurant: (restaurant, options = { refresh: false }) => {
+                set({ selectedRestaurant: restaurant })
+                localStorage.setItem("selected-restaurant-id", restaurant.id);
+                // Force a full page reload
+                if (options.refresh) {
+                    window.location.reload();
+                }
+            },
             updateSelectedRestaurant: (updates) => {
                 const { selectedRestaurant } = get()
                 if (selectedRestaurant) {

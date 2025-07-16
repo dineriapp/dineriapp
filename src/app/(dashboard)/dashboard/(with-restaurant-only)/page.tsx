@@ -19,6 +19,7 @@ import {
     HelpCircle,
     Instagram,
     LinkIcon,
+    Loader2,
     Mail,
     MapPin,
     MessageCircle,
@@ -322,7 +323,7 @@ export default function DashboardPage() {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold text-slate-900">{monthlyVisits ?? "Loading..."}</div>
+                            <div className="text-3xl font-bold text-slate-900">{monthlyVisits ?? <Loader2 className="animate-spin opacity-80" />}</div>
                             <p className="text-xs text-slate-500 mt-1">Vistors this month</p>
                         </CardContent>
                     </Card>

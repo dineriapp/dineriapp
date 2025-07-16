@@ -151,7 +151,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
                             alt="logo.png"
                             width={250}
                             height={100}
-                            className="w-full max-w-[180px] "
+                            className="w-full max-w-[210px] "
                         />
                     </Link>
 
