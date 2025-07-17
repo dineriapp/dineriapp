@@ -4,11 +4,13 @@ export const createLinkSchema = z.object({
     restaurant_id: z.string().uuid(),
     title: z.string().min(1).max(255),
     url: z.string().url(),
+    iconSlug: z.string().min(1).max(255),
 })
 
 export const updateLinkSchema = z.object({
     title: z.string().min(1).max(255),
     url: z.string().url(),
+    iconSlug: z.string().min(1).max(255),
 })
 
 export const reorderLinkSchema = z.object({

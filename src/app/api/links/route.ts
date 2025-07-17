@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
             ...body,
             url: formatUrl(body.url),
         })
-
+        console.log(validated)
         const authResult = await authenticateAndAuthorize(validated.restaurant_id)
         if (authResult.error) {
             return NextResponse.json({ error: authResult.error }, { status: authResult.status || 500 })
@@ -57,7 +57,10 @@ export async function POST(request: NextRequest) {
 
         const link = await prisma.link.create({
             data: {
-                ...validated,
+                // ...validated,
+                url: validated.url,
+                icon_slug: validated.iconSlug,
+                restaurant_id: validated.restaurant_id,
                 title: validated.title.trim(),
                 sort_order: lastLink ? lastLink.sort_order + 1 : 0,
             },
@@ -69,7 +72,8 @@ export async function POST(request: NextRequest) {
         })
 
         return NextResponse.json({ data: link })
-    } catch {
+    } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: "Failed to create link" }, { status: 500 })
     }
 }

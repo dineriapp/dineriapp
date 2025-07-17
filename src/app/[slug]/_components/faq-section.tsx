@@ -75,7 +75,7 @@ export function FAQSection({ faqCategories, accentColor = "#0f766e", className =
     }
 
     return (
-        <div className={`space-y-4 ${className}`}>
+        <div className={`space-y-3 sm:space-y-4 ${className}`}>
             {/* Search */}
             <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -90,20 +90,20 @@ export function FAQSection({ faqCategories, accentColor = "#0f766e", className =
             {/* Featured FAQs */}
             {featuredFAQs.length > 0 && !searchTerm && (
                 <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-lg">
+                    <CardHeader className="px-4 sm:px-4">
+                        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
                             <Star className="h-5 w-5 text-yellow-500" />
                             Popular Questions
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-3">
+                    <CardContent className="space-y-2 sm:space-y-3 !py-0 px-4 sm:px-4">
                         {featuredFAQs.slice(0, 3).map((faq, index) => (
                             <motion.div key={`${faq.id}-${index}`} className="overflow-hidden rounded-lg border">
                                 <button
                                     onClick={() => handleFAQClick(faq.id)}
-                                    className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50"
+                                    className="flex w-full items-center justify-between px-3 sm:px-4 py-3 sm:py-4 text-left transition-colors hover:bg-gray-50"
                                 >
-                                    <span className="font-medium">{faq.question}</span>
+                                    <span className="font-medium sm:text-base text-sm">{faq.question}</span>
                                     <ChevronDown
                                         className={`h-4 w-4 transition-transform ${expandedFAQ === faq.id ? "rotate-180" : ""}`}
                                         style={{ color: accentColor }}
@@ -118,7 +118,7 @@ export function FAQSection({ faqCategories, accentColor = "#0f766e", className =
                                             transition={{ duration: 0.2 }}
                                             className="overflow-hidden"
                                         >
-                                            <div className="p-4 pt-0 text-muted-foreground">{faq.answer}</div>
+                                            <div className="p-4 pt-0 sm:text-base text-sm text-muted-foreground">{faq.answer}</div>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
@@ -132,20 +132,20 @@ export function FAQSection({ faqCategories, accentColor = "#0f766e", className =
             <div className="space-y-6">
                 {filteredCategories.map((category) => (
                     <Card key={category.id}>
-                        <CardHeader>
-                            <CardTitle className="text-lg">{category.name}</CardTitle>
-                            {category.description && <p className="text-sm text-muted-foreground">{category.description}</p>}
+                        <CardHeader className="gap-1 !py-0 px-4 sm:px-4">
+                            <CardTitle className="text-base sm:text-lg">{category.name}</CardTitle>
+                            {category.description && <p className="text-xs sm:text-sm text-muted-foreground">{category.description}</p>}
                         </CardHeader>
-                        <CardContent className="space-y-3">
+                        <CardContent className="space-y-3 !py-0 px-4 sm:px-4">
                             {category.faqs.map((faq) => (
-                                <motion.div key={faq.id} className="overflow-hidden rounded-lg border">
+                                <motion.div key={faq.id} className="overflow-hidden  rounded-lg border">
                                     <button
                                         onClick={() => handleFAQClick(faq.id)}
-                                        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-50"
+                                        className="flex w-full items-center relative justify-between px-3 sm:px-4 py-3 sm:py-4 text-left transition-colors hover:bg-gray-50"
                                     >
-                                        <div className="flex items-center gap-2">
-                                            <span className="font-medium">{faq.question}</span>
-                                            {faq.is_featured && <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />}
+                                        <div className="flex sm:flex-row flex-col-reverse  items-start sm:items-center gap-1 sm:gap-2">
+                                            <span className="font-medium sm:text-base text-sm">{faq.question}</span>
+                                            {faq.is_featured && <Star className="h-3 sm:h-4 w-3 sm:w-4 fill-yellow-500 text-yellow-500" />}
                                         </div>
                                         <ChevronDown
                                             className={`h-4 w-4 transition-transform ${expandedFAQ === faq.id ? "rotate-180" : ""}`}
@@ -161,7 +161,7 @@ export function FAQSection({ faqCategories, accentColor = "#0f766e", className =
                                                 transition={{ duration: 0.2 }}
                                                 className="overflow-hidden"
                                             >
-                                                <div className="p-4 pt-0 leading-relaxed text-muted-foreground">{faq.answer}</div>
+                                                <div className="p-4 pt-0 leading-relaxed sm:text-base text-sm text-muted-foreground">{faq.answer}</div>
                                             </motion.div>
                                         )}
                                     </AnimatePresence>

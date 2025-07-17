@@ -43,6 +43,8 @@ import { motion } from "motion/react"
 import { useState } from "react"
 import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
 import { SubscriptionPlan } from "@prisma/client"
+import { ALL_ICON_SLUGS, getLucideIconBySlug, type IconSlug } from "@/lib/get-icons"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 
 export default function LinksPage() {
@@ -57,6 +59,7 @@ export default function LinksPage() {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [selectedLinks, setSelectedLinks] = useState<Set<string>>(new Set())
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+    const [selectedIcon, setSelectedIcon] = useState<IconSlug>("link")
 
     const restaurantId = selectedRestaurant?.id
 
@@ -69,20 +72,20 @@ export default function LinksPage() {
 
     const handleAddLink = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!newTitle.trim() || !newUrl.trim() || !restaurantId) return
+        if (!newTitle.trim() || !newUrl.trim() || !restaurantId || !selectedIcon) return
 
         setIsAddDialogOpen(false)
         setNewTitle("")
         setNewUrl("")
 
         createMutation.mutate(
-            { title: newTitle.trim(), url: newUrl.trim() },
+            { title: newTitle.trim(), url: newUrl.trim(), iconSlug: selectedIcon },
         )
     }
 
     const handleUpdateLink = (e: React.FormEvent) => {
         e.preventDefault()
-        if (!editingLink || !newTitle.trim() || !newUrl.trim()) return
+        if (!editingLink || !newTitle.trim() || !newUrl.trim() || !selectedIcon) return
 
         setIsEditDialogOpen(false)
         setEditingLink(null)
@@ -90,12 +93,13 @@ export default function LinksPage() {
         setNewUrl("")
 
         updateMutation.mutate(
-            { id: editingLink.id, title: newTitle.trim(), url: newUrl.trim() },
+            { id: editingLink.id, title: newTitle.trim(), url: newUrl.trim(), iconSlug: selectedIcon },
         )
     }
 
     const handleEditClick = (link: any) => {
         setEditingLink(link)
+        setSelectedIcon(link?.icon_slug)
         setNewTitle(link.title)
         setNewUrl(link.url)
         setIsEditDialogOpen(true)
@@ -267,6 +271,24 @@ export default function LinksPage() {
                                                             required
                                                         />
                                                     </div>
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="icon">Icon</Label>
+                                                        <Select
+                                                            value={selectedIcon}
+                                                            onValueChange={(val) => setSelectedIcon(val as IconSlug)}
+                                                        >
+                                                            <SelectTrigger id="icon" className="w-full">
+                                                                <SelectValue placeholder="Select an icon" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {ALL_ICON_SLUGS.map((slug) => (
+                                                                    <SelectItem key={slug} value={slug}>
+                                                                        {getLucideIconBySlug(slug, { className: "w-4 h-4" })}  {slug}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
                                                 </div>
 
                                                 <DialogFooter>
@@ -356,7 +378,10 @@ export default function LinksPage() {
                                                 </div>
 
                                                 <div className="min-w-0 flex-grow">
-                                                    <h3 className="truncate font-medium text-slate-900">{link.title}</h3>
+                                                    <div className="flex items-center gap-2">
+                                                        {getLucideIconBySlug(link.icon_slug, { className: "w-4 h-4" })}
+                                                        <h3 className="truncate font-medium text-slate-900">{link.title}</h3>
+                                                    </div>
                                                     <p className="truncate text-sm text-slate-500">{link.url}</p>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
@@ -476,6 +501,24 @@ export default function LinksPage() {
                             <div className="space-y-2">
                                 <Label htmlFor="edit-url">URL</Label>
                                 <Input id="edit-url" value={newUrl} onChange={(e) => setNewUrl(e.target.value)} required />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="icon">Icon</Label>
+                                <Select
+                                    value={selectedIcon}
+                                    onValueChange={(val) => setSelectedIcon(val as IconSlug)}
+                                >
+                                    <SelectTrigger id="icon" className="w-full">
+                                        <SelectValue placeholder="Select an icon" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {ALL_ICON_SLUGS.map((slug) => (
+                                            <SelectItem key={slug} value={slug}>
+                                                {getLucideIconBySlug(slug, { className: "w-4 h-4" })}  {slug}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
 

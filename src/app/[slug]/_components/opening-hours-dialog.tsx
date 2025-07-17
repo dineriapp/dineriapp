@@ -60,13 +60,13 @@ export function OpeningHoursDialog({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-[90vw] sm:!max-w-[570px]">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
+                    <DialogTitle className="flex text-start items-center gap-2">
                         <Clock className="h-5 w-5" style={{ color: accentColor }} />
                         <span>Opening Hours</span>
                     </DialogTitle>
-                    <DialogDescription>{restaurantName} operating hours</DialogDescription>
+                    <DialogDescription className="text-start">{restaurantName} operating hours</DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-3 py-4">

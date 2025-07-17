@@ -53,7 +53,7 @@ const navigationGroups = [
         items: [
             // { href: "/dashboard/templates", label: "Templates", icon: Layout },
             { href: "/dashboard/appearance", label: "Appearance", icon: Palette },
-            { href: "/dashboard/settings", label: "Settings", icon: Settings },
+            { href: "/dashboard/settings/business-information", label: "Settings", icon: Settings },
         ],
     },
 ]

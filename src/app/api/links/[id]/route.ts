@@ -32,6 +32,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             data: {
                 title: validated.title.trim(),
                 url: validated.url,
+                icon_slug: validated.iconSlug || "link"
             },
             include: {
                 _count: {

@@ -1,26 +1,28 @@
 "use client"
 
+import { ColorSelector } from "@/app/(dashboard)/_components/color-selection"
 import { GoogleRating } from "@/app/[slug]/_components/google-rating"
 import { OpeningHoursStatus } from "@/app/[slug]/_components/opening-hours-status"
+import SocialIcons from "@/components/social-icons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getLucideIconBySlug } from "@/lib/get-icons"
 import { useLinks } from "@/lib/link-queries"
+import { useGoogleReviews } from "@/lib/review-api"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { OpeningHoursData } from "@/types"
 import { GradientDirection } from "@prisma/client"
 import {
     Battery,
-    Facebook,
     ImageIcon,
-    Instagram,
-    Mail,
-    MapPin,
-    MessageCircle,
+    MoreVertical,
     Paintbrush,
     Palette,
     RotateCcw,
@@ -30,7 +32,7 @@ import {
     Wifi
 } from "lucide-react"
 import { motion } from "motion/react"
-import { memo, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 // Define types based on Prisma schema
@@ -43,6 +45,12 @@ interface AppearanceFormData {
     font_family: string
     bg_type: "color" | "gradient" | "image"
     bg_gradient_start: string
+    social_icon_bg_color: string
+    social_icon_color: string
+    button_icons_show: boolean
+    buttons_gap_in_px: number
+    social_icon_gap: number
+    social_icon_bg_show: boolean
     bg_gradient_end: string
     gradient_direction: GradientDirection
     button_variant: "solid" | "outline"
@@ -134,8 +142,14 @@ const templates: Template[] = [
             bg_gradient_end: "#2d2d2d",
             gradient_direction: "bottom_right",
             bg_color: "#1a1a1a",
+            social_icon_bg_color: "#d4af37",
+            social_icon_color: "#000000",
+            social_icon_bg_show: true,
             accent_color: "#d4af37",
+            buttons_gap_in_px: 16,
+            social_icon_gap: 12,
             headings_text_color: "#ffffff",
+            button_icons_show: true,
             button_text_icons_color: "#000000",
             button_style: "rounded",
             button_variant: "solid",
@@ -152,9 +166,15 @@ const templates: Template[] = [
             bg_type: "gradient",
             bg_gradient_start: "#f8fafc",
             bg_gradient_end: "#e2e8f0",
+            social_icon_bg_color: "#000000",
+            social_icon_color: "#000000",
             gradient_direction: "bottom",
+            buttons_gap_in_px: 16,
+            social_icon_gap: 12,
+            social_icon_bg_show: false,
             bg_color: "#ffffff",
             accent_color: "#0f172a",
+            button_icons_show: true,
             headings_text_color: "#1e293b",
             button_text_icons_color: "#ffffff",
             button_style: "square",
@@ -172,8 +192,14 @@ const templates: Template[] = [
             bg_type: "gradient",
             bg_gradient_start: "#fef3c7",
             bg_gradient_end: "#fed7aa",
+            button_icons_show: true,
+            buttons_gap_in_px: 16,
+            social_icon_gap: 12,
+            social_icon_bg_show: false,
             gradient_direction: "bottom_right",
             bg_color: "#fef3c7",
+            social_icon_bg_color: "#000000",
+            social_icon_color: "#c2410c",
             accent_color: "#c2410c",
             headings_text_color: "#7c2d12",
             button_text_icons_color: "#ffffff",
@@ -192,6 +218,12 @@ const templates: Template[] = [
             bg_type: "gradient",
             bg_gradient_start: "#0891b2",
             bg_gradient_end: "#0d9488",
+            social_icon_bg_show: false,
+            buttons_gap_in_px: 16,
+            social_icon_gap: 12,
+            social_icon_color: "#FFFFFF",
+            social_icon_bg_color: "#000000",
+            button_icons_show: true,
             gradient_direction: "bottom_left",
             bg_color: "#0891b2",
             accent_color: "#ffffff",
@@ -210,11 +242,17 @@ const templates: Template[] = [
         category: "Vibrant",
         preview: {
             bg_type: "gradient",
+            social_icon_bg_color: "#000000",
+            social_icon_color: "#FFFFFF",
             bg_gradient_start: "#f97316",
             bg_gradient_end: "#dc2626",
             gradient_direction: "top_right",
+            social_icon_bg_show: false,
             bg_color: "#f97316",
             accent_color: "#ffffff",
+            buttons_gap_in_px: 16,
+            social_icon_gap: 12,
+            button_icons_show: true,
             headings_text_color: "#ffffff",
             button_text_icons_color: "#dc2626",
             button_style: "pill",
@@ -229,11 +267,17 @@ const templates: Template[] = [
         description: "Natural green theme for organic restaurants",
         category: "Natural",
         preview: {
+            social_icon_bg_color: "#000000",
+            social_icon_color: "#FFFFFF",
             bg_type: "gradient",
             bg_gradient_start: "#166534",
             bg_gradient_end: "#15803d",
+            social_icon_bg_show: false,
+            button_icons_show: true,
             gradient_direction: "bottom",
             bg_color: "#166534",
+            buttons_gap_in_px: 16,
+            social_icon_gap: 12,
             accent_color: "#fbbf24",
             headings_text_color: "#ffffff",
             button_text_icons_color: "#166534",
@@ -249,6 +293,7 @@ const templates: Template[] = [
 export default function AppearancePage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
     const { data: links = [], isLoading: linksLoading, } = useLinks(selectedRestaurant?.id)
+    const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(selectedRestaurant?.google_place_id);
 
     // Form state
     const [formData, setFormData] = useState<AppearanceFormData>({
@@ -259,6 +304,12 @@ export default function AppearancePage() {
         button_style: "rounded",
         font_family: "Inter",
         bg_type: "color",
+        button_icons_show: true,
+        social_icon_bg_show: false,
+        social_icon_bg_color: "#FFFFFF",
+        social_icon_color: "#000000",
+        buttons_gap_in_px: 16,
+        social_icon_gap: 12,
         bg_gradient_start: "#ffffff",
         bg_gradient_end: "#f3f4f6",
         gradient_direction: "bottom_right",
@@ -284,6 +335,12 @@ export default function AppearancePage() {
                 button_style: selectedRestaurant.button_style || "rounded",
                 font_family: selectedRestaurant.font_family || "Inter",
                 bg_type: selectedRestaurant.bg_type || "color",
+                button_icons_show: selectedRestaurant.button_icons_show,
+                buttons_gap_in_px: selectedRestaurant.buttons_gap_in_px,
+                social_icon_bg_show: selectedRestaurant.social_icon_bg_show,
+                social_icon_bg_color: selectedRestaurant.social_icon_bg_color,
+                social_icon_color: selectedRestaurant.social_icon_color,
+                social_icon_gap: selectedRestaurant.social_icon_gap,
                 bg_gradient_start: selectedRestaurant.bg_gradient_start || "#ffffff",
                 bg_gradient_end: selectedRestaurant.bg_gradient_end || "#f3f4f6",
                 gradient_direction: selectedRestaurant.gradient_direction || "bottom_right",
@@ -347,71 +404,71 @@ export default function AppearancePage() {
         }
     }
 
-    const SocialIcons = memo(() => {
-        return <div
-            // initial={{ y: 20, opacity: 0 }}
-            // animate={{ y: 0, opacity: 1 }}
-            // transition={{ delay: 0.4 }}
-            className="mb-4 flex flex-wrap items-center justify-center gap-3"
-        >
-            {selectedRestaurant?.instagram && (
-                <a
-                    href={selectedRestaurant?.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <Instagram className="h-6 w-6" />
-                </a>
-            )}
-            {selectedRestaurant?.facebook && (
-                <a
-                    href={selectedRestaurant?.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <Facebook className="h-6 w-6" />
-                </a>
-            )}
-            {selectedRestaurant?.whatsapp && (
-                <a
-                    href={`https://wa.me/${selectedRestaurant?.whatsapp.replace(/\D/g, "")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <MessageCircle className="h-6 w-6" />
-                </a>
-            )}
-            {selectedRestaurant?.email && (
-                <a
-                    href={`mailto:${selectedRestaurant?.email}`}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <Mail className="h-6 w-6" />
-                </a>
-            )}
-            {selectedRestaurant?.address && (
-                <a
-                    href={`https://maps.google.com/?q=${encodeURIComponent(selectedRestaurant?.address)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <MapPin className="h-6 w-6" />
-                </a>
-            )}
-        </div>
-    },
-    )
+    // const SocialIcons = memo(() => {
+    //     return <div
+    //         // initial={{ y: 20, opacity: 0 }}
+    //         // animate={{ y: 0, opacity: 1 }}
+    //         // transition={{ delay: 0.4 }}
+    //         className="mb-4 flex flex-wrap items-center justify-center gap-3"
+    //     >
+    //         {selectedRestaurant?.instagram && (
+    //             <a
+    //                 href={selectedRestaurant?.instagram}
+    //                 target="_blank"
+    //                 rel="noopener noreferrer"
+    //                 className={`p-2 rounded-full  backdrop-blur-sm  transition-transform hover:scale-110 ${formData.social_icon_bg_show && "shadow-md"}`}
+    //                 style={{ color: formData?.accent_color || "#10b981", backgroundColor: formData.social_icon_bg_show ? "white" : "transparent" }}
+    //             >
+    //                 <Instagram className="h-6 w-6" />
+    //             </a>
+    //         )}
+    //         {selectedRestaurant?.facebook && (
+    //             <a
+    //                 href={selectedRestaurant?.facebook}
+    //                 target="_blank"
+    //                 rel="noopener noreferrer"
+    //                 className={`p-2 rounded-full  backdrop-blur-sm  transition-transform hover:scale-110 ${formData.social_icon_bg_show && "shadow-md"}`}
+    //                 style={{ color: formData?.accent_color || "#10b981", backgroundColor: formData.social_icon_bg_show ? "white" : "transparent" }}
+    //             >
+    //                 <Facebook className="h-6 w-6" />
+    //             </a>
+    //         )}
+    //         {selectedRestaurant?.whatsapp && (
+    //             <a
+    //                 href={`https://wa.me/${selectedRestaurant?.whatsapp.replace(/\D/g, "")}`}
+    //                 target="_blank"
+    //                 rel="noopener noreferrer"
+    //                 className={`p-2 rounded-full  backdrop-blur-sm  transition-transform hover:scale-110 ${formData.social_icon_bg_show && "shadow-md"}`}
+    //                 style={{ color: formData?.accent_color || "#10b981", backgroundColor: formData.social_icon_bg_show ? "white" : "transparent" }}
+    //             >
+    //                 <MessageCircle className="h-6 w-6" />
+    //             </a>
+    //         )}
+    //         {selectedRestaurant?.email && (
+    //             <a
+    //                 href={`mailto:${selectedRestaurant?.email}`}
+    //                 className={`p-2 rounded-full  backdrop-blur-sm  transition-transform hover:scale-110 ${formData.social_icon_bg_show && "shadow-md"}`}
+    //                 style={{ color: formData?.accent_color || "#10b981", backgroundColor: formData.social_icon_bg_show ? "white" : "transparent" }}
+    //             >
+    //                 <Mail className="h-6 w-6" />
+    //             </a>
+    //         )}
+    //         {selectedRestaurant?.address && (
+    //             <a
+    //                 href={`https://maps.google.com/?q=${encodeURIComponent(selectedRestaurant?.address)}`}
+    //                 target="_blank"
+    //                 rel="noopener noreferrer"
+    //                 className={`p-2 rounded-full  backdrop-blur-sm  transition-transform hover:scale-110 ${formData.social_icon_bg_show && "shadow-md"}`}
+    //                 style={{ color: formData?.accent_color || "#10b981", backgroundColor: formData.social_icon_bg_show ? "white" : "transparent" }}
+    //             >
+    //                 <MapPin className="h-6 w-6" />
+    //             </a>
+    //         )}
+    //     </div>
+    // },
+    // )
 
-    SocialIcons.displayName = "SocialIcons";
+    // SocialIcons.displayName = "SocialIcons";
 
 
     // const getIconForLink = (title: string) => {
@@ -506,13 +563,13 @@ export default function AppearancePage() {
                             </TabsTrigger>
                         </TabsList>
 
-                        <TabsContent value="style">
-                            <Card className="border-slate-200">
-                                <CardHeader>
+                        <TabsContent value="style" className="space-y-4">
+                            <Card className="border-slate-200 gap-0 pt-0">
+                                <CardHeader className="py-4 gap-1">
                                     <CardTitle className="text-slate-900">Button Style</CardTitle>
                                     <CardDescription className="text-slate-500">Choose how your buttons should look</CardDescription>
                                 </CardHeader>
-                                <CardContent className="space-y-6">
+                                <CardContent className="space-y-3">
                                     <div className="space-y-4">
                                         <Label className="text-slate-700">Shape</Label>
                                         <RadioGroup
@@ -592,6 +649,141 @@ export default function AppearancePage() {
                                                 </Label>
                                             </div>
                                         </RadioGroup>
+                                    </div>
+                                    {/* button icons show  */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between border rounded-lg px-4 py-3">
+                                            <div className="space-y-1">
+                                                <Label className="text-slate-700 text-sm font-medium">Show Icons on Buttons</Label>
+                                                <p className="text-sm text-muted-foreground">Enable this to show icons inside your link buttons.</p>
+                                            </div>
+                                            <Switch
+                                                checked={formData.button_icons_show}
+                                                onCheckedChange={(checked) =>
+                                                    setFormData((prev) => ({ ...prev, button_icons_show: checked }))
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                    {/* Gap between buttons (vertical spacing) */}
+                                    <div className="space-y-2">
+                                        <div>
+                                            <Label className="text-slate-700 text-sm font-medium">
+                                                Vertical Gap Between Buttons (px)
+                                            </Label>
+                                            <p className="text-sm text-muted-foreground">
+                                                Adjust the spacing between stacked buttons.
+                                            </p>
+                                        </div>
+                                        <Select
+                                            value={String(formData.buttons_gap_in_px)}
+                                            onValueChange={(value) =>
+                                                setFormData((prev) => ({ ...prev, buttons_gap_in_px: parseInt(value) }))
+                                            }
+                                        >
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Select gap in px" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {[...Array(16)].map((_, i) => {
+                                                    const gap = i * 2;
+                                                    if (gap === 0) return null
+                                                    return (
+                                                        <SelectItem key={gap} value={String(gap)}>
+                                                            {gap}px
+                                                        </SelectItem>
+                                                    );
+                                                })}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            <Card className="border-slate-200 gap-0 pt-0">
+                                <CardHeader className="py-4 gap-1">
+                                    <CardTitle className="text-slate-900">Social Icon Style</CardTitle>
+                                    <CardDescription className="text-slate-500">
+                                        Customize how your social icons appear.
+                                    </CardDescription>
+                                </CardHeader>
+
+                                <CardContent className="space-y-3">
+                                    {/* Toggle for background */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between border rounded-lg px-4 py-3">
+                                            <div className="space-y-1">
+                                                <Label className="text-slate-700 text-sm font-medium">Show Icon Background</Label>
+                                                <p className="text-sm text-muted-foreground">
+                                                    Enable this to show a colored circular behind each social icon.
+                                                </p>
+                                            </div>
+                                            <Switch
+                                                checked={formData.social_icon_bg_show}
+                                                onCheckedChange={(checked) =>
+                                                    setFormData((prev) => ({ ...prev, social_icon_bg_show: checked }))
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Select background color */}
+                                    <div className="space-y-2">
+                                        <div>
+                                            <Label className="text-slate-700 text-sm font-medium">Icon Background Color</Label>
+                                            <p className="text-sm text-muted-foreground">
+                                                Choose the background color for the icon container.
+                                            </p>
+                                        </div>
+                                        <ColorSelector
+                                            value={formData.social_icon_bg_color}
+                                            onChange={(val) => setFormData((prev) => ({ ...prev, social_icon_bg_color: val }))}
+                                        />
+                                    </div>
+
+                                    {/* Select icon color */}
+                                    <div className="space-y-2">
+                                        <div>
+                                            <Label className="text-slate-700 text-sm font-medium">Icon Color</Label>
+                                            <p className="text-sm text-muted-foreground">
+                                                Choose the color of the social icon itself.
+                                            </p>
+                                        </div>
+                                        <ColorSelector
+                                            value={formData.social_icon_color}
+                                            onChange={(val) => setFormData((prev) => ({ ...prev, social_icon_color: val }))}
+                                        />
+                                    </div>
+                                    {/* Horizonal Gap Between icons  */}
+                                    <div className="space-y-2">
+                                        <div>
+                                            <Label className="text-slate-700 text-sm font-medium">
+                                                Horizonal Gap Between Icons (px)
+                                            </Label>
+                                            <p className="text-sm text-muted-foreground">
+                                                Adjust the spacing between social icons.
+                                            </p>
+                                        </div>
+                                        <Select
+                                            value={String(formData.social_icon_gap)}
+                                            onValueChange={(value) =>
+                                                setFormData((prev) => ({ ...prev, social_icon_gap: parseInt(value) }))
+                                            }
+                                        >
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Select gap in px" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {[...Array(12)].map((_, i) => {
+                                                    const gap = i * 2;
+                                                    if (gap === 0) return null
+                                                    return (
+                                                        <SelectItem key={gap} value={String(gap)}>
+                                                            {gap}px
+                                                        </SelectItem>
+                                                    );
+                                                })}
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -699,29 +891,29 @@ export default function AppearancePage() {
                         </TabsContent>
 
                         <TabsContent value="colors">
-                            <div className="space-y-6">
-                                <Card className="border-slate-200">
-                                    <CardHeader>
+                            <div className="space-y-4">
+                                <Card className="border-slate-200 gap-0 pt-0">
+                                    <CardHeader className="py-4">
                                         <CardTitle className="text-slate-900">Background</CardTitle>
                                         <CardDescription className="text-slate-500">
                                             Choose between a solid color, gradient, or custom image background
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="space-y-6">
+                                    <CardContent className="space-y-4">
                                         <RadioGroup
                                             value={formData.bg_type}
                                             onValueChange={(value: string) =>
                                                 updateFormData({ bg_type: value as "color" | "gradient" | "image" })
                                             }
-                                            className="grid grid-cols-3 gap-4"
+                                            className="flex gap-3"
                                         >
                                             <div>
                                                 <RadioGroupItem value="color" id="color" className="peer sr-only" />
                                                 <Label
                                                     htmlFor="color"
-                                                    className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                                                    className="flex flex-col w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-16 rounded bg-teal-600 mb-2"></div>
+                                                    <div className="w-full h-8 rounded bg-teal-600 mb-2"></div>
                                                     <span className="text-slate-700">Solid Color</span>
                                                 </Label>
                                             </div>
@@ -730,9 +922,9 @@ export default function AppearancePage() {
                                                 <RadioGroupItem value="gradient" id="gradient" className="peer sr-only" />
                                                 <Label
                                                     htmlFor="gradient"
-                                                    className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                                                    className="flex flex-col w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-16 rounded bg-gradient-to-r from-teal-500 to-blue-500 mb-2"></div>
+                                                    <div className="w-full h-8 rounded bg-gradient-to-r from-teal-500 to-blue-500 mb-2"></div>
                                                     <span className="text-slate-700">Gradient</span>
                                                 </Label>
                                             </div>
@@ -741,9 +933,9 @@ export default function AppearancePage() {
                                                 <RadioGroupItem value="image" id="image" className="peer sr-only" />
                                                 <Label
                                                     htmlFor="image"
-                                                    className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                                                    className="flex flex-col w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-16 rounded bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center mb-2">
+                                                    <div className="w-full h-8 rounded bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center mb-2">
                                                         <ImageIcon className="h-6 w-6 text-slate-400" />
                                                     </div>
                                                     <span className="text-slate-700">Image</span>
@@ -755,24 +947,21 @@ export default function AppearancePage() {
                                             <div className="space-y-4">
                                                 <div className="space-y-2">
                                                     <Label className="text-slate-700">Background Color</Label>
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="w-10 h-10 rounded border" style={{ backgroundColor: formData.bg_color }} />
-                                                        <Input
-                                                            type="color"
-                                                            value={formData.bg_color}
-                                                            onChange={(e) => updateFormData({ bg_color: e.target.value })}
-                                                            className="flex-1"
-                                                        />
-                                                    </div>
+                                                    <ColorSelector
+                                                        value={formData.bg_color}
+                                                        colors={["#FFFFFF", "#000000", ...colorPresets.map((item => item.color))]}
+                                                        onChange={(val) => updateFormData({ bg_color: val })}
+                                                    />
                                                 </div>
                                             </div>
                                         )}
 
                                         {formData.bg_type === "gradient" && (
-                                            <div className="space-y-6">
-                                                <div className="space-y-4">
+                                            <div className="space-y-4">
+                                                <div className="space-y-3">
                                                     <Label className="text-slate-700">Gradient Presets</Label>
-                                                    <div className="grid grid-cols-8 gap-2">
+
+                                                    <div className="grid grid-cols-10 gap-2">
                                                         {gradientPresets.map((preset) => (
                                                             <button
                                                                 key={preset.name}
@@ -792,19 +981,19 @@ export default function AppearancePage() {
                                                     </div>
                                                 </div>
 
-                                                <div className="space-y-4">
+                                                <div className="space-y-3">
                                                     <Label className="text-slate-700">Gradient Direction</Label>
                                                     <Select
                                                         value={formData.gradient_direction}
                                                         onValueChange={(value) => updateFormData({ gradient_direction: value as GradientDirection })}
                                                     >
-                                                        <SelectTrigger className="border-slate-200">
+                                                        <SelectTrigger className="border-slate-200 !py-5 w-full">
                                                             <SelectValue placeholder="Select direction" />
                                                         </SelectTrigger>
                                                         <SelectContent>
                                                             {gradientDirections.map((direction) => (
-                                                                <SelectItem key={direction.value} value={direction.value}>
-                                                                    <div className="flex flex-col">
+                                                                <SelectItem key={direction.value} value={direction.value} >
+                                                                    <div className="flex flex-col items-start">
                                                                         <span>{direction.label}</span>
                                                                         <span className="text-xs text-slate-500">{direction.preview}</span>
                                                                     </div>
@@ -814,37 +1003,23 @@ export default function AppearancePage() {
                                                     </Select>
                                                 </div>
 
-                                                <div className="grid grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-2 gap-3">
                                                     <div className="space-y-2">
                                                         <Label className="text-slate-700">Start Color</Label>
-                                                        <div className="flex items-center gap-2">
-                                                            <div
-                                                                className="w-10 h-10 rounded border"
-                                                                style={{ backgroundColor: formData.bg_gradient_start }}
-                                                            />
-                                                            <Input
-                                                                type="color"
-                                                                value={formData.bg_gradient_start}
-                                                                onChange={(e) => updateFormData({ bg_gradient_start: e.target.value })}
-                                                                className="flex-1"
-                                                            />
-                                                        </div>
+                                                        <ColorSelector
+                                                            value={formData.bg_gradient_start}
+                                                            colors={["#FFFFFF", "#000000", ...colorPresets.map((item => item.color))]}
+                                                            onChange={(val) => updateFormData({ bg_gradient_start: val })}
+                                                        />
                                                     </div>
 
                                                     <div className="space-y-2">
                                                         <Label className="text-slate-700">End Color</Label>
-                                                        <div className="flex items-center gap-2">
-                                                            <div
-                                                                className="w-10 h-10 rounded border"
-                                                                style={{ backgroundColor: formData.bg_gradient_end }}
-                                                            />
-                                                            <Input
-                                                                type="color"
-                                                                value={formData.bg_gradient_end}
-                                                                onChange={(e) => updateFormData({ bg_gradient_end: e.target.value })}
-                                                                className="flex-1"
-                                                            />
-                                                        </div>
+                                                        <ColorSelector
+                                                            value={formData.bg_gradient_end}
+                                                            colors={["#FFFFFF", "#000000", ...colorPresets.map((item => item.color))]}
+                                                            onChange={(val) => updateFormData({ bg_gradient_end: val })}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -872,109 +1047,60 @@ export default function AppearancePage() {
                                     </CardContent>
                                 </Card>
 
-                                <Card className="border-slate-200">
-                                    <CardHeader>
+                                <Card className="border-slate-200 gap-0 pt-0">
+                                    <CardHeader className="py-4">
                                         <CardTitle className="text-slate-900">Accent Color</CardTitle>
                                         <CardDescription className="text-slate-500">
                                             This color will be used for buttons and highlights
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="space-y-6">
+                                    <CardContent className="space-y-4">
                                         <div className="space-y-4">
                                             <Label className="text-slate-700">Color Presets</Label>
-                                            <div className="grid grid-cols-8 gap-2">
-                                                {colorPresets.map((preset) => (
-                                                    <button
-                                                        key={preset.name}
-                                                        onClick={() => updateFormData({ accent_color: preset.color })}
-                                                        className="w-full aspect-square rounded-lg overflow-hidden hover:ring-2 ring-offset-2 ring-teal-600 transition-all"
-                                                        style={{ backgroundColor: preset.color }}
-                                                        title={preset.name}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label className="text-slate-700">Custom Color</Label>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-10 h-10 rounded border" style={{ backgroundColor: formData.accent_color }} />
-                                                <Input
-                                                    type="color"
+                                            <div >
+                                                <ColorSelector
                                                     value={formData.accent_color}
-                                                    onChange={(e) => updateFormData({ accent_color: e.target.value })}
-                                                    className="flex-1"
+                                                    colors={colorPresets.map((item => item.color))}
+                                                    onChange={(val) => updateFormData({ accent_color: val })}
                                                 />
                                             </div>
                                         </div>
                                     </CardContent>
                                 </Card>
 
-                                <Card className="border-slate-200">
-                                    <CardHeader>
+                                <Card className="border-slate-200 gap-0 !pt-0">
+                                    <CardHeader className="py-4">
                                         <CardTitle className="text-slate-900">Text Colors</CardTitle>
                                         <CardDescription className="text-slate-500">
                                             Customize the colors for headings and button text
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="space-y-6">
+                                    <CardContent className="space-y-4">
                                         <div className="space-y-4">
-                                            <Label className="text-slate-700">Headings Text Color</Label>
-                                            <p className="text-xs text-slate-500">Color for restaurant name and bio text</p>
-                                            <div className="space-y-4">
-                                                <div className="grid grid-cols-8 gap-2">
-                                                    {textColorPresets.map((preset) => (
-                                                        <button
-                                                            key={preset.name}
-                                                            onClick={() => updateFormData({ headings_text_color: preset.color })}
-                                                            className="w-full aspect-square rounded-lg overflow-hidden hover:ring-2 ring-offset-2 ring-teal-600 transition-all border"
-                                                            style={{ backgroundColor: preset.color }}
-                                                            title={preset.name}
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <div
-                                                        className="w-10 h-10 rounded border"
-                                                        style={{ backgroundColor: formData.headings_text_color }}
-                                                    />
-                                                    <Input
-                                                        type="color"
-                                                        value={formData.headings_text_color}
-                                                        onChange={(e) => updateFormData({ headings_text_color: e.target.value })}
-                                                        className="flex-1"
-                                                    />
-                                                </div>
+                                            <div>
+                                                <Label className="text-slate-700">Headings Text Color</Label>
+                                                <p className="text-xs mt-2 text-slate-500">Color for restaurant name and bio text</p>
+                                            </div>
+                                            <div >
+                                                <ColorSelector
+                                                    value={formData.headings_text_color}
+                                                    colors={textColorPresets.map((item => item.color))}
+                                                    onChange={(val) => updateFormData({ headings_text_color: val })}
+                                                />
                                             </div>
                                         </div>
 
                                         <div className="space-y-4">
-                                            <Label className="text-slate-700">Button Text & Icons Color</Label>
-                                            <p className="text-xs text-slate-500">Color for text and icons inside buttons</p>
-                                            <div className="space-y-4">
-                                                <div className="grid grid-cols-8 gap-2">
-                                                    {textColorPresets.map((preset) => (
-                                                        <button
-                                                            key={preset.name}
-                                                            onClick={() => updateFormData({ button_text_icons_color: preset.color })}
-                                                            className="w-full aspect-square rounded-lg overflow-hidden hover:ring-2 ring-offset-2 ring-teal-600 transition-all border"
-                                                            style={{ backgroundColor: preset.color }}
-                                                            title={preset.name}
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <div
-                                                        className="w-10 h-10 rounded border"
-                                                        style={{ backgroundColor: formData.button_text_icons_color }}
-                                                    />
-                                                    <Input
-                                                        type="color"
-                                                        value={formData.button_text_icons_color}
-                                                        onChange={(e) => updateFormData({ button_text_icons_color: e.target.value })}
-                                                        className="flex-1"
-                                                    />
-                                                </div>
+                                            <div>
+                                                <Label className="text-slate-700">Button Text & Icons Color</Label>
+                                                <p className="text-xs mt-2 text-slate-500">Color for text and icons inside buttons</p>
+                                            </div>
+                                            <div >
+                                                <ColorSelector
+                                                    value={formData.button_text_icons_color}
+                                                    colors={textColorPresets.map((item => item.color))}
+                                                    onChange={(val) => updateFormData({ button_text_icons_color: val })}
+                                                />
                                             </div>
                                         </div>
                                     </CardContent>
@@ -1061,7 +1187,7 @@ export default function AppearancePage() {
                             <CardDescription className="text-slate-500">See how your page looks on mobile devices</CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <div className="mx-auto max-w-[350px] p-6">
+                            <div className="mx-auto max-w-[350px] lg:max-w-[400px] p-6">
                                 <div className="relative">
                                     <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-teal-500/20 to-blue-500/20 blur-xl opacity-30 scale-105 translate-y-2"></div>
 
@@ -1087,7 +1213,7 @@ export default function AppearancePage() {
                                         </div>
 
                                         <div className="mt-1">
-                                            <div className="min-h-[600px] no-scroll overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
+                                            <div className="min-h-[600px] lg:min-h-[650px] no-scroll overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
                                                 <div className="p-4 flex flex-col items-center">
                                                     {selectedRestaurant?.logo_url ? (
                                                         <motion.img
@@ -1140,19 +1266,30 @@ export default function AppearancePage() {
                                                         </motion.div>
                                                     )}
 
-                                                    <motion.div
-                                                        initial={{ y: 20, opacity: 0 }}
-                                                        animate={{ y: 0, opacity: 1 }}
-                                                        transition={{ delay: 0.25 }}
-                                                        className="mb-4"
-                                                    >
-                                                        <GoogleRating info={{
-                                                            rating: 5,
-                                                            user_ratings_total: 17
-                                                        }}
-                                                            color={formData.headings_text_color || "#000000"}
-                                                            className="text-white" />
-                                                    </motion.div>
+                                                    {
+                                                        selectedRestaurant?.google_place_id &&
+                                                            reviewLoading
+                                                            ?
+                                                            <Skeleton className="w-[80px] h-[36px] animate-pulse" />
+                                                            :
+                                                            reviewData.rating
+                                                                ?
+                                                                <motion.div
+                                                                    initial={{ y: 20, opacity: 0 }}
+                                                                    animate={{ y: 0, opacity: 1 }}
+                                                                    transition={{ delay: 0.25 }}
+                                                                    className="mb-4"
+                                                                >
+                                                                    <GoogleRating info={{
+                                                                        rating: reviewData.rating,
+                                                                        user_ratings_total: reviewData.user_ratings_total
+                                                                    }}
+                                                                        color={formData?.headings_text_color || "#000000"}
+                                                                    />
+                                                                </motion.div>
+                                                                :
+                                                                ""
+                                                    }
 
                                                     {selectedRestaurant?.bio && (
                                                         <motion.p
@@ -1174,10 +1311,33 @@ export default function AppearancePage() {
                                                         selectedRestaurant?.facebook ||
                                                         selectedRestaurant?.email ||
                                                         selectedRestaurant?.address ||
-                                                        selectedRestaurant?.whatsapp) && <SocialIcons />}
+                                                        selectedRestaurant?.whatsapp)
+                                                        &&
+                                                        <SocialIcons
+                                                            restaurant={
+                                                                {
+                                                                    address: selectedRestaurant?.address,
+                                                                    email: selectedRestaurant.email,
+                                                                    facebook: selectedRestaurant.facebook,
+                                                                    instagram: selectedRestaurant.facebook,
+                                                                    whatsapp: selectedRestaurant.whatsapp,
+                                                                }
+                                                            }
+                                                            className="mb-4"
+                                                            theme={{
+                                                                socialIconColor: formData.social_icon_color,
+                                                                socialIconBgShow: formData.social_icon_bg_show,
+                                                                socialIconBgColor: formData.social_icon_bg_color,
+                                                                social_icon_gap: formData.social_icon_gap
+                                                            }}
+                                                        />
+                                                    }
                                                 </div>
 
-                                                <motion.div variants={container} initial="hidden" animate="show" className="flex-grow px-4 mb-4 space-y-4">
+                                                <motion.div variants={container} initial="hidden" animate="show"
+                                                    className="flex-grow px-4 mb-4 flex flex-col"
+                                                    style={{ rowGap: `${formData.buttons_gap_in_px}px` }}
+                                                >
                                                     {
                                                         linksLoading ?
                                                             <p className="w-full text-center text-sm">
@@ -1193,7 +1353,7 @@ export default function AppearancePage() {
                                                                                 <div
                                                                                     key={link.id}
                                                                                     rel="noopener noreferrer"
-                                                                                    className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
+                                                                                    className={`group flex items-center justify-center  text-center w-full h-[52px]  transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} ${formData.button_style === "pill"
                                                                                         ? "rounded-full"
                                                                                         : formData.button_style === "square"
                                                                                             ? "rounded-md"
@@ -1203,7 +1363,7 @@ export default function AppearancePage() {
                                                                                         backgroundColor:
                                                                                             formData.button_variant === "solid"
                                                                                                 ? formData.accent_color || "#10b981"
-                                                                                                : "rgba(255, 255, 255, 0.95)",
+                                                                                                : "transparent",
                                                                                         backdropFilter: "blur(8px)",
                                                                                         border: `2px solid ${formData.accent_color || "#10b981"}`,
                                                                                         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
@@ -1212,16 +1372,35 @@ export default function AppearancePage() {
                                                                                         letterSpacing: "0.01em",
                                                                                     }}
                                                                                 >
+
+                                                                                    {
+                                                                                        formData.button_icons_show
+                                                                                        &&
+                                                                                        <div className="flex aspect-square absolute left-[7px]  shrink-0 size-[38px] items-center justify-center rounded-full "
+                                                                                            style={{
+                                                                                                backgroundColor: formData.button_text_icons_color || "transparent"
+                                                                                            }}
+                                                                                        >
+                                                                                            {getLucideIconBySlug(link.icon_slug, { className: "w-4 h-4", style: { color: formData.accent_color || "transparent" } })}
+                                                                                        </div>
+                                                                                    }
                                                                                     <span
-                                                                                        className={`relative text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
                                                                                             } transition-colors duration-300 font-medium`}
                                                                                         style={{
                                                                                             color:
-                                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : formData.button_text_icons_color || "#000000",
+                                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : formData.button_text_icons_color,
                                                                                         }}
                                                                                     >
                                                                                         {link.title}
                                                                                     </span>
+                                                                                    {
+                                                                                        formData.button_icons_show
+                                                                                        &&
+                                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                                                                            <MoreVertical className="size-4" />
+                                                                                        </div>
+                                                                                    }
                                                                                 </div>
                                                                             ))}
                                                                         </>

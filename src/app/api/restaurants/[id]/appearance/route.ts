@@ -31,6 +31,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             gradient_direction,
             button_variant,
             bg_image_url,
+            social_icon_bg_color,
+            social_icon_color,
+            button_icons_show,
+            buttons_gap_in_px,
+            social_icon_gap,
+            social_icon_bg_show
         } = body
 
         // Validate required fields
@@ -81,7 +87,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                 bg_gradient_start,
                 bg_gradient_end,
                 gradient_direction,
+                social_icon_bg_show,
+                social_icon_bg_color,
+                social_icon_gap,
+                social_icon_color,
+                buttons_gap_in_px: Number(buttons_gap_in_px),
                 button_variant,
+                button_icons_show: button_icons_show,
                 bg_image_url: bg_image_url || null,
             },
         })

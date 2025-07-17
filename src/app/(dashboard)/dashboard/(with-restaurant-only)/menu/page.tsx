@@ -492,7 +492,14 @@ export default function MenuPage() {
                                                             {item.description && <p className="text-sm text-slate-500 mb-2">{item.description}</p>}
                                                             {item.allergens && item.allergens.length > 0 && (
                                                                 <div className="flex flex-wrap gap-1">
-                                                                    {item.allergens.map((allergen) => (
+                                                                    <span
+                                                                        className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800"
+                                                                        title={`Contains allergens`}
+                                                                    >
+                                                                        <AlertTriangle className="h-3 w-3" />
+                                                                        Allergens
+                                                                    </span>
+                                                                    {/* {item.allergens.map((allergen) => (
                                                                         <span
                                                                             key={allergen}
                                                                             className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800"
@@ -501,7 +508,7 @@ export default function MenuPage() {
                                                                             <AlertTriangle className="h-3 w-3" />
                                                                             {allergen}
                                                                         </span>
-                                                                    ))}
+                                                                    ))} */}
                                                                 </div>
                                                             )}
                                                         </div>

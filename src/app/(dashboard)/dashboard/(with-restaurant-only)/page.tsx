@@ -2,10 +2,14 @@
 
 import { GoogleRating } from "@/app/[slug]/_components/google-rating"
 import { OpeningHoursStatus } from "@/app/[slug]/_components/opening-hours-status"
+import SocialIcons from "@/components/social-icons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { getLucideIconBySlug } from "@/lib/get-icons"
 import { useLinks } from "@/lib/link-queries"
 import { useRecentActivity, useRestaurants } from "@/lib/restaurents-queries"
+import { useGoogleReviews } from "@/lib/review-api"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { GetRestaurantsResponse, OpeningHoursData } from "@/types"
 import { QueryObserverResult } from "@tanstack/react-query"
@@ -15,14 +19,10 @@ import {
     Calendar,
     Copy,
     ExternalLink,
-    Facebook,
     HelpCircle,
-    Instagram,
     LinkIcon,
     Loader2,
-    Mail,
-    MapPin,
-    MessageCircle,
+    MoreVertical,
     Plus,
     QrCode,
     Settings,
@@ -34,7 +34,7 @@ import {
 } from "lucide-react"
 import { motion } from "motion/react"
 import Link from "next/link"
-import { memo, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 
@@ -61,6 +61,7 @@ export default function DashboardPage() {
     const { data: links = [], isLoading: linksLoading, } = useLinks(selectedRestaurant?.id)
     const [monthlyVisits, setMonthlyVisits] = useState<number | null>(null);
     const { data: activityData, isLoading: activityLoading } = useRecentActivity(selectedRestaurant?.id);
+    const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(selectedRestaurant?.google_place_id);
 
     useEffect(() => {
         const fetchMonthlyVisits = async () => {
@@ -166,71 +167,6 @@ export default function DashboardPage() {
 
         return { backgroundColor: selectedRestaurant?.bg_color || "#ffffff" }
     }
-
-    const SocialIcons = memo(() => {
-        return <div
-            // initial={{ y: 20, opacity: 0 }}
-            // animate={{ y: 0, opacity: 1 }}
-            // transition={{ delay: 0.4 }}
-            className="mb-4 flex flex-wrap items-center justify-center gap-3"
-        >
-            {selectedRestaurant?.instagram && (
-                <a
-                    href={selectedRestaurant?.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <Instagram className="h-6 w-6" />
-                </a>
-            )}
-            {selectedRestaurant?.facebook && (
-                <a
-                    href={selectedRestaurant?.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <Facebook className="h-6 w-6" />
-                </a>
-            )}
-            {selectedRestaurant?.whatsapp && (
-                <a
-                    href={`https://wa.me/${selectedRestaurant?.whatsapp.replace(/\D/g, "")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <MessageCircle className="h-6 w-6" />
-                </a>
-            )}
-            {selectedRestaurant?.email && (
-                <a
-                    href={`mailto:${selectedRestaurant?.email}`}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <Mail className="h-6 w-6" />
-                </a>
-            )}
-            {selectedRestaurant?.address && (
-                <a
-                    href={`https://maps.google.com/?q=${encodeURIComponent(selectedRestaurant?.address)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: selectedRestaurant?.accent_color || "#10b981" }}
-                >
-                    <MapPin className="h-6 w-6" />
-                </a>
-            )}
-        </div>
-    },
-    )
-    SocialIcons.displayName = "SocialIcons";
 
     const openingHours = selectedRestaurant?.opening_hours ? (selectedRestaurant?.opening_hours as OpeningHoursData) : null
 
@@ -370,7 +306,7 @@ export default function DashboardPage() {
                             </div>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <div className="mx-auto max-w-[350px] p-6">
+                            <div className="mx-auto max-w-[350px] lg:max-w-[400px] p-6">
                                 <div className="relative">
                                     <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-teal-500/20 to-blue-500/20 blur-xl opacity-30 scale-105 translate-y-2"></div>
 
@@ -396,7 +332,7 @@ export default function DashboardPage() {
                                         </div>
 
                                         <div className="mt-1">
-                                            <div className="min-h-[600px] no-scroll overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
+                                            <div className="min-h-[600px] lg:min-h-[650px] no-scroll overflow-y-auto max-h-[610px]" style={getBackgroundStyle()}>
                                                 <div className="p-4 flex flex-col items-center">
                                                     {selectedRestaurant?.logo_url ? (
                                                         <motion.img
@@ -449,19 +385,30 @@ export default function DashboardPage() {
                                                         </motion.div>
                                                     )}
 
-                                                    <motion.div
-                                                        initial={{ y: 20, opacity: 0 }}
-                                                        animate={{ y: 0, opacity: 1 }}
-                                                        transition={{ delay: 0.25 }}
-                                                        className="mb-4"
-                                                    >
-                                                        <GoogleRating info={{
-                                                            rating: 5,
-                                                            user_ratings_total: 17
-                                                        }}
-                                                            color={selectedRestaurant?.headings_text_color || "#000000"}
-                                                            className="text-white" />
-                                                    </motion.div>
+                                                    {
+                                                        selectedRestaurant?.google_place_id &&
+                                                            reviewLoading
+                                                            ?
+                                                            <Skeleton className="w-[80px] h-[36px] animate-pulse" />
+                                                            :
+                                                            reviewData.rating
+                                                                ?
+                                                                <motion.div
+                                                                    initial={{ y: 20, opacity: 0 }}
+                                                                    animate={{ y: 0, opacity: 1 }}
+                                                                    transition={{ delay: 0.25 }}
+                                                                    className="mb-4"
+                                                                >
+                                                                    <GoogleRating info={{
+                                                                        rating: reviewData.rating,
+                                                                        user_ratings_total: reviewData.user_ratings_total
+                                                                    }}
+                                                                        color={selectedRestaurant?.headings_text_color || "#000000"}
+                                                                    />
+                                                                </motion.div>
+                                                                :
+                                                                ""
+                                                    }
 
                                                     {selectedRestaurant?.bio && (
                                                         <motion.p
@@ -483,10 +430,32 @@ export default function DashboardPage() {
                                                         selectedRestaurant?.facebook ||
                                                         selectedRestaurant?.email ||
                                                         selectedRestaurant?.address ||
-                                                        selectedRestaurant?.whatsapp) && <SocialIcons />}
+                                                        selectedRestaurant?.whatsapp)
+                                                        &&
+                                                        <SocialIcons
+                                                            restaurant={
+                                                                {
+                                                                    address: selectedRestaurant?.address,
+                                                                    email: selectedRestaurant.email,
+                                                                    facebook: selectedRestaurant.facebook,
+                                                                    instagram: selectedRestaurant.facebook,
+                                                                    whatsapp: selectedRestaurant.whatsapp,
+                                                                }
+                                                            }
+                                                            className="mb-4"
+                                                            theme={{
+                                                                socialIconColor: selectedRestaurant.social_icon_color,
+                                                                socialIconBgShow: selectedRestaurant.social_icon_bg_show,
+                                                                socialIconBgColor: selectedRestaurant.social_icon_bg_color,
+                                                                social_icon_gap: selectedRestaurant.social_icon_gap
+                                                            }}
+                                                        />
+                                                    }
                                                 </div>
 
-                                                <motion.div variants={container} initial="hidden" animate="show" className="flex-grow px-4 mb-4 space-y-4">
+                                                <motion.div variants={container} initial="hidden" animate="show" className="flex-grow px-4 mb-4 flex flex-col"
+                                                    style={{ rowGap: `${selectedRestaurant.buttons_gap_in_px}px` }}
+                                                >
                                                     {
                                                         linksLoading ?
                                                             <p className="w-full text-center text-sm">
@@ -501,9 +470,9 @@ export default function DashboardPage() {
                                                                                 <div
                                                                                     key={link.id}
                                                                                     rel="noopener noreferrer"
-                                                                                    className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant?.button_style === "pill"
+                                                                                    className={`group flex items-center justify-center  text-center  w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} ${selectedRestaurant.button_style === "pill"
                                                                                         ? "rounded-full"
-                                                                                        : selectedRestaurant?.button_style === "square"
+                                                                                        : selectedRestaurant.button_style === "square"
                                                                                             ? "rounded-md"
                                                                                             : "rounded-xl"
                                                                                         }`}
@@ -511,7 +480,7 @@ export default function DashboardPage() {
                                                                                         backgroundColor:
                                                                                             selectedRestaurant?.button_variant === "solid"
                                                                                                 ? selectedRestaurant?.accent_color || "#10b981"
-                                                                                                : "rgba(255, 255, 255, 0.95)",
+                                                                                                : "transparent",
                                                                                         backdropFilter: "blur(8px)",
                                                                                         border: `2px solid ${selectedRestaurant?.accent_color || "#10b981"}`,
                                                                                         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
@@ -520,16 +489,35 @@ export default function DashboardPage() {
                                                                                         letterSpacing: "0.01em",
                                                                                     }}
                                                                                 >
+
+                                                                                    {
+                                                                                        selectedRestaurant?.button_icons_show
+                                                                                        &&
+                                                                                        <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                                                                            style={{
+                                                                                                backgroundColor: selectedRestaurant.button_text_icons_color || "transparent"
+                                                                                            }}
+                                                                                        >
+                                                                                            {getLucideIconBySlug(link.icon_slug, { className: "w-4 h-4", style: { color: selectedRestaurant.accent_color || "transparent" } })}
+                                                                                        </div>
+                                                                                    }
                                                                                     <span
-                                                                                        className={`relative text-[15px] ${selectedRestaurant?.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                                        className={`relative w-full text-[15px] ${selectedRestaurant.button_variant === "outline" ? "group-hover:text-white" : ""
                                                                                             } transition-colors duration-300 font-medium`}
                                                                                         style={{
                                                                                             color:
-                                                                                                selectedRestaurant?.button_variant === "outline" ? selectedRestaurant?.accent_color || "#10b981" : selectedRestaurant?.button_text_icons_color || "#000000",
+                                                                                                selectedRestaurant.button_variant === "outline" ? selectedRestaurant.accent_color || "#10b981" : selectedRestaurant.button_text_icons_color || undefined,
                                                                                         }}
                                                                                     >
                                                                                         {link.title}
                                                                                     </span>
+                                                                                    {
+                                                                                        selectedRestaurant?.button_icons_show
+                                                                                        &&
+                                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                                                                            <MoreVertical className="size-4" />
+                                                                                        </div>
+                                                                                    }
                                                                                 </div>
                                                                             ))}
                                                                         </>

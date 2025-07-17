@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ky from "./ky"
 import { toast } from "sonner"
 import { Link } from "@prisma/client"
+import { IconSlug } from "./get-icons"
 
 type LinkWithCount = Link & {
     _count: {
@@ -26,12 +27,12 @@ export function useCreateLink(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async (data: { title: string; url: string }) => {
+        mutationFn: async (data: { title: string; url: string, iconSlug?: IconSlug }) => {
             if (!restaurantId) throw new Error("Restaurant ID is required")
 
             const response = await ky
                 .post("/api/links", {
-                    json: { ...data, restaurant_id: restaurantId },
+                    json: { ...data, restaurant_id: restaurantId, iconSlug: data.iconSlug || "link" },
                 })
                 .json<{ data: LinkWithCount }>()
             return response.data
@@ -51,6 +52,7 @@ export function useCreateLink(restaurantId: string | undefined) {
                 sort_order:
                     !previousLinks || previousLinks.length === 0 ? 0 : Math.max(...previousLinks.map((l) => l.sort_order)) + 1,
                 show_icon: true,
+                icon_slug: newLink.iconSlug || "link",
                 createdAt: new Date(),
                 _count: {
                     views: 0
@@ -88,8 +90,8 @@ export function useUpdateLink(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({ id, ...data }: { id: string; title: string; url: string }) => {
-            const response = await ky.put(`/api/links/${id}`, { json: data }).json<{ data: LinkWithCount }>()
+        mutationFn: async ({ id, ...data }: { id: string; title: string; url: string, iconSlug?: IconSlug }) => {
+            const response = await ky.put(`/api/links/${id}`, { json: { ...data, iconSlug: data.iconSlug || "libk" } }).json<{ data: LinkWithCount, }>()
             return response.data
         },
         onMutate: async (updatedLink) => {

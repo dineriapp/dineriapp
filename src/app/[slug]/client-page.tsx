@@ -1,31 +1,29 @@
 "use client"
 
-import type React from "react"
+import SocialIcons from "@/components/social-icons"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { getLucideIconBySlug } from "@/lib/get-icons"
+import { OpeningHoursData, ReviewsInfo } from "@/types"
+import type { Event, Faq, FaqCategory, MenuCategory, MenuItem, Link as PrismaLink, Restaurant, User } from "@prisma/client"
 import {
     AlertTriangle,
     Calendar,
     ExternalLink,
-    Facebook,
     HelpCircle,
-    Instagram,
     Leaf,
-    Mail,
-    MapPin,
     MenuIcon,
-    MessageCircle,
+    MoreVertical
 } from "lucide-react"
 import { motion } from "motion/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { memo, useEffect, useRef, useState } from "react"
-import { GoogleRating } from "./_components/google-rating"
-import { OpeningHoursStatus } from "./_components/opening-hours-status"
-import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
-import { WelcomePopup } from "./_components/welcome-popup"
+import type React from "react"
+import { useEffect, useRef, useState } from "react"
 import { FAQSection } from "./_components/faq-section"
-import type { Restaurant, Link as PrismaLink, MenuCategory, MenuItem, Event, FaqCategory, Faq, User } from "@prisma/client"
-import { OpeningHoursData, ReviewsInfo } from "@/types"
+import { GoogleRating } from "./_components/google-rating"
+import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
+import { OpeningHoursStatus } from "./_components/opening-hours-status"
+import { WelcomePopup } from "./_components/welcome-popup"
 
 // Define the complete types with relations using Prisma types
 type RestaurantWithRelations = Restaurant & {
@@ -149,70 +147,6 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
     const headingsColor = restaurant.headings_text_color || "#ffffff"
     const buttonTextColor = restaurant.button_text_icons_color || "#000000"
 
-    const SocialIcons = memo(() => {
-        return <div
-            // initial={{ y: 20, opacity: 0 }}
-            // animate={{ y: 0, opacity: 1 }}
-            // transition={{ delay: 0.4 }}
-            className="mb-4 sm:mb-8 flex flex-wrap items-center justify-center gap-3"
-        >
-            {restaurant.instagram && (
-                <a
-                    href={restaurant.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: restaurant.accent_color || "#10b981" }}
-                >
-                    <Instagram className="h-6 w-6" />
-                </a>
-            )}
-            {restaurant.facebook && (
-                <a
-                    href={restaurant.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: restaurant.accent_color || "#10b981" }}
-                >
-                    <Facebook className="h-6 w-6" />
-                </a>
-            )}
-            {restaurant.whatsapp && (
-                <a
-                    href={`https://wa.me/${restaurant.whatsapp.replace(/\D/g, "")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: restaurant.accent_color || "#10b981" }}
-                >
-                    <MessageCircle className="h-6 w-6" />
-                </a>
-            )}
-            {restaurant.email && (
-                <a
-                    href={`mailto:${restaurant.email}`}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: restaurant.accent_color || "#10b981" }}
-                >
-                    <Mail className="h-6 w-6" />
-                </a>
-            )}
-            {restaurant.address && (
-                <a
-                    href={`https://maps.google.com/?q=${encodeURIComponent(restaurant.address)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-transform hover:scale-110"
-                    style={{ color: restaurant.accent_color || "#10b981" }}
-                >
-                    <MapPin className="h-6 w-6" />
-                </a>
-            )}
-        </div>
-    },
-    )
-    SocialIcons.displayName = "SocialIcons";
 
     useEffect(() => {
         if (!hasTracked.current) {
@@ -237,7 +171,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                 }}
             />
 
-            <div className="container relative mx-auto flex max-w-[450px] flex-grow flex-col px-4 py-8">
+            <div className="container relative mx-auto flex max-w-[570px] flex-grow flex-col px-4 py-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -331,10 +265,31 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                         restaurant.email ||
                         restaurant.address ||
                         restaurant.whatsapp) &&
-                        restaurant.social_icons_position === "top" && <SocialIcons />}
+                        restaurant.social_icons_position === "top" &&
+                        <SocialIcons
+                            restaurant={
+                                {
+                                    address: restaurant?.address,
+                                    email: restaurant.email,
+                                    facebook: restaurant.facebook,
+                                    instagram: restaurant.facebook,
+                                    whatsapp: restaurant.whatsapp,
+                                }
+                            }
+                            className="mb-4 sm:mb-8"
+                            theme={{
+                                socialIconColor: restaurant.social_icon_color,
+                                socialIconBgShow: restaurant.social_icon_bg_show,
+                                socialIconBgColor: restaurant.social_icon_bg_color,
+                                social_icon_gap: restaurant.social_icon_gap
+                            }}
+                        />
+                    }
                 </motion.div>
 
-                <motion.div variants={container} initial="hidden" animate="show" className="flex-grow space-y-4">
+                <motion.div variants={container} initial="hidden" animate="show" className="flex-grow flex flex-col"
+                    style={{ rowGap: `${restaurant.buttons_gap_in_px}px` }}
+                >
                     {restaurant.links.map((link) => (
                         <motion.a
                             key={link.id}
@@ -343,7 +298,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => trackLinkClick(link.id)}
-                            className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                            className={`group flex items-center justify-center  text-center  w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} ${restaurant.button_style === "pill"
                                 ? "rounded-full"
                                 : restaurant.button_style === "square"
                                     ? "rounded-md"
@@ -353,7 +308,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 backgroundColor:
                                     restaurant.button_variant === "solid"
                                         ? restaurant.accent_color || "#10b981"
-                                        : "rgba(255, 255, 255, 0.95)",
+                                        : "transparent",
                                 backdropFilter: "blur(8px)",
                                 border: `2px solid ${restaurant.accent_color || "#10b981"}`,
                                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
@@ -362,8 +317,19 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 letterSpacing: "0.01em",
                             }}
                         >
+                            {
+                                restaurant?.button_icons_show
+                                &&
+                                <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                                    style={{
+                                        backgroundColor: restaurant.button_text_icons_color || "transparent"
+                                    }}
+                                >
+                                    {getLucideIconBySlug(link.icon_slug, { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
+                                </div>
+                            }
                             <span
-                                className={`relative text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                className={`relative w-full text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
                                     } transition-colors duration-300 font-medium`}
                                 style={{
                                     color:
@@ -372,6 +338,13 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             >
                                 {link.title}
                             </span>
+                            {
+                                restaurant?.button_icons_show
+                                &&
+                                <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                    <MoreVertical className="size-4" />
+                                </div>
+                            }
                         </motion.a>
                     ))}
 
@@ -379,7 +352,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                         <motion.button
                             variants={item}
                             onClick={() => setShowMenuDialog(true)}
-                            className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                            className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
                                 ? "rounded-full"
                                 : restaurant.button_style === "square"
                                     ? "rounded-md"
@@ -389,7 +362,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 backgroundColor:
                                     restaurant.button_variant === "solid"
                                         ? restaurant.accent_color || "#10b981"
-                                        : "rgba(255, 255, 255, 0.95)",
+                                        : "transparent",
                                 backdropFilter: "blur(8px)",
                                 border: `2px solid ${restaurant.accent_color || "#10b981"}`,
                                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
@@ -398,9 +371,19 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 letterSpacing: "0.01em",
                             }}
                         >
-
+                            {
+                                restaurant?.button_icons_show
+                                &&
+                                <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                                    style={{
+                                        backgroundColor: restaurant.button_text_icons_color || "transparent"
+                                    }}
+                                >
+                                    {getLucideIconBySlug("menu", { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
+                                </div>
+                            }
                             <span
-                                className={`relative text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                className={`relative w-full text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
                                     } transition-colors duration-300 font-medium`}
                                 style={{
                                     color:
@@ -409,6 +392,13 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             >
                                 Menu
                             </span>
+                            {
+                                restaurant?.button_icons_show
+                                &&
+                                <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                    <MoreVertical className="size-4" />
+                                </div>
+                            }
                         </motion.button>
                     )}
 
@@ -416,7 +406,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                         <motion.button
                             variants={item}
                             onClick={() => setShowEventsDialog(true)}
-                            className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                            className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
                                 ? "rounded-full"
                                 : restaurant.button_style === "square"
                                     ? "rounded-md"
@@ -426,7 +416,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 backgroundColor:
                                     restaurant.button_variant === "solid"
                                         ? restaurant.accent_color || "#10b981"
-                                        : "rgba(255, 255, 255, 0.95)",
+                                        : "transparent",
                                 backdropFilter: "blur(8px)",
                                 border: `2px solid ${restaurant.accent_color || "#10b981"}`,
                                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
@@ -435,10 +425,19 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 letterSpacing: "0.01em",
                             }}
                         >
-
-
+                            {
+                                restaurant?.button_icons_show
+                                &&
+                                <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                                    style={{
+                                        backgroundColor: restaurant.button_text_icons_color || "transparent"
+                                    }}
+                                >
+                                    {getLucideIconBySlug("events", { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
+                                </div>
+                            }
                             <span
-                                className={`relative text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                className={`relative w-full text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
                                     } transition-colors duration-300 font-medium`}
                                 style={{
                                     color:
@@ -447,6 +446,13 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             >
                                 Events
                             </span>
+                            {
+                                restaurant?.button_icons_show
+                                &&
+                                <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                    <MoreVertical className="size-4" />
+                                </div>
+                            }
                         </motion.button>
                     )}
 
@@ -455,7 +461,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                         <motion.button
                             variants={item}
                             onClick={() => setShowFAQDialog(true)}
-                            className={`group flex items-center justify-center text-center p-4 w-full transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                            className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
                                 ? "rounded-full"
                                 : restaurant.button_style === "square"
                                     ? "rounded-md"
@@ -465,7 +471,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 backgroundColor:
                                     restaurant.button_variant === "solid"
                                         ? restaurant.accent_color || "#10b981"
-                                        : "rgba(255, 255, 255, 0.95)",
+                                        : "transparent",
                                 backdropFilter: "blur(8px)",
                                 border: `2px solid ${restaurant.accent_color || "#10b981"}`,
                                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
@@ -475,8 +481,19 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             }}
                         >
 
+                            {
+                                restaurant?.button_icons_show
+                                &&
+                                <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                                    style={{
+                                        backgroundColor: restaurant.button_text_icons_color || "transparent"
+                                    }}
+                                >
+                                    {getLucideIconBySlug("faq", { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
+                                </div>
+                            }
                             <span
-                                className={`relative text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                className={`relative w-full text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
                                     } transition-colors duration-300 font-medium`}
                                 style={{
                                     color:
@@ -485,6 +502,14 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             >
                                 FAQ
                             </span>
+                            {
+                                restaurant?.button_icons_show
+                                &&
+                                <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                    <MoreVertical className="size-4" />
+                                </div>
+                            }
+
                         </motion.button>
                     )}
 
@@ -504,7 +529,27 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                         restaurant.email ||
                         restaurant.address ||
                         restaurant.whatsapp) &&
-                        restaurant.social_icons_position === "bottom" && <SocialIcons />}
+                        restaurant.social_icons_position === "bottom"
+                        &&
+                        <SocialIcons
+                            restaurant={
+                                {
+                                    address: restaurant?.address,
+                                    email: restaurant.email,
+                                    facebook: restaurant.facebook,
+                                    instagram: restaurant.facebook,
+                                    whatsapp: restaurant.whatsapp,
+                                }
+                            }
+                            className="mb-4 sm:mb-8"
+                            theme={{
+                                socialIconColor: restaurant.social_icon_color,
+                                socialIconBgShow: restaurant.social_icon_bg_show,
+                                socialIconBgColor: restaurant.social_icon_bg_color,
+                                social_icon_gap: restaurant.social_icon_gap
+                            }}
+                        />
+                    }
                 </motion.div>
 
                 {/* Opening Hours Dialog */}
@@ -518,13 +563,18 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
                 {/* Menu Dialog */}
                 <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}>
-                    <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+                    <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] w-full overflow-y-auto">
                         <DialogHeader>
-                            <DialogTitle className="flex items-center gap-2">
-                                <MenuIcon className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
-                                <span>Menu</span>
+                            <DialogTitle className="flex text-start items-center justify-start gap-4">
+                                <div className="flex items-center gap-2">
+                                    <MenuIcon
+                                        className="h-5 w-5"
+                                        style={{ color: restaurant.accent_color || '#10b981' }}
+                                    />
+                                    <span>Menu</span>
+                                </div>
                             </DialogTitle>
-                            <DialogDescription>
+                            <DialogDescription className="text-start">
                                 {restaurant.menuCategories.length > 0 && (
                                     <>
                                         Last updated{" "}
@@ -542,20 +592,26 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             </DialogDescription>
                         </DialogHeader>
 
-                        <div className="space-y-8 py-4">
+                        <div className="space-y-8 py-2">
                             {restaurant.menuCategories.map((category) => (
-                                <div key={category.id} className="space-y-4">
-                                    <h3 className="border-b pb-2 text-lg font-bold">{category.name}</h3>
-                                    {category.description && (
-                                        <p className="-mt-2 mb-4 text-sm text-muted-foreground">{category.description}</p>
-                                    )}
-
-                                    <div className="space-y-6">
+                                <div key={category.id} className="space-y-3">
+                                    <div>
+                                        <h3 className="text-xl leading-[1.3] font-semibold text-gray-900">{category.name}</h3>
+                                        {category.description && (
+                                            <p className="mb-2 mt-1 text-sm text-muted-foreground">{category.description}</p>
+                                        )}
+                                    </div>
+                                    <div className="w-full border-b" />
+                                    <div className="space-y-2">
                                         {category.items?.map((item) => (
-                                            <div key={item.id} className="flex justify-between gap-4">
-                                                <div className="space-y-1">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="font-medium">{item.name}</span>
+                                            <div
+                                                key={item.id}
+                                                className="rounded-lg border border-gray-200 px-3 py-4 shadow-sm bg-white flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3"
+                                            >
+                                                <div className="space-y-1 w-full sm:w-auto">
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        <span className="text-base font-medium text-gray-900">{item.name}</span>
+
                                                         {item.is_halal && (
                                                             <span
                                                                 className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800"
@@ -565,20 +621,30 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                                                 Halal
                                                             </span>
                                                         )}
-                                                        {item.allergens && item.allergens.length > 0 && (
+
+                                                        {item.allergens?.length > 0 && (
                                                             <span
                                                                 className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800"
-                                                                title={`Contains: ${item.allergens.join(", ")}`}
+                                                                title={`Contains: ${item.allergens.join(', ')}`}
                                                             >
                                                                 <AlertTriangle className="h-3 w-3" />
                                                                 Allergens
                                                             </span>
                                                         )}
                                                     </div>
-                                                    {item.description && <p className="text-sm text-muted-foreground">{item.description}</p>}
-                                                    {item.allergen_info && <p className="text-xs italic text-yellow-700">{item.allergen_info}</p>}
+
+                                                    {item.description && (
+                                                        <p className="text-sm text-muted-foreground">{item.description}</p>
+                                                    )}
+
+                                                    {item.allergen_info && (
+                                                        <p className="text-xs italic text-yellow-700">{item.allergen_info}</p>
+                                                    )}
                                                 </div>
-                                                <div className="flex-shrink-0 font-medium">&euro;{item.price.toFixed(2)}</div>
+
+                                                <div className="text-sm sm:text-base font-semibold text-gray-800">
+                                                    &euro;{item.price.toFixed(2)}
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
@@ -590,13 +656,13 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
                 {/* Events Dialog */}
                 <Dialog open={showEventsDialog} onOpenChange={setShowEventsDialog}>
-                    <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+                    <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] overflow-y-auto">
                         <DialogHeader>
-                            <DialogTitle className="flex items-center gap-2">
+                            <DialogTitle className="flex text-start items-center gap-2">
                                 <Calendar className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
                                 <span>Upcoming Events</span>
                             </DialogTitle>
-                            <DialogDescription>
+                            <DialogDescription className="text-start">
                                 {restaurant.events.length} upcoming {restaurant.events.length === 1 ? "event" : "events"}
                             </DialogDescription>
                         </DialogHeader>
@@ -641,16 +707,16 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
                 {/* FAQ Dialog */}
                 <Dialog open={showFAQDialog} onOpenChange={setShowFAQDialog}>
-                    <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+                    <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] overflow-y-auto ">
                         <DialogHeader>
-                            <DialogTitle className="flex items-center gap-2">
+                            <DialogTitle className="flex text-start items-center gap-2">
                                 <HelpCircle className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
                                 <span>Frequently Asked Questions</span>
                             </DialogTitle>
-                            <DialogDescription>Find answers to common questions</DialogDescription>
+                            <DialogDescription className="text-start">Find answers to common questions</DialogDescription>
                         </DialogHeader>
 
-                        <div className="py-4">
+                        <div className="py-0">
                             <FAQSection faqCategories={restaurant.faqCategories} accentColor={restaurant.accent_color || "#10b981"} />
                         </div>
                     </DialogContent>
