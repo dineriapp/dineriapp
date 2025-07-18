@@ -391,7 +391,7 @@ export default function DashboardPage() {
                                                             ?
                                                             <Skeleton className="w-[80px] h-[36px] animate-pulse" />
                                                             :
-                                                            reviewData.rating
+                                                            reviewData?.rating
                                                                 ?
                                                                 <motion.div
                                                                     initial={{ y: 20, opacity: 0 }}
@@ -400,8 +400,8 @@ export default function DashboardPage() {
                                                                     className="mb-4"
                                                                 >
                                                                     <GoogleRating info={{
-                                                                        rating: reviewData.rating,
-                                                                        user_ratings_total: reviewData.user_ratings_total
+                                                                        rating: reviewData?.rating,
+                                                                        user_ratings_total: reviewData?.user_ratings_total
                                                                     }}
                                                                         color={selectedRestaurant?.headings_text_color || "#000000"}
                                                                     />

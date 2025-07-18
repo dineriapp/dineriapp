@@ -1,6 +1,7 @@
 "use client"
-import { BarChart, Calendar, Check, ChevronDown, Dot, HelpCircle, Home, LinkIcon, Loader2, Palette, Plus, QrCode, Settings, Utensils, UtensilsCrossed } from "lucide-react"
+import { BarChart, Calendar, Check, ChevronDown, Dot, HelpCircle, Home, Instagram, LinkIcon, Loader2, Palette, Plus, QrCode, Settings, Utensils, UtensilsCrossed, Zap } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
     Sidebar,
@@ -14,18 +15,17 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { useRestaurants } from "@/lib/restaurents-queries"
+import { useUserStore } from "@/stores/auth-store"
+import { useRestaurantStore } from "@/stores/restaurant-store"
+import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
+import { User as prismaUserType, User } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
-import { useRestaurantStore } from "@/stores/restaurant-store"
-import { User as prismaUserType, User } from "@prisma/client"
-import { useEffect } from "react"
-import { useRestaurants } from "@/lib/restaurents-queries"
-import { Button } from "@/components/ui/button"
-import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { usePathname, useRouter } from "next/navigation"
-import { NavUser } from "./nav-user"
-import { useUserStore } from "@/stores/auth-store"
+import { useEffect } from "react"
 import { toast } from "sonner"
+import { NavUser } from "./nav-user"
 
 const navigationGroups = [
     {
@@ -42,6 +42,8 @@ const navigationGroups = [
             { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
             { href: "/dashboard/events", label: "Events", icon: Calendar },
             { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+            { href: "/dashboard/settings/social", label: "Social", icon: Instagram },
+            { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
         ],
     },
     {
