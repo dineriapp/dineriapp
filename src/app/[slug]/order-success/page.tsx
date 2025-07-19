@@ -8,7 +8,7 @@ import { CheckCircle, Clock, MapPin, Phone, Mail, Receipt, Navigation } from "lu
 import Link from "next/link"
 
 interface OrderSuccessPageProps {
-    params: { slug: string }
+    params: Promise<{ slug: string }>
     searchParams: { session_id?: string; order_number?: string }
 }
 
@@ -36,6 +36,7 @@ async function getOrderDetails(sessionId: string, orderNumber: string) {
 }
 
 export default async function OrderSuccessPage({ params, searchParams }: OrderSuccessPageProps) {
+    const { slug } = await params
     const { session_id, order_number } = searchParams
 
     if (!session_id && !order_number) {
@@ -44,7 +45,7 @@ export default async function OrderSuccessPage({ params, searchParams }: OrderSu
 
     return (
         <Suspense fallback={<OrderSuccessLoading />}>
-            <OrderSuccessContent sessionId={session_id} orderNumber={order_number} restaurantSlug={params.slug} />
+            <OrderSuccessContent sessionId={session_id} orderNumber={order_number} restaurantSlug={slug} />
         </Suspense>
     )
 }
