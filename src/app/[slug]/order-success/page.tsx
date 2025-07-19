@@ -5,12 +5,12 @@ import OrderSuccessContent from "./order-success";
 
 interface OrderSuccessPageProps {
     params: Promise<{ slug: string }>
-    searchParams: { session_id?: string; order_number?: string }
+    searchParams: Promise<{ session_id?: string; order_number?: string }>
 }
 
 export default async function OrderSuccessPage({ params, searchParams }: OrderSuccessPageProps) {
     const { slug } = await params
-    const { session_id, order_number } = searchParams
+    const { session_id, order_number } = await searchParams
 
     if (!session_id && !order_number) {
         notFound()
