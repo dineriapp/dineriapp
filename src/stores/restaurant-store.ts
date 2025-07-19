@@ -9,6 +9,7 @@ interface RestaurantState {
     setRestaurants: (restaurants: RestaurantWithCount[]) => void
     setSelectedRestaurant: (restaurant: RestaurantWithCount, options?: { refresh: boolean }) => void
     updateSelectedRestaurant: (updates: Partial<RestaurantWithCount>) => void
+    initializeRestaurants: (data: RestaurantWithCount[]) => void
 }
 
 export const useRestaurantStore = create<RestaurantState>()(
@@ -37,6 +38,20 @@ export const useRestaurantStore = create<RestaurantState>()(
                         const updatedRestaurants = restaurants.map((r) => (r.id === selectedRestaurant.id ? updatedRestaurant : r))
                         set({ restaurants: updatedRestaurants })
                     }
+                }
+            },
+            initializeRestaurants: (data) => {
+                set({ restaurants: data })
+
+                const storedId = localStorage.getItem("selected-restaurant-id")
+                const firstRestaurant = data[0]
+
+                if (!storedId && firstRestaurant) {
+                    set({ selectedRestaurant: firstRestaurant })
+                    localStorage.setItem("selected-restaurant-id", firstRestaurant.id)
+                } else {
+                    const found = data.find((r) => r.id === storedId)
+                    set({ selectedRestaurant: found || firstRestaurant })
                 }
             },
         }),

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { Building2, Clock, Globe2, Instagram, Phone, ShieldAlert, Zap } from "lucide-react"
+import { Building2, Clock, CreditCard, Globe2, Instagram, Phone, ShieldAlert, Zap } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -41,6 +41,13 @@ const sections = [
         icon: Instagram,
         description: "Connect your social profiles",
         href: "/dashboard/settings/social",
+    },
+    {
+        id: "stripe",
+        title: "Stripe Settings",
+        icon: CreditCard,
+        description: "Configure payment processing",
+        href: "/dashboard/settings/stripe",
     },
     {
         id: "popups",

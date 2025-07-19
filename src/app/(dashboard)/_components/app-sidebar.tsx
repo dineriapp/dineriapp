@@ -1,5 +1,5 @@
 "use client"
-import { BarChart, Calendar, Check, ChevronDown, Dot, HelpCircle, Home, Instagram, LinkIcon, Loader2, Palette, Plus, QrCode, Settings, Utensils, UtensilsCrossed, Zap } from "lucide-react"
+import { BarChart, Calendar, Check, ChevronDown, Dot, HelpCircle, Home, Instagram, LinkIcon, Loader2, Palette, Plus, QrCode, Settings, ShoppingCart, Utensils, UtensilsCrossed, Zap } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -33,6 +33,7 @@ const navigationGroups = [
         items: [
             { href: "/dashboard", label: "Dashboard", icon: Home },
             { href: "/dashboard/stats", label: "Analytics", icon: BarChart },
+            { href: "/dashboard/orders", label: "Orders", icon: ShoppingCart },
         ],
     },
     {
@@ -62,33 +63,21 @@ const navigationGroups = [
 
 
 export function AppSidebar({ user, prismaUser }: { user: any, prismaUser: prismaUserType }) {
-    const { restaurants, setRestaurants, selectedRestaurant, setSelectedRestaurant } = useRestaurantStore()
+    const { restaurants, initializeRestaurants, selectedRestaurant, setSelectedRestaurant } = useRestaurantStore()
     const { data } = useRestaurants();
+
+    useEffect(() => {
+        if (data?.restaurants) {
+            initializeRestaurants(data.restaurants)
+        }
+    }, [])
+
     const router = useRouter()
     const pathname = usePathname()
     const openPopup = useUpgradePopupStore(state => state.open)
     const { setSupabaseUser, setPrismaUser } = useUserStore()
 
-    useEffect(() => {
-        if (data?.restaurants) {
-            setRestaurants(data.restaurants);
 
-            const firstRestaurant = data.restaurants[0];
-            const restaurantID = localStorage.getItem("selected-restaurant-id");
-
-            if (!restaurantID) {
-                localStorage.setItem("selected-restaurant-id", firstRestaurant.id);
-                setSelectedRestaurant(firstRestaurant);
-            } else {
-                const restaurantSelected = data.restaurants.find(res => res.id === restaurantID);
-                if (restaurantSelected) {
-                    setSelectedRestaurant(restaurantSelected);
-                } else {
-                    setSelectedRestaurant(firstRestaurant);
-                }
-            }
-        }
-    }, []);
 
     // Hydrate store with server data
     useEffect(() => {

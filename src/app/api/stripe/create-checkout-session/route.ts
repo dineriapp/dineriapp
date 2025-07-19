@@ -106,6 +106,7 @@ export async function POST(request: NextRequest) {
             },
             subscription_data: {
                 metadata: {
+                    type: "subscription",
                     user_id: dbUser.id,
                     plan: plan,
                 },

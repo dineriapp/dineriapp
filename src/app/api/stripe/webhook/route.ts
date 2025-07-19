@@ -35,12 +35,15 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
     }
 
+
+
     console.log(`Processing webhook event: ${event.type}`)
 
     try {
         switch (event.type) {
             case "checkout.session.completed":
-                await handleCheckoutCompleted(event.data.object)
+                const session = event.data.object as Stripe.Checkout.Session;
+                await handleCheckoutCompleted(session);
                 break
 
             case "customer.subscription.updated":
@@ -58,7 +61,6 @@ export async function POST(request: NextRequest) {
             case "invoice.payment_failed":
                 await handlePaymentFailed(event.data.object)
                 break
-
             default:
                 console.log(`Unhandled event type: ${event.type}`)
         }
@@ -127,11 +129,17 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 
         const status = mapStripeStatus(subscription.status)
 
+        const dataToUpdate: any = {
+            subscription_status: status,
+        }
+
+        if (status === "inactive") {
+            dataToUpdate.subscription_plan = "basic"
+        }
+
         await prisma.user.update({
             where: { id: user.id },
-            data: {
-                subscription_status: status,
-            },
+            data: dataToUpdate,
         })
 
         console.log(`Subscription updated for user ${user.id}, status: ${status}`)

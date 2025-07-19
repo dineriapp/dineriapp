@@ -88,6 +88,7 @@ model User {
   restaurants                       Restaurant[]
   subscription_current_period_start DateTime?          @db.Timestamptz
   subscription_current_period_end   DateTime?          @db.Timestamptz
+  Order                             Order[]
 
   @@map("users")
 }
@@ -142,6 +143,10 @@ model Restaurant {
   welcome_popup_show_button        Boolean?            @default(true)
   createdAt                        DateTime            @default(now()) @map("created_at")
   updatedAt                        DateTime            @default(now()) @updatedAt @map("updated_at")
+  // Stripe keys encrypted 
+  stripe_public_key_encrypted      String?
+  stripe_secret_key_encrypted      String?
+  stripe_webhook_secret_encrypted  String?
 
   events          Event[]
   faqCategories   FaqCategory[]
@@ -151,6 +156,7 @@ model Restaurant {
   user            User             @relation(fields: [user_id], references: [id])
   restaurantViews RestaurantView[]
   qrCodes         qr_codes[]
+  Order           Order[]
 
   @@map("restaurants")
 }
@@ -271,7 +277,8 @@ model MenuItem {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
-  category MenuCategory @relation(fields: [category_id], references: [id])
+  category  MenuCategory @relation(fields: [category_id], references: [id])
+  OrderItem OrderItem[]
 
   @@map("menu_items")
 }
@@ -339,4 +346,62 @@ model qr_code_scans {
   @@index([qr_code_id], name: "idx_qr_code_scans_qr_code_id")
   @@index([scanned_at], name: "idx_qr_code_scans_scanned_at")
   @@index([ip_hash], name: "idx_qr_code_scans_ip_hash")
+}
+
+model Order {
+  id                    String        @id @default(uuid()) @db.Uuid
+  user_id               String?       @db.Uuid // Made optional for guest orders
+  restaurant_id         String        @db.Uuid
+  stripe_payment_intent String        @unique
+  stripe_session_id     String?       @unique
+  order_number          String        @unique
+  customer_name         String?
+  customer_email        String?
+  customer_phone        String?
+  // Address 
+  delivery_address      String?
+  street                String?
+  city                  String?
+  state                 String?
+  postal_code           String?
+  country               String?
+  latitude              Float?
+  longitude             Float?
+  notes                 String?
+  // ---- 
+  order_type            String        @default("pickup") // pickup, delivery
+  status                OrderStatus   @default(pending)
+  payment_status        PaymentStatus @default(pending)
+  subtotal              Float
+  tax_amount            Float
+  delivery_fee          Float         @default(0)
+  total_amount          Float
+  special_instructions  String?
+  estimated_ready_time  DateTime?
+  createdAt             DateTime      @default(now()) @map("created_at")
+  updatedAt             DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  user       User?       @relation(fields: [user_id], references: [id])
+  restaurant Restaurant  @relation(fields: [restaurant_id], references: [id])
+  items      OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id               String   @id @default(uuid()) @db.Uuid
+  order_id         String   @db.Uuid
+  menu_item_id     String?  @db.Uuid
+  name             String
+  description      String?
+  price            Float
+  quantity         Int
+  item_total       Float
+  special_requests String?
+  allergens        String[]
+
+  order    Order     @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  menuItem MenuItem? @relation(fields: [menu_item_id], references: [id])
+
+  @@map("order_items")
 }

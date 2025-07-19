@@ -9,3 +9,16 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     typescript: true,
 })
 
+export async function getValidStripeClient(secretKey: string): Promise<false | Stripe> {
+    try {
+        const testStripe = new Stripe(secretKey, {
+            apiVersion: "2025-06-30.basil",
+        })
+
+        const account = await testStripe.accounts.retrieve()
+        return account?.id ? testStripe : false
+    } catch (error) {
+        console.error("Invalid Stripe secret key:", error)
+        return false
+    }
+}
