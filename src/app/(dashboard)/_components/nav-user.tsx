@@ -1,6 +1,6 @@
 "use client"
 
-import { LogOutIcon, MoreVertical, User as UserIcon } from "lucide-react"
+import { LogOutIcon, Mail, MoreVertical, User as UserIcon } from "lucide-react"
 
 import { signout } from "@/actions/auth"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -16,6 +16,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/c
 import { User } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import Link from "next/link"
 
 export function NavUser({ data }: { data: { user: User } }) {
     const { isMobile } = useSidebar()
@@ -61,8 +62,8 @@ export function NavUser({ data }: { data: { user: User } }) {
                     >
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                                <Avatar className="h-8 w-8 rounded-lg">
-                                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                <Avatar className="h-8 w-8 rounded-lg border">
+                                    <AvatarFallback className="rounded-lg !text-[20px] !font-[600]">{data?.user.email?.slice(0, 1)}</AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
                                     <span className="truncate text-xs text-muted-foreground">{data?.user.email || ""}</span>
@@ -70,6 +71,12 @@ export function NavUser({ data }: { data: { user: User } }) {
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                            <Link href={"/dashboard/change-email"}>
+                                <Mail />
+                                Change Email
+                            </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => {
                             handleSignOut()
                         }}>

@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
             specialInstructions,
             isGuest = false,
         } = body
+        console.log(restaurantSlug)
 
         // Validate required fields
         if (!restaurantSlug || !items?.length || !customerInfo?.name || !customerInfo?.email || !customerInfo?.phone) {
