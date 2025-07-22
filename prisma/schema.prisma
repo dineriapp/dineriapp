@@ -269,6 +269,7 @@ model MenuItem {
   category_id   String   @db.Uuid
   name          String
   description   String?
+  image         String?
   price         Float
   sort_order    Int      @default(0)
   allergens     String[] @default([])
@@ -279,6 +280,7 @@ model MenuItem {
 
   category  MenuCategory @relation(fields: [category_id], references: [id])
   OrderItem OrderItem[]
+  addons    Json?        @default("[]")
 
   @@map("menu_items")
 }

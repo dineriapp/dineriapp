@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma"
 import { createItemSchema } from "@/lib/validations"
 import { authenticateAndAuthorize, checkSubscriptionLimitsWithPlans } from "@/lib/auth-utils"
 
+
+
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
@@ -46,6 +48,8 @@ export async function POST(request: NextRequest) {
                 description: validated.description?.trim(),
                 allergen_info: validated.allergen_info?.trim(),
                 sort_order: nextSortOrder,
+                addons: validated.addons ?? [],
+                image: validated.image?.trim() || null,
             },
         })
 

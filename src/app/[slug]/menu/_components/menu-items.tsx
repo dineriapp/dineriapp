@@ -1,6 +1,6 @@
 "use client"
 
-import type { MenuItem } from "@prisma/client"
+import type { MenuItem, Restaurant } from "@prisma/client"
 import { MenuItemCard } from "./menu-item-card"
 
 type MenuItemWithCategory = MenuItem & {
@@ -11,9 +11,10 @@ interface MenuItemsProps {
     items: MenuItemWithCategory[]
     restaurantSlug: string
     selectedCategory: string
+    restaurant: Restaurant
 }
 
-export function MenuItems({ items, restaurantSlug, selectedCategory }: MenuItemsProps) {
+export function MenuItems({ items, restaurantSlug, restaurant, selectedCategory }: MenuItemsProps) {
     if (items.length === 0) {
         return (
             <div className="text-center py-12">
@@ -32,17 +33,23 @@ export function MenuItems({ items, restaurantSlug, selectedCategory }: MenuItems
     return (
         <div>
             <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <h2 style={{
+                    color: restaurant.accent_color || "white"
+                }} className="text-2xl font-bold  mb-2">
                     {selectedCategory === "all" ? "All Items" : items[0]?.categoryName}
                 </h2>
-                <p className="text-gray-600">
+                <p
+                    style={{
+                        color: restaurant.accent_color || "white"
+                    }}
+                    className="opacity-80">
                     {items.length} item{items.length !== 1 ? "s" : ""} available
                 </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {items.map((item) => (
-                    <MenuItemCard key={item.id} item={item} categoryName={item.categoryName} restaurantSlug={restaurantSlug} />
+                    <MenuItemCard restaurant={restaurant} key={item.id} item={item} categoryName={item.categoryName} restaurantSlug={restaurantSlug} />
                 ))}
             </div>
         </div>

@@ -226,9 +226,11 @@ export function useCreateItem(restaurantId: string | undefined) {
             category_id: string
             name: string
             description?: string
+            image?: string
             price: number
             allergens?: string[]
             is_halal?: boolean
+            addons?: { name: string, price: number }[]
             allergen_info?: string
         }) => {
             const response = await ky.post("/api/menu/items", { json: data }).json<{ data: MenuItem }>()
@@ -238,10 +240,12 @@ export function useCreateItem(restaurantId: string | undefined) {
             category_id: string
             name: string
             description?: string
+            image?: string
             price: number
             allergens?: string[]
             is_halal?: boolean
             allergen_info?: string
+            addons?: { name: string, price: number }[]
         }) => {
             if (!restaurantId) return
 
@@ -252,6 +256,7 @@ export function useCreateItem(restaurantId: string | undefined) {
             const optimisticItem: MenuItem = {
                 id: `temp-${Date.now()}`,
                 category_id: variables.category_id,
+                image: variables.image || "",
                 name: variables.name,
                 description: variables.description || null,
                 price: variables.price,
@@ -259,6 +264,7 @@ export function useCreateItem(restaurantId: string | undefined) {
                 is_halal: variables.is_halal || null,
                 allergen_info: variables.allergen_info || null,
                 sort_order: 0,
+                addons: variables.addons ?? [],
                 createdAt: new Date(),
                 updatedAt: new Date(),
             }
@@ -312,10 +318,12 @@ export function useUpdateItem(restaurantId: string | undefined) {
         }: {
             id: string
             name: string
+            image?: string
             description?: string
             price: number
             allergens?: string[]
             is_halal?: boolean
+            addons?: { name: string, price: number }[]
             allergen_info?: string
         }) => {
             const response = await ky.put(`/api/menu/items/${id}`, { json: data }).json<{ data: MenuItem }>()
@@ -325,9 +333,11 @@ export function useUpdateItem(restaurantId: string | undefined) {
             id: string
             name: string
             description?: string
+            image?: string
             price: number
             allergens?: string[]
             is_halal?: boolean
+            addons?: { name: string, price: number }[]
             allergen_info?: string
         }) => {
             if (!restaurantId) return
@@ -348,8 +358,10 @@ export function useUpdateItem(restaurantId: string | undefined) {
                                     name: variables.name,
                                     description: variables.description || null,
                                     price: variables.price,
+                                    image: variables.image || "",
                                     allergens: variables.allergens || [],
                                     is_halal: variables.is_halal || null,
+                                    addons: variables.addons ?? [],
                                     allergen_info: variables.allergen_info || null,
                                 }
                                 : item,

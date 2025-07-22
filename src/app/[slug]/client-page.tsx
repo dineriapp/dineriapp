@@ -7,6 +7,7 @@ import { OpeningHoursData, ReviewsInfo } from "@/types"
 import type { Event, Faq, FaqCategory, MenuCategory, MenuItem, Link as PrismaLink, Restaurant, User } from "@prisma/client"
 import {
     AlertTriangle,
+    ArrowRight,
     Calendar,
     ExternalLink,
     HelpCircle,
@@ -84,6 +85,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
     const [showFAQDialog, setShowFAQDialog] = useState(false)
     const [showWelcomePopup, setShowWelcomePopup] = useState(false)
     const [showOpeningHoursDialog, setShowOpeningHoursDialog] = useState(false)
+    const [selectedMenuCategory, setSelectedMenuCategory] = useState<string>("all")
 
     // Parse JSON fields
     const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : null
@@ -157,6 +159,22 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
             });
         }
     }, [restaurant.id]);
+
+    // Get filtered menu items based on selected category
+    const getFilteredMenuItems = () => {
+        if (selectedMenuCategory === "all") {
+            return restaurant.menuCategories.flatMap((category) =>
+                category.items.map((item) => ({ ...item, categoryName: category.name })),
+            )
+        }
+
+        const category = restaurant.menuCategories.find((cat) => cat.id === selectedMenuCategory)
+        return category ? category.items.map((item) => ({ ...item, categoryName: category.name })) : []
+    }
+
+    const filteredMenuItems = getFilteredMenuItems()
+
+
     return (
         <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
             <div
@@ -562,7 +580,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                 />
 
                 {/* Menu Dialog */}
-                <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}>
+                {/* <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}>
                     <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] w-full overflow-y-auto">
                         <DialogHeader>
                             <DialogTitle className="flex text-start items-center justify-start gap-4">
@@ -652,29 +670,303 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             ))}
                         </div>
                     </DialogContent>
+                </Dialog> */}
+                {/* Enhanced Menu Dialog */}
+                <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}>
+                    <DialogContent closeIconColor={restaurant.accent_color || "#10b981"} style={{ ...getBackgroundStyle() }} className="max-h-[90vh] max-w-[90vw] border-transparent no-scroll sm:!max-w-[570px] overflow-hidden overflow-y-auto">
+                        <DialogHeader className="pb-1">
+                            <DialogTitle className="flex items-center text-start gap-2 text-xl">
+                                <MenuIcon className="h-6 w-6" style={{ color: restaurant.accent_color || "#10b981" }} />
+                                <span style={{ color: restaurant.accent_color || "#10b981" }}>Menu</span>
+                            </DialogTitle>
+                            <DialogDescription style={{ color: restaurant.accent_color || "#10b981" }} className="text-base text-start">
+                                Browse our delicious menu items organized by category
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        {/* Category Tabs */}
+                        <div className="relative mb-0 flex items-center ">
+                            <div className="flex gap-0 overflow-x-auto no-scroll max-w-[70vw] sm:!max-w-[430px]">
+                                {/* All Items Tab */}
+                                <button
+                                    onClick={() => setSelectedMenuCategory("all")}
+                                    className={`flex-shrink-0 px-3 cursor-pointer border-b py-2 text-sm font-medium transition-all duration-200 ${selectedMenuCategory === "all"
+                                        ? ""
+                                        : "hover:opacity-70"
+                                        }`}
+                                    style={{
+                                        color: restaurant.accent_color || "#10b981",
+                                        borderColor: selectedMenuCategory === "all" ? `${restaurant.accent_color || "#10b981"}` : "transparent",
+                                    }}
+                                >
+                                    All ({restaurant.menuCategories.reduce((sum, cat) => sum + cat.items.length, 0)})
+                                </button>
+                                {/* Category Tabs */}
+                                {restaurant.menuCategories.map((category) => (
+                                    <button
+                                        key={category.id}
+                                        onClick={() => setSelectedMenuCategory(category.id)}
+                                        className={`flex-shrink-0 px-3 cursor-pointer border-b py-2 text-sm font-medium transition-all duration-200 ${selectedMenuCategory === category.id
+                                            ? ""
+                                            : "hover:opacity-70"
+                                            }`}
+                                        style={{
+                                            color: restaurant.accent_color || "#10b981",
+                                            borderColor: selectedMenuCategory === category.id ? `${restaurant.accent_color || "#10b981"}` : "transparent",
+                                        }}
+                                    >
+                                        {category.name} ({category.items.length})
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* View More Button */}
+                            <div className="absolute w-[180px] flex justify-end right-0 bottom-0 items-center">
+                                <div
+                                    className="w-[120px] h-full  flex items-center justify-end"
+                                >
+                                    <Link
+                                        href={`/${restaurant.slug}/menu`}
+                                        className="flex items-center gap-1 px-4 py-[11px] text-xs font-medium rounded-full transition-all duration-200 hover:shadow-md"
+                                        style={{
+                                            backgroundColor: restaurant.accent_color || "#10b981",
+                                            color: restaurant.button_text_icons_color || "white",
+                                        }}
+                                        onClick={() => setShowMenuDialog(false)}
+                                    >
+                                        <span>View More</span>
+                                        <ArrowRight className="h-3 w-3" />
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Menu Items */}
+                        <div className="overflow-y-auto max-h-[60vh] pr-2">
+                            {filteredMenuItems.length > 0 ? (
+                                <div className="space-y-6">
+                                    {selectedMenuCategory === "all" ? (
+                                        // Group by category when showing all items
+                                        restaurant.menuCategories.map((category) => (
+                                            <div key={category.id} className="space-y-4">
+                                                <div style={{
+                                                    color: restaurant.accent_color || "#10b981",
+                                                    borderColor: restaurant.accent_color || "#10b981"
+                                                }} className="flex items-center gap-2 pb-2 border-b ">
+                                                    <h3 className="text-lg font-semibold ">{category.name}</h3>
+                                                    <span className="text-sm opacity-80">({category.items.length} items)</span>
+                                                </div>
+                                                {category.description && (
+                                                    <p className="text-sm  -mt-2 mb-4 opacity-80"
+                                                        style={{
+                                                            color: restaurant.accent_color || "#10b981",
+                                                        }}
+                                                    >{category.description}</p>
+                                                )}
+                                                <div className="grid gap-2">
+                                                    {category.items.slice(0, 3).map((item) => {
+                                                        const parsedAddons = Array.isArray(item.addons)
+                                                            ? (item.addons as { name: string; price: number }[])
+                                                            : [];
+                                                        return <div
+                                                            key={item.id}
+                                                            className="flex justify-between items-start gap-4 p-3 rounded-lg"
+                                                            style={{
+                                                                backgroundColor: restaurant.accent_color || "white"
+                                                            }}
+                                                        >
+                                                            <div className="flex-1 space-y-1">
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="font-medium"
+                                                                        style={{
+                                                                            color: restaurant.button_text_icons_color || "black"
+                                                                        }}
+                                                                    >{item.name}</span>
+                                                                    {item.is_halal && (
+                                                                        <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                                                                            <Leaf className="h-3 w-3" />
+                                                                            Halal
+                                                                        </span>
+                                                                    )}
+                                                                    {item.allergens && item.allergens.length > 0 && (
+                                                                        <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
+                                                                            <AlertTriangle className="h-3 w-3" />
+                                                                            Allergens
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                {item.description && <p className="text-sm opacity-80"
+                                                                    style={{
+                                                                        color: restaurant.button_text_icons_color || "black"
+                                                                    }}
+                                                                >{item.description}</p>}
+                                                                {item.allergen_info && (
+                                                                    <p className="text-xs italic w-fit px-2 py-1"
+                                                                        style={{
+                                                                            backgroundColor: restaurant.button_text_icons_color || "white",
+                                                                            color: restaurant.accent_color || "black"
+                                                                        }}
+                                                                    >{item.allergen_info}</p>
+                                                                )}
+                                                                {item.addons && parsedAddons.length > 0 && (
+                                                                    <div style={{
+                                                                        color: restaurant.button_text_icons_color || "black"
+                                                                    }}>
+                                                                        <h3 className="text-xs mt-2 font-medium mb-1">Available Addons:</h3>
+                                                                        <ul className="list-disc list-inside text-xs ">
+                                                                            {parsedAddons.map((addon: any, index: number) => (
+                                                                                <li key={index}>
+                                                                                    {addon.name} — €{addon.price.toFixed(2)}
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="flex-shrink-0 font-semibold text-gray-900">€{item.price.toFixed(2)}</div>
+                                                        </div>
+                                                    })}
+                                                    {category.items.length > 3 && (
+                                                        <div className="text-center py-2">
+                                                            <span
+                                                                style={{
+                                                                    color: restaurant.accent_color || "black"
+                                                                }}
+                                                                className="text-sm">
+                                                                +{category.items.length - 3} more items in this category
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        // Show items from selected category
+                                        <div className="grid gap-2">
+                                            {filteredMenuItems.map((item) => {
+                                                const parsedAddons = Array.isArray(item.addons)
+                                                    ? (item.addons as { name: string; price: number }[])
+                                                    : [];
+                                                return <div
+                                                    key={item.id}
+                                                    className="flex justify-between items-start gap-4 p-3 rounded-lg"
+                                                    style={{
+                                                        backgroundColor: restaurant.accent_color || "white"
+                                                    }}
+                                                >
+                                                    <div className="flex-1 space-y-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="font-medium"
+                                                                style={{
+                                                                    color: restaurant.button_text_icons_color || "black"
+                                                                }}
+                                                            >{item.name}</span>
+                                                            {item.is_halal && (
+                                                                <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                                                                    <Leaf className="h-3 w-3" />
+                                                                    Halal
+                                                                </span>
+                                                            )}
+                                                            {item.allergens && item.allergens.length > 0 && (
+                                                                <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
+                                                                    <AlertTriangle className="h-3 w-3" />
+                                                                    Allergens
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        {item.description && <p className="text-sm opacity-80"
+                                                            style={{
+                                                                color: restaurant.button_text_icons_color || "black"
+                                                            }}
+                                                        >{item.description}</p>}
+                                                        {item.allergen_info && (
+                                                            <p className="text-xs italic w-fit px-2 py-1"
+                                                                style={{
+                                                                    backgroundColor: restaurant.button_text_icons_color || "white",
+                                                                    color: restaurant.accent_color || "black"
+                                                                }}
+                                                            >{item.allergen_info}</p>
+                                                        )}
+                                                        {item.addons && parsedAddons.length > 0 && (
+                                                            <div style={{
+                                                                color: restaurant.button_text_icons_color || "black"
+                                                            }}>
+                                                                <h3 className="text-xs mt-2 font-medium mb-1">Available Addons:</h3>
+                                                                <ul className="list-disc list-inside text-xs ">
+                                                                    {parsedAddons.map((addon: any, index: number) => (
+                                                                        <li key={index}>
+                                                                            {addon.name} — €{addon.price.toFixed(2)}
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex-shrink-0 font-semibold text-gray-900">€{item.price.toFixed(2)}</div>
+                                                </div>
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="text-center py-8">
+                                    <MenuIcon className="h-12 w-12 mx-auto mb-2" style={{
+                                        color: restaurant.accent_color || "black"
+                                    }} />
+                                    <p className="text-sm" style={{
+                                        color: restaurant.accent_color || "black"
+                                    }}>No menu items available</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Footer with full menu link */}
+                        <div className="pt-2 border-t border-gray-100 mt-2">
+                            <Link
+                                href={`/${restaurant.slug}/menu`}
+                                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-md"
+                                style={{
+                                    backgroundColor: restaurant.accent_color || "#10b981",
+                                    color: restaurant.button_text_icons_color || "#10b981",
+                                }}
+                                onClick={() => setShowMenuDialog(false)}
+                            >
+                                <MenuIcon className="h-4 w-4" />
+                                <span>View Full Menu & Order Online</span>
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                        </div>
+                    </DialogContent>
                 </Dialog>
 
                 {/* Events Dialog */}
-                <Dialog open={showEventsDialog} onOpenChange={setShowEventsDialog}>
-                    <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] overflow-y-auto">
+                <Dialog open={showEventsDialog} onOpenChange={setShowEventsDialog} >
+                    <DialogContent closeIconColor={restaurant.accent_color || "#10b981"} className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] border-transparent no-scroll overflow-y-auto" style={{ ...getBackgroundStyle() }}>
                         <DialogHeader>
                             <DialogTitle className="flex text-start items-center gap-2">
                                 <Calendar className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
-                                <span>Upcoming Events</span>
+                                <span style={{ color: restaurant.accent_color || "#10b981" }}>Upcoming Events</span>
                             </DialogTitle>
-                            <DialogDescription className="text-start">
+                            <DialogDescription className="text-start" style={{ color: restaurant.accent_color || "#10b981" }}>
                                 {restaurant.events.length} upcoming {restaurant.events.length === 1 ? "event" : "events"}
                             </DialogDescription>
                         </DialogHeader>
 
                         <div className="space-y-6 py-4">
                             {restaurant.events.map((event) => (
-                                <div key={event.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
-                                    <h3 className="mb-2 text-lg font-semibold">{event.title}</h3>
-                                    {event.description && <p className="mb-4 text-muted-foreground">{event.description}</p>}
+                                <div key={event.id} className="border-b pb-6 last:border-0 last:pb-0" style={{ borderColor: restaurant.headings_text_color || "white" }}>
+                                    <h3 className="mb-1 text-lg font-semibold" style={{ color: restaurant.accent_color || "#10b981" }}>{event.title}</h3>
+                                    {event.description &&
+                                        <p
+                                            className="mb-4 text-[15px] text-muted-foreground opacity-80"
+                                            style={{ color: restaurant.accent_color || "#10b981" }}
+                                        >
+                                            {event.description}
+                                        </p>
+                                    }
                                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                         <Calendar className="h-4 w-4" style={{ color: restaurant.accent_color || "#10b981" }} />
-                                        <span>
+                                        <span style={{ color: restaurant.accent_color || "#10b981" }}>
                                             {new Date(event.date).toLocaleDateString("en-US", {
                                                 weekday: "long",
                                                 year: "numeric",
@@ -691,8 +983,8 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                                 href={event.ticket_url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-white transition-transform hover:scale-105"
-                                                style={{ backgroundColor: restaurant.accent_color || "#10b981" }}
+                                                className="inline-flex items-center gap-2 rounded-lg px-4 py-2 transition-transform hover:scale-105"
+                                                style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
                                             >
                                                 Get Tickets
                                                 <ExternalLink className="h-4 w-4" />
@@ -707,17 +999,17 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
                 {/* FAQ Dialog */}
                 <Dialog open={showFAQDialog} onOpenChange={setShowFAQDialog}>
-                    <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] overflow-y-auto ">
+                    <DialogContent closeIconColor={restaurant.accent_color || "#10b981"} className="max-h-[90vh] no-scroll max-w-[90vw] sm:!max-w-[570px] overflow-y-auto border-transparent" style={{ ...getBackgroundStyle() }}>
                         <DialogHeader>
                             <DialogTitle className="flex text-start items-center gap-2">
                                 <HelpCircle className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
-                                <span>Frequently Asked Questions</span>
+                                <span style={{ color: restaurant.accent_color || "#10b981" }}>Frequently Asked Questions</span>
                             </DialogTitle>
-                            <DialogDescription className="text-start">Find answers to common questions</DialogDescription>
+                            <DialogDescription className="text-start" style={{ color: restaurant.accent_color || "#10b981" }}>Find answers to common questions</DialogDescription>
                         </DialogHeader>
 
                         <div className="py-0">
-                            <FAQSection faqCategories={restaurant.faqCategories} accentColor={restaurant.accent_color || "#10b981"} />
+                            <FAQSection faqCategories={restaurant.faqCategories} cardstextColor={restaurant.button_text_icons_color || "black"} accentColor={restaurant.accent_color || "#10b981"} />
                         </div>
                     </DialogContent>
                 </Dialog>

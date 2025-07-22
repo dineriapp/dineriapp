@@ -16,15 +16,18 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AddressInput, type AddressData } from "@/components/address-input"
 import { loadGoogleMapsScript } from "@/lib/google-maps"
 import Image from "next/image"
+import { Restaurant } from "@prisma/client"
+import { isRestaurantOpenNow } from "./menu-item-card"
 
 interface CartDrawerProps {
     restaurantSlug: string
     restaurantName: string
+    restaurant: Restaurant
     isOpen: boolean
     onClose: () => void
 }
 
-export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: CartDrawerProps) {
+export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen, onClose }: CartDrawerProps) {
     const { getCartItems, getCartTotal, updateQuantity, removeItem, clearCart } = useCartStore()
     const [isProcessing, setIsProcessing] = useState(false)
     const [showCheckout, setShowCheckout] = useState(false)
@@ -155,8 +158,14 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
             } else {
                 throw new Error("No checkout URL received")
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Checkout error:", error)
+            if (error.message === "Restaurant or Stripe key not found") {
+                toast.error("Restaurant Unavailable", {
+                    description: "This restaurant is not currently able to handle online orders.",
+                });
+                return;
+            }
             toast.error(error instanceof Error ? error.message : "Failed to proceed to checkout")
         } finally {
             setIsProcessing(false)
@@ -190,19 +199,37 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                     onClose()
                 }
             }}
+
         >
-            <SheetContent className="w-full sm:max-w-md flex flex-col">
+            <SheetContent
+                style={{
+                    backgroundColor: restaurant.button_text_icons_color || "black",
+                    borderColor: restaurant.accent_color || "black"
+                }}
+                iconColorClose={restaurant.accent_color || "black"}
+                className="w-full sm:max-w-md flex flex-col">
                 <SheetHeader className="relative shadow-sm gap-1">
-                    <SheetTitle className="flex items-center justify-between">
+                    <SheetTitle
+                        style={{
+                            color: restaurant.accent_color || "black"
+                        }}
+                        className="flex items-center justify-between">
                         {showCheckout ? "Checkout" : "Your Order"}
                     </SheetTitle>
-                    <SheetDescription>From {restaurantName}</SheetDescription>
+                    <SheetDescription
+                        style={{
+                            color: restaurant.accent_color || "black"
+                        }}
+                    ><span>From :- </span> <span className="font-semibold">{restaurantName}</span></SheetDescription>
                     {!showCheckout && items.length > 0 && (
                         <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => clearCart(restaurantSlug)}
-                            className="text-red-600 absolute bottom-2 right-2 hover:text-red-700 hover:bg-red-50"
+                            style={{
+                                color: restaurant.accent_color || "black"
+                            }}
+                            className=" absolute bottom-2 right-2 hover:bg-transparent cursor-pointer"
                         >
                             <Trash2 className="h-4 w-4 mr-1" />
                             Clear All
@@ -216,10 +243,27 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                         // Cart Items View
                         items.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full text-center">
-                                <ShoppingBag className="h-16 w-16 text-gray-400 mb-4" />
-                                <h3 className="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
-                                <p className="text-gray-500 mb-4">Add some delicious items from the menu!</p>
-                                <Button onClick={onClose} variant="outline">
+                                <ShoppingBag
+                                    style={{
+                                        color: restaurant.accent_color || "black"
+                                    }}
+                                    className="h-16 w-16 text-gray-400 mb-4" />
+                                <h3
+                                    style={{
+                                        color: restaurant.accent_color || "black"
+                                    }}
+                                    className="text-lg font-medium  mb-2">Your cart is empty</h3>
+                                <p
+                                    style={{
+                                        color: restaurant.accent_color || "black"
+                                    }}
+                                    className="opacity-80 mb-4">Add some delicious items from the menu!</p>
+                                <Button
+                                    style={{
+                                        color: restaurant.button_text_icons_color || "black",
+                                        backgroundColor: restaurant.accent_color || "black"
+                                    }}
+                                    onClick={onClose} variant="outline" className="hover:bg-transparent cursor-pointer border-none">
                                     Continue Shopping
                                 </Button>
                             </div>
@@ -229,6 +273,7 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                                     <CartItemComponent
                                         key={item.id}
                                         item={item}
+                                        restaurant={restaurant}
                                         onQuantityChange={(quantity) => handleQuantityChange(item.id, quantity)}
                                         onRemove={() => removeItem(restaurantSlug, item.id)}
                                     />
@@ -239,16 +284,34 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                         // Checkout Form View
                         <div className="space-y-3">
                             {/* Guest Order Notice */}
-                            <Alert>
-                                <AlertCircle className="h-4 w-4" />
-                                <AlertDescription>
+                            <Alert
+                                style={{
+                                    backgroundColor: restaurant.accent_color || "black",
+                                }}
+                                className="border-none"
+                            >
+                                <AlertCircle
+                                    style={{
+                                        color: restaurant.button_text_icons_color || "black",
+                                    }}
+                                    className="h-4 w-4" />
+                                <AlertDescription
+                                    style={{
+                                        color: restaurant.button_text_icons_color || "black",
+                                    }}
+                                >
                                     You&apos;re placing a guest order. You&apos;ll receive order updates via email and can track your order using
                                     the order number.
                                 </AlertDescription>
                             </Alert>
 
                             {/* Order Summary */}
-                            <div className="bg-gray-50 px-3 py-3 rounded-lg">
+                            <div
+                                style={{
+                                    backgroundColor: restaurant.accent_color || "black",
+                                    color: restaurant.button_text_icons_color || "black",
+                                }}
+                                className="px-3 py-3 rounded-lg">
                                 <h3 className="font-medium mb-2">Order Summary</h3>
                                 <div className="space-y-2 text-sm">
                                     <div className="flex justify-between">
@@ -265,7 +328,11 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                                             <span>${deliveryFee.toFixed(2)}</span>
                                         </div>
                                     )}
-                                    <div className="flex justify-between font-semibold border-t pt-1">
+                                    <div
+                                        style={{
+                                            borderColor: restaurant.button_text_icons_color || "black",
+                                        }}
+                                        className="flex justify-between font-semibold border-t pt-1">
                                         <span>Total</span>
                                         <span>${total.toFixed(2)}</span>
                                     </div>
@@ -273,7 +340,12 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                             </div>
 
                             {/* Customer Information */}
-                            <div className="space-y-4 bg-gray-100 p-3 rounded-md shadow-sm">
+                            <div
+                                style={{
+                                    backgroundColor: restaurant.accent_color || "black",
+                                    color: restaurant.button_text_icons_color || "black",
+                                }}
+                                className="space-y-4 p-3 rounded-md shadow-sm">
                                 <h3 className="font-medium">Contact Information *</h3>
                                 <div className="grid grid-cols-1 gap-4">
                                     <div className="space-y-2">
@@ -287,11 +359,18 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                                                     setFormErrors((prev) => ({ ...prev, name: "" }))
                                                 }
                                             }}
+                                            style={{
+                                                borderColor: restaurant.button_text_icons_color || "black",
+                                            }}
                                             placeholder="Your full name"
                                             className={formErrors.name ? "border-red-500" : ""}
                                             autoComplete="name"
                                         />
-                                        {formErrors.name && <p className="text-sm text-red-500 mt-1">{formErrors.name}</p>}
+                                        {formErrors.name && <p
+                                            style={{
+                                                color: restaurant.button_text_icons_color || "black",
+                                            }}
+                                            className="text-sm text-red-500 mt-1">{formErrors.name}</p>}
                                     </div>
                                     <div className="space-y-2">
                                         <Label htmlFor="email">Email Address *</Label>
@@ -305,11 +384,18 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                                                     setFormErrors((prev) => ({ ...prev, email: "" }))
                                                 }
                                             }}
+                                            style={{
+                                                borderColor: restaurant.button_text_icons_color || "black",
+                                            }}
                                             placeholder="your@email.com"
                                             className={formErrors.email ? "border-red-500" : ""}
                                             autoComplete="email"
                                         />
-                                        {formErrors.email && <p className="text-sm text-red-500 mt-1">{formErrors.email}</p>}
+                                        {formErrors.email && <p
+                                            style={{
+                                                color: restaurant.button_text_icons_color || "black",
+                                            }}
+                                            className="text-sm text-red-500 mt-1">{formErrors.email}</p>}
                                     </div>
                                     <div className="space-y-2">
                                         <Label htmlFor="phone">Phone Number *</Label>
@@ -323,25 +409,50 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                                                     setFormErrors((prev) => ({ ...prev, phone: "" }))
                                                 }
                                             }}
+                                            style={{
+                                                borderColor: restaurant.button_text_icons_color || "black",
+                                            }}
                                             placeholder="(555) 123-4567"
                                             className={formErrors.phone ? "border-red-500" : ""}
                                             autoComplete="tel"
                                         />
-                                        {formErrors.phone && <p className="text-sm text-red-500 mt-1">{formErrors.phone}</p>}
+                                        {formErrors.phone && <p
+                                            style={{
+                                                color: restaurant.button_text_icons_color || "black",
+                                            }}
+                                            className="text-sm text-red-500 mt-1">{formErrors.phone}</p>}
                                     </div>
                                 </div>
                             </div>
 
                             {/* Order Type */}
-                            <div className="space-y-4">
+                            <div
+                                style={{
+                                    color: restaurant.accent_color || "black",
+                                }}
+                                className="space-y-4">
                                 <h3 className="font-medium">Order Type *</h3>
                                 <RadioGroup value={orderType} onValueChange={(value: "pickup" | "delivery") => setOrderType(value)}>
                                     <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="pickup" id="pickup" />
+                                        <RadioGroupItem
+                                            indicatorStyle={{
+                                                fill: restaurant.accent_color || "black",
+                                            }}
+                                            style={{
+                                                borderColor: restaurant.accent_color || "black",
+                                            }}
+                                            value="pickup" id="pickup" />
                                         <Label htmlFor="pickup">Pickup</Label>
                                     </div>
                                     <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="delivery" id="delivery" />
+                                        <RadioGroupItem
+                                            indicatorStyle={{
+                                                fill: restaurant.accent_color || "black",
+                                            }}
+                                            style={{
+                                                borderColor: restaurant.accent_color || "black",
+                                            }}
+                                            value="delivery" id="delivery" />
                                         <Label htmlFor="delivery">Delivery (+$5.00)</Label>
                                     </div>
                                 </RadioGroup>
@@ -350,6 +461,7 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                                     <div className="space-y-4">
                                         <AddressInput
                                             value={deliveryAddress}
+                                            restaurant={restaurant}
                                             onChange={(address: AddressData) => {
                                                 setDeliveryAddress(address)
                                                 if (formErrors.address) {
@@ -369,6 +481,13 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                                             <Label htmlFor="delivery-notes">Delivery Notes (Optional)</Label>
                                             <Textarea
                                                 id="delivery-notes"
+                                                style={{
+                                                    color: restaurant.accent_color || "black",
+                                                    borderColor: restaurant.accent_color || "black",
+                                                    // @ts-expect-error due to types 
+                                                    '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                                }}
+                                                className="placehodler-placeholder"
                                                 value={deliveryNotes}
                                                 onChange={(e) => setDeliveryNotes(e.target.value)}
                                                 placeholder="Apartment number, gate code, special delivery instructions..."
@@ -380,11 +499,30 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                             </div>
 
                             {/* Special Instructions */}
-                            <div className="space-y-3 mt-6">
+                            <div className="space-y-3 mt-6"
+                                style={{
+                                    color: restaurant.accent_color || "black",
+                                }}
+                            >
                                 <Label htmlFor="instructions">Special Instructions (Optional)</Label>
+                                <style>
+                                    {`
+      .placehodler-placeholder::placeholder {
+        color: ${restaurant.accent_color || "black"};
+          opacity: 0.8; /* 80% opacity */
+      }
+    `}
+                                </style>
                                 <Textarea
                                     id="instructions"
+                                    className="placehodler-placeholder"
                                     value={specialInstructions}
+                                    style={{
+                                        color: restaurant.accent_color || "black",
+                                        borderColor: restaurant.accent_color || "black",
+                                        // @ts-expect-error due to types 
+                                        '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                    }}
                                     onChange={(e) => setSpecialInstructions(e.target.value)}
                                     placeholder="Any special requests, dietary restrictions, or cooking preferences..."
                                     rows={3}
@@ -396,10 +534,18 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
 
                 {/* Footer */}
                 {items.length > 0 && (
-                    <div className="border-t pt-4 space-y-4 px-4 pb-4">
+                    <div className="border-t pt-4 space-y-4 px-4 pb-4"
+                        style={{
+                            borderColor: restaurant.accent_color || "black",
+                        }}
+                    >
                         {!showCheckout ? (
                             <>
-                                <div className="space-y-2">
+                                <div
+                                    style={{
+                                        color: restaurant.accent_color || "black",
+                                    }}
+                                    className="space-y-2">
                                     <div className="flex justify-between text-sm">
                                         <span>Subtotal</span>
                                         <span>${subtotal.toFixed(2)}</span>
@@ -408,21 +554,53 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
                                         <span>Tax (8%)</span>
                                         <span>${taxAmount.toFixed(2)}</span>
                                     </div>
-                                    <div className="flex justify-between font-semibold text-lg border-t pt-2">
+                                    <div
+                                        style={{
+                                            borderColor: restaurant.accent_color || "black",
+                                        }}
+                                        className="flex justify-between font-semibold text-lg border-t pt-2">
                                         <span>Total</span>
                                         <span>${(subtotal + taxAmount).toFixed(2)}</span>
                                     </div>
                                 </div>
-                                <Button className="w-full" size="lg" onClick={() => setShowCheckout(true)}>
+                                <Button
+                                    style={{
+                                        backgroundColor: restaurant.accent_color || "black",
+                                        color: restaurant.button_text_icons_color || "black",
+                                    }}
+                                    className="w-full cursor-pointer border-none" size="lg" onClick={() => {
+                                        const isOpen = isRestaurantOpenNow(
+                                            typeof restaurant.opening_hours === "string"
+                                                ? JSON.parse(restaurant.opening_hours)
+                                                : restaurant.opening_hours
+                                        );
+                                        if (!isOpen) {
+                                            alert("The restaurant is currently closed. You can't place an order right now.");
+                                            return;
+                                        }
+                                        setShowCheckout(true)
+                                    }
+                                    }>
                                     Proceed to Checkout
                                 </Button>
                             </>
                         ) : (
                             <div className="flex gap-2">
-                                <Button variant="outline" onClick={() => setShowCheckout(false)} className="flex-1">
+                                <Button
+                                    style={{
+                                        color: restaurant.accent_color || "black",
+                                        borderColor: restaurant.accent_color || "black",
+                                        backgroundColor: restaurant.button_text_icons_color || "black",
+                                    }}
+                                    variant="outline" onClick={() => setShowCheckout(false)} className="flex-1 cursor-pointer border">
                                     Back to Cart
                                 </Button>
-                                <Button onClick={handleProceedToCheckout} disabled={isProcessing} className="flex-1">
+                                <Button
+                                    style={{
+                                        color: restaurant.button_text_icons_color || "black",
+                                        backgroundColor: restaurant.accent_color || "black",
+                                    }}
+                                    onClick={handleProceedToCheckout} disabled={isProcessing} className="flex-1 cursor-pointer border-none">
                                     {isProcessing ? (
                                         <>
                                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -446,26 +624,33 @@ export function CartDrawer({ restaurantSlug, restaurantName, isOpen, onClose }: 
 
 interface CartItemComponentProps {
     item: CartItem
+    restaurant: Restaurant
     onQuantityChange: (quantity: number) => void
     onRemove: () => void
 }
 
-function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemComponentProps) {
+function CartItemComponent({ item, onQuantityChange, restaurant, onRemove }: CartItemComponentProps) {
     return (
-        <Card className="gap-2 py-3">
+        <Card style={{
+            backgroundColor: restaurant.accent_color || "black",
+            borderColor: restaurant.button_text_icons_color || "black"
+        }} className="gap-2 py-3">
             <CardContent className="px-4 py-0">
                 <div className="flex justify-between items-start mb-3">
-                    <div className="flex-1 mr-3">
-                        <Image
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzcgFyUtPS-o5LVocypCY6nTPxLyAjkdmYIQ&s"
+                    <div
+                        style={{
+                            color: restaurant.button_text_icons_color || "black",
+                        }}
+                        className="flex-1 mr-3">
+                        {item.image_url && <Image
+                            src={item.image_url || "/dummy.jfif"}
                             alt={item.name}
                             width={100}
                             height={100}
                             className="object-cover mb-2 aspect-square rounded-sm"
-                        />
-                        <h4 className="font-medium text-gray-900 line-clamp-1">{item.name}</h4>
-                        <p className="text-sm text-gray-500">{item.category}</p>
-                        {item.description && <p className="text-sm text-gray-600 mt-1 line-clamp-2">{item.description}</p>}
+                        />}
+                        <h4 className="font-medium  line-clamp-1">{item.name}</h4>
+                        {item.description && <p className="text-sm  mt-1 line-clamp-2 opacity-80">{item.description}</p>}
                     </div>
                     <Button
                         variant="ghost"
@@ -481,12 +666,20 @@ function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemCompone
                     <div className="mb-3">
                         <div className="flex flex-wrap gap-1">
                             {item.allergens.slice(0, 3).map((allergen) => (
-                                <Badge key={allergen} variant="secondary" className="text-xs">
+                                <Badge style={{
+                                    color: restaurant.accent_color || "black",
+                                    backgroundColor: restaurant.button_text_icons_color || "black"
+                                }} key={allergen} variant="secondary" className="text-xs">
                                     {allergen}
                                 </Badge>
                             ))}
                             {item.allergens.length > 3 && (
-                                <Badge variant="secondary" className="text-xs">
+                                <Badge
+                                    style={{
+                                        color: restaurant.accent_color || "black",
+                                        backgroundColor: restaurant.button_text_icons_color || "black"
+                                    }}
+                                    variant="secondary" className="text-xs">
                                     +{item.allergens.length - 3}
                                 </Badge>
                             )}
@@ -499,17 +692,29 @@ function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemCompone
                         <Button
                             variant="outline"
                             size="sm"
+                            style={{
+                                color: restaurant.accent_color || "black",
+                                backgroundColor: restaurant.button_text_icons_color || "black"
+                            }}
                             onClick={() => onQuantityChange(item.quantity - 1)}
-                            className="h-8 w-8 p-0"
+                            className="h-8 w-8 p-0 border-none"
                         >
                             <Minus className="h-3 w-3" />
                         </Button>
-                        <span className="text-sm font-medium min-w-[20px] text-center">{item.quantity}</span>
+                        <span
+                            style={{
+                                color: restaurant.button_text_icons_color || "black",
+                            }}
+                            className="text-sm font-medium min-w-[20px] text-center">{item.quantity}</span>
                         <Button
                             variant="outline"
                             size="sm"
+                            style={{
+                                color: restaurant.accent_color || "black",
+                                backgroundColor: restaurant.button_text_icons_color || "black"
+                            }}
                             onClick={() => onQuantityChange(item.quantity + 1)}
-                            className="h-8 w-8 p-0"
+                            className="h-8 w-8 p-0 border-none"
                         >
                             <Plus className="h-3 w-3" />
                         </Button>

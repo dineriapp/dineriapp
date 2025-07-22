@@ -54,6 +54,15 @@ export const createItemSchema = z.object({
     allergens: z.array(z.string()).default([]),
     is_halal: z.boolean().optional().default(false), // Match Boolean? in schema
     allergen_info: z.string().optional(),
+    image: z.string().optional(), // it can be an empty string or relative path
+    addons: z
+        .array(
+            z.object({
+                name: z.string().min(1),
+                price: z.number().nonnegative(),
+            })
+        )
+        .optional(),
 })
 
 export const updateItemSchema = z.object({
@@ -63,6 +72,15 @@ export const updateItemSchema = z.object({
     allergens: z.array(z.string()).default([]),
     is_halal: z.boolean().optional().default(false), // Match Boolean? in schema
     allergen_info: z.string().optional(),
+    image: z.string().optional(), // it can be an empty string or relative path
+    addons: z
+        .array(
+            z.object({
+                name: z.string().min(1),
+                price: z.number().nonnegative(),
+            })
+        )
+        .optional(),
 })
 
 export const reorderItemSchema = z.object({

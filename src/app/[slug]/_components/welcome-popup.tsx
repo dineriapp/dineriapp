@@ -69,6 +69,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcoming
 
         return { backgroundColor: restaurant.bg_color || "#ffffff" }
     }
+
     const textColor =
         restaurant.headings_text_color || "#000000"
 
@@ -105,7 +106,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcoming
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+                    className="fixed inset-0 z-50  flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
                     onClick={onClose}
                 >
                     <motion.div
@@ -126,7 +127,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcoming
                         </button>
 
                         {/* Content */}
-                        <div className="relative p-8 text-center">
+                        <div className="relative p-8 text-center no-scroll max-h-[95dvh] overflow-y-auto">
                             {/* Logo */}
                             <motion.div
                                 initial={{ scale: 0 }}
@@ -287,8 +288,8 @@ export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcoming
                                         href={currentEvent.ticket_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mb-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-medium text-white transition-all hover:scale-105"
-                                        style={{ backgroundColor: restaurant.accent_color || "#10b981" }}
+                                        className="mb-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-medium transition-all hover:scale-105"
+                                        style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
                                     >
                                         <span>Get Event Tickets</span>
                                         <ExternalLink className="h-4 w-4" />
@@ -299,8 +300,8 @@ export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcoming
                                 {showButton && (
                                     <Button
                                         onClick={onClose}
-                                        className="w-full rounded-xl py-3 font-medium text-white transition-all hover:scale-105"
-                                        style={{ backgroundColor: restaurant.accent_color || "#10b981" }}
+                                        className="w-full rounded-xl py-3 font-medium transition-all hover:scale-105"
+                                        style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
                                     >
                                         Explore
                                     </Button>

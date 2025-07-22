@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { MapPin, Loader2, Navigation } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { google } from "google-maps"
+import { Restaurant } from "@prisma/client"
 
 export interface AddressData {
     street: string
@@ -27,6 +28,7 @@ interface AddressInputProps {
     className?: string
     required?: boolean
     placeholder?: string
+    restaurant: Restaurant
     label?: string
     showCurrentLocation?: boolean
 }
@@ -44,6 +46,7 @@ export function AddressInput({
     value,
     onChange,
     onValidationChange,
+    restaurant,
     className,
     required = false,
     placeholder = "Enter your address",
@@ -253,7 +256,12 @@ export function AddressInput({
                                 size="sm"
                                 onClick={getCurrentLocation}
                                 disabled={isGettingLocation}
-                                className="text-xs bg-transparent"
+                                style={{
+                                    backgroundColor: restaurant.button_text_icons_color || "black",
+                                    color: restaurant.accent_color || "black",
+                                    borderColor: restaurant.accent_color || "black",
+                                }}
+                                className="text-xs bg-transparent cursor-pointer"
                             >
                                 {isGettingLocation ? (
                                     <Loader2 className="h-3 w-3 animate-spin mr-1" />
@@ -267,8 +275,13 @@ export function AddressInput({
                             type="button"
                             variant="outline"
                             size="sm"
+                            style={{
+                                color: restaurant.button_text_icons_color || "black",
+                                backgroundColor: restaurant.accent_color || "black",
+                                borderColor: restaurant.accent_color || "black",
+                            }}
                             onClick={() => setManualEntry(!manualEntry)}
-                            className="text-xs"
+                            className="text-xs cursor-pointer"
                         >
                             {manualEntry ? "Use Search" : "Manual Entry"}
                         </Button>
@@ -278,7 +291,9 @@ export function AddressInput({
                 {!manualEntry ? (
                     <div className="relative">
                         <div className="relative">
-                            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                            <MapPin style={{
+                                color: restaurant.accent_color || "black"
+                            }} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                             <Input
                                 ref={inputRef}
                                 id="address-search"
@@ -286,7 +301,13 @@ export function AddressInput({
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                                 placeholder={placeholder}
-                                className="pl-10"
+                                className="pl-10 placehodler-placeholder"
+                                style={{
+                                    color: restaurant.accent_color || "black",
+                                    borderColor: restaurant.accent_color || "black",
+                                    // @ts-expect-error due to types 
+                                    '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                }}
                                 autoComplete="street-address"
                             />
                             {isLoading && (
@@ -295,17 +316,32 @@ export function AddressInput({
                         </div>
 
                         {showSuggestions && suggestions.length > 0 && (
-                            <Card className="absolute z-50 w-full mt-1 max-h-60 overflow-y-auto">
+                            <Card
+                                style={{
+                                    backgroundColor: restaurant.accent_color || "black",
+                                }}
+                                className="absolute z-50 w-full mt-1 max-h-60 overflow-y-auto border-none">
                                 <CardContent className="p-0">
                                     {suggestions.map((suggestion) => (
                                         <button
                                             key={suggestion.place_id}
+                                            style={{
+                                                borderColor: restaurant.button_text_icons_color || "black",
+                                            }}
                                             type="button"
-                                            className="w-full text-left p-3 hover:bg-gray-50 border-b last:border-b-0 focus:bg-gray-50 focus:outline-none"
+                                            className="w-full text-left p-3 hover:opacity-50 cursor-pointer border-b last:border-b-0 focus:outline-none"
                                             onClick={() => selectPlace(suggestion.place_id)}
                                         >
-                                            <div className="font-medium text-sm">{suggestion.structured_formatting.main_text}</div>
-                                            <div className="text-xs text-gray-500">{suggestion.structured_formatting.secondary_text}</div>
+                                            <div
+                                                style={{
+                                                    color: restaurant.button_text_icons_color || "black",
+                                                }}
+                                                className="font-medium text-sm">{suggestion.structured_formatting.main_text}</div>
+                                            <div
+                                                style={{
+                                                    color: restaurant.button_text_icons_color || "black",
+                                                }}
+                                                className="text-xs text-gray-500">{suggestion.structured_formatting.secondary_text}</div>
                                         </button>
                                     ))}
                                 </CardContent>
@@ -313,7 +349,11 @@ export function AddressInput({
                         )}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 gap-4">
+                    <div
+                        style={{
+                            color: restaurant.accent_color || "black",
+                        }}
+                        className="grid grid-cols-1 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="street">Street Address {required && <span className="text-red-500">*</span>}</Label>
                             <Input
@@ -321,6 +361,13 @@ export function AddressInput({
                                 value={value.street}
                                 onChange={(e) => handleManualInput("street", e.target.value)}
                                 placeholder="123 Main Street"
+                                className="placehodler-placeholder"
+                                style={{
+                                    color: restaurant.accent_color || "black",
+                                    borderColor: restaurant.accent_color || "black",
+                                    // @ts-expect-error due to types 
+                                    '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                }}
                                 autoComplete="address-line1"
                             />
                         </div>
@@ -330,6 +377,13 @@ export function AddressInput({
                                 <Label htmlFor="city">City {required && <span className="text-red-500">*</span>}</Label>
                                 <Input
                                     id="city"
+                                    className="placehodler-placeholder"
+                                    style={{
+                                        color: restaurant.accent_color || "black",
+                                        borderColor: restaurant.accent_color || "black",
+                                        // @ts-expect-error due to types 
+                                        '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                    }}
                                     value={value.city}
                                     onChange={(e) => handleManualInput("city", e.target.value)}
                                     placeholder="New York"
@@ -340,6 +394,13 @@ export function AddressInput({
                                 <Label htmlFor="state">State {required && <span className="text-red-500">*</span>}</Label>
                                 <Input
                                     id="state"
+                                    className="placehodler-placeholder"
+                                    style={{
+                                        color: restaurant.accent_color || "black",
+                                        borderColor: restaurant.accent_color || "black",
+                                        // @ts-expect-error due to types 
+                                        '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                    }}
                                     value={value.state}
                                     onChange={(e) => handleManualInput("state", e.target.value)}
                                     placeholder="NY"
@@ -353,6 +414,13 @@ export function AddressInput({
                                 <Label htmlFor="postalCode">ZIP Code {required && <span className="text-red-500">*</span>}</Label>
                                 <Input
                                     id="postalCode"
+                                    className="placehodler-placeholder"
+                                    style={{
+                                        color: restaurant.accent_color || "black",
+                                        borderColor: restaurant.accent_color || "black",
+                                        // @ts-expect-error due to types 
+                                        '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                    }}
                                     value={value.postalCode}
                                     onChange={(e) => handleManualInput("postalCode", e.target.value)}
                                     placeholder="10001"
@@ -363,6 +431,13 @@ export function AddressInput({
                                 <Label htmlFor="country">Country {required && <span className="text-red-500">*</span>}</Label>
                                 <Input
                                     id="country"
+                                    className="placehodler-placeholder"
+                                    style={{
+                                        color: restaurant.accent_color || "black",
+                                        borderColor: restaurant.accent_color || "black",
+                                        // @ts-expect-error due to types 
+                                        '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                    }}
                                     value={value.country}
                                     onChange={(e) => handleManualInput("country", e.target.value)}
                                     placeholder="United States"

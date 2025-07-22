@@ -10,6 +10,7 @@ export interface CartItem {
     category: string
     allergens?: string[]
     is_halal?: boolean
+    addons?: { name: string, price: number }[]
     image_url?: string
 }
 

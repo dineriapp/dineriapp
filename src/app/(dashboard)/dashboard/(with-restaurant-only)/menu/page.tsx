@@ -43,10 +43,12 @@ import {
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
-import { AlertTriangle, ArrowDown, ArrowUp, Edit, Grip, Leaf, Plus, Search, Trash2 } from "lucide-react"
+import { AlertTriangle, ArrowDown, ArrowUp, Edit, Grip, Leaf, Plus, Search, Trash2, X } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
 import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
+import { uploadImage } from "@/supabase/clients/client"
+import { toast } from "sonner"
 
 const container = {
     hidden: { opacity: 0 },
@@ -78,6 +80,10 @@ export default function MenuPage() {
     const [allergens, setAllergens] = useState<string[]>([])
     const [isHalal, setIsHalal] = useState(false)
     const [allergenInfo, setAllergenInfo] = useState("")
+    const [addons, setAddons] = useState([{ name: "", price: 0 }]);
+    const [selectedImage, setSelectedImage] = useState<File | null>(null)
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+    const [isUploading, setIsUploading] = useState(false)
 
     const restaurantId = selectedRestaurant?.id
 
@@ -108,7 +114,7 @@ export default function MenuPage() {
                 (category.items && category.items.length > 0),
         )
 
-    const handleAddCategory = (e: React.FormEvent) => {
+    const handleAddCategory = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!newCategoryName.trim() || !restaurantId) return
 
@@ -148,51 +154,114 @@ export default function MenuPage() {
         )
     }
 
-    const handleAddItem = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!selectedCategory || !newItemName.trim() || !newItemPrice) return
+    const handleAddItem = async (e: React.FormEvent) => {
+        try {
+            e.preventDefault()
+            if (!selectedCategory || !newItemName.trim() || !newItemPrice) return
 
-        createItemMutation.mutate(
-            {
-                category_id: selectedCategory.id,
-                name: newItemName.trim(),
-                description: newItemDescription.trim() || undefined,
-                price: Number.parseFloat(newItemPrice),
-                allergens: allergens,
-                is_halal: isHalal,
-                allergen_info: allergenInfo.trim() || undefined,
-            },
-            {
-                onSuccess: () => {
-                    resetForm()
-                    setIsAddItemDialogOpen(false)
+            if (!selectedImage) {
+                toast.error("Please select an image also")
+                return
+            }
+
+            setIsUploading(true)
+
+            let imageUrl = previewUrl // keep existing if editing
+
+            // Upload if new image selected
+            if (selectedImage) {
+                const uploaded = await uploadImage(selectedImage)
+                if (uploaded) imageUrl = uploaded
+            }
+
+            // Filter valid addons (non-empty name and price)
+            const validAddons = addons
+                .filter((addon) => addon.name.trim() !== "" && addon.price !== 0)
+                .map((addon) => ({
+                    name: addon.name.trim(),
+                    price: addon.price,
+                }));
+
+
+            createItemMutation.mutate(
+                {
+
+                    category_id: selectedCategory.id,
+                    name: newItemName.trim(),
+                    description: newItemDescription.trim() || undefined,
+                    price: Number.parseFloat(newItemPrice),
+                    allergens: allergens,
+                    is_halal: isHalal,
+                    image: imageUrl || "",
+                    allergen_info: allergenInfo.trim() || undefined,
+                    addons: validAddons.length > 0 ? validAddons : undefined, // Optional: omit if empty
+
                 },
-            },
-        )
+                {
+                    onSuccess: () => {
+                        resetForm()
+                        setIsAddItemDialogOpen(false)
+                    },
+                },
+            )
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsUploading(false)
+        }
+
     }
 
-    const handleEditItem = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!selectedItem || !newItemName.trim() || !newItemPrice) return
+    const handleEditItem = async (e: React.FormEvent) => {
+        try {
+            e.preventDefault()
+            if (!selectedItem || !newItemName.trim() || !newItemPrice) return
 
-        updateItemMutation.mutate(
-            {
-                id: selectedItem.id,
-                name: newItemName.trim(),
-                description: newItemDescription.trim() || undefined,
-                price: Number.parseFloat(newItemPrice),
-                allergens: allergens,
-                is_halal: isHalal,
-                allergen_info: allergenInfo.trim() || undefined,
-            },
-            {
-                onSuccess: () => {
-                    setIsEditItemDialogOpen(false)
-                    setSelectedItem(null)
-                    resetForm()
+            setIsUploading(true)
+
+            let imageUrl = previewUrl // keep existing if editing
+
+            // Upload if new image selected
+            if (selectedImage) {
+                const uploaded = await uploadImage(selectedImage)
+                if (uploaded) imageUrl = uploaded
+            }
+
+
+            // Filter valid addons (non-empty name and price)
+            const validAddons = addons
+                .filter((addon) => addon.name.trim() !== "" && addon.price !== 0)
+                .map((addon) => ({
+                    name: addon.name.trim(),
+                    price: addon.price,
+                }));
+
+            updateItemMutation.mutate(
+                {
+                    id: selectedItem.id,
+                    name: newItemName.trim(),
+                    description: newItemDescription.trim() || undefined,
+                    price: Number.parseFloat(newItemPrice),
+                    allergens: allergens,
+                    is_halal: isHalal,
+                    image: imageUrl || "",
+                    addons: validAddons.length > 0 ? validAddons : undefined, // Optional: omit if empty
+                    allergen_info: allergenInfo.trim() || undefined,
                 },
-            },
-        )
+                {
+                    onSuccess: () => {
+                        setIsEditItemDialogOpen(false)
+                        setSelectedItem(null)
+                        resetForm()
+                    },
+                },
+            )
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsUploading(false)
+
+        }
     }
 
     const resetForm = () => {
@@ -455,6 +524,8 @@ export default function MenuPage() {
                                                     } else {
                                                         setSelectedCategory(category);
                                                         setIsAddItemDialogOpen(true);
+                                                        setPreviewUrl("")
+                                                        setSelectedImage(null)
                                                     }
                                                 }}
                                                 className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
@@ -467,8 +538,11 @@ export default function MenuPage() {
 
                                         {category.items && category.items.length > 0 ? (
                                             <div className="space-y-3">
-                                                {category.items.map((item, itemIndex) => (
-                                                    <div
+                                                {category.items.map((item, itemIndex) => {
+                                                    const parsedAddons = Array.isArray(item.addons)
+                                                        ? (item.addons as { name: string; price: number }[])
+                                                        : [];
+                                                    return <div
                                                         key={item.id}
                                                         className="flex items-center gap-3 rounded-lg border bg-white/80 p-4 backdrop-blur-sm transition-all hover:shadow-md hover:bg-white/90"
                                                     >
@@ -478,6 +552,7 @@ export default function MenuPage() {
 
                                                         <div className="min-w-0 flex-grow">
                                                             <div className="flex items-center gap-2 mb-1">
+
                                                                 <h3 className="font-medium">{item.name}</h3>
                                                                 {item.is_halal && (
                                                                     <span
@@ -489,6 +564,15 @@ export default function MenuPage() {
                                                                     </span>
                                                                 )}
                                                             </div>
+                                                            {item.image
+                                                                &&
+                                                                <div className="mt-2">
+                                                                    <img
+                                                                        src={item.image}
+                                                                        alt="Preview"
+                                                                        className="w-10 h-10 object-cover rounded border"
+                                                                    />
+                                                                </div>}
                                                             {item.description && <p className="text-sm text-slate-500 mb-2">{item.description}</p>}
                                                             {item.allergens && item.allergens.length > 0 && (
                                                                 <div className="flex flex-wrap gap-1">
@@ -511,6 +595,19 @@ export default function MenuPage() {
                                                                     ))} */}
                                                                 </div>
                                                             )}
+                                                            {/* Addons */}
+                                                            {item.addons && parsedAddons.length > 0 && (
+                                                                <div>
+                                                                    <h3 className="text-xs mt-2 font-medium mb-1">Available Addons:</h3>
+                                                                    <ul className="list-disc list-inside text-xs text-gray-700">
+                                                                        {parsedAddons.map((addon: any, index: number) => (
+                                                                            <li key={index}>
+                                                                                {addon.name} — €{addon.price.toFixed(2)}
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
                                                         </div>
 
                                                         <div className="flex-shrink-0 font-bold text-lg text-teal-600">
@@ -522,6 +619,7 @@ export default function MenuPage() {
                                                                 variant="ghost"
                                                                 size="sm"
                                                                 onClick={() => {
+                                                                    setPreviewUrl(item.image)
                                                                     setSelectedCategory(category)
                                                                     setSelectedItem(item)
                                                                     setNewItemName(item.name)
@@ -531,6 +629,8 @@ export default function MenuPage() {
                                                                     setIsHalal(item.is_halal || false)
                                                                     setAllergenInfo(item.allergen_info || "")
                                                                     setIsEditItemDialogOpen(true)
+                                                                    setAddons(parsedAddons)
+                                                                    setSelectedImage(null)
                                                                 }}
                                                                 className="h-8 w-8 p-0 transition-transform hover:scale-110"
                                                             >
@@ -595,7 +695,7 @@ export default function MenuPage() {
                                                             </Button>
                                                         </div>
                                                     </div>
-                                                ))}
+                                                })}
                                             </div>
                                         ) : (
                                             <div className="py-8 text-center">
@@ -605,6 +705,8 @@ export default function MenuPage() {
                                                     onClick={() => {
                                                         setSelectedCategory(category)
                                                         setIsAddItemDialogOpen(true)
+                                                        setPreviewUrl("")
+                                                        setSelectedImage(null)
                                                     }}
                                                     className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
                                                 >
@@ -784,6 +886,81 @@ export default function MenuPage() {
                                 />
                             </div>
 
+                            <div className="space-y-2">
+                                <Label>Addons</Label>
+                                {addons.map((addon, index) => (
+                                    <div key={index} className="grid grid-cols-4 gap-2">
+                                        <Input
+                                            placeholder="Addon Name (e.g. Extra Cheese)"
+                                            value={addon.name}
+                                            className="col-span-2"
+                                            onChange={(e) => {
+                                                const updated = [...addons];
+                                                updated[index].name = e.target.value;
+                                                setAddons(updated);
+                                            }}
+                                        />
+                                        <Input
+                                            placeholder="Price"
+                                            type="number"
+                                            step="0.01"
+                                            min="0"
+                                            value={addon.price}
+                                            onChange={(e) => {
+                                                const updated = [...addons];
+                                                updated[index].price = +(e.target.value);
+                                                setAddons(updated);
+                                            }}
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            size="icon"
+                                            onClick={() => {
+                                                const updated = [...addons];
+                                                updated.splice(index, 1);
+                                                setAddons(updated);
+                                            }}
+                                        >
+                                            <X size={24} />
+                                        </Button>
+                                    </div>
+                                ))}
+
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => setAddons([...addons, { name: "", price: 0 }])}
+                                    className="mt-2"
+                                >
+                                    + Add Addon
+                                </Button>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="image">Upload Image</Label>
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    id="image"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0]
+                                        if (file) {
+                                            setSelectedImage(file)
+                                            setPreviewUrl(URL.createObjectURL(file))
+                                        }
+                                    }}
+                                />
+                            </div>
+
+                            {previewUrl && (
+                                <div className="mt-2">
+                                    <img
+                                        src={previewUrl}
+                                        alt="Preview"
+                                        className="w-24 h-24 object-cover rounded border"
+                                    />
+                                </div>
+                            )}
                             <div className="flex items-center space-x-2">
                                 <Checkbox
                                     id="editIsHalal"
@@ -815,12 +992,13 @@ export default function MenuPage() {
                                 disabled={!newItemName || !newItemPrice || updateItemMutation.isPending}
                                 className="bg-gradient-to-r from-teal-600 to-blue-600"
                             >
-                                {updateItemMutation.isPending ? "Saving..." : "Save Changes"}
+                                {isUploading ? "Uploading..." : updateItemMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
             </Dialog>
+
             <Dialog open={!!selectedCategory && isAddItemDialogOpen} onOpenChange={(open) => {
                 setIsAddItemDialogOpen(open);
                 if (!open) {
@@ -911,6 +1089,81 @@ export default function MenuPage() {
                                 />
                             </div>
 
+                            <div className="space-y-2">
+                                <Label>Addons</Label>
+                                {addons.map((addon, index) => (
+                                    <div key={index} className="grid grid-cols-4 gap-2">
+                                        <Input
+                                            placeholder="Addon Name (e.g. Extra Cheese)"
+                                            value={addon.name}
+                                            className="col-span-2"
+                                            onChange={(e) => {
+                                                const updated = [...addons];
+                                                updated[index].name = e.target.value;
+                                                setAddons(updated);
+                                            }}
+                                        />
+                                        <Input
+                                            placeholder="Price"
+                                            type="number"
+                                            step="0.01"
+                                            min="0"
+                                            value={addon.price}
+                                            onChange={(e) => {
+                                                const updated = [...addons];
+                                                updated[index].price = +(e.target.value);
+                                                setAddons(updated);
+                                            }}
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            size="icon"
+                                            onClick={() => {
+                                                const updated = [...addons];
+                                                updated.splice(index, 1);
+                                                setAddons(updated);
+                                            }}
+                                        >
+                                            <X size={24} />
+                                        </Button>
+                                    </div>
+                                ))}
+
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => setAddons([...addons, { name: "", price: 0 }])}
+                                    className="mt-2"
+                                >
+                                    + Add Addon
+                                </Button>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="image">Upload Image</Label>
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    id="image"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0]
+                                        if (file) {
+                                            setSelectedImage(file)
+                                            setPreviewUrl(URL.createObjectURL(file))
+                                        }
+                                    }}
+                                />
+                            </div>
+
+                            {previewUrl && (
+                                <div className="mt-2">
+                                    <img
+                                        src={previewUrl}
+                                        alt="Preview"
+                                        className="w-24 h-24 object-cover rounded border"
+                                    />
+                                </div>
+                            )}
                             <div className="flex items-center space-x-2">
                                 <Checkbox
                                     id="isHalal"
@@ -939,11 +1192,11 @@ export default function MenuPage() {
                             <Button
                                 type="submit"
                                 disabled={
-                                    !newItemName || !newItemPrice || createItemMutation.isPending || !selectedCategory
+                                    !newItemName || !newItemPrice || !selectedCategory || isUploading || createItemMutation.isPending
                                 }
                                 className="bg-gradient-to-r from-teal-600 to-blue-600"
                             >
-                                {createItemMutation.isPending ? "Adding..." : "Add Item"}
+                                {isUploading ? "Uploading..." : createItemMutation.isPending ? "Adding..." : "Add Item"}
                             </Button>
                         </DialogFooter>
                     </form>
