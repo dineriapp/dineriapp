@@ -18,10 +18,12 @@ type RestaurantWithRelations = Restaurant & {
             name: string
             description: string | null
             price: number
+            image: string
             sort_order: number
             allergens: string[]
             is_halal: boolean | null
             allergen_info: string | null
+            addons: any
             createdAt: Date
             updatedAt: Date
         }>
