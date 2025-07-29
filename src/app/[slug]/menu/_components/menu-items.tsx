@@ -1,57 +1,75 @@
-"use client"
+"use client";
 
-import type { MenuItem, Restaurant } from "@prisma/client"
-import { MenuItemCard } from "./menu-item-card"
+import type { MenuItem, Restaurant } from "@prisma/client";
+import { MenuItemCard } from "./menu-item-card";
 
 type MenuItemWithCategory = MenuItem & {
-    categoryName: string
-}
+  categoryName: string;
+};
 
 interface MenuItemsProps {
-    items: MenuItemWithCategory[]
-    restaurantSlug: string
-    selectedCategory: string
-    restaurant: Restaurant
+  items: MenuItemWithCategory[];
+  restaurantSlug: string;
+  selectedCategory: string;
+  restaurant: Restaurant;
 }
 
-export function MenuItems({ items, restaurantSlug, restaurant, selectedCategory }: MenuItemsProps) {
-    if (items.length === 0) {
-        return (
-            <div className="text-center py-12">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    {selectedCategory === "all" ? "No menu items available" : "No items in this category"}
-                </h3>
-                <p className="text-gray-500">
-                    {selectedCategory === "all"
-                        ? "This restaurant hasn't added any menu items yet."
-                        : "This category doesn't have any menu items yet."}
-                </p>
-            </div>
-        )
-    }
-
+export function MenuItems({
+  items,
+  restaurantSlug,
+  restaurant,
+  selectedCategory,
+}: MenuItemsProps) {
+  if (items.length === 0) {
     return (
-        <div>
-            <div className="mb-6">
-                <h2 style={{
-                    color: restaurant.accent_color || "white"
-                }} className="text-2xl font-bold  mb-2">
-                    {selectedCategory === "all" ? "All Items" : items[0]?.categoryName}
-                </h2>
-                <p
-                    style={{
-                        color: restaurant.accent_color || "white"
-                    }}
-                    className="opacity-80">
-                    {items.length} item{items.length !== 1 ? "s" : ""} available
-                </p>
-            </div>
+      <div className="text-center py-12">
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
+          {selectedCategory === "all"
+            ? "No menu items available"
+            : "No items in this category"}
+        </h3>
+        <p className="text-gray-500">
+          {selectedCategory === "all"
+            ? "This restaurant hasn't added any menu items yet."
+            : "This category doesn't have any menu items yet."}
+        </p>
+      </div>
+    );
+  }
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {items.map((item) => (
-                    <MenuItemCard restaurant={restaurant} key={item.id} item={item} categoryName={item.categoryName} restaurantSlug={restaurantSlug} />
-                ))}
-            </div>
-        </div>
-    )
+  return (
+    <div className="w-full">
+      <div className="mb-6">
+        <h2
+          style={{
+            color: restaurant.accent_color || "white",
+          }}
+          className="text-2xl font-bold  mb-2"
+        >
+          {selectedCategory === "all" ? "All Items" : items[0]?.categoryName}
+        </h2>
+        <p
+          style={{
+            color: restaurant.accent_color || "white",
+          }}
+          className="opacity-80"
+        >
+          {items.length} item{items.length !== 1 ? "s" : ""} available
+        </p>
+      </div>
+
+      <div className="flex flex-col  w-full gap-6">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-6"> */}
+        {items.map((item) => (
+          <MenuItemCard
+            restaurant={restaurant}
+            key={item.id}
+            item={item}
+            categoryName={item.categoryName}
+            restaurantSlug={restaurantSlug}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }

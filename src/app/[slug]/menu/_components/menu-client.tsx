@@ -1,102 +1,128 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import type { Restaurant, MenuCategory, MenuItem } from "@prisma/client"
-import { MenuHeader } from "./menu-header"
-import { CategoryButtons } from "./category-buttons"
-import { MenuItems } from "./menu-items"
-import { CartDrawer } from "./cart-drawer"
-import { useCartStore } from "@/stores/cart-store"
+import { useState } from "react";
+import type { Restaurant, MenuCategory, MenuItem } from "@prisma/client";
+import { MenuHeader } from "./menu-header";
+import { CategoryButtons } from "./category-buttons";
+import { MenuItems } from "./menu-items";
+import { CartDrawer } from "./cart-drawer";
+import { useCartStore } from "@/stores/cart-store";
+import ResturantHeader from "./resturant-header";
+import { Info } from "lucide-react";
 
 type RestaurantWithMenu = Restaurant & {
-    menuCategories: (MenuCategory & {
-        items: MenuItem[]
-    })[]
-}
+  menuCategories: (MenuCategory & {
+    items: MenuItem[];
+  })[];
+};
 
 interface MenuClientProps {
-    restaurant: RestaurantWithMenu
+  restaurant: RestaurantWithMenu;
 }
 
 export function MenuClient({ restaurant }: MenuClientProps) {
-    const [selectedCategory, setSelectedCategory] = useState<string>("all")
-    const [isCartOpen, setIsCartOpen] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-    const { getCartItemCount } = useCartStore()
-    const cartItemCount = getCartItemCount(restaurant.slug)
+  const { getCartItemCount } = useCartStore();
+  const cartItemCount = getCartItemCount(restaurant.slug);
 
-    // Get all items or filtered by category
-    const getFilteredItems = () => {
-        if (selectedCategory === "all") {
-            return restaurant.menuCategories.flatMap((category) =>
-                category.items.map((item) => ({ ...item, categoryName: category.name })),
-            )
-        }
-
-        const category = restaurant.menuCategories.find((cat) => cat.id === selectedCategory)
-        return category ? category.items.map((item) => ({ ...item, categoryName: category.name })) : []
+  // Get all items or filtered by category
+  const getFilteredItems = () => {
+    if (selectedCategory === "all") {
+      return restaurant.menuCategories.flatMap((category) =>
+        category.items.map((item) => ({ ...item, categoryName: category.name }))
+      );
     }
 
-    const filteredItems = getFilteredItems()
+    const category = restaurant.menuCategories.find(
+      (cat) => cat.id === selectedCategory
+    );
+    return category
+      ? category.items.map((item) => ({ ...item, categoryName: category.name }))
+      : [];
+  };
 
-    const getBackgroundStyle = () => {
-        if (restaurant.bg_type === "image" && restaurant.bg_image_url) {
-            return {
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${restaurant.bg_image_url})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-            }
-        }
+  const filteredItems = getFilteredItems();
 
-        if (restaurant.bg_type === "gradient" && restaurant.bg_gradient_start && restaurant.bg_gradient_end) {
-            const directionMap: Record<string, string> = {
-                top: "to top",
-                bottom: "to bottom",
-                left: "to left",
-                right: "to right",
-                "top-right": "to top right",
-                "top-left": "to top left",
-                "bottom-right": "to bottom right",
-                "bottom-left": "to bottom left",
-            }
-
-            return {
-                backgroundImage: `linear-gradient(${directionMap[restaurant.gradient_direction] || "to bottom right"}, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
-            }
-        }
-
-        return { backgroundColor: restaurant.bg_color || "#ffffff" }
+  const getBackgroundStyle = () => {
+    if (restaurant.bg_type === "image" && restaurant.bg_image_url) {
+      return {
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${restaurant.bg_image_url})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      };
     }
 
+    if (
+      restaurant.bg_type === "gradient" &&
+      restaurant.bg_gradient_start &&
+      restaurant.bg_gradient_end
+    ) {
+      const directionMap: Record<string, string> = {
+        top: "to top",
+        bottom: "to bottom",
+        left: "to left",
+        right: "to right",
+        "top-right": "to top right",
+        "top-left": "to top left",
+        "bottom-right": "to bottom right",
+        "bottom-left": "to bottom left",
+      };
 
-    return (
-        <div className="min-h-screen w-full" style={getBackgroundStyle()}>
-            {/* Header */}
-            <MenuHeader restaurant={restaurant} cartItemCount={cartItemCount} onCartClick={() => setIsCartOpen(true)} />
+      return {
+        backgroundImage: `linear-gradient(${
+          directionMap[restaurant.gradient_direction] || "to bottom right"
+        }, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
+      };
+    }
 
-            <div className="w-full max-w-[1200px] mx-auto pb-8">
-                {/* Category Buttons */}
-                <CategoryButtons
-                    categories={restaurant.menuCategories}
-                    selectedCategory={selectedCategory}
-                    onCategorySelect={setSelectedCategory}
-                    restaurant={restaurant}
-                />
+    return { backgroundColor: restaurant.bg_color || "#ffffff" };
+  };
 
-                {/* Menu Items */}
-                <div className="mx-auto px-4 py-3 w-full">
-                    <MenuItems restaurant={restaurant} items={filteredItems} restaurantSlug={restaurant.slug} selectedCategory={selectedCategory} />
-                </div>
-
-                {/* Cart Drawer */}
-                <CartDrawer
-                    restaurantSlug={restaurant.slug}
-                    restaurantName={restaurant.name}
-                    restaurant={restaurant}
-                    isOpen={isCartOpen}
-                    onClose={() => setIsCartOpen(false)}
-                />
-            </div>
+  return (
+    <div className="min-h-screen w-full" style={getBackgroundStyle()}>
+      {/* Header */}
+      <MenuHeader
+        restaurant={restaurant}
+        cartItemCount={cartItemCount}
+        onCartClick={() => setIsCartOpen(true)}
+      />
+      <ResturantHeader />
+      <div className="w-full max-w-[1200px] mx-auto pb-8">
+        <div className="p-4 flex justify-between items-center">
+          <h4 className="text-3xl font-medium">Pizza Viza </h4>
+          <button>
+            <Info />
+          </button>
         </div>
-    )
+        {/* Category Buttons */}
+        <CategoryButtons
+          categories={restaurant.menuCategories}
+          selectedCategory={selectedCategory}
+          onCategorySelect={setSelectedCategory}
+          restaurant={restaurant}
+        />
+
+        {/* Menu Items */}
+        <div className="mx-auto  px-4 py-3 w-full">
+          <MenuItems
+            restaurant={restaurant}
+            items={filteredItems}
+            restaurantSlug={restaurant.slug}
+            selectedCategory={selectedCategory}
+          />
+        </div>
+
+        {/* Cart Drawer */}
+        <CartDrawer
+          restaurantSlug={restaurant.slug}
+          restaurantName={restaurant.name}
+          restaurant={restaurant}
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+        />
+      </div>
+    </div>
+  );
 }
