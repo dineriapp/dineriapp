@@ -202,33 +202,33 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
         >
             <SheetContent
-                style={{
-                    backgroundColor: restaurant.button_text_icons_color || "black",
-                    borderColor: restaurant.accent_color || "black"
-                }}
-                iconColorClose={restaurant.accent_color || "black"}
+                // style={{
+                //     backgroundColor: restaurant.button_text_icons_color || "black",
+                //     borderColor: restaurant.accent_color || "black"
+                // }}
+                iconColorClose={"black"}
                 className="w-full sm:max-w-md flex flex-col">
                 <SheetHeader className="relative shadow-sm gap-1">
                     <SheetTitle
-                        style={{
-                            color: restaurant.accent_color || "black"
-                        }}
+                        // style={{
+                        //     color: restaurant.accent_color || "black"
+                        // }}
                         className="flex items-center justify-between">
                         {showCheckout ? "Checkout" : "Your Order"}
                     </SheetTitle>
                     <SheetDescription
-                        style={{
-                            color: restaurant.accent_color || "black"
-                        }}
+                    // style={{
+                    //     color: restaurant.accent_color || "black"
+                    // }}
                     ><span>From :- </span> <span className="font-semibold">{restaurantName}</span></SheetDescription>
                     {!showCheckout && items.length > 0 && (
                         <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => clearCart(restaurantSlug)}
-                            style={{
-                                color: restaurant.accent_color || "black"
-                            }}
+                            // style={{
+                            //     color: restaurant.accent_color || "black"
+                            // }}
                             className=" absolute bottom-2 right-2 hover:bg-transparent cursor-pointer"
                         >
                             <Trash2 className="h-4 w-4 mr-1" />
@@ -244,25 +244,25 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                         items.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full text-center">
                                 <ShoppingBag
-                                    style={{
-                                        color: restaurant.accent_color || "black"
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.accent_color || "black"
+                                    // }}
                                     className="h-16 w-16 text-gray-400 mb-4" />
                                 <h3
-                                    style={{
-                                        color: restaurant.accent_color || "black"
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.accent_color || "black"
+                                    // }}
                                     className="text-lg font-medium  mb-2">Your cart is empty</h3>
                                 <p
-                                    style={{
-                                        color: restaurant.accent_color || "black"
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.accent_color || "black"
+                                    // }}
                                     className="opacity-80 mb-4">Add some delicious items from the menu!</p>
                                 <Button
-                                    style={{
-                                        color: restaurant.button_text_icons_color || "black",
-                                        backgroundColor: restaurant.accent_color || "black"
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.button_text_icons_color || "black",
+                                    //     backgroundColor: restaurant.accent_color || "black"
+                                    // }}
                                     onClick={onClose} variant="outline" className="hover:bg-transparent cursor-pointer border-none">
                                     Continue Shopping
                                 </Button>
@@ -285,20 +285,21 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                         <div className="space-y-3">
                             {/* Guest Order Notice */}
                             <Alert
-                                style={{
-                                    backgroundColor: restaurant.accent_color || "black",
-                                }}
-                                className="border-none"
+                                // style={{
+                                //     backgroundColor: restaurant.accent_color || "black",
+                                // }}
+                                // className="border-none"
+                                className="bg-yellow-50"
                             >
                                 <AlertCircle
-                                    style={{
-                                        color: restaurant.button_text_icons_color || "black",
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.button_text_icons_color || "black",
+                                    // }}
                                     className="h-4 w-4" />
                                 <AlertDescription
-                                    style={{
-                                        color: restaurant.button_text_icons_color || "black",
-                                    }}
+                                // style={{
+                                //     color: restaurant.button_text_icons_color || "black",
+                                // }}
                                 >
                                     You&apos;re placing a guest order. You&apos;ll receive order updates via email and can track your order using
                                     the order number.
@@ -307,10 +308,10 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
                             {/* Order Summary */}
                             <div
-                                style={{
-                                    backgroundColor: restaurant.accent_color || "black",
-                                    color: restaurant.button_text_icons_color || "black",
-                                }}
+                                // style={{
+                                //     backgroundColor: restaurant.accent_color || "black",
+                                //     color: restaurant.button_text_icons_color || "black",
+                                // }}
                                 className="px-3 py-3 rounded-lg">
                                 <h3 className="font-medium mb-2">Order Summary</h3>
                                 <div className="space-y-2 text-sm">
@@ -329,9 +330,9 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                         </div>
                                     )}
                                     <div
-                                        style={{
-                                            borderColor: restaurant.button_text_icons_color || "black",
-                                        }}
+                                        // style={{
+                                        //     borderColor: restaurant.button_text_icons_color || "black",
+                                        // }}
                                         className="flex justify-between font-semibold border-t pt-1">
                                         <span>Total</span>
                                         <span>${total.toFixed(2)}</span>
@@ -341,10 +342,10 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
                             {/* Customer Information */}
                             <div
-                                style={{
-                                    backgroundColor: restaurant.accent_color || "black",
-                                    color: restaurant.button_text_icons_color || "black",
-                                }}
+                                // style={{
+                                //     backgroundColor: restaurant.accent_color || "black",
+                                //     color: restaurant.button_text_icons_color || "black",
+                                // }}
                                 className="space-y-4 p-3 rounded-md shadow-sm">
                                 <h3 className="font-medium">Contact Information *</h3>
                                 <div className="grid grid-cols-1 gap-4">
@@ -359,17 +360,17 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                                     setFormErrors((prev) => ({ ...prev, name: "" }))
                                                 }
                                             }}
-                                            style={{
-                                                borderColor: restaurant.button_text_icons_color || "black",
-                                            }}
+                                            // style={{
+                                            //     borderColor: restaurant.button_text_icons_color || "black",
+                                            // }}
                                             placeholder="Your full name"
                                             className={formErrors.name ? "border-red-500" : ""}
                                             autoComplete="name"
                                         />
                                         {formErrors.name && <p
-                                            style={{
-                                                color: restaurant.button_text_icons_color || "black",
-                                            }}
+                                            // style={{
+                                            //     color: restaurant.button_text_icons_color || "black",
+                                            // }}
                                             className="text-sm text-red-500 mt-1">{formErrors.name}</p>}
                                     </div>
                                     <div className="space-y-2">
@@ -384,17 +385,17 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                                     setFormErrors((prev) => ({ ...prev, email: "" }))
                                                 }
                                             }}
-                                            style={{
-                                                borderColor: restaurant.button_text_icons_color || "black",
-                                            }}
+                                            // style={{
+                                            //     borderColor: restaurant.button_text_icons_color || "black",
+                                            // }}
                                             placeholder="your@email.com"
                                             className={formErrors.email ? "border-red-500" : ""}
                                             autoComplete="email"
                                         />
                                         {formErrors.email && <p
-                                            style={{
-                                                color: restaurant.button_text_icons_color || "black",
-                                            }}
+                                            // style={{
+                                            //     color: restaurant.button_text_icons_color || "black",
+                                            // }}
                                             className="text-sm text-red-500 mt-1">{formErrors.email}</p>}
                                     </div>
                                     <div className="space-y-2">
@@ -409,17 +410,17 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                                     setFormErrors((prev) => ({ ...prev, phone: "" }))
                                                 }
                                             }}
-                                            style={{
-                                                borderColor: restaurant.button_text_icons_color || "black",
-                                            }}
+                                            // style={{
+                                            //     borderColor: restaurant.button_text_icons_color || "black",
+                                            // }}
                                             placeholder="(555) 123-4567"
                                             className={formErrors.phone ? "border-red-500" : ""}
                                             autoComplete="tel"
                                         />
                                         {formErrors.phone && <p
-                                            style={{
-                                                color: restaurant.button_text_icons_color || "black",
-                                            }}
+                                            // style={{
+                                            //     color: restaurant.button_text_icons_color || "black",
+                                            // }}
                                             className="text-sm text-red-500 mt-1">{formErrors.phone}</p>}
                                     </div>
                                 </div>
@@ -427,31 +428,31 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
                             {/* Order Type */}
                             <div
-                                style={{
-                                    color: restaurant.accent_color || "black",
-                                }}
+                                // style={{
+                                //     color: restaurant.accent_color || "black",
+                                // }}
                                 className="space-y-4">
                                 <h3 className="font-medium">Order Type *</h3>
                                 <RadioGroup value={orderType} onValueChange={(value: "pickup" | "delivery") => setOrderType(value)}>
                                     <div className="flex items-center space-x-2">
                                         <RadioGroupItem
-                                            indicatorStyle={{
-                                                fill: restaurant.accent_color || "black",
-                                            }}
-                                            style={{
-                                                borderColor: restaurant.accent_color || "black",
-                                            }}
+                                            // indicatorStyle={{
+                                            //     fill: restaurant.accent_color || "black",
+                                            // }}
+                                            // style={{
+                                            //     borderColor: restaurant.accent_color || "black",
+                                            // }}
                                             value="pickup" id="pickup" />
                                         <Label htmlFor="pickup">Pickup</Label>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <RadioGroupItem
-                                            indicatorStyle={{
-                                                fill: restaurant.accent_color || "black",
-                                            }}
-                                            style={{
-                                                borderColor: restaurant.accent_color || "black",
-                                            }}
+                                            // indicatorStyle={{
+                                            //     fill: restaurant.accent_color || "black",
+                                            // }}
+                                            // style={{
+                                            //     borderColor: restaurant.accent_color || "black",
+                                            // }}
                                             value="delivery" id="delivery" />
                                         <Label htmlFor="delivery">Delivery (+$5.00)</Label>
                                     </div>
@@ -481,13 +482,13 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                             <Label htmlFor="delivery-notes">Delivery Notes (Optional)</Label>
                                             <Textarea
                                                 id="delivery-notes"
-                                                style={{
-                                                    color: restaurant.accent_color || "black",
-                                                    borderColor: restaurant.accent_color || "black",
-                                                    // @ts-expect-error due to types 
-                                                    '--tw-ring-color': restaurant.accent_color, // dynamic ring color
-                                                }}
-                                                className="placehodler-placeholder"
+                                                // style={{
+                                                //     color: restaurant.accent_color || "black",
+                                                //     borderColor: restaurant.accent_color || "black",
+                                                //     // @ts-expect-error due to types 
+                                                //     '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                                // }}
+                                                // className="placehodler-placeholder"
                                                 value={deliveryNotes}
                                                 onChange={(e) => setDeliveryNotes(e.target.value)}
                                                 placeholder="Apartment number, gate code, special delivery instructions..."
@@ -500,9 +501,9 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
                             {/* Special Instructions */}
                             <div className="space-y-3 mt-6"
-                                style={{
-                                    color: restaurant.accent_color || "black",
-                                }}
+                            // style={{
+                            //     color: restaurant.accent_color || "black",
+                            // }}
                             >
                                 <Label htmlFor="instructions">Special Instructions (Optional)</Label>
                                 <style>
@@ -515,14 +516,14 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                 </style>
                                 <Textarea
                                     id="instructions"
-                                    className="placehodler-placeholder"
+                                    // className="placehodler-placeholder"
                                     value={specialInstructions}
-                                    style={{
-                                        color: restaurant.accent_color || "black",
-                                        borderColor: restaurant.accent_color || "black",
-                                        // @ts-expect-error due to types 
-                                        '--tw-ring-color': restaurant.accent_color, // dynamic ring color
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.accent_color || "black",
+                                    //     borderColor: restaurant.accent_color || "black",
+                                    //     // @ts-expect-error due to types 
+                                    //     '--tw-ring-color': restaurant.accent_color, // dynamic ring color
+                                    // }}
                                     onChange={(e) => setSpecialInstructions(e.target.value)}
                                     placeholder="Any special requests, dietary restrictions, or cooking preferences..."
                                     rows={3}
@@ -535,16 +536,16 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                 {/* Footer */}
                 {items.length > 0 && (
                     <div className="border-t pt-4 space-y-4 px-4 pb-4"
-                        style={{
-                            borderColor: restaurant.accent_color || "black",
-                        }}
+                    // style={{
+                    //     borderColor: restaurant.accent_color || "black",
+                    // }}
                     >
                         {!showCheckout ? (
                             <>
                                 <div
-                                    style={{
-                                        color: restaurant.accent_color || "black",
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.accent_color || "black",
+                                    // }}
                                     className="space-y-2">
                                     <div className="flex justify-between text-sm">
                                         <span>Subtotal</span>
@@ -555,19 +556,19 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                         <span>${taxAmount.toFixed(2)}</span>
                                     </div>
                                     <div
-                                        style={{
-                                            borderColor: restaurant.accent_color || "black",
-                                        }}
+                                        // style={{
+                                        //     borderColor: restaurant.accent_color || "black",
+                                        // }}
                                         className="flex justify-between font-semibold text-lg border-t pt-2">
                                         <span>Total</span>
                                         <span>${(subtotal + taxAmount).toFixed(2)}</span>
                                     </div>
                                 </div>
                                 <Button
-                                    style={{
-                                        backgroundColor: restaurant.accent_color || "black",
-                                        color: restaurant.button_text_icons_color || "black",
-                                    }}
+                                    // style={{
+                                    //     backgroundColor: restaurant.accent_color || "black",
+                                    //     color: restaurant.button_text_icons_color || "black",
+                                    // }}
                                     className="w-full cursor-pointer border-none" size="lg" onClick={() => {
                                         const isOpen = isRestaurantOpenNow(
                                             typeof restaurant.opening_hours === "string"
@@ -587,19 +588,19 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                         ) : (
                             <div className="flex gap-2">
                                 <Button
-                                    style={{
-                                        color: restaurant.accent_color || "black",
-                                        borderColor: restaurant.accent_color || "black",
-                                        backgroundColor: restaurant.button_text_icons_color || "black",
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.accent_color || "black",
+                                    //     borderColor: restaurant.accent_color || "black",
+                                    //     backgroundColor: restaurant.button_text_icons_color || "black",
+                                    // }}
                                     variant="outline" onClick={() => setShowCheckout(false)} className="flex-1 cursor-pointer border">
                                     Back to Cart
                                 </Button>
                                 <Button
-                                    style={{
-                                        color: restaurant.button_text_icons_color || "black",
-                                        backgroundColor: restaurant.accent_color || "black",
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.button_text_icons_color || "black",
+                                    //     backgroundColor: restaurant.accent_color || "black",
+                                    // }}
                                     onClick={handleProceedToCheckout} disabled={isProcessing} className="flex-1 cursor-pointer border-none">
                                     {isProcessing ? (
                                         <>
@@ -629,18 +630,20 @@ interface CartItemComponentProps {
     onRemove: () => void
 }
 
-function CartItemComponent({ item, onQuantityChange, restaurant, onRemove }: CartItemComponentProps) {
+function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemComponentProps) {
     return (
-        <Card style={{
-            backgroundColor: restaurant.accent_color || "black",
-            borderColor: restaurant.button_text_icons_color || "black"
-        }} className="gap-2 py-3">
+        <Card
+            // style={{
+            //     backgroundColor: restaurant.accent_color || "black",
+            //     borderColor: restaurant.button_text_icons_color || "black"
+            // }}
+            className="gap-2 py-3">
             <CardContent className="px-4 py-0">
                 <div className="flex justify-between items-start mb-3">
                     <div
-                        style={{
-                            color: restaurant.button_text_icons_color || "black",
-                        }}
+                        // style={{
+                        //     color: restaurant.button_text_icons_color || "black",
+                        // }}
                         className="flex-1 mr-3">
                         {item.image_url && <Image
                             src={item.image_url || "/dummy.jfif"}
@@ -666,19 +669,21 @@ function CartItemComponent({ item, onQuantityChange, restaurant, onRemove }: Car
                     <div className="mb-3">
                         <div className="flex flex-wrap gap-1">
                             {item.allergens.slice(0, 3).map((allergen) => (
-                                <Badge style={{
-                                    color: restaurant.accent_color || "black",
-                                    backgroundColor: restaurant.button_text_icons_color || "black"
-                                }} key={allergen} variant="secondary" className="text-xs">
+                                <Badge
+                                    //  style={{
+                                    //     color: restaurant.accent_color || "black",
+                                    //     backgroundColor: restaurant.button_text_icons_color || "black"
+                                    // }} 
+                                    key={allergen} variant="secondary" className="text-xs">
                                     {allergen}
                                 </Badge>
                             ))}
                             {item.allergens.length > 3 && (
                                 <Badge
-                                    style={{
-                                        color: restaurant.accent_color || "black",
-                                        backgroundColor: restaurant.button_text_icons_color || "black"
-                                    }}
+                                    // style={{
+                                    //     color: restaurant.accent_color || "black",
+                                    //     backgroundColor: restaurant.button_text_icons_color || "black"
+                                    // }}
                                     variant="secondary" className="text-xs">
                                     +{item.allergens.length - 3}
                                 </Badge>
@@ -692,27 +697,27 @@ function CartItemComponent({ item, onQuantityChange, restaurant, onRemove }: Car
                         <Button
                             variant="outline"
                             size="sm"
-                            style={{
-                                color: restaurant.accent_color || "black",
-                                backgroundColor: restaurant.button_text_icons_color || "black"
-                            }}
+                            // style={{
+                            //     color: restaurant.accent_color || "black",
+                            //     backgroundColor: restaurant.button_text_icons_color || "black"
+                            // }}
                             onClick={() => onQuantityChange(item.quantity - 1)}
                             className="h-8 w-8 p-0 border-none"
                         >
                             <Minus className="h-3 w-3" />
                         </Button>
                         <span
-                            style={{
-                                color: restaurant.button_text_icons_color || "black",
-                            }}
+                            // style={{
+                            //     color: restaurant.button_text_icons_color || "black",
+                            // }}
                             className="text-sm font-medium min-w-[20px] text-center">{item.quantity}</span>
                         <Button
                             variant="outline"
                             size="sm"
-                            style={{
-                                color: restaurant.accent_color || "black",
-                                backgroundColor: restaurant.button_text_icons_color || "black"
-                            }}
+                            // style={{
+                            //     color: restaurant.accent_color || "black",
+                            //     backgroundColor: restaurant.button_text_icons_color || "black"
+                            // }}
                             onClick={() => onQuantityChange(item.quantity + 1)}
                             className="h-8 w-8 p-0 border-none"
                         >

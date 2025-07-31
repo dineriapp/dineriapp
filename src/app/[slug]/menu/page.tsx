@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import prisma from "@/lib/prisma"
 import { MenuClient } from "./_components/menu-client"
+import { ReviewsInfo } from "@/types"
 
 interface MenuPageProps {
     params: Promise<{ slug: string }>
@@ -19,6 +20,7 @@ async function getRestaurantWithMenu(slug: string) {
                         },
                     },
                 },
+                user: true
             },
         })
 
@@ -37,9 +39,39 @@ export default async function MenuPage({ params }: MenuPageProps) {
         notFound()
     }
 
+    let reviewsData: ReviewsInfo = null;
+
+    if (restaurant.google_place_id) {
+        try {
+            const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+            const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${restaurant.google_place_id}&fields=rating,user_ratings_total&key=${apiKey}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (
+                response.ok &&
+                data.status === "OK" &&
+                data.result?.rating !== undefined &&
+                data.result?.user_ratings_total !== undefined
+            ) {
+                reviewsData = {
+                    rating: data.result.rating,
+                    user_ratings_total: data.result.user_ratings_total,
+                };
+            } else {
+                console.warn("Google Place API error or missing fields:", data);
+                reviewsData = null;
+            }
+        } catch (err) {
+            console.error("Error fetching Google Place reviews:", err);
+            reviewsData = null;
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gray-50">
-            <MenuClient restaurant={restaurant} />
+            <MenuClient restaurant={restaurant} reviewsInfo={reviewsData} />
         </div>
     )
 }
@@ -47,6 +79,8 @@ export default async function MenuPage({ params }: MenuPageProps) {
 export async function generateMetadata({ params }: MenuPageProps) {
     const { slug } = await params
     const restaurant = await getRestaurantWithMenu(slug)
+
+
 
     if (!restaurant) {
         return {

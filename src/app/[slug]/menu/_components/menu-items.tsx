@@ -41,18 +41,12 @@ export function MenuItems({
     <div className="w-full">
       <div className="mb-6">
         <h2
-          style={{
-            color: restaurant.accent_color || "white",
-          }}
-          className="text-2xl font-bold  mb-2"
+          className="text-xl font-semibold text-black"
         >
           {selectedCategory === "all" ? "All Items" : items[0]?.categoryName}
         </h2>
         <p
-          style={{
-            color: restaurant.accent_color || "white",
-          }}
-          className="opacity-80"
+          className="text-sm opacity-80 text-black"
         >
           {items.length} item{items.length !== 1 ? "s" : ""} available
         </p>

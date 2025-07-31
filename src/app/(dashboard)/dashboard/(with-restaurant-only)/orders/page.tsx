@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,8 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -18,13 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -33,38 +33,37 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Search,
-  Eye,
-  Clock,
-  CheckCircle,
-  Truck,
-  XCircle,
-  MapPin,
-  Phone,
-  Mail,
-  Receipt,
-  Navigation,
-  DollarSign,
-  Package,
-  TrendingUp,
-  Download,
-  RefreshCw,
-  AlertCircle,
-  Euro,
-  Clock4,
-} from "lucide-react";
-import {
+  OrderWithItems,
+  useExportOrders,
   useOrders,
   useOrderStats,
-  useUpdateOrderStatus,
   useRefreshOrders,
-  useExportOrders,
-  OrderWithItems,
+  useUpdateOrderStatus,
 } from "@/lib/order-queries";
 import { useRestaurantStore } from "@/stores/restaurant-store";
+import {
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Clock4,
+  Download,
+  Euro,
+  Eye,
+  Mail,
+  MapPin,
+  Navigation,
+  Package,
+  Phone,
+  Receipt,
+  RefreshCw,
+  Search,
+  TrendingUp,
+  Truck,
+  XCircle
+} from "lucide-react";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 
 export default function OrdersPage() {
   const { selectedRestaurant: restaurant } = useRestaurantStore();
@@ -164,6 +163,14 @@ export default function OrdersPage() {
       searchTerm,
     });
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleRefresh();
+    }, 240000); // 4 minutes
+
+    return () => clearInterval(interval);
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -919,11 +926,10 @@ function OrderDetailsModal({ order }: { order: OrderWithItems }) {
           <div className="flex items-center justify-between">
             <span>Payment Status</span>
             <Badge
-              className={`${
-                order.payment_status === "completed"
-                  ? "bg-green-100 text-green-800"
-                  : "bg-yellow-100 text-yellow-800"
-              }`}
+              className={`${order.payment_status === "completed"
+                ? "bg-green-100 text-green-800"
+                : "bg-yellow-100 text-yellow-800"
+                }`}
             >
               {order.payment_status.charAt(0).toUpperCase() +
                 order.payment_status.slice(1)}

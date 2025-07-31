@@ -1,14 +1,13 @@
 "use client";
 
-import type { MenuItem, Restaurant } from "@prisma/client";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Leaf } from "lucide-react";
 import { useCartStore } from "@/stores/cart-store";
-import Image from "next/image";
+import type { MenuItem, Restaurant } from "@prisma/client";
+import { isAfter, isBefore, parse } from "date-fns";
+import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import { parse, isAfter, isBefore } from "date-fns";
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -81,10 +80,10 @@ export function MenuItemCard({
 
   return (
     <Card
-      style={{
-        backgroundColor: restaurant.button_text_icons_color || "black",
-        borderColor: restaurant.accent_color || "black",
-      }}
+      // style={{
+      //   backgroundColor: restaurant.button_text_icons_color || "black",
+      //   borderColor: restaurant.accent_color || "black",
+      // }}
       className="overflow-hidden w-full gap-0 !pt-0 !pb-0 hover:shadow-lg transition-all duration-200 h-full flex flex-col"
     >
       {/* Image */}
@@ -114,9 +113,9 @@ export function MenuItemCard({
         <div className="flex justify-between">
           <div className="flex justify-between items-start">
             <h3
-              style={{
-                color: restaurant.accent_color || "black",
-              }}
+              // style={{
+              //   color: restaurant.accent_color || "black",
+              // }}
               className="font-semibold line-clamp-2 text-base leading-tight flex-1 mr-2"
             >
               {item.name}
@@ -124,10 +123,10 @@ export function MenuItemCard({
           </div>
           <div className="">
             <Button
-              style={{
-                color: restaurant.button_text_icons_color || "black",
-                backgroundColor: restaurant.accent_color || "black",
-              }}
+              // style={{
+              //   color: restaurant.button_text_icons_color || "black",
+              //   backgroundColor: restaurant.accent_color || "black",
+              // }}
               onClick={handleAddToCart}
               className="w-full cursor-pointer"
               size="sm"
@@ -139,10 +138,10 @@ export function MenuItemCard({
         </div>
         <h4>
           <span
-            style={{
-              color: restaurant.accent_color || "black",
-            }}
-            className="font-bold text-lg  whitespace-nowrap"
+            // style={{
+            //   color: restaurant.accent_color || "black",
+            // }}
+            className="font-bold text-lg text-black  whitespace-nowrap"
           >
             ${item.price.toFixed(2)}
           </span>
@@ -151,9 +150,9 @@ export function MenuItemCard({
         {/* Description */}
         {item.description && (
           <p
-            style={{
-              color: restaurant.accent_color || "black",
-            }}
+            // style={{
+            //   color: restaurant.accent_color || "black",
+            // }}
             className=" text-sm mb-3 opacity-80 line-clamp-3 flex-1"
           >
             {item.description}
@@ -166,10 +165,10 @@ export function MenuItemCard({
             <div className="flex flex-wrap gap-1">
               {item.allergens.slice(0, 3).map((allergen) => (
                 <Badge
-                  style={{
-                    color: restaurant.button_text_icons_color || "black",
-                    backgroundColor: restaurant.accent_color || "black",
-                  }}
+                  // style={{
+                  //   color: restaurant.button_text_icons_color || "black",
+                  //   backgroundColor: restaurant.accent_color || "black",
+                  // }}
                   key={allergen}
                   variant="secondary"
                   className="text-xs"
@@ -179,10 +178,10 @@ export function MenuItemCard({
               ))}
               {item.allergens.length > 3 && (
                 <Badge
-                  style={{
-                    color: restaurant.button_text_icons_color || "black",
-                    backgroundColor: restaurant.accent_color || "black",
-                  }}
+                  // style={{
+                  //   color: restaurant.button_text_icons_color || "black",
+                  //   backgroundColor: restaurant.accent_color || "black",
+                  // }}
                   variant="secondary"
                   className="text-xs"
                 >
@@ -196,11 +195,11 @@ export function MenuItemCard({
         {/* Allergen info */}
         {item.allergen_info && (
           <p
-            style={{
-              color: restaurant.button_text_icons_color || "black",
-              backgroundColor: restaurant.accent_color || "black",
-            }}
-            className="text-xs  italic w-fit px-2 py-0.5 mb-3 line-clamp-2"
+            // style={{
+            //   color: restaurant.button_text_icons_color || "black",
+            //   backgroundColor: restaurant.accent_color || "black",
+            // }}
+            className="text-xs  italic bg-gray-100 w-fit px-2 py-0.5 mb-3 line-clamp-2"
           >
             {item.allergen_info}
           </p>
