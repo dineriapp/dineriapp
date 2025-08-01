@@ -11,8 +11,9 @@ import ResturantHeader from "./resturant-header";
 import { Info, MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react"
-import { ReviewsInfo } from "@/types";
+import { ReviewsInfo, StylesDataType } from "@/types";
 import { GoogleRating } from "../../_components/google-rating";
+import RestaurantCustomizer from "./restaurent-customizer";
 
 type RestaurantWithMenu = Restaurant & {
   user: User
@@ -29,6 +30,56 @@ interface MenuClientProps {
 export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [customBgUrl, setCustomBgUrl] = useState(restaurant.menuPageBackgroundImage)
+
+  const [stylesData, setStylesData] = useState<StylesDataType>({
+    background: {
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${customBgUrl})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    },
+    // header
+    headerBg: restaurant.headerBg,
+    headerText: restaurant.headerText,
+    headerCartButtonBG: restaurant.headerCartButtonBG,
+    headerCartButtonBorder: restaurant.headerCartButtonBorder,
+    headerCartButtonCountBG: restaurant.headerCartButtonCountBG,
+    headerCartButtonCountBorder: restaurant.headerCartButtonCountBorder,
+    // overall
+    textColor: restaurant.textColor,
+    bgColor: restaurant.bgColor,
+    infoIconsColor: restaurant.infoIconsColor,
+    // category tabs
+    tabsButtonBG: restaurant.tabsButtonBG,
+    tabsButtonDefault: restaurant.tabsButtonDefault,
+    tabsBorderColor: restaurant.tabsBorderColor,
+    tabsTextColor: restaurant.tabsTextColor,
+    tabsTextDefaultColor: restaurant.tabsTextDefaultColor,
+    // cards
+    cardsBG: restaurant.cardsBG,
+    cardsText: restaurant.cardsText,
+    cardsBadgesBg: restaurant.cardsBadgesBg,
+    cardsBadgesTextColor: restaurant.cardsBadgesTextColor,
+  })
+
+
+  const updateStylesData = (key: string, value: string) => {
+    if (key === "bg_image_url") {
+      setCustomBgUrl(value)
+      setStylesData((prev) => ({
+        ...prev,
+        background: {
+          ...prev.background,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${value})`,
+        },
+      }))
+    } else {
+      setStylesData((prev) => ({
+        ...prev,
+        [key]: value,
+      }))
+    }
+  }
 
   const { getCartItemCount } = useCartStore();
   const cartItemCount = getCartItemCount(restaurant.slug);
@@ -51,58 +102,35 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
 
   const filteredItems = getFilteredItems();
 
-  const getBackgroundStyle = () => {
-    if (restaurant.bg_type === "image" && restaurant.bg_image_url) {
-      return {
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${restaurant.bg_image_url})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      };
-    }
-
-    if (
-      restaurant.bg_type === "gradient" &&
-      restaurant.bg_gradient_start &&
-      restaurant.bg_gradient_end
-    ) {
-      const directionMap: Record<string, string> = {
-        top: "to top",
-        bottom: "to bottom",
-        left: "to left",
-        right: "to right",
-        "top-right": "to top right",
-        "top-left": "to top left",
-        "bottom-right": "to bottom right",
-        "bottom-left": "to bottom left",
-      };
-
-      return {
-        backgroundImage: `linear-gradient(${directionMap[restaurant.gradient_direction] || "to bottom right"
-          }, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
-      };
-    }
-
-    return { backgroundColor: restaurant.bg_color || "#ffffff" };
-  };
-
   return (
-    <div className="min-h-screen w-full " style={{}}>
+    <div
+      className="min-h-screen w-full"
+      style={{
+        backgroundColor: stylesData.bgColor
+      }}>
       {/* Header */}
       <MenuHeader
         restaurant={restaurant}
+        stylesData={stylesData}
         cartItemCount={cartItemCount}
         onCartClick={() => setIsCartOpen(true)}
       />
-      <div style={getBackgroundStyle()}>
+      {/* JSON Display */}
+      {/* Restaurant Customizer Component */}
+      <RestaurantCustomizer restaurentID={restaurant.id} restaurentOwnerID={restaurant.user_id} stylesData={stylesData} customBgUrl={customBgUrl || ""} updateStylesData={updateStylesData} />
+      <div style={stylesData.background}>
         <ResturantHeader logo={restaurant.logo_url || ""} />
       </div>
-      <div className="w-full max-w-[1200px] px-4 mx-auto pb-8 " >
+      <div className="w-full max-w-[1200px] px-4 mx-auto pb-8 ">
         <div className="flex justify-between py-4 items-center ">
           {/* left  */}
           <div>
-            <h4 className="text-2xl font-semibold text-black">{restaurant.name}</h4>
+            <h4 className="text-2xl font-semibold "
+              style={{
+                color: stylesData.textColor
+              }}>{restaurant.name}</h4>
             <div className="mt-3 flex items-start sm:items-center sm:flex-row flex-col justify-start sm:justify-start gap-4 sm:gap-3">
-              {restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && (
+              {restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && reviewsInfo && (
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -110,14 +138,25 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
                   className=""
                 >
                   <GoogleRating info={reviewsInfo}
-                    color={"#000000"}
-                    className="text-black underline font-semibold" />
+                    color={stylesData.textColor}
+                    iconsColor={stylesData.infoIconsColor}
+                    underline={true}
+                    className="font-semibold" />
                 </motion.div>
               )}
               {restaurant.address && (
                 <div className="flex items-center justify-center gap-1">
-                  <MapPin className="h-5 w-5 fill-yellow-400 text-white" />
-                  <span className="text-sm" >
+                  <MapPin
+                    style={{
+                      color: stylesData.bgColor,
+                      fill: stylesData.infoIconsColor
+                    }}
+                    className="h-5 w-5" />
+                  <span
+                    style={{
+                      color: stylesData.textColor
+                    }}
+                    className="text-sm" >
                     {restaurant.address}
                   </span>
                 </div>
@@ -127,17 +166,33 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
           </div>
           {/* right  */}
           <div>
-            <Button variant={"ghost"} className="bg-[#f5f3f1] cursor-pointer hover:bg-gray-200">
-              <Info className="text-black size-4" strokeWidth={2.5} />
+            <Button variant={"ghost"} className="bg-transparent cursor-pointer hover:bg-transparent">
+              <Info className="size-4"
+                style={{
+                  color: stylesData.textColor
+                }}
+                strokeWidth={2.5} />
             </Button>
           </div>
         </div>
-        <div className="relative w-full my-2 bg-white rounded-full">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-black w-5 h-5" />
+        <div className="relative w-full my-2 rounded-full"
+          style={{
+            backgroundColor: stylesData.headerBg
+          }}
+        >
+          <Search
+            style={{
+              color: stylesData.headerText,
+            }}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2  w-5 h-5" />
           <input
             type="text"
             placeholder={`Search in ${restaurant.name}...`}
-            className="w-full h-[54px] pl-12 rounded-full pr-4 py-2 border border-black/30 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            style={{
+              color: stylesData.headerText,
+              borderColor: stylesData.headerCartButtonBorder
+            }}
+            className="w-full h-[54px] pl-12 rounded-full pr-4 py-2 border shadow-sm focus:outline-none "
           />
         </div>
         {/* Category Buttons */}
@@ -145,6 +200,7 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
           categories={restaurant.menuCategories}
           selectedCategory={selectedCategory}
           onCategorySelect={setSelectedCategory}
+          stylesData={stylesData}
           restaurant={restaurant}
         />
 
@@ -153,6 +209,7 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
           <MenuItems
             restaurant={restaurant}
             items={filteredItems}
+            stylesData={stylesData}
             restaurantSlug={restaurant.slug}
             selectedCategory={selectedCategory}
           />

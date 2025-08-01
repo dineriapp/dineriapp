@@ -69,6 +69,7 @@ export default async function MenuPage({ params }: MenuPageProps) {
         }
     }
 
+
     return (
         <div className="min-h-screen bg-gray-50">
             <MenuClient restaurant={restaurant} reviewsInfo={reviewsData} />

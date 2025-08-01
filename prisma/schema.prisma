@@ -148,6 +148,35 @@ model Restaurant {
   stripe_secret_key_encrypted      String?
   stripe_webhook_secret_encrypted  String?
 
+  //Menu Page Customizations
+  menuPageBackgroundImage String @default("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAACp8Z5+AAAAHUlEQVR42mP8z8Dwn4EIwDiqBQjRAxA0DA4jCAEAzB0KCUo9S5YAAAAASUVORK5CYII=")
+
+  // Header
+  headerBg                    String @default("white")
+  headerText                  String @default("black")
+  headerCartButtonBG          String @default("white")
+  headerCartButtonBorder      String @default("#ebebeb")
+  headerCartButtonCountBG     String @default("white")
+  headerCartButtonCountBorder String @default("#ebebeb")
+
+  // Overall
+  textColor      String @default("black")
+  bgColor        String @default("#f9fafb")
+  infoIconsColor String @default("#fdc700")
+
+  // Category Tabs
+  tabsButtonBG         String @default("black")
+  tabsButtonDefault    String @default("white")
+  tabsBorderColor      String @default("transparent")
+  tabsTextColor        String @default("white")
+  tabsTextDefaultColor String @default("black")
+
+  // Cards
+  cardsBG              String @default("white")
+  cardsText            String @default("black")
+  cardsBadgesBg        String @default("#F5F5F5")
+  cardsBadgesTextColor String @default("black")
+
   events          Event[]
   faqCategories   FaqCategory[]
   links           Link[]

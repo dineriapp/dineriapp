@@ -39,3 +39,29 @@ export type RestaurantWithRelations = Restaurant & {
         faqs: Faq[]
     })[]
 }
+
+export type StylesDataType = {
+    background: {
+        backgroundImage: string;
+        backgroundSize: string;
+        backgroundPosition: string;
+    };
+    headerBg: string;
+    headerText: string;
+    headerCartButtonBG: string;
+    headerCartButtonBorder: string;
+    headerCartButtonCountBG: string;
+    headerCartButtonCountBorder: string;
+    textColor: string;
+    bgColor: string;
+    infoIconsColor: string;
+    tabsButtonBG: string;
+    tabsButtonDefault: string;
+    tabsBorderColor: string;
+    tabsTextColor: string;
+    tabsTextDefaultColor: string;
+    cardsBG: string;
+    cardsText: string;
+    cardsBadgesBg: string;
+    cardsBadgesTextColor: string;
+};

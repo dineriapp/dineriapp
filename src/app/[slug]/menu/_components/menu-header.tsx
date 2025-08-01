@@ -13,9 +13,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { StylesDataType } from "@/types";
 
 interface MenuHeaderProps {
   restaurant: Restaurant;
+  stylesData: StylesDataType;
   cartItemCount: number;
   onCartClick: () => void;
 }
@@ -23,6 +25,7 @@ interface MenuHeaderProps {
 export function MenuHeader({
   restaurant,
   cartItemCount,
+  stylesData,
   onCartClick,
 }: MenuHeaderProps) {
   const openingHours = (() => {
@@ -64,10 +67,10 @@ export function MenuHeader({
         </DialogContent>
       </Dialog>
       <div
-        // style={{
-        //   backgroundColor: restaurant.accent_color || "white",
-        // }}
-        className=" sticky top-0 z-40 shadow-sm bg-white"
+        style={{
+          backgroundColor: stylesData.headerBg,
+        }}
+        className=" sticky top-0 z-40 shadow-sm"
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
@@ -80,9 +83,9 @@ export function MenuHeader({
                   className="p-2 cursor-pointer"
                 >
                   <ArrowLeft
-                    // style={{
-                    //   color: restaurant.button_text_icons_color || "white",
-                    // }}
+                    style={{
+                      color: stylesData.headerText,
+                    }}
                     className="h-4 w-4"
                   />
                 </Button>
@@ -101,17 +104,17 @@ export function MenuHeader({
                 )}
                 <div className="space-y-1">
                   <h1
-                    // style={{
-                    //   color: restaurant.button_text_icons_color || "white",
-                    // }}
+                    style={{
+                      color: stylesData.headerText,
+                    }}
                     className="text-lg !leading-[1] font-bold text-gray-900 line-clamp-1"
                   >
                     {restaurant.name}
                   </h1>
                   <p
-                    // style={{
-                    //   color: restaurant.button_text_icons_color || "white",
-                    // }}
+                    style={{
+                      color: stylesData.headerText,
+                    }}
                     className="text-sm opacity-80 !leading-[1]"
                   >
                     Menu
@@ -122,10 +125,11 @@ export function MenuHeader({
 
             {/* Right side - Cart button */}
             <Button
-              // style={{
-              //   backgroundColor: restaurant.button_text_icons_color || "white",
-              //   color: restaurant.accent_color || "white",
-              // }}
+              style={{
+                backgroundColor: stylesData.headerCartButtonBG,
+                color: stylesData.headerText,
+                borderColor: stylesData.headerCartButtonBorder || "white",
+              }}
               onClick={onCartClick}
               variant="outline"
               className="relative cursor-pointer"
@@ -135,12 +139,11 @@ export function MenuHeader({
               {/* Cart */}
               {cartItemCount > 0 && (
                 <span
-                  // style={{
-                  //   backgroundColor:
-                  //     restaurant.button_text_icons_color || "white",
-                  //   color: restaurant.accent_color || "white",
-                  //   borderColor: restaurant.accent_color || "white",
-                  // }}
+                  style={{
+                    backgroundColor: stylesData.headerCartButtonCountBG,
+                    color: stylesData.headerText,
+                    borderColor: stylesData.headerCartButtonCountBorder || "white",
+                  }}
                   className="absolute bg-white -top-2 -right-2 border text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]"
                 >
                   {cartItemCount}

@@ -2,6 +2,7 @@
 
 import type { MenuItem, Restaurant } from "@prisma/client";
 import { MenuItemCard } from "./menu-item-card";
+import { StylesDataType } from "@/types";
 
 type MenuItemWithCategory = MenuItem & {
   categoryName: string;
@@ -11,6 +12,7 @@ interface MenuItemsProps {
   items: MenuItemWithCategory[];
   restaurantSlug: string;
   selectedCategory: string;
+  stylesData: StylesDataType;
   restaurant: Restaurant;
 }
 
@@ -18,17 +20,22 @@ export function MenuItems({
   items,
   restaurantSlug,
   restaurant,
+  stylesData,
   selectedCategory,
 }: MenuItemsProps) {
   if (items.length === 0) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <h3 className="text-lg font-medium  mb-2" style={{
+          color: stylesData.textColor
+        }}>
           {selectedCategory === "all"
             ? "No menu items available"
             : "No items in this category"}
         </h3>
-        <p className="text-gray-500">
+        <p className="" style={{
+          color: stylesData.textColor
+        }}>
           {selectedCategory === "all"
             ? "This restaurant hasn't added any menu items yet."
             : "This category doesn't have any menu items yet."}
@@ -41,12 +48,18 @@ export function MenuItems({
     <div className="w-full">
       <div className="mb-6">
         <h2
-          className="text-xl font-semibold text-black"
+          className="text-xl font-semibold"
+          style={{
+            color: stylesData.textColor
+          }}
         >
           {selectedCategory === "all" ? "All Items" : items[0]?.categoryName}
         </h2>
         <p
-          className="text-sm opacity-80 text-black"
+          className="text-sm opacity-80"
+          style={{
+            color: stylesData.textColor
+          }}
         >
           {items.length} item{items.length !== 1 ? "s" : ""} available
         </p>
@@ -58,6 +71,7 @@ export function MenuItems({
           <MenuItemCard
             restaurant={restaurant}
             key={item.id}
+            stylesData={stylesData}
             item={item}
             categoryName={item.categoryName}
             restaurantSlug={restaurantSlug}

@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCartStore } from "@/stores/cart-store";
+import { StylesDataType } from "@/types";
 import type { MenuItem, Restaurant } from "@prisma/client";
 import { isAfter, isBefore, parse } from "date-fns";
 import { Plus } from "lucide-react";
@@ -14,6 +15,7 @@ interface MenuItemCardProps {
   categoryName: string;
   restaurantSlug: string;
   restaurant: Restaurant;
+  stylesData: StylesDataType
 }
 
 type OpeningHours = {
@@ -53,6 +55,7 @@ export function MenuItemCard({
   categoryName,
   restaurant,
   restaurantSlug,
+  stylesData
 }: MenuItemCardProps) {
   const { addItem } = useCartStore();
 
@@ -80,42 +83,20 @@ export function MenuItemCard({
 
   return (
     <Card
-      // style={{
-      //   backgroundColor: restaurant.button_text_icons_color || "black",
-      //   borderColor: restaurant.accent_color || "black",
-      // }}
-      className="overflow-hidden w-full gap-0 !pt-0 !pb-0 hover:shadow-lg transition-all duration-200 h-full flex flex-col"
+      style={{
+        backgroundColor: stylesData.cardsBG,
+        borderColor: restaurant.accent_color || "black",
+      }}
+      className="overflow-hidden w-full gap-0 !pt-0 !pb-0 hover:shadow-lg border-none transition-all duration-200 h-full flex flex-col"
     >
-      {/* Image */}
-      {/* <div className="relative h-48 overflow-hidden">
-                 {<Image
-                    src={item?.image ? item.image : "/dummy.jfif"}
-                    alt={item.name}
-                    fill
-                    className="object-cover transition-transform duration-200 hover:scale-105"
-                />} 
-                {item.is_halal && (
-                    <Badge
-                        style={{
-                            backgroundColor: restaurant.button_text_icons_color || "black",
-                            color: restaurant.accent_color || "black"
-                        }
-                        }
-                        className="absolute top-3 right-3 ">
-                        <Leaf className="h-3 w-3 mr-1" />
-                        Halal
-                    </Badge>
-                )}
-            </div> */}
-
       <CardContent className="p-4 flex flex-col flex-1">
         {/* Header with name and price */}
         <div className="flex justify-between">
           <div className="flex justify-between items-start">
             <h3
-              // style={{
-              //   color: restaurant.accent_color || "black",
-              // }}
+              style={{
+                color: stylesData.cardsText,
+              }}
               className="font-semibold line-clamp-2 text-base leading-tight flex-1 mr-2"
             >
               {item.name}
@@ -123,10 +104,10 @@ export function MenuItemCard({
           </div>
           <div className="">
             <Button
-              // style={{
-              //   color: restaurant.button_text_icons_color || "black",
-              //   backgroundColor: restaurant.accent_color || "black",
-              // }}
+              style={{
+                color: stylesData.tabsTextColor,
+                backgroundColor: stylesData.tabsButtonBG,
+              }}
               onClick={handleAddToCart}
               className="w-full cursor-pointer"
               size="sm"
@@ -138,9 +119,9 @@ export function MenuItemCard({
         </div>
         <h4>
           <span
-            // style={{
-            //   color: restaurant.accent_color || "black",
-            // }}
+            style={{
+              color: stylesData.cardsText,
+            }}
             className="font-bold text-lg text-black  whitespace-nowrap"
           >
             ${item.price.toFixed(2)}
@@ -150,9 +131,9 @@ export function MenuItemCard({
         {/* Description */}
         {item.description && (
           <p
-            // style={{
-            //   color: restaurant.accent_color || "black",
-            // }}
+            style={{
+              color: stylesData.cardsText,
+            }}
             className=" text-sm mb-3 opacity-80 line-clamp-3 flex-1"
           >
             {item.description}
@@ -165,10 +146,10 @@ export function MenuItemCard({
             <div className="flex flex-wrap gap-1">
               {item.allergens.slice(0, 3).map((allergen) => (
                 <Badge
-                  // style={{
-                  //   color: restaurant.button_text_icons_color || "black",
-                  //   backgroundColor: restaurant.accent_color || "black",
-                  // }}
+                  style={{
+                    color: stylesData.cardsBadgesTextColor,
+                    backgroundColor: stylesData.cardsBadgesBg
+                  }}
                   key={allergen}
                   variant="secondary"
                   className="text-xs"
@@ -178,10 +159,10 @@ export function MenuItemCard({
               ))}
               {item.allergens.length > 3 && (
                 <Badge
-                  // style={{
-                  //   color: restaurant.button_text_icons_color || "black",
-                  //   backgroundColor: restaurant.accent_color || "black",
-                  // }}
+                  style={{
+                    color: stylesData.cardsBadgesTextColor,
+                    backgroundColor: stylesData.cardsBadgesBg
+                  }}
                   variant="secondary"
                   className="text-xs"
                 >
@@ -195,17 +176,15 @@ export function MenuItemCard({
         {/* Allergen info */}
         {item.allergen_info && (
           <p
-            // style={{
-            //   color: restaurant.button_text_icons_color || "black",
-            //   backgroundColor: restaurant.accent_color || "black",
-            // }}
-            className="text-xs  italic bg-gray-100 w-fit px-2 py-0.5 mb-3 line-clamp-2"
+            style={{
+              color: stylesData.cardsBadgesTextColor,
+              backgroundColor: stylesData.cardsBadgesBg
+            }}
+            className="text-xs italic w-fit px-2 py-0.5 mb-3 line-clamp-2"
           >
             {item.allergen_info}
           </p>
         )}
-
-        {/* Add to cart button - always at bottom */}
       </CardContent>
     </Card>
   );
