@@ -5,20 +5,20 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { supabase } from "@/supabase/clients/client"
+import { supabase, uploadImage } from "@/supabase/clients/client"
 import { Session } from "@supabase/supabase-js"
-import { Settings } from "lucide-react"
+import { Loader2, Settings } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 
 const colorPresets = [
     { color: "#3B82F6" },
-    { color: "#EF4444" },
-    { color: "#10B981" },
-    { color: "#F59E0B" },
-    { color: "#8B5CF6" },
-    { color: "#EC4899" },
+    // { color: "#EF4444" },
+    // { color: "#10B981" },
+    // { color: "#F59E0B" },
+    // { color: "#8B5CF6" },
+    // { color: "#EC4899" },
 ]
 
 interface RestaurantCustomizerProps {
@@ -34,7 +34,7 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
     const [session, setSession] = useState<Session | null>(null);
     const [isSaving, setIsSaving] = useState(false)
     const [initialStylesData, setInitialStylesData] = useState<any>(null)
-
+    const [uploading, setUploading] = useState(false)
     useEffect(() => {
         if (!initialStylesData) {
             setInitialStylesData(stylesData)
@@ -122,10 +122,56 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
                     <div className="space-y-2">
                         <Label className="text-slate-700 text-sm font-medium">Background Image URL</Label>
                         <Input
-                            value={customBgUrl}
-                            onChange={(e) => updateStylesData("bg_image_url", e.target.value)}
-                            placeholder="Enter image URL"
+                            type="file"
+                            accept="image/*"
+                            className="disabled:opacity-40"
+                            disabled={uploading}
+                            onDrop={async (e) => {
+                                e.preventDefault(); // prevent browser default behavior
+                                setUploading(true);
+
+                                const file = e.dataTransfer.files?.[0];
+                                if (!file) return;
+
+                                const uploadedUrl = await uploadImage(file);
+                                if (uploadedUrl) {
+                                    updateStylesData("bg_image_url", uploadedUrl);
+                                }
+                                setUploading(false);
+                            }}
+                            onChange={async (e) => {
+                                setUploading(true)
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+
+                                const uploadedUrl = await uploadImage(file);
+                                if (uploadedUrl) {
+                                    updateStylesData("bg_image_url", uploadedUrl);
+                                    setUploading(false)
+                                } else {
+                                    setUploading(false)
+                                }
+
+                            }}
                         />
+                        {customBgUrl && (
+                            <>
+                                <p className="text-sm font-semibold">
+                                    Image Preview  :-
+                                </p>
+                                <div className="w-full relative">
+                                    {uploading && <div className="absolute w-full flex-col gap-1 text-sm h-full bg-white top-0 left-0 flex items-center justify-center">
+                                        <Loader2 className="animate-spin" />
+                                        Uploading...
+                                    </div>}
+                                    <img
+                                        src={customBgUrl}
+                                        alt="Selected background"
+                                        className="w-full max-w-md mt-2 aspect-[4/1.04] object-cover rounded shadow border"
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Header Colors */}

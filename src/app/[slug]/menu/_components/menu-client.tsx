@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Restaurant, MenuCategory, MenuItem, User } from "@prisma/client";
 import { MenuHeader } from "./menu-header";
 import { CategoryButtons } from "./category-buttons";
@@ -14,6 +14,7 @@ import { motion } from "motion/react"
 import { ReviewsInfo, StylesDataType } from "@/types";
 import { GoogleRating } from "../../_components/google-rating";
 import RestaurantCustomizer from "./restaurent-customizer";
+import { WelcomePopup } from "../../_components/welcome-popup";
 
 type RestaurantWithMenu = Restaurant & {
   user: User
@@ -31,6 +32,22 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [customBgUrl, setCustomBgUrl] = useState(restaurant.menuPageBackgroundImage)
+  const [showWelcomePopup, setShowWelcomePopup] = useState(false)
+
+  useEffect(() => {
+    // Show welcome popup after component mounts
+    const timer = setTimeout(
+      () => {
+        const dismissed = localStorage.getItem(`welcome-popup-${restaurant.slug}`)
+        if (!dismissed && restaurant.welcome_popup_enabled) {
+          setShowWelcomePopup(true)
+        }
+      },
+      (restaurant.welcome_popup_delay || 2) * 1000,
+    )
+
+    return () => clearTimeout(timer)
+  }, [restaurant.slug, restaurant.welcome_popup_enabled, restaurant.welcome_popup_delay])
 
   const [stylesData, setStylesData] = useState<StylesDataType>({
     background: {
@@ -101,6 +118,10 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
   };
 
   const filteredItems = getFilteredItems();
+
+  const welcomePopupShowInfo = restaurant.welcome_popup_show_info
+    ? (restaurant.welcome_popup_show_info as { ratings: boolean; address: boolean; hours: boolean; phone: boolean })
+    : { ratings: true, address: true, hours: true, phone: true }
 
   return (
     <div
@@ -222,6 +243,18 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
           restaurant={restaurant}
           isOpen={isCartOpen}
           onClose={() => setIsCartOpen(false)}
+        />
+        {/* Welcome Popup */}
+        <WelcomePopup
+          // @ts-expect-error due to types 
+          restaurant={restaurant}
+          isOpen={showWelcomePopup}
+          RatingInfo={reviewsInfo}
+          eventsShow={false}
+          actionsShow={false}
+          onClose={() => setShowWelcomePopup(false)}
+          upcomingEvents={[]}
+          welcomePopupShowInfo={welcomePopupShowInfo}
         />
       </div>
     </div>

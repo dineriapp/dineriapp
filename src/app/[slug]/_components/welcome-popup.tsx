@@ -10,6 +10,8 @@ import { OpeningHoursStatus } from "./opening-hours-status"
 interface WelcomePopupProps {
     restaurant: RestaurantWithRelations
     isOpen: boolean
+    eventsShow?: boolean
+    actionsShow?: boolean
     onClose: () => void
     RatingInfo?: ReviewsInfo;
     upcomingEvents: Event[]
@@ -21,19 +23,21 @@ interface WelcomePopupProps {
     }
 }
 
-export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcomingEvents, welcomePopupShowInfo }: WelcomePopupProps) {
+export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, actionsShow = true, RatingInfo, upcomingEvents, welcomePopupShowInfo }: WelcomePopupProps) {
     const [currentEventIndex, setCurrentEventIndex] = useState(0)
 
     // Auto-rotate through events
     useEffect(() => {
-        if (upcomingEvents.length <= 1 || !restaurant.event_announcements_enabled) return
+        if (eventsShow) {
+            if (upcomingEvents.length <= 1 || !restaurant.event_announcements_enabled) return
 
-        const rotationSpeed = (restaurant.event_rotation_speed || 5) * 1000
-        const interval = setInterval(() => {
-            setCurrentEventIndex((prev) => (prev + 1) % upcomingEvents.length)
-        }, rotationSpeed)
+            const rotationSpeed = (restaurant.event_rotation_speed || 5) * 1000
+            const interval = setInterval(() => {
+                setCurrentEventIndex((prev) => (prev + 1) % upcomingEvents.length)
+            }, rotationSpeed)
 
-        return () => clearInterval(interval)
+            return () => clearInterval(interval)
+        }
     }, [upcomingEvents.length, restaurant.event_rotation_speed, restaurant.event_announcements_enabled])
 
     const handleDontShowAgain = () => {
@@ -163,7 +167,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcoming
                                 </h2>
 
                                 {/* Event Announcement or Welcome Message */}
-                                {hasEvents && currentEvent ? (
+                                {eventsShow && hasEvents && currentEvent ? (
                                     <div className="space-y-3">
                                         <div
                                             className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium"
@@ -216,7 +220,7 @@ export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcoming
                                 transition={{ delay: 0.4 }}
                                 className="mb-8 space-y-3 mx-autoflex items-center justify-center flex-col"
                             >
-                                {welcomePopupShowInfo.ratings && restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && (
+                                {welcomePopupShowInfo.ratings && restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && RatingInfo && (
                                     <div className={`flex items-center justify-center gap-1 text-sm mx-auto w-full`}>
                                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                                         <span
@@ -275,46 +279,49 @@ export function WelcomePopup({ restaurant, isOpen, onClose, RatingInfo, upcoming
                                 )}
                             </motion.div>
 
-                            {/* Action Buttons */}
-                            <motion.div
-                                initial={{ y: 20, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ delay: 0.5 }}
-                                className="space-y-3"
-                            >
-                                {/* Event Ticket Button */}
-                                {hasEvents && currentEvent?.ticket_url && (
-                                    <a
-                                        href={currentEvent.ticket_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="mb-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-medium transition-all hover:scale-105"
-                                        style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
-                                    >
-                                        <span>Get Event Tickets</span>
-                                        <ExternalLink className="h-4 w-4" />
-                                    </a>
-                                )}
-
-                                {/* Main Action Button - Only show if enabled AND no events are displayed */}
-                                {showButton && (
-                                    <Button
-                                        onClick={onClose}
-                                        className="w-full rounded-xl py-3 font-medium transition-all hover:scale-105"
-                                        style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
-                                    >
-                                        Explore
-                                    </Button>
-                                )}
-
-                                <button
-                                    onClick={handleDontShowAgain}
-                                    className="text-sm opacity-75 transition-opacity hover:opacity-100"
-                                    style={{ color: textColor }}
+                            {/* Action Buttons */}{actionsShow
+                                &&
+                                <motion.div
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.5 }}
+                                    className="space-y-3"
                                 >
-                                    Don&apos;t show this again
-                                </button>
-                            </motion.div>
+                                    {/* Event Ticket Button */}
+                                    {hasEvents && currentEvent?.ticket_url && (
+                                        <a
+                                            href={currentEvent.ticket_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mb-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-medium transition-all hover:scale-105"
+                                            style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
+                                        >
+                                            <span>Get Event Tickets</span>
+                                            <ExternalLink className="h-4 w-4" />
+                                        </a>
+                                    )}
+
+                                    {/* Main Action Button - Only show if enabled AND no events are displayed */}
+                                    {showButton && (
+                                        <Button
+                                            onClick={onClose}
+                                            className="w-full rounded-xl py-3 font-medium transition-all hover:scale-105"
+                                            style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
+                                        >
+                                            Explore
+                                        </Button>
+                                    )}
+
+                                    <button
+                                        onClick={handleDontShowAgain}
+                                        className="text-sm opacity-75 transition-opacity hover:opacity-100"
+                                        style={{ color: textColor }}
+                                    >
+                                        Don&apos;t show this again
+                                    </button>
+                                </motion.div>
+                            }
+
                         </div>
 
                     </motion.div>

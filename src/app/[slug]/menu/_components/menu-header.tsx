@@ -80,7 +80,7 @@ export function MenuHeader({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="p-2 cursor-pointer"
+                  className="p-2 cursor-pointer hover:bg-transparent"
                 >
                   <ArrowLeft
                     style={{

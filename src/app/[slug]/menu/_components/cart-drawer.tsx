@@ -1,22 +1,21 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useCartStore, type CartItem } from "@/stores/cart-store"
+import { AddressInput, type AddressData } from "@/components/address-input"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Plus, Minus, ShoppingBag, Trash2, X, CreditCard, Loader2, AlertCircle } from "lucide-react"
-import { toast } from "sonner"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AddressInput, type AddressData } from "@/components/address-input"
+import { Textarea } from "@/components/ui/textarea"
 import { loadGoogleMapsScript } from "@/lib/google-maps"
-import Image from "next/image"
+import { useCartStore, type CartItem } from "@/stores/cart-store"
 import { Restaurant } from "@prisma/client"
+import { AlertCircle, CreditCard, Loader2, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { isRestaurantOpenNow } from "./menu-item-card"
 
 interface CartDrawerProps {
@@ -645,13 +644,13 @@ function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemCompone
                         //     color: restaurant.button_text_icons_color || "black",
                         // }}
                         className="flex-1 mr-3">
-                        {item.image_url && <Image
+                        {/* {item.image_url && <Image
                             src={item.image_url || "/dummy.jfif"}
                             alt={item.name}
                             width={100}
                             height={100}
                             className="object-cover mb-2 aspect-square rounded-sm"
-                        />}
+                        />} */}
                         <h4 className="font-medium  line-clamp-1">{item.name}</h4>
                         {item.description && <p className="text-sm  mt-1 line-clamp-2 opacity-80">{item.description}</p>}
                     </div>
