@@ -579,7 +579,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                 </motion.div>
 
                 {/* Opening Hours Dialog */}
-                {openingHours && <OpeningHoursDialog
+                {openingHours && restaurant.timezone && <OpeningHoursDialog
                     isOpen={showOpeningHoursDialog}
                     onClose={() => setShowOpeningHoursDialog(false)}
                     openingHours={openingHours}

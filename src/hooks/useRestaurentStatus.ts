@@ -49,6 +49,7 @@ export function useRestaurantStatus(openingHours: OpeningHoursData, restaurantTi
         return () => clearInterval(interval)
     }, [openingHours, restaurantTimezone])
 
+
     return {
         isOpen: status?.isOpen ?? false,
         openingTime: status?.openingTime ?? null,
