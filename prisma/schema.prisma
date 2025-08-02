@@ -125,6 +125,7 @@ model Restaurant {
   social_icon_color                String              @default("#000000")
   social_icon_gap                  Int                 @default(12)
   opening_hours                    Json?
+  timezone                         String? //Timezone
   latitude                         Float?
   longitude                        Float?
   review_count                     Int?                @default(0)

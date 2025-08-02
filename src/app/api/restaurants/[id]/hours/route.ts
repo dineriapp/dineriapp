@@ -9,6 +9,7 @@ const dayHoursSchema = z.object({
 })
 
 const openingHoursSchema = z.object({
+    timezone: z.string(),
     opening_hours: z.object({
         monday: dayHoursSchema,
         tuesday: dayHoursSchema,
@@ -74,6 +75,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             where: { id },
             data: {
                 opening_hours: validatedData.opening_hours,
+                timezone: validatedData.timezone
             },
         })
 

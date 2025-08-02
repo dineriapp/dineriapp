@@ -56,6 +56,10 @@ const defaultFormData: OpeningHoursFormData = {
     sunday: { ...defaultDayHours, day: "Sunday" },
 }
 
+const allTimezones = Intl.supportedValuesOf("timeZone")
+
+
+
 export default function HoursPage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
     const [formData, setFormData] = useState<OpeningHoursFormData>(defaultFormData)
@@ -63,6 +67,7 @@ export default function HoursPage() {
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [hasChanges, setHasChanges] = useState(false)
+    const [selectedTimeZone, setSelectedTimeZone] = useState<string>("")
 
     // Load initial data from restaurant store
     useEffect(() => {
@@ -70,17 +75,23 @@ export default function HoursPage() {
             const loadedData = parseOpeningHours(selectedRestaurant.opening_hours)
             setFormData(loadedData)
             setInitialData(loadedData)
+            setSelectedTimeZone(selectedRestaurant?.timezone || "")
             setLoading(false)
         } else {
             setLoading(false)
         }
     }, [selectedRestaurant])
 
-    // Check for changes
+
+    console.log({ selectedTimeZone, initial: selectedRestaurant?.timezone || "" })
+
+
     useEffect(() => {
-        const hasFormChanges = JSON.stringify(formData) !== JSON.stringify(initialData)
-        setHasChanges(hasFormChanges)
-    }, [formData, initialData])
+        const hasFormChanges =
+            JSON.stringify(formData) !== JSON.stringify(initialData) ||
+            selectedTimeZone !== (selectedRestaurant?.timezone || "");
+        setHasChanges(hasFormChanges);
+    }, [formData, initialData, selectedTimeZone, selectedRestaurant]);
 
     // Parse opening hours from database JSON format
     const parseOpeningHours = (openingHoursJson: any): OpeningHoursFormData => {
@@ -194,6 +205,7 @@ export default function HoursPage() {
                 },
                 body: JSON.stringify({
                     opening_hours: openingHoursData,
+                    timezone: selectedTimeZone,
                 }),
             })
 
@@ -207,6 +219,7 @@ export default function HoursPage() {
             // Update the store with the response data
             updateSelectedRestaurant({
                 opening_hours: result.data.opening_hours,
+                timezone: selectedTimeZone
             })
 
             // Update initial data to reflect saved state
@@ -251,12 +264,34 @@ export default function HoursPage() {
 
     return (
         <>
-            <Card className="shadow-sm border-gray-200">
-                <CardHeader className="bg-gray-50/50">
+            <Card className="shadow-sm border-gray-200 pt-0 gap-0">
+                <CardHeader className="bg-gray-50/50 py-4">
                     <CardTitle className="text-gray-900">Opening Hours</CardTitle>
                     <CardDescription>Set your restaurant&apos;s opening hours for each day of the week</CardDescription>
                 </CardHeader>
-                <CardContent className="pt-6">
+                <CardContent className="pt-4">
+                    <div className="mb-6">
+                        <Label className="text-base font-medium mb-2">Timezone</Label>
+                        <Select
+                            value={selectedTimeZone}
+                            onValueChange={(value) =>
+                                setSelectedTimeZone(value)
+                            }
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select restaurant timezone" />
+                            </SelectTrigger>
+                            <SelectContent className="">
+                                <div className="!max-h-[300px] !overflow-y-auto h-[300px] py-1">
+                                    {allTimezones.map((tz) => (
+                                        <SelectItem key={tz} value={tz}>
+                                            {tz} — <span className="text-gray-500 text-xs">{tz}</span>
+                                        </SelectItem>
+                                    ))}
+                                </div>
+                            </SelectContent>
+                        </Select>
+                    </div>
                     <div className="space-y-6">
                         {Object.entries(formData).map(([dayKey, dayData]) => (
                             <div key={dayKey} className="space-y-3">
@@ -276,7 +311,7 @@ export default function HoursPage() {
                                 </div>
 
                                 {!dayData.closed && (
-                                    <div className="grid grid-cols-2 gap-4 ml-4">
+                                    <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2 w-full">
                                             <Label htmlFor={`${dayKey}-open`} className="text-sm text-slate-600">
                                                 Opening time
@@ -331,6 +366,7 @@ export default function HoursPage() {
                             </p>
                         </div>
                     </div>
+
                 </CardContent>
             </Card>
 

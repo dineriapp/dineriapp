@@ -25,6 +25,7 @@ import { GoogleRating } from "./_components/google-rating"
 import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
 import { OpeningHoursStatus } from "./_components/opening-hours-status"
 import { WelcomePopup } from "./_components/welcome-popup"
+import RestaurantStatus from "./_components/hours-stats"
 
 // Define the complete types with relations using Prisma types
 type RestaurantWithRelations = Restaurant & {
@@ -174,7 +175,6 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
     const filteredMenuItems = getFilteredMenuItems()
 
-
     return (
         <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
             <div
@@ -241,6 +241,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                         >
                             <OpeningHoursStatus
                                 openingHours={openingHours}
+                                restaurentTimeZone={restaurant.timezone || ""}
                                 color={restaurant.headings_text_color || "#000000"}
                                 className="text-white cursor-pointer text-center"
                                 accentColor={restaurant.accent_color || "#10b981"}
@@ -248,6 +249,13 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             />
                         </motion.div>
                     )}
+
+                    {openingHours && restaurant.timezone &&
+                        <div className="mb-4">
+                            <RestaurantStatus openingHours={openingHours} restaurantTimezone={restaurant.timezone} />
+                        </div>
+                    }
+
 
                     {restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && (
                         <motion.div
@@ -571,14 +579,15 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                 </motion.div>
 
                 {/* Opening Hours Dialog */}
-                <OpeningHoursDialog
+                {openingHours && <OpeningHoursDialog
                     isOpen={showOpeningHoursDialog}
                     onClose={() => setShowOpeningHoursDialog(false)}
                     openingHours={openingHours}
+                    restaurentTimeZone={restaurant.timezone || ""}
                     restaurantName={restaurant.name}
                     accentColor={restaurant.accent_color || "#10b981"}
                 />
-
+                }
                 {/* Menu Dialog */}
                 {/* <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}>
                     <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] w-full overflow-y-auto">
