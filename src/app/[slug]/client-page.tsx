@@ -25,7 +25,6 @@ import { GoogleRating } from "./_components/google-rating"
 import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
 import { OpeningHoursStatus } from "./_components/opening-hours-status"
 import { WelcomePopup } from "./_components/welcome-popup"
-import RestaurantStatus from "./_components/hours-stats"
 
 // Define the complete types with relations using Prisma types
 type RestaurantWithRelations = Restaurant & {
@@ -90,6 +89,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
     // Parse JSON fields
     const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : null
+
     const welcomePopupShowInfo = restaurant.welcome_popup_show_info
         ? (restaurant.welcome_popup_show_info as { ratings: boolean; address: boolean; hours: boolean; phone: boolean })
         : { ratings: true, address: true, hours: true, phone: true }
@@ -108,6 +108,8 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
         return () => clearTimeout(timer)
     }, [restaurant.slug, restaurant.welcome_popup_enabled, restaurant.welcome_popup_delay])
+
+
 
     const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
         e.currentTarget.style.display = "none"
@@ -174,6 +176,8 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
     }
 
     const filteredMenuItems = getFilteredMenuItems()
+
+
 
     return (
         <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
@@ -244,18 +248,11 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 restaurentTimeZone={restaurant.timezone || ""}
                                 color={restaurant.headings_text_color || "#000000"}
                                 className="text-white cursor-pointer text-center"
-                                accentColor={restaurant.accent_color || "#10b981"}
+                                accentColor={restaurant.headings_text_color || "#10b981"}
                                 onClick={() => setShowOpeningHoursDialog(true)}
                             />
                         </motion.div>
                     )}
-
-                    {openingHours && restaurant.timezone &&
-                        <div className="mb-4">
-                            <RestaurantStatus openingHours={openingHours} restaurantTimezone={restaurant.timezone} />
-                        </div>
-                    }
-
 
                     {restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && (
                         <motion.div

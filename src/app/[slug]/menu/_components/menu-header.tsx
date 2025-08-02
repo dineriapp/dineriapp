@@ -1,19 +1,11 @@
 "use client";
 
-import type { Restaurant } from "@prisma/client";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import { isRestaurantOpenNow } from "./menu-item-card";
-import { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { StylesDataType } from "@/types";
+import type { Restaurant } from "@prisma/client";
+import { ArrowLeft, ShoppingCart } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface MenuHeaderProps {
   restaurant: Restaurant;
@@ -28,44 +20,9 @@ export function MenuHeader({
   stylesData,
   onCartClick,
 }: MenuHeaderProps) {
-  const openingHours = (() => {
-    if (!restaurant.opening_hours) return null;
-    if (typeof restaurant.opening_hours === "string") {
-      try {
-        return JSON.parse(restaurant.opening_hours);
-      } catch {
-        return null;
-      }
-    }
-    return restaurant.opening_hours;
-  })();
-
-  const isOpen = openingHours ? isRestaurantOpenNow(openingHours) : false;
-
-  const [showClosedDialog, setShowClosedDialog] = useState(false);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setShowClosedDialog(true);
-    }
-  }, [isOpen]);
-
   return (
     <>
-      <Dialog open={showClosedDialog} onOpenChange={setShowClosedDialog}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle>We&apos;re currently closed</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground">
-            {restaurant.name} is currently closed. Please come back during our
-            opening hours.
-          </p>
-          <div className="mt-4 text-right">
-            <Button onClick={() => setShowClosedDialog(false)}>Got it</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+
       <div
         style={{
           backgroundColor: stylesData.headerBg,

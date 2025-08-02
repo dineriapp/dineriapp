@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { stripe } from "@/lib/stripe"
-import prisma from "@/lib/prisma"
-import type Stripe from "stripe"
 import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
+import prisma from "@/lib/prisma"
+import { stripe } from "@/lib/stripe"
+import { type NextRequest, NextResponse } from "next/server"
+import type Stripe from "stripe"
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const { id: restaurantId } = await params
@@ -164,6 +164,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                     quantity: item.quantity,
                     item_total: item.price * item.quantity,
                     allergens: item.allergens || [],
+                    addons: item.addons
                 })),
             },
         }

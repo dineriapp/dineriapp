@@ -3,12 +3,15 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useRestaurantStatus } from "@/hooks/useRestaurentStatus";
 import { useCartStore } from "@/stores/cart-store";
-import { StylesDataType } from "@/types";
+import { OpeningHoursData, StylesDataType } from "@/types";
 import type { MenuItem, Restaurant } from "@prisma/client";
 import { isAfter, isBefore, parse } from "date-fns";
 import { Plus } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
+import { AddonSelectorDialog } from "./addon-selector-dialog";
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -59,29 +62,60 @@ export function MenuItemCard({
 }: MenuItemCardProps) {
   const { addItem } = useCartStore();
 
-  const handleAddToCart = () => {
-    console.log(restaurant.opening_hours);
+  const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : {
+    monday: { open: "", close: "", closed: true },
+    tuesday: { open: "", close: "", closed: true },
+    wednesday: { open: "", close: "", closed: true },
+    thursday: { open: "", close: "", closed: true },
+    friday: { open: "", close: "", closed: true },
+    saturday: { open: "", close: "", closed: true },
+    sunday: { open: "", close: "", closed: true },
+  }
+  const [addonDialogOpen, setAddonDialogOpen] = useState(false);
 
-    const parsedAddons = Array.isArray(item.addons)
-      ? (item.addons as { name: string; price: number }[])
-      : [];
+  const status = useRestaurantStatus(openingHours, restaurant.timezone || "Asia/Karachi")
+
+  const handleConfirmAddons = (selectedAddons: { name: string; price: number }[]) => {
+    const totalAddonPrice = selectedAddons.reduce((sum, a) => sum + a.price, 0);
+
     addItem(restaurantSlug, {
       id: item.id,
       name: item.name,
       description: item.description || undefined,
-      price: item.price,
+      price: item.price + totalAddonPrice,
       image_url: item.image || "",
       category: categoryName,
       allergens: item.allergens,
       is_halal: item.is_halal || undefined,
-      addons: item.addons ? parsedAddons : undefined,
+      addons: selectedAddons,
     });
+
     toast.success("Added to cart", {
-      description: "Item has been added to your cart.",
+      description: "Item and selected addons have been added. You cannot change addons later.",
     });
   };
 
+  const handleAddToCart = () => {
+    if (!status?.isOpen) {
+      toast.error("Restaurant is closed", {
+        description: status?.nextOpeningDay
+          ? `Opens ${status.nextOpeningDay} at ${status.openingTime}`
+          : "Please check back later.",
+      });
+      return;
+    }
+
+    const hasAddons = Array.isArray(item.addons) && item.addons.length > 0;
+
+    if (hasAddons) {
+      setAddonDialogOpen(true);
+    } else {
+      handleConfirmAddons([]);
+    }
+  };
+
   return (
+
     <Card
       style={{
         backgroundColor: stylesData.cardsBG,
@@ -89,6 +123,13 @@ export function MenuItemCard({
       }}
       className="overflow-hidden w-full gap-0 !pt-0 !pb-0 hover:shadow-lg border-none transition-all duration-200 h-full flex flex-col"
     >
+      <AddonSelectorDialog
+        isOpen={addonDialogOpen}
+        onClose={() => setAddonDialogOpen(false)}
+        itemName={item.name}
+        addons={(item.addons as { name: string; price: number }[]) || []}
+        onConfirm={handleConfirmAddons}
+      />
       <CardContent className="p-4 flex flex-col flex-1">
         {/* Header with name and price */}
         <div className="flex justify-between">

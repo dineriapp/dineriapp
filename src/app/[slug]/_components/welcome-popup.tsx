@@ -247,7 +247,7 @@ export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, a
                                     </div>
                                 )}
 
-                                {welcomePopupShowInfo.hours && restaurant.opening_hours && openingHours && (
+                                {welcomePopupShowInfo.hours && openingHours && restaurant.timezone && (
                                     <>
                                         <motion.div
                                             initial={{ y: 20, opacity: 0 }}
@@ -258,6 +258,7 @@ export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, a
                                             <OpeningHoursStatus
                                                 openingHours={openingHours}
                                                 pop={true}
+                                                restaurentTimeZone={restaurant.timezone}
                                                 color={restaurant.headings_text_color || "#000000"}
                                                 className="text-white cursor-pointer text-center"
                                                 accentColor={restaurant.accent_color || "#10b981"}

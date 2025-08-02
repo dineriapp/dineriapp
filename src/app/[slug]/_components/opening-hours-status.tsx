@@ -93,7 +93,7 @@ export function OpeningHoursStatus({
         </div>
     ) : (
         <div
-            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full transition-all hover:scale-105 ${className} ${onClick ? "cursor-pointer" : ""
+            className={`inline-flex items-center gap-2   px-3 py-1.5 rounded-full transition-all hover:scale-105 ${className} ${onClick ? "cursor-pointer" : ""
                 }`}
             style={{ backgroundColor: getStatusBgColor() }}
             onClick={onClick}
@@ -103,7 +103,7 @@ export function OpeningHoursStatus({
                 <span className="text-sm font-medium" style={{ color: getStatusColor() }}>
                     {statusLabel}
                 </span>
-                <span className="text-sm opacity-90" style={{ color }}>
+                <span className="text-sm opacity-90 line-clamp-1" style={{ color }}>
                     • {nextChange}
                 </span>
             </div>

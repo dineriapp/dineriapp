@@ -12,6 +12,10 @@ interface CheckoutItem {
     quantity: number
     category: string
     allergens?: string[]
+    addons: {
+        name: string;
+        price: number;
+    }[]
 }
 
 interface CustomerInfo {
@@ -103,7 +107,10 @@ export async function POST(request: NextRequest) {
         }
 
         // Calculate totals
-        const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+        const subtotal = items.reduce((sum, item) => {
+            const addonsTotal = item.addons?.reduce((aSum, addon) => aSum + addon.price, 0) || 0
+            return sum + (item.price + addonsTotal) * item.quantity
+        }, 0)
         const taxRate = 0.08
         const taxAmount = subtotal * taxRate
         const deliveryFee = orderType === "delivery" ? 5.0 : 0

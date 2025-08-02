@@ -124,7 +124,7 @@ model Restaurant {
   social_icon_bg_color             String              @default("#FFFFFF")
   social_icon_color                String              @default("#000000")
   social_icon_gap                  Int                 @default(12)
-  opening_hours                    Json?
+  opening_hours                    Json?               @default("{\"monday\":{\"open\":\"\",\"close\":\"\",\"closed\":true},\"tuesday\":{\"open\":\"\",\"close\":\"\",\"closed\":true},\"wednesday\":{\"open\":\"\",\"close\":\"\",\"closed\":true},\"thursday\":{\"open\":\"\",\"close\":\"\",\"closed\":true},\"friday\":{\"open\":\"\",\"close\":\"\",\"closed\":true},\"saturday\":{\"open\":\"\",\"close\":\"\",\"closed\":true},\"sunday\":{\"open\":\"\",\"close\":\"\",\"closed\":true}}")
   timezone                         String?             @default("Europe/Rome")
   latitude                         Float?
   longitude                        Float?
@@ -421,9 +421,9 @@ model Order {
 }
 
 model OrderItem {
-  id               String   @id @default(uuid()) @db.Uuid
-  order_id         String   @db.Uuid
-  menu_item_id     String?  @db.Uuid
+  id               String    @id @default(uuid()) @db.Uuid
+  order_id         String    @db.Uuid
+  menu_item_id     String?   @db.Uuid
   name             String
   description      String?
   price            Float
@@ -431,9 +431,9 @@ model OrderItem {
   item_total       Float
   special_requests String?
   allergens        String[]
-
-  order    Order     @relation(fields: [order_id], references: [id], onDelete: Cascade)
-  menuItem MenuItem? @relation(fields: [menu_item_id], references: [id])
+  addons           Json?     @default("[]")
+  order            Order     @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  menuItem         MenuItem? @relation(fields: [menu_item_id], references: [id])
 
   @@map("order_items")
 }

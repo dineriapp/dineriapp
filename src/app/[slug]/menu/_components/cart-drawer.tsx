@@ -10,13 +10,14 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Textarea } from "@/components/ui/textarea"
+import { useRestaurantStatus } from "@/hooks/useRestaurentStatus"
 import { loadGoogleMapsScript } from "@/lib/google-maps"
 import { useCartStore, type CartItem } from "@/stores/cart-store"
+import { OpeningHoursData } from "@/types"
 import { Restaurant } from "@prisma/client"
 import { AlertCircle, CreditCard, Loader2, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { isRestaurantOpenNow } from "./menu-item-card"
 
 interface CartDrawerProps {
     restaurantSlug: string
@@ -136,6 +137,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                         quantity: item.quantity,
                         category: item.category,
                         allergens: item.allergens,
+                        addons: item.addons
                     })),
                     customerInfo,
                     orderType,
@@ -188,6 +190,18 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
         setFormErrors({})
         setIsAddressValid(false)
     }
+
+    const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : {
+        monday: { open: "", close: "", closed: true },
+        tuesday: { open: "", close: "", closed: true },
+        wednesday: { open: "", close: "", closed: true },
+        thursday: { open: "", close: "", closed: true },
+        friday: { open: "", close: "", closed: true },
+        saturday: { open: "", close: "", closed: true },
+        sunday: { open: "", close: "", closed: true },
+    }
+
+    const status = useRestaurantStatus(openingHours, restaurant.timezone || "Asia/Karachi")
 
     return (
         <Sheet
@@ -569,14 +583,17 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                     //     color: restaurant.button_text_icons_color || "black",
                                     // }}
                                     className="w-full cursor-pointer border-none" size="lg" onClick={() => {
-                                        const isOpen = isRestaurantOpenNow(
-                                            typeof restaurant.opening_hours === "string"
-                                                ? JSON.parse(restaurant.opening_hours)
-                                                : restaurant.opening_hours
-                                        );
-                                        if (!isOpen) {
-                                            alert("The restaurant is currently closed. You can't place an order right now.");
-                                            return;
+
+                                        if (!status.isOpen) {
+                                            toast.error("The restaurant is currently closed.", {
+                                                description: status.nextOpeningDay
+                                                    ? `Opens on ${status.nextOpeningDay} at ${status.openingTime}`
+                                                    : status.openingTime
+                                                        ? `Opens at ${status.openingTime}`
+                                                        : "Please check opening hours.",
+                                                duration: 5000,
+                                            })
+                                            return
                                         }
                                         setShowCheckout(true)
                                     }

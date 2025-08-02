@@ -11,10 +11,11 @@ import ResturantHeader from "./resturant-header";
 import { Info, MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react"
-import { ReviewsInfo, StylesDataType } from "@/types";
+import { OpeningHoursData, ReviewsInfo, StylesDataType } from "@/types";
 import { GoogleRating } from "../../_components/google-rating";
 import RestaurantCustomizer from "./restaurent-customizer";
 import { WelcomePopup } from "../../_components/welcome-popup";
+import { OpeningHoursStatus } from "../../_components/opening-hours-status";
 
 type RestaurantWithMenu = Restaurant & {
   user: User
@@ -123,6 +124,9 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
     ? (restaurant.welcome_popup_show_info as { ratings: boolean; address: boolean; hours: boolean; phone: boolean })
     : { ratings: true, address: true, hours: true, phone: true }
 
+  const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : null
+
+
   return (
     <div
       className="min-h-screen w-full"
@@ -166,7 +170,11 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
                 </motion.div>
               )}
               {restaurant.address && (
-                <div className="flex items-center justify-center gap-1">
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.25 }}
+                  className="flex items-center justify-center gap-1">
                   <MapPin
                     style={{
                       color: stylesData.bgColor,
@@ -180,7 +188,25 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
                     className="text-sm" >
                     {restaurant.address}
                   </span>
-                </div>
+                </motion.div>
+              )}
+              {/* Opening Hours Status */}
+              {openingHours && restaurant.timezone && (
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.25 }}
+                  className=""
+                >
+                  <OpeningHoursStatus
+                    openingHours={openingHours}
+                    restaurentTimeZone={restaurant.timezone || ""}
+                    color={restaurant.textColor || "#000000"}
+                    className=" cursor-pointer text-center"
+                    accentColor={restaurant.textColor}
+                    onClick={() => { }}
+                  />
+                </motion.div>
               )}
             </div>
 
