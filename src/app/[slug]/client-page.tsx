@@ -232,7 +232,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                     </motion.h2>
 
                     {/* Opening Hours Status */}
-                    {openingHours && (
+                    {openingHours && restaurant.timezone && (
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
