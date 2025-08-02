@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
 
         const stripeSecretKey = decrypt_key(restaurant.stripe_secret_key_encrypted)
         const stripeClient = new Stripe(stripeSecretKey, {
-            apiVersion: "2025-06-30.basil",
+            apiVersion: "2025-07-30.basil",
         })
 
         // Get user ID if authenticated
