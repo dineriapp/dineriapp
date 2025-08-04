@@ -188,12 +188,16 @@ export default async function OrderSuccessContent({
                     <CardContent>
                         <div className="space-y-4">
                             {order.items.map((item: any) => (
-                                <div key={item.id} className="flex justify-between items-start">
+                                <div key={item.id} className="flex justify-between items-start gap-4 py-3 border-b">
                                     <div className="flex-1">
-                                        <h4 className="font-medium">{item.name}</h4>
-                                        {item.description && <p className="text-sm text-gray-600">{item.description}</p>}
-                                        {item.allergens.length > 0 && (
-                                            <div className="flex flex-wrap gap-1 mt-1">
+                                        <h4 className="font-semibold text-base text-gray-900">{item.name}</h4>
+
+                                        {item.description && (
+                                            <p className="text-sm text-gray-600 mt-0.5">{item.description}</p>
+                                        )}
+
+                                        {item.allergens?.length > 0 && (
+                                            <div className="flex flex-wrap gap-1 mt-2">
                                                 {item.allergens.map((allergen: string) => (
                                                     <Badge key={allergen} variant="secondary" className="text-xs">
                                                         {allergen}
@@ -201,10 +205,29 @@ export default async function OrderSuccessContent({
                                                 ))}
                                             </div>
                                         )}
-                                        <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+
+                                        {item.addons?.length > 0 && (
+                                            <div className="flex flex-wrap gap-1 mt-2">
+                                                {item.addons.map((addon: any) => (
+                                                    <Badge key={addon.name} variant="outline" className="text-xs">
+                                                        {addon.name} (${addon.price.toFixed(2)})
+                                                    </Badge>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        <p className="text-xs text-gray-500 mt-2">Quantity: {item.quantity}</p>
                                     </div>
-                                    <div className="text-right">
-                                        <p className="font-medium">${item.item_total.toFixed(2)}</p>
+
+                                    <div className="text-right min-w-[70px]">
+                                        <p className="text-sm font-semibold text-green-600">
+                                            ${(
+                                                item.price +
+                                                (Array.isArray(item.addons)
+                                                    ? item.addons.reduce((sum: any, addon: any) => sum + addon.price, 0)
+                                                    : 0)
+                                            ).toFixed(2)}
+                                        </p>
                                     </div>
                                 </div>
                             ))}

@@ -79,7 +79,7 @@ export function Cart({ restaurantSlug, restaurantName, isOpen, onClose }: CartPr
                                     <CartItemComponent
                                         key={item.id}
                                         item={item}
-                                        onQuantityChange={(quantity) => handleQuantityChange(item.id, quantity)}
+                                        onQuantityChange={(quantity) => handleQuantityChange(item.cartItemId || "", quantity)}
                                         onRemove={() => removeItem(restaurantSlug, item.id)}
                                     />
                                 ))}

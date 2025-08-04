@@ -850,36 +850,86 @@ function OrderDetailsModal({ order }: { order: OrderWithItems }) {
               >
                 <div className="flex-1">
                   <h4 className="font-medium">{item.name}</h4>
+
                   {item.description && (
                     <p className="text-sm text-gray-600">{item.description}</p>
                   )}
+
                   {item.allergens.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1">
                       {item.allergens.map((allergen) => (
-                        <Badge
-                          key={allergen}
-                          variant="secondary"
-                          className="text-xs"
-                        >
+                        <Badge key={allergen} variant="secondary" className="text-xs">
                           {allergen}
                         </Badge>
                       ))}
                     </div>
                   )}
+
+                  {/* ✅ Show Addons */}
+                  {item.addons && (
+                    (() => {
+                      let parsedAddons: { name: string; price: number }[] = []
+
+                      try {
+                        parsedAddons = typeof item.addons === "string"
+                          ? JSON.parse(item.addons)
+                          : Array.isArray(item.addons)
+                            ? item.addons
+                            : []
+                      } catch (err) {
+                        console.warn("Invalid addons JSON:", err)
+                      }
+
+                      return (
+                        parsedAddons.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {parsedAddons.map((addon) => (
+                              <Badge key={addon.name} variant="outline" className="text-xs">
+                                {addon.name} (+€{addon.price.toFixed(2)})
+                              </Badge>
+                            ))}
+                          </div>
+                        )
+                      )
+                    })()
+                  )}
+
                   {item.special_requests && (
                     <p className="text-sm text-blue-600 mt-1">
                       Special: {item.special_requests}
                     </p>
                   )}
+
                   <p className="text-sm text-gray-500 mt-1">
                     €{item.price.toFixed(2)} × {item.quantity}
                   </p>
                 </div>
+
                 <div className="text-right">
-                  <p className="font-medium">€{item.item_total.toFixed(2)}</p>
+                  {(() => {
+                    let parsedAddons: { name: string; price: number }[] = []
+
+                    try {
+                      parsedAddons = typeof item.addons === "string"
+                        ? JSON.parse(item.addons)
+                        : Array.isArray(item.addons)
+                          ? item.addons
+                          : []
+                    } catch (err) {
+                      console.warn("Invalid addons JSON:", err)
+                    }
+
+                    const addonsTotal = parsedAddons.reduce((sum, addon) => sum + addon.price, 0)
+                    const totalWithAddons = (item.price + addonsTotal) * item.quantity
+
+                    return (
+                      <p className="font-medium">€{totalWithAddons.toFixed(2)}</p>
+                    )
+                  })()}
                 </div>
               </div>
             ))}
+
 
             <div className="border-t pt-4 space-y-2">
               <div className="flex justify-between text-sm">

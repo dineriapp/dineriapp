@@ -16,6 +16,8 @@ import { GoogleRating } from "../../_components/google-rating";
 import RestaurantCustomizer from "./restaurent-customizer";
 import { WelcomePopup } from "../../_components/welcome-popup";
 import { OpeningHoursStatus } from "../../_components/opening-hours-status";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { RestaurantInfoDialog } from "./restaurant-info-dialog";
 
 type RestaurantWithMenu = Restaurant & {
   user: User
@@ -34,6 +36,7 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [customBgUrl, setCustomBgUrl] = useState(restaurant.menuPageBackgroundImage)
   const [showWelcomePopup, setShowWelcomePopup] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     // Show welcome popup after component mounts
@@ -104,18 +107,33 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
 
   // Get all items or filtered by category
   const getFilteredItems = () => {
+    let allItems: (MenuItem & { categoryName: string })[] = [];
+
     if (selectedCategory === "all") {
-      return restaurant.menuCategories.flatMap((category) =>
-        category.items.map((item) => ({ ...item, categoryName: category.name }))
+      allItems = restaurant.menuCategories.flatMap((category) =>
+        category.items.map((item) => ({
+          ...item,
+          categoryName: category.name,
+        }))
       );
+    } else {
+      const category = restaurant.menuCategories.find(
+        (cat) => cat.id === selectedCategory
+      );
+      allItems = category
+        ? category.items.map((item) => ({
+          ...item,
+          categoryName: category.name,
+        }))
+        : [];
     }
 
-    const category = restaurant.menuCategories.find(
-      (cat) => cat.id === selectedCategory
+    if (!searchQuery) return allItems;
+
+    return allItems.filter((item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description?.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    return category
-      ? category.items.map((item) => ({ ...item, categoryName: category.name }))
-      : [];
   };
 
   const filteredItems = getFilteredItems();
@@ -213,13 +231,16 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
           </div>
           {/* right  */}
           <div>
-            <Button variant={"ghost"} className="bg-transparent cursor-pointer hover:bg-transparent">
-              <Info className="size-4"
-                style={{
-                  color: stylesData.textColor
-                }}
-                strokeWidth={2.5} />
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" className="bg-transparent cursor-pointer hover:bg-transparent p-0">
+                  <Info className="size-4" style={{ color: stylesData.textColor }} strokeWidth={2.5} />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <RestaurantInfoDialog restaurant={restaurant} />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         <div className="relative w-full my-2 rounded-full"
@@ -235,6 +256,8 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
           <input
             type="text"
             placeholder={`Search in ${restaurant.name}...`}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             style={{
               color: stylesData.headerText,
               borderColor: stylesData.headerCartButtonBorder
@@ -257,6 +280,7 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
             restaurant={restaurant}
             items={filteredItems}
             stylesData={stylesData}
+            searchQuery={searchQuery}
             restaurantSlug={restaurant.slug}
             selectedCategory={selectedCategory}
           />

@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
             specialInstructions,
             isGuest = false,
         } = body
-        console.log(restaurantSlug)
+        console.log({ location: "Create CheckOut:- ", body })
 
         // Validate required fields
         if (!restaurantSlug || !items?.length || !customerInfo?.name || !customerInfo?.email || !customerInfo?.phone) {
@@ -108,7 +108,11 @@ export async function POST(request: NextRequest) {
 
         // Calculate totals
         const subtotal = items.reduce((sum, item) => {
-            const addonsTotal = item.addons?.reduce((aSum, addon) => aSum + addon.price, 0) || 0
+            const hasAddons = Array.isArray(item.addons) && item.addons.length > 0
+            const addonsTotal = hasAddons
+                ? item.addons.reduce((aSum, addon) => aSum + addon.price, 0)
+                : 0
+
             return sum + (item.price + addonsTotal) * item.quantity
         }, 0)
         const taxRate = 0.08
@@ -123,21 +127,37 @@ export async function POST(request: NextRequest) {
         const session = await stripeClient.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: [
-                ...items.map((item) => ({
-                    price_data: {
-                        currency: "usd",
-                        product_data: {
-                            name: item.name,
-                            description: item.description || undefined,
-                            metadata: {
-                                category: item.category,
-                                allergens: item.allergens?.join(", ") || "",
+                ...items.map((item) => {
+                    const hasAddons = Array.isArray(item.addons) && item.addons.length > 0
+                    const addonsTotal = hasAddons
+                        ? item.addons.reduce((sum, addon) => sum + addon.price, 0)
+                        : 0
+
+                    return {
+                        price_data: {
+                            currency: "usd",
+                            product_data: {
+                                name: item.name,
+                                description: [
+                                    item.description,
+                                    Array.isArray(item.addons) && item.addons.length > 0
+                                        ? "Addons: " + item.addons
+                                            .map((addon) => `${addon.name} ($${addon.price.toFixed(2)})`)
+                                            .join(", ")
+                                        : null
+                                ]
+                                    .filter(Boolean)
+                                    .join(" | "),
+                                metadata: {
+                                    category: item.category,
+                                    allergens: item.allergens?.join(", ") || "",
+                                },
                             },
+                            unit_amount: Math.round((item.price + addonsTotal) * 100), // ✅ include addons
                         },
-                        unit_amount: Math.round(item.price * 100),
-                    },
-                    quantity: item.quantity,
-                })),
+                        quantity: item.quantity,
+                    }
+                }),
                 {
                     price_data: {
                         currency: "usd",

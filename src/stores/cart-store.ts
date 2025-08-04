@@ -12,6 +12,7 @@ export interface CartItem {
     is_halal?: boolean
     addons?: { name: string, price: number }[]
     image_url?: string
+    cartItemId: string
 }
 
 interface CartState {
@@ -33,14 +34,25 @@ export const useCartStore = create<CartState>()(
             addItem: (restaurantSlug, item) => {
                 set((state) => {
                     const restaurantItems = state.items[restaurantSlug] || []
-                    const existingItemIndex = restaurantItems.findIndex((i) => i.id === item.id)
+
+                    const newAddonsKey = JSON.stringify(
+                        (item.addons || []).sort((a, b) => a.name.localeCompare(b.name))
+                    )
+
+                    const existingItemIndex = restaurantItems.findIndex((i) => {
+                        const existingAddonsKey = JSON.stringify(
+                            (i.addons || []).sort((a, b) => a.name.localeCompare(b.name))
+                        )
+                        return i.cartItemId === item.cartItemId && existingAddonsKey === newAddonsKey
+                    })
 
                     if (existingItemIndex >= 0) {
-                        // Update quantity if item exists
                         restaurantItems[existingItemIndex].quantity += 1
                     } else {
-                        // Add new item
-                        restaurantItems.push({ ...item, quantity: 1 })
+                        restaurantItems.push({
+                            ...item,
+                            quantity: 1,
+                        })
                     }
 
                     return {
@@ -51,24 +63,23 @@ export const useCartStore = create<CartState>()(
                     }
                 })
             },
-
-            removeItem: (restaurantSlug, itemId) => {
+            removeItem: (restaurantSlug, cartItemId) => {
                 set((state) => {
                     const restaurantItems = state.items[restaurantSlug] || []
                     return {
                         items: {
                             ...state.items,
-                            [restaurantSlug]: restaurantItems.filter((item) => item.id !== itemId),
+                            [restaurantSlug]: restaurantItems.filter((item) => item.cartItemId !== cartItemId),
                         },
                     }
                 })
             },
 
-            updateQuantity: (restaurantSlug, itemId, quantity) => {
+            updateQuantity: (restaurantSlug, cartItemId, quantity) => {
                 set((state) => {
                     const restaurantItems = state.items[restaurantSlug] || []
                     const updatedItems = restaurantItems
-                        .map((item) => (item.id === itemId ? { ...item, quantity: Math.max(0, quantity) } : item))
+                        .map((item) => (item.cartItemId === cartItemId ? { ...item, quantity: Math.max(0, quantity) } : item))
                         .filter((item) => item.quantity > 0)
 
                     return {
@@ -92,10 +103,16 @@ export const useCartStore = create<CartState>()(
             getCartItems: (restaurantSlug) => {
                 return get().items[restaurantSlug] || []
             },
-
             getCartTotal: (restaurantSlug) => {
                 const items = get().items[restaurantSlug] || []
-                return items.reduce((total, item) => total + item.price * item.quantity, 0)
+
+                return items.reduce((total, item) => {
+                    const addonsTotal = Array.isArray(item.addons)
+                        ? item.addons.reduce((sum, addon) => sum + addon.price, 0)
+                        : 0
+
+                    return total + (item.price + addonsTotal) * item.quantity
+                }, 0)
             },
 
             getCartItemCount: (restaurantSlug) => {

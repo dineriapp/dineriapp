@@ -76,18 +76,19 @@ export function MenuItemCard({
   const status = useRestaurantStatus(openingHours, restaurant.timezone || "Asia/Karachi")
 
   const handleConfirmAddons = (selectedAddons: { name: string; price: number }[]) => {
-    const totalAddonPrice = selectedAddons.reduce((sum, a) => sum + a.price, 0);
+    // const totalAddonPrice = selectedAddons.reduce((sum, a) => sum + a.price, 0);
 
     addItem(restaurantSlug, {
       id: item.id,
       name: item.name,
       description: item.description || undefined,
-      price: item.price + totalAddonPrice,
+      price: item.price,
       image_url: item.image || "",
       category: categoryName,
       allergens: item.allergens,
       is_halal: item.is_halal || undefined,
       addons: selectedAddons,
+      cartItemId: crypto.randomUUID()
     });
 
     toast.success("Added to cart", {

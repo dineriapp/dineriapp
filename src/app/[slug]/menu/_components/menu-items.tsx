@@ -11,6 +11,7 @@ type MenuItemWithCategory = MenuItem & {
 interface MenuItemsProps {
   items: MenuItemWithCategory[];
   restaurantSlug: string;
+  searchQuery: string;
   selectedCategory: string;
   stylesData: StylesDataType;
   restaurant: Restaurant;
@@ -20,26 +21,36 @@ export function MenuItems({
   items,
   restaurantSlug,
   restaurant,
+  searchQuery,
   stylesData,
   selectedCategory,
 }: MenuItemsProps) {
   if (items.length === 0) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-lg font-medium  mb-2" style={{
-          color: stylesData.textColor
-        }}>
-          {selectedCategory === "all"
-            ? "No menu items available"
-            : "No items in this category"}
-        </h3>
-        <p className="" style={{
-          color: stylesData.textColor
-        }}>
-          {selectedCategory === "all"
-            ? "This restaurant hasn't added any menu items yet."
-            : "This category doesn't have any menu items yet."}
-        </p>
+        {searchQuery.trim() ? (
+          <>
+            <h3 className="text-lg font-medium mb-1" style={{ color: stylesData.textColor }}>
+              No results found
+            </h3>
+            <p style={{ color: stylesData.textColor }}>
+              We couldn&apos;t find any items matching &quot;{searchQuery}&quot;.
+            </p>
+          </>
+        ) : (
+          <>
+            <h3 className="text-lg font-medium mb-2" style={{ color: stylesData.textColor }}>
+              {selectedCategory === "all"
+                ? "No menu items available"
+                : "No items in this category"}
+            </h3>
+            <p style={{ color: stylesData.textColor }}>
+              {selectedCategory === "all"
+                ? "This restaurant hasn't added any menu items yet."
+                : "This category doesn't have any menu items yet."}
+            </p>
+          </>
+        )}
       </div>
     );
   }

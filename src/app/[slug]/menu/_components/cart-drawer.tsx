@@ -287,7 +287,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                         key={item.id}
                                         item={item}
                                         restaurant={restaurant}
-                                        onQuantityChange={(quantity) => handleQuantityChange(item.id, quantity)}
+                                        onQuantityChange={(quantity) => handleQuantityChange(item.cartItemId || "", quantity)}
                                         onRemove={() => removeItem(restaurantSlug, item.id)}
                                     />
                                 ))}
@@ -708,6 +708,23 @@ function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemCompone
                     </div>
                 )}
 
+                {item?.addons && item?.addons?.length > 0 && (
+                    <div className="mb-3">
+                        <div className="flex flex-wrap gap-1">
+                            {item.addons.slice(0, 3).map((addon) => (
+                                <Badge key={addon.name} variant="outline" className="text-xs">
+                                    {addon.name} (${addon.price.toFixed(2)})
+                                </Badge>
+                            ))}
+                            {item.addons.length > 3 && (
+                                <Badge variant="outline" className="text-xs">
+                                    +{item.addons.length - 3}
+                                </Badge>
+                            )}
+                        </div>
+                    </div>
+                )}
+
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                         <Button
@@ -740,8 +757,14 @@ function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemCompone
                             <Plus className="h-3 w-3" />
                         </Button>
                     </div>
-                    <span className="font-semibold text-green-600">${(item.price * item.quantity).toFixed(2)}</span>
-                </div>
+                    <span className="font-semibold text-green-600">
+                        ${(
+                            (item.price +
+                                (Array.isArray(item.addons)
+                                    ? item.addons.reduce((sum, addon) => sum + addon.price, 0)
+                                    : 0)) * item.quantity
+                        ).toFixed(2)}
+                    </span>                </div>
             </CardContent>
         </Card>
     )
