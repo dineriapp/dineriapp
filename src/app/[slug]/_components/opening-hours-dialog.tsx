@@ -77,6 +77,7 @@ export function OpeningHoursDialog({
                     </DialogTitle>
                     <DialogDescription className="text-start text-gray-500">
                         {restaurantName} operating hours <br />
+                        Timezone :- {restaurentTimeZone}
                     </DialogDescription>
 
                 </DialogHeader>
