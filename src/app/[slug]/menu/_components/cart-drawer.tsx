@@ -288,7 +288,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                         item={item}
                                         restaurant={restaurant}
                                         onQuantityChange={(quantity) => handleQuantityChange(item.cartItemId || "", quantity)}
-                                        onRemove={() => removeItem(restaurantSlug, item.id)}
+                                        onRemove={() => removeItem(restaurantSlug, item.cartItemId || "")}
                                     />
                                 ))}
                             </div>
