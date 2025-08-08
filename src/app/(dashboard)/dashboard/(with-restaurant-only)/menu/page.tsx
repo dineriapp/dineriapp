@@ -49,6 +49,8 @@ import { useState } from "react"
 import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
 import { uploadImage } from "@/supabase/clients/client"
 import { toast } from "sonner"
+import { Switch } from "@/components/ui/switch"
+import { Badge } from "@/components/ui/badge"
 
 const container = {
     hidden: { opacity: 0 },
@@ -74,8 +76,10 @@ export default function MenuPage() {
     const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
     const [newCategoryName, setNewCategoryName] = useState("")
     const [newCategoryDescription, setNewCategoryDescription] = useState("")
+    const [newCategoryshow_in_quick_menu, setNewCategoryshow_in_quick_menu] = useState(false)
     const [newItemName, setNewItemName] = useState("")
     const [newItemDescription, setNewItemDescription] = useState("")
+    const [newItemshow_in_quick_menu, setNewItemshow_in_quick_menu] = useState(false)
     const [newItemPrice, setNewItemPrice] = useState("")
     const [allergens, setAllergens] = useState<string[]>([])
     const [isHalal, setIsHalal] = useState(false)
@@ -122,6 +126,7 @@ export default function MenuPage() {
             {
                 name: newCategoryName.trim(),
                 description: newCategoryDescription.trim() || undefined,
+                show_in_quick_menu: newCategoryshow_in_quick_menu
             },
             {
                 onSuccess: () => {
@@ -142,6 +147,7 @@ export default function MenuPage() {
                 id: selectedCategory.id,
                 name: newCategoryName.trim(),
                 description: newCategoryDescription.trim() || undefined,
+                show_in_quick_menu: newCategoryshow_in_quick_menu
             },
             {
                 onSuccess: () => {
@@ -192,6 +198,7 @@ export default function MenuPage() {
                     price: Number.parseFloat(newItemPrice),
                     allergens: allergens,
                     is_halal: isHalal,
+                    show_in_quick_menu: newItemshow_in_quick_menu,
                     image: imageUrl || "",
                     allergen_info: allergenInfo.trim() || undefined,
                     addons: validAddons.length > 0 ? validAddons : undefined, // Optional: omit if empty
@@ -244,6 +251,7 @@ export default function MenuPage() {
                     price: Number.parseFloat(newItemPrice),
                     allergens: allergens,
                     is_halal: isHalal,
+                    show_in_quick_menu: newItemshow_in_quick_menu,
                     image: imageUrl || "",
                     addons: validAddons.length > 0 ? validAddons : undefined, // Optional: omit if empty
                     allergen_info: allergenInfo.trim() || undefined,
@@ -379,6 +387,17 @@ export default function MenuPage() {
                                                         rows={3}
                                                     />
                                                 </div>
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="showQuickMenu">Show in Quick Menu</Label>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        Enable this category to appear in the quick menu.
+                                                    </p>
+                                                    <Switch
+                                                        id="showQuickMenu"
+                                                        checked={newCategoryshow_in_quick_menu}
+                                                        onCheckedChange={setNewCategoryshow_in_quick_menu}
+                                                    />
+                                                </div>
                                             </div>
 
                                             <DialogFooter>
@@ -433,6 +452,9 @@ export default function MenuPage() {
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <div className="space-y-1">
                                         <CardTitle className="text-xl">{category.name}</CardTitle>
+                                        {category.show_in_quick_menu && (
+                                            <Badge className="bg-primary text-white">Quick Menu</Badge>
+                                        )}
                                         {category.description && (
                                             <CardDescription className="text-base">{category.description}</CardDescription>
                                         )}
@@ -446,6 +468,7 @@ export default function MenuPage() {
                                                 setNewCategoryName(category.name)
                                                 setNewCategoryDescription(category.description || "")
                                                 setIsEditCategoryDialogOpen(true)
+                                                setNewCategoryshow_in_quick_menu(category.show_in_quick_menu)
                                             }}
                                             className="h-8 w-8 p-0 transition-transform hover:scale-110"
                                         >
@@ -563,6 +586,9 @@ export default function MenuPage() {
                                                                         Halal
                                                                     </span>
                                                                 )}
+                                                                {item.show_in_quick_menu && (
+                                                                    <Badge className="bg-primary text-white">Quick Menu</Badge>
+                                                                )}
                                                             </div>
                                                             {item.image
                                                                 &&
@@ -631,6 +657,7 @@ export default function MenuPage() {
                                                                     setIsEditItemDialogOpen(true)
                                                                     setAddons(parsedAddons)
                                                                     setSelectedImage(null)
+                                                                    setNewItemshow_in_quick_menu(item.show_in_quick_menu)
                                                                 }}
                                                                 className="h-8 w-8 p-0 transition-transform hover:scale-110"
                                                             >
@@ -776,6 +803,17 @@ export default function MenuPage() {
                                     value={newCategoryDescription}
                                     onChange={(e) => setNewCategoryDescription(e.target.value)}
                                     rows={3}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="showQuickMenu">Show in Quick Menu</Label>
+                                <p className="text-sm text-muted-foreground">
+                                    Enable this category to appear in the quick menu.
+                                </p>
+                                <Switch
+                                    id="showQuickMenu"
+                                    checked={newCategoryshow_in_quick_menu}
+                                    onCheckedChange={setNewCategoryshow_in_quick_menu}
                                 />
                             </div>
                         </div>
@@ -970,6 +1008,16 @@ export default function MenuPage() {
                                 <Label htmlFor="editIsHalal" className="flex items-center gap-2">
                                     <Leaf className="h-4 w-4 text-green-600" />
                                     This item is Halal certified
+                                </Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="inQuickMenu"
+                                    checked={newItemshow_in_quick_menu}
+                                    onCheckedChange={(checked) => setNewItemshow_in_quick_menu(checked as boolean)}
+                                />
+                                <Label htmlFor="inQuickMenu" className="flex items-center gap-2">
+                                    Show this item in Quick Menu
                                 </Label>
                             </div>
                         </div>
@@ -1173,6 +1221,16 @@ export default function MenuPage() {
                                 <Label htmlFor="isHalal" className="flex items-center gap-2">
                                     <Leaf className="h-4 w-4 text-green-600" />
                                     This item is Halal certified
+                                </Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="showinWuickMenu"
+                                    checked={newItemshow_in_quick_menu}
+                                    onCheckedChange={(checked) => setNewItemshow_in_quick_menu(checked as boolean)}
+                                />
+                                <Label htmlFor="showinWuickMenu" className="flex items-center gap-2">
+                                    Show this item in Quick Menu
                                 </Label>
                             </div>
                         </div>

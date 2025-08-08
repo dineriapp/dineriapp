@@ -38,6 +38,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                 is_halal: validated.is_halal,
                 allergen_info: validated.allergen_info?.trim(),
                 addons: validated.addons ?? [],
+                show_in_quick_menu: validated.show_in_quick_menu,
                 image: validated.image?.trim() || null,
             },
         })

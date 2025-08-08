@@ -33,11 +33,13 @@ export const createCategorySchema = z.object({
     restaurant_id: z.string().uuid(),
     name: z.string().min(1).max(255),
     description: z.string().optional(),
+    show_in_quick_menu: z.boolean().optional().default(false),
 })
 
 export const updateCategorySchema = z.object({
     name: z.string().min(1).max(255),
     description: z.string().optional(),
+    show_in_quick_menu: z.boolean().optional().default(false),
 })
 
 export const reorderCategorySchema = z.object({
@@ -50,6 +52,7 @@ export const createItemSchema = z.object({
     category_id: z.string().uuid(),
     name: z.string().min(1).max(255),
     description: z.string().optional(),
+    show_in_quick_menu: z.boolean().optional().default(false),
     price: z.number().min(0), // This will be Float in Prisma
     allergens: z.array(z.string()).default([]),
     is_halal: z.boolean().optional().default(false), // Match Boolean? in schema
@@ -68,6 +71,7 @@ export const createItemSchema = z.object({
 export const updateItemSchema = z.object({
     name: z.string().min(1).max(255),
     description: z.string().optional(),
+    show_in_quick_menu: z.boolean().optional().default(false),
     price: z.number().min(0), // This will be Float in Prisma
     allergens: z.array(z.string()).default([]),
     is_halal: z.boolean().optional().default(false), // Match Boolean? in schema

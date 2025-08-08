@@ -27,12 +27,12 @@ export function useCreateCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async (data: { name: string; description?: string }) => {
+        mutationFn: async (data: { name: string; description?: string, show_in_quick_menu?: boolean }) => {
             if (!restaurantId) throw new Error("Restaurant ID is required")
 
             const response = await ky
                 .post("/api/menu/categories", {
-                    json: { ...data, restaurant_id: restaurantId },
+                    json: { ...data, restaurant_id: restaurantId, show_in_quick_menu: data.show_in_quick_menu || false },
                 })
                 .json<{ data: MenuCategoryWithItems }>()
             return response.data
@@ -47,6 +47,7 @@ export function useCreateCategory(restaurantId: string | undefined) {
             const optimisticCategory: MenuCategoryWithItems = {
                 id: `temp-${Date.now()}`,
                 restaurant_id: restaurantId,
+                show_in_quick_menu: false,
                 name: newCategory.name,
                 description: newCategory.description || null,
                 sort_order:
@@ -89,8 +90,8 @@ export function useUpdateCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({ id, ...data }: { id: string; name: string; description?: string }) => {
-            const response = await ky.put(`/api/menu/categories/${id}`, { json: data }).json<{ data: MenuCategory }>()
+        mutationFn: async ({ id, ...data }: { id: string; name: string; description?: string, show_in_quick_menu: boolean }) => {
+            const response = await ky.put(`/api/menu/categories/${id}`, { json: { ...data, show_in_quick_menu: data.show_in_quick_menu } }).json<{ data: MenuCategory }>()
             return response.data
         },
         onMutate: async (variables: { id: string; name: string; description?: string }) => {
@@ -230,6 +231,7 @@ export function useCreateItem(restaurantId: string | undefined) {
             price: number
             allergens?: string[]
             is_halal?: boolean
+            show_in_quick_menu: boolean
             addons?: { name: string, price: number }[]
             allergen_info?: string
         }) => {
@@ -242,6 +244,7 @@ export function useCreateItem(restaurantId: string | undefined) {
             description?: string
             image?: string
             price: number
+            show_in_quick_menu: boolean
             allergens?: string[]
             is_halal?: boolean
             allergen_info?: string
@@ -258,6 +261,7 @@ export function useCreateItem(restaurantId: string | undefined) {
                 category_id: variables.category_id,
                 image: variables.image || "",
                 name: variables.name,
+                show_in_quick_menu: variables.show_in_quick_menu,
                 description: variables.description || null,
                 price: variables.price,
                 allergens: variables.allergens || [],
@@ -321,6 +325,7 @@ export function useUpdateItem(restaurantId: string | undefined) {
             image?: string
             description?: string
             price: number
+            show_in_quick_menu: boolean
             allergens?: string[]
             is_halal?: boolean
             addons?: { name: string, price: number }[]

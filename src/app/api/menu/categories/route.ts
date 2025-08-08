@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
             data: {
                 ...validated,
                 name: validated.name.trim(),
+                show_in_quick_menu: validated.show_in_quick_menu,
                 description: validated.description?.trim(),
                 sort_order: lastCategory ? lastCategory.sort_order + 1 : 0,
             },

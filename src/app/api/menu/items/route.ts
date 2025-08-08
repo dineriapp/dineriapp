@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
         const validated = createItemSchema.parse(body)
-
+        console.log(validated)
         // First get the category to check ownership
         const category = await prisma.menuCategory.findUnique({
             where: { id: validated.category_id },
@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
                 description: validated.description?.trim(),
                 allergen_info: validated.allergen_info?.trim(),
                 sort_order: nextSortOrder,
+                show_in_quick_menu: validated.show_in_quick_menu,
                 addons: validated.addons ?? [],
                 image: validated.image?.trim() || null,
             },
