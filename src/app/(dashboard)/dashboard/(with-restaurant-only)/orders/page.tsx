@@ -88,6 +88,10 @@ export default function OrdersPage() {
   const [paymentStatusFilter, setPaymentStatusFilter] = useState("all");
   const [orderTypeFilter, setOrderTypeFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
+  const [refreshSeconds, setRefreshSeconds] = useState(() => {
+    const saved = localStorage.getItem("refreshSeconds");
+    return saved ? Number(saved) : 500; // default 4 seconds
+  });
 
   const [selectedOrder, setSelectedOrder] = useState<OrderWithItems | null>(
     null
@@ -164,13 +168,20 @@ export default function OrdersPage() {
     });
   };
 
+  const handleRefreshChange = (value: number) => {
+    setRefreshSeconds(value);
+    localStorage.setItem("refreshSeconds", String(value));
+  };
+
   useEffect(() => {
+    if (refreshSeconds <= 0) return; // 0 means no  //
+
     const interval = setInterval(() => {
       handleRefresh();
-    }, 240000); // 4 minutes
+    }, refreshSeconds * 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [refreshSeconds]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -316,6 +327,21 @@ export default function OrdersPage() {
             />
             Refresh
           </Button>
+          <select
+            id="refreshInterval"
+            value={refreshSeconds}
+            onChange={(e) => handleRefreshChange(Number(e.target.value))}
+            className="border rounded py-1 px-3 bg-white"
+          >
+            {Array.from({ length: 11 }, (_, i) => {
+              const seconds = i * 60; // store seconds
+              return (
+                <option key={i} value={seconds}>
+                  {i === 0 ? "Off" : `${i} minute${i > 1 ? "s" : ""}`}
+                </option>
+              );
+            })}
+          </select>
           <Link
             href={"/dashboard/settings/hours"}
             className="flex items-center justify-between w-full h-full"

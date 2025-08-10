@@ -5,11 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { AlertCircle, Mail, MapPin, Phone, Save, RefreshCw } from "lucide-react"
+import { useRestaurantStore } from "@/stores/restaurant-store"
+import { AlertCircle, Mail, MapPin, Phone, RefreshCw, Save } from "lucide-react"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { useRestaurantStore } from "@/stores/restaurant-store"
 import { z } from "zod"
 
 // Validation schemas
@@ -386,45 +386,6 @@ export default function ContactPage() {
                         <p className="text-xs text-gray-500">Full address including city, state/province, and country</p>
                     </div>
 
-                    {/* Coordinates */}
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2">
-                            <MapPin className="h-4 w-4 text-emerald-600" />
-                            <Label className="text-sm font-medium">Location Coordinates</Label>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="latitude">Latitude</Label>
-                                <Input
-                                    id="latitude"
-                                    type="text"
-                                    value={formData.latitude}
-                                    onChange={(e) => handleInputChange("latitude", e.target.value)}
-                                    placeholder="e.g. 40.7128"
-                                    className={`focus:border-emerald-500 focus:ring-emerald-500 ${errors.latitude ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
-                                        }`}
-                                />
-                                {errors.latitude && <p className="text-sm text-red-600">{errors.latitude}</p>}
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="longitude">Longitude</Label>
-                                <Input
-                                    id="longitude"
-                                    type="text"
-                                    value={formData.longitude}
-                                    onChange={(e) => handleInputChange("longitude", e.target.value)}
-                                    placeholder="e.g. -74.0060"
-                                    className={`focus:border-emerald-500 focus:ring-emerald-500 ${errors.longitude ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
-                                        }`}
-                                />
-                                {errors.longitude && <p className="text-sm text-red-600">{errors.longitude}</p>}
-                            </div>
-                        </div>
-                        <p className="text-xs text-gray-500">
-                            Optional: Add precise coordinates for better map integration. You can find these on Google Maps.
-                        </p>
-                    </div>
                 </CardContent>
             </Card>
 

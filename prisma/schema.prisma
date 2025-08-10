@@ -106,7 +106,7 @@ model Restaurant {
   button_style                     ButtonStyle         @default(rounded)
   button_icons_show                Boolean             @default(true)
   buttons_gap_in_px                Int                 @default(16)
-  font_family                      String?             @default("Inter")
+  font_family                      String?             @default("var(--font-inter)")
   bg_type                          BgType              @default(color)
   bg_gradient_start                String?             @default("#ffffff")
   bg_gradient_end                  String?             @default("#f3f4f6")
@@ -119,6 +119,7 @@ model Restaurant {
   instagram                        String?
   facebook                         String?
   whatsapp                         String?
+  tiktok                           String?
   social_icons_position            SocialIconsPosition @default(top)
   social_icon_bg_show              Boolean             @default(false)
   social_icon_bg_color             String              @default("#FFFFFF")

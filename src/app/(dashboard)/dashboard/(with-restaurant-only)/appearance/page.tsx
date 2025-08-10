@@ -27,7 +27,6 @@ import {
     Palette,
     RotateCcw,
     Signal,
-    Sparkles,
     Type,
     Wifi
 } from "lucide-react"
@@ -71,13 +70,16 @@ const container = {
 }
 
 // Font options
-const fonts = [
-    { name: "Inter", value: "Inter", preview: "Modern and clean" },
-    { name: "Helvetica", value: "Helvetica Neue", preview: "Classic and versatile" },
-    { name: "Roboto", value: "Roboto", preview: "Professional and readable" },
-    { name: "SF Pro", value: "SF Pro Display", preview: "Elegant and refined" },
-    { name: "Playfair Display", value: "Playfair Display", preview: "Sophisticated and luxurious" },
-]
+export const fonts = [
+    { name: "Inter", value: "var(--font-inter)", preview: "Modern and clean", weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },
+    { name: "Roboto", value: "var(--font-roboto)", preview: "Professional and readable", weights: [100, 300, 400, 500, 700, 900] },
+    { name: "Lora", value: "var(--font-lora)", preview: "Elegant serif style", weights: [400, 500, 600, 700] },
+    { name: "Poppins", value: "var(--font-poppins)", preview: "Friendly and geometric", weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },
+    { name: "Open Sans", value: "var(--font-open-sans)", preview: "Neutral and versatile", weights: [300, 400, 500, 600, 700, 800] },
+    { name: "Merriweather", value: "var(--font-merriweather)", preview: "Classic reading font", weights: [300, 400, 700, 900] },
+    { name: "Montserrat", value: "var(--font-montserrat)", preview: "Bold and modern", weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },
+    { name: "Playfair Display", value: "var(--font-playfair-display)", preview: "Stylish display serif", weights: [400, 500, 600, 700, 800, 900] },
+];
 
 // Gradient presets
 const gradientPresets = [
@@ -302,7 +304,7 @@ export default function AppearancePage() {
         headings_text_color: "#ffffff",
         button_text_icons_color: "#000000",
         button_style: "rounded",
-        font_family: "Inter",
+        font_family: "var(--font-inter)",
         bg_type: "color",
         button_icons_show: true,
         social_icon_bg_show: false,
@@ -531,7 +533,6 @@ export default function AppearancePage() {
     }
 
 
-
     return (
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <div className="mb-8">
@@ -544,7 +545,7 @@ export default function AppearancePage() {
             <div className="grid lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                     <Tabs defaultValue="style" className="space-y-6">
-                        <TabsList className="grid grid-cols-4 gap-4">
+                        <TabsList className="grid grid-cols-3 gap-4 w-full">
                             <TabsTrigger value="style" className="flex items-center gap-2">
                                 <Paintbrush className="h-4 w-4" />
                                 <span>Style</span>
@@ -557,10 +558,10 @@ export default function AppearancePage() {
                                 <Type className="h-4 w-4" />
                                 <span>Typography</span>
                             </TabsTrigger>
-                            <TabsTrigger value="templates" className="flex items-center gap-2">
+                            {/* <TabsTrigger value="templates" className="flex items-center gap-2">
                                 <Sparkles className="h-4 w-4" />
                                 <span>Templates</span>
-                            </TabsTrigger>
+                            </TabsTrigger> */}
                         </TabsList>
 
                         <TabsContent value="style" className="space-y-4">
@@ -1117,7 +1118,7 @@ export default function AppearancePage() {
                                 <CardContent>
                                     <div className="space-y-6">
                                         <Select
-                                            value={formData.font_family}
+                                            value={formData.font_family || "var(--font-inter)"}
                                             onValueChange={(value) => updateFormData({ font_family: value })}
                                         >
                                             <SelectTrigger className="border-slate-200">

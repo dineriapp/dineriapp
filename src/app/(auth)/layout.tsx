@@ -1,5 +1,5 @@
-import { Utensils } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -20,16 +20,15 @@ export default function AuthLayout({
                         {/* Left side - Form */}
                         <div className="flex flex-1 flex-col justify-center py-12 lg:px-8  xl:px-12">
                             <div className="mx-auto w-full max-w-md bg-white px-6 py-7 rounded-2xl">
-                                <div className="mb-5">
-                                    <Link href="/" className="flex items-center space-x-2 group">
-                                        <div className="bg-gradient-to-r from-teal-600 to-blue-600 p-2 rounded-xl transition-transform group-hover:scale-110">
-                                            <Utensils className="h-6 w-6 text-white" />
-                                        </div>
-                                        <span className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
-                                            dineri.app
-                                        </span>
-                                    </Link>
-                                </div>
+                                <Link href={"/"} className="mb-5">
+                                    <Image
+                                        src={"/logo.png"}
+                                        alt="logo.png"
+                                        width={250}
+                                        height={100}
+                                        className="w-full max-w-[160px] "
+                                    />
+                                </Link>
                                 {children}
                             </div>
                         </div>

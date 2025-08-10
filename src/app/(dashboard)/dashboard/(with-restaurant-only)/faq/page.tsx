@@ -1,7 +1,7 @@
 "use client"
 
+import type { Faq, FaqCategory, SubscriptionPlan } from "@prisma/client"
 import type React from "react"
-import type { FaqCategory, Faq, SubscriptionPlan } from "@prisma/client"
 
 import {
     AlertDialog,
@@ -29,24 +29,24 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { useRestaurantStore } from "@/stores/restaurant-store"
 import {
-    useFaqCategories,
-    useCreateFaqCategory,
-    useUpdateFaqCategory,
-    useDeleteFaqCategory,
-    useReorderFaqCategory,
     useCreateFaq,
-    useUpdateFaq,
+    useCreateFaqCategory,
     useDeleteFaq,
+    useDeleteFaqCategory,
+    useFaqCategories,
     useReorderFaq,
+    useReorderFaqCategory,
+    useUpdateFaq,
+    useUpdateFaqCategory,
 } from "@/lib/faq-queries"
-import { ArrowDown, ArrowUp, Edit, Eye, Grip, HelpCircle, Lightbulb, Plus, Search, Star, Trash2 } from "lucide-react"
-import { motion } from "motion/react"
-import { useMemo, useState } from "react"
 import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
 import { useUserStore } from "@/stores/auth-store"
+import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
+import { ArrowDown, ArrowUp, Edit, Eye, HelpCircle, Lightbulb, Plus, Search, Star, Trash2 } from "lucide-react"
+import { motion } from "motion/react"
+import { useMemo, useState } from "react"
 
 // Animation variants
 const container = {
@@ -793,9 +793,9 @@ export default function FAQPage() {
                                                             key={faq.id}
                                                             className="flex items-start gap-3 rounded-lg border bg-white/90 p-4 backdrop-blur-sm transition-all hover:shadow-md hover:scale-[1.01]"
                                                         >
-                                                            <div className="mt-1 flex-shrink-0 cursor-move">
+                                                            {/* <div className="mt-1 flex-shrink-0 cursor-move">
                                                                 <Grip className="h-4 w-4 text-slate-400" />
-                                                            </div>
+                                                            </div> */}
 
                                                             <div className="min-w-0 flex-grow">
                                                                 <div className="mb-2 flex items-center gap-2">

@@ -656,14 +656,16 @@ export default function DashboardPage() {
                                     <p className="text-xs text-center text-neutral-500">You don&apos;t have any yet.</p>
                                 )}
                                 {!activityLoading &&
-                                    activityData?.activity.map((item, i) => (
-                                        <div key={i} className="text-sm text-slate-700 border-b py-1 last:border-none">
-                                            {item.message}
-                                            <div className="text-xs text-slate-400">
-                                                {new Date(item.createdAt).toLocaleString()}
+                                    activityData?.activity
+                                        .slice(0, 5) // show only the first 5
+                                        .map((item, i) => (
+                                            <div key={i} className="text-sm text-slate-700 border-b py-1 last:border-none">
+                                                {item.message}
+                                                <div className="text-xs text-slate-400">
+                                                    {new Date(item.createdAt).toLocaleString()}
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
                             </div>
 
                         </CardContent>

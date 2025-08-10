@@ -5,11 +5,17 @@ import { z } from "zod"
 const updateSocialSchema = z.object({
     instagram: z.string().url("Invalid Instagram URL").optional().or(z.literal("")),
     facebook: z.string().url("Invalid Facebook URL").optional().or(z.literal("")),
-    whatsapp: z
+    tiktok: z
         .string()
-        .regex(/^\+[1-9]\d{1,14}$/, "Invalid WhatsApp number format")
+        .regex(/^@?[A-Za-z0-9._]{2,24}$/, {
+            message: "Invalid TikTok username",
+        })
         .optional()
-        .or(z.literal("")),
+        .or(z.literal("")), whatsapp: z
+            .string()
+            .regex(/^\+[1-9]\d{1,14}$/, "Invalid WhatsApp number format")
+            .optional()
+            .or(z.literal("")),
     social_icons_position: z.enum(["top", "bottom"]).optional(),
 })
 
@@ -35,6 +41,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             instagram: validatedData.instagram || null,
             facebook: validatedData.facebook || null,
             whatsapp: validatedData.whatsapp || null,
+            tiktok: validatedData.tiktok || null,
             social_icons_position: validatedData.social_icons_position || "top",
         }
 

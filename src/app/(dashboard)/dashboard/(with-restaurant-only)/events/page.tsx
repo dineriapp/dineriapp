@@ -31,7 +31,7 @@ import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import type { Event, SubscriptionPlan } from "@prisma/client"
-import { ArrowDown, ArrowUp, Calendar, Edit, ExternalLink, Grip, Plus, Search, Trash2 } from "lucide-react"
+import { ArrowDown, ArrowUp, Calendar, Edit, ExternalLink, Plus, Search, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import type React from "react"
 import { useState } from "react"
@@ -337,9 +337,9 @@ export default function EventsPage() {
                                                 key={event.id}
                                                 className="flex items-center gap-3 rounded-lg border bg-white/80 p-4 backdrop-blur-sm transition-shadow hover:shadow-md"
                                             >
-                                                <div className="flex-shrink-0 cursor-move">
+                                                {/* <div className="flex-shrink-0 cursor-move">
                                                     <Grip className="h-5 w-5 text-muted-foreground" />
-                                                </div>
+                                                </div> */}
 
                                                 <div className="min-w-0 flex-grow">
                                                     <div className="flex items-center gap-2">

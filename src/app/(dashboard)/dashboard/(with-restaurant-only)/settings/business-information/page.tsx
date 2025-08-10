@@ -5,13 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { AlertCircle, Building2, Globe, ImageIcon, RotateCcw, Save } from "lucide-react"
+import { useRestaurantStore } from "@/stores/restaurant-store"
+import { uploadImage } from "@/supabase/clients/client"
+import { AlertCircle, Building2, Globe, RotateCcw, Save } from "lucide-react"
 import { motion } from "motion/react"
+import Image from "next/image"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { useRestaurantStore } from "@/stores/restaurant-store"
 import { z } from "zod"
-import Image from "next/image"
 
 // Validation schemas
 const nameSchema = z
@@ -45,6 +46,7 @@ interface BusinessFormData {
 
 export default function BusinessInformationPage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
+    const [uploadingLogo, setUploadingLogo] = useState(false);
 
     // Form state
     const [formData, setFormData] = useState<BusinessFormData>({
@@ -131,10 +133,30 @@ export default function BusinessInformationPage() {
 
     const handleLogoUrlChange = (value: string) => {
         setFormData((prev) => ({ ...prev, logo_url: value }))
-
         // Clear logo URL error when user starts typing
         if (errors.logo_url) {
             setErrors((prev) => ({ ...prev, logo_url: undefined }))
+        }
+    }
+
+    async function handleLogoFileChange(file?: File) {
+        if (!file) return;
+        // optional: quick client validation
+        if (!file.type.startsWith("image/")) {
+            setErrors((p) => ({ ...p, logo_url: "Please choose an image file" }));
+            return;
+        }
+        setErrors((p) => ({ ...p, logo_url: undefined }));
+        setUploadingLogo(true);
+        try {
+            const uploadedUrl = await uploadImage(file); // <- your existing uploader
+            if (uploadedUrl) handleLogoUrlChange(uploadedUrl); // reuse same updater
+
+        } catch (e) {
+            console.log(e)
+            setErrors((p) => ({ ...p, logo_url: "Upload failed. Try again." }));
+        } finally {
+            setUploadingLogo(false);
         }
     }
 
@@ -354,21 +376,21 @@ export default function BusinessInformationPage() {
 
                     {/* Logo URL */}
                     <div className="space-y-2">
-                        <Label htmlFor="logo_url">Logo URL</Label>
+                        <Label htmlFor="logo_url">Logo </Label>
                         <div className="relative">
-                            <ImageIcon className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
                             <Input
-                                id="logo_url"
-                                type="url"
-                                value={formData.logo_url}
-                                onChange={(e) => handleLogoUrlChange(e.target.value)}
-                                placeholder="https://example.com/logo.png"
-                                className={`pl-10 focus:border-emerald-500 focus:ring-emerald-500 ${errors.logo_url ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
-                                    }`}
+                                id="logo_file"
+                                type="file"
+                                accept="image/*"
+                                disabled={saving || uploadingLogo}
+                                onChange={(e) => handleLogoFileChange(e.target.files?.[0])}
+                            // className={`file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-emerald-50 file:text-emerald-700 file:hover:bg-emerald-100 ${errors.logo_url ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-slate-200"
+                            //     }`}
                             />
+                            {uploadingLogo && (
+                                <span className="absolute right-3 top-3 text-xs text-slate-500">Uploading…</span>
+                            )}
                         </div>
-                        {errors.logo_url && <p className="text-sm text-red-600">{errors.logo_url}</p>}
-                        <p className="text-xs text-gray-500">Optional: Direct link to your restaurant&apos;s logo image</p>
 
                         {/* Logo Preview */}
                         {formData.logo_url && !errors.logo_url && (

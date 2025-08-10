@@ -10,10 +10,12 @@ import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { useRestaurantStore } from "@/stores/restaurant-store"
+import { FaTiktok } from "react-icons/fa";
 
 interface SocialFormData {
   instagram: string
   facebook: string
+  tiktok: string
   whatsapp: string
   social_icons_position: "top" | "bottom"
 }
@@ -24,6 +26,7 @@ export default function SocialPage() {
   const [formData, setFormData] = useState<SocialFormData>({
     instagram: "",
     facebook: "",
+    tiktok: "",
     whatsapp: "",
     social_icons_position: "top",
   })
@@ -32,6 +35,7 @@ export default function SocialPage() {
     instagram: "",
     facebook: "",
     whatsapp: "",
+    tiktok: "",
     social_icons_position: "top",
   })
 
@@ -45,6 +49,7 @@ export default function SocialPage() {
         instagram: selectedRestaurant.instagram || "",
         facebook: selectedRestaurant.facebook || "",
         whatsapp: selectedRestaurant.whatsapp || "",
+        tiktok: selectedRestaurant.tiktok || "",
         social_icons_position: selectedRestaurant.social_icons_position || "top",
       }
       setFormData(data)
@@ -277,6 +282,40 @@ export default function SocialPage() {
             )}
             <p className="text-xs text-muted-foreground">
               Enter your WhatsApp number with country code (e.g., +1234567890)
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="tiktok">TikTok Username</Label>
+            <div className="relative">
+              {/* Replace with a TikTok icon SVG or component */}
+              <FaTiktok className="absolute left-3 top-3 h-4 w-4" />
+              <Input
+                id="tiktok"
+                value={formData.tiktok}
+                onChange={(e) => {
+                  let value = e.target.value;
+                  // Always ensure it starts with "@"
+                  if (value && !value.startsWith("@")) {
+                    value = "@" + value;
+                  }
+                  handleInputChange("tiktok", value);
+                }}
+                placeholder="@username"
+                className={`pl-10 focus:border-pink-500 focus:ring-pink-500 ${errors.tiktok
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                  : ""
+                  }`}
+              />
+            </div>
+            {errors.tiktok && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <AlertCircle className="h-3 w-3" />
+                {errors.tiktok}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              Enter your TikTok username starting with @ (e.g., @myrestaurant)
             </p>
           </div>
 

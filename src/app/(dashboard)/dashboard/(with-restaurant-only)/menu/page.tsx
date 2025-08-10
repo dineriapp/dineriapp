@@ -13,6 +13,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -27,8 +28,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { MenuCategory, MenuItem, SubscriptionPlan } from "@prisma/client"
 import {
     useCreateCategory,
     useCreateItem,
@@ -40,17 +41,16 @@ import {
     useUpdateCategory,
     useUpdateItem,
 } from "@/lib/menu-queries"
+import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
-import { AlertTriangle, ArrowDown, ArrowUp, Edit, Grip, Leaf, Plus, Search, Trash2, X } from "lucide-react"
+import { uploadImage } from "@/supabase/clients/client"
+import { MenuCategory, MenuItem, SubscriptionPlan } from "@prisma/client"
+import { AlertTriangle, ArrowDown, ArrowUp, Edit, Leaf, Plus, Search, Trash2, X } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
-import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
-import { uploadImage } from "@/supabase/clients/client"
 import { toast } from "sonner"
-import { Switch } from "@/components/ui/switch"
-import { Badge } from "@/components/ui/badge"
 
 const container = {
     hidden: { opacity: 0 },
@@ -569,9 +569,9 @@ export default function MenuPage() {
                                                         key={item.id}
                                                         className="flex items-center gap-3 rounded-lg border bg-white/80 p-4 backdrop-blur-sm transition-all hover:shadow-md hover:bg-white/90"
                                                     >
-                                                        <div className="flex-shrink-0 cursor-move">
+                                                        {/* <div className="flex-shrink-0 cursor-move">
                                                             <Grip className="h-5 w-5 text-slate-400" />
-                                                        </div>
+                                                        </div> */}
 
                                                         <div className="min-w-0 flex-grow">
                                                             <div className="flex items-center gap-2 mb-1">

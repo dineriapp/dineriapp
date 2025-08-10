@@ -1,5 +1,5 @@
 "use client"
-import { BarChart, Calendar, Check, ChevronDown, Dot, HelpCircle, Home, Instagram, LinkIcon, Loader2, Palette, Plus, QrCode, Settings, ShoppingCart, Utensils, UtensilsCrossed, Zap } from "lucide-react"
+import { BarChart, Calendar, Check, ChevronDown, Dot, HelpCircle, Home, LinkIcon, Loader2, Palette, Plus, QrCode, Settings, ShoppingCart, Utensils, UtensilsCrossed, Zap } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -43,7 +43,6 @@ const navigationGroups = [
             { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
             { href: "/dashboard/events", label: "Events", icon: Calendar },
             { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
-            { href: "/dashboard/settings/social", label: "Social", icon: Instagram },
             { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
         ],
     },

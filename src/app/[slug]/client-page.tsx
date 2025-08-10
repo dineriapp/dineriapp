@@ -255,16 +255,18 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                     )}
 
                     {restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && (
-                        <motion.div
+                        <motion.a
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.25 }}
+                            target="_blank"
+                            href={`https://search.google.com/local/reviews?placeid=${restaurant.google_place_id}`}
                             className="mb-4"
                         >
                             <GoogleRating info={reviewsInfo}
                                 color={restaurant.headings_text_color || "#000000"}
                                 className="text-white" />
-                        </motion.div>
+                        </motion.a>
                     )}
 
                     {restaurant.bio && (
@@ -297,6 +299,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                     facebook: restaurant.facebook,
                                     instagram: restaurant.facebook,
                                     whatsapp: restaurant.whatsapp,
+                                    tiktok: restaurant.tiktok
                                 }
                             }
                             className="mb-4 sm:mb-8"
@@ -981,13 +984,13 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
                 {/* FAQ Dialog */}
                 <Dialog open={showFAQDialog} onOpenChange={setShowFAQDialog}>
-                    <DialogContent closeIconColor={restaurant.accent_color || "#10b981"} className="max-h-[90vh] no-scroll max-w-[90vw] sm:!max-w-[570px] overflow-y-auto border-transparent" style={{ ...getBackgroundStyle() }}>
+                    <DialogContent className="max-h-[90vh] no-scroll max-w-[90vw] sm:!max-w-[570px] overflow-y-auto border-transparent" >
                         <DialogHeader>
                             <DialogTitle className="flex text-start items-center gap-2">
-                                <HelpCircle className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
-                                <span style={{ color: restaurant.accent_color || "#10b981" }}>Frequently Asked Questions</span>
+                                <HelpCircle />
+                                <span >Frequently Asked Questions</span>
                             </DialogTitle>
-                            <DialogDescription className="text-start" style={{ color: restaurant.accent_color || "#10b981" }}>Find answers to common questions</DialogDescription>
+                            <DialogDescription className="text-start" >Find answers to common questions</DialogDescription>
                         </DialogHeader>
 
                         <div className="py-0">

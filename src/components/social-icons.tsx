@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import type { FC } from "react";
 import { JSX } from "react"
+import { FaTiktok } from "react-icons/fa";
 
 interface SocialLink {
     url: string;
@@ -20,6 +21,7 @@ interface SocialIconsProps {
         instagram?: string | null;
         facebook?: string | null;
         whatsapp?: string | null;
+        tiktok?: string | null;
         email?: string | null;
         address?: string | null;
     };
@@ -58,6 +60,17 @@ const SocialIcons: FC<SocialIconsProps> = ({
         socialLinks.push({
             url: formattedWhatsapp,
             icon: <MessageCircle className="h-6 w-6" />
+        });
+    }
+    if (restaurant.tiktok) {
+        const username = restaurant.tiktok.startsWith("@")
+            ? restaurant.tiktok.slice(1) // remove the @ for the URL
+            : restaurant.tiktok;
+        const formattedTiktok = `https://www.tiktok.com/@${username}`;
+
+        socialLinks.push({
+            url: formattedTiktok,
+            icon: <FaTiktok className="h-6 w-6" />
         });
     }
 

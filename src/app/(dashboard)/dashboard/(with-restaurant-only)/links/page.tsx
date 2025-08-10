@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ALL_ICON_SLUGS, getLucideIconBySlug, type IconSlug } from "@/lib/get-icons"
 import {
     useBulkDeleteLinks,
     useCreateLink,
@@ -35,16 +37,14 @@ import {
     useReorderLink,
     useUpdateLink,
 } from "@/lib/link-queries"
+import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
-import { ArrowDown, ArrowUp, Edit, Grip, Plus, Trash2 } from "lucide-react"
+import { SubscriptionPlan } from "@prisma/client"
+import { ArrowDown, ArrowUp, Edit, Plus, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
-import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
-import { SubscriptionPlan } from "@prisma/client"
-import { ALL_ICON_SLUGS, getLucideIconBySlug, type IconSlug } from "@/lib/get-icons"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 
 export default function LinksPage() {
@@ -372,10 +372,10 @@ export default function LinksPage() {
                                                     onCheckedChange={() => toggleLinkSelection(link.id)}
                                                     aria-label={`Select ${link.title}`}
                                                 />
-
+                                                {/* 
                                                 <div className="flex-shrink-0 cursor-move">
                                                     <Grip className="h-5 w-5 text-slate-400" />
-                                                </div>
+                                                </div> */}
 
                                                 <div className="min-w-0 flex-grow">
                                                     <div className="flex items-center gap-2">
@@ -550,3 +550,5 @@ export default function LinksPage() {
         </>
     )
 }
+
+

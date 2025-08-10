@@ -12,11 +12,19 @@ import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { signup } from "../../../actions/auth"
+import { Checkbox } from "@/components/ui/checkbox"
 
 const SignupSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
     password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-})
+    confirmPassword: z.string().min(8, { message: "Confirm Password must be at least 8 characters" }),
+    agree: z.boolean().refine((val) => val === true, {
+        message: "You must agree to the Privacy Notice and T&Cs",
+    }),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+});
 
 type SignupFormData = z.infer<typeof SignupSchema>
 
@@ -27,6 +35,8 @@ export default function SignupPage() {
 
     const {
         register,
+        setValue,
+        watch,
         handleSubmit,
         formState: { errors },
     } = useForm<SignupFormData>({
@@ -58,8 +68,8 @@ export default function SignupPage() {
         <
             >
             <div className="mb-4">
-                <h1 className="text-3xl font-bold tracking-tight text-slate-900">Create your account</h1>
-                <p className="mt-2 text-slate-600">Sign up for dineri.app to start building your restaurant&apos;s online presence.</p>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900">Create your account</h1>
+                <p className="mt-2 text-sm text-slate-600">Sign up for dineri.app to start building your restaurant&apos;s online presence.</p>
             </div>
             {error && (
                 <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600">
@@ -103,6 +113,40 @@ export default function SignupPage() {
                     {errors.password && <p className="text-xs text-red-600">{errors.password.message}</p>}
                 </div>
 
+                <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <div className="relative flex items-center justify-center">
+                        <Input
+                            id="confirmPassword"
+                            type="password"
+                            placeholder="••••••••"
+                            className="pl-10 h-[44px]"
+                            autoComplete="new-password"
+                            disabled={isPending}
+                            {...register("confirmPassword")}
+                        />
+                        <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                    </div>
+                    {errors.confirmPassword && (
+                        <p className="text-xs text-red-600">{errors.confirmPassword.message}</p>
+                    )}
+                </div>
+
+                <div className="flex items-center space-x-2">
+                    <Checkbox
+                        id="agree"
+                        checked={watch("agree")}
+                        onCheckedChange={(checked: boolean) => setValue("agree", checked)}
+                        disabled={isPending}
+                    />
+                    <Label htmlFor="agree" className="text-xs font-normal">
+                        By clicking Continue, you agree toDineri.app privacy notice and T&amp;Cs.
+                    </Label>
+                </div>
+                {errors.agree && (
+                    <p className="text-xs text-red-600">{errors.agree.message}</p>
+                )}
+
                 <Button
                     type="submit"
                     className="w-full bg-gradient-to-r h-[44px] from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
@@ -113,7 +157,7 @@ export default function SignupPage() {
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account...
                         </>
                     ) : (
-                        "Create account"
+                        "Continue"
                     )}
                 </Button>
             </form>

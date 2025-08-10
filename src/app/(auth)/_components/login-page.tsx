@@ -61,8 +61,8 @@ export default function LoginPage() {
     return (
         <>
             <div className="mb-4">
-                <h1 className="text-3xl font-bold tracking-tight text-slate-900">Welcome back</h1>
-                <p className="mt-2 text-slate-600">Log in to your dineri.app account to manage your restaurant&apos;s online presence.</p>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900">Welcome back</h1>
+                <p className="mt-2 text-sm text-slate-600">Log in to your dineri.app account to manage your restaurant&apos;s online presence.</p>
             </div>
             {error && (
                 <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600">
