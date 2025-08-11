@@ -118,7 +118,7 @@ export default async function RestaurantPage({ params }: PageProps) {
             }
         }
 
-
+        // @ts-expect-error due to types 
         return <ClientPage restaurant={restaurant as RestaurantWithRelations} reviewsInfo={reviewsData} />
     } catch (error) {
         console.error("Error fetching restaurant data:", error)
