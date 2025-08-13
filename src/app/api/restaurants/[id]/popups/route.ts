@@ -15,6 +15,18 @@ const updatePopupsSchema = z.object({
             phone: z.boolean(),
         })
         .optional(),
+    menu_popup_enabled: z.boolean().optional(),
+    menu_popup_message: z.string().max(200, "Message too long").optional(),
+    menu_popup_delay: z.number().min(1).max(10).optional(),
+    menu_popup_show_button: z.boolean().optional(),
+    menu_popup_show_info: z
+        .object({
+            ratings: z.boolean(),
+            address: z.boolean(),
+            hours: z.boolean(),
+            phone: z.boolean(),
+        })
+        .optional(),
     event_announcements_enabled: z.boolean().optional(),
     event_announcement_days: z.number().min(1).max(365).optional(),
     max_events_in_popup: z.number().min(1).max(10).optional(),
@@ -55,6 +67,21 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         }
         if (validatedData.welcome_popup_show_info !== undefined) {
             updateData.welcome_popup_show_info = validatedData.welcome_popup_show_info
+        }
+        if (validatedData.menu_popup_enabled !== undefined) {
+            updateData.menu_popup_enabled = validatedData.menu_popup_enabled
+        }
+        if (validatedData.menu_popup_message !== undefined) {
+            updateData.menu_popup_message = validatedData.menu_popup_message
+        }
+        if (validatedData.menu_popup_delay !== undefined) {
+            updateData.menu_popup_delay = validatedData.menu_popup_delay
+        }
+        if (validatedData.menu_popup_show_button !== undefined) {
+            updateData.menu_popup_show_button = validatedData.menu_popup_show_button
+        }
+        if (validatedData.menu_popup_show_info !== undefined) {
+            updateData.menu_popup_show_info = validatedData.menu_popup_show_info
         }
         if (validatedData.event_announcements_enabled !== undefined) {
             updateData.event_announcements_enabled = validatedData.event_announcements_enabled

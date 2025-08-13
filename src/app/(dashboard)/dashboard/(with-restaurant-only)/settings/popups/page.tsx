@@ -36,6 +36,16 @@ interface PopupFormData {
         hours: boolean
         phone: boolean
     }
+    menu_popup_enabled: boolean
+    menu_popup_message: string
+    menu_popup_delay: number
+    menu_popup_show_button: boolean
+    menu_popup_show_info: {
+        ratings: boolean
+        address: boolean
+        hours: boolean
+        phone: boolean
+    }
     event_announcements_enabled: boolean
     event_announcement_days: number
     max_events_in_popup: number
@@ -51,6 +61,16 @@ export default function PopupsPage() {
         welcome_popup_delay: 2,
         welcome_popup_show_button: true,
         welcome_popup_show_info: {
+            ratings: true,
+            address: true,
+            hours: true,
+            phone: true,
+        },
+        menu_popup_enabled: true,
+        menu_popup_message: "Welcome! We're excited to have you visit us.",
+        menu_popup_delay: 2,
+        menu_popup_show_button: true,
+        menu_popup_show_info: {
             ratings: true,
             address: true,
             hours: true,
@@ -73,6 +93,11 @@ export default function PopupsPage() {
                     ? JSON.parse(selectedRestaurant.welcome_popup_show_info)
                     : selectedRestaurant.welcome_popup_show_info
                 : { ratings: true, address: true, hours: true, phone: true }
+            const menuPopupShowInfo = selectedRestaurant.menu_popup_show_info
+                ? typeof selectedRestaurant.menu_popup_show_info === "string"
+                    ? JSON.parse(selectedRestaurant.menu_popup_show_info)
+                    : selectedRestaurant.menu_popup_show_info
+                : { ratings: true, address: true, hours: true, phone: true }
 
             const data: PopupFormData = {
                 welcome_popup_enabled: selectedRestaurant.welcome_popup_enabled ?? true,
@@ -81,6 +106,12 @@ export default function PopupsPage() {
                 welcome_popup_delay: selectedRestaurant.welcome_popup_delay || 2,
                 welcome_popup_show_button: selectedRestaurant.welcome_popup_show_button ?? true,
                 welcome_popup_show_info: welcomePopupShowInfo,
+                menu_popup_enabled: selectedRestaurant.menu_popup_enabled ?? true,
+                menu_popup_message:
+                    selectedRestaurant.menu_popup_message || "Welcome! We're excited to have you visit us.",
+                menu_popup_delay: selectedRestaurant.menu_popup_delay || 2,
+                menu_popup_show_button: selectedRestaurant.menu_popup_show_button ?? true,
+                menu_popup_show_info: menuPopupShowInfo,
                 event_announcements_enabled: selectedRestaurant.event_announcements_enabled ?? true,
                 event_announcement_days: selectedRestaurant.event_announcement_days || 30,
                 max_events_in_popup: selectedRestaurant.max_events_in_popup || 3,
@@ -100,6 +131,15 @@ export default function PopupsPage() {
             ...prev,
             welcome_popup_show_info: {
                 ...prev.welcome_popup_show_info,
+                [key]: value,
+            },
+        }))
+    }
+    const handlePopupInfoChangeMenu = (key: keyof typeof formData.menu_popup_show_info, value: boolean) => {
+        setFormData((prev) => ({
+            ...prev,
+            menu_popup_show_info: {
+                ...prev.menu_popup_show_info,
                 [key]: value,
             },
         }))
@@ -185,7 +225,7 @@ export default function PopupsPage() {
                     <CardHeader className="bg-gray-50/50">
                         <CardTitle className="flex items-center gap-2 text-gray-900">
                             <Zap className="h-5 w-5 text-emerald-600" />
-                            Welcome Popup
+                            Welcome Popup Restaurent Page
                         </CardTitle>
                         <CardDescription>Show a welcome message to first-time visitors</CardDescription>
                     </CardHeader>
@@ -370,6 +410,211 @@ export default function PopupsPage() {
                                                     )}
                                                 </div>
                                                 {formData.welcome_popup_show_button && (
+                                                    <Button size="sm" className="mt-4 bg-emerald-600 hover:bg-emerald-700">
+                                                        Explore
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        This is how your welcome popup will appear to visitors
+                                    </p>
+                                </div>
+                            </>
+                        )}
+                    </CardContent>
+                </Card>
+
+                <Card className="shadow-sm border-gray-200">
+                    <CardHeader className="bg-gray-50/50">
+                        <CardTitle className="flex items-center gap-2 text-gray-900">
+                            <Zap className="h-5 w-5 text-emerald-600" />
+                            Welcome Popup Menu Page
+                        </CardTitle>
+                        <CardDescription>Show a welcome message to first-time visitors</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6 pt-6">
+                        {/* Enable/Disable Toggle */}
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-0.5">
+                                <Label className="text-base">Enable Welcome Popup</Label>
+                                <p className="text-sm text-muted-foreground">Show a welcome popup to new visitors</p>
+                            </div>
+                            <Switch
+                                checked={formData.menu_popup_enabled}
+                                onCheckedChange={(checked) => {
+                                    setFormData((prev) => ({ ...prev, menu_popup_enabled: checked }))
+                                }}
+                            />
+                        </div>
+
+                        {formData.menu_popup_enabled && (
+                            <>
+                                {/* Custom Message */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="popup-message" className="flex items-center gap-2">
+                                        <MessageSquare className="h-4 w-4" />
+                                        Welcome Message
+                                    </Label>
+                                    <Textarea
+                                        id="popup-message"
+                                        value={formData.menu_popup_message}
+                                        onChange={(e) => {
+                                            setFormData((prev) => ({ ...prev, menu_popup_message: e.target.value }))
+                                        }}
+                                        placeholder="Welcome! We're excited to have you visit us."
+                                        rows={3}
+                                        maxLength={200}
+                                        className="focus:border-emerald-500 focus:ring-emerald-500"
+                                    />
+                                    <div className="text-right text-xs text-muted-foreground">
+                                        {formData.menu_popup_message.length}/200 characters
+                                    </div>
+                                </div>
+
+                                {/* Timing Control */}
+                                <div className="space-y-2">
+                                    <Label className="flex items-center gap-2">
+                                        <Timer className="h-4 w-4" />
+                                        Show Delay
+                                    </Label>
+                                    <Select
+                                        value={formData.menu_popup_delay.toString()}
+                                        onValueChange={(value) => {
+                                            setFormData((prev) => ({ ...prev, menu_popup_delay: Number.parseInt(value) }))
+                                        }}
+                                    >
+                                        <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((seconds) => (
+                                                <SelectItem key={seconds} value={seconds.toString()}>
+                                                    {seconds} second{seconds > 1 ? "s" : ""}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <p className="text-xs text-muted-foreground">How long to wait before showing the popup</p>
+                                </div>
+
+                                {/* Show Button Toggle */}
+                                <div className="flex items-center justify-between">
+                                    <div className="space-y-0.5">
+                                        <Label className="text-base">Show Action Button</Label>
+                                        <p className="text-sm text-muted-foreground">Display the &quot;Explore&quot; button in the popup</p>
+                                    </div>
+                                    <Switch
+                                        checked={formData.menu_popup_show_button}
+                                        onCheckedChange={(checked) => {
+                                            setFormData((prev) => ({ ...prev, menu_popup_show_button: checked }))
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Information Display Options */}
+                                <div className="space-y-4">
+                                    <Label className="text-base">Show Information</Label>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="flex items-center space-x-2">
+                                            <Switch
+                                                id="show-ratings"
+                                                checked={formData.menu_popup_show_info.ratings}
+                                                onCheckedChange={(checked) => handlePopupInfoChangeMenu("ratings", checked)}
+                                            />
+                                            <Label htmlFor="show-ratings" className="flex items-center gap-2">
+                                                <Star className="h-4 w-4" />
+                                                Ratings
+                                            </Label>
+                                        </div>
+
+                                        <div className="flex items-center space-x-2">
+                                            <Switch
+                                                id="show-address"
+                                                checked={formData.menu_popup_show_info.address}
+                                                onCheckedChange={(checked) => handlePopupInfoChangeMenu("address", checked)}
+                                            />
+                                            <Label htmlFor="show-address" className="flex items-center gap-2">
+                                                <MapPinIcon className="h-4 w-4" />
+                                                Address
+                                            </Label>
+                                        </div>
+
+                                        <div className="flex items-center space-x-2">
+                                            <Switch
+                                                id="show-hours"
+                                                checked={formData.menu_popup_show_info.hours}
+                                                onCheckedChange={(checked) => handlePopupInfoChangeMenu("hours", checked)}
+                                            />
+                                            <Label htmlFor="show-hours" className="flex items-center gap-2">
+                                                <Clock className="h-4 w-4" />
+                                                Opening Hours
+                                            </Label>
+                                        </div>
+
+                                        <div className="flex items-center space-x-2">
+                                            <Switch
+                                                id="show-phone"
+                                                checked={formData.menu_popup_show_info.phone}
+                                                onCheckedChange={(checked) => handlePopupInfoChangeMenu("phone", checked)}
+                                            />
+                                            <Label htmlFor="show-phone" className="flex items-center gap-2">
+                                                <Phone className="h-4 w-4" />
+                                                Phone Number
+                                            </Label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Live Preview */}
+                                <div className="space-y-2">
+                                    <Label className="flex items-center gap-2">
+                                        <Eye className="h-4 w-4" />
+                                        Preview
+                                    </Label>
+                                    <div className="rounded-lg border bg-muted/50 p-4">
+                                        <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-lg">
+                                            <div className="p-6 text-center">
+                                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600">
+                                                    <span className="text-2xl font-bold text-white">
+                                                        {selectedRestaurant?.name?.charAt(0) || "R"}
+                                                    </span>
+                                                </div>
+                                                <h3 className="mb-2 text-lg font-bold">
+                                                    Welcome to {selectedRestaurant?.name || "Your Restaurant"}!
+                                                </h3>
+                                                <p className="mb-4 text-sm text-gray-600">{formData.menu_popup_message}</p>
+                                                <div className="space-y-2 text-xs text-gray-500">
+                                                    {formData.menu_popup_show_info.ratings && selectedRestaurant?.average_rating && (
+                                                        <div className="flex items-center justify-center gap-1">
+                                                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                                                            <span>
+                                                                {selectedRestaurant.average_rating.toFixed(1)} ({selectedRestaurant.review_count}{" "}
+                                                                reviews)
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                    {formData.menu_popup_show_info.address && selectedRestaurant?.address && (
+                                                        <div className="flex items-center justify-center gap-1">
+                                                            <MapPinIcon className="h-3 w-3" />
+                                                            <span>{selectedRestaurant.address.split(",")[0]}</span>
+                                                        </div>
+                                                    )}
+                                                    {formData.menu_popup_show_info.hours && (
+                                                        <div className="flex items-center justify-center gap-1">
+                                                            <Clock className="h-3 w-3" />
+                                                            <span>Open Today</span>
+                                                        </div>
+                                                    )}
+                                                    {formData.menu_popup_show_info.phone && selectedRestaurant?.phone && (
+                                                        <div className="flex items-center justify-center gap-1">
+                                                            <Phone className="h-3 w-3" />
+                                                            <span>{selectedRestaurant.phone}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                {formData.menu_popup_show_button && (
                                                     <Button size="sm" className="mt-4 bg-emerald-600 hover:bg-emerald-700">
                                                         Explore
                                                     </Button>

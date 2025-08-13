@@ -1,23 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import type { Restaurant, MenuCategory, MenuItem, User } from "@prisma/client";
-import { MenuHeader } from "./menu-header";
-import { CategoryButtons } from "./category-buttons";
-import { MenuItems } from "./menu-items";
-import { CartDrawer } from "./cart-drawer";
-import { useCartStore } from "@/stores/cart-store";
-import ResturantHeader from "./resturant-header";
-import { Info, MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion } from "motion/react"
-import { OpeningHoursData, ReviewsInfo, StylesDataType } from "@/types";
-import { GoogleRating } from "../../_components/google-rating";
-import RestaurantCustomizer from "./restaurent-customizer";
-import { WelcomePopup } from "../../_components/welcome-popup";
-import { OpeningHoursStatus } from "../../_components/opening-hours-status";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useCartStore } from "@/stores/cart-store";
+import { OpeningHoursData, ReviewsInfo, StylesDataType } from "@/types";
+import type { MenuCategory, MenuItem, Restaurant, User } from "@prisma/client";
+import { Info, MapPin, Search } from "lucide-react";
+import { motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { GoogleRating } from "../../_components/google-rating";
+import { OpeningHoursStatus } from "../../_components/opening-hours-status";
+import { CartDrawer } from "./cart-drawer";
+import { CategoryButtons } from "./category-buttons";
+import { MenuHeader } from "./menu-header";
+import { MenuItems } from "./menu-items";
+import { WelcomePopupMenu } from "./menu-welocome-popup";
 import { RestaurantInfoDialog } from "./restaurant-info-dialog";
+import RestaurantCustomizer from "./restaurent-customizer";
+import ResturantHeader from "./resturant-header";
 
 type RestaurantWithMenu = Restaurant & {
   user: User
@@ -42,16 +42,16 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
     // Show welcome popup after component mounts
     const timer = setTimeout(
       () => {
-        const dismissed = localStorage.getItem(`welcome-popup-${restaurant.slug}`)
-        if (!dismissed && restaurant.welcome_popup_enabled) {
+        const dismissed = localStorage.getItem(`menu-popup-${restaurant.slug}`)
+        if (!dismissed && restaurant.menu_popup_enabled) {
           setShowWelcomePopup(true)
         }
       },
-      (restaurant.welcome_popup_delay || 2) * 1000,
+      (restaurant.menu_popup_delay || 2) * 1000,
     )
 
     return () => clearTimeout(timer)
-  }, [restaurant.slug, restaurant.welcome_popup_enabled, restaurant.welcome_popup_delay])
+  }, [restaurant.slug, restaurant.menu_popup_enabled, restaurant.menu_popup_delay])
 
   const [stylesData, setStylesData] = useState<StylesDataType>({
     background: {
@@ -138,8 +138,8 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
 
   const filteredItems = getFilteredItems();
 
-  const welcomePopupShowInfo = restaurant.welcome_popup_show_info
-    ? (restaurant.welcome_popup_show_info as { ratings: boolean; address: boolean; hours: boolean; phone: boolean })
+  const welcomePopupShowInfo = restaurant.menu_popup_show_info
+    ? (restaurant.menu_popup_show_info as { ratings: boolean; address: boolean; hours: boolean; phone: boolean })
     : { ratings: true, address: true, hours: true, phone: true }
 
   const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : null
@@ -295,7 +295,7 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
           onClose={() => setIsCartOpen(false)}
         />
         {/* Welcome Popup */}
-        <WelcomePopup
+        <WelcomePopupMenu
           // @ts-expect-error due to types 
           restaurant={restaurant}
           isOpen={showWelcomePopup}

@@ -11,17 +11,18 @@ import { toast } from "sonner"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 
 // Generate time slots for the select dropdowns (30-minute intervals)
-const timeSlots = Array.from({ length: 48 }, (_, i) => {
-    const hour = Math.floor(i / 2)
-    const minute = i % 2 === 0 ? "00" : "30"
-    const date = new Date()
-    date.setHours(hour, Number.parseInt(minute), 0, 0)
-    return {
-        value: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        label: date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
-    }
-})
+const fmt = new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+});
 
+const timeSlots = Array.from({ length: 48 }, (_, i) => {
+    const date = new Date();
+    date.setHours(Math.floor(i / 2), i % 2 === 0 ? 0 : 30, 0, 0);
+    const str = fmt.format(date);
+    return { value: str, label: str };
+});
 interface DayHours {
     day: string
     open: string
