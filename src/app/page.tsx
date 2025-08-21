@@ -1,19 +1,20 @@
-
-import ContactInfo from "@/components/pages/home/contact-info"
-import CtaSection from "@/components/pages/home/cta-section"
-import FaqSection from "@/components/pages/home/faq-section"
-import FeaturesSection from "@/components/pages/home/features-section"
-import HeroSection from "@/components/pages/home/hero-section"
-import HowItWorks from "@/components/pages/home/how-it-works"
-import PricingSection from "@/components/pages/home/pricing"
-import Testimonialssection from "@/components/pages/home/testimonials-section"
-import TrustedBy from "@/components/pages/home/trusted-by"
-import { Footer } from "@/components/shared/footer"
-import { Header } from "@/components/shared/header"
+import ContactInfo from "@/components/pages/home/contact-info";
+import CtaSection from "@/components/pages/home/cta-section";
+import FaqSection from "@/components/pages/home/faq-section";
+import FeaturesSection from "@/components/pages/home/features-section";
+import HeroSection from "@/components/pages/home/hero-section";
+import HowItWorks from "@/components/pages/home/how-it-works";
+import PricingSection from "@/components/pages/home/pricing";
+// import Testimonialssection from "@/components/pages/home/testimonials-section";
+import TrustedBy from "@/components/pages/home/trusted-by";
+import { Footer } from "@/components/shared/footer";
+import { Header } from "@/components/shared/header";
+import TopBar from "@/components/shared/top-bar";
 
 export default function Home() {
   return (
     <>
+      <TopBar />
       <Header />
       <main>
         {/* Hero Section */}
@@ -25,7 +26,7 @@ export default function Home() {
         {/* How It Works Section */}
         <HowItWorks />
         {/* Testimonials Section */}
-        <Testimonialssection />
+        {/* <Testimonialssection /> */}
         {/* Pricing Section  */}
         <PricingSection />
         {/* FAQ Section */}
@@ -37,5 +38,5 @@ export default function Home() {
       </main>
       <Footer />
     </>
-  )
+  );
 }
