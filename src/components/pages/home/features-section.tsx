@@ -50,24 +50,8 @@ const features = [
 const FeaturesSection = () => {
   return (
     <section id="features" className="bg-main-background py-14 lg:py-24">
-      <div className="max-w-[1200px] mx-auto px-4 flex items-center gap-10">
-        <div className="grid gap-4 lg:gap-8 md:grid-cols-2 lg:grid-cols-3 w-1/2">
-          {features.map((feature, index) => (
-            <div key={index}>
-              <h3>{feature.title}</h3>
-              <p>{feature.description}</p>
-            </div>
-          ))}
-          {/* {features.map((feature, index) => (
-            <FeatureCard
-              key={index}
-              icon={feature.icon}
-              title={feature.title}
-              description={feature.description}
-            />
-          ))} */}
-        </div>
-        <div className="mb-10 lg:mb-16 w-1/2 mx-auto text-right">
+      <div className="max-w-[1200px] mx-auto px-4">
+        <div className="mb-10 lg:mb-16 max-w-3xl mx-auto text-center">
           <h2 className="mb-4 text-3xl font-bold text-main md:text-4xl lg:text-5xl">
             Everything you need to{" "}
             <span className="bg-gradient-to-r from-main-action to-main bg-clip-text text-transparent">
@@ -80,36 +64,19 @@ const FeaturesSection = () => {
             performance. No commissions. Just your brand, fully in control.
           </p>
         </div>
+
+        <div className="grid gap-4 lg:gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {features.map((feature, index) => (
+            <FeatureCard
+              key={index}
+              icon={feature.icon}
+              title={feature.title}
+              description={feature.description}
+            />
+          ))}
+        </div>
       </div>
     </section>
-    // <section id="features" className="bg-main-background py-14 lg:py-24">
-    //     <div className="max-w-[1200px] mx-auto px-4">
-    //         <div className="mb-10 lg:mb-16 max-w-3xl mx-auto text-center">
-    //             <h2 className="mb-4 text-3xl font-bold text-main md:text-4xl lg:text-5xl">
-    //                 Everything you need to{" "}
-    //                 <span className="bg-gradient-to-r from-main-action to-main bg-clip-text text-transparent">
-    //                     grow your restaurant
-    //                 </span>
-    //             </h2>
-    //             <p className="text-lg text-main-text">
-    //                 Powerful tools made for restaurants. Create a stunning profile page, share all
-    //                 your links, take direct orders with payments, and track performance. No commissions. Just
-    //                 your brand, fully in control.
-    //             </p>
-    //         </div>
-
-    //         <div className="grid gap-4 lg:gap-8 md:grid-cols-2 lg:grid-cols-3">
-    //             {features.map((feature, index) => (
-    //                 <FeatureCard
-    //                     key={index}
-    //                     icon={feature.icon}
-    //                     title={feature.title}
-    //                     description={feature.description}
-    //                 />
-    //             ))}
-    //         </div>
-    //     </div>
-    // </section>
   );
 };
 

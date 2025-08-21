@@ -100,7 +100,7 @@ const PrivacyPolicy = () => {
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>Right to access your personal data</li>
               <li>Right to rectification of inaccurate data</li>
-              <li>Right to erasure ("right to be forgotten")</li>
+              <li>Right to erasure (&ldquo;right to be forgotten&ldquo;)</li>
               <li>Right to restrict processing</li>
               <li>Right to data portability</li>
               <li>Right to object to processing</li>
@@ -185,8 +185,8 @@ const PrivacyPolicy = () => {
             <p>
               We may update this Privacy Policy from time to time to reflect
               changes in our practices or legal requirements. When we make
-              changes, we will update the "Last updated" date at the top of this
-              page.
+              changes, we will update the &ldquo;Last updated&ldquo; date at the
+              top of this page.
             </p>
             <p>
               Please review this Privacy Policy periodically to stay informed

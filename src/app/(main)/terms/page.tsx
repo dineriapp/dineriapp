@@ -8,10 +8,10 @@ const TermsOfService = () => {
       </h1>
 
       <p className="text-slate-600 mb-6 leading-relaxed">
-        These Terms of Service ("Terms") govern your access to and use of our
-        website and services. By accessing or using our services, you agree to
-        comply with these Terms. If you do not agree to these Terms, you may not
-        access or use our services.
+        These Terms of Service (&ldquo;Terms&ldquo;) govern your access to and
+        use of our website and services. By accessing or using our services, you
+        agree to comply with these Terms. If you do not agree to these Terms,
+        you may not access or use our services.
       </p>
 
       <p className="text-sm text-slate-500 mb-8">
@@ -89,10 +89,10 @@ const TermsOfService = () => {
           </h2>
           <div className="space-y-4 text-slate-600 leading-relaxed">
             <p>
-              The services are provided "as is" without any warranties or
-              guarantees of any kind, either express or implied. We do not
-              guarantee that the services will be error-free, uninterrupted, or
-              secure.
+              The services are provided &ldquo;as is&ldquo; without any
+              warranties or guarantees of any kind, either express or implied.
+              We do not guarantee that the services will be error-free,
+              uninterrupted, or secure.
             </p>
             <p>
               To the fullest extent permitted by law, we shall not be liable for
@@ -122,9 +122,10 @@ const TermsOfService = () => {
           <div className="space-y-4 text-slate-600 leading-relaxed">
             <p>
               We may update these Terms from time to time. When changes are
-              made, we will update the "Last updated" date at the top of this
-              page. Your continued use of the services after the changes take
-              effect constitutes your acceptance of the revised Terms.
+              made, we will update the &ldquo;Last updated&ldquo; date at the
+              top of this page. Your continued use of the services after the
+              changes take effect constitutes your acceptance of the revised
+              Terms.
             </p>
           </div>
         </section>

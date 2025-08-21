@@ -108,14 +108,19 @@ export function Footer() {
                 Legal
               </h3>
               <ul className="space-y-4">
-                {["Terms", "Privacy", "Cookies"].map((item) => (
+                {[
+                  { name: "Terms", path: "/terms" },
+                  { name: "Privacy", path: "/privacy-policy" },
+                  { name: "Cookies", path: "/cookies" },
+                  { name: "Licenses", path: "#licenses" },
+                ].map((item, index) => (
                   // {["Terms", "Privacy", "Cookies", "Licenses"].map((item) => (
-                  <li key={item}>
+                  <li key={index}>
                     <Link
-                      href={`#${item.toLowerCase()}`}
+                      href={`${item.path}`}
                       className="text-white/90 hover:text-main-action"
                     >
-                      {item}
+                      {item.name}
                     </Link>
                   </li>
                 ))}

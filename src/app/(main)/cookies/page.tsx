@@ -68,7 +68,7 @@ const CookiesPolicy = () => {
               <li>
                 <strong>Performance Cookies:</strong> These cookies allow us to
                 measure website performance and track how users interact with
-                the site. This helps us improve our website's content and
+                the site. This helps us improve our website&apos;s content and
                 functionality.
               </li>
               <li>
@@ -118,8 +118,8 @@ const CookiesPolicy = () => {
             <p>
               We may update this Cookies Policy to reflect changes in our
               practices or for other operational, legal, or regulatory reasons.
-              Any changes will be posted on this page, and the "Last updated"
-              date will be revised accordingly.
+              Any changes will be posted on this page, and the &ldquo;Last
+              updated&ldquo; date will be revised accordingly.
             </p>
           </div>
         </section>
