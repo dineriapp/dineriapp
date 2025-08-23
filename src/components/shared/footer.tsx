@@ -90,13 +90,17 @@ export function Footer() {
                 Company
               </h3>
               <ul className="space-y-2">
-                {["About", "Careers", "Help center"].map((item) => (
-                  <li key={`#${item}`}>
+                {[
+                  { name: "About", path: "/about" },
+                  { name: "Careers", path: "/careers" },
+                  { name: "Help Center", path: "/cookies" },
+                ].map((item, index) => (
+                  <li key={index}>
                     <Link
-                      href={`#${item.toLowerCase()}`}
+                      href={`${item.path}`}
                       className="text-white/90 hover:text-main-action"
                     >
-                      {item}
+                      {item.name}
                     </Link>
                   </li>
                 ))}
