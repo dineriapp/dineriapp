@@ -6,12 +6,12 @@ const About = () => {
     <div className="w-11/12 max-w-[1200px] mx-auto   lg:px-4 pb-12 lg:pt-20 pt-5">
       <div className=" flex items-center lg:flex-row flex-col w-full gap-10">
         <div className="lg:w-1/2 w-full">
-          <h1 className="mb-3 md:mb-9 text-[44px] font-bold max-sm:text-center leading-[1.05] tracking-tight text-[#002147] md:text-6xl lg:text-7xl lg:w-9/12">
+          <h1 className="mb-3 md:mb-5 text-[44px] font-bold max-sm:text-center leading-[1.05] tracking-tight text-[#002147] md:text-6xl lg:text-7xl lg:w-9/12">
             <span className="bg-gradient-to-r from-[#2ECC71] to-[#002147] bg-clip-text text-transparent">
               From kitchen to code
             </span>
           </h1>
-          <p className="text-lg text-main-text lg:w-9/12">
+          <p className="text-lg text-main-text lg:w-11/12">
             The idea for Dineri.app was born from years of experience building
             websites for restaurants. During that time, we kept seeing the same
             problem: owners didn’t have the time to update their site, found the

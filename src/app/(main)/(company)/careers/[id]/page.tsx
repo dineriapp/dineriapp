@@ -25,7 +25,7 @@ export default function JobDetailPage({
       <div className="max-w-3xl mx-auto px-6 py-8 text-center">
         <h1 className="text-2xl font-bold text-red-600">Job not found</h1>
         <Link
-          href="/"
+          href="/careers"
           className="text-blue-500 hover:underline mt-4 inline-block"
         >
           ← Back to Jobs
@@ -37,7 +37,7 @@ export default function JobDetailPage({
     <div className="min-h-screen ">
       <div className="max-w-3xl mx-auto px-6 py-8">
         <Link
-          href="/"
+          href="/careers"
           className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />

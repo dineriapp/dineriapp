@@ -100,6 +100,12 @@ export default function JobForm({ id }: { id: number }) {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
+      // This is the key fix - you need to set the value in the form
+      setValue("resume", file, { shouldValidate: true });
+    } else {
+      // Clear the file if no file is selected
+      setSelectedFile(null);
+      setValue("resume", undefined as any, { shouldValidate: true });
     }
   };
 
@@ -187,7 +193,9 @@ export default function JobForm({ id }: { id: number }) {
                         </Label>
                         <Select
                           onValueChange={(value) =>
-                            setValue("experience", value)
+                            setValue("experience", value, {
+                              shouldValidate: true,
+                            })
                           }
                           value={watch("experience")}
                         >
@@ -220,7 +228,9 @@ export default function JobForm({ id }: { id: number }) {
                         </Label>
                         <Select
                           onValueChange={(value) =>
-                            setValue("education", value)
+                            setValue("education", value, {
+                              shouldValidate: true,
+                            })
                           }
                           value={watch("education")}
                         >
@@ -259,7 +269,9 @@ export default function JobForm({ id }: { id: number }) {
                         </Label>
                         <Select
                           onValueChange={(value) =>
-                            setValue("noticePeriod", value)
+                            setValue("noticePeriod", value, {
+                              shouldValidate: true,
+                            })
                           }
                           value={watch("noticePeriod")}
                         >
@@ -294,7 +306,9 @@ export default function JobForm({ id }: { id: number }) {
                         Gender
                       </Label>
                       <Select
-                        onValueChange={(value) => setValue("gender", value)}
+                        onValueChange={(value) =>
+                          setValue("gender", value, { shouldValidate: true })
+                        }
                         value={watch("gender")}
                       >
                         <SelectTrigger
@@ -514,7 +528,7 @@ export default function JobForm({ id }: { id: number }) {
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-blue-600 hover:bg-blue-700 py-5 "
+                        className="w-full bg-blue-600 cursor-pointer hover:bg-blue-700 h-12 "
                       >
                         {isSubmitting ? "Submitting..." : "Submit Application"}
                       </Button>
