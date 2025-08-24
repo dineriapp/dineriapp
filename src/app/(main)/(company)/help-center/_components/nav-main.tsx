@@ -1,11 +1,11 @@
 "use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 
 import {
   Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
+  // CollapsibleContent,
+  // CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
   SidebarGroup,

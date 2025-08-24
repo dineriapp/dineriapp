@@ -80,6 +80,7 @@ export default function SupportForm() {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true);
     setSubmitStatus("idle");
+    console.log(values);
 
     try {
       // Simulate API call
@@ -117,8 +118,8 @@ export default function SupportForm() {
           <CheckCircle2 className="h-4 w-4 text-green-600" />
           <AlertTitle className="text-green-800">Success!</AlertTitle>
           <AlertDescription className="text-green-700">
-            Your support request has been submitted successfully. We'll get back
-            to you soon.
+            Your support request has been submitted successfully. We`&apos;ll
+            get back to you soon.
           </AlertDescription>
         </Alert>
       )}

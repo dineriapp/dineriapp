@@ -6,7 +6,7 @@ import { Code, HelpCircle, Home, Sparkle, X } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
+  // SidebarFooter,
   SidebarHeader,
   SidebarRail,
   SidebarTrigger,

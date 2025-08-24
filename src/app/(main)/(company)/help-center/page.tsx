@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ChevronRight, Code, HelpCircle, Home, Sparkle } from "lucide-react";
 import {
   BarChart,
