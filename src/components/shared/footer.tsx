@@ -93,7 +93,7 @@ export function Footer() {
                 {[
                   { name: "About", path: "/about" },
                   { name: "Careers", path: "/careers" },
-                  { name: "Help Center", path: "/cookies" },
+                  { name: "Help Center", path: "/help-center" },
                 ].map((item, index) => (
                   <li key={index}>
                     <Link

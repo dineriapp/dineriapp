@@ -13,7 +13,7 @@ const features = [
     icon: Globe,
     title: "Beautiful Profile Page",
     description:
-      "CCreate a stunning, mobile-friendly page that reflects your restaurant’s unique vibe and style.",
+      "Create a stunning, mobile-friendly page that reflects your restaurant’s unique vibe and style.",
   },
   {
     icon: MenuIcon,
