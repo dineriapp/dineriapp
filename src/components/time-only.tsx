@@ -44,5 +44,5 @@ export default function TimeOnly({
         return formatTimeOnly(iso, timeZone, locale, compactAmPm);
     }, [iso, timeZone, locale, compactAmPm]);
 
-    return <span className={className}>{txt ?? fallback}</span>;
+    return <span className={className}>{txt ?? fallback}-{txt && timeZone}</span>;
 }

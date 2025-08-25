@@ -2,16 +2,13 @@
 import { Button } from "@/components/ui/button"
 import { OpeningHoursData, RestaurantWithRelations, ReviewsInfo } from "@/types"
 import type { Event } from "@prisma/client"
-import { Calendar, ExternalLink, MapPin, Phone, Star, X } from "lucide-react"
+import { MapPin, Phone, Star, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
-import { useEffect, useState } from "react"
 import { OpeningHoursStatus } from "../../_components/opening-hours-status"
 
 interface WelcomePopupProps {
     restaurant: RestaurantWithRelations
     isOpen: boolean
-    eventsShow?: boolean
-    actionsShow?: boolean
     onClose: () => void
     RatingInfo?: ReviewsInfo;
     upcomingEvents: Event[]
@@ -23,22 +20,7 @@ interface WelcomePopupProps {
     }
 }
 
-export function WelcomePopupMenu({ restaurant, isOpen, eventsShow = true, onClose, actionsShow = true, RatingInfo, upcomingEvents, welcomePopupShowInfo }: WelcomePopupProps) {
-    const [currentEventIndex, setCurrentEventIndex] = useState(0)
-
-    // Auto-rotate through events
-    useEffect(() => {
-        if (eventsShow) {
-            if (upcomingEvents.length <= 1 || !restaurant.event_announcements_enabled) return
-
-            const rotationSpeed = (restaurant.event_rotation_speed || 5) * 1000
-            const interval = setInterval(() => {
-                setCurrentEventIndex((prev) => (prev + 1) % upcomingEvents.length)
-            }, rotationSpeed)
-
-            return () => clearInterval(interval)
-        }
-    }, [upcomingEvents.length, restaurant.event_rotation_speed, restaurant.event_announcements_enabled])
+export function WelcomePopupMenu({ restaurant, isOpen, onClose, RatingInfo, welcomePopupShowInfo }: WelcomePopupProps) {
 
     const handleDontShowAgain = () => {
         localStorage.setItem(`menu-popup-${restaurant.slug}`, "dismissed")
@@ -77,30 +59,7 @@ export function WelcomePopupMenu({ restaurant, isOpen, eventsShow = true, onClos
     const textColor =
         restaurant.headings_text_color || "#000000"
 
-    const currentEvent = upcomingEvents[currentEventIndex]
-    const hasEvents = upcomingEvents.length > 0 && restaurant.event_announcements_enabled !== false
 
-    const formatEventDate = (dateString: string) => {
-        const eventDate = new Date(dateString)
-        const now = new Date()
-        const diffTime = eventDate.getTime() - now.getTime()
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-        if (diffDays === 0) {
-            return "Today"
-        } else if (diffDays === 1) {
-            return "Tomorrow"
-        } else if (diffDays <= 7) {
-            return `In ${diffDays} days`
-        } else {
-            return eventDate.toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-            })
-        }
-    }
-
-    const showButton = restaurant.menu_popup_show_button !== false && !hasEvents
     const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : null
 
     return (
@@ -163,54 +122,15 @@ export function WelcomePopupMenu({ restaurant, isOpen, eventsShow = true, onClos
                                 className="mb-6"
                             >
                                 <h2 className="mb-2 text-2xl font-bold" style={{ color: textColor }}>
-                                    Welcome to {restaurant.name}!
+                                    Welcome to {restaurant.name}! {restaurant.menu_popup_show_button ? "Yes" : "No"}
                                 </h2>
 
                                 {/* Event Announcement or Welcome Message */}
-                                {eventsShow && hasEvents && currentEvent ? (
-                                    <div className="space-y-3">
-                                        <div
-                                            className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium"
-                                            style={{
-                                                backgroundColor: `${restaurant.accent_color || "#10b981"}20`,
-                                                color: restaurant.accent_color || "#10b981",
-                                            }}
-                                        >
-                                            <Calendar className="h-4 w-4" />
-                                            <span>{formatEventDate(currentEvent.date.toISOString())}</span>
-                                        </div>
-
-                                        <h3 className="text-lg font-semibold" style={{ color: textColor }}>
-                                            {currentEvent.title}
-                                        </h3>
-
-                                        {currentEvent.description && (
-                                            <p className="text-sm leading-relaxed opacity-90" style={{ color: textColor }}>
-                                                {currentEvent.description}
-                                            </p>
-                                        )}
-
-                                        {/* Event indicators if multiple events */}
-                                        {upcomingEvents.length > 1 && (
-                                            <div className="mt-3 flex justify-center gap-2">
-                                                {upcomingEvents.map((_, index) => (
-                                                    <button
-                                                        key={index}
-                                                        onClick={() => setCurrentEventIndex(index)}
-                                                        className={`w-2 h-2 rounded-full transition-all ${index === currentEventIndex ? "bg-white scale-125" : "bg-white/50"
-                                                            }`}
-                                                    />
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <p className="text-sm leading-relaxed opacity-90" style={{ color: textColor }}>
-                                        {restaurant.menu_popup_message ||
-                                            restaurant.bio ||
-                                            "Welcome! We're excited to have you visit us."}
-                                    </p>
-                                )}
+                                <p className="text-sm leading-relaxed opacity-90" style={{ color: textColor }}>
+                                    {restaurant.menu_popup_message ||
+                                        restaurant.bio ||
+                                        "Welcome! We're excited to have you visit us."}
+                                </p>
                             </motion.div>
 
                             {/* Restaurant Info */}
@@ -280,48 +200,35 @@ export function WelcomePopupMenu({ restaurant, isOpen, eventsShow = true, onClos
                                 )}
                             </motion.div>
 
-                            {/* Action Buttons */}{actionsShow
-                                &&
-                                <motion.div
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 0.5 }}
-                                    className="space-y-3"
-                                >
-                                    {/* Event Ticket Button */}
-                                    {hasEvents && currentEvent?.ticket_url && (
-                                        <a
-                                            href={currentEvent.ticket_url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mb-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-medium transition-all hover:scale-105"
-                                            style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
-                                        >
-                                            <span>Get Event Tickets</span>
-                                            <ExternalLink className="h-4 w-4" />
-                                        </a>
-                                    )}
+                            {/* Action Buttons */}
+                            {restaurant.menu_popup_show_button && <motion.div
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.5 }}
+                                className="space-y-3"
+                            >
 
-                                    {/* Main Action Button - Only show if enabled AND no events are displayed */}
-                                    {showButton && (
-                                        <Button
-                                            onClick={onClose}
-                                            className="w-full rounded-xl py-3 font-medium transition-all hover:scale-105"
-                                            style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
-                                        >
-                                            Explore
-                                        </Button>
-                                    )}
 
-                                    <button
-                                        onClick={handleDontShowAgain}
-                                        className="text-sm opacity-75 transition-opacity hover:opacity-100"
-                                        style={{ color: textColor }}
+                                {/* Main Action Button - Only show if enabled AND no events are displayed */}
+                                {restaurant.menu_popup_show_button && (
+                                    <Button
+                                        onClick={onClose}
+                                        className="w-full rounded-xl py-3 font-medium transition-all hover:scale-105"
+                                        style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
                                     >
-                                        Don&apos;t show this again
-                                    </button>
-                                </motion.div>
-                            }
+                                        Explore
+                                    </Button>
+                                )}
+
+                                <button
+                                    onClick={handleDontShowAgain}
+                                    className="text-sm opacity-75 transition-opacity hover:opacity-100"
+                                    style={{ color: textColor }}
+                                >
+                                    Don&apos;t show this again
+                                </button>
+                            </motion.div>}
+
 
                         </div>
 

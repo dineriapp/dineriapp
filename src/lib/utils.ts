@@ -1,3 +1,4 @@
+import { RestaurantStatus } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -14,3 +15,11 @@ export function convertHexToRgba(hex: string, opacity: number) {
 }
 
 export const DELIVERY_COST = 10.0
+
+export function normalizeBusinessStatus(raw?: string | null): RestaurantStatus {
+  const v = (raw ?? "ALLOKAY").toString().trim().toUpperCase();
+  if (v === "DISABLE_DELIVERY" || v === "DISABLE_PICKUP" || v === "DISABLE_BOTH" || v === "ALLOKAY") {
+    return v as RestaurantStatus;
+  }
+  return "ALLOKAY";
+}

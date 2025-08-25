@@ -93,6 +93,13 @@ model User {
   @@map("users")
 }
 
+enum RestaurantStatus {
+  DISABLE_DELIVERY
+  DISABLE_PICKUP
+  DISABLE_BOTH
+  ALLOKAY
+}
+
 model Restaurant {
   id                               String              @id @default(uuid()) @db.Uuid
   user_id                          String              @db.Uuid
@@ -112,8 +119,9 @@ model Restaurant {
   bg_gradient_end                  String?             @default("#f3f4f6")
   gradient_direction               GradientDirection   @default(bottom_right)
   button_variant                   ButtonVariant       @default(solid)
+  status                           RestaurantStatus    @default(ALLOKAY)
   slug                             String              @unique
-  delivery_fee                     Float               @default(5.0) // ✅ default 5 euros
+  delivery_fee                     Float               @default(5.0)
   address                          String?
   phone                            String?
   email                            String?

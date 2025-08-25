@@ -1,5 +1,6 @@
 "use client";
 
+import RestaurantOperationalSettingsCard from "@/components/restaurant-operational-settings-card";
 import TimeOnly from "@/components/time-only";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -94,6 +95,8 @@ export default function OrdersPage() {
     return saved ? Number(saved) : 500; // default 4 seconds
   });
 
+
+
   const [selectedOrder, setSelectedOrder] = useState<OrderWithItems | null>(
     null
   );
@@ -183,6 +186,8 @@ export default function OrdersPage() {
 
     return () => clearInterval(interval);
   }, [refreshSeconds]);
+
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -279,6 +284,8 @@ export default function OrdersPage() {
     );
   }
 
+
+
   // Error state
   if (error) {
     return (
@@ -309,7 +316,7 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-[1200px] mx-auto w-full py-8">
+    <div className="space-y-6 max-w-[1200px] mx-auto px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
@@ -362,6 +369,7 @@ export default function OrdersPage() {
           </Button>
         </div>
       </div>
+      <RestaurantOperationalSettingsCard />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -528,8 +536,8 @@ export default function OrdersPage() {
             Manage your restaurant orders and update their status
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
+        <CardContent className="grid">
+          <div className="overflow-x-auto grid">
             <Table>
               <TableHeader>
                 <TableRow>

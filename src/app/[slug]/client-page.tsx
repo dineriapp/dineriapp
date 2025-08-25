@@ -1,17 +1,17 @@
 "use client"
 
 import SocialIcons from "@/components/social-icons"
+import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { getLucideIconBySlug } from "@/lib/get-icons"
+import { cn } from "@/lib/utils"
 import { OpeningHoursData, ReviewsInfo } from "@/types"
 import type { Event, Faq, FaqCategory, MenuCategory, MenuItem, Link as PrismaLink, Restaurant, User } from "@prisma/client"
 import {
-    AlertTriangle,
     ArrowRight,
     Calendar,
     ExternalLink,
     HelpCircle,
-    Leaf,
     MenuIcon,
     MoreVertical
 } from "lucide-react"
@@ -25,6 +25,7 @@ import { GoogleRating } from "./_components/google-rating"
 import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
 import { OpeningHoursStatus } from "./_components/opening-hours-status"
 import { WelcomePopup } from "./_components/welcome-popup"
+import { MenuItems } from "./menu-items"
 
 // Define the complete types with relations using Prisma types
 type RestaurantWithRelations = Restaurant & {
@@ -166,18 +167,16 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
     // Get filtered menu items based on selected category
     const getFilteredMenuItems = () => {
         if (selectedMenuCategory === "all") {
-            return restaurant.menuCategories.flatMap((category) =>
-                category.items.map((item) => ({ ...item, categoryName: category.name })),
+            return restaurant.menuCategories.filter(c => c.show_in_quick_menu).flatMap((category) =>
+                category.items.filter(itm => itm.show_in_quick_menu).map((item) => ({ ...item, categoryName: category.name })),
             )
         }
 
-        const category = restaurant.menuCategories.find((cat) => cat.id === selectedMenuCategory)
-        return category ? category.items.map((item) => ({ ...item, categoryName: category.name })) : []
+        const category = restaurant.menuCategories.filter(c => c.show_in_quick_menu).find((cat) => cat.id === selectedMenuCategory)
+        return category ? category.items.filter(itm => itm.show_in_quick_menu).map((item) => ({ ...item, categoryName: category.name })) : []
     }
 
     const filteredMenuItems = getFilteredMenuItems()
-
-
 
     return (
         <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
@@ -588,149 +587,96 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                     accentColor={restaurant.accent_color || "#10b981"}
                 />
                 }
-                {/* Menu Dialog */}
-                {/* <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}>
-                    <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] w-full overflow-y-auto">
-                        <DialogHeader>
-                            <DialogTitle className="flex text-start items-center justify-start gap-4">
-                                <div className="flex items-center gap-2">
-                                    <MenuIcon
-                                        className="h-5 w-5"
-                                        style={{ color: restaurant.accent_color || '#10b981' }}
-                                    />
-                                    <span>Menu</span>
-                                </div>
-                            </DialogTitle>
-                            <DialogDescription className="text-start">
-                                {restaurant.menuCategories.length > 0 && (
-                                    <>
-                                        Last updated{" "}
-                                        {new Date(
-                                            Math.max(...restaurant.menuCategories.map((cat) => new Date(cat.updatedAt).getTime())),
-                                        ).toLocaleString("en-US", {
-                                            year: "numeric",
-                                            month: "long",
-                                            day: "numeric",
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                        })}
-                                    </>
-                                )}
-                            </DialogDescription>
-                        </DialogHeader>
 
-                        <div className="space-y-8 py-2">
-                            {restaurant.menuCategories.map((category) => (
-                                <div key={category.id} className="space-y-3">
-                                    <div>
-                                        <h3 className="text-xl leading-[1.3] font-semibold text-gray-900">{category.name}</h3>
-                                        {category.description && (
-                                            <p className="mb-2 mt-1 text-sm text-muted-foreground">{category.description}</p>
-                                        )}
-                                    </div>
-                                    <div className="w-full border-b" />
-                                    <div className="space-y-2">
-                                        {category.items?.map((item) => (
-                                            <div
-                                                key={item.id}
-                                                className="rounded-lg border border-gray-200 px-3 py-4 shadow-sm bg-white flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3"
-                                            >
-                                                <div className="space-y-1 w-full sm:w-auto">
-                                                    <div className="flex flex-wrap items-center gap-2">
-                                                        <span className="text-base font-medium text-gray-900">{item.name}</span>
-
-                                                        {item.is_halal && (
-                                                            <span
-                                                                className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800"
-                                                                title="Halal"
-                                                            >
-                                                                <Leaf className="h-3 w-3" />
-                                                                Halal
-                                                            </span>
-                                                        )}
-
-                                                        {item.allergens?.length > 0 && (
-                                                            <span
-                                                                className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800"
-                                                                title={`Contains: ${item.allergens.join(', ')}`}
-                                                            >
-                                                                <AlertTriangle className="h-3 w-3" />
-                                                                Allergens
-                                                            </span>
-                                                        )}
-                                                    </div>
-
-                                                    {item.description && (
-                                                        <p className="text-sm text-muted-foreground">{item.description}</p>
-                                                    )}
-
-                                                    {item.allergen_info && (
-                                                        <p className="text-xs italic text-yellow-700">{item.allergen_info}</p>
-                                                    )}
-                                                </div>
-
-                                                <div className="text-sm sm:text-base font-semibold text-gray-800">
-                                                    &euro;{item.price.toFixed(2)}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </DialogContent>
-                </Dialog> */}
                 {/* Enhanced Menu Dialog */}
-                <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}>
-                    <DialogContent className="max-h-[90vh] max-w-[90vw] border-transparent no-scroll sm:!max-w-[570px] overflow-hidden overflow-y-auto">
+                <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}
+
+                >
+                    <DialogContent
+                        style={{
+                            backgroundColor: restaurant.bgColor
+                        }}
+                        closeIconColor={restaurant.textColor}
+                        className="max-h-[90vh] max-w-[90vw] border-transparent no-scroll sm:!max-w-[570px] overflow-hidden overflow-y-auto">
                         <DialogHeader className="pb-1">
-                            <DialogTitle className="flex items-center text-start gap-2 text-xl">
+                            <DialogTitle
+                                style={{ color: restaurant.textColor }}
+                                className="flex items-center text-start gap-2 text-xl">
                                 <MenuIcon className="h-6 w-6" />
                                 <span>Menu</span>
                             </DialogTitle>
-                            <DialogDescription className="text-base text-start">
+                            <DialogDescription
+                                style={{ color: restaurant.textColor }}
+                                className="text-base text-start">
                                 Browse our delicious menu items organized by category
                             </DialogDescription>
                         </DialogHeader>
 
                         {/* Category Tabs */}
                         <div className="relative mb-0 flex items-center ">
-                            <div className="flex gap-0 overflow-x-auto no-scroll max-w-[70vw] sm:!max-w-[430px]">
+                            <div className="flex gap-2 overflow-x-auto no-scroll max-w-[70vw] sm:!max-w-[430px]">
                                 {/* All Items Tab */}
-                                <button
+                                <Button
+                                    variant={selectedMenuCategory === "all" ? "default" : "outline"}
+                                    size="lg"
                                     onClick={() => setSelectedMenuCategory("all")}
-                                    className={`flex-shrink-0 px-3 cursor-pointer border-b py-2 text-sm font-medium transition-all duration-200 ${selectedMenuCategory === "all"
-                                        ? "bg-[#F5F5F5]"
-                                        : "hover:opacity-70"
-                                        }`}
                                     style={{
-                                        color: "black",
-                                        borderColor: selectedMenuCategory === "all" ? "black" : "transparent",
+                                        backgroundColor: selectedMenuCategory === "all" ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
+                                        color: selectedMenuCategory === "all" ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
                                     }}
+                                    className={cn(
+                                        "whitespace-nowrap cursor-pointer !text-sm flex-shrink-0 h-10 px-4 rounded-full font-medium transition-all duration-200",
+                                        selectedMenuCategory === "all" ? "shadow-md" : ""
+                                    )}
                                 >
-                                    All ({
-                                        restaurant.menuCategories.reduce(
-                                            (sum, cat) => sum + cat.items.filter(item => item.show_in_quick_menu).length,
-                                            0
-                                        )
-                                    })                                </button>
+                                    <span className="flex items-center  gap-2">
+                                        <span className="">All Items</span>
+                                        <span
+                                            className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                                            style={{
+                                                backgroundColor: selectedMenuCategory === "all" ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
+                                                color: selectedMenuCategory === "all" ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
+                                            }}
+                                        >
+                                            {restaurant.menuCategories.filter(c => c.show_in_quick_menu).flatMap((category) =>
+                                                category.items.filter(itm => itm.show_in_quick_menu)
+                                            ).length}
+                                        </span>
+                                    </span>
+                                </Button>
                                 {/* Category Tabs */}
-                                {restaurant.menuCategories.map((category) => {
+                                {restaurant.menuCategories.filter(cat => cat.items.filter(i => i.show_in_quick_menu).length !== 0).map((category) => {
                                     if (!category.show_in_quick_menu) return null
-                                    return <button
-                                        key={category.id}
-                                        onClick={() => setSelectedMenuCategory(category.id)}
-                                        className={`flex-shrink-0 px-3 cursor-pointer border-b py-2 text-sm font-medium transition-all duration-200 ${selectedMenuCategory === category.id
-                                            ? "bg-[#F5F5F5]"
-                                            : "hover:opacity-70"
-                                            }`}
-                                        style={{
-                                            color: "black",
-                                            borderColor: selectedMenuCategory === category.id ? "black" : "transparent",
-                                        }}
-                                    >
-                                        {category.name} ({category.items.filter(item => item.show_in_quick_menu).length})
-                                    </button>
+
+                                    return <div className="keen-slider__slide !w-auto !min-w-fit" key={category.id}>
+                                        <Button
+                                            key={category.id}
+                                            variant={selectedMenuCategory === category.id ? "default" : "outline"}
+                                            size="lg"
+                                            onClick={() => setSelectedMenuCategory(category.id)}
+                                            className={cn(
+                                                "whitespace-nowrap cursor-pointer !text-sm flex-shrink-0 h-10 px-4 rounded-full font-medium transition-all duration-200",
+                                                selectedMenuCategory === category.id ? "shadow-md" : ""
+                                            )}
+                                            style={{
+                                                backgroundColor: selectedMenuCategory === category.id ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
+                                                color: selectedMenuCategory === category.id ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
+                                            }}
+                                        >
+                                            <span className="flex items-center gap-2">
+                                                <span>{category.name}</span>
+                                                <span
+                                                    className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                                                    style={{
+                                                        backgroundColor: selectedMenuCategory === category.id ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
+                                                        color: selectedMenuCategory === category.id ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
+                                                    }}
+                                                >
+                                                    {restaurant.menuCategories.find((cat) => cat.id === category.id)?.items?.filter(item => item.show_in_quick_menu).length}
+                                                </span>
+                                            </span>
+                                        </Button>
+                                    </div>
                                 })}
                             </div>
 
@@ -738,17 +684,20 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             <div className="absolute w-[180px] flex justify-end right-0 bottom-0 items-center">
                                 <div
                                     className="w-[120px] h-full  flex items-center justify-end"
+                                    style={{
+                                        background: `linear-gradient(to left, ${restaurant.bgColor} 80%, transparent 100%)`
+                                    }}
                                 >
                                     <Link
                                         href={`/${restaurant.slug}/menu`}
-                                        className="flex items-center gap-1 px-4 py-[11px] text-xs font-medium rounded-full transition-all duration-200 hover:shadow-md"
+                                        className="flex items-center gap-1 px-4 py-[12px] shadow-md text-xs font-medium rounded-full transition-all duration-200 hover:shadow-md"
                                         style={{
-                                            backgroundColor: "#F5F5F5",
-                                            color: "black",
+                                            backgroundColor: restaurant.tabsButtonDefault,
+                                            color: restaurant.tabsTextDefaultColor,
                                         }}
                                         onClick={() => setShowMenuDialog(false)}
                                     >
-                                        <span>View More</span>
+                                        <span>View All</span>
                                         <ArrowRight className="h-3 w-3" />
                                     </Link>
                                 </div>
@@ -756,164 +705,25 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                         </div>
 
                         {/* Menu Items */}
-                        <div className="overflow-y-auto max-h-[60vh] pr-2 ">
-                            {filteredMenuItems.filter(item => item.show_in_quick_menu).length > 0 ? (
-                                <div className="space-y-6">
-                                    {selectedMenuCategory === "all" ? (
-                                        // Group by category when showing all items
-                                        restaurant.menuCategories.map((category) => {
-                                            if (!category.show_in_quick_menu) return null
-
-                                            return <div key={category.id} className="space-y-4">
-                                                <div className="flex items-center text-black gap-2 pb-2 border-b ">
-                                                    <h3 className="text-lg font-semibold text-black ">{category.name}</h3>
-                                                    <span className="text-sm opacity-80">
-                                                        ({category.items.filter(item => item.show_in_quick_menu).length} items)
-                                                    </span>
-                                                </div>
-                                                {category.description && (
-                                                    <p className="text-sm block -mt-2 mb-4 opacity-80"
-                                                    >{category.description}</p>
-                                                )}
-                                                <div className="grid gap-2 border shadow-md rounded-md">
-                                                    {category.items.slice(0, 3).map((item) => {
-                                                        const parsedAddons = Array.isArray(item.addons)
-                                                            ? (item.addons as { name: string; price: number }[])
-                                                            : [];
-                                                        if (!item.show_in_quick_menu) return null
-
-                                                        return <div
-                                                            key={item.id}
-                                                            className="flex justify-between items-start gap-4 p-3 rounded-lg"
-                                                        >
-                                                            <div className="flex-1 space-y-1">
-                                                                <div className="flex items-center gap-2">
-                                                                    <span className="font-medium text-black"
-                                                                    >{item.name}</span>
-                                                                    {item.is_halal && (
-                                                                        <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-                                                                            <Leaf className="h-3 w-3" />
-                                                                            Halal
-                                                                        </span>
-                                                                    )}
-                                                                    {item.allergens && item.allergens.length > 0 && (
-                                                                        <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
-                                                                            <AlertTriangle className="h-3 w-3" />
-                                                                            Allergens
-                                                                        </span>
-                                                                    )}
-                                                                </div>
-                                                                {item.description && <p className="text-sm opacity-80"
-
-                                                                >{item.description}</p>}
-                                                                {item.allergen_info && (
-                                                                    <p className="text-xs italic w-fit px-2 py-1 bg-black text-white"
-                                                                    >{item.allergen_info}</p>
-                                                                )}
-                                                                {item.addons && parsedAddons.length > 0 && (
-                                                                    <div >
-                                                                        <h3 className="text-xs mt-2 font-medium mb-1">Available Addons:</h3>
-                                                                        <ul className="list-disc list-inside text-xs ">
-                                                                            {parsedAddons.map((addon: any, index: number) => (
-                                                                                <li key={index}>
-                                                                                    {addon.name} — €{addon.price.toFixed(2)}
-                                                                                </li>
-                                                                            ))}
-                                                                        </ul>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                            <div className="flex-shrink-0 font-semibold text-gray-900">€{item.price.toFixed(2)}</div>
-                                                        </div>
-                                                    })}
-                                                    {category.items.length > 3 && (
-                                                        <div className="text-center py-2">
-                                                            <span
-                                                                className="text-sm text-black">
-                                                                {category.items.filter(item => item.show_in_quick_menu).length > 3 && (
-                                                                    <>+{category.items.filter(item => item.show_in_quick_menu).length - 3} more items in this category</>
-                                                                )}
-                                                            </span>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        })
-                                    ) : (
-                                        // Show items from selected category
-                                        <div className="grid gap-2">
-                                            {filteredMenuItems.map((item) => {
-                                                const parsedAddons = Array.isArray(item.addons)
-                                                    ? (item.addons as { name: string; price: number }[])
-                                                    : [];
-                                                if (!item.show_in_quick_menu) return null
-
-                                                return <div
-                                                    key={item.id}
-                                                    className="flex justify-between border shadow-md rounded-md items-start gap-4 p-3"
-                                                >
-                                                    <div className="flex-1 space-y-1">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="font-medium"
-
-                                                            >{item.name}</span>
-                                                            {item.is_halal && (
-                                                                <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-                                                                    <Leaf className="h-3 w-3" />
-                                                                    Halal
-                                                                </span>
-                                                            )}
-                                                            {item.allergens && item.allergens.length > 0 && (
-                                                                <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
-                                                                    <AlertTriangle className="h-3 w-3" />
-                                                                    Allergens
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                        {item.description && <p className="text-sm opacity-80"
-
-                                                        >{item.description}</p>}
-                                                        {item.allergen_info && (
-                                                            <p className="text-xs italic w-fit px-2 py-1 bg-black text-white"
-
-                                                            >{item.allergen_info}</p>
-                                                        )}
-                                                        {item.addons && parsedAddons.length > 0 && (
-                                                            <div >
-                                                                <h3 className="text-xs mt-2 font-medium mb-1">Available Addons:</h3>
-                                                                <ul className="list-disc list-inside text-xs ">
-                                                                    {parsedAddons.map((addon: any, index: number) => (
-                                                                        <li key={index}>
-                                                                            {addon.name} — €{addon.price.toFixed(2)}
-                                                                        </li>
-                                                                    ))}
-                                                                </ul>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <div className="flex-shrink-0 font-semibold text-gray-900">€{item.price.toFixed(2)}</div>
-                                                </div>
-                                            })}
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="text-center py-8 text-black">
-                                    <MenuIcon className="h-12 w-12 mx-auto mb-2" />
-                                    <p className="text-sm">No menu items available</p>
-                                </div>
-                            )}
+                        <div className="overflow-y-auto  max-h-[52vh] pr-2 ">
+                            <MenuItems
+                                restaurant={restaurant}
+                                items={filteredMenuItems}
+                                searchQuery={""}
+                                restaurantSlug={restaurant.slug}
+                                selectedCategory={selectedMenuCategory}
+                            />
                         </div>
 
                         {/* Footer with full menu link */}
                         <div className="pt-2 border-t border-black/30 mt-2">
                             <Link
                                 href={`/${restaurant.slug}/menu`}
-                                className="w-full flex items-center justify-center text-white bg-black gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-md"
-                                // style={{
-                                //     backgroundColor: restaurant.accent_color || "#10b981",
-                                //     color: restaurant.button_text_icons_color || "#10b981",
-                                // }}
+                                className="w-full flex items-center justify-center  gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-md"
+                                style={{
+                                    backgroundColor: restaurant.tabsButtonBG,
+                                    color: restaurant.tabsTextColor,
+                                }}
                                 onClick={() => setShowMenuDialog(false)}
                             >
                                 <MenuIcon className="h-4 w-4" />

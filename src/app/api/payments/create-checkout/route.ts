@@ -75,8 +75,25 @@ export async function POST(request: NextRequest) {
         // Get restaurant details
         const restaurant = await prisma.restaurant.findUnique({
             where: { slug: restaurantSlug },
-            select: { id: true, name: true, stripe_secret_key_encrypted: true, delivery_fee: true },
+            select: { id: true, name: true, stripe_secret_key_encrypted: true, delivery_fee: true, status: true },
         })
+
+        if (restaurant?.status === "DISABLE_BOTH") {
+            return NextResponse.json(
+                { error: "This restaurant has temporarily disabled all online orders." },
+                { status: 403 }
+            )
+        } else if (restaurant?.status === "DISABLE_DELIVERY" && orderType === "delivery") {
+            return NextResponse.json(
+                { error: "This restaurant is not accepting delivery orders right now. Please choose pickup instead." },
+                { status: 403 }
+            )
+        } else if (restaurant?.status === "DISABLE_PICKUP" && orderType === "pickup") {
+            return NextResponse.json(
+                { error: "This restaurant is not accepting pickup orders right now. Please choose delivery instead." },
+                { status: 403 }
+            )
+        }
 
         if (!restaurant || !restaurant.stripe_secret_key_encrypted) {
             return NextResponse.json({ error: "Restaurant or Stripe key not found" }, { status: 404 })

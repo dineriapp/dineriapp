@@ -18,6 +18,8 @@ import { WelcomePopupMenu } from "./menu-welocome-popup";
 import { RestaurantInfoDialog } from "./restaurant-info-dialog";
 import RestaurantCustomizer from "./restaurent-customizer";
 import ResturantHeader from "./resturant-header";
+import RestaurantStatusAlert from "@/components/restaurant-status-alert";
+import { useRestaurantStatus } from "@/hooks/useRestaurentStatus";
 
 type RestaurantWithMenu = Restaurant & {
   user: User
@@ -136,6 +138,9 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
     );
   };
 
+
+
+
   const filteredItems = getFilteredItems();
 
   const welcomePopupShowInfo = restaurant.menu_popup_show_info
@@ -143,6 +148,16 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
     : { ratings: true, address: true, hours: true, phone: true }
 
   const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : null
+
+  const status = useRestaurantStatus(openingHours || {
+    monday: { open: "", close: "", closed: true },
+    tuesday: { open: "", close: "", closed: true },
+    wednesday: { open: "", close: "", closed: true },
+    thursday: { open: "", close: "", closed: true },
+    friday: { open: "", close: "", closed: true },
+    saturday: { open: "", close: "", closed: true },
+    sunday: { open: "", close: "", closed: true },
+  }, restaurant.timezone || "Asia/Karachi")
 
 
   return (
@@ -243,6 +258,16 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
             </Dialog>
           </div>
         </div>
+        {
+
+          status.isOpen
+            ?
+            <>
+              <RestaurantStatusAlert status={restaurant.status} />
+            </>
+            :
+            null
+        }
         <div className="relative w-full my-2 rounded-full"
           style={{
             backgroundColor: stylesData.headerBg
@@ -300,10 +325,7 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
           restaurant={restaurant}
           isOpen={showWelcomePopup}
           RatingInfo={reviewsInfo}
-          eventsShow={false}
-          actionsShow={false}
           onClose={() => setShowWelcomePopup(false)}
-          upcomingEvents={[]}
           welcomePopupShowInfo={welcomePopupShowInfo}
         />
       </div>
