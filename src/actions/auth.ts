@@ -7,9 +7,6 @@ import { redirect } from 'next/navigation'
 
 export async function login(formData: FormData) {
     const supabase = await createClient()
-
-    // type-casting here for convenience
-    // in practice, you should validate your inputs
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
@@ -52,7 +49,6 @@ export async function signup(formData: FormData) {
         },
     })
 
-    // Handle sign-up errors
     if (signUpError) {
         const message =
             signUpError.message === "User already registered"
@@ -61,7 +57,6 @@ export async function signup(formData: FormData) {
         return { error: message };
     }
 
-    // Sync with local DB
     if (data.user) {
         try {
             const existingUser = await prisma.user.findFirst({
@@ -91,7 +86,6 @@ export async function signup(formData: FormData) {
         }
     }
 
-    // Attempt to sign in immediately
     const { error: signInError } = await supabase.auth.signInWithPassword({
         email, password,
 

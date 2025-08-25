@@ -210,7 +210,7 @@ export default async function OrderSuccessContent({
                                             <div className="flex flex-wrap gap-1 mt-2">
                                                 {item.addons.map((addon: any) => (
                                                     <Badge key={addon.name} variant="outline" className="text-xs">
-                                                        {addon.name} (${addon.price.toFixed(2)})
+                                                        {addon.name} (€{addon.price.toFixed(2)})
                                                     </Badge>
                                                 ))}
                                             </div>
@@ -221,7 +221,7 @@ export default async function OrderSuccessContent({
 
                                     <div className="text-right min-w-[70px]">
                                         <p className="text-sm font-semibold text-green-600">
-                                            ${(
+                                            €{(
                                                 item.price +
                                                 (Array.isArray(item.addons)
                                                     ? item.addons.reduce((sum: any, addon: any) => sum + addon.price, 0)
@@ -235,21 +235,21 @@ export default async function OrderSuccessContent({
                             <div className="border-t pt-4 space-y-2">
                                 <div className="flex justify-between text-sm">
                                     <span>Subtotal</span>
-                                    <span>${order.subtotal.toFixed(2)}</span>
+                                    <span>€{order.subtotal.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span>Tax</span>
-                                    <span>${order.tax_amount.toFixed(2)}</span>
+                                    <span>€{order.tax_amount.toFixed(2)}</span>
                                 </div>
                                 {order.delivery_fee > 0 && (
                                     <div className="flex justify-between text-sm">
                                         <span>Delivery Fee</span>
-                                        <span>${order.delivery_fee.toFixed(2)}</span>
+                                        <span>€{order.delivery_fee.toFixed(2)}</span>
                                     </div>
                                 )}
                                 <div className="flex justify-between font-semibold text-lg border-t pt-2">
                                     <span>Total</span>
-                                    <span>${order.total_amount.toFixed(2)}</span>
+                                    <span>€{order.total_amount.toFixed(2)}</span>
                                 </div>
                             </div>
                         </div>

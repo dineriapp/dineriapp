@@ -45,12 +45,10 @@ import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
-import { uploadImage } from "@/supabase/clients/client"
 import { MenuCategory, MenuItem, SubscriptionPlan } from "@prisma/client"
 import { AlertTriangle, ArrowDown, ArrowUp, Edit, Leaf, Plus, Search, Trash2, X } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
-import { toast } from "sonner"
 
 const container = {
     hidden: { opacity: 0 },
@@ -85,8 +83,6 @@ export default function MenuPage() {
     const [isHalal, setIsHalal] = useState(false)
     const [allergenInfo, setAllergenInfo] = useState("")
     const [addons, setAddons] = useState([{ name: "", price: 0 }]);
-    const [selectedImage, setSelectedImage] = useState<File | null>(null)
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null)
     const [isUploading, setIsUploading] = useState(false)
 
     const restaurantId = selectedRestaurant?.id
@@ -165,20 +161,7 @@ export default function MenuPage() {
             e.preventDefault()
             if (!selectedCategory || !newItemName.trim() || !newItemPrice) return
 
-            if (!selectedImage) {
-                toast.error("Please select an image also")
-                return
-            }
-
             setIsUploading(true)
-
-            let imageUrl = previewUrl // keep existing if editing
-
-            // Upload if new image selected
-            if (selectedImage) {
-                const uploaded = await uploadImage(selectedImage)
-                if (uploaded) imageUrl = uploaded
-            }
 
             // Filter valid addons (non-empty name and price)
             const validAddons = addons
@@ -199,7 +182,7 @@ export default function MenuPage() {
                     allergens: allergens,
                     is_halal: isHalal,
                     show_in_quick_menu: newItemshow_in_quick_menu,
-                    image: imageUrl || "",
+                    image: "",
                     allergen_info: allergenInfo.trim() || undefined,
                     addons: validAddons.length > 0 ? validAddons : undefined, // Optional: omit if empty
 
@@ -226,15 +209,6 @@ export default function MenuPage() {
 
             setIsUploading(true)
 
-            let imageUrl = previewUrl // keep existing if editing
-
-            // Upload if new image selected
-            if (selectedImage) {
-                const uploaded = await uploadImage(selectedImage)
-                if (uploaded) imageUrl = uploaded
-            }
-
-
             // Filter valid addons (non-empty name and price)
             const validAddons = addons
                 .filter((addon) => addon.name.trim() !== "" && addon.price !== 0)
@@ -252,7 +226,7 @@ export default function MenuPage() {
                     allergens: allergens,
                     is_halal: isHalal,
                     show_in_quick_menu: newItemshow_in_quick_menu,
-                    image: imageUrl || "",
+                    image: "",
                     addons: validAddons.length > 0 ? validAddons : undefined, // Optional: omit if empty
                     allergen_info: allergenInfo.trim() || undefined,
                 },
@@ -546,9 +520,16 @@ export default function MenuPage() {
                                                         openPopup(`You are limited to ${limit} menu items per category on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`);
                                                     } else {
                                                         setSelectedCategory(category);
+                                                        setSelectedItem(null)
+                                                        setNewItemName("")
+                                                        setNewItemDescription("")
+                                                        setNewItemPrice("")
+                                                        setAllergens([])
+                                                        setIsHalal(false)
+                                                        setAllergenInfo("")
+                                                        setAddons([])
+                                                        setNewItemshow_in_quick_menu(true)
                                                         setIsAddItemDialogOpen(true);
-                                                        setPreviewUrl("")
-                                                        setSelectedImage(null)
                                                     }
                                                 }}
                                                 className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
@@ -590,15 +571,6 @@ export default function MenuPage() {
                                                                     <Badge className="bg-primary text-white">Quick Menu</Badge>
                                                                 )}
                                                             </div>
-                                                            {item.image
-                                                                &&
-                                                                <div className="mt-2">
-                                                                    <img
-                                                                        src={item.image}
-                                                                        alt="Preview"
-                                                                        className="w-10 h-10 object-cover rounded border"
-                                                                    />
-                                                                </div>}
                                                             {item.description && <p className="text-sm text-slate-500 mb-2">{item.description}</p>}
                                                             {item.allergens && item.allergens.length > 0 && (
                                                                 <div className="flex flex-wrap gap-1">
@@ -609,16 +581,6 @@ export default function MenuPage() {
                                                                         <AlertTriangle className="h-3 w-3" />
                                                                         Allergens
                                                                     </span>
-                                                                    {/* {item.allergens.map((allergen) => (
-                                                                        <span
-                                                                            key={allergen}
-                                                                            className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800"
-                                                                            title={`Contains ${allergen}`}
-                                                                        >
-                                                                            <AlertTriangle className="h-3 w-3" />
-                                                                            {allergen}
-                                                                        </span>
-                                                                    ))} */}
                                                                 </div>
                                                             )}
                                                             {/* Addons */}
@@ -645,7 +607,6 @@ export default function MenuPage() {
                                                                 variant="ghost"
                                                                 size="sm"
                                                                 onClick={() => {
-                                                                    setPreviewUrl(item.image)
                                                                     setSelectedCategory(category)
                                                                     setSelectedItem(item)
                                                                     setNewItemName(item.name)
@@ -656,7 +617,6 @@ export default function MenuPage() {
                                                                     setAllergenInfo(item.allergen_info || "")
                                                                     setIsEditItemDialogOpen(true)
                                                                     setAddons(parsedAddons)
-                                                                    setSelectedImage(null)
                                                                     setNewItemshow_in_quick_menu(item.show_in_quick_menu)
                                                                 }}
                                                                 className="h-8 w-8 p-0 transition-transform hover:scale-110"
@@ -730,10 +690,17 @@ export default function MenuPage() {
                                                 <Button
                                                     variant="outline"
                                                     onClick={() => {
-                                                        setSelectedCategory(category)
-                                                        setIsAddItemDialogOpen(true)
-                                                        setPreviewUrl("")
-                                                        setSelectedImage(null)
+                                                        setSelectedCategory(category);
+                                                        setSelectedItem(null)
+                                                        setNewItemName("")
+                                                        setNewItemDescription("")
+                                                        setNewItemPrice("")
+                                                        setAllergens([])
+                                                        setIsHalal(false)
+                                                        setAllergenInfo("")
+                                                        setAddons([])
+                                                        setNewItemshow_in_quick_menu(true)
+                                                        setIsAddItemDialogOpen(true);
                                                     }}
                                                     className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
                                                 >
@@ -974,31 +941,7 @@ export default function MenuPage() {
                                     + Add Addon
                                 </Button>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="image">Upload Image</Label>
-                                <Input
-                                    type="file"
-                                    accept="image/*"
-                                    id="image"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0]
-                                        if (file) {
-                                            setSelectedImage(file)
-                                            setPreviewUrl(URL.createObjectURL(file))
-                                        }
-                                    }}
-                                />
-                            </div>
 
-                            {previewUrl && (
-                                <div className="mt-2">
-                                    <img
-                                        src={previewUrl}
-                                        alt="Preview"
-                                        className="w-24 h-24 object-cover rounded border"
-                                    />
-                                </div>
-                            )}
                             <div className="flex items-center space-x-2">
                                 <Checkbox
                                     id="editIsHalal"
@@ -1187,31 +1130,6 @@ export default function MenuPage() {
                                     + Add Addon
                                 </Button>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="image">Upload Image</Label>
-                                <Input
-                                    type="file"
-                                    accept="image/*"
-                                    id="image"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0]
-                                        if (file) {
-                                            setSelectedImage(file)
-                                            setPreviewUrl(URL.createObjectURL(file))
-                                        }
-                                    }}
-                                />
-                            </div>
-
-                            {previewUrl && (
-                                <div className="mt-2">
-                                    <img
-                                        src={previewUrl}
-                                        alt="Preview"
-                                        className="w-24 h-24 object-cover rounded border"
-                                    />
-                                </div>
-                            )}
                             <div className="flex items-center space-x-2">
                                 <Checkbox
                                     id="isHalal"

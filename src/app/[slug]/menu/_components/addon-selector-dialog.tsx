@@ -53,7 +53,7 @@ export function AddonSelectorDialog({ isOpen, onClose, addons, itemName, onConfi
                                         <span className="text-sm absolute bottom-2 right-2 text-teal-600 font-semibold">✓</span>
                                     )}
                                 </div>
-                                <span className="text-sm text-gray-500">${addon.price.toFixed(2)}</span>
+                                <span className="text-sm text-gray-500">€{addon.price.toFixed(2)}</span>
                             </button>
                         );
                     })}

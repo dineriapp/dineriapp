@@ -262,7 +262,6 @@ export default function HoursPage() {
         )
     }
 
-
     return (
         <>
             <Card className="shadow-sm border-gray-200 pt-0 gap-0">

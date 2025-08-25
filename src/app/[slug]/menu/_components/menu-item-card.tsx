@@ -166,7 +166,7 @@ export function MenuItemCard({
             }}
             className="font-bold text-lg text-black  whitespace-nowrap"
           >
-            ${item.price.toFixed(2)}
+            €{item.price.toFixed(2)}
           </span>
         </h4>
 

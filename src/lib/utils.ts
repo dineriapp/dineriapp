@@ -12,3 +12,5 @@ export function convertHexToRgba(hex: string, opacity: number) {
   const b = parseInt(hex.substring(4, 6), 16);
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
+
+export const DELIVERY_COST = 10.0

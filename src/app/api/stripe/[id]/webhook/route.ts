@@ -101,6 +101,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         restaurant_id,
         order_number,
         order_type,
+        preferredISO,
         subtotal,
         tax_amount,
         delivery_fee,
@@ -147,6 +148,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
             longitude: longitude ? Number.parseFloat(longitude) : null,
             notes: delivery_notes || null,
             order_type,
+            preferredISO: preferredISO || "",
             status: "confirmed",
             payment_status: "completed",
             subtotal: Number.parseFloat(subtotal),
@@ -168,7 +170,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                 })),
             },
         }
-
+        console.log(orderData)
         // Only add user_id if it's not a guest order
         if (!isGuestOrder && user_id && user_id !== "guest") {
             orderData.user_id = user_id
@@ -180,6 +182,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                 items: true,
             },
         })
+
+        console.log(order)
 
         console.log(`Created ${isGuestOrder ? "guest " : ""}order ${order.order_number}`)
     } catch (error) {

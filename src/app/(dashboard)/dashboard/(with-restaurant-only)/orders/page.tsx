@@ -1,5 +1,6 @@
 "use client";
 
+import TimeOnly from "@/components/time-only";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -535,6 +536,7 @@ export default function OrdersPage() {
                   <TableHead>Order #</TableHead>
                   <TableHead>Customer</TableHead>
                   <TableHead>Type</TableHead>
+                  <TableHead>Order to be delivered</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Payment</TableHead>
                   <TableHead>Total</TableHead>
@@ -599,6 +601,11 @@ export default function OrdersPage() {
                       <TableCell>
                         <Badge variant="outline" className="capitalize">
                           {order.order_type}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="capitalize">
+                          <TimeOnly iso={order.preferredISO} timeZone={restaurant.timezone || "Europe/Rome"} />
                         </Badge>
                       </TableCell>
                       <TableCell>

@@ -238,8 +238,7 @@ export async function checkSubscriptionLimitsWithPlans(
 
         // Check if subscription is active
         const isSubscriptionActive =
-            user.subscription_status === "active" &&
-            (!user.subscription_current_period_end || new Date() < new Date(user.subscription_current_period_end))
+            user.subscription_status === "active"
 
         // If user has pro or enterprise plan and subscription is active, no limits apply
         if (planData.limits === null && isSubscriptionActive) {

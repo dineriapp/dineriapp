@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 import prisma from "@/lib/prisma"
 import { createClient } from "@/supabase/clients/server"
+import { type NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
-import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 
 interface CheckoutItem {
     id: string
@@ -40,6 +40,7 @@ interface CheckoutRequest {
     items: CheckoutItem[]
     customerInfo: CustomerInfo
     orderType: "pickup" | "delivery"
+    preferredISO: string
     deliveryAddress?: DeliveryAddress
     deliveryNotes?: string
     specialInstructions?: string
@@ -58,6 +59,7 @@ export async function POST(request: NextRequest) {
             deliveryNotes,
             specialInstructions,
             isGuest = false,
+            preferredISO
         } = body
         console.log({ location: "Create CheckOut:- ", body })
 
@@ -73,7 +75,7 @@ export async function POST(request: NextRequest) {
         // Get restaurant details
         const restaurant = await prisma.restaurant.findUnique({
             where: { slug: restaurantSlug },
-            select: { id: true, name: true, stripe_secret_key_encrypted: true },
+            select: { id: true, name: true, stripe_secret_key_encrypted: true, delivery_fee: true },
         })
 
         if (!restaurant || !restaurant.stripe_secret_key_encrypted) {
@@ -117,7 +119,7 @@ export async function POST(request: NextRequest) {
         }, 0)
         const taxRate = 0.08
         const taxAmount = subtotal * taxRate
-        const deliveryFee = orderType === "delivery" ? 5.0 : 0
+        const deliveryFee = orderType === "delivery" ? restaurant.delivery_fee : 0
         const totalAmount = subtotal + taxAmount + deliveryFee
 
         // Generate unique order number
@@ -135,14 +137,14 @@ export async function POST(request: NextRequest) {
 
                     return {
                         price_data: {
-                            currency: "usd",
+                            currency: "eur",
                             product_data: {
                                 name: item.name,
                                 description: [
                                     item.description,
                                     Array.isArray(item.addons) && item.addons.length > 0
                                         ? "Addons: " + item.addons
-                                            .map((addon) => `${addon.name} ($${addon.price.toFixed(2)})`)
+                                            .map((addon) => `${addon.name} (€${addon.price.toFixed(2)})`)
                                             .join(", ")
                                         : null
                                 ]
@@ -160,7 +162,7 @@ export async function POST(request: NextRequest) {
                 }),
                 {
                     price_data: {
-                        currency: "usd",
+                        currency: "eur",
                         product_data: {
                             name: "Tax",
                         },
@@ -172,7 +174,7 @@ export async function POST(request: NextRequest) {
                     ? [
                         {
                             price_data: {
-                                currency: "usd",
+                                currency: "eur",
                                 product_data: {
                                     name: "Delivery Fee",
                                 },
@@ -193,6 +195,7 @@ export async function POST(request: NextRequest) {
                 restaurant_id: restaurant.id,
                 order_number: orderNumber,
                 order_type: orderType,
+                preferredISO: preferredISO,
                 subtotal: subtotal.toString(),
                 tax_amount: taxAmount.toString(),
                 delivery_fee: deliveryFee.toString(),

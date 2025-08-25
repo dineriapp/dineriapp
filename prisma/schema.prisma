@@ -113,6 +113,7 @@ model Restaurant {
   gradient_direction               GradientDirection   @default(bottom_right)
   button_variant                   ButtonVariant       @default(solid)
   slug                             String              @unique
+  delivery_fee                     Float               @default(5.0) // ✅ default 5 euros
   address                          String?
   phone                            String?
   email                            String?
@@ -399,6 +400,7 @@ model Order {
   customer_name         String?
   customer_email        String?
   customer_phone        String?
+  preferredISO          String?
   // Address 
   delivery_address      String?
   street                String?

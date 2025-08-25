@@ -93,15 +93,15 @@ export function Cart({ restaurantSlug, restaurantName, isOpen, onClose }: CartPr
                             <div className="space-y-2">
                                 <div className="flex justify-between text-sm">
                                     <span>Subtotal</span>
-                                    <span>${subtotal.toFixed(2)}</span>
+                                    <span>€{subtotal.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span>Tax</span>
-                                    <span>${tax.toFixed(2)}</span>
+                                    <span>€{tax.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between font-semibold text-lg border-t pt-2">
                                     <span>Total</span>
-                                    <span>${finalTotal.toFixed(2)}</span>
+                                    <span>€{finalTotal.toFixed(2)}</span>
                                 </div>
                             </div>
 
@@ -169,7 +169,7 @@ function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemCompone
                             <Plus className="h-3 w-3" />
                         </Button>
                     </div>
-                    <span className="font-semibold text-green-600">${(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="font-semibold text-green-600">€{(item.price * item.quantity).toFixed(2)}</span>
                 </div>
             </CardContent>
         </Card>

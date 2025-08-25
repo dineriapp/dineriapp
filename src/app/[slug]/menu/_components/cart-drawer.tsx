@@ -1,6 +1,7 @@
 "use client"
 
 import { AddressInput, type AddressData } from "@/components/address-input"
+import PreferredDeliveryTimeSelect, { PreferredDeliveryTimeChange } from "@/components/preferred-delivery-time-select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -32,6 +33,14 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
     const [isProcessing, setIsProcessing] = useState(false)
     const [showCheckout, setShowCheckout] = useState(false)
     const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false)
+    const [preferredISO, setPreferredISO] = useState<string>("");
+
+    const handleChangeTime = (next: PreferredDeliveryTimeChange) => {
+        setPreferredISO(next.iso);
+        // You can also stash next.label / next.timeZone for UI/analytics
+        // console.log(next);
+    };
+
     const [customerInfo, setCustomerInfo] = useState({
         name: "",
         email: "",
@@ -55,7 +64,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
     const subtotal = getCartTotal(restaurantSlug)
     const taxRate = 0.08 // 8% tax
     const taxAmount = subtotal * taxRate
-    const deliveryFee = orderType === "delivery" ? 5.0 : 0
+    const deliveryFee = orderType === "delivery" ? restaurant.delivery_fee : 0
     const total = subtotal + taxAmount + deliveryFee
 
     // Load Google Maps API when component mounts
@@ -141,6 +150,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                     })),
                     customerInfo,
                     orderType,
+                    preferredISO: preferredISO || "",
                     deliveryAddress: orderType === "delivery" ? deliveryAddress : undefined,
                     deliveryNotes: orderType === "delivery" ? deliveryNotes : undefined,
                     specialInstructions: specialInstructions || undefined,
@@ -330,16 +340,16 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                 <div className="space-y-2 text-sm">
                                     <div className="flex justify-between">
                                         <span>{items.length} items</span>
-                                        <span>${subtotal.toFixed(2)}</span>
+                                        <span>€{subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Tax (8%)</span>
-                                        <span>${taxAmount.toFixed(2)}</span>
+                                        <span>€{taxAmount.toFixed(2)}</span>
                                     </div>
                                     {orderType === "delivery" && (
                                         <div className="flex justify-between">
                                             <span>Delivery Fee</span>
-                                            <span>${deliveryFee.toFixed(2)}</span>
+                                            <span>€{deliveryFee.toFixed(2)}</span>
                                         </div>
                                     )}
                                     <div
@@ -348,7 +358,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                         // }}
                                         className="flex justify-between font-semibold border-t pt-1">
                                         <span>Total</span>
-                                        <span>${total.toFixed(2)}</span>
+                                        <span>€{total.toFixed(2)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -467,7 +477,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                             //     borderColor: restaurant.accent_color || "black",
                                             // }}
                                             value="delivery" id="delivery" />
-                                        <Label htmlFor="delivery">Delivery (+$5.00)</Label>
+                                        <Label htmlFor="delivery">Delivery (+€{restaurant.delivery_fee.toFixed(2)})</Label>
                                     </div>
                                 </RadioGroup>
 
@@ -542,6 +552,21 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                     rows={3}
                                 />
                             </div>
+                            <p>
+                                {preferredISO}
+                            </p>
+                            <div className="mt-5"
+
+                            >
+                                <PreferredDeliveryTimeSelect
+                                    value={preferredISO}
+                                    label="Preferred delivery or pickup time (Optional)"
+                                    onChange={handleChangeTime}
+                                    minutesAhead={120}
+                                    stepMinutes={5}
+                                    timeZone={restaurant.timezone || "Europe/Rome"} // <- optionally override
+                                />
+                            </div>
                         </div>
                     )}
                 </div>
@@ -562,11 +587,11 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                     className="space-y-2">
                                     <div className="flex justify-between text-sm">
                                         <span>Subtotal</span>
-                                        <span>${subtotal.toFixed(2)}</span>
+                                        <span>€{subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between text-sm">
                                         <span>Tax (8%)</span>
-                                        <span>${taxAmount.toFixed(2)}</span>
+                                        <span>€{taxAmount.toFixed(2)}</span>
                                     </div>
                                     <div
                                         // style={{
@@ -574,7 +599,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                         // }}
                                         className="flex justify-between font-semibold text-lg border-t pt-2">
                                         <span>Total</span>
-                                        <span>${(subtotal + taxAmount).toFixed(2)}</span>
+                                        <span>€{(subtotal + taxAmount).toFixed(2)}</span>
                                     </div>
                                 </div>
                                 <Button
@@ -626,7 +651,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                     ) : (
                                         <>
                                             <CreditCard className="h-4 w-4 mr-2" />
-                                            Pay ${total.toFixed(2)}
+                                            Pay €{total.toFixed(2)}
                                         </>
                                     )}
                                 </Button>
@@ -713,7 +738,7 @@ function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemCompone
                         <div className="flex flex-wrap gap-1">
                             {item.addons.slice(0, 3).map((addon) => (
                                 <Badge key={addon.name} variant="outline" className="text-xs">
-                                    {addon.name} (${addon.price.toFixed(2)})
+                                    {addon.name} (€{addon.price.toFixed(2)})
                                 </Badge>
                             ))}
                             {item.addons.length > 3 && (
@@ -758,7 +783,7 @@ function CartItemComponent({ item, onQuantityChange, onRemove }: CartItemCompone
                         </Button>
                     </div>
                     <span className="font-semibold text-green-600">
-                        ${(
+                        €{(
                             (item.price +
                                 (Array.isArray(item.addons)
                                     ? item.addons.reduce((sum, addon) => sum + addon.price, 0)

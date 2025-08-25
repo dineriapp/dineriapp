@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
         // Authenticate user and verify restaurant ownership
         const authResult = await authenticateAndAuthorize(category.restaurant_id)
         if (authResult.error) {
+            console.log(authResult.error)
             return NextResponse.json({ error: authResult.error }, { status: authResult.status || 500 })
         }
 
