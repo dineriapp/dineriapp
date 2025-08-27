@@ -65,20 +65,22 @@ export function Footer() {
                 Product
               </h3>
               <ul className="space-y-2">
+
                 {[
-                  "Features",
-                  "Pricing",
-                  "Testimonials",
-                  "FAQ",
-                  "Demo",
-                  "Support",
+                  { name: "Features", path: "/features" },
+                  { name: "Demo", path: "/demo" },
+                  { name: "Plans", path: "/plans" },
+                  { name: "Pricing", path: "#Pricing" },
+                  { name: "Testimonials", path: "#Testimonials" },
+                  { name: "FAQ", path: "#FAQ" },
+                  { name: "Support", path: "#Support" },
                 ].map((item) => (
-                  <li key={item}>
+                  <li key={item.name}>
                     <Link
-                      href={`#${item.toLowerCase()}`}
+                      href={`${item.path.toLowerCase()}`}
                       className="text-white/90 hover:text-main-action"
                     >
-                      {item}
+                      {item.name}
                     </Link>
                   </li>
                 ))}
