@@ -53,7 +53,7 @@ const HeroSection = () => {
                 </Button>
               </Link>
 
-              <Link href="#features">
+              <Link href="/features">
                 <Button
                   size="lg"
                   variant="outline"

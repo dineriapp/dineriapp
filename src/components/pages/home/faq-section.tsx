@@ -25,7 +25,7 @@ const faqs = [
 ]
 const FaqSection = () => {
     return (
-        <section className="bg-white py-14 lg:py-24">
+        <section id="faq" className="bg-white py-14 lg:py-24 scroll-mt-10">
             <div className="max-w-[1200px] mx-auto px-4">
                 <div className="mb-8 lg:mb-16 max-w-3xl mx-auto text-center">
                     <h2 className="mb-4 text-3xl font-bold text-main md:text-4xl lg:text-5xl">

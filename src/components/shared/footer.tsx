@@ -70,10 +70,8 @@ export function Footer() {
                   { name: "Features", path: "/features" },
                   { name: "Demo", path: "/demo" },
                   { name: "Plans", path: "/plans" },
-                  { name: "Pricing", path: "#Pricing" },
-                  { name: "Testimonials", path: "#Testimonials" },
-                  { name: "FAQ", path: "#FAQ" },
-                  { name: "Support", path: "#Support" },
+                  { name: "Testimonials", path: "/#testimonials" },
+                  { name: "FAQ", path: "/#faq" },
                 ].map((item) => (
                   <li key={item.name}>
                     <Link
@@ -113,12 +111,11 @@ export function Footer() {
               <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-main-action">
                 Legal
               </h3>
-              <ul className="space-y-4">
+              <ul className="space-y-2">
                 {[
                   { name: "Terms", path: "/terms" },
                   { name: "Privacy", path: "/privacy-policy" },
                   { name: "Cookies", path: "/cookies" },
-                  { name: "Licenses", path: "#licenses" },
                 ].map((item, index) => (
                   // {["Terms", "Privacy", "Cookies", "Licenses"].map((item) => (
                   <li key={index}>

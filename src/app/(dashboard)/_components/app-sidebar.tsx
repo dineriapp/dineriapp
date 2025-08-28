@@ -124,7 +124,7 @@ export function AppSidebar({
   const isPremium = prismaUser?.subscription_plan === "basic" ? false : true;
 
   return (
-    <Sidebar className="!pt-0">
+    <Sidebar className="!pt-0 rounded-tl-[14px] rounded-bl-[14px] overflow-hidden">
       <SidebarHeader className="!px-0 !pt-0">
         <div className="h-16 flex items-center px-2 border-b border-black/10">
           <Link href="/dashboard" className="flex items-center space-x-2 group">
@@ -181,11 +181,10 @@ export function AppSidebar({
                                                         flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md
                                                         text-main transition-colors cursor-pointer
                                                         hover:bg-main-background
-                                                        ${
-                                                          isActive
-                                                            ? " font-medium text-black"
-                                                            : ""
-                                                        }
+                                                        ${isActive
+                            ? " font-medium text-black"
+                            : ""
+                          }
                                                     `}
                       >
                         <div className="flex items-center gap-2">
@@ -278,16 +277,14 @@ export function AppSidebar({
                           className={`
                                                         flex items-center space-x-2 w-full
                                                         rounded-md px-2 py-1.5 text-sm transition
-                                                        ${
-                                                          isLocked
-                                                            ? "cursor-not-allowed opacity-60"
-                                                            : ""
-                                                        }
-                                                        ${
-                                                          isActive
-                                                            ? "bg-gray-100 text-main-action font-medium"
-                                                            : "hover:bg-main-background font-normal"
-                                                        }
+                                                        ${isLocked
+                              ? "cursor-not-allowed opacity-60"
+                              : ""
+                            }
+                                                        ${isActive
+                              ? "bg-gray-100 text-main-action font-medium"
+                              : "hover:bg-main-background font-normal"
+                            }
                                                     `}
                         >
                           <Icon className="h-5 w-5 group-hover/btn:!text-main-action" />

@@ -48,41 +48,44 @@ export default async function WithResttaurantLayout({
     const isPremium = prismaUser?.subscription_plan === "basic" ? false : true
 
     return (
-        <SidebarProvider defaultOpen={defaultOpen}>
-            <AppSidebar user={user} prismaUser={prismaUser} />
-            <main className="w-full bg-main-background">
-                <div className="min-h-screen">
-                    <div className="border-b border-slate-200 bg-white shadow-sm">
-                        <div className="mx-auto px-4 h-[62px] flex items-center justify-between">
-                            <div className="flex items-center space-x-4 md:hidden">
-                                <Link href="/dashboard" className="flex items-center space-x-2 group">
-                                    <Image
-                                        src={"/logo.png"}
-                                        alt="logo.png"
-                                        width={250}
-                                        height={100}
-                                        className="w-full max-w-[170px] "
-                                    />
-                                </Link>
-                            </div>
-                            <div className="flex items-center justify-between gap-2 md:flex-row flex-row-reverse md:w-full">
-                                <SidebarTrigger />
-                                <div className="flex items-center gap-2">
-                                    {!isPremium && (
-                                        <UpgradeBtn />
-                                    )}
-                                    <VisitBtn />
+        <div className="bg-[#3C3C3C]">
+            <SidebarProvider defaultOpen={defaultOpen} className="!rounded-[14px] overflow-hidden">
+                <AppSidebar user={user} prismaUser={prismaUser} />
+                <main className="w-full bg-main-background h-screen overflow-y-auto">
+                    <div className="min-h-screen">
+                        <div className="border-b border-slate-200 bg-white shadow-sm">
+                            <div className="mx-auto px-4 h-[62px] flex items-center justify-between">
+                                <div className="flex items-center space-x-4 md:hidden">
+                                    <Link href="/dashboard" className="flex items-center space-x-2 group">
+                                        <Image
+                                            src={"/logo.png"}
+                                            alt="logo.png"
+                                            width={250}
+                                            height={100}
+                                            className="w-full max-w-[170px] "
+                                        />
+                                    </Link>
                                 </div>
-                            </div>
+                                <div className="flex items-center justify-between gap-2 md:flex-row flex-row-reverse md:w-full">
+                                    <SidebarTrigger />
+                                    <div className="flex items-center gap-2">
+                                        {!isPremium && (
+                                            <UpgradeBtn />
+                                        )}
+                                        <VisitBtn />
+                                    </div>
+                                </div>
 
+                            </div>
                         </div>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            {children}
+                        </Suspense>
                     </div>
-                    <Suspense fallback={<div>Loading...</div>}>
-                        {children}
-                    </Suspense>
-                </div>
-            </main>
-        </SidebarProvider>
+                </main>
+            </SidebarProvider>
+        </div>
+
 
     );
 }
