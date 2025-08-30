@@ -46,9 +46,9 @@ const TrustedBy = () => {
     ];
 
     return (
-        <section className="border-y border-slate-200 bg-white py-12 overflow-hidden">
+        <section className=" bg-[#FCF9EB] py-10 sm:py-[72px] overflow-hidden">
             <div className="max-w-[1200px] mx-auto px-4">
-                <p className="mb-8 text-center text-sm font-medium uppercase tracking-wider text-slate-500">
+                <p className="mb-8 text-center text-sm font-medium uppercase tracking-wider text-[#62748E] ">
                     Trusted by restaurants worldwide
                 </p>
 
@@ -65,7 +65,7 @@ const TrustedBy = () => {
                         {[...restaurantNames, ...restaurantNames].map((res, i) => (
                             <div key={i} className="flex items-center gap-2 text-slate-400 shrink-0 mr-10">
                                 <Image src={res.img} alt={res.text} width={60} height={60} className='aspect-square border rounded-full w-full max-w-[42px] shrink-0' />
-                                <span className="text-lg font-medium">{res.text}</span>
+                                <span className="text-lg font-medium text-[#90A1B9]">{res.text}</span>
                             </div>
                         ))}
                     </div>

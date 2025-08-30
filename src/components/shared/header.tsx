@@ -1,11 +1,10 @@
 "use client";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { MobileNav } from "./mobile-nav";
-import { ChevronDown } from "lucide-react";
 
 export function Header() {
   const [isSticky, setIsSticky] = useState(false);
@@ -25,13 +24,13 @@ export function Header() {
 
   return (
     <header
-      className={`bg-[#F8F9FB] pt-10 h-32  transition-all duration-300 flex justify-center `}
+      className={`bg-[white] py-10  transition-all duration-300 flex justify-center `}
     >
       <div
         className={`${isSticky ? "top-5 fixed   " : "sticky  top-0 left-0 "
-          }  z-50  border rounded-full w-11/12 max-w-[1200px] mx-auto border-slate-200 bg-white backdrop-blur-md transition-all duration-500 h-[75px]`}
+          }  z-50  border rounded-full w-11/12 max-w-[1281px] mx-auto border-slate-200  flex items-center justify-center bg-[#FCF9EB] backdrop-blur-md transition-all duration-500 h-[76px] lg:h-[120px]`}
       >
-        <div className="flex h-18 items-center justify-between px-6">
+        <div className="flex h-18 items-center justify-between px-6 lg:px-[51px] w-full">
           <Link href="/" className="flex items-center space-x-2 group">
             <Image
               src={"/logo.png"}
@@ -42,11 +41,17 @@ export function Header() {
             />
           </Link>
 
-          <div className="hidden items-center space-x-1 md:flex">
+          <div className="hidden gap-8 items-center md:flex font-poppins">
+            <Link
+              href="/"
+              className=" text-[#090909CC] font-[400] hover:text-slate-900"
+            >
+              Home
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="!outline-none !ring-0">
-                <button className="px-4 py-2 text-slate-600 flex items-center justify-center gap-1 cursor-pointer hover:text-slate-900">
-                  Products <ChevronDown className="size-4" />
+                <button className=" text-[#090909CC] font-[400] flex items-center justify-center gap-1 cursor-pointer hover:text-slate-900">
+                  Products
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
@@ -65,36 +70,36 @@ export function Header() {
             </DropdownMenu>
             <Link
               href="/signup"
-              className="px-4 py-2 text-slate-600 hover:text-slate-900"
+              className=" text-[#090909CC] font-[400] hover:text-slate-900"
             >
               Get started
             </Link>
             <Link
               href="/demo"
-              className="px-4 py-2 text-slate-600 hover:text-slate-900"
+              className=" text-[#090909CC] font-[400] hover:text-slate-900"
             >
               Demo
             </Link>
             <Link
               href="/plans"
-              className="px-4 py-2 text-slate-600 hover:text-slate-900"
+              className=" text-[#090909CC] font-[400] hover:text-slate-900"
             >
               Pricing
             </Link>
           </div>
 
-          <div className="hidden space-x-4 md:flex">
+          <div className="hidden items-center gap-[14px] justify-center md:flex">
             <Link href="/login">
               <Button
                 variant="ghost"
-                className="text-slate-600 hover:text-slate-800"
+                className=" border border-[#0909094D] text-[#090909] font-poppins transition-all font-[500] cursor-pointer text-lg hover:text-slate-800 px-[51px] h-[60px] rounded-full"
               >
                 Log in
               </Button>
             </Link>
             <Link href="/signup">
-              <Button className="bg-main hover:bg-main-hover/80 hover:scale-105 transition-transform rounded-full">
-                Sign up free
+              <Button className="bg-[#002147] hover:bg-main-hover/80 font-poppins font-[600] text-lg text-[#FFFFFF] cursor-pointer h-[62px] px-[46px] transition-all rounded-full">
+                Join Now
               </Button>
             </Link>
           </div>
