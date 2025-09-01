@@ -10,11 +10,11 @@ export function MobileNav() {
     const [open, setOpen] = useState(false)
 
     return (
-        <div className="md:hidden">
+        <div className="xl:hidden">
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
-                    <div className="text-slate-300">
-                        <Menu className="h-6 w-6 text-main" />
+                    <div className="text-slate-300 cursor-pointer">
+                        <Menu className="h-6 w-6 lg:h-8 lg:w-8 text-main" />
                         <span className="sr-only">Toggle menu</span>
                     </div>
                 </SheetTrigger>

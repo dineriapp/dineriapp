@@ -159,6 +159,10 @@
   }
 }
 
+.box-shad-every {
+  box-shadow: 8.59px 8.59px 0px 0px #000000;
+}
+
 .no-scroll {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */

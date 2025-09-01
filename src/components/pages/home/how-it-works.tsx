@@ -1,53 +1,79 @@
-import { ChevronRight } from 'lucide-react'
-import React from 'react'
+import Image from "next/image"
 
 const HowItWorks = () => {
     return (
-        <section className="bg-slate-50 py-14 lg:py-24">
-            <div className="max-w-[1200px] mx-auto px-4">
-                <div className="mb-10 lg:mb-16 max-w-3xl mx-auto text-center">
-                    <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl lg:text-5xl ">How <span className='bg-gradient-to-r from-[#2ECC71] to-[#002147] bg-clip-text text-transparent'>dineri.app</span> works</h2>
-                    <p className="text-lg text-slate-600">Start using Dineri in a few clicks</p>
+        <div className="w-full bg-[#1E1E1E] px-5 text-white flex items-center pt-12 sm:pt-[108px] pb-12 sm:pb-[108px] xl:pb-[807px] justify-center">
+            <div className="w-full max-w-[1320px] relative xl:space-y-0 space-y-10 sm:space-y-5">
+                <div className="xl:pt-[132px]">
+                    <h2 className="text-[#FFFFFF] font-inter font-[900] text-[40px] sm:text-[56px] leading-[1.1]">
+                        How dineri.app works
+                    </h2>
+                    <p className="text-[#FFFFFF] font-inter font-[500] text-xl mt-5 sm:mt-6">
+                        Start using Dineri in a few clicks
+                    </p>
+                    <button className='px-[46px] mt-5 sm:mt-8 bg-[white] rounded-full hover:opacity-80 cursor-pointer transition-all h-[58px] text-[#000000] font-[600] font-poppins text-lg'>
+                        Join Now
+                    </button>
                 </div>
-
-                <div className="grid gap-4 lg:gap-8 md:grid-cols-3">
-                    {[
-                        {
-                            step: "01",
-                            title: "Create your profile",
-                            description:
-                                "Sign up and customize your restaurant page with your logo, photos, and key information.",
-                        },
-                        {
-                            step: "02",
-                            title: "Add your content",
-                            description: "Upload your menu, highlight events or promotions, and link your socials, all in one place.",
-                        },
-                        {
-                            step: "03",
-                            title: "Share with customers",
-                            description:
-                                "Share your unique Dineri.me link via Instagram, Google Business, and flyers to connect with your guests.",
-                        },
-                    ].map((item, i) => (
-                        <div key={i} className="relative rounded-2xl bg-white p-8 shadow-sm transition-all hover:shadow-md">
-                            <div className="mb-6 inline-block rounded-xl bg-gradient-to-r from-main-action to-main p-4 text-2xl font-bold text-white">
-                                {item.step}
-                            </div>
-                            <h3 className="mb-3 text-xl font-bold text-slate-900">{item.title}</h3>
-                            <p className="text-slate-600">{item.description}</p>
-
-                            {i < 2 && (
-                                <div className="absolute -right-[34px] top-1/2 hidden -translate-y-1/2 text-slate-300 md:block">
-                                    <ChevronRight className="h-8 w-8" />
-                                </div>
-                            )}
+                <div className="xl:absolute top-0 right-0 flex flex-col w-full xl:w-[840px] xl:pointer-events-none">
+                    <div className="w-full ml-auto bg-[#DAE9D2] text-[#00664E] 900:max-w-[392px] relative p-6 sm:p-[32px] flex flex-col gap-16 xl:mr-[164px] rounded-[23px] overflow-hidden">
+                        <Image src={"/frame-1.png"} alt="frame-1.png" width={200} height={200} className="w-full max-w-[170px] absolute top-0 right-0 pointer-events-none" />
+                        <div>
+                            <Image src={"/ix_user-profile-filled.png"} alt="ix_user-profile-filled.png" width={70} height={70} className="w-full max-w-[59px] pointer-events-none aspect-square" />
                         </div>
-                    ))}
+                        <div className="space-y-4 ">
+                            <h3 className="text-[#00664E] font-inter font-[700] text-[32px] leading-[1.2] lg:tracking-tighter">
+                                Create your Profile
+                            </h3>
+                            <p className="text-[#00664E] font-inter font-[400] text-base">
+                                Sign up and customize your restaurant
+                                page with your logo, photos, and key
+                                information.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <Image src={"/arr-down.png"} alt="arr-down.png" width={100} height={100} className="w-full 900:mr-[170px] max-w-[50px] sm:max-w-[75px]" />
+                    </div>
+                    <div className="relative w-full">
+                        <div className="w-full bg-[#CDBCE6] text-[#461A86] 900:max-w-[392px] relative p-6 sm:p-[32px] flex flex-col gap-16 overflow-hidden rounded-[23px]">
+                            <Image src={"/frame-2.png"} alt="frame-2.png" width={200} height={200} className="w-full max-w-[170px] absolute top-0 right-0 pointer-events-none" />
+                            <div>
+                                <Image src={"/foundation_upload.png"} alt="foundation_upload.png" width={70} height={70} className="w-full max-w-[62px] pointer-events-none aspect-square" />
+                            </div>
+                            <div className="space-y-4 ">
+                                <h3 className="text-[#461A86] font-inter font-[700] text-[32px] leading-[1.2] lg:tracking-tighter">
+                                    Add your content
+                                </h3>
+                                <p className="text-[#461A86] font-inter font-[400] lg:tracking-wide text-base">
+                                    Upload your menu, highlight events or
+                                    promotions, and link your socials, all in
+                                    one place.
+                                </p>
+                            </div>
+                        </div>
+                        <Image src={"/arr-down.png"} alt="arr-down.png" width={100} height={100} className="w-full 900:absolute top-[107%] 900:ml-[330px] 900:mr-0 mx-auto ro 900:rotate-[-90deg] max-w-[50px] sm:max-w-[75px]" />
+
+                    </div>
+                    <div className="w-full bg-[#FFBA86] ml-auto 900:mt-[-60px] 900:max-w-[392px] relative p-6 sm:p-[32px] flex flex-col gap-16  overflow-hidden rounded-[23px]">
+                        <Image src={"/frame-3.png"} alt="frame-3.png" width={200} height={200} className="w-full max-w-[170px] absolute top-0 right-0 pointer-events-none" />
+                        <div>
+                            <Image src={"/card-header-arr.png"} alt="card-header-arr.png" width={70} height={70} className="w-full max-w-[48px] pointer-events-none aspect-square" />
+                        </div>
+                        <div className="space-y-4 ">
+                            <h3 className="text-[#893600] font-inter font-[700] text-[32px] leading-[1.2] tracking-tight">
+                                Share with customers
+                            </h3>
+                            <p className="text-[#893600] font-inter font-[400] text-base">
+                                Share your unique Dineri.me link via
+                                Instagram, Google Business, and flyers to
+                                connect with your guests.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-
+        </div>
     )
 }
 

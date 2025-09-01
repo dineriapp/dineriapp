@@ -24,13 +24,13 @@ export function Header() {
 
   return (
     <header
-      className={`bg-[white] py-10  transition-all duration-300 flex justify-center `}
+      className={`bg-transparent  transition-all duration-300 flex justify-center`}
     >
       <div
-        className={`${isSticky ? "top-5 fixed   " : "sticky  top-0 left-0 "
-          }  z-50  border rounded-full w-11/12 max-w-[1281px] mx-auto border-slate-200  flex items-center justify-center bg-[#FCF9EB] backdrop-blur-md transition-all duration-500 h-[76px] lg:h-[120px]`}
+        className={`${isSticky ? "top-5 fixed h-[76px] lg:h-[90px] " : "fixed h-[76px] lg:h-[120px] top-[100px] xl:top-[120px]"
+          }  z-50  border rounded-full w-[96%] lg:w-11/12 max-w-[1281px] mx-auto border-slate-200  flex items-center justify-center bg-[#FCF9EB] backdrop-blur-md transition-all duration-500 `}
       >
-        <div className="flex h-18 items-center justify-between px-6 lg:px-[51px] w-full">
+        <div className={`${isSticky ? "px-6" : "px-6 lg:px-[51px]"} flex h-18 items-center justify-between  w-full`}>
           <Link href="/" className="flex items-center space-x-2 group">
             <Image
               src={"/logo.png"}
@@ -41,7 +41,7 @@ export function Header() {
             />
           </Link>
 
-          <div className="hidden gap-8 items-center md:flex font-poppins">
+          <div className="hidden gap-8 items-center xl:flex font-poppins">
             <Link
               href="/"
               className=" text-[#090909CC] font-[400] hover:text-slate-900"
@@ -54,14 +54,14 @@ export function Header() {
                   Products
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
+              <DropdownMenuContent align="start" className="bg-[#FCF9EB]">
                 {
                   [
                     { name: "Features", path: "/features" },
                     { name: "Demo", path: "/demo" },
                     { name: "Plans", path: "/plans" },
                   ].map((item, index) => (
-                    <DropdownMenuItem key={index} asChild className="!text-base cursor-pointer">
+                    <DropdownMenuItem key={index} asChild className="!text-base hover:!bg-white cursor-pointer">
                       <Link href={item.path}>{item.name}</Link>
                     </DropdownMenuItem>
                   ))
@@ -88,7 +88,7 @@ export function Header() {
             </Link>
           </div>
 
-          <div className="hidden items-center gap-[14px] justify-center md:flex">
+          <div className="hidden items-center gap-[14px] justify-center xl:flex">
             <Link href="/login">
               <Button
                 variant="ghost"
