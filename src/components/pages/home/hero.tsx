@@ -14,7 +14,7 @@ const Hero = () => {
                     <button className='bg-transparent px-[28px] h-[52px] 900:h-[66px] text-[#002147] border border-[#002147] hover:text-white hover:bg-[#002147] transition-all font-poppins font-[600] text-sm 900:text-base rounded-full cursor-pointer'>
                         Get Started – It’s Free
                     </button>
-                    <button className='bg-[#002147] px-[28px] h-[52px] 900:h-[66px] text-[#FFFFFF] hover:bg-main-hover/80 transition-all font-poppins font-[600] text-sm 900:text-base rounded-full cursor-pointer'>
+                    <button className=' px-[28px] h-[52px] 900:h-[66px] text-[#FFFFFF] bg-[#002147] hover:bg-main-hover/80 transition-all font-poppins font-[600] text-sm 900:text-base rounded-full cursor-pointer'>
                         See What You Can Do
                     </button>
                 </div>

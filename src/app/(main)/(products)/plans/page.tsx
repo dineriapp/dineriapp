@@ -16,13 +16,13 @@ export default function PlansPage() {
     const planKeys: StripePlan[] = ["basic", "pro", "enterprise"];
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
+        <div className="min-h-screen bg-[#DFE9B7] flex flex-col">
             {/* Header */}
-            <header className="w-full max-w-4xl mx-auto text-center pt-20 pb-12 px-4">
-                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-[#002147]">
+            <header className="w-full max-w-4xl mx-auto text-center pt-40 pb-12 px-4">
+                <h1 className="text-5xl md:text-6xl font-bold font-inter tracking-tight text-[#1B4048]">
                     Choose the right plan for your restaurant
                 </h1>
-                <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+                <p className="mt-6 text-lg md:text-xl text-[#1B4048] max-w-2xl mx-auto">
                     Start free and upgrade as your restaurant grows. All plans come with
                     powerful tools to showcase your menu, events, and brand online.
                 </p>
@@ -39,13 +39,13 @@ export default function PlansPage() {
                             <Card
                                 key={plan.name}
                                 className={`flex flex-col rounded-2xl border transition ${isHighlighted
-                                        ? "border-[#2ECC71] shadow-2xl scale-105"
-                                        : "border-gray-200 shadow-md"
+                                    ? "border-[#2ECC71] shadow-2xl scale-105"
+                                    : "border-gray-200 shadow-md"
                                     } hover:shadow-xl`}
                             >
                                 <CardHeader>
                                     {isHighlighted && (
-                                        <p className="text-sm font-semibold text-[#2ECC71] uppercase tracking-wide">
+                                        <p className="text-sm font-semibold text-[#002147] uppercase tracking-wide">
                                             Most Popular
                                         </p>
                                     )}
@@ -73,9 +73,9 @@ export default function PlansPage() {
 
                                 <CardFooter>
                                     <Button
-                                        className={`w-full font-semibold ${isHighlighted
-                                                ? "bg-[#2ECC71] hover:bg-[#27ae60] text-white"
-                                                : "bg-gray-100 hover:bg-gray-200 text-[#002147]"
+                                        className={`w-full font-poppins cursor-pointer font-semibold ${isHighlighted
+                                            ? "bg-[#002147] hover:bg-[#083a70] text-white"
+                                            : "bg-gray-100 hover:bg-gray-200 text-[#002147]"
                                             }`}
                                     >
                                         {plan.price === 0 ? "Start Free" : "Choose Plan"}
@@ -93,7 +93,7 @@ export default function PlansPage() {
                     Need something custom?{" "}
                     <Link
                         href="/contact"
-                        className="text-[#2ECC71] font-medium hover:underline"
+                        className="text-[#002147] font-medium hover:underline"
                     >
                         Contact our team
                     </Link>

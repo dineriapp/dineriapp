@@ -27,7 +27,7 @@ const faqs = [
 
 const Faqs = () => {
     return (
-        <div className='w-full flex items-center justify-center bg-[#A0BC94] px-5 pt-12 sm:pt-[86px] pb-14 sm:pb-[157px]'>
+        <div id='faq' className='w-full flex items-center scroll-mt-10 justify-center bg-[#A0BC94] px-5 pt-12 sm:pt-[86px] pb-14 sm:pb-[157px]'>
             <div className='w-full flex items-center justify-center gap-10 sm:gap-16 flex-col max-w-[1140px]'>
                 <div className='flex items-center justify-center flex-col gap-6'>
                     <h2 className='text-[#000000] font-[900] font-inter text-[40px] sm:text-[56px] text-center leading-[1.3]'>

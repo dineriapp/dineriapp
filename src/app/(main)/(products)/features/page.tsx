@@ -3,11 +3,11 @@ import React from 'react'
 
 const page = () => {
     return (
-        <div className='w-full flex items-center justify-center gap-7 sm:gap-[50px] flex-col pt-[40px] px-5 pb-12'>
+        <div className='w-full bg-[#DFE9B7] flex items-center justify-center gap-7 sm:gap-[50px] flex-col pt-32 sm:pt-40 px-5 pb-12'>
             {/* top  */}
             <div className='w-full max-w-[1200px] '>
-                <h1 className="mb-3 text-[44px] font-bold text-center leading-[1.05] tracking-tight text-[#002147] md:text-6xl lg:text-6xl ">
-                    <span className="bg-gradient-to-r from-[#2ECC71] to-[#002147] bg-clip-text text-transparent">
+                <h1 className="mb-3 text-[44px] font-bold text-center leading-[1.05] tracking-tight text-[#1B4048] md:text-6xl lg:text-6xl ">
+                    <span className="bg-gradient-to-r from-[#1B4048] to-[#1B4048] bg-clip-text text-transparent">
                         Create a homebase for your <br /> restaurent&apos;s presence.
                     </span>
                 </h1>

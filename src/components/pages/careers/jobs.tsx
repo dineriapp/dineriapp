@@ -38,18 +38,21 @@ const Jobs = () => {
     },
   ];
   return (
-    <div className="w-11/12 max-w-[1200px] mx-auto flex flex-col gap-y-5  lg:px-4 pb-12 lg:pt-10 pt-5">
-      <h2 className="text-3xl font-bold text-center text-main font-inter">
-        Current Openings
-      </h2>
-      {jobListings.length <= 0 ? (
-        <p className="text-2xl text-main font-inter text-center">
-          We don’t have any vacancies at the moment, but we’d love to welcome
-          you in the future when new opportunities arise.
-        </p>
-      ) : (
-        jobListings.map((job) => <JobCard key={job.id} job={job} />)
-      )}
+    <div className="w-full ">
+
+      <div className="w-11/12 max-w-[1280px] mx-auto flex flex-col gap-y-5  lg:px-4 pb-12 lg:pt-10 pt-5">
+        <h2 className="text-3xl font-bold text-center text-white font-inter">
+          Current Openings
+        </h2>
+        {jobListings.length <= 0 ? (
+          <p className="text-2xl text-main font-inter text-center">
+            We don’t have any vacancies at the moment, but we’d love to welcome
+            you in the future when new opportunities arise.
+          </p>
+        ) : (
+          jobListings.map((job) => <JobCard key={job.id} job={job} />)
+        )}
+      </div>
     </div>
   );
 };
@@ -80,7 +83,7 @@ function JobCard({ job }: JobCardProps) {
   const jobLink = `/careers/${job.id}`;
   const router = useRouter();
   return (
-    <Card className="w-full bg-white shadow-sm font-inter  transition-shadow duration-300 border-0 rounded-2xl overflow-hidden">
+    <Card className="w-full bg-white shadow-md border border-black/10 font-inter  transition-shadow duration-300 rounded-2xl overflow-hidden">
       <div className="p-4 md:p-6">
         {/* Label */}
         <div className="mb-4">

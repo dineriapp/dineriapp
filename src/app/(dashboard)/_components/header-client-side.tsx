@@ -10,7 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useRestaurants } from "@/lib/restaurents-queries"
+import { useSyncRestaurants } from "@/hooks/useSyncRestaurants"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
@@ -73,11 +73,11 @@ const navigationGroups = [
 
 
 export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, prismaUser: prismaUserType }) {
-    const { restaurants, setRestaurants, selectedRestaurant, setSelectedRestaurant } = useRestaurantStore()
+    const { restaurants, selectedRestaurant, setSelectedRestaurant } = useRestaurantStore()
     const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
     const navRef = useRef<HTMLDivElement>(null)
     const { setSupabaseUser, setPrismaUser } = useUserStore()
-    const { data } = useRestaurants();
+    const { fetchAndSet } = useSyncRestaurants();
 
     const openPopup = useUpgradePopupStore(state => state.open)
     const router = useRouter()
@@ -87,24 +87,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
     }, [pathname])
 
     useEffect(() => {
-        if (data?.restaurants) {
-            setRestaurants(data.restaurants);
-
-            const firstRestaurant = data.restaurants[0];
-            const restaurantID = localStorage.getItem("selected-restaurant-id");
-
-            if (!restaurantID) {
-                localStorage.setItem("selected-restaurant-id", firstRestaurant.id);
-                setSelectedRestaurant(firstRestaurant);
-            } else {
-                const restaurantSelected = data.restaurants.find(res => res.id === restaurantID);
-                if (restaurantSelected) {
-                    setSelectedRestaurant(restaurantSelected);
-                } else {
-                    setSelectedRestaurant(firstRestaurant);
-                }
-            }
-        }
+        fetchAndSet();
     }, []);
 
     // Hydrate store with server data

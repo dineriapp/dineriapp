@@ -51,11 +51,11 @@ export default function DemoPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-[#DFE9B7] flex flex-col">
             {/* Hero Section */}
-            <div className="w-full max-w-[1200px] mx-auto px-4 pt-12 lg:pt-16 text-center">
+            <div className="w-full max-w-[1200px] mx-auto px-4 pt-32 lg:pt-40 text-center">
                 <h1 className="mb-4 text-[44px] font-bold leading-[1.05] tracking-tight text-[#002147] md:text-6xl lg:text-6xl">
-                    <span className="bg-gradient-to-r from-[#2ECC71] to-[#002147] bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-r from-[#1B4048] to-[#1B4048] bg-clip-text text-transparent">
                         Request Your Free Demo <br /> and Get Started Today
                     </span>
                 </h1>
@@ -85,7 +85,7 @@ export default function DemoPage() {
                                         <FormItem>
                                             <FormLabel>Business Name</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Your restaurant name" {...field} />
+                                                <Input className="!h-[50] font-poppins" placeholder="Your restaurant name" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -98,7 +98,7 @@ export default function DemoPage() {
                                         <FormItem>
                                             <FormLabel>Contact Person</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="John Doe" {...field} />
+                                                <Input placeholder="John Doe" className="!h-[50] font-poppins" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -111,7 +111,7 @@ export default function DemoPage() {
                                         <FormItem>
                                             <FormLabel>Email</FormLabel>
                                             <FormControl>
-                                                <Input type="email" placeholder="example@email.com" {...field} />
+                                                <Input type="email" className="!h-[50] font-poppins" placeholder="example@email.com" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -124,7 +124,7 @@ export default function DemoPage() {
                                         <FormItem>
                                             <FormLabel>Phone</FormLabel>
                                             <FormControl>
-                                                <Input type="tel" placeholder="+1 234 567 890" {...field} />
+                                                <Input type="tel" className="!h-[50] font-poppins" placeholder="+1 234 567 890" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -137,7 +137,7 @@ export default function DemoPage() {
                                         <FormItem className="md:col-span-2">
                                             <FormLabel>Address</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="123 Main St" {...field} />
+                                                <Input placeholder="123 Main St" className="!h-[50] font-poppins" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -150,7 +150,7 @@ export default function DemoPage() {
                                         <FormItem>
                                             <FormLabel>City</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="City" {...field} />
+                                                <Input placeholder="City" className="!h-[50] font-poppins" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -163,7 +163,7 @@ export default function DemoPage() {
                                         <FormItem>
                                             <FormLabel>Country</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Country" {...field} />
+                                                <Input placeholder="Country" className="!h-[50] font-poppins" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -178,7 +178,7 @@ export default function DemoPage() {
                                             <FormControl>
                                                 <Textarea
                                                     placeholder="Tell us more about your business needs..."
-                                                    className="resize-none"
+                                                    className="resize-none font-poppins pt-3"
                                                     rows={4}
                                                     {...field}
                                                 />
@@ -191,7 +191,7 @@ export default function DemoPage() {
 
                             <div className="flex justify-center">
 
-                                <Button type="submit" className="bg-main hover:bg-main-hover/80 hover:scale-105 transition-transform h-[48px] px-10 cursor-pointer rounded-full">
+                                <Button type="submit" className="bg-main hover:bg-main-hover/80 hover:scale-105 font-poppins h-[62px] transition-transform text-lg px-10 cursor-pointer rounded-full">
                                     Submit Request
                                 </Button>
                             </div>

@@ -1,4 +1,4 @@
-import { Footer } from "@/components/shared/footer";
+import FooterMain from "@/components/shared/footer-main";
 import { Header } from "@/components/shared/header";
 
 export default function ProductsPagesLayout({
@@ -12,7 +12,7 @@ export default function ProductsPagesLayout({
             <main className="bg-[#F8F9FB] w-full grid">
                 {children}
             </main>
-            <Footer />
+            <FooterMain />
         </>
     );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { Footer } from "@/components/shared/footer";
+import FooterMain from "@/components/shared/footer-main";
 import { Header } from "@/components/shared/header";
 import { usePathname } from "next/navigation";
 
@@ -13,9 +13,11 @@ export default function RootLayout({
   return (
     <>
       {pathname !== "/help-center" && <Header />}
-      <div className="bg-[#F8F9FB]">{children}</div>
+      <div className="bg-[white]">
+        {children}
+      </div>
 
-      {pathname !== "/help-center" && <Footer />}
+      {pathname !== "/help-center" && <FooterMain />}
     </>
   );
 }

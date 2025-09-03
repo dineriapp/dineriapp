@@ -1,11 +1,13 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Monitor, Smartphone, Tablet, TrendingUp, Users, Eye, MousePointer } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
-import { useStats } from "@/lib/stats-queries"
+import { ErrorMessage } from "@/components/error-message"
+import LoadingUI from "@/components/loading-ui"
 import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useStats } from "@/lib/stats-queries"
 import { useRestaurantStore } from "@/stores/restaurant-store"
+import { Eye, Monitor, MousePointer, Smartphone, Tablet, TrendingUp, Users } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 export default function StatsPage() {
     const { selectedRestaurant } = useRestaurantStore()
@@ -13,50 +15,71 @@ export default function StatsPage() {
 
     if (isLoading || !selectedRestaurant) {
         return (
-            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
-                <div className="flex items-center space-x-2 text-slate-500">
-                    <svg
-                        className="animate-spin h-5 w-5 text-teal-600"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                    >
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                    </svg>
-                    <span>Loading analytics...</span>
-                </div>
-            </div>
+            <LoadingUI text="Loading analytics..." />
         )
     }
 
     if (error) {
         return (
-            <div className="max-w-[1200px] mx-auto px-4 py-16">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">Unable to load analytics</h2>
-                    <p className="text-slate-600">Please try refreshing the page</p>
-                </div>
-            </div>
+            <ErrorMessage
+                title="Unable to load analytics"
+                message="Please try refreshing the page"
+            />
         )
     }
 
     if (!stats) {
         return (
-            <div className="max-w-[1200px] mx-auto px-4 py-16">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">No data available</h2>
-                    <p className="text-slate-600">Start sharing your restaurant page to see analytics</p>
-                </div>
-            </div>
+            <ErrorMessage
+                title="No data available"
+                message="Start sharing your restaurant page to see analytics"
+            />
         )
     }
 
     const lastUpdated = new Date(dataUpdatedAt).toLocaleTimeString()
+
+
+    const overviewCards = [
+        {
+            title: "Total Link Views",
+            value: stats.overview.totalViews,
+            icon: <MousePointer className="h-4 w-4 text-slate-400" />,
+            extra: stats.overview.recentLinkViews > 0
+                ? `+${stats.overview.recentLinkViews} this week`
+                : null,
+            extraClass: "text-green-600",
+        },
+        {
+            title: "Unique Link Visitors",
+            value: stats.overview.totalUniqueViews,
+            icon: <Users className="h-4 w-4 text-slate-400" />,
+            extra:
+                stats.overview.totalViews > 0
+                    ? `${Math.round((stats.overview.totalUniqueViews / stats.overview.totalViews) * 100)}% unique`
+                    : "No data yet",
+            extraClass: "text-slate-500",
+        },
+        {
+            title: "Page Views",
+            value: stats.overview.totalPageViews,
+            icon: <Eye className="h-4 w-4 text-slate-400" />,
+            extra: stats.overview.recentPageViews > 0
+                ? `+${stats.overview.recentPageViews} this week`
+                : null,
+            extraClass: "text-green-600",
+        },
+        {
+            title: "Unique Page Visitors",
+            value: stats.overview.uniquePageViews,
+            icon: <TrendingUp className="h-4 w-4 text-slate-400" />,
+            extra:
+                stats.overview.totalPageViews > 0
+                    ? `${Math.round((stats.overview.uniquePageViews / stats.overview.totalPageViews) * 100)}% unique`
+                    : "No data yet",
+            extraClass: "text-slate-500",
+        },
+    ];
 
     return (
         <main className="max-w-[1200px] mx-auto px-4 py-8">
@@ -73,61 +96,26 @@ export default function StatsPage() {
 
             {/* Overview Cards */}
             <div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="border-slate-200 shadow-sm">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-600">Total Link Views</CardTitle>
-                        <MousePointer className="h-4 w-4 text-slate-400" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-slate-900">{stats.overview.totalViews.toLocaleString()}</div>
-                        {stats.overview.recentLinkViews > 0 && (
-                            <p className="text-xs text-green-600 mt-1">+{stats.overview.recentLinkViews} this week</p>
-                        )}
-                    </CardContent>
-                </Card>
-
-                <Card className="border-slate-200 shadow-sm">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-600">Unique Link Visitors</CardTitle>
-                        <Users className="h-4 w-4 text-slate-400" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-slate-900">{stats.overview.totalUniqueViews.toLocaleString()}</div>
-                        <p className="text-xs text-slate-500 mt-1">
-                            {stats.overview.totalViews > 0
-                                ? `${Math.round((stats.overview.totalUniqueViews / stats.overview.totalViews) * 100)}% unique`
-                                : "No data yet"}
-                        </p>
-                    </CardContent>
-                </Card>
-
-                <Card className="border-slate-200 shadow-sm">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-600">Page Views</CardTitle>
-                        <Eye className="h-4 w-4 text-slate-400" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-slate-900">{stats.overview.totalPageViews.toLocaleString()}</div>
-                        {stats.overview.recentPageViews > 0 && (
-                            <p className="text-xs text-green-600 mt-1">+{stats.overview.recentPageViews} this week</p>
-                        )}
-                    </CardContent>
-                </Card>
-
-                <Card className="border-slate-200 shadow-sm">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-600">Unique Page Visitors</CardTitle>
-                        <TrendingUp className="h-4 w-4 text-slate-400" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-slate-900">{stats.overview.uniquePageViews.toLocaleString()}</div>
-                        <p className="text-xs text-slate-500 mt-1">
-                            {stats.overview.totalPageViews > 0
-                                ? `${Math.round((stats.overview.uniquePageViews / stats.overview.totalPageViews) * 100)}% unique`
-                                : "No data yet"}
-                        </p>
-                    </CardContent>
-                </Card>
+                {overviewCards.map((card, idx) => (
+                    <Card key={idx} className="border-slate-200 shadow-sm">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium text-slate-600">
+                                {card.title}
+                            </CardTitle>
+                            {card.icon}
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-slate-900">
+                                {card.value.toLocaleString()}
+                            </div>
+                            {card.extra && (
+                                <p className={`text-xs mt-1 ${card.extraClass}`}>
+                                    {card.extra}
+                                </p>
+                            )}
+                        </CardContent>
+                    </Card>
+                ))}
             </div>
 
             {/* Link Performance Chart */}

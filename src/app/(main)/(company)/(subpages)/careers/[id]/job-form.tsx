@@ -143,7 +143,8 @@ export default function JobForm({ id }: { id: number }) {
                         <Input
                           id="fullName"
                           {...register("fullName")}
-                          className="mt-1 h-11"
+                          placeholder="Full Name"
+                          className="mt-1 h-[54px]  font-poppins"
                         />
                         {errors.fullName && (
                           <p className="text-red-500 text-sm mt-1">
@@ -158,9 +159,10 @@ export default function JobForm({ id }: { id: number }) {
                         </Label>
                         <Input
                           id="email"
+                          placeholder="example@example.com"
                           type="email"
                           {...register("email")}
-                          className="mt-1 h-11"
+                          className="mt-1 h-[54px]  font-poppins"
                         />
                         {errors.email && (
                           <p className="text-red-500 text-sm mt-1">
@@ -178,7 +180,7 @@ export default function JobForm({ id }: { id: number }) {
                         <Input
                           id="phone"
                           {...register("phone")}
-                          className="mt-1 h-11"
+                          className="mt-1 h-[54px]  font-poppins"
                         />
                         {errors.phone && (
                           <p className="text-red-500 text-sm mt-1">
@@ -201,9 +203,9 @@ export default function JobForm({ id }: { id: number }) {
                         >
                           <SelectTrigger
                             id="experience"
-                            className="mt-1 w-full !h-11"
+                            className="mt-1 w-full !h-[54px] font-poppins"
                           >
-                            <SelectValue placeholder="Select experience" />
+                            <SelectValue placeholder="Select experience" className="" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="0-1">0-1 years</SelectItem>
@@ -236,7 +238,7 @@ export default function JobForm({ id }: { id: number }) {
                         >
                           <SelectTrigger
                             id="education"
-                            className="mt-1 w-full !h-11"
+                            className="mt-1 w-full !h-[54px] font-poppins"
                           >
                             <SelectValue placeholder="Select education" />
                           </SelectTrigger>
@@ -277,7 +279,7 @@ export default function JobForm({ id }: { id: number }) {
                         >
                           <SelectTrigger
                             id="noticePeriod"
-                            className="mt-1 w-full !h-11"
+                            className="mt-1 w-full !h-[54px] font-poppins"
                           >
                             <SelectValue placeholder="Select notice period" />
                           </SelectTrigger>
@@ -313,7 +315,7 @@ export default function JobForm({ id }: { id: number }) {
                       >
                         <SelectTrigger
                           id="gender"
-                          className="mt-3 w-full !h-11"
+                          className="mt-3 w-full !h-[54px] font-poppins"
                         >
                           <SelectValue placeholder="Prefer not to say" />
                         </SelectTrigger>
@@ -354,7 +356,8 @@ export default function JobForm({ id }: { id: number }) {
                         <Input
                           id="city"
                           {...register("city")}
-                          className="mt-1 h-11"
+                          placeholder="City Name"
+                          className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.city && (
                           <p className="text-red-500 text-sm mt-1">
@@ -370,7 +373,8 @@ export default function JobForm({ id }: { id: number }) {
                         <Input
                           id="state"
                           {...register("state")}
-                          className="mt-1 h-11"
+                          placeholder="State Name"
+                          className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.state && (
                           <p className="text-red-500 text-sm mt-1">
@@ -386,7 +390,8 @@ export default function JobForm({ id }: { id: number }) {
                         <Input
                           id="zipCode"
                           {...register("zipCode")}
-                          className="mt-1 h-11"
+                          placeholder="ZipCode"
+                          className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.zipCode && (
                           <p className="text-red-500 text-sm mt-1">
@@ -406,7 +411,7 @@ export default function JobForm({ id }: { id: number }) {
                           type="url"
                           placeholder="https://your-portfolio.com"
                           {...register("portfolio")}
-                          className="mt-1 h-11"
+                          className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.portfolio && (
                           <p className="text-red-500 text-sm mt-1">
@@ -424,7 +429,7 @@ export default function JobForm({ id }: { id: number }) {
                           type="url"
                           placeholder="https://linkedin.com/in/yourprofile"
                           {...register("linkedIn")}
-                          className="mt-1 h-11"
+                          className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.linkedIn && (
                           <p className="text-red-500 text-sm mt-1">
@@ -444,7 +449,7 @@ export default function JobForm({ id }: { id: number }) {
                           type="url"
                           placeholder="https://github.com/yourusername"
                           {...register("github")}
-                          className="mt-1 h-11"
+                          className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.github && (
                           <p className="text-red-500 text-sm mt-1">
@@ -461,7 +466,7 @@ export default function JobForm({ id }: { id: number }) {
                           id="salaryExpectations"
                           placeholder="e.g. $80,000 - $100,000"
                           {...register("salaryExpectations")}
-                          className="mt-1 h-11"
+                          className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.salaryExpectations && (
                           <p className="text-red-500 text-sm mt-1">
@@ -485,7 +490,7 @@ export default function JobForm({ id }: { id: number }) {
                         />
                         <Button
                           type="button"
-                          className="h-11"
+                          className="!h-[54px] font-poppins"
                           variant="outline"
                           onClick={() =>
                             document.getElementById("resume")?.click()
@@ -515,7 +520,7 @@ export default function JobForm({ id }: { id: number }) {
                         id="coverLetter"
                         placeholder="Tell us why you're interested in this role and what makes you a great fit..."
                         {...register("coverLetter")}
-                        className="mt-1 h-32 resize-none"
+                        className="mt-1 h-32 pt-4 font-poppins resize-none"
                       />
                       {errors.coverLetter && (
                         <p className="text-red-500 text-sm mt-1">
@@ -528,7 +533,7 @@ export default function JobForm({ id }: { id: number }) {
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-blue-600 cursor-pointer hover:bg-blue-700 h-12 "
+                        className="w-full bg-[#002147] hover:bg-main-hover/80 cursor-pointer transition-all font-poppins text-lg h-[60px] "
                       >
                         {isSubmitting ? "Submitting..." : "Submit Application"}
                       </Button>

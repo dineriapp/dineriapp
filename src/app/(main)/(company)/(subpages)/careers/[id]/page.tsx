@@ -22,7 +22,7 @@ export default function JobDetailPage({
 
   if (!job) {
     return (
-      <div className="max-w-3xl mx-auto px-6 py-8 text-center">
+      <div className="max-w-3xl mx-auto px-6 pb-8 pt-32 lg:pt-40 text-center">
         <h1 className="text-2xl font-bold text-red-600">Job not found</h1>
         <Link
           href="/careers"
@@ -35,7 +35,7 @@ export default function JobDetailPage({
   }
   return (
     <div className="min-h-screen ">
-      <div className="max-w-3xl mx-auto px-6 py-8">
+      <div className="max-w-4xl mx-auto px-6 pb-8 pt-32 lg:pt-40">
         <Link
           href="/careers"
           className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8"
