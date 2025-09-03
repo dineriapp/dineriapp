@@ -46,7 +46,7 @@ const TrustedBy = () => {
     ];
 
     return (
-        <section className=" bg-[#FCF9EB] py-10 sm:py-[72px] overflow-hidden">
+        <section className=" bg-[#FFFFFF] border-[#D9D9D9] border py-10 sm:py-[72px] overflow-hidden">
             <div className="max-w-[1200px] mx-auto px-4">
                 <p className="mb-8 text-center text-sm font-medium uppercase tracking-wider text-[#62748E] ">
                     Trusted by restaurants worldwide

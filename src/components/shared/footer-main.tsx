@@ -64,8 +64,8 @@ const FooterMain = () => {
                     {/* bottom */}
                     <div className='w-full flex sm:flex-row flex-col sm:gap-0 gap-6 items-center justify-between'>
                         <Link href={"/signup"} className='sm:w-auto w-full'>
-                            <div className=' flex items-center justify-center sm:w-auto w-full bg-[#002147] hover:bg-[#083a70] transition-all h-[62px] text-white px-[27px] rounded-full cursor-pointer hover: font-poppins font-[600] text-[18px] leading-[1]'>
-                                Get Started Today
+                            <div className=' flex items-center justify-center sm:w-auto w-full bg-[#009A5E] hover:bg-[#104e37] transition-all h-[62px] text-white px-[27px] rounded-full cursor-pointer hover: font-poppins font-[600] text-[18px] leading-[1]'>
+                                Get started today
                             </div>
                         </Link>
                         <div className="flex gap-[18px] items-center">
@@ -80,7 +80,7 @@ const FooterMain = () => {
                                     <Link
                                         key={i}
                                         href={social.href}
-                                        className="flex h-[46px] w-[46px] shrink-0 items-center hover:bg-[#083a70] transition-all justify-center rounded-full bg-[#002147] text-white  "
+                                        className="flex h-[46px] w-[46px] shrink-0 items-center bg-[#009A5E] hover:bg-[#104e37] transition-all justify-center rounded-full  text-white  "
                                     >
                                         <Icon className="h-[23px] aspect-square shrink-0 w-[23px]" />
                                         <span className="sr-only">

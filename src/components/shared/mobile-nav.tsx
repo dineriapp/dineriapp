@@ -20,35 +20,35 @@ export function MobileNav() {
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[300px] flex flex-col h-full items-center justify-between sm:w-[400px]">
                     <div className="flex flex-col space-y-2 py-4 pt-10 px-0 w-full">
-                        {
-                            [
-                                { name: "Features", path: "/features" },
-                                { name: "Demo", path: "/demo" },
-                                { name: "Plans", path: "/plans" },
-                            ].map((item, index) => (
-                                <Link
-                                    href={item.path}
-                                    key={index}
-                                    className="px-4 py-2 text-base font-medium text-slate-700 hover:text-slate-900"
-                                    onClick={() => setOpen(false)}
-                                >
-                                    {item.name}
-                                </Link>
-                            ))
-                        }
+
                         <Link
-                            href="/signup"
+                            href="/"
                             className="px-4 py-2 text-base font-medium text-slate-700 hover:text-slate-900"
                             onClick={() => setOpen(false)}
                         >
-                            Get started
+                            Home
                         </Link>
+                        <Link
+                            href="/features"
+                            className="px-4 py-2 text-base font-medium text-slate-700 hover:text-slate-900"
+                            onClick={() => setOpen(false)}
+                        >
+                            Features
+                        </Link>
+
                         <Link
                             href="/demo"
                             className="px-4 py-2 text-base font-medium text-slate-700 hover:text-slate-900"
                             onClick={() => setOpen(false)}
                         >
                             Demo
+                        </Link>
+                        <Link
+                            href="/#"
+                            className="px-4 py-2 text-base font-medium text-slate-700 hover:text-slate-900"
+                            onClick={() => setOpen(false)}
+                        >
+                            Learn
                         </Link>
                         <Link
                             href="/plans"
@@ -67,7 +67,7 @@ export function MobileNav() {
                             </Link>
                             <Link href="/signup" onClick={() => setOpen(false)}>
                                 <Button className="w-full bg-main hover:bg-main/90">
-                                    Sign up free
+                                    Sign up
                                 </Button>
                             </Link>
                         </div>

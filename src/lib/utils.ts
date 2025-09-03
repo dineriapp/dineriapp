@@ -53,17 +53,3 @@ export const getBackgroundStyle = ({ props }: { props: { bg_type: string, bg_ima
   return { backgroundColor: props?.bg_color || "#ffffff" }
 }
 
-export const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-export const motionItem = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-}

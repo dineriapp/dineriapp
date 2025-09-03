@@ -1,3 +1,5 @@
+import { GradientDirection } from "@prisma/client";
+
 export interface Restaurant {
     id: string;
     user_id: string;
@@ -124,4 +126,33 @@ export interface FAQ {
     view_count: number;
     created_at: string;
     updated_at: string;
+}
+
+export interface AppearanceFormData {
+    bg_color: string
+    accent_color: string
+    headings_text_color: string
+    button_text_icons_color: string
+    button_style: "rounded" | "square" | "pill"
+    font_family: string
+    bg_type: "color" | "gradient" | "image"
+    bg_gradient_start: string
+    social_icon_bg_color: string
+    social_icon_color: string
+    button_icons_show: boolean
+    buttons_gap_in_px: number
+    social_icon_gap: number
+    social_icon_bg_show: boolean
+    bg_gradient_end: string
+    gradient_direction: GradientDirection
+    button_variant: "solid" | "outline"
+    bg_image_url?: string
+}
+
+export interface Template {
+    id: string
+    name: string
+    description: string
+    preview: AppearanceFormData
+    category: string
 }

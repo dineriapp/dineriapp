@@ -1,11 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MobileNav } from "./mobile-nav";
-import { usePathname } from "next/navigation";
 
 export function Header() {
   const [isSticky, setIsSticky] = useState(false);
@@ -49,37 +48,23 @@ export function Header() {
             >
               Home
             </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild className="!outline-none !ring-0">
-                <button className=" text-[#090909CC] font-[400] flex items-center justify-center gap-1 cursor-pointer hover:text-slate-900">
-                  Products
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="bg-[#FCF9EB]">
-                {
-                  [
-                    { name: "Features", path: "/features" },
-                    { name: "Demo", path: "/demo" },
-                    { name: "Plans", path: "/plans" },
-                  ].map((item, index) => (
-                    <DropdownMenuItem key={index} asChild className="!text-base hover:!bg-white cursor-pointer">
-                      <Link href={item.path}>{item.name}</Link>
-                    </DropdownMenuItem>
-                  ))
-                }
-              </DropdownMenuContent>
-            </DropdownMenu>
             <Link
-              href="/signup"
+              href="/features"
               className=" text-[#090909CC] font-[400] hover:text-slate-900"
             >
-              Get started
+              Features
             </Link>
             <Link
               href="/demo"
               className=" text-[#090909CC] font-[400] hover:text-slate-900"
             >
               Demo
+            </Link>
+            <Link
+              href="#"
+              className=" text-[#090909CC] font-[400] hover:text-slate-900"
+            >
+              learn
             </Link>
             <Link
               href="/plans"
@@ -99,8 +84,8 @@ export function Header() {
               </Button>
             </Link>
             <Link href="/signup">
-              <Button className="bg-[#002147] hover:bg-main-hover/80 font-poppins font-[600] text-lg text-[#FFFFFF] cursor-pointer h-[62px] px-[46px] transition-all rounded-full">
-                Join Now
+              <Button className="bg-[#002147] hover:bg-main-hover/80 font-poppins font-[600] text-lg text-[#FFFFFF] cursor-pointer h-[62px] px-[53px] transition-all rounded-full">
+                Sign Up
               </Button>
             </Link>
           </div>
