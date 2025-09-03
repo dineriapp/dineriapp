@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MobileNav } from "./mobile-nav";
+import { usePathname } from "next/navigation";
 
 export function Header() {
   const [isSticky, setIsSticky] = useState(false);
-
+  const pathname = usePathname()
   useEffect(() => {
     console.log(window.scrollY);
     const handleScroll = () => {
@@ -27,10 +28,10 @@ export function Header() {
       className={`bg-transparent  transition-all duration-300 flex justify-center`}
     >
       <div
-        className={`${isSticky ? "top-5 fixed h-[76px] lg:h-[90px] " : "fixed h-[76px] lg:h-[120px] top-[100px] xl:top-[120px]"
+        className={`${isSticky ? "top-5 fixed h-[76px] lg:h-[90px]" : `fixed  ${pathname === "/" ? "top-[100px] xl:top-[120px] h-[76px] lg:h-[120px]" : "top-5 h-[76px] lg:h-[90px]"}`}
           }  z-50  border rounded-full w-[96%] lg:w-11/12 max-w-[1281px] mx-auto border-slate-200  flex items-center justify-center bg-[#FCF9EB] backdrop-blur-md transition-all duration-500 `}
       >
-        <div className={`${isSticky ? "px-6" : "px-6 lg:px-[51px]"} flex h-18 items-center justify-between  w-full`}>
+        <div className={`${isSticky ? "px-6" : ` ${pathname === "/" ? "px-6 lg:px-[51px]" : "px-6"}`} flex h-18 items-center justify-between  w-full`}>
           <Link href="/" className="flex items-center space-x-2 group">
             <Image
               src={"/logo.png"}

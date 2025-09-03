@@ -14,24 +14,17 @@ const FooterMain = () => {
                                 Product
                             </h3>
                             <div className='flex flex-col gap-[14px]'>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Features
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Pricing
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Testimonials
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    FAQ
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Demo
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Support
-                                </Link>
+                                {[
+                                    { name: "Features", path: "/features" },
+                                    { name: "Demo", path: "/demo" },
+                                    { name: "Plans", path: "/plans" },
+                                    { name: "Testimonials", path: "/#testimonials" },
+                                    { name: "FAQ", path: "/#faq" },
+                                ].map((item) => (
+                                    <Link href={item.path} key={item.path} className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
+                                        {item.name}
+                                    </Link>
+                                ))}
                             </div>
                         </div>
                         <div className='space-y-3 sm:space-y-5'>
@@ -39,15 +32,15 @@ const FooterMain = () => {
                                 Company
                             </h3>
                             <div className='flex flex-col gap-4'>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    About
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Careers
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Help Center
-                                </Link>
+                                {[
+                                    { name: "About", path: "/about" },
+                                    { name: "Careers", path: "/careers" },
+                                    { name: "Help Center", path: "/help-center" },
+                                ].map((item, index) => (
+                                    <Link key={index} href={item.path} className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
+                                        {item.name}
+                                    </Link>
+                                ))}
                             </div>
                         </div>
                         <div className='space-y-3 sm:space-y-5'>
@@ -55,29 +48,26 @@ const FooterMain = () => {
                                 Legal
                             </h3>
                             <div className='flex flex-col gap-4'>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Terms
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Privacy
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Cookies
-                                </Link>
-                                <Link href="#" className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
-                                    Licenses
-                                </Link>
+                                {[
+                                    { name: "Terms", path: "/terms" },
+                                    { name: "Privacy", path: "/privacy-policy" },
+                                    { name: "Cookies", path: "/cookies" },
+                                ].map((item, index) => (
+                                    <Link key={index} href={item.path} className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
 
+                                        {item.name}
+                                    </Link>
+                                ))}
                             </div>
                         </div>
                     </div>
                     {/* bottom */}
                     <div className='w-full flex sm:flex-row flex-col sm:gap-0 gap-6 items-center justify-between'>
-                        <div className='sm:w-auto w-full'>
-                            <button className='bg-[#002147] sm:w-auto w-full hover:bg-[#083a70] transition-all h-[62px] text-white px-[27px] rounded-full cursor-pointer hover: font-poppins font-[600] text-[18px] leading-[1]'>
+                        <Link href={"/signup"} className='sm:w-auto w-full'>
+                            <div className='bg-[#002147] flex items-center justify-center sm:w-auto w-full hover:bg-[#083a70] transition-all h-[62px] text-white px-[27px] rounded-full cursor-pointer hover: font-poppins font-[600] text-[18px] leading-[1]'>
                                 Get Started Today
-                            </button>
-                        </div>
+                            </div>
+                        </Link>
                         <div className="flex gap-[18px] items-center">
                             {[
                                 { icon: Instagram, href: "https://instagram.com" },

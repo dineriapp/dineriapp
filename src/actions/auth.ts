@@ -8,8 +8,6 @@ import { redirect } from 'next/navigation'
 export async function login(formData: FormData) {
     const supabase = await createClient()
 
-    // type-casting here for convenience
-    // in practice, you should validate your inputs
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
@@ -23,7 +21,6 @@ export async function login(formData: FormData) {
     }
 
     const { error } = await supabase.auth.signInWithPassword(data)
-
 
     if (error) {
         return { error: error.message }
@@ -44,7 +41,6 @@ export async function signup(formData: FormData) {
         return { error: "Email and password are required." };
     }
 
-    // 1) Sign up
     const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
@@ -54,7 +50,6 @@ export async function signup(formData: FormData) {
     });
 
     if (signUpError) {
-        // Prefer robust matching over brittle message strings
         const msg =
             signUpError.message?.toLowerCase().includes("registered") ||
                 signUpError.status === 400
@@ -63,7 +58,6 @@ export async function signup(formData: FormData) {
         return { error: msg };
     }
 
-    // 2) Try sign-in (may fail if confirmation is required)
     const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -77,15 +71,13 @@ export async function signup(formData: FormData) {
         return { error: friendly };
     }
 
-    // 3) We’re signed in — fetch the authed user and upsert into Prisma
     const { data: userData } = await supabase.auth.getUser();
     const user = userData?.user;
     if (!user) {
         return { error: "Could not load your user after sign-in." };
     }
 
-    // IMPORTANT: Ensure your Prisma schema supports string UUIDs for `id`
-    // If your `User.id` is NOT a string UUID, remove `id` here and only store `supabase_id`.
+
     await prisma.user.upsert({
         where: { id: user.id },
         update: {
@@ -93,7 +85,7 @@ export async function signup(formData: FormData) {
             supabase_id: user.id,
         },
         create: {
-            id: user.id, // keep only if your Prisma id is a String/UUID
+            id: user.id,
             supabase_id: user.id,
             email: user.email ?? email,
         },

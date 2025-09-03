@@ -14,7 +14,7 @@ export function LegalSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="  lg:border-l-2 border-slate-300 lg:p-6 px-0 py-3 sticky lg:top-26">
+    <div className="  lg:border-l-2 border-slate-300 lg:p-6 px-0 py-3 sticky lg:top-35">
       <h3 className="font-semibold text-slate-900 mb-4 max-lg:text-2xl">
         Legal{" "}
       </h3>
@@ -26,7 +26,7 @@ export function LegalSidebar() {
             className={cn(
               "block lg:px-3 lg:py-2 text-sm  transition-all ",
               pathname === page.href
-                ? " text-main-action font-medium lg:border-l-2 border-main-action"
+                ? " text-[#461A86] font-medium lg:border-l-2 border-[#461A86]"
                 : "text-slate-600 hover:text-slate-900"
             )}
           >
