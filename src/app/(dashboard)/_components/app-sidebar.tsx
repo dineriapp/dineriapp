@@ -124,7 +124,7 @@ export function AppSidebar({
   const isPremium = prismaUser?.subscription_plan === "basic" ? false : true;
 
   return (
-    <Sidebar className="!pt-0 rounded-tl-[14px] rounded-bl-[14px] overflow-hidden">
+    <Sidebar className="!pt-0 rounded-tl-[14px] !font-poppins rounded-bl-[14px] overflow-hidden">
       <SidebarHeader className="!px-0 !pt-0">
         <div className="h-16 flex items-center px-2 border-b border-black/10">
           <Link href="/dashboard" className="flex items-center space-x-2 group">
@@ -146,7 +146,7 @@ export function AppSidebar({
 
               <DropdownMenuTrigger
                 asChild
-                className="border w-full rounded-sm !py-4"
+                className="border w-full rounded-full px-5 !py-4 h-[40px]"
               >
                 <SidebarMenuButton>
                   <div className="flex items-center gap-2">
@@ -204,7 +204,7 @@ export function AppSidebar({
                     <Button
                       size="sm"
                       variant="secondary"
-                      className="w-full bg-main-action hover:bg-emerald-700 text-white text-sm"
+                      className="w-full bg-main-action hover:bg-emerald-700 font-poppins rounded-full h-[38px] text-white text-sm"
                       onClick={() => router.push("/dashboard/create")}
                     >
                       <Plus /> New Restaurant
@@ -229,7 +229,7 @@ export function AppSidebar({
                             "Multiple restaurant management is available in the Enterprise Plan."
                           )
                         }
-                        className="mt-2 w-full bg-main-action hover:bg-emerald-700 text-white text-sm"
+                        className="mt-2 w-full bg-main-action hover:bg-emerald-700 rounded-full h-[38px] text-white text-sm"
                       >
                         Upgrade Plan
                       </Button>

@@ -46,35 +46,35 @@ export default function DashboardPage() {
         {
             title: 'Total Links',
             count: selectedRestaurant?._count?.links,
-            icon: <LinkIcon className="h-4 w-4 text-teal-600" />,
+            icon: <LinkIcon className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
             description: 'Active links on your page',
         },
         {
             title: 'Total Menus',
             count: selectedRestaurant?._count?.menuCategories,
-            icon: <UtensilsCrossed className="h-4 w-4 text-teal-600" />,
+            icon: <UtensilsCrossed className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
             description: 'Active menus on your page',
         },
         {
             title: 'Total Events',
             count: selectedRestaurant?._count?.events,
-            icon: <Calendar className="h-4 w-4 text-teal-600" />,
+            icon: <Calendar className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
             description: 'Active events on your page',
         },
         {
             title: 'Total Faqs',
             count: selectedRestaurant?._count?.faqCategories,
-            icon: <HelpCircle className="h-4 w-4 text-teal-600" />,
+            icon: <HelpCircle className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
             description: 'Active faq categories on your page',
         },
         {
             title: 'Visitors This Month',
             count: monthlyVisits ?? <Loader2 className="animate-spin opacity-80" />,
-            icon: <BarChart2 className="h-4 w-4 text-blue-600" />,
+            icon: <BarChart2 className="h-4 w-4 text-white" />,
             iconBg: 'bg-blue-50',
             description: 'Visitors this month',
             bg: 'from-blue-50',
@@ -82,7 +82,7 @@ export default function DashboardPage() {
         {
             title: 'Total Visitors',
             count: selectedRestaurant?._count?.restaurantViews,
-            icon: <Users className="h-4 w-4 text-teal-600" />,
+            icon: <Users className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
             description: 'Total visitors all time',
         },
@@ -91,7 +91,7 @@ export default function DashboardPage() {
     return (
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-                <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600">
+                <h1 className="text-4xl font-bold text-main-blue">
                     Welcome Back
                 </h1>
                 <p className="text-slate-500 mt-2">Manage your restaurant profile and track performance</p>
@@ -105,10 +105,10 @@ export default function DashboardPage() {
             >
                 {stats.map((stat, index) => (
                     <motion.div key={index} variants={motionItem}>
-                        <Card className={`bg-gradient-to-br ${stat.bg || 'from-slate-50'} to-white hover:shadow-md transition-shadow border-slate-200`}>
+                        <Card className={`bg-gradient-to-br ${stat.bg || 'from-slate-50'} to-white box-shad-every hover:shadow-md font-poppins transition-shadow border-slate-400`}>
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium text-slate-500">{stat.title}</CardTitle>
-                                <div className={`h-8 w-8 rounded-full ${stat.iconBg} flex items-center justify-center`}>
+                                <div className={`h-8 w-8 rounded-full bg-[#002147] text-white flex items-center justify-center`}>
                                     {stat.icon}
                                 </div>
                             </CardHeader>

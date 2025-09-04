@@ -26,7 +26,7 @@ const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Re
     return (
         <Card className="overflow-hidden border-slate-200">
             <CardHeader>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between font-poppins">
                     <div>
                         <CardTitle className="text-slate-900">Preview</CardTitle>
                         <CardDescription className="text-slate-500">
@@ -34,8 +34,8 @@ const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Re
                         </CardDescription>
                     </div>
                     <Link href={`/${selectedRestaurant?.slug}`} target="_blank">
-                        <Button variant="outline" size="sm" className="text-slate-700 border-slate-200">
-                            <ExternalLink className="h-4 w-4 mr-2" />
+                        <Button variant="outline" size="sm" className="text-white h-[38px] !px-5 hover:text-white cursor-pointer font-poppins rounded-full bg-[#009A5E] hover:bg-[#009A5E]/80">
+                            <ExternalLink className="h-4 w-4" />
                             Visit
                         </Button>
                     </Link>

@@ -33,8 +33,8 @@ export function NavMain({
   }[];
 }) {
   return (
-    <SidebarGroup>
-      <SidebarMenu>
+    <SidebarGroup className="h-full bg-gray-100 font-poppins">
+      <SidebarMenu className="gap-1">
         {items.map((item) => (
           <Collapsible
             key={item.title}
@@ -44,7 +44,7 @@ export function NavMain({
           >
             <SidebarMenuItem>
               {/* <CollapsibleTrigger asChild> */}
-              <SidebarMenuButton tooltip={item.title} className="gap-4">
+              <SidebarMenuButton tooltip={item.title} className="gap-4 hover:bg-white cursor-pointer">
                 <span className="flex items-center gap-2">
                   {item.icon && <item.icon size={20} strokeWidth={1.5} />}
                 </span>
@@ -53,10 +53,10 @@ export function NavMain({
               </SidebarMenuButton>
               {/* </CollapsibleTrigger> */}
               {/* <CollapsibleContent className="pl-5 "> */}
-              <SidebarMenuSub className="border-l-0 pl-5">
+              <SidebarMenuSub className="border-l-0 pl-5 gap-2">
                 {item.items?.map((subItem) => (
                   <SidebarMenuSubItem key={subItem.title}>
-                    <SidebarMenuSubButton asChild>
+                    <SidebarMenuSubButton asChild className="hover:bg-white cursor-pointer">
                       <Link href={`/help-center${subItem.url}`}>
                         <span>{subItem.title}</span>
                       </Link>

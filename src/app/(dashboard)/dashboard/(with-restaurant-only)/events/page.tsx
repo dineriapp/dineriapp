@@ -191,20 +191,20 @@ export default function EventsPage() {
                     className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
                 >
                     <div>
-                        <h1 className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-4xl font-bold text-transparent">
+                        <h1 className=" text-4xl font-bold text-main-blue">
                             Events
                         </h1>
                         <p className="mt-2 text-muted-foreground">Manage your restaurant&apos;s events and ticket links</p>
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <div className="relative bg-white rounded-full ">
+                            <Search className="absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                             <Input
                                 placeholder="Search events..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 w-64"
+                                className="pl-12 font-poppins rounded-full w-64 h-[42px]"
                             />
                         </div>
                         {isEventsLimitReached ?
@@ -221,7 +221,7 @@ export default function EventsPage() {
                                         } else {
                                         }
                                     }}
-                                    className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105"
+                                    className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                 >
                                     <Plus className="h-4 w-4" />
                                     Add Event
@@ -232,7 +232,7 @@ export default function EventsPage() {
                                 <DialogTrigger asChild>
                                     <Button
                                         size="lg"
-                                        className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105"
+                                        className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                     >
                                         <Plus className="h-4 w-4" />
                                         Add Event
@@ -300,13 +300,14 @@ export default function EventsPage() {
                                                     setIsAddDialogOpen(false)
                                                     resetForm()
                                                 }}
+                                                className="hover:opacity-75 cursor-pointer rounded-full h-[40px] font-poppins !px-5"
                                             >
                                                 Cancel
                                             </Button>
                                             <Button
                                                 type="submit"
                                                 disabled={!title || !date || createEventMutation.isPending}
-                                                className="bg-gradient-to-r from-teal-600 to-blue-600"
+                                                className="hover:opacity-75 !bg-main-blue cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                                             >
                                                 {createEventMutation.isPending ? "Adding..." : "Add Event"}
                                             </Button>
@@ -365,10 +366,9 @@ export default function EventsPage() {
                                                             variant="ghost"
                                                             size="sm"
                                                             asChild
-                                                            className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                        >
+                                                            className="h-8 w-8 p-0   bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full"                                                        >
                                                             <a href={event.ticket_url} target="_blank" rel="noopener noreferrer" title="View tickets">
-                                                                <ExternalLink className="h-4 w-4 text-teal-600" />
+                                                                <ExternalLink className="h-4 w-4 text-white" />
                                                                 <span className="sr-only">View tickets</span>
                                                             </a>
                                                         </Button>
@@ -385,7 +385,7 @@ export default function EventsPage() {
                                                             setTicketUrl(event.ticket_url || "")
                                                             setIsEditDialogOpen(true)
                                                         }}
-                                                        className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                        className="h-8 w-8 p-0   bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full"
                                                     >
                                                         <Edit className="h-4 w-4" />
                                                         <span className="sr-only">Edit event</span>
@@ -396,7 +396,7 @@ export default function EventsPage() {
                                                             <Button
                                                                 variant="ghost"
                                                                 size="sm"
-                                                                className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                                className="h-8 w-8 p-0   bg-destructive text-white hover:text-white hover:bg-destructive/70 cursor-pointer rounded-full"
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
                                                                 <span className="sr-only">Delete event</span>
@@ -410,11 +410,10 @@ export default function EventsPage() {
                                                                 </AlertDialogDescription>
                                                             </AlertDialogHeader>
                                                             <AlertDialogFooter>
-                                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                <AlertDialogCancel className="font-poppins rounded-full !px-5"> Cancel</AlertDialogCancel>
                                                                 <AlertDialogAction
                                                                     onClick={() => handleDeleteEvent(event.id)}
-                                                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                                >
+                                                                    className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90">
                                                                     Delete
                                                                 </AlertDialogAction>
                                                             </AlertDialogFooter>
@@ -426,8 +425,8 @@ export default function EventsPage() {
                                                         size="sm"
                                                         onClick={() => moveEvent(event.id, "up")}
                                                         disabled={index === 0 || reorderEventMutation.isPending}
-                                                        className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                    >
+                                                        className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110">
+
                                                         <ArrowUp className="h-4 w-4" />
                                                         <span className="sr-only">Move up</span>
                                                     </Button>
@@ -437,8 +436,8 @@ export default function EventsPage() {
                                                         size="sm"
                                                         onClick={() => moveEvent(event.id, "down")}
                                                         disabled={index === filteredEvents.length - 1 || reorderEventMutation.isPending}
-                                                        className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                    >
+                                                        className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110">
+
                                                         <ArrowDown className="h-4 w-4" />
                                                         <span className="sr-only">Move down</span>
                                                     </Button>
@@ -537,13 +536,14 @@ export default function EventsPage() {
                                     setEditingEvent(null)
                                     resetForm()
                                 }}
+                                className="hover:opacity-75 h-[40px]  cursor-pointer rounded-full font-poppins !px-5"
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
                                 disabled={!title || !date || updateEventMutation.isPending}
-                                className="bg-gradient-to-r from-teal-600 to-blue-600"
+                                className="hover:opacity-75 !bg-main-blue cursor-pointer rounded-full h-[40px] font-poppins !px-5"
                             >
                                 {updateEventMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>

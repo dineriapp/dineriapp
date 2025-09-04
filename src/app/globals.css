@@ -31,6 +31,8 @@
   /* cutom  */
   --color-main: #002147;
   --color-main-background: #f8f9fb;
+  --color-main-blue: #002147;
+  --color-main-green: #009a5e;
   --color-main-text: #333333;
   --color-main-action: #2ecc71;
   --color-main-warning: #e74c3c;
@@ -161,6 +163,9 @@
 
 .box-shad-every {
   box-shadow: 8.59px 8.59px 0px 0px #000000;
+}
+.box-shad-every-2 {
+  box-shadow: 4.59px 4.59px 0px 0px #000000;
 }
 
 .no-scroll {

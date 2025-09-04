@@ -51,15 +51,15 @@ export default function DemoPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#DFE9B7] flex flex-col">
+        <div className="min-h-screen bg-[#002147] flex flex-col">
             {/* Hero Section */}
             <div className="w-full max-w-[1200px] mx-auto px-4 pt-32 lg:pt-40 text-center">
                 <h1 className="mb-4 text-[44px] font-bold leading-[1.05] tracking-tight text-[#002147] md:text-6xl lg:text-6xl">
-                    <span className="bg-gradient-to-r from-[#1B4048] to-[#1B4048] bg-clip-text text-transparent">
+                    <span className="text-white">
                         Request Your Free Demo <br /> and Get Started Today
                     </span>
                 </h1>
-                <p className="text-center text-lg md:text-xl text-gray-600 max-w-[800px] mx-auto leading-relaxed">
+                <p className="text-center text-lg md:text-xl text-gray-300 max-w-[800px] mx-auto leading-relaxed">
                     See how our platform can help your restaurant grow. Fill out the form below
                     and we’ll be in touch to schedule your personalized demo.
                 </p>
@@ -67,7 +67,7 @@ export default function DemoPage() {
 
             {/* Form Section */}
             <div className="flex-1 flex items-center justify-center py-8 lg:py-12 px-4">
-                <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl px-5 py-8 md:p-8">
+                <div className="w-full max-w-2xl bg-[white] box-shad-every shadow-lg rounded-2xl px-5 py-8 md:p-8">
                     <h2 className="text-2xl font-bold text-[#002147] text-center mb-1">
                         Request a Demo
                     </h2>
@@ -191,7 +191,7 @@ export default function DemoPage() {
 
                             <div className="flex justify-center">
 
-                                <Button type="submit" className="bg-main hover:bg-main-hover/80 hover:scale-105 font-poppins h-[62px] transition-transform text-lg px-10 cursor-pointer rounded-full">
+                                <Button type="submit" className="bg-[#009A5E] hover:bg-[#104e37] hover:scale-105 font-poppins h-[62px] transition-transform text-lg px-10 cursor-pointer rounded-full">
                                     Submit Request
                                 </Button>
                             </div>

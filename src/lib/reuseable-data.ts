@@ -233,3 +233,4 @@ export const textColorPresets = [
     { name: "Gray Dark", color: "#374151" },
     { name: "Gray Light", color: "#9ca3af" },
 ]
+

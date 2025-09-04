@@ -51,7 +51,7 @@ export default async function WithResttaurantLayout({
         <div className="bg-[#3C3C3C]">
             <SidebarProvider defaultOpen={defaultOpen} className="!rounded-[14px] overflow-hidden">
                 <AppSidebar user={user} prismaUser={prismaUser} />
-                <main className="w-full bg-main-background h-screen overflow-y-auto">
+                <main className="w-full bg-gray-50 h-screen overflow-y-auto">
                     <div className="min-h-screen">
                         <div className="border-b border-slate-200 bg-white shadow-sm">
                             <div className="mx-auto px-4 h-[62px] flex items-center justify-between">

@@ -44,7 +44,7 @@ export default function StatsPage() {
         {
             title: "Total Link Views",
             value: stats.overview.totalViews,
-            icon: <MousePointer className="h-4 w-4 text-slate-400" />,
+            icon: <MousePointer className="h-4 w-4 text-main-blue" />,
             extra: stats.overview.recentLinkViews > 0
                 ? `+${stats.overview.recentLinkViews} this week`
                 : null,
@@ -53,17 +53,17 @@ export default function StatsPage() {
         {
             title: "Unique Link Visitors",
             value: stats.overview.totalUniqueViews,
-            icon: <Users className="h-4 w-4 text-slate-400" />,
+            icon: <Users className="h-4 w-4 text-main-blue" />,
             extra:
                 stats.overview.totalViews > 0
                     ? `${Math.round((stats.overview.totalUniqueViews / stats.overview.totalViews) * 100)}% unique`
                     : "No data yet",
-            extraClass: "text-slate-500",
+            extraClass: "text-gray-500",
         },
         {
             title: "Page Views",
             value: stats.overview.totalPageViews,
-            icon: <Eye className="h-4 w-4 text-slate-400" />,
+            icon: <Eye className="h-4 w-4 text-main-blue" />,
             extra: stats.overview.recentPageViews > 0
                 ? `+${stats.overview.recentPageViews} this week`
                 : null,
@@ -72,12 +72,12 @@ export default function StatsPage() {
         {
             title: "Unique Page Visitors",
             value: stats.overview.uniquePageViews,
-            icon: <TrendingUp className="h-4 w-4 text-slate-400" />,
+            icon: <TrendingUp className="h-4 w-4 text-main-blue" />,
             extra:
                 stats.overview.totalPageViews > 0
                     ? `${Math.round((stats.overview.uniquePageViews / stats.overview.totalPageViews) * 100)}% unique`
                     : "No data yet",
-            extraClass: "text-slate-500",
+            extraClass: "text-gray-500",
         },
     ];
 
@@ -85,27 +85,27 @@ export default function StatsPage() {
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <div className="mb-8 flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900">Analytics</h1>
-                    <p className="mt-1 text-slate-600">Real-time statistics for {stats.restaurant.name}</p>
+                    <h1 className="text-3xl font-bold text-[#002147]">Analytics</h1>
+                    <p className="mt-1 text-gray-600">Real-time statistics for {stats.restaurant.name}</p>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm text-slate-500">Last updated: {lastUpdated}</span>
+                    <div className="h-2 w-2 bg-[#009a5e] rounded-full animate-pulse"></div>
+                    <span className="text-sm text-gray-500">Last updated: {lastUpdated}</span>
                 </div>
             </div>
 
             {/* Overview Cards */}
             <div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 {overviewCards.map((card, idx) => (
-                    <Card key={idx} className="border-slate-200 shadow-sm">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-600">
+                    <Card key={idx} className="border-gray-200 shadow-sm box-shad-every">
+                        <CardHeader className="flex flex-row items-center font-poppins justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium text-gray-600">
                                 {card.title}
                             </CardTitle>
                             {card.icon}
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-slate-900">
+                            <div className="text-2xl font-bold text-gray-900">
                                 {card.value.toLocaleString()}
                             </div>
                             {card.extra && (
@@ -120,10 +120,10 @@ export default function StatsPage() {
 
             {/* Link Performance Chart */}
             {stats.linkStats.length > 0 ? (
-                <Card className="mb-8 border-slate-200 shadow-sm">
-                    <CardHeader>
-                        <CardTitle className="text-slate-900">Link Performance</CardTitle>
-                        <CardDescription className="text-slate-500">Clicks on link</CardDescription>
+                <Card className="mb-8 border-gray-200 shadow-sm">
+                    <CardHeader className="font-poppins">
+                        <CardTitle className="text-gray-900">Link Performance</CardTitle>
+                        <CardDescription className="text-gray-500">Clicks on link</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="h-[400px]">
@@ -155,13 +155,13 @@ export default function StatsPage() {
                     </CardContent>
                 </Card>
             ) : (
-                <Card className="mb-8 border-slate-200 shadow-sm">
-                    <CardHeader>
-                        <CardTitle className="text-slate-900">Link Performance</CardTitle>
-                        <CardDescription className="text-slate-500">No links created yet</CardDescription>
+                <Card className="mb-8 border-gray-200 shadow-sm">
+                    <CardHeader className="font-poppins">
+                        <CardTitle className="text-gray-900">Link Performance</CardTitle>
+                        <CardDescription className="text-gray-500">No links created yet</CardDescription>
                     </CardHeader>
                     <CardContent className="py-8">
-                        <div className="text-center text-slate-500">
+                        <div className="text-center text-gray-500">
                             <MousePointer className="h-12 w-12 mx-auto mb-4 opacity-50" />
                             <p>Create some links to see performance analytics</p>
                         </div>
@@ -171,27 +171,27 @@ export default function StatsPage() {
 
             {/* Detailed Statistics Table */}
             {stats.linkStats.length > 0 && (
-                <Card className="mb-8 border-slate-200 shadow-sm">
-                    <CardHeader>
-                        <CardTitle className="text-slate-900">Detailed Statistics</CardTitle>
-                        <CardDescription className="text-slate-500">Breakdown by link</CardDescription>
+                <Card className="mb-8 border-gray-200 shadow-sm">
+                    <CardHeader className="font-poppins">
+                        <CardTitle className="text-gray-900">Detailed Statistics</CardTitle>
+                        <CardDescription className="text-gray-500">Breakdown by link</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
-                                    <tr className="border-b border-slate-200">
-                                        <th className="px-4 py-3 text-left text-slate-700 font-medium">Link</th>
-                                        <th className="px-4 py-3 text-right text-slate-700 font-medium">Total Clicks</th>
-                                        <th className="px-4 py-3 text-right text-slate-700 font-medium">Unique Clicks</th>
+                                    <tr className="border-b border-gray-200">
+                                        <th className="px-4 py-3 text-left text-gray-700 font-medium ">Link</th>
+                                        <th className="px-4 py-3 text-right text-gray-700 font-medium">Total Clicks</th>
+                                        <th className="px-4 py-3 text-right text-gray-700 font-medium">Unique Clicks</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {stats.linkStats.map((stat) => (
-                                        <tr key={stat.id} className="border-b border-slate-100">
+                                        <tr key={stat.id} className="border-b border-gray-100">
                                             <td className="px-4 py-3">
-                                                <div className="font-medium text-slate-900">{stat.title}</div>
-                                                <div className="max-w-xs truncate text-sm text-slate-500">{stat.url}</div>
+                                                <div className="font-medium text-gray-900">{stat.title}</div>
+                                                <div className="max-w-xs truncate text-sm text-gray-500">{stat.url}</div>
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                                 <Badge variant="secondary" className="font-medium">
@@ -213,10 +213,10 @@ export default function StatsPage() {
             )}
 
             {/* Device Breakdown */}
-            <Card className="border-slate-200">
-                <CardHeader>
-                    <CardTitle className="text-slate-900">Device Breakdown</CardTitle>
-                    <CardDescription className="text-slate-500">How visitors access your page</CardDescription>
+            <Card className="border-gray-200">
+                <CardHeader className="font-poppins">
+                    <CardTitle className="text-gray-900">Device Breakdown</CardTitle>
+                    <CardDescription className="text-gray-500">How visitors access your page</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {stats.deviceStats.some((device) => device.count > 0) ? (
@@ -226,20 +226,20 @@ export default function StatsPage() {
                                 return (
                                     <div
                                         key={index}
-                                        className="text-center p-6 rounded-lg border border-slate-200 bg-gradient-to-br from-slate-50 to-white"
+                                        className="text-center p-6 rounded-lg border border-gray-200 box-shad-every bg-gradient-to-br from-gray-100 to-white"
                                     >
-                                        <div className="mx-auto w-12 h-12 rounded-full bg-gradient-to-r from-teal-100 to-blue-100 flex items-center justify-center mb-4">
-                                            <Icon className="h-6 w-6 text-teal-600" />
+                                        <div className="mx-auto w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-4">
+                                            <Icon className="h-6 w-6 text-main-green" />
                                         </div>
-                                        <h3 className="font-semibold text-slate-900 mb-2">{device.device}</h3>
-                                        <div className="text-3xl font-bold text-slate-900 mb-1">{device.count}</div>
-                                        <div className="text-sm text-slate-500">{device.percentage}% of total</div>
+                                        <h3 className="font-semibold text-gray-900 mb-2">{device.device}</h3>
+                                        <div className="text-3xl font-bold text-gray-900 mb-1">{device.count}</div>
+                                        <div className="text-sm text-gray-500">{device.percentage}% of total</div>
                                     </div>
                                 )
                             })}
                         </div>
                     ) : (
-                        <div className="text-center py-8 text-slate-500">
+                        <div className="text-center py-8 text-gray-500">
                             <Monitor className="h-12 w-12 mx-auto mb-4 opacity-50" />
                             <p>No device data available yet</p>
                         </div>

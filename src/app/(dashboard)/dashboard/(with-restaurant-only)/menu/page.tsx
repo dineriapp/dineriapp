@@ -46,7 +46,7 @@ import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { MenuCategory, MenuItem, SubscriptionPlan } from "@prisma/client"
-import { AlertTriangle, ArrowDown, ArrowUp, Edit, Leaf, Plus, Search, Trash2, X } from "lucide-react"
+import { AlertTriangle, ArrowDown, ArrowUp, Check, Edit, Leaf, Plus, Search, Trash2, X } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
 
@@ -299,7 +299,7 @@ export default function MenuPage() {
                     className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
                 >
                     <div>
-                        <h1 className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-4xl font-bold text-transparent">
+                        <h1 className="text-4xl font-bold text-main-blue">
                             Menu Management
                         </h1>
                         <p className="mt-2 text-slate-500">
@@ -310,13 +310,13 @@ export default function MenuPage() {
                     </div>
 
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                        <div className="relative bg-white rounded-full ">
+                            <Search className="absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                             <Input
                                 placeholder="Search menu items..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-10 w-64"
+                                className="pl-12 font-poppins rounded-full w-64 h-[42px]"
                             />
                         </div>
                         {
@@ -326,7 +326,7 @@ export default function MenuPage() {
                                         <Button
                                             size="lg"
                                             disabled={!restaurantId}
-                                            className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105"
+                                            className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                         >
                                             <Plus className="h-4 w-4" />
                                             Add Category
@@ -382,6 +382,7 @@ export default function MenuPage() {
                                                         setIsAddCategoryDialogOpen(false)
                                                         resetForm()
                                                     }}
+                                                    className="hover:opacity-75 cursor-pointer rounded-full h-[40px] font-poppins !px-5"
                                                     disabled={createCategoryMutation.isPending}
                                                 >
                                                     Cancel
@@ -389,7 +390,7 @@ export default function MenuPage() {
                                                 <Button
                                                     type="submit"
                                                     disabled={!newCategoryName || createCategoryMutation.isPending || !restaurantId}
-                                                    className="bg-gradient-to-r from-teal-600 to-blue-600"
+                                                    className="hover:opacity-75 !bg-main-blue cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                                                 >
                                                     {createCategoryMutation.isPending ? "Adding..." : "Add Category"}
                                                 </Button>
@@ -408,7 +409,7 @@ export default function MenuPage() {
 
                                             openPopup(`You are limited to ${limit} menu categories on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`)
                                         }}
-                                        className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105"
+                                        className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                     >
                                         <Plus className="h-4 w-4" />
                                         Add Category
@@ -427,7 +428,10 @@ export default function MenuPage() {
                                     <div className="space-y-1">
                                         <CardTitle className="text-xl">{category.name}</CardTitle>
                                         {category.show_in_quick_menu && (
-                                            <Badge className="bg-primary text-white">Quick Menu</Badge>
+                                            <div className="inline-flex items-center gap-1 rounded-md bg-[#002147] px-2.5 py-1 text-xs font-medium text-white shadow-sm">
+                                                Quick Menu
+                                                <Check className="size-4 text-[#009a5e]" />
+                                            </div>
                                         )}
                                         {category.description && (
                                             <CardDescription className="text-base">{category.description}</CardDescription>
@@ -444,7 +448,7 @@ export default function MenuPage() {
                                                 setIsEditCategoryDialogOpen(true)
                                                 setNewCategoryshow_in_quick_menu(category.show_in_quick_menu)
                                             }}
-                                            className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                            className="h-8 w-8 p-0   bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full"
                                         >
                                             <Edit className="h-4 w-4" />
                                             <span className="sr-only">Edit category</span>
@@ -455,7 +459,7 @@ export default function MenuPage() {
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                    className="h-8 w-8 p-0   bg-destructive text-white hover:text-white hover:bg-destructive/70 cursor-pointer rounded-full"
                                                     disabled={deleteCategoryMutation.isPending}
                                                 >
                                                     <Trash2 className="h-4 w-4" />
@@ -471,11 +475,10 @@ export default function MenuPage() {
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                    <AlertDialogCancel className="font-poppins rounded-full !px-5">Cancel</AlertDialogCancel>
                                                     <AlertDialogAction
                                                         onClick={() => deleteCategoryMutation.mutate(category.id)}
-                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                    >
+                                                        className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"                                                    >
                                                         Delete
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
@@ -487,8 +490,7 @@ export default function MenuPage() {
                                             size="sm"
                                             onClick={() => reorderCategoryMutation.mutate({ categoryId: category.id, direction: "up" })}
                                             disabled={categoryIndex === 0 || reorderCategoryMutation.isPending}
-                                            className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                        >
+                                            className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                        >
                                             <ArrowUp className="h-4 w-4" />
                                             <span className="sr-only">Move up</span>
                                         </Button>
@@ -498,8 +500,7 @@ export default function MenuPage() {
                                             size="sm"
                                             onClick={() => reorderCategoryMutation.mutate({ categoryId: category.id, direction: "down" })}
                                             disabled={categoryIndex === filteredCategories.length - 1 || reorderCategoryMutation.isPending}
-                                            className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                        >
+                                            className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                         >
                                             <ArrowDown className="h-4 w-4" />
                                             <span className="sr-only">Move down</span>
                                         </Button>
@@ -532,9 +533,9 @@ export default function MenuPage() {
                                                         setIsAddItemDialogOpen(true);
                                                     }
                                                 }}
-                                                className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
+                                                className="flex items-center gap-2 cursor-pointer text-white hover:text-white hover:opacity-75 !bg-main-green rounded-full !px-5 font-poppins h-[42px]"
                                             >
-                                                <Plus className="mr-2 h-4 w-4" />
+                                                <Plus className="h-4 w-4" />
                                                 Add Item
                                             </Button>
                                         }
@@ -619,8 +620,7 @@ export default function MenuPage() {
                                                                     setAddons(parsedAddons)
                                                                     setNewItemshow_in_quick_menu(item.show_in_quick_menu)
                                                                 }}
-                                                                className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                            >
+                                                                className="h-8 w-8 p-0 bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                                              >
                                                                 <Edit className="h-4 w-4" />
                                                                 <span className="sr-only">Edit item</span>
                                                             </Button>
@@ -630,7 +630,7 @@ export default function MenuPage() {
                                                                     <Button
                                                                         variant="ghost"
                                                                         size="sm"
-                                                                        className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                                        className="h-8 w-8 p-0 bg-destructive text-white hover:text-white hover:bg-destructive/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                                         disabled={deleteItemMutation.isPending}
                                                                     >
                                                                         <Trash2 className="h-4 w-4" />
@@ -646,11 +646,10 @@ export default function MenuPage() {
                                                                         </AlertDialogDescription>
                                                                     </AlertDialogHeader>
                                                                     <AlertDialogFooter>
-                                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                        <AlertDialogCancel className="font-poppins rounded-full !px-5">Cancel</AlertDialogCancel>
                                                                         <AlertDialogAction
                                                                             onClick={() => deleteItemMutation.mutate(item.id)}
-                                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                                        >
+                                                                            className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"                                                                        >
                                                                             Delete
                                                                         </AlertDialogAction>
                                                                     </AlertDialogFooter>
@@ -662,8 +661,7 @@ export default function MenuPage() {
                                                                 size="sm"
                                                                 onClick={() => reorderItemMutation.mutate({ itemId: item.id, direction: "up" })}
                                                                 disabled={itemIndex === 0 || reorderItemMutation.isPending}
-                                                                className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                            >
+                                                                className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                                            >
                                                                 <ArrowUp className="h-4 w-4" />
                                                                 <span className="sr-only">Move up</span>
                                                             </Button>
@@ -675,8 +673,7 @@ export default function MenuPage() {
                                                                 disabled={
                                                                     itemIndex === (category.items?.length || 0) - 1 || reorderItemMutation.isPending
                                                                 }
-                                                                className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                            >
+                                                                className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                                                 >
                                                                 <ArrowDown className="h-4 w-4" />
                                                                 <span className="sr-only">Move down</span>
                                                             </Button>
@@ -702,9 +699,8 @@ export default function MenuPage() {
                                                         setNewItemshow_in_quick_menu(true)
                                                         setIsAddItemDialogOpen(true);
                                                     }}
-                                                    className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
-                                                >
-                                                    <Plus className="mr-2 h-4 w-4" />
+                                                    className="flex items-center gap-2 cursor-pointer text-white hover:text-white hover:opacity-75 !bg-main-green rounded-full !px-5 font-poppins h-[42px] mx-auto"                                                >
+                                                    <Plus className="h-4 w-4" />
                                                     Add First Item
                                                 </Button>
                                             </div>
@@ -794,6 +790,7 @@ export default function MenuPage() {
                                     setSelectedCategory(null)
                                     resetForm()
                                 }}
+                                className="hover:opacity-75  cursor-pointer rounded-full h-[40px]    font-poppins !px-5"
                                 disabled={updateCategoryMutation.isPending}
                             >
                                 Cancel
@@ -801,7 +798,7 @@ export default function MenuPage() {
                             <Button
                                 type="submit"
                                 disabled={!newCategoryName || updateCategoryMutation.isPending}
-                                className="bg-gradient-to-r from-teal-600 to-blue-600"
+                                className="hover:opacity-75 !bg-main-blue cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                             >
                                 {updateCategoryMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>
@@ -871,7 +868,7 @@ export default function MenuPage() {
                                                     setAllergens([...allergens, allergen])
                                                 }
                                             }}
-                                            className={`capitalize ${allergens.includes(allergen) ? "bg-gradient-to-r from-teal-600 to-blue-600" : ""
+                                            className={`capitalize ${allergens.includes(allergen) ? "bg-main-green" : ""
                                                 }`}
                                         >
                                             {allergen}
@@ -936,7 +933,7 @@ export default function MenuPage() {
                                     type="button"
                                     variant="secondary"
                                     onClick={() => setAddons([...addons, { name: "", price: 0 }])}
-                                    className="mt-2"
+                                    className="hover:opacity-75 !bg-main-green text-white cursor-pointer rounded-full h-[38px] !text-xs font-poppins !px-4"
                                 >
                                     + Add Addon
                                 </Button>
@@ -974,6 +971,7 @@ export default function MenuPage() {
                                     setSelectedItem(null)
                                     resetForm()
                                 }}
+                                className="hover:opacity-75 h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                                 disabled={updateItemMutation.isPending}
                             >
                                 Cancel
@@ -981,7 +979,7 @@ export default function MenuPage() {
                             <Button
                                 type="submit"
                                 disabled={!newItemName || !newItemPrice || updateItemMutation.isPending}
-                                className="bg-gradient-to-r from-teal-600 to-blue-600"
+                                className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                             >
                                 {isUploading ? "Uploading..." : updateItemMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>
@@ -1060,7 +1058,7 @@ export default function MenuPage() {
                                                     setAllergens([...allergens, allergen])
                                                 }
                                             }}
-                                            className={`capitalize ${allergens.includes(allergen) ? "bg-gradient-to-r from-teal-600 to-blue-600" : ""
+                                            className={`capitalize ${allergens.includes(allergen) ? "bg-main-green" : ""
                                                 }`}
                                         >
                                             {allergen}
@@ -1125,7 +1123,7 @@ export default function MenuPage() {
                                     type="button"
                                     variant="secondary"
                                     onClick={() => setAddons([...addons, { name: "", price: 0 }])}
-                                    className="mt-2"
+                                    className="hover:opacity-75 !bg-main-green text-white cursor-pointer rounded-full h-[38px] !text-xs font-poppins !px-4"
                                 >
                                     + Add Addon
                                 </Button>
@@ -1161,6 +1159,8 @@ export default function MenuPage() {
                                     setIsAddItemDialogOpen(false)
                                     resetForm()
                                 }}
+                                className="hover:opacity-75 h-[40px]  cursor-pointer rounded-full font-poppins !px-5"
+
                                 disabled={createItemMutation.isPending}
                             >
                                 Cancel
@@ -1170,7 +1170,7 @@ export default function MenuPage() {
                                 disabled={
                                     !newItemName || !newItemPrice || !selectedCategory || isUploading || createItemMutation.isPending
                                 }
-                                className="bg-gradient-to-r from-teal-600 to-blue-600"
+                                className="hover:opacity-75 !bg-main-blue cursor-pointer rounded-full h-[40px] font-poppins !px-5"
                             >
                                 {isUploading ? "Uploading..." : createItemMutation.isPending ? "Adding..." : "Add Item"}
                             </Button>

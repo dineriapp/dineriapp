@@ -14,7 +14,7 @@ const VisitBtn = () => {
                     <Button
                         variant="outline"
                         size="sm"
-                        className="flex items-center gap-1 !h-[38px] text-slate-600 hover:text-teal-600 hover:bg-slate-50"
+                        className="flex items-center gap-1 bg-main-green text-white !h-[40px] font-inter hover:bg-main-green/70 hover:text-white !leading-[1] rounded-full cursor-pointer !px-4"
                     >
                         <Globe2 className="h-4 w-4" />
                         <span>Visit</span>

@@ -16,7 +16,7 @@ export default function PlansPage() {
     const planKeys: StripePlan[] = ["basic", "pro", "enterprise"];
 
     return (
-        <div className="min-h-screen bg-[#DFE9B7] flex flex-col">
+        <div className="min-h-screen bg-[white] flex flex-col">
             {/* Header */}
             <header className="w-full max-w-4xl mx-auto text-center pt-40 pb-12 px-4">
                 <h1 className="text-5xl md:text-6xl font-bold font-inter tracking-tight text-[#1B4048]">
@@ -38,7 +38,7 @@ export default function PlansPage() {
                         return (
                             <Card
                                 key={plan.name}
-                                className={`flex flex-col rounded-2xl border transition ${isHighlighted
+                                className={`flex flex-col bg-[#EBE3CC] rounded-2xl border transition ${isHighlighted
                                     ? "border-[#2ECC71] shadow-2xl scale-105"
                                     : "border-gray-200 shadow-md"
                                     } hover:shadow-xl`}
@@ -73,8 +73,8 @@ export default function PlansPage() {
 
                                 <CardFooter>
                                     <Button
-                                        className={`w-full font-poppins cursor-pointer font-semibold ${isHighlighted
-                                            ? "bg-[#002147] hover:bg-[#083a70] text-white"
+                                        className={`w-full h-[52px] rounded-full font-poppins cursor-pointer font-semibold ${isHighlighted
+                                            ? "bg-[#009A5E] hover:bg-[#009A5E]/80 text-white"
                                             : "bg-gray-100 hover:bg-gray-200 text-[#002147]"
                                             }`}
                                     >

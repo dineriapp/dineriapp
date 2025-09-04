@@ -344,7 +344,7 @@ export default function FAQPage() {
                     className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
                 >
                     <div>
-                        <h1 className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-4xl font-bold text-transparent">
+                        <h1 className=" text-4xl font-bold text-main-blue">
                             FAQ Management
                         </h1>
                         <p className="mt-2 text-slate-500">
@@ -368,7 +368,9 @@ export default function FAQPage() {
                                             } else {
                                             }
                                         }}
-                                        variant="outline" size="lg" className="flex items-center gap-2 bg-transparent">
+                                        variant="outline" size="lg"
+                                        className="flex items-center gap-2 text-main-blue hover:text-main-blue border-[1px] border-main-blue cursor-pointer hover:opacity-75 !bg-transparent rounded-full !px-5 font-poppins h-[42px]"
+                                    >
                                         <Lightbulb className="h-4 w-4" />
                                         Quick Setup
                                     </Button>
@@ -377,7 +379,9 @@ export default function FAQPage() {
                                 <>
                                     <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
                                         <DialogTrigger asChild>
-                                            <Button variant="outline" size="lg" className="flex items-center gap-2 bg-transparent">
+                                            <Button variant="outline" size="lg"
+                                                className="flex items-center gap-2 text-main-blue hover:text-main-blue border-[1px] border-main-blue cursor-pointer hover:opacity-75 !bg-transparent rounded-full !px-5 font-poppins h-[42px]"
+                                            >
                                                 <Lightbulb className="h-4 w-4" />
                                                 Quick Setup
                                             </Button>
@@ -391,7 +395,7 @@ export default function FAQPage() {
                                             </DialogHeader>
 
                                             <div className="flex-1 overflow-y-auto py-4">
-                                                <div className="grid gap-4 pr-2 md:grid-cols-2">
+                                                <div className="grid gap-4 pr-2 md:grid-cols-1">
                                                     {FAQ_TEMPLATES.map((template, index) => (
                                                         <Card
                                                             key={index}
@@ -418,8 +422,7 @@ export default function FAQPage() {
 
                                                                     <Button
                                                                         onClick={() => handleAddFromTemplate(template)}
-                                                                        className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
-                                                                        disabled={createCategoryMutation.isPending || createFaqMutation.isPending}
+                                                                        className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]" disabled={createCategoryMutation.isPending || createFaqMutation.isPending}
                                                                     >
                                                                         {createCategoryMutation.isPending || createFaqMutation.isPending
                                                                             ? "Adding..."
@@ -453,7 +456,7 @@ export default function FAQPage() {
                                             } else {
                                             }
                                         }}
-                                        className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
+                                        className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                     >
                                         <Plus className="h-4 w-4" />
                                         Add Category
@@ -465,7 +468,7 @@ export default function FAQPage() {
                                         <Button
                                             size="lg"
                                             disabled={!restaurantId}
-                                            className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
+                                            className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                         >
                                             <Plus className="h-4 w-4" />
                                             Add Category
@@ -511,13 +514,14 @@ export default function FAQPage() {
                                                         resetForm()
                                                     }}
                                                     disabled={createCategoryMutation.isPending}
+                                                    className="hover:opacity-75 cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                                                 >
                                                     Cancel
                                                 </Button>
                                                 <Button
                                                     type="submit"
                                                     disabled={!newCategoryName || createCategoryMutation.isPending || !restaurantId}
-                                                    className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                                    className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                                                 >
                                                     {createCategoryMutation.isPending ? "Adding..." : "Add Category"}
                                                 </Button>
@@ -534,7 +538,7 @@ export default function FAQPage() {
                 {/* Stats Cards */}
                 <motion.div variants={container} initial="hidden" animate="show" className="mb-8 grid gap-6 md:grid-cols-3">
                     <motion.div variants={item}>
-                        <Card className="bg-gradient-to-br from-teal-50 to-white transition-all hover:shadow-lg hover:scale-[1.02]">
+                        <Card className="bg-gradient-to-br box-shad-every-2 from-white to-white transition-all hover:shadow-lg hover:scale-[1.02]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium text-slate-500">Total Categories</CardTitle>
                                 <HelpCircle className="h-4 w-4 text-teal-600" />
@@ -547,7 +551,7 @@ export default function FAQPage() {
                     </motion.div>
 
                     <motion.div variants={item}>
-                        <Card className="bg-gradient-to-br from-blue-50 to-white transition-all hover:shadow-lg hover:scale-[1.02]">
+                        <Card className="bg-gradient-to-br box-shad-every-2 from-white to-white transition-all hover:shadow-lg hover:scale-[1.02]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium text-slate-500">Total FAQs</CardTitle>
                                 <Eye className="h-4 w-4 text-blue-600" />
@@ -560,7 +564,7 @@ export default function FAQPage() {
                     </motion.div>
 
                     <motion.div variants={item}>
-                        <Card className="bg-gradient-to-br from-purple-50 to-white transition-all hover:shadow-lg hover:scale-[1.02]">
+                        <Card className="bg-gradient-to-br box-shad-every-2 from-white to-white transition-all hover:shadow-lg hover:scale-[1.02]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-sm font-medium text-slate-500">Featured FAQs</CardTitle>
                                 <Star className="h-4 w-4 text-purple-600" />
@@ -580,13 +584,13 @@ export default function FAQPage() {
                     transition={{ delay: 0.2 }}
                     className="mb-6"
                 >
-                    <div className="relative">
-                        <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                    <div className="relative bg-white rounded-full">
+                        <Search className="absolute left-5 top-4 h-5 w-5 text-slate-400" />
                         <Input
                             placeholder="Search FAQs..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 transition-all focus:ring-2 focus:ring-teal-500"
+                            className="pl-12 transition-all rounded-full focus:ring-2 font-poppins h-[50px] focus:ring-teal-500"
                         />
                     </div>
                 </motion.div>
@@ -623,8 +627,7 @@ export default function FAQPage() {
                                                     setNewCategoryDescription(category.description || "")
                                                     setIsEditCategoryDialogOpen(true)
                                                 }}
-                                                className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                            >
+                                                className="h-8 w-8 p-0 bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                            >
                                                 <Edit className="h-4 w-4" />
                                                 <span className="sr-only">Edit category</span>
                                             </Button>
@@ -634,7 +637,7 @@ export default function FAQPage() {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                        className="h-8 w-8 p-0 bg-destructive text-white hover:text-white hover:bg-destructive/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                         disabled={deleteCategoryMutation.isPending}
                                                     >
                                                         <Trash2 className="h-4 w-4" />
@@ -650,12 +653,12 @@ export default function FAQPage() {
                                                         </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
-                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                        <AlertDialogCancel className="font-poppins rounded-full !px-5">Cancel</AlertDialogCancel>
                                                         <AlertDialogAction
                                                             onClick={() => deleteCategoryMutation.mutate(category.id)}
-                                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                            className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"
                                                         >
-                                                            Delete Category
+                                                            Delete
                                                         </AlertDialogAction>
                                                     </AlertDialogFooter>
                                                 </AlertDialogContent>
@@ -666,7 +669,7 @@ export default function FAQPage() {
                                                 size="sm"
                                                 onClick={() => reorderCategoryMutation.mutate({ categoryId: category.id, direction: "up" })}
                                                 disabled={categoryIndex === 0 || reorderCategoryMutation.isPending}
-                                                className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                             >
                                                 <ArrowUp className="h-4 w-4" />
                                                 <span className="sr-only">Move up</span>
@@ -677,8 +680,7 @@ export default function FAQPage() {
                                                 size="sm"
                                                 onClick={() => reorderCategoryMutation.mutate({ categoryId: category.id, direction: "down" })}
                                                 disabled={categoryIndex === filteredCategories.length - 1 || reorderCategoryMutation.isPending}
-                                                className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                            >
+                                                className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                             >
                                                 <ArrowDown className="h-4 w-4" />
                                                 <span className="sr-only">Move down</span>
                                             </Button>
@@ -692,7 +694,7 @@ export default function FAQPage() {
                                                 <>
                                                     <Button
                                                         variant="outline"
-                                                        className="w-full justify-center transition-all hover:scale-[1.02] hover:bg-teal-50 bg-transparent"
+                                                        className="w-full justify-center transition-all rounded-full border-main-blue font-poppins h-[40px] hover:text-white hover:bg-main-blue cursor-pointer bg-transparent"
                                                         onClick={() =>
                                                             openPopup(
                                                                 `You are limited to ${faqLimit} FAQs per category on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`
@@ -708,7 +710,7 @@ export default function FAQPage() {
                                                         <DialogTrigger asChild>
                                                             <Button
                                                                 variant="outline"
-                                                                className="w-full justify-center transition-all hover:scale-[1.02] hover:bg-teal-50 bg-transparent"
+                                                                className="w-full justify-center transition-all rounded-full border-main-blue font-poppins h-[40px] hover:text-white hover:bg-main-blue cursor-pointer bg-transparent"
                                                                 onClick={() => setSelectedCategory(category)}
                                                             >
                                                                 <Plus className="mr-2 h-4 w-4" />
@@ -765,6 +767,7 @@ export default function FAQPage() {
                                                                             setIsAddFAQDialogOpen(false)
                                                                             resetForm()
                                                                         }}
+                                                                        className="hover:opacity-75  cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                                                                         disabled={createFaqMutation.isPending}
                                                                     >
                                                                         Cancel
@@ -774,7 +777,7 @@ export default function FAQPage() {
                                                                         disabled={
                                                                             !newFAQQuestion || !newFAQAnswer || createFaqMutation.isPending || !selectedCategory
                                                                         }
-                                                                        className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                                                        className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                                                                     >
                                                                         {createFaqMutation.isPending ? "Adding..." : "Add FAQ"}
                                                                     </Button>
@@ -823,8 +826,7 @@ export default function FAQPage() {
                                                                         setIsFeatured(faq.is_featured)
                                                                         setIsEditFAQDialogOpen(true)
                                                                     }}
-                                                                    className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                                >
+                                                                    className="h-8 w-8 p-0 bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                                                >
                                                                     <Edit className="h-4 w-4" />
                                                                     <span className="sr-only">Edit FAQ</span>
                                                                 </Button>
@@ -834,7 +836,7 @@ export default function FAQPage() {
                                                                         <Button
                                                                             variant="ghost"
                                                                             size="sm"
-                                                                            className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                                            className="h-8 w-8 p-0 bg-destructive text-white hover:text-white hover:bg-destructive/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                                             disabled={deleteFaqMutation.isPending}
                                                                         >
                                                                             <Trash2 className="h-4 w-4" />
@@ -850,12 +852,13 @@ export default function FAQPage() {
                                                                             </AlertDialogDescription>
                                                                         </AlertDialogHeader>
                                                                         <AlertDialogFooter>
-                                                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                            <AlertDialogCancel
+                                                                                className="font-poppins rounded-full !px-5"
+                                                                            >Cancel</AlertDialogCancel>
                                                                             <AlertDialogAction
                                                                                 onClick={() => deleteFaqMutation.mutate(faq.id)}
-                                                                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                                            >
-                                                                                Delete FAQ
+                                                                                className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"                                                                            >
+                                                                                Delete
                                                                             </AlertDialogAction>
                                                                         </AlertDialogFooter>
                                                                     </AlertDialogContent>
@@ -866,7 +869,7 @@ export default function FAQPage() {
                                                                     size="sm"
                                                                     onClick={() => reorderFaqMutation.mutate({ faqId: faq.id, direction: "up" })}
                                                                     disabled={faqIndex === 0 || reorderFaqMutation.isPending}
-                                                                    className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                                    className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                                 >
                                                                     <ArrowUp className="h-4 w-4" />
                                                                     <span className="sr-only">Move up</span>
@@ -879,7 +882,7 @@ export default function FAQPage() {
                                                                     disabled={
                                                                         faqIndex === (category.faqs?.length || 0) - 1 || reorderFaqMutation.isPending
                                                                     }
-                                                                    className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                                    className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                                 >
                                                                     <ArrowDown className="h-4 w-4" />
                                                                     <span className="sr-only">Move down</span>
@@ -892,17 +895,6 @@ export default function FAQPage() {
                                                 <div className="py-8 text-center">
                                                     <HelpCircle className="mx-auto mb-2 h-8 w-8 text-gray-400" />
                                                     <p className="text-slate-500 mb-4">No FAQs in this category yet</p>
-                                                    <Button
-                                                        variant="outline"
-                                                        onClick={() => {
-                                                            setSelectedCategory(category)
-                                                            setIsAddFAQDialogOpen(true)
-                                                        }}
-                                                        className="hover:bg-gradient-to-r hover:from-teal-50 hover:to-blue-50"
-                                                    >
-                                                        <Plus className="mr-2 h-4 w-4" />
-                                                        Add First FAQ
-                                                    </Button>
                                                 </div>
                                             )}
                                         </div>
@@ -992,13 +984,14 @@ export default function FAQPage() {
                                     resetForm()
                                 }}
                                 disabled={updateCategoryMutation.isPending}
+                                className="hover:opacity-75 cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
                                 disabled={!newCategoryName || updateCategoryMutation.isPending}
-                                className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                             >
                                 {updateCategoryMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>
@@ -1055,6 +1048,7 @@ export default function FAQPage() {
                                     setIsEditFAQDialogOpen(false)
                                     resetForm()
                                 }}
+                                className="hover:opacity-75  cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                                 disabled={updateFaqMutation.isPending}
                             >
                                 Cancel
@@ -1062,7 +1056,7 @@ export default function FAQPage() {
                             <Button
                                 type="submit"
                                 disabled={!newFAQQuestion || !newFAQAnswer || updateFaqMutation.isPending}
-                                className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                             >
                                 {updateFaqMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>

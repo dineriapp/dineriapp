@@ -17,7 +17,7 @@ const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant:
 
     return (
         <Card className="hover:shadow-md transition-shadow backdrop-blur-sm bg-white border-slate-200">
-            <CardHeader>
+            <CardHeader className='font-poppins'>
                 <CardTitle className="text-slate-900">Your Restaurant Page</CardTitle>
                 <CardDescription className="text-slate-500">Share your page with customers</CardDescription>
             </CardHeader>
@@ -58,7 +58,7 @@ const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant:
             </CardContent>
             <CardFooter className="border-t border-slate-100 pt-4">
                 <Button
-                    className="w-full justify-center bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                    className="w-full justify-center bg-[#002147] hover:bg-main-hover/80 h-12 rounded-full cursor-pointer"
                     size="sm"
                 >
                     <QrCode className="h-4 w-4 mr-2" />

@@ -45,6 +45,7 @@ import { SubscriptionPlan } from "@prisma/client"
 import { ArrowDown, ArrowUp, Edit, Plus, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
+import LoadingUI from "@/components/loading-ui"
 
 
 export default function LinksPage() {
@@ -131,24 +132,7 @@ export default function LinksPage() {
 
     if (restaurants.length === 0 || !selectedRestaurant || isLoading) {
         return (
-            <div className="max-w-[1200px] mx-auto px-4 py-16 flex justify-center">
-                <div className="flex items-center space-x-2 text-slate-500">
-                    <svg
-                        className="animate-spin h-5 w-5 text-teal-600"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                    >
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                    </svg>
-                    <span>Loading your Link...</span>
-                </div>
-            </div>
+            <LoadingUI text="Loading your Link..." />
         )
     }
 
@@ -182,12 +166,12 @@ export default function LinksPage() {
                     className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
                 >
                     <div>
-                        <h1 className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-4xl font-bold text-transparent">
+                        <h1 className=" text-4xl font-bold text-main-blue">
                             Manage Links
                         </h1>
                         <p className="mt-2 text-slate-500">
                             Add, edit, or remove links for{" "}
-                            <span className="font-medium text-slate-700">{selectedRestaurant.name}</span>
+                            <span className="font-medium text-main-green">{selectedRestaurant.name}</span>
                         </p>
                     </div>
 
@@ -199,7 +183,7 @@ export default function LinksPage() {
                                         variant="destructive"
                                         size="lg"
                                         disabled={bulkDeleteMutation.isPending}
-                                        className="flex items-center gap-2 transition-transform hover:scale-105"
+                                        className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-red-500 rounded-full !px-5 font-poppins h-[42px]"
                                     >
                                         <Trash2 className="h-4 w-4" />
                                         {bulkDeleteMutation.isPending ? "Deleting..." : `Delete Selected (${selectedLinks.size})`}
@@ -236,7 +220,7 @@ export default function LinksPage() {
                                             <Button
                                                 size="lg"
                                                 disabled={!restaurantId}
-                                                className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
+                                                className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                             >
                                                 <Plus className="h-4 w-4" />
                                                 Add new link
@@ -300,6 +284,7 @@ export default function LinksPage() {
                                                             setNewTitle("")
                                                             setNewUrl("")
                                                         }}
+                                                        className="hover:opacity-75 cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                                                         disabled={createMutation.isPending}
                                                     >
                                                         Cancel
@@ -307,7 +292,7 @@ export default function LinksPage() {
                                                     <Button
                                                         type="submit"
                                                         disabled={!newTitle.trim() || !newUrl.trim() || createMutation.isPending || !restaurantId}
-                                                        className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                                        className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                                                     >
                                                         {createMutation.isPending ? "Adding..." : "Add Link"}
                                                     </Button>
@@ -327,7 +312,7 @@ export default function LinksPage() {
 
                                             openPopup(`You are limited to ${limit} links on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`)
                                         }}
-                                        className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
+                                        className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                     >
                                         <Plus className="h-4 w-4" />
                                         Add new link
@@ -341,7 +326,7 @@ export default function LinksPage() {
 
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                     <Card className="bg-white/50 backdrop-blur-sm border-slate-200 shadow-sm">
-                        <CardHeader>
+                        <CardHeader className="font-poppins">
                             <div className="flex items-center justify-between">
                                 <div>
                                     <CardTitle className="text-slate-900">Your Links</CardTitle>
@@ -363,7 +348,6 @@ export default function LinksPage() {
                                 <div className="space-y-3">
                                     {links.map((link, index) => (
                                         <div key={link.id} className="border border-slate-200 rounded-lg  bg-white/80 p-4 backdrop-blur-sm transition-shadow hover:shadow-md">
-
                                             <div
                                                 className="flex items-center gap-3 "
                                             >
@@ -396,7 +380,7 @@ export default function LinksPage() {
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() => handleEditClick(link)}
-                                                        className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                        className="h-8 w-8 p-0 bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                     >
                                                         <Edit className="h-4 w-4" />
                                                         <span className="sr-only">Edit</span>
@@ -407,7 +391,7 @@ export default function LinksPage() {
                                                             <Button
                                                                 variant="ghost"
                                                                 size="sm"
-                                                                className="h-8 w-8 p-0 text-destructive transition-transform hover:scale-110"
+                                                                className="h-8 w-8 p-0 bg-destructive text-white hover:text-white hover:bg-destructive/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                                 disabled={deleteMutation.isPending}
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
@@ -423,10 +407,10 @@ export default function LinksPage() {
                                                                 </AlertDialogDescription>
                                                             </AlertDialogHeader>
                                                             <AlertDialogFooter>
-                                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                                <AlertDialogCancel className="font-poppins rounded-full !px-5">Cancel</AlertDialogCancel>
                                                                 <AlertDialogAction
                                                                     onClick={() => deleteMutation.mutate(link.id)}
-                                                                    className="bg-destructive text-white hover:opacity-80 hover:bg-destructive/90"
+                                                                    className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"
                                                                 >
                                                                     Delete
                                                                 </AlertDialogAction>
@@ -439,7 +423,7 @@ export default function LinksPage() {
                                                         size="sm"
                                                         onClick={() => reorderMutation.mutate({ linkId: link.id, direction: "up" })}
                                                         disabled={index === 0 || reorderMutation.isPending}
-                                                        className="h-8 w-8 p-0 transition-transform hover:scale-110"
+                                                        className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                     >
                                                         <ArrowUp className="h-4 w-4" />
                                                         <span className="sr-only">Move up</span>
@@ -450,8 +434,7 @@ export default function LinksPage() {
                                                         size="sm"
                                                         onClick={() => reorderMutation.mutate({ linkId: link.id, direction: "down" })}
                                                         disabled={index === links.length - 1 || reorderMutation.isPending}
-                                                        className="h-8 w-8 p-0 transition-transform hover:scale-110"
-                                                    >
+                                                        className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                                    >
                                                         <ArrowDown className="h-4 w-4" />
                                                         <span className="sr-only">Move down</span>
                                                     </Button>
@@ -532,6 +515,7 @@ export default function LinksPage() {
                                     setNewTitle("")
                                     setNewUrl("")
                                 }}
+                                className="hover:opacity-75  cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                                 disabled={updateMutation.isPending}
                             >
                                 Cancel
@@ -539,7 +523,7 @@ export default function LinksPage() {
                             <Button
                                 type="submit"
                                 disabled={!newTitle.trim() || !newUrl.trim() || updateMutation.isPending}
-                                className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                                className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                             >
                                 {updateMutation.isPending ? "Saving..." : "Save Changes"}
                             </Button>

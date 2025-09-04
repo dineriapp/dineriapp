@@ -53,3 +53,67 @@ export const getBackgroundStyle = ({ props }: { props: { bg_type: string, bg_ima
   return { backgroundColor: props?.bg_color || "#ffffff" }
 }
 
+
+export const getStatusColor = (status: string) => {
+  switch (status) {
+    case "pending":
+      return "bg-yellow-100 text-yellow-800";
+    case "confirmed":
+      return "bg-green-100 text-green-800";
+    case "preparing":
+      return "bg-blue-100 text-blue-800";
+    case "ready":
+      return "bg-purple-100 text-purple-800";
+    case "delivered":
+      return "bg-emerald-100 text-emerald-800";
+    case "cancelled":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+};
+
+export const getPaymentStatusColor = (status: string) => {
+  switch (status) {
+    case "completed":
+      return "bg-green-100 text-green-800";
+    case "pending":
+      return "bg-yellow-100 text-yellow-800";
+    case "failed":
+      return "bg-red-100 text-red-800";
+    case "refunded":
+      return "bg-gray-100 text-gray-800";
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+};
+
+export const getNextStatus = (currentStatus: string) => {
+  switch (currentStatus) {
+    case "pending":
+      return "confirmed";
+    case "confirmed":
+      return "preparing";
+    case "preparing":
+      return "ready";
+    case "ready":
+      return "delivered";
+    default:
+      return null;
+  }
+};
+
+export const getStatusAction = (currentStatus: string) => {
+  switch (currentStatus) {
+    case "pending":
+      return "Confirm Order";
+    case "confirmed":
+      return "Start Preparing";
+    case "preparing":
+      return "Mark as Ready";
+    case "ready":
+      return "Mark as Delivered";
+    default:
+      return null;
+  }
+};
