@@ -103,9 +103,9 @@ export default function SubscriptionPage() {
   const isPastDue = subscription.status === "past_due";
 
   return (
-    <Card className="bg-white">
+    <Card className="bg-white box-shad-every-2 shadow-md">
       <CardContent className="space-y-6">
-        <div>
+        <div className="font-poppins">
           <h1 className="text-3xl font-bold">Subscription</h1>
           <p className="text-muted-foreground">
             Manage your subscription and billing information.

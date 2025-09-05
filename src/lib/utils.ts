@@ -117,3 +117,6 @@ export const getStatusAction = (currentStatus: string) => {
       return null;
   }
 };
+
+export const SaveChangesBtnClasses = "bg-main-green cursor-pointer rounded-full shadow-lg !px-5 font-poppins !h-[44px] transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl disabled:opacity-50"
+export const ResetChangesBtnClasses = "shadow-lg cursor-pointer transition-all duration-200 !px-5 font-poppins !h-[44px] rounded-full bg-white hover:shadow-xl disabled:opacity-50"

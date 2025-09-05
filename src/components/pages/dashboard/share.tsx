@@ -1,10 +1,9 @@
 "use client"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import React from 'react'
-import { motion } from "motion/react"
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Copy, QrCode } from 'lucide-react'
+import { motion } from "motion/react"
 import { toast } from 'sonner'
-import { Copy, ExternalLink, Link, QrCode } from 'lucide-react'
 
 const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant: boolean }) => {
 
@@ -38,16 +37,6 @@ const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant:
                                 <Copy className="h-4 w-4" />
                                 <span className="sr-only">Copy URL</span>
                             </Button>
-                            <Link href={`/${slug}`} target="_blank">
-                                <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="h-8 w-8 p-0 text-slate-600 hover:text-teal-600 hover:bg-teal-50"
-                                >
-                                    <ExternalLink className="h-4 w-4" />
-                                    <span className="sr-only">Visit page</span>
-                                </Button>
-                            </Link>
                         </div>
                     </div>
                 </motion.div>

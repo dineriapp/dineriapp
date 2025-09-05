@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import UnsavedChangesUi from "@/components/unsaved-changes-ui"
+import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { supabase } from "@/supabase/clients/client"
-import { AlertCircle, Save, RotateCcw, Lock, Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, Lock, RotateCcw, Save } from "lucide-react"
 import { motion } from "motion/react"
 import Link from "next/link"
 import { useState } from "react"
@@ -177,8 +179,8 @@ export default function ChangePasswordPage() {
 
     return (
         <>
-            <Card className="shadow-sm border-gray-200">
-                <CardHeader className="bg-gray-50/50">
+            <Card className=" border-gray-200 pt-0 box-shad-every-2 shadow-md">
+                <CardHeader className="bg-gray-50/50 py-4 font-poppins">
                     <div className="flex items-center gap-2">
                         <Lock className="h-5 w-5 text-gray-600" />
                         <div>
@@ -328,32 +330,27 @@ export default function ChangePasswordPage() {
                     opacity: hasChanges ? 1 : 0,
                     y: hasChanges ? 0 : 20,
                 }}
-                className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-4"
+                className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-2"
             >
-                <div className="rounded-lg border bg-white/80 px-4 py-2 shadow-sm backdrop-blur-sm">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>You have unsaved changes</span>
-                    </div>
-                </div>
+                <UnsavedChangesUi />
                 <div className="flex gap-2">
                     <Button
                         onClick={handleResetForm}
                         disabled={saving || !hasChanges}
                         size="lg"
                         variant="outline"
-                        className="shadow-lg transition-all duration-200 hover:shadow-xl bg-transparent"
+                        className={ResetChangesBtnClasses}
                     >
-                        <RotateCcw className="mr-2 h-4 w-4" />
+                        <RotateCcw className="h-4 w-4" />
                         Reset
                     </Button>
                     <Button
                         onClick={handleChangePassword}
                         disabled={saving || !hasChanges}
                         size="lg"
-                        className="bg-emerald-600 shadow-lg transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl"
+                        className={SaveChangesBtnClasses}
                     >
-                        <Save className="mr-2 h-4 w-4" />
+                        <Save className="h-4 w-4" />
                         {saving ? "Changing..." : "Change Password"}
                     </Button>
                 </div>

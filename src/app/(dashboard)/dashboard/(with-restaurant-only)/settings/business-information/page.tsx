@@ -1,13 +1,16 @@
 "use client"
 
+import LoadingUI from "@/components/loading-ui"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import UnsavedChangesUi from "@/components/unsaved-changes-ui"
+import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { uploadImage } from "@/supabase/clients/client"
-import { AlertCircle, Building2, Globe, RotateCcw, Save } from "lucide-react"
+import { Building2, Globe, RotateCcw, Save } from "lucide-react"
 import { motion } from "motion/react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
@@ -282,31 +285,14 @@ export default function BusinessInformationPage() {
 
     if (!selectedRestaurant) {
         return (
-            <div className="flex justify-center py-16">
-                <div className="flex items-center space-x-2 text-slate-500">
-                    <svg
-                        className="animate-spin h-5 w-5 text-teal-600"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                    >
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                    </svg>
-                    <span>Loading business information...</span>
-                </div>
-            </div>
+            <LoadingUI text="Loading business information..." />
         )
     }
 
     return (
         <>
-            <Card className="shadow-sm border-gray-200">
-                <CardHeader className="bg-gray-50/50">
+            <Card className="border-gray-200 pt-0 box-shad-every-2 shadow-md">
+                <CardHeader className="bg-gray-50/50 py-4 font-poppins">
                     <CardTitle className="text-gray-900">Business Information</CardTitle>
                     <CardDescription>Manage your restaurant&apos;s basic information and branding</CardDescription>
                 </CardHeader>
@@ -384,8 +370,7 @@ export default function BusinessInformationPage() {
                                 accept="image/*"
                                 disabled={saving || uploadingLogo}
                                 onChange={(e) => handleLogoFileChange(e.target.files?.[0])}
-                            // className={`file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-emerald-50 file:text-emerald-700 file:hover:bg-emerald-100 ${errors.logo_url ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-slate-200"
-                            //     }`}
+
                             />
                             {uploadingLogo && (
                                 <span className="absolute right-3 top-3 text-xs text-slate-500">Uploading…</span>
@@ -428,14 +413,9 @@ export default function BusinessInformationPage() {
                     opacity: hasChanges ? 1 : 0,
                     y: hasChanges ? 0 : 20,
                 }}
-                className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-4 z-50"
+                className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-2 z-50"
             >
-                <div className="rounded-lg border bg-white/90 px-4 py-2 shadow-lg backdrop-blur-sm">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>You have unsaved changes</span>
-                    </div>
-                </div>
+                <UnsavedChangesUi />
 
                 <div className="flex gap-2">
                     {/* Reset Button */}
@@ -444,9 +424,9 @@ export default function BusinessInformationPage() {
                         disabled={saving || !hasChanges}
                         size="lg"
                         variant="outline"
-                        className="shadow-lg transition-all duration-200 hover:shadow-xl disabled:opacity-50 bg-transparent"
+                        className={ResetChangesBtnClasses}
                     >
-                        <RotateCcw className="mr-2 h-4 w-4" />
+                        <RotateCcw className="h-4 w-4" />
                         Reset
                     </Button>
 
@@ -455,9 +435,9 @@ export default function BusinessInformationPage() {
                         onClick={saveBusinessInfo}
                         disabled={saving || !hasChanges}
                         size="lg"
-                        className="bg-emerald-600 shadow-lg transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl disabled:opacity-50"
+                        className={SaveChangesBtnClasses}
                     >
-                        <Save className="mr-2 h-4 w-4" />
+                        <Save className="h-4 w-4" />
                         {saving ? "Saving..." : "Save Changes"}
                     </Button>
                 </div>

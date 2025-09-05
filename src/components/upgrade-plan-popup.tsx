@@ -81,7 +81,7 @@ export const UpgradePopup = () => {
         <Card className="bg-white dark:bg-gray-900 gap-2 rounded-xl shadow-2xl overflow-hidden">
           <DialogHeader className="px-6 pb-0 pt-0">
             <div className="flex justify-between items-center">
-              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+              <DialogTitle className="text-2xl font-bold text-main-blue">
                 Upgrade Your Plan
               </DialogTitle>
             </div>
@@ -126,7 +126,7 @@ export const UpgradePopup = () => {
                           </CardDescription>
                         </div>
                         {isPopular && (
-                          <span className="bg-gradient-to-r from-teal-500 to-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                          <span className="bg-main-green text-white text-xs font-semibold px-3 py-1 rounded-full">
                             POPULAR
                           </span>
                         )}
@@ -138,7 +138,7 @@ export const UpgradePopup = () => {
                         {plan.features.slice(0, 4).map((feature, idx) => (
                           <li key={idx} className="flex items-start">
                             <div className="bg-teal-500/10 p-1 rounded-full mr-3">
-                              <CheckIcon className="h-4 w-4 text-teal-500" />
+                              <CheckIcon className="h-4 w-4 text-main-green" />
                             </div>
                             <span>{feature}</span>
                           </li>
@@ -154,11 +154,10 @@ export const UpgradePopup = () => {
                     <CardFooter>
                       <Button
                         size="lg"
-                        className={`w-full ${
-                          isPopular
-                            ? "bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
-                            : "bg-gray-900 hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700"
-                        }`}
+                        className={`w-full cursor-pointer !h-[44px] ${isPopular
+                          ? "bg-main-green rounded-full hover:bg-main-green/70 font-poppins "
+                          : "bg-main-blue rounded-full font-poppins hover:bg-main-blue/70"
+                          }`}
                         onClick={() => handleSubscribe(planKey)}
                       >
                         {isLoading ? (

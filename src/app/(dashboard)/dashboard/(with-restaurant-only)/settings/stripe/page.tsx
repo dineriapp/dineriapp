@@ -12,6 +12,7 @@ import { useRestaurantStore } from "@/stores/restaurant-store"
 import { AlertCircle, CheckCircle, Eye, EyeOff, Loader2, Shield } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
+import LoadingUI from "@/components/loading-ui"
 
 export default function StripeSettingsPage() {
     const { selectedRestaurant: restaurant, initializeRestaurants } = useRestaurantStore()
@@ -133,24 +134,22 @@ export default function StripeSettingsPage() {
 
     if (!restaurant) {
         return (
-            <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
+            <LoadingUI text="Loading...." />
         )
     }
 
     const hasKeys = restaurant.stripe_public_key_encrypted || restaurant.stripe_secret_key_encrypted || restaurant.stripe_webhook_secret_encrypted
 
     return (
-        <Card className="shadow-sm border-gray-200 gap-5 pt-0">
-            <CardHeader className="bg-gray-50/50 py-4">
+        <Card className="pt-0 box-shad-every-2 shadow-md border-gray-200 gap-5">
+            <CardHeader className="bg-gray-50/50 py-4 font-poppins">
                 <CardTitle className="text-gray-900">Stripe Settings</CardTitle>
                 <CardDescription>Configure your Stripe payment processing keys</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
 
                 {/* Security Notice */}
-                <Alert>
+                <Alert className="">
                     <Shield className="h-4 w-4" />
                     <AlertDescription>
                         <strong>Your keys are secure:</strong> We encrypt and store your Stripe keys using industry-standard
@@ -201,7 +200,7 @@ export default function StripeSettingsPage() {
                                 size="sm"
                                 onClick={handleRemoveKeys}
                                 disabled={saving}
-                                className="mt-4 text-red-600 border-red-200 hover:bg-red-50 bg-transparent"
+                                className="mt-4 hover:text-white text-white rounded-full font-poppins px-4 cursor-pointer hover:bg-destructive/70 text-xs border-red-200 bg-destructive"
                             >
                                 {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                                 Remove Keys
@@ -270,20 +269,21 @@ export default function StripeSettingsPage() {
                                 <p className="text-xs text-muted-foreground">This key must be kept secret and only used on the server</p>
                             </div>
 
-                            <div className="flex gap-3 pt-4">
+                            <div className="flex gap-2 pt-4">
                                 <Button
                                     type="submit"
                                     disabled={saving || (!formData.stripe_public_key && !formData.stripe_secret_key)}
-                                    className="bg-emerald-600 hover:bg-emerald-700"
+                                    className="bg-main-green hover:bg-main-green/70 cursor-pointer px-5 font-poppins rounded-full text-white"
                                 >
                                     {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                                     {hasKeys ? "Update Keys" : "Save Keys"}
                                 </Button>
                                 <Button
                                     type="button"
-                                    variant="outline"
+                                    variant="default"
                                     onClick={() => setFormData({ stripe_public_key: "", stripe_secret_key: "" })}
                                     disabled={saving}
+                                    className="bg-main-blue cursor-pointer px-5 font-poppins rounded-full text-white"
                                 >
                                     Clear
                                 </Button>
