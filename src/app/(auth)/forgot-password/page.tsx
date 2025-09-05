@@ -33,7 +33,7 @@ export default function ForgotPasswordPage() {
 
     return (
         <>
-            <div className="mb-4">
+            <div className="mb-4 mt-3">
                 <h1 className="text-3xl font-bold tracking-tight text-slate-900">Reset your password</h1>
                 <p className="mt-2 text-slate-600">Enter your email address and we&apos;ll send you a link to reset your password.</p>
             </div>
@@ -92,7 +92,7 @@ export default function ForgotPasswordPage() {
 
                         <Button
                             type="submit"
-                            className="w-full h-[44px] bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                            className="w-full  h-[44px] bg-main-blue rounded-full font-poppins cursor-pointer"
                             disabled={isLoading}
                         >
                             {isLoading ? (

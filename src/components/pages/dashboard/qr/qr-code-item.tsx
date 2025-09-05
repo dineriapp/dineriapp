@@ -35,21 +35,27 @@ export const QRCodeItem = ({ qr, getScanUrl, onCopy, onDownload, onDelete, isDel
             <div className="flex items-center gap-4">
                 <div className="text-right">
                     <p className="font-medium">{qr.scan_count} scans</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-main-green font-semibold">
                         {qr.scan_count === 0 ? "Never scanned" : "Active"}
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => window.open(qr.target_url, "_blank")}>
-                        <ExternalLink className="h-4 w-4" />
+                    <Button variant="outline" size="sm"
+                        className="bg-main-blue rounded-full aspect-square size-[38px] cursor-pointer hover:bg-main-blue/70"
+                        onClick={() => window.open(qr.target_url, "_blank")}>
+                        <ExternalLink className="h-4 w-4 text-white" />
                     </Button>
                     {qr.qr_data_url && (
-                        <Button variant="outline" size="sm" onClick={() => onDownload(qr)}>
-                            <Download className="h-4 w-4" />
+                        <Button variant="outline"
+                            className="bg-main-green rounded-full aspect-square size-[38px] cursor-pointer hover:bg-main-green/70"
+                            size="sm" onClick={() => onDownload(qr)}>
+                            <Download className="h-4 w-4 text-white" />
                         </Button>
                     )}
-                    <Button variant="outline" size="sm" onClick={() => onDelete(qr.id)} disabled={isDeleting}>
-                        <Trash2 className="h-4 w-4" />
+                    <Button variant="destructive" size="sm"
+                        className="bg-destructive rounded-full aspect-square size-[38px] cursor-pointer hover:bg-destructive/70"
+                        onClick={() => onDelete(qr.id)} disabled={isDeleting}>
+                        <Trash2 className="h-4 w-4 text-white" />
                     </Button>
                 </div>
             </div>

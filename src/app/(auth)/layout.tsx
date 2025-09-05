@@ -14,7 +14,7 @@ export default function AuthLayout({
 }>) {
     return (
         <>
-            <div className="flex min-h-screen flex-col bg-gradient-to-br from-teal-600 to-blue-600">
+            <div className="flex min-h-screen flex-col bg-main-blue">
                 <div className="w-full mx-auto flex flex-1">
                     <div className="flex w-full flex-1 flex-col lg:flex-row">
                         {/* Left side - Form */}

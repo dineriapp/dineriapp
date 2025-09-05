@@ -107,7 +107,7 @@ export default function QRCodesPage() {
     return (
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-                <h1 className="bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-4xl font-bold text-transparent">
+                <h1 className="text-4xl font-bold text-main-blue">
                     QR Codes
                 </h1>
                 <p className="mt-2 text-muted-foreground">Generate and manage branded QR codes for your restaurant</p>
@@ -130,7 +130,7 @@ export default function QRCodesPage() {
                         {/* Stats Overview */}
                         {stats && (
                             <div className="grid gap-6 md:grid-cols-3">
-                                <Card className="bg-gradient-to-br from-teal-50 to-white border-teal-200">
+                                <Card className=" box-shad-every-2 bg-white border-main-green/20">
                                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                                         <CardTitle className="text-sm font-medium text-muted-foreground">Total QR Codes</CardTitle>
                                         <QrCode className="h-4 w-4 text-teal-600" />
@@ -141,7 +141,7 @@ export default function QRCodesPage() {
                                     </CardContent>
                                 </Card>
 
-                                <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-200">
+                                <Card className=" box-shad-every-2 bg-white border-main-green/20">
                                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                                         <CardTitle className="text-sm font-medium text-muted-foreground">Total Scans</CardTitle>
                                         <Eye className="h-4 w-4 text-blue-600" />
@@ -152,7 +152,7 @@ export default function QRCodesPage() {
                                     </CardContent>
                                 </Card>
 
-                                <Card className="bg-gradient-to-br from-green-50 to-white border-green-200">
+                                <Card className=" box-shad-every-2 bg-white border-main-green/20">
                                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                                         <CardTitle className="text-sm font-medium text-muted-foreground">Avg. Scans</CardTitle>
                                         <BarChart3 className="h-4 w-4 text-green-600" />
@@ -168,8 +168,8 @@ export default function QRCodesPage() {
                         )}
 
                         {/* QR Code List */}
-                        <Card>
-                            <CardHeader>
+                        <Card className="pt-0 ">
+                            <CardHeader className="font-poppins bg-gray-100/50 py-4 ">
                                 <CardTitle>Your QR Codes</CardTitle>
                                 <CardDescription>Manage and track your generated QR codes</CardDescription>
                             </CardHeader>

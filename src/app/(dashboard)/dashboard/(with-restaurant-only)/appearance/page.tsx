@@ -3,6 +3,7 @@
 import { ColorSelector } from "@/app/(dashboard)/_components/color-selection"
 import { GoogleRating } from "@/app/[slug]/_components/google-rating"
 import { OpeningHoursStatus } from "@/app/[slug]/_components/opening-hours-status"
+import LoadingUI from "@/components/loading-ui"
 import SocialIcons from "@/components/social-icons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,10 +16,10 @@ import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getLucideIconBySlug } from "@/lib/get-icons"
 import { useLinks } from "@/lib/link-queries"
-import { templates } from "@/lib/reuseable-data"
+import { colorPresets, container2, fonts, gradientDirections, gradientPresets, templates, textColorPresets } from "@/lib/reuseable-data"
 import { useGoogleReviews } from "@/lib/review-api"
 import { AppearanceFormData, Template } from "@/lib/types"
-import { colorPresets, container2, fonts, gradientDirections, gradientPresets, textColorPresets } from "@/lib/reuseable-data"
+import { cn, getBackgroundStyle, ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { OpeningHoursData } from "@/types"
 import { GradientDirection } from "@prisma/client"
@@ -29,6 +30,7 @@ import {
     Paintbrush,
     Palette,
     RotateCcw,
+    Save,
     Signal,
     Type,
     Wifi
@@ -36,8 +38,6 @@ import {
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { getBackgroundStyle } from "@/lib/utils"
-import LoadingUI from "@/components/loading-ui"
 
 export default function AppearancePage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
@@ -171,7 +171,7 @@ export default function AppearancePage() {
     return (
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600">
+                <h1 className="text-3xl font-bold text-main-blue">
                     Appearance
                 </h1>
                 <p className="text-slate-500 mt-1">Customize how your restaurant page looks</p>
@@ -180,32 +180,32 @@ export default function AppearancePage() {
             <div className="grid lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                     <Tabs defaultValue="style" className="space-y-6">
-                        <TabsList className="grid grid-cols-3 gap-4 w-full">
-                            <TabsTrigger value="style" className="flex items-center gap-2">
+                        <TabsList className="grid grid-cols-3 gap-4 h-[44px] rounded-full w-full">
+                            <TabsTrigger value="style" className="flex items-center gap-2 rounded-full">
                                 <Paintbrush className="h-4 w-4" />
                                 <span>Style</span>
                             </TabsTrigger>
-                            <TabsTrigger value="colors" className="flex items-center gap-2">
+                            <TabsTrigger value="colors" className="flex items-center gap-2 rounded-full">
                                 <Palette className="h-4 w-4" />
                                 <span>Colors</span>
                             </TabsTrigger>
-                            <TabsTrigger value="typography" className="flex items-center gap-2">
+                            <TabsTrigger value="typography" className="flex items-center gap-2 rounded-full">
                                 <Type className="h-4 w-4" />
                                 <span>Typography</span>
                             </TabsTrigger>
-                            {/* <TabsTrigger value="templates" className="flex items-center gap-2">
+                            {/* <TabsTrigger value="templates" className="flex items-center gap-2 rounded-full">
                                 <Sparkles className="h-4 w-4" />
                                 <span>Templates</span>
                             </TabsTrigger> */}
                         </TabsList>
 
                         <TabsContent value="style" className="space-y-4">
-                            <Card className="border-slate-200 gap-0 pt-0">
-                                <CardHeader className="py-4 gap-1">
+                            <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
+                                <CardHeader className="py-4 gap-1 font-poppins bg-gray-100/50">
                                     <CardTitle className="text-slate-900">Button Style</CardTitle>
                                     <CardDescription className="text-slate-500">Choose how your buttons should look</CardDescription>
                                 </CardHeader>
-                                <CardContent className="space-y-3">
+                                <CardContent className="space-y-3 pt-4">
                                     <div className="space-y-4">
                                         <Label className="text-slate-700">Shape</Label>
                                         <RadioGroup
@@ -221,7 +221,7 @@ export default function AppearancePage() {
                                                     htmlFor="rounded"
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-teal-600 to-blue-600 mb-2"></div>
+                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
                                                     <span className="text-slate-700">Rounded</span>
                                                 </Label>
                                             </div>
@@ -232,7 +232,7 @@ export default function AppearancePage() {
                                                     htmlFor="square"
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-10 rounded-md bg-gradient-to-r from-teal-600 to-blue-600 mb-2"></div>
+                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
                                                     <span className="text-slate-700">Square</span>
                                                 </Label>
                                             </div>
@@ -243,7 +243,7 @@ export default function AppearancePage() {
                                                     htmlFor="pill"
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-10 rounded-full bg-gradient-to-r from-teal-600 to-blue-600 mb-2"></div>
+                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
                                                     <span className="text-slate-700">Pill</span>
                                                 </Label>
                                             </div>
@@ -265,7 +265,7 @@ export default function AppearancePage() {
                                                     htmlFor="solid"
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-teal-600 to-blue-600 mb-2 flex items-center justify-center">
+                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-green to-main-blue mb-2 flex items-center justify-center">
                                                         <span className="text-white text-xs font-medium">Solid</span>
                                                     </div>
                                                     <span className="text-slate-700">Solid</span>
@@ -335,15 +335,15 @@ export default function AppearancePage() {
                                     </div>
                                 </CardContent>
                             </Card>
-                            <Card className="border-slate-200 gap-0 pt-0">
-                                <CardHeader className="py-4 gap-1">
+                            <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
+                                <CardHeader className="py-4 gap-1 bg-gray-100/50 font-poppins">
                                     <CardTitle className="text-slate-900">Social Icon Style</CardTitle>
                                     <CardDescription className="text-slate-500">
                                         Customize how your social icons appear.
                                     </CardDescription>
                                 </CardHeader>
 
-                                <CardContent className="space-y-3">
+                                <CardContent className="space-y-3 pt-4">
                                     {/* Toggle for background */}
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between border rounded-lg px-4 py-3">
@@ -426,8 +426,8 @@ export default function AppearancePage() {
                         </TabsContent>
 
                         <TabsContent value="templates">
-                            <Card className="border-slate-200">
-                                <CardHeader>
+                            <Card className="border-slate-200 pt-0 box-shad-every-2">
+                                <CardHeader className="py-4 font-poppins bg-gray-100/50">
                                     <CardTitle className="text-slate-900">Design Templates</CardTitle>
                                     <CardDescription className="text-slate-500">
                                         Choose from professionally designed templates to quickly style your restaurant page
@@ -513,7 +513,7 @@ export default function AppearancePage() {
                                                     <Button
                                                         onClick={() => applyTemplate(template)}
                                                         disabled={saving}
-                                                        className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white"
+                                                        className={cn(SaveChangesBtnClasses, "w-full !h-[40px] !text-sm")}
                                                         size="sm"
                                                     >
                                                         {saving ? "Applying..." : "Apply Template"}
@@ -528,14 +528,14 @@ export default function AppearancePage() {
 
                         <TabsContent value="colors">
                             <div className="space-y-4">
-                                <Card className="border-slate-200 gap-0 pt-0">
-                                    <CardHeader className="py-4">
+                                <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
+                                    <CardHeader className="py-4 font-poppins bg-gray-100/50">
                                         <CardTitle className="text-slate-900">Background</CardTitle>
                                         <CardDescription className="text-slate-500">
                                             Choose between a solid color, gradient, or custom image background
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="space-y-4">
+                                    <CardContent className="space-y-4 pt-4">
                                         <RadioGroup
                                             value={formData.bg_type}
                                             onValueChange={(value: string) =>
@@ -683,14 +683,14 @@ export default function AppearancePage() {
                                     </CardContent>
                                 </Card>
 
-                                <Card className="border-slate-200 gap-0 pt-0">
-                                    <CardHeader className="py-4">
+                                <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
+                                    <CardHeader className="py-4 font-poppins bg-gray-100/50">
                                         <CardTitle className="text-slate-900">Accent Color</CardTitle>
                                         <CardDescription className="text-slate-500">
                                             This color will be used for buttons and highlights
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="space-y-4">
+                                    <CardContent className="space-y-4 pt-4">
                                         <div className="space-y-4">
                                             <Label className="text-slate-700">Color Presets</Label>
                                             <div >
@@ -704,14 +704,14 @@ export default function AppearancePage() {
                                     </CardContent>
                                 </Card>
 
-                                <Card className="border-slate-200 gap-0 !pt-0">
-                                    <CardHeader className="py-4">
+                                <Card className="border-slate-200 gap-0 !pt-0 box-shad-every-2">
+                                    <CardHeader className="py-4 font-poppins bg-gray-100/50">
                                         <CardTitle className="text-slate-900">Text Colors</CardTitle>
                                         <CardDescription className="text-slate-500">
                                             Customize the colors for headings and button text
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="space-y-4">
+                                    <CardContent className="space-y-4 pt-4">
                                         <div className="space-y-4">
                                             <div>
                                                 <Label className="text-slate-700">Headings Text Color</Label>
@@ -745,33 +745,36 @@ export default function AppearancePage() {
                         </TabsContent>
 
                         <TabsContent value="typography">
-                            <Card className="border-slate-200">
-                                <CardHeader>
+                            <Card className="border-slate-200 pt-0 box-shad-every-2">
+                                <CardHeader className="py-4 bg-gray-100/50 font-poppins">
                                     <CardTitle className="text-slate-900">Font Selection</CardTitle>
                                     <CardDescription className="text-slate-500">Choose the font for your page</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="space-y-6">
-                                        <Select
-                                            value={formData.font_family || "var(--font-inter)"}
-                                            onValueChange={(value) => updateFormData({ font_family: value })}
-                                        >
-                                            <SelectTrigger className="border-slate-200">
-                                                <SelectValue placeholder="Select a font" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {fonts.map((font) => (
-                                                    <SelectItem key={font.value} value={font.value}>
-                                                        <div className="flex flex-col">
-                                                            <span style={{ fontFamily: font.value }}>{font.name}</span>
-                                                            <span className="text-xs text-slate-500">{font.preview}</span>
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                    <div className="space-y-4">
+                                        <div className="space-y-2">
+                                            <Label className="text-slate-700">Font</Label>
+                                            <Select
+                                                value={formData.font_family || "var(--font-inter)"}
+                                                onValueChange={(value) => updateFormData({ font_family: value })}
+                                            >
+                                                <SelectTrigger className="border-slate-200 !h-[50px] w-full">
+                                                    <SelectValue placeholder="Select a font" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {fonts.map((font) => (
+                                                        <SelectItem key={font.value} value={font.value}>
+                                                            <div className="flex flex-col items-start ">
+                                                                <span style={{ fontFamily: font.value }}>{font.name}</span>
+                                                                <span className="text-xs text-slate-500">{font.preview}</span>
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
 
-                                        <div className="space-y-4">
+                                        <div className="space-y-2">
                                             <Label className="text-slate-700">Preview</Label>
                                             <div className="p-4 rounded-lg bg-slate-100" style={{ fontFamily: formData.font_family }}>
                                                 <p className="text-2xl font-bold mb-2 text-slate-900">The quick brown fox</p>
@@ -798,7 +801,7 @@ export default function AppearancePage() {
                                 onClick={resetForm}
                                 variant="outline"
                                 size="sm"
-                                className="bg-white shadow-lg border-gray-200 hover:bg-gray-50"
+                                className={ResetChangesBtnClasses}
                             >
                                 <RotateCcw className="h-4 w-4" />
                                 Reset
@@ -807,8 +810,9 @@ export default function AppearancePage() {
                                 onClick={saveChanges}
                                 disabled={saving}
                                 size="sm"
-                                className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 shadow-lg"
+                                className={SaveChangesBtnClasses}
                             >
+                                <Save className="size-4 aspect-square" />
                                 {saving ? "Saving..." : "Save Changes"}
                             </Button>
                         </motion.div>
@@ -817,13 +821,13 @@ export default function AppearancePage() {
 
                 {/* Live Preview */}
                 <div className="lg:sticky lg:top-24 space-y-6">
-                    <Card className="overflow-hidden border-slate-200">
-                        <CardHeader>
+                    <Card className="overflow-hidden pt-0 border-slate-200 box-shad-every-2">
+                        <CardHeader className="bg-gray-100/50 py-4 font-poppins">
                             <CardTitle className="text-slate-900">Live Preview</CardTitle>
                             <CardDescription className="text-slate-500">See how your page looks on mobile devices</CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <div className="mx-auto max-w-[350px] lg:max-w-[400px] p-6">
+                            <div className="mx-auto max-w-[350px] lg:max-w-[390px] p-6">
                                 <div className="relative">
                                     <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-teal-500/20 to-blue-500/20 blur-xl opacity-30 scale-105 translate-y-2"></div>
 

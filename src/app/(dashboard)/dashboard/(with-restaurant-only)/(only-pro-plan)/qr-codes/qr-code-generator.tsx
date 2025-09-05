@@ -149,8 +149,8 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
 
     return (
         <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-                <CardHeader>
+            <Card className="pt-0">
+                <CardHeader className="bg-gray-100/50 py-4 font-poppins">
                     <CardTitle>Generate QR Code</CardTitle>
                     <CardDescription>Create a branded QR code for your restaurant</CardDescription>
                 </CardHeader>
@@ -275,16 +275,17 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                             </div>
                         )}
 
-                        <Button type="submit" className="w-full h-[44px]" disabled={createQRCodeMutation.isPending}>
+                        <Button type="submit" className="w-full rounded-full font-poppins cursor-pointer h-[44px]" disabled={createQRCodeMutation.isPending}>
                             {createQRCodeMutation.isPending ? "Creating..." : "Create QR Code"}
                         </Button>
                     </form>
                 </CardContent>
             </Card>
 
-            <Card className="w-full h-full">
-                <CardHeader>
+            <Card className="w-full h-full pt-0">
+                <CardHeader className="bg-gray-100/50 py-4 font-poppins">
                     <CardTitle>Preview</CardTitle>
+                    <CardDescription>Preview of QR code created.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2 items-center space-y-4">
                     {generating ? (
@@ -305,8 +306,8 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                                 />
                             </div>
                             <div className="flex gap-2 mt-4 w-full">
-                                <Button onClick={downloadPreview} variant="outline" className="w-full h-[44px]">
-                                    <Download className="mr-2 h-4 w-4" />
+                                <Button onClick={downloadPreview} variant="default" className="w-full cursor-pointer hover:bg-main-green/70 rounded-full bg-main-green text-white h-[44px]">
+                                    <Download className="h-4 w-4" />
                                     Download Preview
                                 </Button>
                             </div>

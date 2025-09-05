@@ -149,7 +149,7 @@ export default function SignupPage() {
 
                 <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r h-[44px] from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700"
+                    className="w-full  h-[44px] bg-main-blue rounded-full font-poppins cursor-pointer"
                     disabled={isPending}
                 >
                     {isPending ? (

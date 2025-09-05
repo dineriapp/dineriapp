@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, ArrowRight, Check, Utensils } from "lucide-react";
+import { AlertCircle, ArrowRight, Check, Loader2, Utensils } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -31,33 +31,14 @@ function SubmitButton({ loading }: { loading: boolean }) {
   return (
     <Button
       type="submit"
-      className="flex-1 bg-gradient-to-r from-teal-600 !min-h-[44px] to-blue-600 hover:from-teal-700 hover:to-blue-700 group"
+      className="flex-1 bg-main-green rounded-full h-[44px] font-poppins cursor-pointer hover:bg-main-green/90"
       disabled={loading}
     >
       {loading ? (
-        <span className="flex items-center">
-          <svg
-            className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
+        <>
+          <Loader2 className="animate-spin" />
           Creating...
-        </span>
+        </>
       ) : (
         <span className="flex items-center">
           Create Restaurant Profile
@@ -211,11 +192,11 @@ export default function CreateRestaurantPage() {
                 )}
               </CardContent>
               <CardFooter className="border-t border-slate-100 pt-6">
-                <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0 w-full">
+                <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0 w-full">
                   <Button
                     type="button"
                     variant="outline"
-                    className="border-slate-200 text-slate-700 !h-[44px] hover:bg-slate-50"
+                    className="border-slate-200  bg-main-blue text-white !h-[44px] font-poppins !px-5 rounded-full hover:bg-main-blue/80"
                     onClick={() => router.push("/dashboard")}
                   >
                     Cancel
