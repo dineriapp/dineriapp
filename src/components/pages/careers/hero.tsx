@@ -4,11 +4,11 @@ import React from "react";
 const Hero = () => {
   return (
     <div className="w-11/12  max-w-[1240px] mx-auto  g:px-4 pb-12 lg:pt-24 pt-32 sm:pt-40">
-      <div className=" flex items-center lg:flex-row flex-col w-full gap-10">
-        <div className="lg:w-1/2 w-full max-sm:flex items-center justify-center flex-col">
-          <h1 className="mb-3 md:mb-7 text-[44px] font-bold max-sm:text-center leading-[1.05] tracking-tight text-[#002147] md:text-6xl lg:text-7xl lg:w-9/12 font-inter">
-            <span className=" text-[#002147]">
-              Grow your career at Dineri
+      <div className=" flex items-center lg:flex-row flex-col justify-between w-full gap-10 lg:pt-30 lg:pb-20">
+        <div className=" w-full b max-sm:flex items-center justify-center flex-col">
+          <h1 className="mb-3 md:mb-7 text-[44px] font-bold max-sm:text-center !leading-[1] tracking-tight text-[#002147] md:text-6xl lg:text-7xl  font-inter">
+            <span className=" text-black font-poppins">
+              Grow your <br />  career at Dineri
             </span>
           </h1>
           <p className="text-lg text-main-text lg:w-9/12">
@@ -19,13 +19,14 @@ const Hero = () => {
             Get Started – It’s Free
           </button>
         </div>
-        <div className="lg:w-1/2 w-full">
+        <div className="lg:w-1/2 max-w-[500px] w-full">
           <Image
-            src={"/careers.avif"}
+            // src={"/careers.avif"}
+            src={"/img-f-2.avif"}
             alt="logo.png"
-            width={1000}
-            height={1000}
-            className="w-full "
+            width={700}
+            height={700}
+            className="w-full max-w-[600px]"
           />
         </div>
       </div>

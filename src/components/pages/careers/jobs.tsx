@@ -38,7 +38,7 @@ const Jobs = () => {
     },
   ];
   return (
-    <div className="w-full bg-[#EBE3CC]">
+    <div className="w-full bg-[#FCF9EB]">
 
       <div className="w-11/12 max-w-[1280px] mx-auto flex flex-col gap-y-5  lg:px-4 pb-12 lg:pt-10 pt-5">
         <h2 className="text-3xl font-bold text-center text-main font-inter">
@@ -83,7 +83,7 @@ function JobCard({ job }: JobCardProps) {
   const jobLink = `/careers/${job.id}`;
   const router = useRouter();
   return (
-    <Card className="w-full bg-[#F6E3D5] box-shad-every border-[4px] border-[#000000] shadow-md font-inter  transition-shadow duration-300 rounded-2xl overflow-hidden">
+    <Card className="w-full bg-[white] box-shad-every border-[4px] border-[#000000] shadow-md font-inter  transition-shadow duration-300 rounded-2xl overflow-hidden">
       <div className="p-4 md:p-6">
         {/* Label */}
         <div className="mb-4">

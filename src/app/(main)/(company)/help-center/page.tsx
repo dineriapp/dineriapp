@@ -1,8 +1,12 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronRight, Code, HelpCircle, Home, Sparkle } from "lucide-react";
 import {
+  ChevronRight,
+  Code,
+  HelpCircle,
+  Home,
+  Sparkle,
   BarChart,
   Calendar,
   Globe,
@@ -10,6 +14,7 @@ import {
   Palette,
   Share2,
 } from "lucide-react";
+
 export default function Page() {
   const featureCards = [
     { title: "Getting Started", icon: Home },
@@ -58,57 +63,57 @@ export default function Page() {
   ];
 
   return (
-    <>
-      {/* <div className="flex justify-center mb-8">
-        <Badge className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2">
-          NEW Announcing our next round of funding
-        </Badge>
-      </div> */}
-
-      <div className="text-center mb-12 mt-12">
-        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
-          Welcome to Dineri
+    <div className="sm:px-6 md:px-12 lg:px-20 py-12">
+      {/* Header */}
+      <div className="text-center mb-16">
+        <h1 className="text-5xl md:text-6xl font-extrabold text-main-blue mb-4 leading-tight">
+          Welcome to <span className="text-main-blue">Dineri</span>
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
           The idea for Dineri.app was born from years of experience building
           websites for restaurants.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2  gap-4 mb-16">
+      {/* Feature Cards (Top Section) */}
+      <div className="grid md:grid-cols-2 gap-6 mb-20">
         {featureCards.map((card, index) => (
           <Card
             key={index}
-            className="bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group"
+            className="bg-white border border-indigo-100 shadow-sm hover:border-main-green hover:shadow-md transition-all duration-200 hover:bg-indigo-50 cursor-pointer group"
           >
             <CardContent className="p-6 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <card.icon className="w-5 h-5 text-gray-600" />
-                <span className="font-medium text-gray-900 text-lg">
+              <div className="flex items-center gap-4">
+                <card.icon className="w-6 h-6 text-indigo-600 group-hover:text-indigo-800" />
+                <span className="font-semibold text-lg text-indigo-900 group-hover:text-indigo-800">
                   {card.title}
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+              <ChevronRight className="w-5 h-5 text-indigo-400 group-hover:text-indigo-700 transition-colors" />
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="mb-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+      {/* "Why Dineri" Section */}
+      <div className="mb-20">
+        <h2 className="text-4xl font-bold text-main-blue mb-10 text-center">
           Why Dineri
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {features.map((feature, index) => (
-            <div key={index} className="flex gap-4 bg-gray-50 p-5 rounded-sm">
+            <div
+              key={index}
+              className="flex gap-5 bg-indigo-50 hover:bg-indigo-100 transition-colors p-6 rounded-lg border border-indigo-100 shadow-sm"
+            >
               <div className="flex-shrink-0">
-                <feature.icon className="w-6 h-6 text-blue-600" />
+                <feature.icon className="w-7 h-7 text-indigo-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">
+                <h3 className="font-semibold text-lg text-indigo-900 mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-gray-700 leading-relaxed text-sm">
                   {feature.description}
                 </p>
               </div>
@@ -116,6 +121,6 @@ export default function Page() {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

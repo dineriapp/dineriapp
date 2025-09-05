@@ -27,10 +27,10 @@ export function Header() {
       className={`bg-transparent  transition-all duration-300 flex justify-center`}
     >
       <div
-        className={`${isSticky ? "top-5 fixed h-[76px] lg:h-[90px]" : `fixed  ${pathname === "/" ? "top-[100px] xl:top-[120px] h-[76px] lg:h-[120px]" : "top-5 h-[76px] lg:h-[90px]"}`}
+        className={`${isSticky ? "top-5 fixed h-[76px] lg:h-[90px]" : `fixed  ${pathname === "/" ? "top-[100px] xl:top-[120px] h-[76px] lg:h-[90]" : "top-5 h-[76px] lg:h-[90px]"}`}
           }  z-50  border rounded-full w-[96%] lg:w-11/12 max-w-[1281px] mx-auto border-slate-200  flex items-center justify-center bg-[#FCF9EB] backdrop-blur-md transition-all duration-500 `}
       >
-        <div className={`${isSticky ? "px-6" : ` ${pathname === "/" ? "px-6 lg:px-[51px]" : "px-6"}`} flex h-18 items-center justify-between  w-full`}>
+        <div className={`${isSticky ? "px-6" : ` ${pathname === "/" ? "px-6" : "px-6"}`} flex h-18 items-center justify-between  w-full`}>
           <Link href="/" className="flex items-center space-x-2 group">
             <Image
               src={"/logo.png"}
@@ -78,13 +78,13 @@ export function Header() {
             <Link href="/login">
               <Button
                 variant="ghost"
-                className=" border border-[#0909094D] text-[#090909] font-poppins transition-all font-[500] cursor-pointer text-lg hover:text-slate-800 px-[51px] h-[60px] rounded-full"
+                className=" border border-[#0909094D] text-[#090909] font-poppins transition-all font-[500] cursor-pointer text-lg hover:text-slate-800 px-[40px] h-[52px] rounded-full"
               >
                 Log in
               </Button>
             </Link>
             <Link href="/signup">
-              <Button className="bg-[#002147] hover:bg-main-hover/80 font-poppins font-[600] text-lg text-[#FFFFFF] cursor-pointer h-[62px] px-[53px] transition-all rounded-full">
+              <Button className="bg-[#002147] hover:bg-main-hover/80 font-poppins font-[600] text-lg text-[#FFFFFF] cursor-pointer h-[52px] px-[40px] transition-all rounded-full">
                 Sign Up
               </Button>
             </Link>
