@@ -1,7 +1,7 @@
 "use client"
 
 import LoadingUI from "@/components/loading-ui"
-import { Button } from "@/components/ui/button"
+import { UnsavedChangesPanel } from "@/components/pages/dashboard/unsaved-cahnges-penal"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,8 +10,7 @@ import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
-import { Globe2, Lock, RotateCcw, Save } from "lucide-react"
-import { motion } from "motion/react"
+import { Globe2, Lock } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -204,39 +203,16 @@ export default function IntegrationsPage() {
                     )}
                 </CardContent>
             </Card>
-
-            {/* Floating Action Buttons */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{
-                    opacity: hasChanges ? 1 : 0,
-                    y: hasChanges ? 0 : 20,
-                }}
-                className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-2"
-            >
-                <UnsavedChangesUi />
-                <div className="flex gap-2">
-                    <Button
-                        onClick={resetForm}
-                        disabled={saving || !hasChanges}
-                        variant="outline"
-                        size="lg"
-                        className={ResetChangesBtnClasses}
-                    >
-                        <RotateCcw className="h-4 w-4" />
-                        Reset
-                    </Button>
-                    <Button
-                        onClick={saveSettings}
-                        disabled={saving || !hasChanges}
-                        size="lg"
-                        className={SaveChangesBtnClasses}
-                    >
-                        <Save className="h-4 w-4" />
-                        {saving ? "Saving..." : "Save Changes"}
-                    </Button>
-                </div>
-            </motion.div>
+            {/* Floating Save Button */}
+            <UnsavedChangesPanel
+                hasChanges={hasChanges}
+                saving={saving}
+                resetForm={resetForm}
+                saveSettings={saveSettings}
+                UnsavedChangesUi={UnsavedChangesUi}
+                ResetChangesBtnClasses={ResetChangesBtnClasses}
+                SaveChangesBtnClasses={SaveChangesBtnClasses}
+            />
         </>
     )
 }

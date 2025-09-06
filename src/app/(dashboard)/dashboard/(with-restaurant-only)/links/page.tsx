@@ -2,6 +2,9 @@
 
 import type React from "react"
 
+import LoadingUI from "@/components/loading-ui"
+import EditLinkDialog from "@/components/pages/dashboard/links/edit-link-dialog"
+import LinkDialog from "@/components/pages/dashboard/links/link-add-dialog"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -16,19 +19,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ALL_ICON_SLUGS, getLucideIconBySlug, type IconSlug } from "@/lib/get-icons"
+import { getLucideIconBySlug, type IconSlug } from "@/lib/get-icons"
 import {
     useBulkDeleteLinks,
     useCreateLink,
@@ -45,7 +36,6 @@ import { SubscriptionPlan } from "@prisma/client"
 import { ArrowDown, ArrowUp, Edit, Plus, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
-import LoadingUI from "@/components/loading-ui"
 
 
 export default function LinksPage() {
@@ -214,92 +204,26 @@ export default function LinksPage() {
                         {
                             !isLinkLimitReached ?
                                 <>
-                                    <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                                        <DialogTrigger asChild>
-
-                                            <Button
-                                                size="lg"
-                                                disabled={!restaurantId}
-                                                className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
-                                            >
-                                                <Plus className="h-4 w-4" />
-                                                Add new link
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <form onSubmit={handleAddLink}>
-                                                <DialogHeader>
-                                                    <DialogTitle>Add new link</DialogTitle>
-                                                    <DialogDescription>Add a link to {selectedRestaurant.name}&apos;s page</DialogDescription>
-                                                </DialogHeader>
-
-                                                <div className="space-y-4 py-4">
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="title">Link Title</Label>
-                                                        <Input
-                                                            id="title"
-                                                            value={newTitle}
-                                                            onChange={(e) => setNewTitle(e.target.value)}
-                                                            placeholder="e.g. View our menu"
-                                                            required
-                                                        />
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="url">URL</Label>
-                                                        <Input
-                                                            id="url"
-                                                            value={newUrl}
-                                                            onChange={(e) => setNewUrl(e.target.value)}
-                                                            placeholder="e.g. https://example.com/menu"
-                                                            required
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="icon">Icon</Label>
-                                                        <Select
-                                                            value={selectedIcon}
-                                                            onValueChange={(val) => setSelectedIcon(val as IconSlug)}
-                                                        >
-                                                            <SelectTrigger id="icon" className="w-full">
-                                                                <SelectValue placeholder="Select an icon" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                {ALL_ICON_SLUGS.map((slug) => (
-                                                                    <SelectItem key={slug} value={slug}>
-                                                                        {getLucideIconBySlug(slug, { className: "w-4 h-4" })}  {slug}
-                                                                    </SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                </div>
-
-                                                <DialogFooter>
-                                                    <Button
-                                                        type="button"
-                                                        variant="outline"
-                                                        onClick={() => {
-                                                            setIsAddDialogOpen(false)
-                                                            setNewTitle("")
-                                                            setNewUrl("")
-                                                        }}
-                                                        className="hover:opacity-75 cursor-pointer h-[40px] rounded-full font-poppins !px-5"
-                                                        disabled={createMutation.isPending}
-                                                    >
-                                                        Cancel
-                                                    </Button>
-                                                    <Button
-                                                        type="submit"
-                                                        disabled={!newTitle.trim() || !newUrl.trim() || createMutation.isPending || !restaurantId}
-                                                        className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
-                                                    >
-                                                        {createMutation.isPending ? "Adding..." : "Add Link"}
-                                                    </Button>
-                                                </DialogFooter>
-                                            </form>
-                                        </DialogContent>
-                                    </Dialog>
+                                    <LinkDialog
+                                        type="add"
+                                        isOpen={isAddDialogOpen}
+                                        onOpenChange={setIsAddDialogOpen}
+                                        restaurantName={selectedRestaurant.name}
+                                        title={newTitle}
+                                        setTitle={setNewTitle}
+                                        url={newUrl}
+                                        setUrl={setNewUrl}
+                                        icon={selectedIcon}
+                                        setIcon={setSelectedIcon}
+                                        onCancel={() => {
+                                            setIsAddDialogOpen(false);
+                                            setNewTitle("");
+                                            setNewUrl("");
+                                        }}
+                                        onSubmit={handleAddLink}
+                                        isPending={createMutation.isPending}
+                                        disabled={!restaurantId}
+                                    />
                                 </>
                                 :
                                 <>
@@ -356,11 +280,6 @@ export default function LinksPage() {
                                                     onCheckedChange={() => toggleLinkSelection(link.id)}
                                                     aria-label={`Select ${link.title}`}
                                                 />
-                                                {/* 
-                                                <div className="flex-shrink-0 cursor-move">
-                                                    <Grip className="h-5 w-5 text-slate-400" />
-                                                </div> */}
-
                                                 <div className="min-w-0 flex-grow">
                                                     <div className="flex items-center gap-2">
                                                         {getLucideIconBySlug(link.icon_slug, { className: "w-4 h-4" })}
@@ -451,15 +370,7 @@ export default function LinksPage() {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="py-12 text-center"
                                 >
-                                    <p className="mb-4 text-slate-500">No links added yet for {selectedRestaurant.name}</p>
-                                    <Button
-                                        onClick={() => setIsAddDialogOpen(true)}
-                                        size="lg"
-                                        disabled={!restaurantId}
-                                        className="bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105 hover:from-teal-700 hover:to-blue-700"
-                                    >
-                                        Add your first link
-                                    </Button>
+                                    <p className="mb-3 text-sm text-slate-500">No links added yet for {selectedRestaurant.name}</p>
                                 </motion.div>
                             )}
                         </CardContent>
@@ -467,72 +378,25 @@ export default function LinksPage() {
                 </motion.div>
             </main>
 
-            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent>
-                    <form onSubmit={handleUpdateLink}>
-                        <DialogHeader>
-                            <DialogTitle>Edit link</DialogTitle>
-                            <DialogDescription>Update the details of your link for {selectedRestaurant.name}</DialogDescription>
-                        </DialogHeader>
-
-                        <div className="space-y-4 py-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="edit-title">Link Title</Label>
-                                <Input id="edit-title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} required />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="edit-url">URL</Label>
-                                <Input id="edit-url" value={newUrl} onChange={(e) => setNewUrl(e.target.value)} required />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="icon">Icon</Label>
-                                <Select
-                                    value={selectedIcon}
-                                    onValueChange={(val) => setSelectedIcon(val as IconSlug)}
-                                >
-                                    <SelectTrigger id="icon" className="w-full">
-                                        <SelectValue placeholder="Select an icon" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {ALL_ICON_SLUGS.map((slug) => (
-                                            <SelectItem key={slug} value={slug}>
-                                                {getLucideIconBySlug(slug, { className: "w-4 h-4" })}  {slug}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <DialogFooter>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => {
-                                    setIsEditDialogOpen(false)
-                                    setEditingLink(null)
-                                    setNewTitle("")
-                                    setNewUrl("")
-                                }}
-                                className="hover:opacity-75  cursor-pointer h-[40px] rounded-full font-poppins !px-5"
-                                disabled={updateMutation.isPending}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={!newTitle.trim() || !newUrl.trim() || updateMutation.isPending}
-                                className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
-                            >
-                                {updateMutation.isPending ? "Saving..." : "Save Changes"}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
+            <EditLinkDialog
+                isOpen={isEditDialogOpen}
+                onOpenChange={setIsEditDialogOpen}
+                restaurantName={selectedRestaurant.name}
+                title={newTitle}
+                setTitle={setNewTitle}
+                url={newUrl}
+                setUrl={setNewUrl}
+                icon={selectedIcon}
+                setIcon={setSelectedIcon}
+                onCancel={() => {
+                    setIsEditDialogOpen(false);
+                    setEditingLink(null);
+                    setNewTitle("");
+                    setNewUrl("");
+                }}
+                onSubmit={handleUpdateLink}
+                isPending={updateMutation.isPending}
+            />
         </>
     )
 }
-
-

@@ -65,3 +65,31 @@ export type StylesDataType = {
     cardsBadgesBg: string;
     cardsBadgesTextColor: string;
 };
+
+
+export interface PopupFormData {
+    welcome_popup_enabled: boolean
+    welcome_popup_message: string
+    welcome_popup_delay: number
+    welcome_popup_show_button: boolean
+    welcome_popup_show_info: {
+        ratings: boolean
+        address: boolean
+        hours: boolean
+        phone: boolean
+    }
+    menu_popup_enabled: boolean
+    menu_popup_message: string
+    menu_popup_delay: number
+    menu_popup_show_button: boolean
+    menu_popup_show_info: {
+        ratings: boolean
+        address: boolean
+        hours: boolean
+        phone: boolean
+    }
+    event_announcements_enabled: boolean
+    event_announcement_days: number
+    max_events_in_popup: number
+    event_rotation_speed: number
+}

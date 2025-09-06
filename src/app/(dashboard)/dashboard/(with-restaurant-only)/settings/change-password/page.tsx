@@ -1,5 +1,6 @@
 "use client"
 
+import { UnsavedChangesPanel } from "@/components/pages/dashboard/unsaved-cahnges-penal"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -7,8 +8,7 @@ import { Label } from "@/components/ui/label"
 import UnsavedChangesUi from "@/components/unsaved-changes-ui"
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { supabase } from "@/supabase/clients/client"
-import { Eye, EyeOff, Lock, RotateCcw, Save } from "lucide-react"
-import { motion } from "motion/react"
+import { Eye, EyeOff, Lock } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -322,39 +322,17 @@ export default function ChangePasswordPage() {
                     </Link>
                 </CardContent>
             </Card>
+            {/* Floating Save Button */}
+            <UnsavedChangesPanel
+                hasChanges={hasChanges}
+                saving={saving}
+                resetForm={handleResetForm}
+                saveSettings={handleChangePassword}
+                UnsavedChangesUi={UnsavedChangesUi}
+                ResetChangesBtnClasses={ResetChangesBtnClasses}
+                SaveChangesBtnClasses={SaveChangesBtnClasses}
+            />
 
-            {/* Floating Action Buttons */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{
-                    opacity: hasChanges ? 1 : 0,
-                    y: hasChanges ? 0 : 20,
-                }}
-                className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-2"
-            >
-                <UnsavedChangesUi />
-                <div className="flex gap-2">
-                    <Button
-                        onClick={handleResetForm}
-                        disabled={saving || !hasChanges}
-                        size="lg"
-                        variant="outline"
-                        className={ResetChangesBtnClasses}
-                    >
-                        <RotateCcw className="h-4 w-4" />
-                        Reset
-                    </Button>
-                    <Button
-                        onClick={handleChangePassword}
-                        disabled={saving || !hasChanges}
-                        size="lg"
-                        className={SaveChangesBtnClasses}
-                    >
-                        <Save className="h-4 w-4" />
-                        {saving ? "Changing..." : "Change Password"}
-                    </Button>
-                </div>
-            </motion.div>
         </>
     )
 }

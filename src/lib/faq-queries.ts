@@ -4,7 +4,7 @@ import { toast } from "sonner"
 import ky from "./ky"
 
 // Use Prisma types with relations
-type FaqCategoryWithFaqs = FaqCategory & {
+export type FaqCategoryWithFaqs = FaqCategory & {
     faqs: Faq[]
 }
 

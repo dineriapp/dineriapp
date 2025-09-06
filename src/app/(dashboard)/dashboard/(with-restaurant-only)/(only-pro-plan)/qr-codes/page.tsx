@@ -3,12 +3,11 @@
 import { ErrorMessage } from "@/components/error-message"
 import LoadingUI from "@/components/loading-ui"
 import { QRCodeItem } from "@/components/pages/dashboard/qr/qr-code-item"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useDeleteQRCode, useQRCodes, useQRCodeStats } from "@/lib/qr-queries"
 import { useRestaurantStore } from "@/stores/restaurant-store"
-import { BarChart3, Eye, Plus, QrCode } from "lucide-react"
+import { BarChart3, Eye, QrCode } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -196,11 +195,8 @@ export default function QRCodesPage() {
                                     <div className="py-12 text-center">
                                         <QrCode className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                                         <h3 className="mb-2 text-lg font-semibold">No QR codes yet</h3>
-                                        <p className="mb-4 text-muted-foreground">Generate your first QR code to start tracking scans</p>
-                                        <Button onClick={() => setActiveTab("generator")}>
-                                            <Plus className="mr-2 h-4 w-4" />
-                                            Create QR Code
-                                        </Button>
+                                        <p className="mb-4 text-sm text-muted-foreground">Generate your first QR code to start tracking scans</p>
+
                                     </div>
                                 )}
                             </CardContent>

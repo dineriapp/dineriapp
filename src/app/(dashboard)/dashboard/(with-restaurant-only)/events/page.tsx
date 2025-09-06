@@ -1,5 +1,8 @@
 "use client"
 
+import LoadingUI from "@/components/loading-ui"
+import AddEventDialog from "@/components/pages/dashboard/events/add-event-dialog"
+import EditEventDialog from "@/components/pages/dashboard/events/edit-event-dialog"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,39 +16,17 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { useCreateEvent, useDeleteEvent, useEvents, useReorderEvent, useUpdateEvent } from "@/lib/event-queries"
+import { container4 } from "@/lib/reuseable-data"
 import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import type { Event, SubscriptionPlan } from "@prisma/client"
-import { ArrowDown, ArrowUp, Calendar, Edit, ExternalLink, Plus, Search, Trash2 } from "lucide-react"
+import { ArrowDown, ArrowUp, Calendar, Edit, ExternalLink, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import type React from "react"
 import { useState } from "react"
-
-const container = {
-    hidden: { opacity: 0 },
-    show: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-        },
-    },
-}
-
 
 export default function EventsPage() {
     const { selectedRestaurant } = useRestaurantStore()
@@ -154,24 +135,7 @@ export default function EventsPage() {
 
     if (isLoading || !restaurantId) {
         return (
-            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
-                <div className="flex items-center space-x-2 text-slate-500">
-                    <svg
-                        className="animate-spin h-5 w-5 text-teal-600"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                    >
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                    </svg>
-                    <span>Loading...</span>
-                </div>
-            </div>
+            <LoadingUI text="Loading..." />
         )
     }
 
@@ -180,6 +144,8 @@ export default function EventsPage() {
         resourceType: "events",
         currentCount: events.length,
     });
+
+    const plan = prismaUser?.subscription_plan ?? "basic"
 
 
     return (
@@ -198,125 +164,45 @@ export default function EventsPage() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="relative bg-white rounded-full ">
-                            <Search className="absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                            <Input
+                        {/* Search */}
+                        <div className="relative bg-white rounded-full">
+                            <input
                                 placeholder="Search events..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-12 font-poppins rounded-full w-64 h-[42px]"
+                                value={""}
+                                onChange={() => { }}
+                                className="pl-12 font-poppins rounded-full w-64 h-[42px] border border-gray-300"
                             />
                         </div>
-                        {isEventsLimitReached ?
-                            <>
-                                <Button
-                                    size="lg"
-                                    onClick={() => {
-                                        const plan = prismaUser?.subscription_plan ?? "basic";
-                                        const limit = STRIPE_PLANS[plan].limits?.events;
-                                        const planName = STRIPE_PLANS[plan].name;
 
-                                        if (limit !== undefined && events.length >= limit) {
-                                            openPopup(`You are limited to ${limit} events on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`);
-                                        } else {
-                                        }
-                                    }}
-                                    className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
-                                >
-                                    <Plus className="h-4 w-4" />
-                                    Add Event
-                                </Button>
-                            </>
-                            :
-                            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                                <DialogTrigger asChild>
-                                    <Button
-                                        size="lg"
-                                        className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
-                                    >
-                                        <Plus className="h-4 w-4" />
-                                        Add Event
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[500px]">
-                                    <form onSubmit={handleAddEvent}>
-                                        <DialogHeader>
-                                            <DialogTitle>Add Event</DialogTitle>
-                                            <DialogDescription>Create a new event for your restaurant</DialogDescription>
-                                        </DialogHeader>
-
-                                        <div className="space-y-4 py-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="title">Event Title</Label>
-                                                <Input
-                                                    id="title"
-                                                    value={title}
-                                                    onChange={(e) => setTitle(e.target.value)}
-                                                    placeholder="e.g. Wine Tasting Night"
-                                                    required
-                                                />
-                                            </div>
-
-                                            <div className="space-y-2">
-                                                <Label htmlFor="description">Description</Label>
-                                                <Textarea
-                                                    id="description"
-                                                    value={description}
-                                                    onChange={(e) => setDescription(e.target.value)}
-                                                    placeholder="Add details about your event"
-                                                    rows={3}
-                                                />
-                                            </div>
-
-                                            <div className="space-y-2">
-                                                <Label htmlFor="date">Date & Time</Label>
-                                                <Input
-                                                    id="date"
-                                                    type="datetime-local"
-                                                    value={date}
-                                                    onChange={(e) => setDate(e.target.value)}
-                                                    required
-                                                />
-                                            </div>
-
-                                            <div className="space-y-2">
-                                                <Label htmlFor="ticketUrl">Ticket Link (Optional)</Label>
-                                                <Input
-                                                    id="ticketUrl"
-                                                    type="url"
-                                                    value={ticketUrl}
-                                                    onChange={(e) => setTicketUrl(e.target.value)}
-                                                    placeholder="https://ticketseller.com/your-event"
-                                                />
-                                                <p className="text-xs text-muted-foreground">Add a link where customers can buy tickets</p>
-                                            </div>
-                                        </div>
-
-                                        <DialogFooter>
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                onClick={() => {
-                                                    setIsAddDialogOpen(false)
-                                                    resetForm()
-                                                }}
-                                                className="hover:opacity-75 cursor-pointer rounded-full h-[40px] font-poppins !px-5"
-                                            >
-                                                Cancel
-                                            </Button>
-                                            <Button
-                                                type="submit"
-                                                disabled={!title || !date || createEventMutation.isPending}
-                                                className="hover:opacity-75 !bg-main-blue cursor-pointer h-[40px] rounded-full font-poppins !px-5"
-                                            >
-                                                {createEventMutation.isPending ? "Adding..." : "Add Event"}
-                                            </Button>
-                                        </DialogFooter>
-                                    </form>
-                                </DialogContent>
-                            </Dialog>
-                        }
-
+                        {/* Button */}
+                        {isEventsLimitReached ? (
+                            <button
+                                onClick={() =>
+                                    openPopup(
+                                        `You are limited to ${STRIPE_PLANS[plan].limits?.events} events on the ${STRIPE_PLANS[plan].name} plan. Upgrade to Pro or Enterprise to add more.`
+                                    )
+                                }
+                                className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px] text-white"
+                            >
+                                + Add Event
+                            </button>
+                        ) : (
+                            <AddEventDialog
+                                open={isAddDialogOpen}
+                                setOpen={setIsAddDialogOpen}
+                                title={title}
+                                setTitle={setTitle}
+                                description={description}
+                                setDescription={setDescription}
+                                date={date}
+                                setDate={setDate}
+                                ticketUrl={ticketUrl}
+                                setTicketUrl={setTicketUrl}
+                                handleAddEvent={handleAddEvent}
+                                resetForm={resetForm}
+                                isPending={createEventMutation.isPending}
+                            />
+                        )}
                     </div>
                 </motion.div>
 
@@ -330,7 +216,7 @@ export default function EventsPage() {
                         </CardHeader>
                         <CardContent>
                             {filteredEvents.length > 0 ? (
-                                <motion.div variants={container} initial="hidden" animate="show" className="space-y-3">
+                                <motion.div variants={container4} initial="hidden" animate="show" className="space-y-3">
                                     {filteredEvents.map((event, index) => {
                                         const { formatted: formattedDate, isUpcoming } = formatEventDate(event.date)
                                         return (
@@ -461,14 +347,7 @@ export default function EventsPage() {
                                         </>
                                     ) : (
                                         <>
-                                            <p className="mb-4 text-muted-foreground">No events added yet</p>
-                                            <Button
-                                                onClick={() => setIsAddDialogOpen(true)}
-                                                size="lg"
-                                                className="bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105"
-                                            >
-                                                Add your first event
-                                            </Button>
+                                            <p className="mb-4 text-sm text-muted-foreground">No events added yet</p>
                                         </>
                                     )}
                                 </motion.div>
@@ -479,78 +358,22 @@ export default function EventsPage() {
             </main>
 
             {/* Edit Event Dialog */}
-            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent className="sm:max-w-[500px]">
-                    <form onSubmit={handleUpdateEvent}>
-                        <DialogHeader>
-                            <DialogTitle>Edit Event</DialogTitle>
-                            <DialogDescription>Update the event details</DialogDescription>
-                        </DialogHeader>
-
-                        <div className="space-y-4 py-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="editTitle">Event Title</Label>
-                                <Input id="editTitle" value={title} onChange={(e) => setTitle(e.target.value)} required />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="editDescription">Description</Label>
-                                <Textarea
-                                    id="editDescription"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    rows={3}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="editDate">Date & Time</Label>
-                                <Input
-                                    id="editDate"
-                                    type="datetime-local"
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="editTicketUrl">Ticket Link (Optional)</Label>
-                                <Input
-                                    id="editTicketUrl"
-                                    type="url"
-                                    value={ticketUrl}
-                                    onChange={(e) => setTicketUrl(e.target.value)}
-                                    placeholder="https://ticketseller.com/your-event"
-                                />
-                                <p className="text-xs text-muted-foreground">Add a link where customers can buy tickets</p>
-                            </div>
-                        </div>
-
-                        <DialogFooter>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => {
-                                    setIsEditDialogOpen(false)
-                                    setEditingEvent(null)
-                                    resetForm()
-                                }}
-                                className="hover:opacity-75 h-[40px]  cursor-pointer rounded-full font-poppins !px-5"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={!title || !date || updateEventMutation.isPending}
-                                className="hover:opacity-75 !bg-main-blue cursor-pointer rounded-full h-[40px] font-poppins !px-5"
-                            >
-                                {updateEventMutation.isPending ? "Saving..." : "Save Changes"}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
+            <EditEventDialog
+                open={isEditDialogOpen}
+                setOpen={setIsEditDialogOpen}
+                title={title}
+                setTitle={setTitle}
+                description={description}
+                setDescription={setDescription}
+                date={date}
+                setDate={setDate}
+                ticketUrl={ticketUrl}
+                setTicketUrl={setTicketUrl}
+                handleUpdateEvent={handleUpdateEvent}
+                resetForm={resetForm}
+                setEditingEvent={setEditingEvent}
+                isPending={updateEventMutation.isPending}
+            />
         </>
     )
 }

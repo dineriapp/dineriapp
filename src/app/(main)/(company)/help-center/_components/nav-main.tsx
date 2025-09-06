@@ -31,8 +31,8 @@ export function NavMain({
   }[];
 }) {
   return (
-    <SidebarGroup className="h-full bg-gradient-to-b from-blue-50 to-green-100 font-poppins shadow-md">
-      <SidebarMenu className="gap-1 p-3">
+    <SidebarGroup className="h-full bg-white font-poppins shadow-md px-2">
+      <SidebarMenu className="gap-1 py-3">
         {items.map((item) => (
           <Collapsible
             key={item.title}
@@ -43,9 +43,9 @@ export function NavMain({
             <SidebarMenuItem>
               <SidebarMenuButton
                 tooltip={item.title}
-                className={`gap-4 transition-all duration-200 rounded-lg px-3 py-2 cursor-pointer ${item.isActive
-                  ? "bg-green-500 hover:bg-green-400 text-white hover:text-white"
-                  : "hover:bg-green-500 text-green-800 hover:text-white"
+                className={`gap-2 transition-all !text-sm duration-200 px-3 py-2 rounded-none cursor-pointer ${item.isActive
+                  ? "bg-gray-100 hover:bg-gray-100 text-main-action hover:text-main-action"
+                  : "hover:bg-gray-100 text-main-blue hover:text-main-action"
                   }`}
               >
                 <span className="flex items-center gap-2">
@@ -53,19 +53,19 @@ export function NavMain({
                     <item.icon
                       size={20}
                       strokeWidth={1.5}
-                      className={` ${item.isActive ? "text-white" : "text-green-600"}`}
+                      className={` ${item.isActive ? "text-main-action" : "text-main-blue"}`}
                     />
                   )}
                 </span>
-                <span className="text-base font-medium">{item.title}</span>
+                <span className="text-sm font-medium">{item.title}</span>
               </SidebarMenuButton>
 
-              <SidebarMenuSub className="pl-5 ml-2 mt-1 border-l border-green-300 gap-1">
+              <SidebarMenuSub className="pl-5 ml-2 border-l border-green-300 gap-1">
                 {item.items?.map((subItem) => (
                   <SidebarMenuSubItem key={subItem.title}>
                     <SidebarMenuSubButton
                       asChild
-                      className="rounded-md px-2 py-1.5 text-sm hover:bg-green-200 text-green-700 transition-colors"
+                      className="rounded-none px-2 py-1.5 text-sm hover:bg-gray-100 text-main-blue transition-colors"
                     >
                       <Link href={`/help-center${subItem.url}`}>
                         <span>{subItem.title}</span>

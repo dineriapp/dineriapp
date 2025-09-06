@@ -234,3 +234,17 @@ export const textColorPresets = [
     { name: "Gray Light", color: "#9ca3af" },
 ]
 
+export const container3 = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.1 } },
+}
+
+export const container4 = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+        },
+    },
+}

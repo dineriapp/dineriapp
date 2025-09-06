@@ -1,6 +1,7 @@
 "use client"
 
 import LoadingUI from "@/components/loading-ui"
+import { UnsavedChangesPanel } from "@/components/pages/dashboard/unsaved-cahnges-penal"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -8,8 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import UnsavedChangesUi from "@/components/unsaved-changes-ui"
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
-import { RotateCcw, Save } from "lucide-react"
-import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -355,41 +354,17 @@ export default function HoursPage() {
 
                 </CardContent>
             </Card>
+            {/* Floating Save Button */}
+            <UnsavedChangesPanel
+                hasChanges={hasChanges}
+                saving={saving}
+                resetForm={resetForm}
+                saveSettings={saveOpeningHours}
+                UnsavedChangesUi={UnsavedChangesUi}
+                ResetChangesBtnClasses={ResetChangesBtnClasses}
+                SaveChangesBtnClasses={SaveChangesBtnClasses}
+            />
 
-            {/* Floating Action Buttons */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{
-                    opacity: hasChanges ? 1 : 0,
-                    y: hasChanges ? 0 : 20,
-                }}
-                className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-2"
-            >
-                <UnsavedChangesUi />
-
-                <div className="flex gap-2">
-                    <Button
-                        onClick={resetForm}
-                        disabled={saving || !hasChanges}
-                        variant="outline"
-                        size="lg"
-                        className={ResetChangesBtnClasses}
-                    >
-                        <RotateCcw className="h-4 w-4" />
-                        Reset
-                    </Button>
-
-                    <Button
-                        onClick={saveOpeningHours}
-                        disabled={saving || !hasChanges}
-                        size="lg"
-                        className={SaveChangesBtnClasses}
-                    >
-                        <Save className="h-4 w-4" />
-                        {saving ? "Saving..." : "Save Changes"}
-                    </Button>
-                </div>
-            </motion.div>
         </>
     )
 }

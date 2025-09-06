@@ -80,16 +80,16 @@ export default function Page() {
         {featureCards.map((card, index) => (
           <Card
             key={index}
-            className="bg-white border border-indigo-100 shadow-sm hover:border-main-green hover:shadow-md transition-all duration-200 hover:bg-indigo-50 cursor-pointer group"
+            className="bg-white border border-indigo-100 shadow-sm hover:border-main-green hover:shadow-md transition-all duration-200 hover:bg-transparent cursor-pointer group"
           >
             <CardContent className="p-6 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <card.icon className="w-6 h-6 text-indigo-600 group-hover:text-indigo-800" />
-                <span className="font-semibold text-lg text-indigo-900 group-hover:text-indigo-800">
+                <card.icon className="w-6 h-6 text-main-blue group-hover:text-ain-blue" />
+                <span className="font-semibold text-lg text-ain-blue group-hover:text-ain-blue">
                   {card.title}
                 </span>
               </div>
-              <ChevronRight className="w-5 h-5 text-indigo-400 group-hover:text-indigo-700 transition-colors" />
+              <ChevronRight className="w-5 h-5 text-indigo-400 group-hover:text-ain-blue transition-colors" />
             </CardContent>
           </Card>
         ))}
@@ -104,13 +104,13 @@ export default function Page() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="flex gap-5 bg-indigo-50 hover:bg-indigo-100 transition-colors p-6 rounded-lg border border-indigo-100 shadow-sm"
+              className="flex gap-5 cursor-pointer transition-colors p-6 rounded-lg border border-indigo-100  hover:border-main-green/50 shadow-sm"
             >
               <div className="flex-shrink-0">
                 <feature.icon className="w-7 h-7 text-indigo-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg text-indigo-900 mb-2">
+                <h3 className="font-semibold text-lg text-ain-blue mb-2">
                   {feature.title}
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-sm">

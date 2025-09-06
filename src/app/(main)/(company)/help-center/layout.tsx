@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <>
       {/* HEADER */}
-      <header className="sticky top-0 left-0 z-50 w-full h-16 bg-gradient-to-r from-blue-50 via-green-50 to-white border-b shadow-sm flex items-center transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+      <header className="sticky top-0 left-0 z-50 w-full h-16 bg-[#FCF9EB] border-b shadow-none flex items-center transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
         <div className="flex items-center justify-between w-full px-4 gap-6">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
@@ -41,11 +41,11 @@ export default function RootLayout({
             {/* Notifications Button (example) */}
             <button
               type="button"
-              className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-green-50 hover:bg-green-100 transition-colors"
+              className="inline-flex items-center justify-center w-9 h-9 rounded-full cursor-pointer bg-main-green hover:bg-main-green transition-colors"
             >
               <span className="sr-only">Notifications</span>
               <svg
-                className="w-5 h-5 text-green-600"
+                className="w-5 h-5 text-white"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"

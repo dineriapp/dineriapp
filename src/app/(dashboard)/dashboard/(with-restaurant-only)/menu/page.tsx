@@ -2,6 +2,12 @@
 
 import type React from "react"
 
+import LoadingUI from "@/components/loading-ui"
+import AddCategoryDialog from "@/components/pages/dashboard/menu/add-category-dialog"
+import AddItemDialog from "@/components/pages/dashboard/menu/add-item-dialog"
+import EditCategoryDialog from "@/components/pages/dashboard/menu/edit-category-dialog"
+import EditItemDialog from "@/components/pages/dashboard/menu/edit-item-dialog"
+import MenuCategoryComponent, { MenuCategoryWithItems } from "@/components/pages/dashboard/menu/menu-category"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,23 +19,9 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
 import {
     useCreateCategory,
     useCreateItem,
@@ -41,24 +33,15 @@ import {
     useUpdateCategory,
     useUpdateItem,
 } from "@/lib/menu-queries"
+import { container3 } from "@/lib/reuseable-data"
 import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
 import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { MenuCategory, MenuItem, SubscriptionPlan } from "@prisma/client"
-import { AlertTriangle, ArrowDown, ArrowUp, Check, Edit, Leaf, Plus, Search, Trash2, X } from "lucide-react"
+import { ArrowDown, ArrowUp, Check, Edit, Plus, Search, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
-
-const container = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.1 } },
-}
-
-
-type MenuCategoryWithItems = MenuCategory & {
-    items: MenuItem[]
-}
 
 export default function MenuPage() {
     const { restaurants, selectedRestaurant } = useRestaurantStore()
@@ -257,19 +240,12 @@ export default function MenuPage() {
         setAllergenInfo("")
     }
 
-    // Show loading state when menu is being fetched
     if (isLoading || !selectedRestaurant || !restaurants) {
         return (
-            <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
-                <div className="flex items-center space-x-2 text-slate-500">
-                    <div className="animate-spin h-5 w-5 border-2 border-teal-600 border-t-transparent rounded-full" />
-                    <span>Loading menu...</span>
-                </div>
-            </div>
+            <LoadingUI text="Loading menu..." />
         )
     }
 
-    // Show error state
     if (error) {
         return (
             <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
@@ -321,83 +297,23 @@ export default function MenuPage() {
                         </div>
                         {
                             !isCategoryLimitReached ?
-                                <Dialog open={isAddCategoryDialogOpen} onOpenChange={setIsAddCategoryDialogOpen}>
-                                    <DialogTrigger asChild>
-                                        <Button
-                                            size="lg"
-                                            disabled={!restaurantId}
-                                            className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
-                                        >
-                                            <Plus className="h-4 w-4" />
-                                            Add Category
-                                        </Button>
-                                    </DialogTrigger>
-                                    <DialogContent className="sm:max-w-md">
-                                        <form onSubmit={handleAddCategory}>
-                                            <DialogHeader>
-                                                <DialogTitle>Add Menu Category</DialogTitle>
-                                                <DialogDescription>Create a new category for your menu items</DialogDescription>
-                                            </DialogHeader>
-
-                                            <div className="space-y-4 py-4">
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="name">Category Name</Label>
-                                                    <Input
-                                                        id="name"
-                                                        value={newCategoryName}
-                                                        onChange={(e) => setNewCategoryName(e.target.value)}
-                                                        placeholder="e.g. Appetizers"
-                                                        required
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="description">Description (Optional)</Label>
-                                                    <Textarea
-                                                        id="description"
-                                                        value={newCategoryDescription}
-                                                        onChange={(e) => setNewCategoryDescription(e.target.value)}
-                                                        placeholder="Add a description for this category"
-                                                        rows={3}
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="showQuickMenu">Show in Quick Menu</Label>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        Enable this category to appear in the quick menu.
-                                                    </p>
-                                                    <Switch
-                                                        id="showQuickMenu"
-                                                        checked={newCategoryshow_in_quick_menu}
-                                                        onCheckedChange={setNewCategoryshow_in_quick_menu}
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <DialogFooter>
-                                                <Button
-                                                    type="button"
-                                                    variant="outline"
-                                                    onClick={() => {
-                                                        setIsAddCategoryDialogOpen(false)
-                                                        resetForm()
-                                                    }}
-                                                    className="hover:opacity-75 cursor-pointer rounded-full h-[40px] font-poppins !px-5"
-                                                    disabled={createCategoryMutation.isPending}
-                                                >
-                                                    Cancel
-                                                </Button>
-                                                <Button
-                                                    type="submit"
-                                                    disabled={!newCategoryName || createCategoryMutation.isPending || !restaurantId}
-                                                    className="hover:opacity-75 !bg-main-blue cursor-pointer h-[40px] rounded-full font-poppins !px-5"
-                                                >
-                                                    {createCategoryMutation.isPending ? "Adding..." : "Add Category"}
-                                                </Button>
-                                            </DialogFooter>
-                                        </form>
-                                    </DialogContent>
-                                </Dialog>
+                                <AddCategoryDialog
+                                    isOpen={isAddCategoryDialogOpen}
+                                    onOpenChange={setIsAddCategoryDialogOpen}
+                                    restaurantId={restaurantId}
+                                    categoryName={newCategoryName}
+                                    setCategoryName={setNewCategoryName}
+                                    categoryDescription={newCategoryDescription}
+                                    setCategoryDescription={setNewCategoryDescription}
+                                    showInQuickMenu={newCategoryshow_in_quick_menu}
+                                    setShowInQuickMenu={setNewCategoryshow_in_quick_menu}
+                                    onSubmit={handleAddCategory}
+                                    onCancel={() => {
+                                        setIsAddCategoryDialogOpen(false);
+                                        resetForm();
+                                    }}
+                                    isPending={createCategoryMutation.isPending}
+                                />
                                 :
                                 <>
                                     <Button
@@ -406,7 +322,6 @@ export default function MenuPage() {
                                             const plan = prismaUser?.subscription_plan ?? "basic"
                                             const planName = STRIPE_PLANS[plan].name
                                             const limit = STRIPE_PLANS[plan].limits?.menuCategories
-
                                             openPopup(`You are limited to ${limit} menu categories on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`)
                                         }}
                                         className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
@@ -420,7 +335,7 @@ export default function MenuPage() {
                     </div>
                 </motion.div>
 
-                <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
+                <motion.div variants={container3} initial="hidden" animate="show" className="space-y-6">
                     {filteredCategories.map((category, categoryIndex) => (
                         <div key={category.id} className="space-y-4">
                             <Card className="bg-white/50 backdrop-blur-sm gap-1 shadow-lg border">
@@ -506,7 +421,6 @@ export default function MenuPage() {
                                         </Button>
                                     </div>
                                 </CardHeader>
-
                                 <CardContent>
                                     <div className="space-y-4">
                                         {
@@ -539,172 +453,24 @@ export default function MenuPage() {
                                                 Add Item
                                             </Button>
                                         }
-
-
-                                        {category.items && category.items.length > 0 ? (
-                                            <div className="space-y-3">
-                                                {category.items.map((item, itemIndex) => {
-                                                    const parsedAddons = Array.isArray(item.addons)
-                                                        ? (item.addons as { name: string; price: number }[])
-                                                        : [];
-                                                    return <div
-                                                        key={item.id}
-                                                        className="flex items-center gap-3 rounded-lg border bg-white/80 p-4 backdrop-blur-sm transition-all hover:shadow-md hover:bg-white/90"
-                                                    >
-                                                        {/* <div className="flex-shrink-0 cursor-move">
-                                                            <Grip className="h-5 w-5 text-slate-400" />
-                                                        </div> */}
-
-                                                        <div className="min-w-0 flex-grow">
-                                                            <div className="flex items-center gap-2 mb-1">
-
-                                                                <h3 className="font-medium">{item.name}</h3>
-                                                                {item.is_halal && (
-                                                                    <span
-                                                                        className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800"
-                                                                        title="Halal certified"
-                                                                    >
-                                                                        <Leaf className="h-3 w-3" />
-                                                                        Halal
-                                                                    </span>
-                                                                )}
-                                                                {item.show_in_quick_menu && (
-                                                                    <Badge className="bg-primary text-white">Quick Menu</Badge>
-                                                                )}
-                                                            </div>
-                                                            {item.description && <p className="text-sm text-slate-500 mb-2">{item.description}</p>}
-                                                            {item.allergens && item.allergens.length > 0 && (
-                                                                <div className="flex flex-wrap gap-1">
-                                                                    <span
-                                                                        className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800"
-                                                                        title={`Contains allergens`}
-                                                                    >
-                                                                        <AlertTriangle className="h-3 w-3" />
-                                                                        Allergens
-                                                                    </span>
-                                                                </div>
-                                                            )}
-                                                            {/* Addons */}
-                                                            {item.addons && parsedAddons.length > 0 && (
-                                                                <div>
-                                                                    <h3 className="text-xs mt-2 font-medium mb-1">Available Addons:</h3>
-                                                                    <ul className="list-disc list-inside text-xs text-gray-700">
-                                                                        {parsedAddons.map((addon: any, index: number) => (
-                                                                            <li key={index}>
-                                                                                {addon.name} — €{addon.price.toFixed(2)}
-                                                                            </li>
-                                                                        ))}
-                                                                    </ul>
-                                                                </div>
-                                                            )}
-                                                        </div>
-
-                                                        <div className="flex-shrink-0 font-bold text-lg text-teal-600">
-                                                            €{item.price.toFixed(2)}
-                                                        </div>
-
-                                                        <div className="flex flex-shrink-0 items-center gap-1">
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                onClick={() => {
-                                                                    setSelectedCategory(category)
-                                                                    setSelectedItem(item)
-                                                                    setNewItemName(item.name)
-                                                                    setNewItemDescription(item.description || "")
-                                                                    setNewItemPrice(item.price.toString())
-                                                                    setAllergens(item.allergens || [])
-                                                                    setIsHalal(item.is_halal || false)
-                                                                    setAllergenInfo(item.allergen_info || "")
-                                                                    setIsEditItemDialogOpen(true)
-                                                                    setAddons(parsedAddons)
-                                                                    setNewItemshow_in_quick_menu(item.show_in_quick_menu)
-                                                                }}
-                                                                className="h-8 w-8 p-0 bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                                              >
-                                                                <Edit className="h-4 w-4" />
-                                                                <span className="sr-only">Edit item</span>
-                                                            </Button>
-
-                                                            <AlertDialog>
-                                                                <AlertDialogTrigger asChild>
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="sm"
-                                                                        className="h-8 w-8 p-0 bg-destructive text-white hover:text-white hover:bg-destructive/70 cursor-pointer rounded-full transition-transform hover:scale-110"
-                                                                        disabled={deleteItemMutation.isPending}
-                                                                    >
-                                                                        <Trash2 className="h-4 w-4" />
-                                                                        <span className="sr-only">Delete item</span>
-                                                                    </Button>
-                                                                </AlertDialogTrigger>
-                                                                <AlertDialogContent>
-                                                                    <AlertDialogHeader>
-                                                                        <AlertDialogTitle>Delete Menu Item</AlertDialogTitle>
-                                                                        <AlertDialogDescription>
-                                                                            This will permanently delete &quot;{item.name}&quot; from {selectedRestaurant.name}&apos;s menu.
-                                                                            This action cannot be undone.
-                                                                        </AlertDialogDescription>
-                                                                    </AlertDialogHeader>
-                                                                    <AlertDialogFooter>
-                                                                        <AlertDialogCancel className="font-poppins rounded-full !px-5">Cancel</AlertDialogCancel>
-                                                                        <AlertDialogAction
-                                                                            onClick={() => deleteItemMutation.mutate(item.id)}
-                                                                            className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"                                                                        >
-                                                                            Delete
-                                                                        </AlertDialogAction>
-                                                                    </AlertDialogFooter>
-                                                                </AlertDialogContent>
-                                                            </AlertDialog>
-
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                onClick={() => reorderItemMutation.mutate({ itemId: item.id, direction: "up" })}
-                                                                disabled={itemIndex === 0 || reorderItemMutation.isPending}
-                                                                className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                                            >
-                                                                <ArrowUp className="h-4 w-4" />
-                                                                <span className="sr-only">Move up</span>
-                                                            </Button>
-
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                onClick={() => reorderItemMutation.mutate({ itemId: item.id, direction: "down" })}
-                                                                disabled={
-                                                                    itemIndex === (category.items?.length || 0) - 1 || reorderItemMutation.isPending
-                                                                }
-                                                                className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                                                 >
-                                                                <ArrowDown className="h-4 w-4" />
-                                                                <span className="sr-only">Move down</span>
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                })}
-                                            </div>
-                                        ) : (
-                                            <div className="py-8 text-center">
-                                                <p className="text-slate-500 mb-4">No items in this category yet</p>
-                                                <Button
-                                                    variant="outline"
-                                                    onClick={() => {
-                                                        setSelectedCategory(category);
-                                                        setSelectedItem(null)
-                                                        setNewItemName("")
-                                                        setNewItemDescription("")
-                                                        setNewItemPrice("")
-                                                        setAllergens([])
-                                                        setIsHalal(false)
-                                                        setAllergenInfo("")
-                                                        setAddons([])
-                                                        setNewItemshow_in_quick_menu(true)
-                                                        setIsAddItemDialogOpen(true);
-                                                    }}
-                                                    className="flex items-center gap-2 cursor-pointer text-white hover:text-white hover:opacity-75 !bg-main-green rounded-full !px-5 font-poppins h-[42px] mx-auto"                                                >
-                                                    <Plus className="h-4 w-4" />
-                                                    Add First Item
-                                                </Button>
-                                            </div>
-                                        )}
+                                        <MenuCategoryComponent
+                                            category={category}
+                                            selectedRestaurant={selectedRestaurant}
+                                            setSelectedCategory={setSelectedCategory}
+                                            setSelectedItem={setSelectedItem}
+                                            setNewItemName={setNewItemName}
+                                            setNewItemDescription={setNewItemDescription}
+                                            setNewItemPrice={setNewItemPrice}
+                                            setAllergens={setAllergens}
+                                            setIsHalal={setIsHalal}
+                                            setAllergenInfo={setAllergenInfo}
+                                            setAddons={setAddons}
+                                            setNewItemshow_in_quick_menu={setNewItemshow_in_quick_menu}
+                                            setIsEditItemDialogOpen={setIsEditItemDialogOpen}
+                                            setIsAddItemDialogOpen={setIsAddItemDialogOpen}
+                                            deleteItemMutation={deleteItemMutation}
+                                            reorderItemMutation={reorderItemMutation}
+                                        />
                                     </div>
                                 </CardContent>
                             </Card>
@@ -718,15 +484,6 @@ export default function MenuPage() {
                                 <p className="text-slate-500 mb-6">
                                     Start building your menu for {selectedRestaurant.name} by creating your first category
                                 </p>
-                                <Button
-                                    onClick={() => setIsAddCategoryDialogOpen(true)}
-                                    size="lg"
-                                    disabled={!restaurantId}
-                                    className="bg-gradient-to-r from-teal-600 to-blue-600 transition-transform hover:scale-105"
-                                >
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Create Your First Category
-                                </Button>
                             </div>
                         </motion.div>
                     )}
@@ -740,444 +497,75 @@ export default function MenuPage() {
             </main>
 
             {/* Edit Category Dialog */}
-            <Dialog open={isEditCategoryDialogOpen} onOpenChange={setIsEditCategoryDialogOpen}>
-                <DialogContent className="sm:max-w-md">
-                    <form onSubmit={handleEditCategory}>
-                        <DialogHeader>
-                            <DialogTitle>Edit Category</DialogTitle>
-                            <DialogDescription>Update the category details</DialogDescription>
-                        </DialogHeader>
-
-                        <div className="space-y-4 py-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="editName">Category Name</Label>
-                                <Input
-                                    id="editName"
-                                    value={newCategoryName}
-                                    onChange={(e) => setNewCategoryName(e.target.value)}
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="editDescription">Description (Optional)</Label>
-                                <Textarea
-                                    id="editDescription"
-                                    value={newCategoryDescription}
-                                    onChange={(e) => setNewCategoryDescription(e.target.value)}
-                                    rows={3}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="showQuickMenu">Show in Quick Menu</Label>
-                                <p className="text-sm text-muted-foreground">
-                                    Enable this category to appear in the quick menu.
-                                </p>
-                                <Switch
-                                    id="showQuickMenu"
-                                    checked={newCategoryshow_in_quick_menu}
-                                    onCheckedChange={setNewCategoryshow_in_quick_menu}
-                                />
-                            </div>
-                        </div>
-
-                        <DialogFooter>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => {
-                                    setIsEditCategoryDialogOpen(false)
-                                    setSelectedCategory(null)
-                                    resetForm()
-                                }}
-                                className="hover:opacity-75  cursor-pointer rounded-full h-[40px]    font-poppins !px-5"
-                                disabled={updateCategoryMutation.isPending}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={!newCategoryName || updateCategoryMutation.isPending}
-                                className="hover:opacity-75 !bg-main-blue cursor-pointer h-[40px] rounded-full font-poppins !px-5"
-                            >
-                                {updateCategoryMutation.isPending ? "Saving..." : "Save Changes"}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
+            <EditCategoryDialog
+                open={isEditCategoryDialogOpen}
+                setOpen={setIsEditCategoryDialogOpen}
+                categoryName={newCategoryName}
+                setCategoryName={setNewCategoryName}
+                categoryDescription={newCategoryDescription}
+                setCategoryDescription={setNewCategoryDescription}
+                showInQuickMenu={newCategoryshow_in_quick_menu}
+                setShowInQuickMenu={setNewCategoryshow_in_quick_menu}
+                handleEditCategory={handleEditCategory}
+                resetForm={resetForm}
+                setSelectedCategory={setSelectedCategory}
+                isPending={updateCategoryMutation.isPending}
+            />
 
             {/* Edit Item Dialog */}
-            <Dialog open={isEditItemDialogOpen} onOpenChange={setIsEditItemDialogOpen}>
-                <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
-                    <form onSubmit={handleEditItem}>
-                        <DialogHeader>
-                            <DialogTitle>Edit Menu Item</DialogTitle>
-                            <DialogDescription>Update the menu item details</DialogDescription>
-                        </DialogHeader>
+            <EditItemDialog
+                isOpen={isEditItemDialogOpen}
+                onOpenChange={setIsEditItemDialogOpen}
+                onSubmit={handleEditItem}
+                newItemName={newItemName}
+                setNewItemName={setNewItemName}
+                newItemPrice={newItemPrice}
+                setNewItemPrice={setNewItemPrice}
+                newItemDescription={newItemDescription}
+                setNewItemDescription={setNewItemDescription}
+                allergens={allergens}
+                setAllergens={setAllergens}
+                allergenInfo={allergenInfo}
+                setAllergenInfo={setAllergenInfo}
+                addons={addons}
+                setAddons={setAddons}
+                isHalal={isHalal}
+                setIsHalal={setIsHalal}
+                newItemshow_in_quick_menu={newItemshow_in_quick_menu}
+                setNewItemshow_in_quick_menu={setNewItemshow_in_quick_menu}
+                isUploading={isUploading}
+                updateItemMutation={updateItemMutation}
+                resetForm={resetForm}
+                setSelectedItem={setSelectedItem}
+            />
 
-                        <div className="space-y-4 py-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="editItemName">Item Name</Label>
-                                    <Input
-                                        id="editItemName"
-                                        value={newItemName}
-                                        onChange={(e) => setNewItemName(e.target.value)}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="editItemPrice">Price (€)</Label>
-                                    <Input
-                                        id="editItemPrice"
-                                        type="number"
-                                        step="0.01"
-                                        min="0"
-                                        value={newItemPrice}
-                                        onChange={(e) => setNewItemPrice(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="editItemDescription">Description (Optional)</Label>
-                                <Textarea
-                                    id="editItemDescription"
-                                    value={newItemDescription}
-                                    onChange={(e) => setNewItemDescription(e.target.value)}
-                                    rows={3}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label>Allergens</Label>
-                                <div className="flex flex-wrap gap-2">
-                                    {["gluten", "dairy", "nuts", "eggs", "soy", "shellfish", "fish"].map((allergen) => (
-                                        <Button
-                                            key={allergen}
-                                            type="button"
-                                            variant={allergens.includes(allergen) ? "default" : "outline"}
-                                            size="sm"
-                                            onClick={() => {
-                                                if (allergens.includes(allergen)) {
-                                                    setAllergens(allergens.filter((a) => a !== allergen))
-                                                } else {
-                                                    setAllergens([...allergens, allergen])
-                                                }
-                                            }}
-                                            className={`capitalize ${allergens.includes(allergen) ? "bg-main-green" : ""
-                                                }`}
-                                        >
-                                            {allergen}
-                                        </Button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="editAllergenInfo">Additional Allergen Information</Label>
-                                <Textarea
-                                    id="editAllergenInfo"
-                                    value={allergenInfo}
-                                    onChange={(e) => setAllergenInfo(e.target.value)}
-                                    placeholder="Add any additional allergen information"
-                                    rows={2}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label>Addons</Label>
-                                {addons.map((addon, index) => (
-                                    <div key={index} className="grid grid-cols-4 gap-2">
-                                        <Input
-                                            placeholder="Addon Name (e.g. Extra Cheese)"
-                                            value={addon.name}
-                                            className="col-span-2"
-                                            onChange={(e) => {
-                                                const updated = [...addons];
-                                                updated[index].name = e.target.value;
-                                                setAddons(updated);
-                                            }}
-                                        />
-                                        <Input
-                                            placeholder="Price"
-                                            type="number"
-                                            step="0.01"
-                                            min="0"
-                                            value={addon.price}
-                                            onChange={(e) => {
-                                                const updated = [...addons];
-                                                updated[index].price = +(e.target.value);
-                                                setAddons(updated);
-                                            }}
-                                        />
-                                        <Button
-                                            type="button"
-                                            variant="destructive"
-                                            size="icon"
-                                            onClick={() => {
-                                                const updated = [...addons];
-                                                updated.splice(index, 1);
-                                                setAddons(updated);
-                                            }}
-                                        >
-                                            <X size={24} />
-                                        </Button>
-                                    </div>
-                                ))}
-
-                                <Button
-                                    type="button"
-                                    variant="secondary"
-                                    onClick={() => setAddons([...addons, { name: "", price: 0 }])}
-                                    className="hover:opacity-75 !bg-main-green text-white cursor-pointer rounded-full h-[38px] !text-xs font-poppins !px-4"
-                                >
-                                    + Add Addon
-                                </Button>
-                            </div>
-
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="editIsHalal"
-                                    checked={isHalal}
-                                    onCheckedChange={(checked) => setIsHalal(checked as boolean)}
-                                />
-                                <Label htmlFor="editIsHalal" className="flex items-center gap-2">
-                                    <Leaf className="h-4 w-4 text-green-600" />
-                                    This item is Halal certified
-                                </Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="inQuickMenu"
-                                    checked={newItemshow_in_quick_menu}
-                                    onCheckedChange={(checked) => setNewItemshow_in_quick_menu(checked as boolean)}
-                                />
-                                <Label htmlFor="inQuickMenu" className="flex items-center gap-2">
-                                    Show this item in Quick Menu
-                                </Label>
-                            </div>
-                        </div>
-
-                        <DialogFooter>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => {
-                                    setIsEditItemDialogOpen(false)
-                                    setSelectedItem(null)
-                                    resetForm()
-                                }}
-                                className="hover:opacity-75 h-[40px] cursor-pointer rounded-full font-poppins !px-5"
-                                disabled={updateItemMutation.isPending}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={!newItemName || !newItemPrice || updateItemMutation.isPending}
-                                className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
-                            >
-                                {isUploading ? "Uploading..." : updateItemMutation.isPending ? "Saving..." : "Save Changes"}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
-
-            <Dialog open={!!selectedCategory && isAddItemDialogOpen} onOpenChange={(open) => {
-                setIsAddItemDialogOpen(open);
-                if (!open) {
-                    setSelectedCategory(null);
+            <AddItemDialog
+                open={!!selectedCategory && isAddItemDialogOpen}
+                categoryName={selectedCategory?.name}
+                newItemName={newItemName}
+                setNewItemName={setNewItemName}
+                newItemPrice={newItemPrice}
+                setNewItemPrice={setNewItemPrice}
+                newItemDescription={newItemDescription}
+                setNewItemDescription={setNewItemDescription}
+                allergens={allergens}
+                setAllergens={setAllergens}
+                allergenInfo={allergenInfo}
+                setAllergenInfo={setAllergenInfo}
+                addons={addons}
+                setAddons={setAddons}
+                isHalal={isHalal}
+                setIsHalal={setIsHalal}
+                showInQuickMenu={newItemshow_in_quick_menu}
+                setShowInQuickMenu={setNewItemshow_in_quick_menu}
+                isUploading={isUploading}
+                onClose={() => {
+                    setIsAddItemDialogOpen(false);
                     resetForm();
-                }
-            }}>
-
-                <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
-                    <form onSubmit={handleAddItem}>
-                        <DialogHeader>
-                            <DialogTitle>Add Menu Item</DialogTitle>
-                            <DialogDescription>Add a new item to {selectedCategory?.name}</DialogDescription>
-                        </DialogHeader>
-
-                        <div className="space-y-4 py-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="itemName">Item Name</Label>
-                                    <Input
-                                        id="itemName"
-                                        value={newItemName}
-                                        onChange={(e) => setNewItemName(e.target.value)}
-                                        placeholder="e.g. Caesar Salad"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="itemPrice">Price (€)</Label>
-                                    <Input
-                                        id="itemPrice"
-                                        type="number"
-                                        step="0.01"
-                                        min="0"
-                                        value={newItemPrice}
-                                        onChange={(e) => setNewItemPrice(e.target.value)}
-                                        placeholder="0.00"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="itemDescription">Description (Optional)</Label>
-                                <Textarea
-                                    id="itemDescription"
-                                    value={newItemDescription}
-                                    onChange={(e) => setNewItemDescription(e.target.value)}
-                                    placeholder="Add a description for this item"
-                                    rows={3}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label>Allergens</Label>
-                                <div className="flex flex-wrap gap-2">
-                                    {["gluten", "dairy", "nuts", "eggs", "soy", "shellfish", "fish"].map((allergen) => (
-                                        <Button
-                                            key={allergen}
-                                            type="button"
-                                            variant={allergens.includes(allergen) ? "default" : "outline"}
-                                            size="sm"
-                                            onClick={() => {
-                                                if (allergens.includes(allergen)) {
-                                                    setAllergens(allergens.filter((a) => a !== allergen))
-                                                } else {
-                                                    setAllergens([...allergens, allergen])
-                                                }
-                                            }}
-                                            className={`capitalize ${allergens.includes(allergen) ? "bg-main-green" : ""
-                                                }`}
-                                        >
-                                            {allergen}
-                                        </Button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="allergenInfo">Additional Allergen Information</Label>
-                                <Textarea
-                                    id="allergenInfo"
-                                    value={allergenInfo}
-                                    onChange={(e) => setAllergenInfo(e.target.value)}
-                                    placeholder="Add any additional allergen information"
-                                    rows={2}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label>Addons</Label>
-                                {addons.map((addon, index) => (
-                                    <div key={index} className="grid grid-cols-4 gap-2">
-                                        <Input
-                                            placeholder="Addon Name (e.g. Extra Cheese)"
-                                            value={addon.name}
-                                            className="col-span-2"
-                                            onChange={(e) => {
-                                                const updated = [...addons];
-                                                updated[index].name = e.target.value;
-                                                setAddons(updated);
-                                            }}
-                                        />
-                                        <Input
-                                            placeholder="Price"
-                                            type="number"
-                                            step="0.01"
-                                            min="0"
-                                            value={addon.price}
-                                            onChange={(e) => {
-                                                const updated = [...addons];
-                                                updated[index].price = +(e.target.value);
-                                                setAddons(updated);
-                                            }}
-                                        />
-                                        <Button
-                                            type="button"
-                                            variant="destructive"
-                                            size="icon"
-                                            onClick={() => {
-                                                const updated = [...addons];
-                                                updated.splice(index, 1);
-                                                setAddons(updated);
-                                            }}
-                                        >
-                                            <X size={24} />
-                                        </Button>
-                                    </div>
-                                ))}
-
-                                <Button
-                                    type="button"
-                                    variant="secondary"
-                                    onClick={() => setAddons([...addons, { name: "", price: 0 }])}
-                                    className="hover:opacity-75 !bg-main-green text-white cursor-pointer rounded-full h-[38px] !text-xs font-poppins !px-4"
-                                >
-                                    + Add Addon
-                                </Button>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="isHalal"
-                                    checked={isHalal}
-                                    onCheckedChange={(checked) => setIsHalal(checked as boolean)}
-                                />
-                                <Label htmlFor="isHalal" className="flex items-center gap-2">
-                                    <Leaf className="h-4 w-4 text-green-600" />
-                                    This item is Halal certified
-                                </Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="showinWuickMenu"
-                                    checked={newItemshow_in_quick_menu}
-                                    onCheckedChange={(checked) => setNewItemshow_in_quick_menu(checked as boolean)}
-                                />
-                                <Label htmlFor="showinWuickMenu" className="flex items-center gap-2">
-                                    Show this item in Quick Menu
-                                </Label>
-                            </div>
-                        </div>
-
-                        <DialogFooter>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => {
-                                    setIsAddItemDialogOpen(false)
-                                    resetForm()
-                                }}
-                                className="hover:opacity-75 h-[40px]  cursor-pointer rounded-full font-poppins !px-5"
-
-                                disabled={createItemMutation.isPending}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={
-                                    !newItemName || !newItemPrice || !selectedCategory || isUploading || createItemMutation.isPending
-                                }
-                                className="hover:opacity-75 !bg-main-blue cursor-pointer rounded-full h-[40px] font-poppins !px-5"
-                            >
-                                {isUploading ? "Uploading..." : createItemMutation.isPending ? "Adding..." : "Add Item"}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
+                }}
+                onSubmit={handleAddItem}
+                createItemPending={createItemMutation.isPending}
+            />
         </>
     )
 }
