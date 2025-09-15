@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Page() {
     return (
-        <div className="px-6 py-16 w-full flex justify-center">
+        <div className="px-6 py-8 md:py-16 w-full flex justify-center">
             <div className="max-w-5xl w-full">
                 <div id="analytics" className="scroll-mt-32">
                     <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-main-blue">

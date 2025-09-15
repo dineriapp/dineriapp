@@ -63,7 +63,7 @@ export default function RootLayout({
         </div>
       </header>
       <SidebarProvider className="mt-0">
-        <div className="absolute top-4 block md:hidden right-3 z-50">
+        <div className="fixed top-4 block md:hidden right-3 z-50">
           <SidebarTrigger />
         </div>
         <Suspense fallback={<>Loading...</>}>

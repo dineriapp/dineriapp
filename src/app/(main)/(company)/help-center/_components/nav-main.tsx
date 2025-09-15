@@ -16,6 +16,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 const navMain: {
@@ -106,7 +107,7 @@ export function NavMain() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [currentHash, setCurrentHash] = useState("");
-
+  const { setOpenMobile } = useSidebar()
   useEffect(() => {
     setCurrentHash(window.location.hash);
 
@@ -172,7 +173,9 @@ export function NavMain() {
                             : "hover:bg-gray-100 text-main-blue"
                             }`}
                         >
-                          <Link href={subItem.url}>
+                          <Link href={subItem.url} onClick={() => {
+                            setOpenMobile(false)
+                          }}>
                             <span>{subItem.title}</span>
                           </Link>
                         </SidebarMenuSubButton>

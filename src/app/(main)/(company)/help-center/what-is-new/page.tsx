@@ -8,7 +8,7 @@ import {
 
 export default function Page() {
     return (
-        <div id="new-features" className="px-6 scroll-mt-26  py-16 w-full flex justify-center">
+        <div id="new-features" className="px-6 scroll-mt-26 py-8 md:py-16 w-full flex justify-center">
             <div className="max-w-5xl w-full">
                 {/* Intro Header */}
                 <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 text-main-blue">

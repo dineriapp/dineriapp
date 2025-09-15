@@ -44,7 +44,7 @@ export default function Page() {
     ];
 
     return (
-        <div id="why-use-this-platform" className="px-6 scroll-mt-26  py-16 w-full flex justify-center">
+        <div id="why-use-this-platform" className="px-6 scroll-mt-26 py-8 md:py-16 w-full flex justify-center">
             <div className="max-w-5xl w-full">
                 {/* Intro Header */}
                 <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 text-main-blue">
@@ -74,7 +74,7 @@ export default function Page() {
                                 key={i}
                                 className="flex items-start gap-4 p-4 rounded-lg border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all bg-white"
                             >
-                                <div className="flex-shrink-0 w-10 h-10 rounded-md flex items-center justify-center bg-indigo-50 text-indigo-600">
+                                <div className="flex-shrink-0 w-10 h-10 rounded-md flex items-center justify-center bg-indigo-50 text-main-green">
                                     <item.icon className="h-5 w-5" />
                                 </div>
                                 <div>
