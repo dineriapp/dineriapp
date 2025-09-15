@@ -58,20 +58,16 @@ export default function RootLayout({
                 />
               </svg>
             </button>
-
-
           </div>
         </div>
       </header>
-      <SidebarProvider className="mt-5">
+      <SidebarProvider className="mt-0">
         <div className="absolute top-4 block md:hidden right-3 z-50">
           <SidebarTrigger />
         </div>
         <AppSidebar />
-        <SidebarInset>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0 mx-auto max-w-[1200px] sm:w-11/12">
-            {children}
-          </div>
+        <SidebarInset className="!p-0 !m-0">
+          {children}
         </SidebarInset>
       </SidebarProvider>
     </>

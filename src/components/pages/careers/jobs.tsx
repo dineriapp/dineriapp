@@ -5,36 +5,25 @@ const Jobs = () => {
   const jobListings = [
     {
       id: 1,
-      label: "Label",
+      label: "Marketing",
       labelColor: "bg-blue-100 text-blue-600",
-      title: "Senior Product Designer",
+      title: "Growth & Marketing Specialist",
       description:
-        "Maecenas accumsan lacus vel facilisis. Ullamcorper sit amet risus nullam eget",
-      employmentType: "Full Time",
+        "Drive Dineri’s growth with creative campaigns and strategies that connect our platform with restaurants and their customers.",
+      employmentType: "Part Time",
       location: "Remote",
-      salary: "$100-$200K",
+      salary: "Salary: Reflecting experience & skills",
     },
     {
       id: 2,
-      label: "Customer Experience",
+      label: "Customer Success",
       labelColor: "bg-green-100 text-green-600",
-      title: "Customer Support Expert",
+      title: "Customer Success Manager",
       description:
-        "Maecenas accumsan lacus vel facilisis. Ullamcorper sit amet risus nullam eget",
+        "Be the main partner for our restaurants, driving success and growth while delivering exceptional support",
       employmentType: "Part Time",
-      location: "In House",
-      salary: "$200-$300K",
-    },
-    {
-      id: 3,
-      label: "Engineering",
-      labelColor: "bg-orange-100 text-orange-600",
-      title: "Frontend UX Engineer",
-      description:
-        "Maecenas accumsan lacus vel facilisis. Ullamcorper sit amet risus nullam eget",
-      employmentType: "Full Time",
       location: "Remote",
-      salary: "$50-$75K",
+      salary: "Salary: Reflecting Experience & Skills",
     },
   ];
   return (

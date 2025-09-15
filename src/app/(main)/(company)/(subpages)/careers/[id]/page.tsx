@@ -1,13 +1,12 @@
 "use client";
 
-import type React from "react";
 
-import { ArrowLeft, MapPin, Building2, Clock, Users } from "lucide-react";
+import { ArrowLeft, Building2, Clock, DollarSign, MapPin } from "lucide-react";
 import Link from "next/link";
 import { use } from "react";
 
-import JobForm from "./job-form";
 import JobListings from "@/app/Data/job-data";
+import JobForm from "./job-form";
 
 export default function JobDetailPage({
   params,
@@ -45,8 +44,8 @@ export default function JobDetailPage({
         </Link>
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">{job.title}</h1>
-
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">{job.title}</h1>
+          <p className="mb-4">{job.description}</p>
           <div className="flex flex-wrap items-center gap-4 text-sm">
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-green-500" />
@@ -57,19 +56,13 @@ export default function JobDetailPage({
               <span className="text-gray-700">{job.label}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-blue-500" />
-              <span className="text-gray-700">
-                {job.location === "Remote" ? "Remote" : "In office"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-600" />
               <span className="text-gray-700">{job.employmentType}</span>
             </div>
-          </div>
-
-          <div className="flex items-center justify-between mt-6">
-            <div className="text-2xl font-bold text-gray-900">{job.salary}</div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <DollarSign className="w-4 h-4 text-green-600" />
+              <span className="text-gray-700">{job.salary}</span>
+            </div>
           </div>
         </div>
 
@@ -77,25 +70,9 @@ export default function JobDetailPage({
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">The Role</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
-              <p>{job.description}</p>
-              <p>
-                As a {job.title} at {job.company}, you&apos;ll be a trusted
-                partner working in a dynamic environment. You&apos;ll play a key
-                role in managing day-to-day operations, keeping teams focused
-                and organized while supporting the wider team experience.
-              </p>
-              <p>
-                You&apos;ll own calendars, logistics and coordination across key
-                meetings and projects. Beyond that, you&apos;ll help drive
-                culture through onboarding, events, and team programs, working
-                closely with leadership and operations teams.
-              </p>
-              <p>
-                This role requires someone who is thoughtful, proactive,
-                detail-oriented, and able to work independently - someone who
-                thrives in a fast-paced environment and enjoys wearing multiple
-                hats.
-              </p>
+              {job?.roleParas?.map((para, index) => (
+                <p key={`para-${index}`}>{para}</p>
+              ))}
             </div>
           </section>
 
@@ -104,17 +81,9 @@ export default function JobDetailPage({
               About {job.company}
             </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
-              <p>
-                {job.company} is a leading technology company focused on
-                creating innovative solutions that transform how people work and
-                collaborate. We&apos;re committed to building a diverse,
-                inclusive workplace where everyone can thrive.
-              </p>
-              <p>
-                Our team of passionate professionals works together to deliver
-                exceptional products and services to our global customer base.
-                We value creativity, collaboration, and continuous learning.
-              </p>
+              {job?.aboutParas?.map((para, index) => (
+                <p key={`para-${index}`}>{para}</p>
+              ))}
             </div>
           </section>
 
@@ -125,7 +94,7 @@ export default function JobDetailPage({
             <div className="space-y-3">
               <div>
                 <h3 className="font-semibold text-gray-900 mb-2">
-                  Executive & Administrative Support
+                  {job.responsibilitiesTitle}
                 </h3>
                 <ul className="space-y-1 text-gray-700">
                   {job.responsibilities.map((responsibility, index) => (
@@ -156,7 +125,7 @@ export default function JobDetailPage({
             </ul>
           </section>
 
-          <section>
+          {/* <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               Work Environment
             </h2>
@@ -173,9 +142,9 @@ export default function JobDetailPage({
                 to do your best work.
               </p>
             </div>
-          </section>
+          </section> */}
 
-          <section>
+          {/* <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               Growth Opportunities
             </h2>
@@ -192,7 +161,7 @@ export default function JobDetailPage({
                 career.
               </p>
             </div>
-          </section>
+          </section> */}
 
           {/* Application Form Section */}
           <JobForm id={jobId} />
