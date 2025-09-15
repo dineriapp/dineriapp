@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from 'react';
 
 import {
   SidebarInset,
@@ -65,7 +66,10 @@ export default function RootLayout({
         <div className="absolute top-4 block md:hidden right-3 z-50">
           <SidebarTrigger />
         </div>
-        <AppSidebar />
+        <Suspense fallback={<>Loading...</>}>
+          <AppSidebar />
+        </Suspense>
+
         <SidebarInset className="!p-0 !m-0">
           {children}
         </SidebarInset>
