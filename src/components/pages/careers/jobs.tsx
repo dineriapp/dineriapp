@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 
 const Jobs = () => {
   const jobListings = [
@@ -48,10 +47,11 @@ const Jobs = () => {
 
 export default Jobs;
 
-import { Clock, MapPin, DollarSign, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ArrowRight, Clock, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { FaEuroSign } from "react-icons/fa";
 
 interface Job {
   id: number;
@@ -106,7 +106,7 @@ function JobCard({ job }: JobCardProps) {
               <span className="text-sm font-medium">{job.location}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
-              <DollarSign className="w-4 h-4" />
+              <FaEuroSign className="w-4 h-4" />
               <span className="text-sm font-medium">{job.salary}</span>
             </div>
           </div>

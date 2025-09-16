@@ -166,8 +166,8 @@ export default function RestaurantOperationalSettingsCard() {
                     disabled={saving}
                     value={status}
                     onValueChange={(v) => setStatus(v as RestaurantStatus)}>
-                    <SelectTrigger className="w-full bg-white">
-                        <SelectValue placeholder="Select status" />
+                    <SelectTrigger className="w-full bg-white !h-10">
+                        <SelectValue placeholder="Select status" className="!h-10" />
                     </SelectTrigger>
                     <SelectContent>
                         {STATUS_OPTIONS.map((opt) => (
@@ -191,7 +191,7 @@ export default function RestaurantOperationalSettingsCard() {
                         disabled={saving}
                         value={feeInput}
                         onChange={(e) => setFeeInput(e.target.value)}
-                        className={feeIsInvalid ? "border-red-500" : ""}
+                        className={feeIsInvalid ? "border-red-500 h-10" : "h-10"}
                         placeholder="0.00"
                     />
                 </div>
@@ -201,7 +201,7 @@ export default function RestaurantOperationalSettingsCard() {
                     type="button"
                     onClick={handleSave}
                     disabled={saving || (!hasChanges || (hasFeeChanged && feeIsInvalid))}
-                    className="whitespace-nowrap w-full"
+                    className="whitespace-nowrap bg-main-green rounded-full w-full !h-10 hover:bg-main-green/70 cursor-pointer"
                 >
                     {saving ? "Saving..." : "Save Changes"}
                 </Button>

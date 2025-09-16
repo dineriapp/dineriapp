@@ -98,7 +98,7 @@ export default function DemoPage() {
                                         <FormItem>
                                             <FormLabel>Contact Person</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="John Doe" className="!h-[50] font-poppins" {...field} />
+                                                <Input placeholder="Your Name" className="!h-[50] font-poppins" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

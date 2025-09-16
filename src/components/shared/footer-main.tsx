@@ -1,12 +1,11 @@
-import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
-import Link from 'next/link'
-import React from 'react'
+import { Instagram, Twitter } from 'lucide-react';
+import Link from 'next/link';
 
 const FooterMain = () => {
     return (
         <footer className='w-full bg-[#002147] pt-10 sm:pt-[77px] pb-10 sm:pb-[104px] px-5'>
             <div className='w-full max-w-[1354px] mx-auto py-8 sm:py-[105px] flex items-center justify-center px-6 sm:px-10 bg-[#FFFFFF] rounded-[14px] sm:rounded-[32px]'>
-                <div className='w-full max-w-[930px] mx-auto flex flex-col gap-7 sm:gap-[99px]'>
+                <div className='w-full max-w-[930px] mx-auto flex flex-col '>
                     {/* top  */}
                     <div className='w-full flex sm:flex-row flex-col sm:gap-0 gap-5 items-start justify-between'>
                         <div className='space-y-3 sm:space-y-5'>
@@ -18,7 +17,6 @@ const FooterMain = () => {
                                     { name: "Features", path: "/features" },
                                     { name: "Demo", path: "/demo" },
                                     { name: "Plans", path: "/plans" },
-                                    { name: "Testimonials", path: "/#testimonials" },
                                     { name: "FAQ", path: "/#faq" },
                                 ].map((item) => (
                                     <Link href={item.path} key={item.path} className='text-[#676B5F] text-base font- hover:text-[#1E2330]'>
@@ -62,7 +60,7 @@ const FooterMain = () => {
                         </div>
                     </div>
                     {/* bottom */}
-                    <div className='w-full flex sm:flex-row flex-col sm:gap-0 gap-6 items-center justify-between'>
+                    <div className='w-full mt-7 sm:mt-[99px] flex sm:flex-row flex-col sm:gap-0 gap-6 items-center justify-between'>
                         <Link href={"/signup"} className='sm:w-auto w-full'>
                             <div className=' flex items-center justify-center sm:w-auto w-full bg-[#009A5E] hover:bg-[#104e37] transition-all h-[62px] text-white px-[27px] rounded-full cursor-pointer hover: font-poppins font-[600] text-[18px] leading-[1]'>
                                 Get started today
@@ -72,8 +70,6 @@ const FooterMain = () => {
                             {[
                                 { icon: Instagram, href: "https://instagram.com" },
                                 { icon: Twitter, href: "https://twitter.com" },
-                                { icon: Facebook, href: "https://facebook.com" },
-                                { icon: Linkedin, href: "https://linkedin.com" },
                             ].map((social, i) => {
                                 const Icon = social.icon;
                                 return (
@@ -90,6 +86,10 @@ const FooterMain = () => {
                                 );
                             })}
                         </div>
+
+                    </div>
+                    <div className='w-full mt-10 font-poppins text-muted-foreground text-base flex items-center justify-center'>
+                        <p className='text-center'>© 2025 <strong className='text-black'>Dineri.app</strong>. All rights reserved.</p>
                     </div>
                 </div>
             </div>

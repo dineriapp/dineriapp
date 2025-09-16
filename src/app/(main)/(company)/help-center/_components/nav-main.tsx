@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Boxes, Sparkles, type LucideIcon } from "lucide-react";
+import { BookOpen, Boxes, LifeBuoy, Sparkles, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -101,6 +101,16 @@ const navMain: {
         },
       ],
     },
+    {
+      title: "Contact Us",
+      icon: LifeBuoy,
+      items: [
+        {
+          title: "Get Help",
+          url: "/help-center/support",
+        },
+      ],
+    }
   ];
 
 export function NavMain() {

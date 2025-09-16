@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const EverythingYouNeed = () => {
@@ -11,20 +12,20 @@ const EverythingYouNeed = () => {
                             [
                                 {
                                     number: "01",
-                                    title: "Beautiful Profile Page",
-                                    description: "Create a stunning, mobile-friendly page that reflects your restaurant’s unique vibe and style.",
+                                    title: "Attractive Restaurant Page",
+                                    description: "A beautiful, (mobile)-friendly page that perfectly reflects your restaurant’s unique style.",
                                     bgColor: "#F6E3D5"
                                 },
                                 {
                                     number: "03",
-                                    title: "Event Highlights",
-                                    description: "Promote events, tastings, or live music to keep your audience engaged and coming back.",
+                                    title: "Integrated Food Order System",
+                                    description: "Manage orders yourself and receive payments directly, no third-party platforms, no commissions.",
                                     bgColor: "#F6E3D5"
                                 },
                                 {
                                     number: "05",
-                                    title: "Food Order System",
-                                    description: "Manage menus, track orders, and streamline food service with a smart ordering system.",
+                                    title: "Event Calendar",
+                                    description: "Create a clear and engaging calendar for events, tastings, or live music.",
                                     bgColor: "#F6E3D5"
                                 },
 
@@ -58,8 +59,8 @@ const EverythingYouNeed = () => {
                             [
                                 {
                                     number: "02",
-                                    title: "Digital Menu",
-                                    description: "Showcase your dishes with prices, descriptions, and dietary info. Easy for customers to browse and order.",
+                                    title: "User-Friendly Dashboard",
+                                    description: "Easily customize colors, fonts, logos, and more from one intuitive dashboard.",
                                     bgColor: "#F6E3D5"
                                 },
                                 {
@@ -70,8 +71,8 @@ const EverythingYouNeed = () => {
                                 },
                                 {
                                     number: "06",
-                                    title: "Custom Branding",
-                                    description: "Use your restaurant’s colors, fonts, and imagery to create a fully branded profile.",
+                                    title: "QR Codes",
+                                    description: "Generate, personalize, and track QR codes to see how often they are scanned.",
                                     bgColor: "#F6E3D5"
                                 },
 
@@ -107,9 +108,11 @@ const EverythingYouNeed = () => {
                     <p className='mt-5 sm:mt-7 text-[#1E2330] font-[500] font-inter sm:text-xl'>
                         Powerful tools made for restaurants. Create a stunning profile page, share all your links, take direct orders with payments, and track performance. No commissions. Just your brand, fully in control.
                     </p>
-                    <button className='mt-6 sm:mt-10 px-[36px] bg-[#009A5E] hover:bg-[#009A5E]/80 rounded-full hover:opacity-70 cursor-pointer transition-all h-[61px] curpo text-[#FFFFFF] font-[600] font-poppins text-lg'>
-                        Join Now
-                    </button>
+                    <Link href={"/signup"}>
+                        <button className='mt-6 sm:mt-10 px-[36px] bg-[#009A5E] hover:bg-[#009A5E]/80 rounded-full hover:opacity-70 cursor-pointer transition-all h-[61px] curpo text-[#FFFFFF] font-[600] font-poppins text-lg'>
+                            Join Now
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>

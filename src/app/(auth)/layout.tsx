@@ -26,9 +26,12 @@ export default function AuthLayout({
                                         alt="logo.png"
                                         width={250}
                                         height={100}
-                                        className="w-full max-w-[160px] "
+                                        className="w-full max-w-[170px] "
                                     />
                                 </Link>
+                                <div className="w-full my-3">
+
+                                </div>
                                 {children}
                             </div>
                         </div>

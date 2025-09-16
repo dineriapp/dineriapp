@@ -7,8 +7,9 @@ const TopBar = () => {
       <p className="text-center max-w-[1200px] text-[#FFFFFF] font-inter font-[500] text-base">
         Time to convert clicks into customers.
         <Link href={"/login"} className="underline ml-2 underline-offset-2 hover:opacity-70 transition-all">
-          Start the Journey
-        </Link>
+          Set up
+        </Link> and start within a few minutes!
+
       </p>
     </div>
   );

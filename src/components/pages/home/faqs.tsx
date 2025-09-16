@@ -74,7 +74,6 @@ export function FAQAccordion() {
                 </AccordionTrigger>
                 <AccordionContent className="text-slate-60  pt-0 text-[#242424] px-4 sm:px-6 space-y-3 text-base sm:text-lg pb-6">
                     <p>
-
                         If you don’t have a domain yet, you can choose from one of our free domains tailored to your
                         market. For example Ibiza.rest, Dineri.me, Thechef.me and many more.
                     </p>
@@ -99,7 +98,6 @@ export function FAQAccordion() {
                         No. With Dineri.app, you keep 100% of your earnings. No commission on take-away, or
                         delivery orders. Unlike many platforms that charge 10–30% per order, you only pay your
                         subscription. More profit, full control, and no surprises.
-
                     </p>
                     <p>
                         Best of all, your payments go directly to your bank account, giving you full control and instant

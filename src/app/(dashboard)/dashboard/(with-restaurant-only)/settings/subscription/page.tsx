@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { STRIPE_PLANS } from "@/lib//stripe-plans";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface SubscriptionData {
   plan: string;
@@ -287,8 +288,10 @@ export default function SubscriptionPage() {
                   </ul>
                 </div>
               </div>
-              <Button onClick={handleUpgrade} className="mt-4 h-[44px]">
-                View All Plans
+              <Button onClick={handleUpgrade} className="mt-4 h-[44px]" asChild>
+                <Link href={"/plans"}>
+                  View All Plans
+                </Link>
               </Button>
             </CardContent>
           </Card>

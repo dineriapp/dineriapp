@@ -1,11 +1,12 @@
 "use client";
 
 
-import { ArrowLeft, Building2, Clock, DollarSign, MapPin } from "lucide-react";
+import { ArrowLeft, Building2, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
 import { use } from "react";
 
 import JobListings from "@/app/Data/job-data";
+import { FaEuroSign } from "react-icons/fa";
 import JobForm from "./job-form";
 
 export default function JobDetailPage({
@@ -60,7 +61,7 @@ export default function JobDetailPage({
               <span className="text-gray-700">{job.employmentType}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
-              <DollarSign className="w-4 h-4 text-green-600" />
+              <FaEuroSign className="w-4 h-4 text-green-600" />
               <span className="text-gray-700">{job.salary}</span>
             </div>
           </div>

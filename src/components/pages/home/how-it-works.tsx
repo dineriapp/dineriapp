@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 
 const HowItWorks = () => {
     return (
@@ -9,11 +10,13 @@ const HowItWorks = () => {
                         How dineri.app works
                     </h2>
                     <p className="text-[#FFFFFF] font-inter font-[500] text-xl mt-5 sm:mt-6">
-                        Start using our products in just a few simple clicks
+                        Set up, customize, and go live within a few minutes
                     </p>
-                    <button className='px-[46px] mt-5 sm:mt-8 bg-[#009A5E] hover:bg-[#009A5E]/80 rounded-full hover:opacity-80 cursor-pointer transition-all h-[58px] text-[white] font-[600] font-poppins text-lg'>
-                        Join now
-                    </button>
+                    <Link href={"/signup"}>
+                        <button className='px-[46px] mt-5 sm:mt-8 bg-[#009A5E] hover:bg-[#009A5E]/80 rounded-full hover:opacity-80 cursor-pointer transition-all h-[58px] text-[white] font-[600] font-poppins text-lg'>
+                            Join now
+                        </button>
+                    </Link>
                 </div>
                 <div className="xl:absolute top-0 right-0 flex flex-col w-full xl:w-[840px] xl:pointer-events-none">
                     <div className="w-full ml-auto bg-[#FFFFFF] text-[#000000] 900:max-w-[392px] relative p-6 sm:p-[32px] flex flex-col gap-16 xl:mr-[164px] rounded-[23px] overflow-hidden">
@@ -26,8 +29,7 @@ const HowItWorks = () => {
                                 Create your Profile
                             </h3>
                             <p className="text-[#000000] font-inter font-[400] text-base">
-                                Sign up and customize your restaurant
-                                page with your logo, photos, and key
+                                Sign up and customize your restaurant page with your logo, photos, and key
                                 information.
                             </p>
                         </div>
@@ -46,9 +48,8 @@ const HowItWorks = () => {
                                     Add your content
                                 </h3>
                                 <p className="text-[#000000] font-inter font-[400] lg:tracking-wide text-base">
-                                    Upload your menu, highlight events or
-                                    promotions, and link your socials, all in
-                                    one place.
+                                    Upload your menu, highlight events or promotions, and link your socials, all in one
+                                    place.
                                 </p>
                             </div>
                         </div>
@@ -65,9 +66,8 @@ const HowItWorks = () => {
                                 Share with customers
                             </h3>
                             <p className="text-[#000000] font-inter font-[400] text-base">
-                                Share your unique Dineri.me link via
-                                Instagram, Google Business, and flyers to
-                                connect with your guests.
+                                Share your unique Dineri link via Instagram, Google Business, and flyers to connect
+                                with your guests.
                             </p>
                         </div>
                     </div>

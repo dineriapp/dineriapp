@@ -44,11 +44,11 @@ export function MobileNav() {
                             Demo
                         </Link>
                         <Link
-                            href="/about"
+                            href="/help-center"
                             className="px-4 py-2 text-base font-medium text-slate-700 hover:text-slate-900"
                             onClick={() => setOpen(false)}
                         >
-                            About
+                            Learn
                         </Link>
                         <Link
                             href="/plans"

@@ -1,4 +1,5 @@
 import { LeftSideSVGImage, RightSideSVGImage } from '@/lib/svgs'
+import Link from 'next/link'
 import React from 'react'
 
 const CTA = () => {
@@ -9,11 +10,13 @@ const CTA = () => {
             <div className='w-full mx-auto max-w-[740px] gap-[46px] flex flex-col items-center justify-center'>
                 <h2 className='text-center text-[#002147] text-[60px] lg:text-[88px] font-[900] leading-[1.1]'>
                     Elevate.
-                    Your.Restaurent.
+                    Your.<span className='sm:hidden flex'>{" "}</span>Restaurent.
                 </h2>
-                <button className='bg-[#009A5E] hover:bg-[#104e37] w-[232px] transition-all text-[white] font-poppins font-[600] cursor-pointer text-base px-[36px] h-[62px] rounded-full'>
-                    Start now
-                </button>
+                <Link href={"/signup"}>
+                    <button className='bg-[#009A5E] hover:bg-[#104e37] w-[232px] transition-all text-[white] font-poppins font-[600] cursor-pointer text-base px-[36px] h-[62px] rounded-full'>
+                        Start now
+                    </button>
+                </Link>
             </div>
         </div>
     )

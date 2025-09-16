@@ -1,11 +1,15 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { useUserStore } from '@/stores/auth-store'
 import { Copy, QrCode } from 'lucide-react'
 import { motion } from "motion/react"
+import Link from 'next/link'
 import { toast } from 'sonner'
 
 const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant: boolean }) => {
+
+    const { prismaUser } = useUserStore();
 
     const copyToClipboard = () => {
         if (selectedRestaurant) {
@@ -45,15 +49,21 @@ const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant:
                     in one place.
                 </p>
             </CardContent>
-            <CardFooter className="border-t border-slate-100 pt-4">
-                <Button
-                    className="w-full justify-center bg-[#002147] hover:bg-main-hover/80 h-12 rounded-full cursor-pointer"
-                    size="sm"
-                >
-                    <QrCode className="h-4 w-4 mr-2" />
-                    Generate QR Code
-                </Button>
-            </CardFooter>
+            {
+                prismaUser?.subscription_plan !== "basic" &&
+                <CardFooter className="border-t border-slate-100 pt-4">
+                    <Button
+                        className="w-full justify-center bg-[#002147] hover:bg-main-hover/80 h-12 rounded-full cursor-pointer"
+                        size="sm"
+                        asChild
+                    >
+                        <Link className='flex items-center justify-center !leading-[1]' href={"/dashboard/qr-codes"}>
+                            <QrCode className="h-4 w-4 mr-2" />
+                            Generate QR Code
+                        </Link>
+                    </Button>
+                </CardFooter>
+            }
         </Card>
     )
 }

@@ -104,7 +104,7 @@ export default function SupportForm() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className=" mx-auto px-6 scroll-mt-32 pb-10 pt-10 w-full max-w-5xl">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Contact Support</h1>
         <p className="text-muted-foreground">

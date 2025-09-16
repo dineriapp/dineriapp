@@ -13,7 +13,8 @@ const Understand = () => {
                         Understand your audience, grow your restaurant
                     </h2>
                     <p className='mt-4 sm:mt-[18px] text-[#000000] font-[500] font-inter text-lg sm:text-xl'>
-                        Track clicks, revenue, and QR scans in real time. Get clear insights into what’s working, so you can make smarter updates and keep customers coming back.
+                        Track clicks, revenue, and QR scans in real time. Get clear insights into what’s
+                        working, so you can make smarter updates and keep customers coming back.
                     </p>
                     <button className='mt-6 sm:mt-[51px] text-[white] bg-[#009A5E] hover:bg-[#0b3f2b] rounded-full px-[37px] h-[62px] cursor-pointer transition-all font-poppins font-[600] text-base'>
                         Get started today

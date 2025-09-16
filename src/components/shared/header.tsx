@@ -61,10 +61,10 @@ export function Header() {
               Demo
             </Link>
             <Link
-              href="/about"
+              href="/help-center"
               className=" text-[#090909CC] font-[400] hover:text-slate-900"
             >
-              About
+              Learn
             </Link>
             <Link
               href="/plans"
