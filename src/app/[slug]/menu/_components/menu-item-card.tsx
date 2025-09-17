@@ -133,7 +133,7 @@ export function MenuItemCard({
       />
       <CardContent className="p-4 flex flex-col flex-1">
         {/* Header with name and price */}
-        <div className="flex justify-between">
+        <div className="flex items-end justify-between">
           <div className="flex justify-between items-start">
             <h3
               style={{
@@ -159,16 +159,6 @@ export function MenuItemCard({
             </Button>
           </div>
         </div>
-        <h4>
-          <span
-            style={{
-              color: stylesData.cardsText,
-            }}
-            className="font-bold text-lg text-black  whitespace-nowrap"
-          >
-            €{item.price.toFixed(2)}
-          </span>
-        </h4>
 
         {/* Description */}
         {item.description && (
@@ -176,11 +166,22 @@ export function MenuItemCard({
             style={{
               color: stylesData.cardsText,
             }}
-            className=" text-sm mb-3 opacity-80 line-clamp-3 flex-1"
+            className=" text-sm mb-1 mt-1 opacity-80 line-clamp-3 flex-1"
           >
             {item.description}
           </p>
         )}
+        <h4 className="mb-3">
+          <span
+            style={{
+              color: stylesData.cardsText,
+            }}
+            className="font-bold  text-lg text-black  whitespace-nowrap"
+          >
+            €{item.price.toFixed(2)}
+          </span>
+        </h4>
+
 
         {/* Allergens */}
         {item.allergens && item.allergens.length > 0 && (
