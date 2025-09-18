@@ -122,6 +122,7 @@ model Restaurant {
   status                           RestaurantStatus    @default(ALLOKAY)
   slug                             String              @unique
   delivery_fee                     Float               @default(5.0)
+  tax_percentage                          Float               @default(8.0)
   address                          String?
   phone                            String?
   email                            String?

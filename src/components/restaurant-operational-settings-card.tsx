@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
 import { useRestaurantStore } from "@/stores/restaurant-store";
 import type { RestaurantStatus } from "@prisma/client";
+import { Loader2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 function formatToTwoDecimals(n: number) {
     return Math.round(n * 100) / 100;
@@ -30,6 +30,11 @@ export default function RestaurantOperationalSettingsCard() {
         () => formatToTwoDecimals(restaurant?.delivery_fee ?? 0),
         [restaurant?.delivery_fee]
     );
+    const initialTax = useMemo(
+        () => formatToTwoDecimals(restaurant?.tax_percentage ?? 0),
+        [restaurant?.tax_percentage]
+    );
+
     const initialStatus = useMemo<RestaurantStatus>(
         () => (restaurant?.status as RestaurantStatus) ?? "ALLOKAY",
         [restaurant?.status]
@@ -38,6 +43,7 @@ export default function RestaurantOperationalSettingsCard() {
     // ----- LOCAL STATE -----
     const [status, setStatus] = useState<RestaurantStatus>(initialStatus);
     const [feeInput, setFeeInput] = useState<string>(initialFee.toFixed(2));
+    const [taxInput, setTaxInput] = useState<string>(initialTax.toFixed(2));
     const [saving, setSaving] = useState(false);
 
     // keep inputs synced if restaurant changes externally
@@ -47,6 +53,9 @@ export default function RestaurantOperationalSettingsCard() {
     useEffect(() => {
         setFeeInput(initialFee.toFixed(2));
     }, [initialFee]);
+    useEffect(() => {
+        setTaxInput(initialTax.toFixed(2));
+    }, [initialTax]);
 
     // ----- PARSING / VALIDATION -----
     const parsedFee = useMemo(() => {
@@ -60,14 +69,26 @@ export default function RestaurantOperationalSettingsCard() {
         return false;
     }, [parsedFee]);
 
+    const parsedTax = useMemo(() => {
+        const n = Number(taxInput);
+        return Number.isFinite(n) ? n : NaN;
+    }, [taxInput]);
+
+    const taxIsInvalid = useMemo(() => {
+        if (!Number.isFinite(parsedTax)) return true;
+        if (parsedTax < 0 || parsedTax > 100) return true; // enforce 0–100 range
+        return false;
+    }, [parsedTax]);
+
     const normalizedNextFee = useMemo(
         () => (Number.isFinite(parsedFee) ? formatToTwoDecimals(parsedFee) : NaN),
         [parsedFee]
     );
 
     const hasStatusChanged = status !== initialStatus;
+    const hasTaxChanged = Number(taxInput) !== initialTax;
     const hasFeeChanged = Number.isFinite(normalizedNextFee) && normalizedNextFee !== initialFee;
-    const hasChanges = hasStatusChanged || hasFeeChanged;
+    const hasChanges = hasStatusChanged || hasFeeChanged || hasTaxChanged;
 
     // ----- SAVE BOTH (calls two endpoints if needed) -----
     const handleSave = async () => {
@@ -79,16 +100,22 @@ export default function RestaurantOperationalSettingsCard() {
             toast.error("Please enter a valid non-negative delivery fee.");
             return;
         }
+        if (hasTaxChanged && taxIsInvalid) {
+            toast.error("Please enter a valid tax percentage between 0 and 100.");
+            return;
+        }
 
         const prev = {
             status: restaurant.status as RestaurantStatus,
             delivery_fee: restaurant.delivery_fee,
+            tax_percentage: restaurant.tax_percentage,
         };
 
         // Optimistic update in store
         updateSelectedRestaurant({
             status,
             delivery_fee: hasFeeChanged ? normalizedNextFee : restaurant.delivery_fee,
+            tax_percentage: hasTaxChanged ? Number(taxInput) : restaurant.tax_percentage,
         });
 
         try {
@@ -116,6 +143,15 @@ export default function RestaurantOperationalSettingsCard() {
                     })
                 );
             }
+            if (hasTaxChanged) {
+                tasks.push(
+                    fetch(`/api/restaurants/${restaurant.id}/tax-percentage`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ tax_percentage: taxInput }),
+                    })
+                );
+            }
 
             const responses = await Promise.all(tasks);
 
@@ -138,6 +174,7 @@ export default function RestaurantOperationalSettingsCard() {
             updateSelectedRestaurant({
                 status: prev.status,
                 delivery_fee: prev.delivery_fee,
+                tax_percentage: prev.tax_percentage,
             });
             setStatus(prev.status);
             setFeeInput(formatToTwoDecimals(prev.delivery_fee ?? 0).toFixed(2));
@@ -151,7 +188,7 @@ export default function RestaurantOperationalSettingsCard() {
     };
 
     return (
-        <Card className="bg-white rounded-xl grid grid-cols-5 px-5 py-4 gap-3 overflow-hidden relative">
+        <Card className="bg-white rounded-xl grid grid-cols-4 px-5 py-4 gap-3 overflow-hidden relative">
             {saving && (
                 <div className="flex items-center justify-center flex-col gap-1 absolute inset-0 bg-white/90">
                     <Loader2 className="animate-spin text-black/50" />
@@ -160,7 +197,7 @@ export default function RestaurantOperationalSettingsCard() {
             )}
 
             {/* Status */}
-            <div className="space-y-2 col-span-2">
+            <div className="space-y-2 ">
                 <Label>Restaurant Status</Label>
                 <Select
                     disabled={saving}
@@ -179,7 +216,7 @@ export default function RestaurantOperationalSettingsCard() {
                 </Select>
             </div>
             {/* Delivery Fee */}
-            <div className="space-y-2 col-span-2">
+            <div className="space-y-2 ">
                 <Label htmlFor="delivery_fee">Delivery Fee (€)</Label>
                 <div className="flex gap-2">
                     <Input
@@ -196,11 +233,29 @@ export default function RestaurantOperationalSettingsCard() {
                     />
                 </div>
             </div>
+            {/* Tax Fee */}
+            <div className="space-y-2 ">
+                <Label htmlFor="tax_percentage">Tax %</Label>
+                <div className="flex gap-2">
+                    <Input
+                        id="tax_percentage"
+                        type="number"
+                        inputMode="decimal"
+                        step="0.01"
+                        min="0"
+                        disabled={saving}
+                        value={taxInput}
+                        onChange={(e) => setTaxInput(e.target.value)}
+                        className={taxIsInvalid ? "border-red-500 h-10" : "h-10"}
+                        placeholder="0.00"
+                    />
+                </div>
+            </div>
             <div className="w-full h-full flex items-end">
                 <Button
                     type="button"
                     onClick={handleSave}
-                    disabled={saving || (!hasChanges || (hasFeeChanged && feeIsInvalid))}
+                    disabled={saving || (!hasChanges || (hasFeeChanged && feeIsInvalid) || (hasTaxChanged && taxIsInvalid))}
                     className="whitespace-nowrap bg-main-green rounded-full w-full !h-10 hover:bg-main-green/70 cursor-pointer"
                 >
                     {saving ? "Saving..." : "Save Changes"}

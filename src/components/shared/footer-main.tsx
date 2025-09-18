@@ -1,5 +1,21 @@
-import { Instagram, Twitter } from 'lucide-react';
+import { Instagram } from 'lucide-react';
 import Link from 'next/link';
+
+function XLogo() {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="23"
+            height="23"
+            viewBox="0 0 1200 1227"
+            fill="currentColor"
+        >
+            <path d="M714.163 519.284 1160.89 0H1054.64L666.092 450.887 357.328 0H0l465.777 681.821L0 1227h106.254l409.49-478.648L842.672 1227H1200L714.163 519.284Zm-144.77 168.47-47.486-67.84L174.59 79.471h136.988l228.72 327.02 47.485 67.84 370.286 529.05H821.081L569.393 687.754Z" />
+        </svg>
+
+    );
+}
+
 
 const FooterMain = () => {
     return (
@@ -68,14 +84,15 @@ const FooterMain = () => {
                         </Link>
                         <div className="flex gap-[18px] items-center">
                             {[
-                                { icon: Instagram, href: "https://instagram.com" },
-                                { icon: Twitter, href: "https://twitter.com" },
+                                { icon: Instagram, href: "https://www.instagram.com/dineri.app" },
+                                { icon: XLogo, href: "https://x.com/Dineri_app" },
                             ].map((social, i) => {
                                 const Icon = social.icon;
                                 return (
                                     <Link
                                         key={i}
                                         href={social.href}
+                                        target='_blank'
                                         className="flex h-[46px] w-[46px] shrink-0 items-center bg-[#009A5E] hover:bg-[#104e37] transition-all justify-center rounded-full  text-white  "
                                     >
                                         <Icon className="h-[23px] aspect-square shrink-0 w-[23px]" />

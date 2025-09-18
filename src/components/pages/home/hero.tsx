@@ -7,7 +7,6 @@ const Hero = () => {
         <div className='w-full bg-[#FFFFFF] max-w-[1920px] mx-auto pt-[140px] sm:pt-[170px] 900:pt-[220px] lg:pt-[286px] 900:pb-[140px] lg:pb-[232px] xl:gap-0 gap-5 flex items-center justify-center flex-col relative px-5'>
             <div className='w-full max-w-[1281px] flex flex-col gap-6 900:gap-16'>
                 <h1 className='text-[#000000] font-inter font-[900] sm:text-start text-center text-[40px] sm:text-[50px] 900:text-[60px] xl:text-[88px] leading-[1.2] xl:leading-[96px]'>
-
                     Connect. Your  <br className='sm:flex hidden' />
                     restaurant, <br className='sm:flex hidden' />
                     in a few clicks.
@@ -25,7 +24,7 @@ const Hero = () => {
                     </Link>
                 </div>
             </div>
-            <Image src={"/hero-mobile.png"} alt='hero-mobile.png' width={750} height={700} className='w-full max-w-[450px] lg:max-w-[600px] xl:ml-0 ml-auto xl:max-w-[706px] 900:absolute bottom-0 right-0' />
+            <Image src={"/hero-img-66.webp"} alt='hero-mobile.png' width={750} height={700} className='w-full max-w-[450px] lg:max-w-[600px] xl:ml-0 ml-auto xl:max-w-[706px] 900:absolute bottom-0 right-0' />
         </div>
     )
 }

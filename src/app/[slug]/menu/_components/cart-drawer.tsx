@@ -72,7 +72,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
     const items = getCartItems(restaurantSlug)
     const subtotal = getCartTotal(restaurantSlug)
-    const taxRate = 0.08 // 8% tax
+    const taxRate = restaurant.tax_percentage / 100;
     const taxAmount = subtotal * taxRate
     const deliveryFee = orderType === "delivery" ? restaurant.delivery_fee : 0
     const total = subtotal + taxAmount + deliveryFee
@@ -348,7 +348,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                         <span>€{subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span>Tax (8%)</span>
+                                        <span>Tax ({restaurant.tax_percentage}%)</span>
                                         <span>€{taxAmount.toFixed(2)}</span>
                                     </div>
                                     {orderType === "delivery" && (
@@ -547,7 +547,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                         <span>€{subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between text-sm">
-                                        <span>Tax (8%)</span>
+                                        <span>Tax ({restaurant.tax_percentage}%)</span>
                                         <span>€{taxAmount.toFixed(2)}</span>
                                     </div>
                                     <div

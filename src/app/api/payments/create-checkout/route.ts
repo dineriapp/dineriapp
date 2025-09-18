@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         // Get restaurant details
         const restaurant = await prisma.restaurant.findUnique({
             where: { slug: restaurantSlug },
-            select: { id: true, name: true, stripe_secret_key_encrypted: true, delivery_fee: true, status: true },
+            select: { id: true, name: true, stripe_secret_key_encrypted: true, delivery_fee: true, status: true, tax_percentage: true },
         })
 
         if (restaurant?.status === "DISABLE_BOTH") {
@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
 
             return sum + (item.price + addonsTotal) * item.quantity
         }, 0)
-        const taxRate = 0.08
+        const taxRate = restaurant.tax_percentage / 100
         const taxAmount = subtotal * taxRate
         const deliveryFee = orderType === "delivery" ? restaurant.delivery_fee : 0
         const totalAmount = subtotal + taxAmount + deliveryFee
