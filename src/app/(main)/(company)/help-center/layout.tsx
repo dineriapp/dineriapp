@@ -6,10 +6,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { AppSidebar } from "./_components/app-sidebar";
-import SearchForm from "./_components/SearchForm";
 import Image from "next/image";
 import Link from "next/link";
+import { AppSidebar } from "./_components/app-sidebar";
 
 export default function RootLayout({
   children,
@@ -32,10 +31,6 @@ export default function RootLayout({
             />
           </Link>
 
-          {/* Search Form */}
-          <div className=" hidden md:flex w-fit justify-center">
-            <SearchForm />
-          </div>
         </div>
       </header>
       <SidebarProvider className="mt-0">
