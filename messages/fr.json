@@ -1,0 +1,153 @@
+{
+  "LocaleSwitcher": {
+    "label": "Changer de langue",
+    "locales": {
+      "en": "🇺🇸 Anglais",
+      "es": "🇪🇸 Espagnol",
+      "fr": "🇫🇷 Français",
+      "de": "🇩🇪 Allemand",
+      "it": "🇮🇹 Italien",
+      "nl": "🇳🇱 Néerlandais"
+    }
+  },
+  "TopBar": {
+    "message": "Il est temps de transformer les clics en clients.",
+    "setup": "Configurer",
+    "cta": "et commencez en quelques minutes !"
+  },
+  "Header": {
+    "home": "Accueil",
+    "features": "Fonctionnalités",
+    "demo": "Démo",
+    "learn": "Apprendre",
+    "pricing": "Tarifs",
+    "login": "Se connecter",
+    "signup": "S'inscrire"
+  },
+  "Footer": {
+    "product": "Produit",
+    "features": "Fonctionnalités",
+    "demo": "Démo",
+    "plans": "Plans",
+    "faq": "FAQ",
+
+    "company": "Entreprise",
+    "about": "À propos",
+    "careers": "Carrières",
+    "help": "Centre d'aide",
+
+    "legal": "Mentions légales",
+    "terms": "Conditions",
+    "privacy": "Confidentialité",
+    "cookies": "Cookies",
+
+    "cta": "Commencez dès aujourd'hui",
+    "rights": "Tous droits réservés."
+  },
+  "Home": {
+    "Hero": {
+      "title": "Connectez. Votre <br class='sm:flex hidden'/>restaurant, <br class='sm:flex hidden'/>en quelques clics.",
+      "explore": "Découvrir toutes les fonctionnalités",
+      "cta": "Commencez dès aujourd'hui"
+    },
+    "Trusted": {
+      "text": "Approuvé par des restaurants du monde entier"
+    },
+    "EverythingYouNeed": {
+      "headline": "Tout ce dont vous avez besoin pour développer votre restaurant",
+      "description": "Des outils puissants conçus pour les restaurants. Créez une page de profil attrayante, partagez tous vos liens, recevez directement des commandes avec paiements et suivez vos performances. Pas de commissions. Juste votre marque, totalement sous contrôle.",
+      "cta": "Rejoignez-nous",
+      "features": {
+        "01": {
+          "title": "Page de restaurant attrayante",
+          "description": "Une page magnifique et adaptée aux mobiles qui reflète parfaitement le style unique de votre restaurant."
+        },
+        "02": {
+          "title": "Tableau de bord convivial",
+          "description": "Personnalisez facilement les couleurs, polices, logos et plus depuis un tableau de bord intuitif."
+        },
+        "03": {
+          "title": "Système de commande intégré",
+          "description": "Gérez vos commandes vous-même et recevez vos paiements directement, sans plateformes tierces ni commissions."
+        },
+        "04": {
+          "title": "Analyses et statistiques",
+          "description": "Suivez les vues, clics et commandes pour mieux comprendre votre audience et améliorer vos performances."
+        },
+        "05": {
+          "title": "Calendrier d’événements",
+          "description": "Créez un calendrier clair et attrayant pour les événements, dégustations ou concerts."
+        },
+        "06": {
+          "title": "Codes QR",
+          "description": "Générez, personnalisez et suivez des codes QR pour savoir à quelle fréquence ils sont scannés."
+        }
+      }
+    },
+    "HowItWorks": {
+      "headline": "Comment fonctionne dineri.app",
+      "description": "Configurez, personnalisez et mettez en ligne en quelques minutes",
+      "cta": "Rejoindre maintenant",
+      "steps": {
+        "01": {
+          "title": "Créez votre profil",
+          "description": "Inscrivez-vous et personnalisez la page de votre restaurant avec votre logo, vos photos et vos informations clés."
+        },
+        "02": {
+          "title": "Ajoutez votre contenu",
+          "description": "Téléchargez votre menu, mettez en avant des événements ou promotions et ajoutez vos réseaux sociaux, le tout au même endroit."
+        },
+        "03": {
+          "title": "Partagez avec vos clients",
+          "description": "Partagez votre lien unique Dineri via Instagram, Google Business et des flyers pour entrer en contact avec vos clients."
+        }
+      }
+    },
+    "Plans": {
+      "headline": "Plans abordables",
+      "description": "Tarification claire et honnête, sans frais cachés, conçue pour développer votre entreprise.",
+      "cta": "Voir tous les plans"
+    },
+    "Faqs": {
+      "headline": "Des questions ?",
+      "description": "Tout ce que vous devez savoir sur nos services",
+      "items": {
+        "01": {
+          "question": "Ai-je besoin de compétences techniques pour utiliser Dineri.app ?",
+          "answer": [
+            "Non, Dineri.app est conçu pour être simple d’utilisation. Vous n’avez besoin d’aucune connaissance en programmation et tout fonctionne avec des formulaires et des paramètres simples. La plateforme est également entièrement compatible avec les mobiles, vous pouvez donc facilement mettre à jour et gérer la page de votre restaurant directement depuis votre téléphone."
+          ]
+        },
+        "02": {
+          "question": "Puis-je connecter mon système de réservation existant ?",
+          "answer": [
+            "Pour le moment, les intégrations complètes avec des systèmes de réservation connus ne sont pas encore disponibles. Nous travaillons activement dessus et prévoyons de les proposer bientôt comme nouvelle fonctionnalité. En attendant, vous pouvez simplement ajouter le lien de votre outil de réservation actuel sur votre page Dineri.app."
+          ]
+        },
+        "03": {
+          "question": "Quelles extensions de domaine puis-je utiliser avec Dineri.app ?",
+          "answer": [
+            "Si vous n’avez pas encore de domaine, vous pouvez choisir parmi l’un de nos domaines gratuits adaptés à votre marché. Par exemple Ibiza.rest, Dineri.me, Thechef.me et bien d’autres.",
+            "Nous acquérons continuellement des extensions de domaine modernes et professionnelles afin de vous offrir encore plus d’options parfaitement adaptées à votre activité, toutes disponibles gratuitement."
+          ]
+        },
+        "04": {
+          "question": "Y a-t-il des frais de commission ?",
+          "answer": [
+            "Non. Avec Dineri.app, vous conservez 100 % de vos revenus. Pas de commission sur les commandes à emporter ou les livraisons. Contrairement à de nombreuses plateformes qui facturent entre 10 % et 30 % par commande, vous ne payez que votre abonnement. Plus de bénéfices, contrôle total, et aucune mauvaise surprise.",
+            "Le meilleur, c’est que vos paiements arrivent directement sur votre compte bancaire, vous donnant un contrôle total et un accès immédiat à vos gains."
+          ]
+        }
+      }
+    },
+    "Understand": {
+      "headline": "Comprenez votre audience, développez votre restaurant",
+      "description": "Suivez les clics, les revenus et les scans QR en temps réel. Obtenez des informations claires sur ce qui fonctionne pour apporter des améliorations intelligentes et fidéliser vos clients.",
+      "cta": "Commencez dès aujourd’hui"
+    },
+    "CTA": {
+      "headline": "Élevez. Votre.<span class='sm:hidden flex'> </span>Restaurant.",
+      "cta": "Commencez maintenant"
+    }
+  }
+}

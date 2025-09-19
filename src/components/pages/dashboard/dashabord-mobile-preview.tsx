@@ -1,6 +1,6 @@
 "use client"
-import { GoogleRating } from '@/app/[slug]/_components/google-rating'
-import { OpeningHoursStatus } from '@/app/[slug]/_components/opening-hours-status'
+import { GoogleRating } from '@/app/[locale]/[slug]/_components/google-rating'
+import { OpeningHoursStatus } from '@/app/[locale]/[slug]/_components/opening-hours-status'
 import SocialIcons from '@/components/social-icons'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'

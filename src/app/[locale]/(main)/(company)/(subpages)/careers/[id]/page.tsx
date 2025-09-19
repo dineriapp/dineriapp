@@ -5,7 +5,7 @@ import { ArrowLeft, Building2, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
 import { use } from "react";
 
-import JobListings from "@/app/Data/job-data";
+import JobListings from "@/app/[locale]/Data/job-data";
 import { FaEuroSign } from "react-icons/fa";
 import JobForm from "./job-form";
 

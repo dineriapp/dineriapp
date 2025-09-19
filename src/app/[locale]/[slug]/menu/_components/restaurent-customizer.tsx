@@ -1,6 +1,6 @@
 "use client"
 
-import { ColorSelector } from "@/app/(dashboard)/_components/color-selection"
+import { ColorSelector } from "@/app/[locale]/(dashboard)/_components/color-selection"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

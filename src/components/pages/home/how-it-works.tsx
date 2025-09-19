@@ -1,20 +1,23 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image"
 import Link from "next/link"
 
 const HowItWorks = () => {
+    const t = useTranslations("Home.HowItWorks");
+
     return (
         <div className="w-full bg-[#002147] px-5 text-white flex items-center pt-12 sm:pt-[108px] pb-12 sm:pb-[108px] xl:pb-[807px] justify-center">
             <div className="w-full max-w-[1320px] relative xl:space-y-0 space-y-10 sm:space-y-5">
                 <div className="xl:pt-[132px]">
-                    <h2 className="text-[#FFFFFF] font-inter font-[900] text-[40px] sm:text-[56px] leading-[1.1]">
-                        How dineri.app works
+                    <h2 className="text-[#FFFFFF] max-w-[700px] font-inter font-[900] text-[40px] sm:text-[56px] leading-[1.1]">
+                        {t("headline")}
                     </h2>
                     <p className="text-[#FFFFFF] font-inter font-[500] text-xl mt-5 sm:mt-6">
-                        Set up, customize, and go live within a few minutes
+                        {t("description")}
                     </p>
                     <Link href={"/signup"}>
                         <button className='px-[46px] mt-5 sm:mt-8 bg-[#009A5E] hover:bg-[#009A5E]/80 rounded-full hover:opacity-80 cursor-pointer transition-all h-[58px] text-[white] font-[600] font-poppins text-lg'>
-                            Join now
+                            {t("cta")}
                         </button>
                     </Link>
                 </div>
@@ -26,11 +29,10 @@ const HowItWorks = () => {
                         </div>
                         <div className="space-y-4 ">
                             <h3 className="text-[#000000] font-inter font-[700] text-[32px] leading-[1.2] lg:tracking-tighter">
-                                Create your Profile
+                                {t("steps.01.title")}
                             </h3>
                             <p className="text-[#000000] font-inter font-[400] text-base">
-                                Sign up and customize your restaurant page with your logo, photos, and key
-                                information.
+                                {t("steps.01.description")}
                             </p>
                         </div>
                     </div>
@@ -45,11 +47,10 @@ const HowItWorks = () => {
                             </div>
                             <div className="space-y-4 ">
                                 <h3 className="text-[#000000] font-inter font-[700] text-[32px] leading-[1.2] lg:tracking-tighter">
-                                    Add your content
+                                    {t("steps.02.title")}
                                 </h3>
                                 <p className="text-[#000000] font-inter font-[400] lg:tracking-wide text-base">
-                                    Upload your menu, highlight events or promotions, and link your socials, all in one
-                                    place.
+                                    {t("steps.02.description")}
                                 </p>
                             </div>
                         </div>
@@ -63,11 +64,10 @@ const HowItWorks = () => {
                         </div>
                         <div className="space-y-4 ">
                             <h3 className="text-[#000000] font-inter font-[700] text-[32px] leading-[1.2] tracking-tight">
-                                Share with customers
+                                {t("steps.03.title")}
                             </h3>
                             <p className="text-[#000000] font-inter font-[400] text-base">
-                                Share your unique Dineri link via Instagram, Google Business, and flyers to connect
-                                with your guests.
+                                {t("steps.03.description")}
                             </p>
                         </div>
                     </div>

@@ -1,8 +1,8 @@
 "use client"
 
-import { ColorSelector } from "@/app/(dashboard)/_components/color-selection"
-import { GoogleRating } from "@/app/[slug]/_components/google-rating"
-import { OpeningHoursStatus } from "@/app/[slug]/_components/opening-hours-status"
+import { ColorSelector } from "@/app/[locale]/(dashboard)/_components/color-selection"
+import { GoogleRating } from "@/app/[locale]/[slug]/_components/google-rating"
+import { OpeningHoursStatus } from "@/app/[locale]/[slug]/_components/opening-hours-status"
 import LoadingUI from "@/components/loading-ui"
 import SocialIcons from "@/components/social-icons"
 import { Button } from "@/components/ui/button"

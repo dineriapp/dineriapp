@@ -1,7 +1,22 @@
+import { useTranslations } from 'next-intl';
 import Link from 'next/link'
 import React from 'react'
 
 const EverythingYouNeed = () => {
+    const t = useTranslations('Home.EverythingYouNeed');
+
+    const leftItems = [
+        { number: "01", },
+        { number: "03" },
+        { number: "05" }
+    ];
+
+    const rightItems = [
+        { number: "02" },
+        { number: "04" },
+        { number: "06" }
+    ];
+
     return (
         <div className='bg-[#EBE3CC] w-full px-5 py-[31px] flex items-center justify-center'>
             <div className='w-full max-w-[1282px] flex items-center lg:flex-row flex-col justify-between gap-8 lg:gap-[93px]'>
@@ -9,32 +24,10 @@ const EverythingYouNeed = () => {
                     <div className='grid gap-4 sm:gap-[34px] w-full'>
                         {/* left items */}
                         {
-                            [
-                                {
-                                    number: "01",
-                                    title: "Attractive Restaurant Page",
-                                    description: "A beautiful, (mobile)-friendly page that perfectly reflects your restaurant’s unique style.",
-                                    bgColor: "#F6E3D5"
-                                },
-                                {
-                                    number: "03",
-                                    title: "Integrated Food Order System",
-                                    description: "Manage orders yourself and receive payments directly, no third-party platforms, no commissions.",
-                                    bgColor: "#F6E3D5"
-                                },
-                                {
-                                    number: "05",
-                                    title: "Event Calendar",
-                                    description: "Create a clear and engaging calendar for events, tastings, or live music.",
-                                    bgColor: "#F6E3D5"
-                                },
-
-                            ].map((item, index) => {
+                            leftItems.map((item, index) => {
                                 return <div
                                     key={index}
-                                    style={{
-                                        backgroundColor: item.bgColor
-                                    }}
+                                    style={{ backgroundColor: "#F6E3D5" }}
                                     className=' box-shad-every py-[21px] px-[15px] rounded-[25px] border-[4px] border-[#000000]'>
                                     <div className='w-full flex items-center justify-center lg:h-[92px]'>
                                         <div className='w-full max-w-[151px] flex items-center justify-end'>
@@ -44,10 +37,10 @@ const EverythingYouNeed = () => {
                                         </div>
                                     </div>
                                     <h2 className='text-[#090909] font-[600] font-inter text-[13px] leading-[18px]'>
-                                        {item.title}
+                                        {t(`features.${item.number}.title`)}
                                     </h2>
                                     <p className='mt-2 text-[#333333] font-inter font-[400] text-[12px] leading-[15px]'>
-                                        {item.description}
+                                        {t(`features.${item.number}.description`)}
                                     </p>
                                 </div>
                             })
@@ -56,32 +49,10 @@ const EverythingYouNeed = () => {
                     <div className='grid  gap-4 sm:gap-[34px] pt-[54px] w-full'>
                         {/* right items */}
                         {
-                            [
-                                {
-                                    number: "02",
-                                    title: "User-Friendly Dashboard",
-                                    description: "Easily customize colors, fonts, logos, and more from one intuitive dashboard.",
-                                    bgColor: "#F6E3D5"
-                                },
-                                {
-                                    number: "04",
-                                    title: "Analytics & Insights",
-                                    description: "Track views, clicks, and orders to better understand your audience and improve performance.",
-                                    bgColor: "#F6E3D5"
-                                },
-                                {
-                                    number: "06",
-                                    title: "QR Codes",
-                                    description: "Generate, personalize, and track QR codes to see how often they are scanned.",
-                                    bgColor: "#F6E3D5"
-                                },
-
-                            ].map((item, index) => {
+                            rightItems.map((item, index) => {
                                 return <div
                                     key={index}
-                                    style={{
-                                        backgroundColor: item.bgColor
-                                    }}
+                                    style={{ backgroundColor: "#F6E3D5" }}
                                     className=' box-shad-every py-[21px] px-[15px] rounded-[25px] border-[4px] border-[#000000]'>
                                     <div className='w-full flex items-center justify-center lg:h-[92px]'>
                                         <div className='w-full max-w-[151px] flex items-center justify-end'>
@@ -91,10 +62,10 @@ const EverythingYouNeed = () => {
                                         </div>
                                     </div>
                                     <h2 className='text-[#090909] font-[600] font-inter text-[13px] leading-[18px]'>
-                                        {item.title}
+                                        {t(`features.${item.number}.title`)}
                                     </h2>
                                     <p className='mt-2 text-[#333333] font-inter font-[400] text-[12px] leading-[15px]'>
-                                        {item.description}
+                                        {t(`features.${item.number}.description`)}
                                     </p>
                                 </div>
                             })
@@ -103,14 +74,14 @@ const EverythingYouNeed = () => {
                 </div>
                 <div className='w-full '>
                     <h1 className='text-[#000000] font-inter font-[900] text-[40px] sm:text-[56px] leading-[1.1]'>
-                        Everything you need to grow your restaurant
+                        {t('headline')}
                     </h1>
                     <p className='mt-5 sm:mt-7 text-[#1E2330] font-[500] font-inter sm:text-xl'>
-                        Powerful tools made for restaurants. Create a stunning profile page, share all your links, take direct orders with payments, and track performance. No commissions. Just your brand, fully in control.
+                        {t('description')}
                     </p>
                     <Link href={"/signup"}>
                         <button className='mt-6 sm:mt-10 px-[36px] bg-[#009A5E] hover:bg-[#009A5E]/80 rounded-full hover:opacity-70 cursor-pointer transition-all h-[61px] curpo text-[#FFFFFF] font-[600] font-poppins text-lg'>
-                            Join Now
+                            {t('cta')}
                         </button>
                     </Link>
                 </div>

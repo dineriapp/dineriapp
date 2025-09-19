@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/app/(dashboard)/_components/app-sidebar";
+import { AppSidebar } from "@/app/[locale]/(dashboard)/_components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import UpgradeBtn from "@/components/upgrade-btn";
 import VisitBtn from "@/components/visit-btn";

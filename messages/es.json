@@ -1,0 +1,152 @@
+{
+  "LocaleSwitcher": {
+    "locales": {
+      "en": "🇺🇸 Inglés",
+      "es": "🇪🇸 Español",
+      "fr": "🇫🇷 Francés",
+      "de": "🇩🇪 Alemán",
+      "it": "🇮🇹 Italiano",
+      "nl": "🇳🇱 Neerlandés"
+    }
+  },
+  "TopBar": {
+    "message": "Es hora de convertir clics en clientes.",
+    "setup": "Configurar",
+    "cta": "y empieza en unos minutos!"
+  },
+  "Header": {
+    "home": "Inicio",
+    "features": "Funciones",
+    "demo": "Demostración",
+    "learn": "Aprender",
+    "pricing": "Precios",
+    "login": "Iniciar sesión",
+    "signup": "Registrarse"
+  },
+  "Footer": {
+    "product": "Producto",
+    "features": "Funciones",
+    "demo": "Demostración",
+    "plans": "Planes",
+    "faq": "FAQ",
+
+    "company": "Compañía",
+    "about": "Acerca de",
+    "careers": "Carreras",
+    "help": "Centro de ayuda",
+
+    "legal": "Legal",
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "cookies": "Cookies",
+
+    "cta": "Empieza hoy mismo",
+    "rights": "Todos los derechos reservados."
+  },
+  "Home": {
+    "Hero": {
+      "title": "Conecta. Tu <br class='sm:flex hidden'/>restaurante, <br class='sm:flex hidden'/>en segundos.",
+      "explore": "Explora todas las funciones",
+      "cta": "Empieza hoy mismo"
+    },
+    "Trusted": {
+      "text": "Con la confianza de restaurantes en todo el mundo"
+    },
+    "EverythingYouNeed": {
+      "headline": "Todo lo que necesitas para hacer crecer tu restaurante",
+      "description": "Herramientas poderosas hechas para restaurantes. Crea una página de perfil atractiva, comparte todos tus enlaces, recibe pedidos directos con pagos y sigue el rendimiento. Sin comisiones. Solo tu marca, con control total.",
+      "cta": "Únete ahora",
+      "features": {
+        "01": {
+          "title": "Página de restaurante atractiva",
+          "description": "Una página hermosa y compatible con móviles que refleja perfectamente el estilo único de tu restaurante."
+        },
+        "02": {
+          "title": "Panel fácil de usar",
+          "description": "Personaliza fácilmente colores, fuentes, logotipos y más desde un panel intuitivo."
+        },
+        "03": {
+          "title": "Sistema integrado de pedidos",
+          "description": "Gestiona tus pedidos tú mismo y recibe pagos directamente, sin plataformas de terceros ni comisiones."
+        },
+        "04": {
+          "title": "Analíticas e información",
+          "description": "Sigue vistas, clics y pedidos para entender mejor a tu audiencia y mejorar el rendimiento."
+        },
+        "05": {
+          "title": "Calendario de eventos",
+          "description": "Crea un calendario claro y atractivo para eventos, degustaciones o música en vivo."
+        },
+        "06": {
+          "title": "Códigos QR",
+          "description": "Genera, personaliza y haz un seguimiento de los códigos QR para ver cuántas veces se escanean."
+        }
+      }
+    },
+    "HowItWorks": {
+      "headline": "Cómo funciona dineri.app",
+      "description": "Configura, personaliza y publica en línea en pocos minutos",
+      "cta": "Únete ahora",
+      "steps": {
+        "01": {
+          "title": "Crea tu perfil",
+          "description": "Regístrate y personaliza la página de tu restaurante con tu logo, fotos e información clave."
+        },
+        "02": {
+          "title": "Agrega tu contenido",
+          "description": "Sube tu menú, destaca eventos o promociones y enlaza tus redes sociales, todo en un solo lugar."
+        },
+        "03": {
+          "title": "Comparte con los clientes",
+          "description": "Comparte tu enlace único de Dineri en Instagram, Google Business y folletos para conectar con tus clientes."
+        }
+      }
+    },
+    "Plans": {
+      "headline": "Planes asequibles",
+      "description": "Precios claros y honestos, sin costes ocultos, diseñados para hacer crecer tu negocio.",
+      "cta": "Ver todos los planes"
+    },
+    "Faqs": {
+      "headline": "¿Tienes preguntas?",
+      "description": "Todo lo que necesitas saber sobre nuestros servicios",
+      "items": {
+        "01": {
+          "question": "¿Necesito conocimientos técnicos para usar Dineri.app?",
+          "answer": [
+            "No, Dineri.app está diseñado para ser fácil de usar. No necesitas conocimientos de programación y todo funciona con formularios y configuraciones simples. La plataforma también es totalmente compatible con dispositivos móviles, por lo que puedes actualizar y gestionar la página de tu restaurante directamente desde tu teléfono."
+          ]
+        },
+        "02": {
+          "question": "¿Puedo conectar mi sistema de reservas existente?",
+          "answer": [
+            "Por el momento, las integraciones completas con sistemas de reservas conocidos aún no están disponibles. Estamos trabajando activamente en ello y planeamos lanzarlo como una nueva función pronto. Mientras tanto, puedes simplemente añadir el enlace de tu herramienta de reservas actual en tu página de Dineri.app."
+          ]
+        },
+        "03": {
+          "question": "¿Qué extensiones de dominio puedo usar con Dineri.app?",
+          "answer": [
+            "Si aún no tienes un dominio, puedes elegir uno de nuestros dominios gratuitos adaptados a tu mercado. Por ejemplo Ibiza.rest, Dineri.me, Thechef.me y muchos más.",
+            "Continuamente estamos adquiriendo extensiones de dominio atractivas y profesionales para ofrecerte aún más opciones que se adapten perfectamente a tu negocio, todas disponibles de forma gratuita."
+          ]
+        },
+        "04": {
+          "question": "¿Existen comisiones?",
+          "answer": [
+            "No. Con Dineri.app, conservas el 100% de tus ingresos. Sin comisiones en pedidos para llevar o de entrega. A diferencia de muchas plataformas que cobran entre un 10% y un 30% por pedido, aquí solo pagas tu suscripción. Más ganancias, control total y sin sorpresas.",
+            "Lo mejor es que tus pagos van directamente a tu cuenta bancaria, dándote control total y acceso inmediato a tus ganancias."
+          ]
+        }
+      }
+    },
+    "Understand": {
+      "headline": "Entiende a tu audiencia, haz crecer tu restaurante",
+      "description": "Sigue clics, ingresos y escaneos QR en tiempo real. Obtén información clara sobre lo que funciona para hacer mejoras inteligentes y lograr que los clientes vuelvan.",
+      "cta": "Empieza hoy"
+    },
+    "CTA": {
+      "headline": "Eleva. Tu.<span class='sm:hidden flex'> </span>Restaurante.",
+      "cta": "Empieza ahora"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 "use client"
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 const TrustedBy = () => {
@@ -44,12 +45,13 @@ const TrustedBy = () => {
             img: "https://i.pinimg.com/736x/8b/78/d4/8b78d4f191990af2dbedcf9c30480581.jpg",
         },
     ];
+    const t = useTranslations("Home.Trusted");
 
     return (
         <section className=" bg-[#FFFFFF] border-[#D9D9D9] border py-10 sm:py-[72px] overflow-hidden">
             <div className="max-w-[1200px] mx-auto px-4">
                 <p className="mb-8 text-center text-sm font-medium uppercase tracking-wider text-[#62748E] ">
-                    Trusted by restaurants worldwide
+                    {t("text")}
                 </p>
 
                 {/* Marquee container */}

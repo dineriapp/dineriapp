@@ -1,7 +1,7 @@
 "use client"
 
-
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -11,50 +11,44 @@ import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { signup } from "../../../actions/auth"
-import { Checkbox } from "@/components/ui/checkbox"
+import { login } from "@/actions/auth"
 
-const SignupSchema = z.object({
+const loginSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
     password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-    confirmPassword: z.string().min(8, { message: "Confirm Password must be at least 8 characters" }),
-    agree: z.boolean().refine((val) => val === true, {
-        message: "You must agree to the Privacy Notice and T&Cs",
-    }),
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-});
+    rememberMe: z.boolean().optional(),
+})
 
-type SignupFormData = z.infer<typeof SignupSchema>
+type LoginFormData = z.infer<typeof loginSchema>
 
-export default function SignupPage() {
+export default function LoginPage() {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [error, setError] = useState("")
 
     const {
         register,
-        setValue,
-        watch,
         handleSubmit,
         formState: { errors },
-    } = useForm<SignupFormData>({
-        resolver: zodResolver(SignupSchema),
+        setValue,
+        watch,
+    } = useForm<LoginFormData>({
+        resolver: zodResolver(loginSchema),
         defaultValues: {
             email: "",
             password: "",
+            rememberMe: false,
         },
     })
 
-    const onSubmit = (data: SignupFormData) => {
+    const onSubmit = (data: LoginFormData) => {
         setError("")
         startTransition(() => {
             const formdata = new FormData()
             formdata.append("email", data.email)
             formdata.append("password", data.password)
 
-            signup(formdata).then((res) => {
+            login(formdata).then((res) => {
                 if (res?.error) {
                     setError(res.error)
                 } else {
@@ -65,11 +59,10 @@ export default function SignupPage() {
     }
 
     return (
-        <
-            >
+        <>
             <div className="mb-4">
-                <h1 className="text-2xl font-bold tracking-tight text-slate-900">Create your account</h1>
-                <p className="mt-2 text-sm text-slate-600">Sign up for dineri.app to start building your restaurant&apos;s online presence.</p>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900">Welcome back</h1>
+                <p className="mt-2 text-sm text-slate-600">Log in to your dineri.app account to manage your restaurant&apos;s online presence.</p>
             </div>
             {error && (
                 <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600">
@@ -79,7 +72,6 @@ export default function SignupPage() {
             )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <div className="relative flex items-center justify-center">
@@ -94,11 +86,15 @@ export default function SignupPage() {
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                     </div>
                     {errors.email && <p className="text-xs text-red-600">{errors.email.message}</p>}
-
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor="password">Password</Label>
+                        {/* <Link href="/auth/forgot-password" className="text-xs text-teal-600 hover:underline">
+                            Forgot password?
+                        </Link> */}
+                    </div>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="password"
@@ -113,39 +109,17 @@ export default function SignupPage() {
                     {errors.password && <p className="text-xs text-red-600">{errors.password.message}</p>}
                 </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <div className="relative flex items-center justify-center">
-                        <Input
-                            id="confirmPassword"
-                            type="password"
-                            placeholder="••••••••"
-                            className="pl-10 h-[44px]"
-                            autoComplete="new-password"
-                            disabled={isPending}
-                            {...register("confirmPassword")}
-                        />
-                        <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                    </div>
-                    {errors.confirmPassword && (
-                        <p className="text-xs text-red-600">{errors.confirmPassword.message}</p>
-                    )}
-                </div>
-
                 <div className="flex items-center space-x-2">
                     <Checkbox
-                        id="agree"
-                        checked={watch("agree")}
-                        onCheckedChange={(checked: boolean) => setValue("agree", checked)}
+                        id="rememberMe"
+                        checked={watch("rememberMe")}
+                        onCheckedChange={(checked: boolean) => setValue("rememberMe", checked)}
                         disabled={isPending}
                     />
-                    <Label htmlFor="agree" className="text-xs font-normal">
-                        By clicking Continue, you agree toDineri.app privacy notice and T&amp;Cs.
+                    <Label htmlFor="rememberMe" className="text-sm font-normal">
+                        Remember me for 30 days
                     </Label>
                 </div>
-                {errors.agree && (
-                    <p className="text-xs text-red-600">{errors.agree.message}</p>
-                )}
 
                 <Button
                     type="submit"
@@ -154,15 +128,15 @@ export default function SignupPage() {
                 >
                     {isPending ? (
                         <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account...
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...
                         </>
                     ) : (
-                        "Continue"
+                        "Log in"
                     )}
                 </Button>
             </form>
-            {/* <>
-            <div className="relative my-5">
+
+            {/* <div className="relative my-5">
                 <div className="absolute inset-0 flex items-center">
                     <Separator className="w-full" />
                 </div>
@@ -174,15 +148,15 @@ export default function SignupPage() {
             <div className="grid grid-cols-1 gap-3">
                 <SocialButton provider="google" />
                 <SocialButton provider="facebook" />
-            </div>
-</> */}
+            </div> */}
 
             <div className="mt-6 text-center text-sm">
-                Already have an account?{" "}
-                <Link href="/login" className="font-medium text-teal-600 hover:underline">
-                    Log in
+                Don&apos;t have an account?{" "}
+                <Link href="/signup" className="font-medium text-teal-600 hover:underline">
+                    Sign up
                 </Link>
             </div>
+
         </>
     )
 }

@@ -1,0 +1,153 @@
+{
+  "LocaleSwitcher": {
+    "label": "Sprache ändern",
+    "locales": {
+      "en": "🇺🇸 Englisch",
+      "es": "🇪🇸 Spanisch",
+      "fr": "🇫🇷 Französisch",
+      "de": "🇩🇪 Deutsch",
+      "it": "🇮🇹 Italienisch",
+      "nl": "🇳🇱 Niederländisch"
+    }
+  },
+  "TopBar": {
+    "message": "Zeit, Klicks in Kunden zu verwandeln.",
+    "setup": "Einrichten",
+    "cta": "und in wenigen Minuten starten!"
+  },
+  "Header": {
+    "home": "Startseite",
+    "features": "Funktionen",
+    "demo": "Demo",
+    "learn": "Lernen",
+    "pricing": "Preise",
+    "login": "Anmelden",
+    "signup": "Registrieren"
+  },
+  "Footer": {
+    "product": "Produkt",
+    "features": "Funktionen",
+    "demo": "Demo",
+    "plans": "Pläne",
+    "faq": "FAQ",
+
+    "company": "Unternehmen",
+    "about": "Über uns",
+    "careers": "Karriere",
+    "help": "Hilfezentrum",
+
+    "legal": "Rechtliches",
+    "terms": "Bedingungen",
+    "privacy": "Datenschutz",
+    "cookies": "Cookies",
+
+    "cta": "Heute noch starten",
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "Home": {
+    "Hero": {
+      "title": "Verbinden Sie. Ihr <br class='sm:flex hidden'/>Restaurant, <br class='sm:flex hidden'/>in wenigen Klicks.",
+      "explore": "Alle Funktionen entdecken",
+      "cta": "Heute noch starten"
+    },
+    "Trusted": {
+      "text": "Vertraut von Restaurants weltweit"
+    },
+    "EverythingYouNeed": {
+      "headline": "Alles, was Sie brauchen, um Ihr Restaurant wachsen zu lassen",
+      "description": "Leistungsstarke Tools für Restaurants. Erstellen Sie eine beeindruckende Profilseite, teilen Sie alle Ihre Links, nehmen Sie Bestellungen direkt mit Zahlungen an und verfolgen Sie die Leistung. Keine Provisionen. Nur Ihre Marke, vollständig unter Kontrolle.",
+      "cta": "Jetzt beitreten",
+      "features": {
+        "01": {
+          "title": "Attraktive Restaurantseite",
+          "description": "Eine schöne, mobilfreundliche Seite, die den einzigartigen Stil Ihres Restaurants perfekt widerspiegelt."
+        },
+        "02": {
+          "title": "Benutzerfreundliches Dashboard",
+          "description": "Passen Sie Farben, Schriften, Logos und mehr einfach über ein intuitives Dashboard an."
+        },
+        "03": {
+          "title": "Integriertes Bestellsystem",
+          "description": "Verwalten Sie Bestellungen selbst und erhalten Sie Zahlungen direkt – ohne Drittanbieter und ohne Provisionen."
+        },
+        "04": {
+          "title": "Analysen & Einblicke",
+          "description": "Verfolgen Sie Aufrufe, Klicks und Bestellungen, um Ihr Publikum besser zu verstehen und die Leistung zu verbessern."
+        },
+        "05": {
+          "title": "Veranstaltungskalender",
+          "description": "Erstellen Sie einen klaren und ansprechenden Kalender für Events, Verkostungen oder Live-Musik."
+        },
+        "06": {
+          "title": "QR-Codes",
+          "description": "Generieren, personalisieren und verfolgen Sie QR-Codes, um zu sehen, wie oft sie gescannt werden."
+        }
+      }
+    },
+    "HowItWorks": {
+      "headline": "Wie dineri.app funktioniert",
+      "description": "Einrichten, anpassen und in wenigen Minuten online gehen",
+      "cta": "Jetzt beitreten",
+      "steps": {
+        "01": {
+          "title": "Erstellen Sie Ihr Profil",
+          "description": "Registrieren Sie sich und passen Sie Ihre Restaurantseite mit Ihrem Logo, Fotos und wichtigen Informationen an."
+        },
+        "02": {
+          "title": "Fügen Sie Ihre Inhalte hinzu",
+          "description": "Laden Sie Ihre Speisekarte hoch, heben Sie Veranstaltungen oder Aktionen hervor und verlinken Sie Ihre sozialen Netzwerke – alles an einem Ort."
+        },
+        "03": {
+          "title": "Teilen Sie mit Kunden",
+          "description": "Teilen Sie Ihren einzigartigen Dineri-Link über Instagram, Google Business und Flyer, um mit Ihren Gästen in Kontakt zu treten."
+        }
+      }
+    },
+    "Plans": {
+      "headline": "Erschwingliche Pläne",
+      "description": "Klare und ehrliche Preise, ohne versteckte Kosten, entwickelt, um Ihr Geschäft auszubauen.",
+      "cta": "Alle Pläne anzeigen"
+    },
+    "Faqs": {
+      "headline": "Noch Fragen?",
+      "description": "Alles, was Sie über unsere Dienste wissen müssen",
+      "items": {
+        "01": {
+          "question": "Brauche ich technische Kenntnisse, um Dineri.app zu nutzen?",
+          "answer": [
+            "Nein, Dineri.app ist benutzerfreundlich gestaltet. Sie benötigen keine Programmierkenntnisse, da alles über einfache Formulare und Einstellungen funktioniert. Die Plattform ist außerdem vollständig mobilfreundlich, sodass Sie die Seite Ihres Restaurants direkt von Ihrem Smartphone aus aktualisieren und verwalten können."
+          ]
+        },
+        "02": {
+          "question": "Kann ich mein bestehendes Reservierungssystem verbinden?",
+          "answer": [
+            "Derzeit sind vollständige Integrationen mit bekannten Reservierungssystemen noch nicht verfügbar. Wir arbeiten aktiv daran und planen, dies bald als neue Funktion bereitzustellen. Bis dahin können Sie einfach den Link zu Ihrem bestehenden Reservierungstool auf Ihrer Dineri.app-Seite hinzufügen."
+          ]
+        },
+        "03": {
+          "question": "Welche Domain-Endungen kann ich mit Dineri.app verwenden?",
+          "answer": [
+            "Wenn Sie noch keine Domain besitzen, können Sie eine unserer kostenlosen Domains auswählen, die auf Ihren Markt zugeschnitten sind. Zum Beispiel Ibiza.rest, Dineri.me, Thechef.me und viele weitere.",
+            "Wir erwerben kontinuierlich attraktive und professionelle Domain-Endungen, um Ihnen noch mehr passende Optionen für Ihr Unternehmen anzubieten – alle kostenlos verfügbar."
+          ]
+        },
+        "04": {
+          "question": "Gibt es Provisionen?",
+          "answer": [
+            "Nein. Mit Dineri.app behalten Sie 100 % Ihrer Einnahmen. Keine Provisionen für Abhol- oder Lieferbestellungen. Im Gegensatz zu vielen Plattformen, die 10–30 % pro Bestellung verlangen, zahlen Sie nur Ihr Abonnement. Mehr Gewinn, volle Kontrolle und keine Überraschungen.",
+            "Das Beste ist: Ihre Zahlungen gehen direkt auf Ihr Bankkonto – sofortiger Zugriff und volle Kontrolle über Ihre Einnahmen."
+          ]
+        }
+      }
+    },
+    "Understand": {
+      "headline": "Verstehen Sie Ihr Publikum, wachsen Sie mit Ihrem Restaurant",
+      "description": "Verfolgen Sie Klicks, Umsätze und QR-Scans in Echtzeit. Erhalten Sie klare Einblicke, was funktioniert, damit Sie klügere Anpassungen vornehmen und Ihre Kunden zurückbringen können.",
+      "cta": "Jetzt loslegen"
+    },
+    "CTA": {
+      "headline": "Steigern. Ihr.<span class='sm:hidden flex'> </span>Restaurant.",
+      "cta": "Jetzt starten"
+    }
+  }
+}

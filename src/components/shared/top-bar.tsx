@@ -1,15 +1,21 @@
 import Link from "next/link";
 import React from "react";
+import { useTranslations } from "next-intl";
 
 const TopBar = () => {
-  return (
-    <div className="p-5  bg-[#009A5E] w-full flex justify-center">
-      <p className="text-center max-w-[1200px] text-[#FFFFFF] font-inter font-[500] text-base">
-        Time to convert clicks into customers.
-        <Link href={"/login"} className="underline ml-2 underline-offset-2 hover:opacity-70 transition-all">
-          Set up
-        </Link> and start within a few minutes!
+  const t = useTranslations("TopBar");
 
+  return (
+    <div className="p-5 bg-[#009A5E] w-full flex justify-center">
+      <p className="text-center max-w-[1200px] text-[#FFFFFF] font-inter font-[500] text-base">
+        {t("message")}
+        <Link
+          href="/login"
+          className="underline ml-2 underline-offset-2 hover:opacity-70 transition-all"
+        >
+          {t("setup")}
+        </Link>{" "}
+        {t("cta")}
       </p>
     </div>
   );

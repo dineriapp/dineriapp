@@ -1,0 +1,152 @@
+{
+  "LocaleSwitcher": {
+    "locales": {
+      "en": "🇺🇸 English",
+      "es": "🇪🇸 Spanish",
+      "fr": "🇫🇷 French",
+      "de": "🇩🇪 German",
+      "it": "🇮🇹 Italian",
+      "nl": "🇳🇱 Dutch"
+    }
+  },
+  "TopBar": {
+    "message": "Time to convert clicks into customers.",
+    "setup": "Set up",
+    "cta": "and start within a few minutes!"
+  },
+  "Header": {
+    "home": "Home",
+    "features": "Features",
+    "demo": "Demo",
+    "learn": "Learn",
+    "pricing": "Pricing",
+    "login": "Log in",
+    "signup": "Sign Up"
+  },
+  "Footer": {
+    "product": "Product",
+    "features": "Features",
+    "demo": "Demo",
+    "plans": "Plans",
+    "faq": "FAQ",
+
+    "company": "Company",
+    "about": "About",
+    "careers": "Careers",
+    "help": "Help Center",
+
+    "legal": "Legal",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+
+    "cta": "Get started today",
+    "rights": "All rights reserved."
+  },
+  "Home": {
+    "Hero": {
+      "title": "Connect. Your <br class='sm:flex hidden'/>restaurant, <br class='sm:flex hidden'/>in a few clicks.",
+      "explore": "Explore all features",
+      "cta": "Get started today"
+    },
+    "Trusted": {
+      "text": "Trusted by restaurants worldwide"
+    },
+    "EverythingYouNeed": {
+      "headline": "Everything you need to grow your restaurant",
+      "description": "Powerful tools made for restaurants. Create a stunning profile page, share all your links, take direct orders with payments, and track performance. No commissions. Just your brand, fully in control.",
+      "cta": "Join Now",
+      "features": {
+        "01": {
+          "title": "Attractive Restaurant Page",
+          "description": "A beautiful, (mobile)-friendly page that perfectly reflects your restaurant’s unique style."
+        },
+        "02": {
+          "title": "User-Friendly Dashboard",
+          "description": "Easily customize colors, fonts, logos, and more from one intuitive dashboard."
+        },
+        "03": {
+          "title": "Integrated Food Order System",
+          "description": "Manage orders yourself and receive payments directly, no third-party platforms, no commissions."
+        },
+        "04": {
+          "title": "Analytics & Insights",
+          "description": "Track views, clicks, and orders to better understand your audience and improve performance."
+        },
+        "05": {
+          "title": "Event Calendar",
+          "description": "Create a clear and engaging calendar for events, tastings, or live music."
+        },
+        "06": {
+          "title": "QR Codes",
+          "description": "Generate, personalize, and track QR codes to see how often they are scanned."
+        }
+      }
+    },
+    "HowItWorks": {
+      "headline": "How dineri.app works",
+      "description": "Set up, customize, and go live within a few minutes",
+      "cta": "Join now",
+      "steps": {
+        "01": {
+          "title": "Create your Profile",
+          "description": "Sign up and customize your restaurant page with your logo, photos, and key information."
+        },
+        "02": {
+          "title": "Add your content",
+          "description": "Upload your menu, highlight events or promotions, and link your socials, all in one place."
+        },
+        "03": {
+          "title": "Share with customers",
+          "description": "Share your unique Dineri link via Instagram, Google Business, and flyers to connect with your guests."
+        }
+      }
+    },
+    "Plans": {
+      "headline": "Affordable plans",
+      "description": "Clear and honest pricing, with zero hidden costs, built to grow your business.",
+      "cta": "View All Plans"
+    },
+    "Faqs": {
+      "headline": "Got questions?",
+      "description": "Everything you need to know about our services",
+      "items": {
+        "01": {
+          "question": "Do I need technical skills to use Dineri.app?",
+          "answer": [
+            "No, Dineri.app is designed to be user-friendly. You don’t need any coding knowledge and everything works with simple forms and settings. The platform is also fully mobile-friendly, so you can easily update and manage your restaurant’s page directly from your phone."
+          ]
+        },
+        "02": {
+          "question": "Can I connect my existing reservation system?",
+          "answer": [
+            "At the moment, full integrations with well-known reservation systems are not yet available. We are actively working on this and plan to release it as a new feature soon. For now, you can simply add the link to your existing reservation tool on your Dineri.app page."
+          ]
+        },
+        "03": {
+          "question": "Which domain extensions can I use with Dineri.app?",
+          "answer": [
+            "If you don’t have a domain yet, you can choose from one of our free domains tailored to your market. For example Ibiza.rest, Dineri.me, Thechef.me and many more.",
+            "We are continuously acquiring cool and professional domain extensions so we can offer you even more options that perfectly fit your business, all available for free."
+          ]
+        },
+        "04": {
+          "question": "Are there any commission fees?",
+          "answer": [
+            "No. With Dineri.app, you keep 100% of your earnings. No commission on take-away, or delivery orders. Unlike many platforms that charge 10–30% per order, you only pay your subscription. More profit, full control, and no surprises.",
+            "Best of all, your payments go directly to your bank account, giving you full control and instant access to your earnings."
+          ]
+        }
+      }
+    },
+    "Understand": {
+      "headline": "Understand your audience, grow your restaurant",
+      "description": "Track clicks, revenue, and QR scans in real time. Get clear insights into what’s working, so you can make smarter updates and keep customers coming back.",
+      "cta": "Get started today"
+    },
+    "CTA": {
+      "headline": "Elevate. Your.<span class='sm:hidden flex'> </span>Restaurant.",
+      "cta": "Start now"
+    }
+  }
+}

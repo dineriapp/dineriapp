@@ -1,0 +1,153 @@
+{
+  "LocaleSwitcher": {
+    "label": "Taal wijzigen",
+    "locales": {
+      "en": "🇺🇸 Engels",
+      "es": "🇪🇸 Spaans",
+      "fr": "🇫🇷 Frans",
+      "de": "🇩🇪 Duits",
+      "it": "🇮🇹 Italiaans",
+      "nl": "🇳🇱 Nederlands"
+    }
+  },
+  "TopBar": {
+    "message": "Tijd om klikken om te zetten in klanten.",
+    "setup": "Instellen",
+    "cta": "en binnen enkele minuten starten!"
+  },
+  "Header": {
+    "home": "Home",
+    "features": "Functies",
+    "demo": "Demo",
+    "learn": "Leren",
+    "pricing": "Prijzen",
+    "login": "Inloggen",
+    "signup": "Aanmelden"
+  },
+  "Footer": {
+    "product": "Product",
+    "features": "Functies",
+    "demo": "Demo",
+    "plans": "Plannen",
+    "faq": "FAQ",
+
+    "company": "Bedrijf",
+    "about": "Over ons",
+    "careers": "Carrières",
+    "help": "Helpcentrum",
+
+    "legal": "Juridisch",
+    "terms": "Voorwaarden",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+
+    "cta": "Begin vandaag nog",
+    "rights": "Alle rechten voorbehouden."
+  },
+  "Home": {
+    "Hero": {
+      "title": "Verbind. Je <br class='sm:flex hidden'/>restaurant, <br class='sm:flex hidden'/>in een paar klikken.",
+      "explore": "Bekijk alle functies",
+      "cta": "Begin vandaag nog"
+    },
+    "Trusted": {
+      "text": "Vertrouwd door restaurants wereldwijd"
+    },
+    "EverythingYouNeed": {
+      "headline": "Alles wat je nodig hebt om je restaurant te laten groeien",
+      "description": "Krachtige tools speciaal gemaakt voor restaurants. Maak een prachtige profielpagina, deel al je links, neem directe bestellingen met betalingen aan en volg de prestaties. Geen commissies. Alleen jouw merk, volledig onder controle.",
+      "cta": "Word lid",
+      "features": {
+        "01": {
+          "title": "Aantrekkelijke restaurantpagina",
+          "description": "Een mooie, mobielvriendelijke pagina die perfect de unieke stijl van je restaurant weerspiegelt."
+        },
+        "02": {
+          "title": "Gebruiksvriendelijk dashboard",
+          "description": "Pas eenvoudig kleuren, lettertypen, logo’s en meer aan vanuit één intuïtief dashboard."
+        },
+        "03": {
+          "title": "Geïntegreerd bestelsysteem",
+          "description": "Beheer zelf de bestellingen en ontvang betalingen direct, zonder derde partijen of commissies."
+        },
+        "04": {
+          "title": "Analytics & inzichten",
+          "description": "Volg weergaven, klikken en bestellingen om je publiek beter te begrijpen en je prestaties te verbeteren."
+        },
+        "05": {
+          "title": "Evenementenkalender",
+          "description": "Maak een duidelijke en aantrekkelijke kalender voor evenementen, proeverijen of live muziek."
+        },
+        "06": {
+          "title": "QR-codes",
+          "description": "Genereer, personaliseer en volg QR-codes om te zien hoe vaak ze worden gescand."
+        }
+      }
+    },
+    "HowItWorks": {
+      "headline": "Hoe dineri.app werkt",
+      "description": "Stel in, pas aan en ga binnen enkele minuten live",
+      "cta": "Nu deelnemen",
+      "steps": {
+        "01": {
+          "title": "Maak je profiel aan",
+          "description": "Registreer en personaliseer je restaurantpagina met je logo, foto’s en belangrijke informatie."
+        },
+        "02": {
+          "title": "Voeg je inhoud toe",
+          "description": "Upload je menu, benadruk evenementen of promoties en koppel je sociale media, allemaal op één plek."
+        },
+        "03": {
+          "title": "Deel met klanten",
+          "description": "Deel je unieke Dineri-link via Instagram, Google Business en flyers om met je gasten in contact te komen."
+        }
+      }
+    },
+    "Plans": {
+      "headline": "Betaalbare plannen",
+      "description": "Duidelijke en eerlijke prijzen, zonder verborgen kosten, ontworpen om je bedrijf te laten groeien.",
+      "cta": "Bekijk alle plannen"
+    },
+    "Faqs": {
+      "headline": "Vragen?",
+      "description": "Alles wat je moet weten over onze diensten",
+      "items": {
+        "01": {
+          "question": "Heb ik technische vaardigheden nodig om Dineri.app te gebruiken?",
+          "answer": [
+            "Nee, Dineri.app is ontworpen om gebruiksvriendelijk te zijn. Je hebt geen programmeerkennis nodig: alles werkt met eenvoudige formulieren en instellingen. Het platform is ook volledig mobielvriendelijk, zodat je de pagina van je restaurant eenvoudig kunt bijwerken en beheren vanaf je telefoon."
+          ]
+        },
+        "02": {
+          "question": "Kan ik mijn bestaande reserveringssysteem koppelen?",
+          "answer": [
+            "Op dit moment zijn volledige integraties met bekende reserveringssystemen nog niet beschikbaar. We werken hier actief aan en verwachten dit binnenkort als nieuwe functie uit te brengen. Voor nu kun je eenvoudig de link naar je bestaande reserveringstool toevoegen op je Dineri.app-pagina."
+          ]
+        },
+        "03": {
+          "question": "Welke domeinextensies kan ik gebruiken met Dineri.app?",
+          "answer": [
+            "Als je nog geen domein hebt, kun je kiezen uit een van onze gratis domeinen die zijn afgestemd op jouw markt. Bijvoorbeeld Ibiza.rest, Dineri.me, Thechef.me en nog veel meer.",
+            "We blijven voortdurend nieuwe en professionele domeinextensies aankopen zodat we je nog meer opties kunnen bieden die perfect passen bij jouw bedrijf — allemaal gratis beschikbaar."
+          ]
+        },
+        "04": {
+          "question": "Zijn er commissiekosten?",
+          "answer": [
+            "Nee. Met Dineri.app behoud je 100% van je inkomsten. Geen commissie op afhaal- of bezorgbestellingen. In tegenstelling tot veel platforms die 10–30% per bestelling rekenen, betaal je hier alleen je abonnement. Meer winst, volledige controle en geen verrassingen.",
+            "Het beste van alles: je betalingen gaan rechtstreeks naar je bankrekening, waardoor je volledige controle hebt en direct toegang tot je inkomsten."
+          ]
+        }
+      }
+    },
+    "Understand": {
+      "headline": "Begrijp je publiek, laat je restaurant groeien",
+      "description": "Volg klikken, inkomsten en QR-scans in realtime. Krijg duidelijke inzichten in wat werkt, zodat je slimmere updates kunt maken en klanten blijft terughalen.",
+      "cta": "Begin vandaag nog"
+    },
+    "CTA": {
+      "headline": "Verhoog. Jouw.<span class='sm:hidden flex'> </span>Restaurant.",
+      "cta": "Begin nu"
+    }
+  }
+}
