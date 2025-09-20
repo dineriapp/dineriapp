@@ -1,30 +1,33 @@
 "use client";
 
-import { STRIPE_PLANS, StripePlan } from "@/lib/stripe-plans"; // adjust path if needed
+import { Button } from "@/components/ui/button";
 import {
     Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
-    CardDescription,
-    CardContent,
-    CardFooter,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { getStripePlans, StripePlan } from "@/lib/stripe-plans"; // adjust path if needed
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 
 export default function PlansPage() {
+    const locale = useLocale()
+    const t = useTranslations("PlansPage")
     const planKeys: StripePlan[] = ["basic", "pro", "enterprise"];
+    const plans = getStripePlans(locale);
 
     return (
         <div className="min-h-screen bg-[white] flex flex-col">
             {/* Header */}
             <header className="w-full max-w-4xl mx-auto text-center pt-40 pb-12 px-4">
                 <h1 className="text-5xl md:text-6xl font-bold font-inter tracking-tight text-[#1B4048]">
-                    Choose the right plan for your restaurant
+                    {t("header.title")}
                 </h1>
                 <p className="mt-6 text-lg md:text-xl text-[#1B4048] max-w-2xl mx-auto">
-                    Start free and upgrade as your restaurant grows. All plans come with
-                    powerful tools to showcase your menu, events, and brand online.
+                    {t("header.description")}
                 </p>
             </header>
 
@@ -32,8 +35,8 @@ export default function PlansPage() {
             <main className="flex-1 w-full max-w-6xl mx-auto px-6 pb-20">
                 <div className="grid gap-8 md:grid-cols-3">
                     {planKeys.map((key) => {
-                        const plan = STRIPE_PLANS[key];
-                        const isHighlighted = key === "pro"; // Highlight Pro as "Most popular"
+                        const plan = plans[key];
+                        const isHighlighted = key === "pro";
 
                         return (
                             <Card
@@ -46,7 +49,17 @@ export default function PlansPage() {
                                 <CardHeader>
                                     {isHighlighted && (
                                         <p className="text-sm font-semibold text-[#002147] uppercase tracking-wide">
-                                            Most Popular
+                                            {locale === "de"
+                                                ? "Am beliebtesten"
+                                                : locale === "es"
+                                                    ? "Más popular"
+                                                    : locale === "fr"
+                                                        ? "Le plus populaire"
+                                                        : locale === "it"
+                                                            ? "Il più popolare"
+                                                            : locale === "nl"
+                                                                ? "Meest populair"
+                                                                : "Most Popular"}
                                         </p>
                                     )}
                                     <CardTitle className="text-3xl font-bold mt-2">
@@ -78,7 +91,31 @@ export default function PlansPage() {
                                             : "bg-gray-100 hover:bg-gray-200 text-[#002147]"
                                             }`}
                                     >
-                                        {plan.price === 0 ? "Start Free" : "Choose Plan"}
+                                        {plan.price === 0 ? (
+                                            locale === "de"
+                                                ? "Kostenlos starten"
+                                                : locale === "es"
+                                                    ? "Comenzar gratis"
+                                                    : locale === "fr"
+                                                        ? "Commencer gratuitement"
+                                                        : locale === "it"
+                                                            ? "Inizia gratis"
+                                                            : locale === "nl"
+                                                                ? "Gratis starten"
+                                                                : "Start Free"
+                                        ) : (
+                                            locale === "de"
+                                                ? "Plan wählen"
+                                                : locale === "es"
+                                                    ? "Elegir plan"
+                                                    : locale === "fr"
+                                                        ? "Choisir le plan"
+                                                        : locale === "it"
+                                                            ? "Scegli piano"
+                                                            : locale === "nl"
+                                                                ? "Kies plan"
+                                                                : "Choose Plan"
+                                        )}
                                     </Button>
                                 </CardFooter>
                             </Card>
@@ -90,12 +127,12 @@ export default function PlansPage() {
             {/* Footer */}
             <footer className="w-full text-center py-8 border-t border-gray-200">
                 <p className="text-gray-500 text-sm">
-                    Need something custom?{" "}
+                    {t("footer.question")}{" "}
                     <Link
                         href="/contact"
                         className="text-[#002147] font-medium hover:underline"
                     >
-                        Contact our team
+                        {t("footer.action")}
                     </Link>
                 </p>
             </footer>

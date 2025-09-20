@@ -1,17 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Link, usePathname } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
-const legalPages = [
-  { name: "Cookies Policy", href: "/cookies" },
-  { name: "Privacy Policy", href: "/privacy-policy" },
-  { name: "Terms and Conditions", href: "/terms" },
-];
+
 
 export function LegalSidebar() {
   const pathname = usePathname();
+  const t = useTranslations("legalPages.sidebar");
+
+  const legalPages = [
+    { name: t("Cookies"), href: "/cookies" },
+    { name: t("Privacy"), href: "/privacy-policy" },
+    { name: t("Terms"), href: "/terms" },
+  ];
 
   return (
     <div className="  lg:border-l-2 border-slate-300 lg:p-6 px-0 py-3 sticky lg:top-35">

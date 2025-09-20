@@ -149,5 +149,290 @@
       "headline": "Steigern. Ihr.<span class='sm:hidden flex'> </span>Restaurant.",
       "cta": "Jetzt starten"
     }
+  },
+  "FeaturesPage": {
+    "Hero": {
+      "title": "Erstellen Sie eine Basis für die Präsenz Ihres<br />  Restaurants.",
+      "description": "Präsentieren Sie Ihr Menü, gewinnen Sie mehr Kunden und verwalten Sie alles über eine einfache Plattform – entwickelt, um mit Ihrem Restaurant zu wachsen.",
+      "features": {
+        "1": {
+          "title": "Steigern Sie den Verkehr, wo es zählt",
+          "text": "Verlinken Sie Ihre sozialen Profile, Ihren Online-Shop, Ihre Website und alles, womit Besucher interagieren sollen."
+        },
+        "2": {
+          "title": "Steigern Sie den Verkehr, wo es zählt",
+          "text": "Verlinken Sie Ihre sozialen Profile, Ihren Online-Shop, Ihre Website und alles, womit Besucher interagieren sollen."
+        },
+        "3": {
+          "title": "Steigern Sie den Verkehr, wo es zählt",
+          "text": "Verlinken Sie Ihre sozialen Profile, Ihren Online-Shop, Ihre Website und alles, womit Besucher interagieren sollen."
+        },
+        "4": {
+          "title": "Steigern Sie den Verkehr, wo es zählt",
+          "text": "Verlinken Sie Ihre sozialen Profile, Ihren Online-Shop, Ihre Website und alles, womit Besucher interagieren sollen."
+        },
+        "5": {
+          "title": "Steigern Sie den Verkehr, wo es zählt",
+          "text": "Verlinken Sie Ihre sozialen Profile, Ihren Online-Shop, Ihre Website und alles, womit Besucher interagieren sollen."
+        },
+        "6": {
+          "title": "Steigern Sie den Verkehr, wo es zählt",
+          "text": "Verlinken Sie Ihre sozialen Profile, Ihren Online-Shop, Ihre Website und alles, womit Besucher interagieren sollen."
+        }
+      }
+    }
+  },
+  "DemoPage": {
+    "Hero": {
+      "title": "Fordern Sie Ihre kostenlose Demo an <br /> und starten Sie noch heute",
+      "description": "Erfahren Sie, wie unsere Plattform Ihrem Restaurant beim Wachsen helfen kann. Füllen Sie das untenstehende Formular aus, und wir melden uns, um Ihre persönliche Demo zu vereinbaren."
+    },
+    "Form": {
+      "heading": "Demo anfordern",
+      "subheading": "Füllen Sie Ihre Geschäftsdaten aus, und wir kontaktieren Sie per Telefon oder E-Mail.",
+      "fields": {
+        "businessName": {
+          "label": "Name des Unternehmens",
+          "placeholder": "Name Ihres Restaurants",
+          "error": "Der Unternehmensname ist erforderlich"
+        },
+        "contactPerson": {
+          "label": "Ansprechpartner",
+          "placeholder": "Ihr Name",
+          "error": "Ein Ansprechpartner ist erforderlich"
+        },
+        "email": {
+          "label": "E-Mail",
+          "placeholder": "beispiel@email.com",
+          "error": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+        },
+        "phone": {
+          "label": "Telefon",
+          "placeholder": "+49 123 456 789",
+          "error": "Telefonnummer ist erforderlich"
+        },
+        "address": {
+          "label": "Adresse",
+          "placeholder": "Musterstraße 123",
+          "error": "Adresse ist erforderlich"
+        },
+        "city": {
+          "label": "Stadt",
+          "placeholder": "Stadt",
+          "error": "Stadt ist erforderlich"
+        },
+        "country": {
+          "label": "Land",
+          "placeholder": "Land",
+          "error": "Land ist erforderlich"
+        },
+        "message": {
+          "label": "Zusätzliche Hinweise",
+          "placeholder": "Erzählen Sie uns mehr über die Bedürfnisse Ihres Unternehmens..."
+        }
+      },
+      "submit": "Anfrage absenden",
+      "successMessage": "Ihre Demo-Anfrage wurde übermittelt. Wir werden Sie in Kürze kontaktieren!"
+    }
+  },
+  "PlansPage": {
+    "header": {
+      "title": "Wählen Sie den richtigen Plan für Ihr Restaurant",
+      "description": "Starten Sie kostenlos und erweitern Sie, wenn Ihr Restaurant wächst. Alle Pläne enthalten leistungsstarke Tools, um Ihre Speisekarte, Veranstaltungen und Marke online zu präsentieren."
+    },
+    "footer": {
+      "question": "Brauchen Sie etwas Individuelles?",
+      "action": "Kontaktieren Sie unser Team"
+    }
+  },
+  "legalPages": {
+    "sidebar": {
+      "Cookies": "Cookie-Richtlinie",
+      "Privacy": "Datenschutzrichtlinie",
+      "Terms": "Allgemeine Geschäftsbedingungen"
+    },
+    "Cookies": {
+      "title": "Cookie-Richtlinie",
+      "intro": "Diese Cookie-Richtlinie erklärt, wie wir Cookies und ähnliche Technologien verwenden, um Sie zu erkennen, wenn Sie unsere Website dineri.app besuchen und mit unseren Diensten interagieren. Durch die weitere Nutzung unserer Website stimmen Sie der Verwendung von Cookies wie in dieser Richtlinie beschrieben zu.",
+      "lastUpdated": "Zuletzt aktualisiert: 6. Juni 2023",
+      "sections": {
+        "1": {
+          "title": "1. Was sind Cookies?",
+          "p1": "Cookies sind kleine Textdateien, die auf Ihrem Gerät oder Computer gespeichert werden, wenn Sie eine Website besuchen. Cookies ermöglichen es der Website, Ihr Gerät zu erkennen und bestimmte Informationen über Ihre Präferenzen oder Aktionen im Laufe der Zeit zu speichern.",
+          "p2": "Cookies können entweder Sitzungscookies sein (die gelöscht werden, wenn Sie Ihren Browser schließen) oder dauerhafte Cookies (die auf Ihrem Gerät für einen bestimmten Zeitraum oder bis zur manuellen Löschung verbleiben)."
+        },
+        "2": {
+          "title": "2. Wie wir Cookies verwenden",
+          "intro": "Wir verwenden Cookies für folgende Zwecke:",
+          "list": [
+            "Um Ihre Präferenzen und Einstellungen zu speichern",
+            "Um die Leistung unserer Website zu verbessern",
+            "Um die Nutzung der Website zu analysieren und Analysen zu verfolgen",
+            "Um die Benutzererfahrung mit personalisierten Inhalten zu verbessern",
+            "Um gezielte Werbung basierend auf Ihren Interessen bereitzustellen"
+          ]
+        },
+        "3": {
+          "title": "3. Arten von Cookies, die wir verwenden",
+          "intro": "Wir verwenden folgende Arten von Cookies:",
+          "list": [
+            "Wesentliche Cookies: Diese Cookies sind für das Funktionieren der Website erforderlich und können nicht deaktiviert werden. Sie werden in der Regel als Reaktion auf von Ihnen vorgenommene Aktionen gesetzt, z. B. das Festlegen Ihrer Datenschutzeinstellungen oder das Ausfüllen von Formularen.",
+            "Leistungs-Cookies: Diese Cookies ermöglichen es uns, die Website-Performance zu messen und zu verfolgen, wie Benutzer mit der Website interagieren. Dies hilft uns, die Inhalte und Funktionen unserer Website zu verbessern.",
+            "Funktionalitäts-Cookies: Diese Cookies ermöglichen es der Website, sich an Ihre Präferenzen und Auswahlmöglichkeiten (z. B. Spracheinstellungen) zu erinnern und erweiterte, personalisierte Funktionen bereitzustellen.",
+            "Targeting-/Werbe-Cookies: Diese Cookies werden verwendet, um Ihnen relevante Anzeigen basierend auf Ihren Interessen und Ihrem Surfverhalten bereitzustellen."
+          ]
+        },
+        "4": {
+          "title": "4. Verwaltung von Cookies",
+          "p1": "Sie können Cookies in Ihren Browsereinstellungen steuern und verwalten. Die meisten Browser ermöglichen es Ihnen, Cookies abzulehnen oder zu löschen oder Sie zu benachrichtigen, wenn ein Cookie gesetzt wird. Bitte beachten Sie, dass das Deaktivieren von Cookies die Funktionalität einiger Website-Funktionen beeinträchtigen kann.",
+          "p2": "Weitere Informationen zur Verwaltung von Cookies in Ihrem Browser finden Sie auf der Website <link>Alles über Cookies</link>."
+        },
+        "5": {
+          "title": "5. Änderungen an der Cookie-Richtlinie",
+          "p1": "Wir können diese Cookie-Richtlinie aktualisieren, um Änderungen in unseren Praktiken oder aus anderen betrieblichen, rechtlichen oder regulatorischen Gründen widerzuspiegeln. Alle Änderungen werden auf dieser Seite veröffentlicht, und das Datum 'Zuletzt aktualisiert' wird entsprechend angepasst."
+        },
+        "6": {
+          "title": "6. Kontaktieren Sie uns",
+          "p1": "Wenn Sie Fragen oder Bedenken zu unserer Cookie-Richtlinie haben, kontaktieren Sie uns bitte unter:",
+          "email": "E-Mail: support@dineri.app",
+          "phone": "Telefon: +123 456 7890"
+        }
+      }
+    },
+    "Privacy": {
+      "title": "Datenschutzrichtlinie",
+      "intro": "Ihre Nutzung und Ihr Zugriff auf unseren Service unterliegen den folgenden Bedingungen; wenn Sie diesen nicht vollständig zustimmen, dürfen Sie den Service in keiner Weise nutzen oder darauf zugreifen.",
+      "lastUpdated": "Zuletzt aktualisiert: 6. Juni 2023",
+      "sections": {
+        "1": {
+          "title": "1. Einführung",
+          "p1": "Im Folgenden informieren wir über die Erhebung personenbezogener Daten bei der Nutzung von",
+          "list": [
+            "unserer Website <link>dineri.app</link>",
+            "unserer Profile in sozialen Medien."
+          ],
+          "p2": "Personenbezogene Daten sind alle Daten, die sich auf eine bestimmte natürliche Person beziehen, wie z. B. deren Name oder IP-Adresse."
+        },
+        "2": {
+          "title": "2. Kontaktdaten",
+          "p1": "Verantwortlicher im Sinne von Art. 4 Abs. 7 EU-Datenschutz-Grundverordnung (DSGVO) ist:"
+        },
+        "3": {
+          "title": "3. Datenerhebung und -verarbeitung",
+          "p1": "Wir erheben und verarbeiten personenbezogene Daten nur, soweit dies zur Bereitstellung unserer Dienste und zur Verbesserung der Benutzererfahrung erforderlich ist. Dazu gehören:",
+          "list": [
+            "Informationen, die Sie bei der Erstellung eines Kontos angeben",
+            "Nutzungsdaten und Analysen",
+            "Kommunikationspräferenzen",
+            "Technische Informationen über Ihr Gerät und Ihren Browser"
+          ]
+        },
+        "4": {
+          "title": "4. Datenweitergabe an Dritte",
+          "p1": "Wir verkaufen, tauschen oder übertragen Ihre personenbezogenen Daten nicht ohne Ihre Zustimmung an Dritte, außer wie in dieser Datenschutzrichtlinie beschrieben oder gesetzlich vorgeschrieben."
+        },
+        "5": {
+          "title": "5. Ihre Rechte",
+          "p1": "Nach der DSGVO haben Sie folgende Rechte in Bezug auf Ihre personenbezogenen Daten:",
+          "list": [
+            "Recht auf Auskunft über Ihre personenbezogenen Daten",
+            "Recht auf Berichtigung unrichtiger Daten",
+            "Recht auf Löschung (\"Recht auf Vergessenwerden\")",
+            "Recht auf Einschränkung der Verarbeitung",
+            "Recht auf Datenübertragbarkeit",
+            "Recht auf Widerspruch gegen die Verarbeitung"
+          ]
+        },
+        "6": {
+          "title": "6. Datensicherheit",
+          "p1": "Wir nehmen den Schutz Ihrer personenbezogenen Daten sehr ernst. Wir haben technische und organisatorische Maßnahmen ergriffen, um Ihre Daten vor unbefugtem Zugriff, Verlust, Missbrauch oder Veränderung zu schützen.",
+          "p2": "Trotz dieser Bemühungen sind keine Sicherheitsmaßnahmen vollkommen narrensicher. Daher können wir die absolute Sicherheit Ihrer Daten nicht garantieren."
+        },
+        "7": {
+          "title": "7. Cookies und Tracking-Technologien",
+          "p1": "Wir verwenden Cookies und ähnliche Tracking-Technologien, um Ihre Erfahrung auf unserer Website zu verbessern und Nutzungsmuster zu analysieren. Durch die Nutzung unserer Website stimmen Sie der Verwendung von Cookies zu.",
+          "p2": "Cookies sind kleine Textdateien, die auf Ihrem Gerät gespeichert werden. Sie können die Cookie-Einstellungen über Ihre Browsereinstellungen steuern. Das Deaktivieren bestimmter Cookies kann jedoch Ihre Fähigkeit beeinträchtigen, einige Funktionen unserer Website zu nutzen."
+        },
+        "8": {
+          "title": "8. Aufbewahrung von Daten",
+          "p1": "Wir bewahren Ihre personenbezogenen Daten nur so lange auf, wie es notwendig ist, um die Zwecke zu erfüllen, für die sie erhoben wurden, oder wie es gesetzlich vorgeschrieben ist. Wenn Ihre Daten nicht mehr benötigt werden, löschen oder anonymisieren wir sie sicher."
+        },
+        "9": {
+          "title": "9. Internationale Datenübermittlungen",
+          "p1": "Ihre personenbezogenen Daten können in ein Land außerhalb des Europäischen Wirtschaftsraums (EWR) übermittelt und dort verarbeitet werden. Wir stellen sicher, dass solche Übermittlungen den geltenden Datenschutzgesetzen entsprechen und geeignete Schutzmaßnahmen zum Schutz Ihrer Daten vorhanden sind."
+        },
+        "10": {
+          "title": "10. Aktualisierungen der Datenschutzrichtlinie",
+          "p1": "Wir können diese Datenschutzrichtlinie von Zeit zu Zeit aktualisieren, um Änderungen in unseren Praktiken oder rechtlichen Anforderungen widerzuspiegeln. Wenn wir Änderungen vornehmen, aktualisieren wir das oben stehende Datum \"Zuletzt aktualisiert\".",
+          "p2": "Bitte überprüfen Sie diese Datenschutzrichtlinie regelmäßig, um informiert zu bleiben, wie wir Ihre Daten schützen."
+        },
+        "11": {
+          "title": "11. Kontakt",
+          "p1": "Wenn Sie Fragen zu dieser Datenschutzrichtlinie haben oder eines Ihrer Rechte in Bezug auf Ihre personenbezogenen Daten ausüben möchten, kontaktieren Sie uns bitte unter:",
+          "email": "E-Mail: support@dineri.app",
+          "phone": "Telefon: +123 456 7890"
+        }
+      }
+    },
+    "Terms": {
+      "title": "Nutzungsbedingungen",
+      "intro": "Diese Nutzungsbedingungen (\"Bedingungen\") regeln Ihren Zugriff auf unsere Website und Dienste. Durch den Zugriff auf oder die Nutzung unserer Dienste erklären Sie sich mit diesen Bedingungen einverstanden. Wenn Sie diesen Bedingungen nicht zustimmen, dürfen Sie unsere Dienste nicht nutzen.",
+      "lastUpdated": "Zuletzt aktualisiert: 6. Juni 2023",
+      "sections": {
+        "1": {
+          "title": "1. Annahme der Bedingungen",
+          "p1": "Durch den Zugriff auf oder die Nutzung unserer Dienste erklären Sie sich mit diesen Bedingungen und unserer Datenschutzerklärung einverstanden. Wenn Sie unsere Dienste im Namen einer Organisation nutzen, erklären und garantieren Sie, dass Sie befugt sind, diese Organisation an diese Bedingungen zu binden."
+        },
+        "2": {
+          "title": "2. Nutzung der Dienste",
+          "p1": "Sie verpflichten sich, unsere Dienste nur für rechtmäßige Zwecke und in Übereinstimmung mit diesen Bedingungen zu nutzen. Es ist Ihnen untersagt, die Dienste zu nutzen, um:",
+          "list": [
+            "Gegen geltende Gesetze oder Vorschriften zu verstoßen",
+            "Die geistigen Eigentumsrechte anderer zu verletzen",
+            "An Aktivitäten teilzunehmen, die den Diensten schaden oder sie stören könnten",
+            "Unbefugten Zugriff auf Systeme oder Netzwerke zu versuchen"
+          ]
+        },
+        "3": {
+          "title": "3. Kontoerstellung",
+          "p1": "Um auf bestimmte Funktionen unserer Dienste zugreifen zu können, müssen Sie möglicherweise ein Konto erstellen. Sie sind für die Vertraulichkeit Ihrer Kontoinformationen und für alle Aktivitäten verantwortlich, die unter Ihrem Konto stattfinden."
+        },
+        "4": {
+          "title": "4. Kündigung",
+          "p1": "Wir behalten uns das Recht vor, Ihren Zugang zu den Diensten nach eigenem Ermessen und ohne Vorankündigung auszusetzen oder zu kündigen, wenn Sie gegen diese Bedingungen verstoßen oder aus einem anderen notwendigen Grund."
+        },
+        "5": {
+          "title": "5. Haftungsausschluss und Haftungsbeschränkung",
+          "p1": "Die Dienste werden „wie sie sind“ bereitgestellt, ohne Garantien oder Zusicherungen jeglicher Art, weder ausdrücklich noch stillschweigend. Wir garantieren nicht, dass die Dienste fehlerfrei, ununterbrochen oder sicher sind.",
+          "p2": "Soweit gesetzlich zulässig, haften wir nicht für direkte, indirekte, zufällige oder Folgeschäden, die sich aus der Nutzung der Dienste ergeben."
+        },
+        "6": {
+          "title": "6. Anwendbares Recht",
+          "p1": "Diese Bedingungen unterliegen dem Recht von [Ihrer Gerichtsbarkeit] und werden in Übereinstimmung damit ausgelegt. Alle Streitigkeiten werden vor den zuständigen Gerichten in [Ihrer Gerichtsbarkeit] beigelegt."
+        },
+        "7": {
+          "title": "7. Änderungen der Bedingungen",
+          "p1": "Wir können diese Bedingungen von Zeit zu Zeit aktualisieren. Wenn Änderungen vorgenommen werden, aktualisieren wir das Datum „Zuletzt aktualisiert“ oben auf dieser Seite. Ihre fortgesetzte Nutzung der Dienste nach Inkrafttreten der Änderungen gilt als Zustimmung zu den geänderten Bedingungen."
+        },
+        "8": {
+          "title": "8. Kontakt",
+          "p1": "Wenn Sie Fragen zu diesen Bedingungen haben, kontaktieren Sie uns bitte unter:",
+          "email": "E-Mail: support@dineri.app",
+          "phone": "Telefon: +123 456 7890"
+        }
+      }
+    }
+  },
+  "About": {
+    "title": "Von der Küche zum Code",
+    "description": "Die Idee für Dineri.app entstand aus jahrelanger Erfahrung beim Erstellen von Webseiten für Restaurants. In dieser Zeit sahen wir immer wieder dasselbe Problem: Die Inhaber hatten keine Zeit, ihre Seite zu aktualisieren, fanden die Systeme zu kompliziert oder zahlten viel zu viel für Funktionen, die sie nie nutzten. Oft wurden teure Designs und unzählige Arbeitsstunden investiert, während die Gäste in Wirklichkeit nur ein paar wichtige Dinge sehen wollen: die Speisekarte, Bewertungen, den Standort, Reservierungsmöglichkeiten und Bestelloptionen.",
+    "p1": "Darüber hinaus haben in den letzten Jahren viele Bestellplattformen angefangen, unnötig hohe Provisionen für jede Bestellung zu verlangen. Viele Restaurantbesitzer würden diese Plattformen gerne verlassen, haben aber schlicht keine echte Alternative. Mit Dineri.app können Sie Online-Bestellungen direkt Ihren Kunden anbieten – ohne Gebühren zu zahlen oder Gewinnmargen zu verlieren.",
+    "p2": "Wir sind ein Team aus Webentwicklern, Marketingexperten und Fachleuten mit jahrelanger Erfahrung in der Gastronomiebranche. Wir wissen, wie stressig der Betrieb eines Gastronomieunternehmens sein kann und wie wichtig es ist, online immer attraktiv und aktuell zu wirken. Unsere kombinierte Expertise in Technologie, Marketing und Gastronomie bedeutet, dass wir genau wissen, was Restaurantbesitzer brauchen."
+  },
+  "CareersPage": {
+    "hero": {
+      "title": "Gestalte die <br /> <span class='underline underline-offset-4 decoration-green-600'>Zukunft</span> bei Dineri",
+      "description": "Bei Dineri glauben wir, dass Talent und Ideen Innovation vorantreiben. Werde Teil unseres Teams und hilf uns, digitale Lösungen zu entwickeln, die Restaurants und ihre Gäste näher zusammenbringen."
+    }
   }
 }

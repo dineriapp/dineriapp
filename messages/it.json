@@ -149,5 +149,290 @@
       "headline": "Eleva. Il tuo.<span class='sm:hidden flex'> </span>Ristorante.",
       "cta": "Inizia ora"
     }
+  },
+  "FeaturesPage": {
+    "Hero": {
+      "title": "Crea una base per la presenza del tuo<br />  ristorante.",
+      "description": "Mostra il tuo menù, attira più clienti e gestisci tutto da una piattaforma semplice — pensata per crescere con il tuo ristorante.",
+      "features": {
+        "1": {
+          "title": "Genera traffico dove conta",
+          "text": "Collega i tuoi profili social, negozio online, sito web e qualsiasi altra cosa con cui vuoi che i visitatori interagiscano."
+        },
+        "2": {
+          "title": "Genera traffico dove conta",
+          "text": "Collega i tuoi profili social, negozio online, sito web e qualsiasi altra cosa con cui vuoi che i visitatori interagiscano."
+        },
+        "3": {
+          "title": "Genera traffico dove conta",
+          "text": "Collega i tuoi profili social, negozio online, sito web e qualsiasi altra cosa con cui vuoi che i visitatori interagiscano."
+        },
+        "4": {
+          "title": "Genera traffico dove conta",
+          "text": "Collega i tuoi profili social, negozio online, sito web e qualsiasi altra cosa con cui vuoi che i visitatori interagiscano."
+        },
+        "5": {
+          "title": "Genera traffico dove conta",
+          "text": "Collega i tuoi profili social, negozio online, sito web e qualsiasi altra cosa con cui vuoi che i visitatori interagiscano."
+        },
+        "6": {
+          "title": "Genera traffico dove conta",
+          "text": "Collega i tuoi profili social, negozio online, sito web e qualsiasi altra cosa con cui vuoi che i visitatori interagiscano."
+        }
+      }
+    }
+  },
+  "DemoPage": {
+    "Hero": {
+      "title": "Richiedi la tua demo gratuita <br /> e inizia oggi stesso",
+      "description": "Scopri come la nostra piattaforma può aiutare il tuo ristorante a crescere. Compila il modulo e ti contatteremo per programmare la tua demo personalizzata."
+    },
+    "Form": {
+      "heading": "Richiedi una demo",
+      "subheading": "Inserisci i dati della tua attività e ti contatteremo via telefono o e-mail.",
+      "fields": {
+        "businessName": {
+          "label": "Nome dell’attività",
+          "placeholder": "Nome del tuo ristorante",
+          "error": "Il nome dell’attività è obbligatorio"
+        },
+        "contactPerson": {
+          "label": "Persona di contatto",
+          "placeholder": "Il tuo nome",
+          "error": "La persona di contatto è obbligatoria"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "esempio@email.com",
+          "error": "Inserisci un’email valida"
+        },
+        "phone": {
+          "label": "Telefono",
+          "placeholder": "+39 123 456 789",
+          "error": "Il numero di telefono è obbligatorio"
+        },
+        "address": {
+          "label": "Indirizzo",
+          "placeholder": "Via Principale 123",
+          "error": "L’indirizzo è obbligatorio"
+        },
+        "city": {
+          "label": "Città",
+          "placeholder": "Città",
+          "error": "La città è obbligatoria"
+        },
+        "country": {
+          "label": "Paese",
+          "placeholder": "Paese",
+          "error": "Il paese è obbligatorio"
+        },
+        "message": {
+          "label": "Note aggiuntive",
+          "placeholder": "Dicci di più sulle esigenze della tua attività..."
+        }
+      },
+      "submit": "Invia richiesta",
+      "successMessage": "La tua richiesta di demo è stata inviata. Ti contatteremo presto!"
+    }
+  },
+  "PlansPage": {
+    "header": {
+      "title": "Scegli il piano giusto per il tuo ristorante",
+      "description": "Inizia gratis e aggiorna man mano che il tuo ristorante cresce. Tutti i piani includono potenti strumenti per mostrare il tuo menu, eventi e marchio online."
+    },
+    "footer": {
+      "question": "Hai bisogno di qualcosa di personalizzato?",
+      "action": "Contatta il nostro team"
+    }
+  },
+  "legalPages": {
+    "sidebar": {
+      "Cookies": "Politica sui cookie",
+      "Privacy": "Informativa sulla privacy",
+      "Terms": "Termini e condizioni"
+    },
+    "Cookies": {
+      "title": "Informativa sui cookie",
+      "intro": "La presente Informativa sui cookie spiega come utilizziamo i cookie e tecnologie simili per riconoscerti quando visiti il nostro sito Web, dineri.app, e interagisci con i nostri servizi. Continuando a utilizzare il nostro sito, accetti l'uso dei cookie come descritto nella presente informativa.",
+      "lastUpdated": "Ultimo aggiornamento: 6 giugno 2023",
+      "sections": {
+        "1": {
+          "title": "1. Cosa sono i cookie?",
+          "p1": "I cookie sono piccoli file di testo che vengono memorizzati sul tuo dispositivo o computer quando visiti un sito Web. I cookie consentono al sito Web di riconoscere il tuo dispositivo e di ricordare alcune informazioni sulle tue preferenze o azioni nel tempo.",
+          "p2": "I cookie possono essere cookie di sessione (che vengono eliminati quando chiudi il browser) o cookie persistenti (che rimangono sul tuo dispositivo per un periodo specificato o fino a eliminazione manuale)."
+        },
+        "2": {
+          "title": "2. Come utilizziamo i cookie",
+          "intro": "Utilizziamo i cookie per i seguenti scopi:",
+          "list": [
+            "Memorizzare le tue preferenze e impostazioni",
+            "Migliorare le prestazioni del nostro sito Web",
+            "Analizzare l'utilizzo del sito e monitorare le statistiche",
+            "Migliorare l'esperienza utente con contenuti personalizzati",
+            "Fornire pubblicità mirata in base ai tuoi interessi"
+          ]
+        },
+        "3": {
+          "title": "3. Tipi di cookie che utilizziamo",
+          "intro": "Utilizziamo i seguenti tipi di cookie:",
+          "list": [
+            "Cookie essenziali: Questi cookie sono necessari per il funzionamento del sito Web e non possono essere disattivati. Di solito vengono impostati in risposta a tue azioni, come impostare le preferenze sulla privacy o compilare moduli.",
+            "Cookie di prestazione: Questi cookie ci consentono di misurare le prestazioni del sito e monitorare come gli utenti interagiscono con esso. Questo ci aiuta a migliorare i contenuti e le funzionalità del nostro sito.",
+            "Cookie di funzionalità: Questi cookie consentono al sito Web di ricordare le tue preferenze e scelte (es. preferenze linguistiche) e fornire funzionalità avanzate e più personalizzate.",
+            "Cookie di targeting/pubblicità: Questi cookie vengono utilizzati per fornire annunci pertinenti in base ai tuoi interessi e al tuo comportamento di navigazione."
+          ]
+        },
+        "4": {
+          "title": "4. Gestione dei cookie",
+          "p1": "Puoi controllare e gestire i cookie nelle impostazioni del tuo browser. La maggior parte dei browser consente di rifiutare o eliminare i cookie o di ricevere una notifica quando un cookie viene impostato. Tieni presente che la disattivazione dei cookie può influire sulla funzionalità di alcune caratteristiche del sito.",
+          "p2": "Per ulteriori informazioni su come controllare i cookie nel tuo browser, visita il sito Web <link>Tutto sui cookie</link>."
+        },
+        "5": {
+          "title": "5. Modifiche all'Informativa sui cookie",
+          "p1": "Potremmo aggiornare la presente Informativa sui cookie per riflettere i cambiamenti nelle nostre pratiche o per altri motivi operativi, legali o normativi. Eventuali modifiche verranno pubblicate su questa pagina e la data di 'Ultimo aggiornamento' sarà modificata di conseguenza."
+        },
+        "6": {
+          "title": "6. Contattaci",
+          "p1": "Se hai domande o dubbi sulla nostra Informativa sui cookie, contattaci a:",
+          "email": "E-mail: support@dineri.app",
+          "phone": "Telefono: +123 456 7890"
+        }
+      }
+    },
+    "Privacy": {
+      "title": "Informativa sulla Privacy",
+      "intro": "L'utilizzo e l'accesso ai nostri servizi sono soggetti ai seguenti termini; se non sei d'accordo con tutti, non puoi utilizzare o accedere ai servizi in alcun modo.",
+      "lastUpdated": "Ultimo aggiornamento: 6 giugno 2023",
+      "sections": {
+        "1": {
+          "title": "1. Introduzione",
+          "p1": "Di seguito forniamo informazioni sulla raccolta dei dati personali durante l'utilizzo di",
+          "list": [
+            "il nostro sito web <link>dineri.app</link>",
+            "i nostri profili sui social media."
+          ],
+          "p2": "I dati personali sono tutte le informazioni che possono essere collegate a una persona fisica specifica, come il nome o l'indirizzo IP."
+        },
+        "2": {
+          "title": "2. Dettagli di Contatto",
+          "p1": "Il responsabile ai sensi dell'art. 4 par. 7 del Regolamento Generale sulla Protezione dei Dati (GDPR) è:"
+        },
+        "3": {
+          "title": "3. Raccolta e Trattamento dei Dati",
+          "p1": "Raccogliamo e trattiamo i dati personali solo nella misura necessaria a fornire i nostri servizi e migliorare l'esperienza dell'utente. Ciò include:",
+          "list": [
+            "Informazioni fornite durante la creazione di un account",
+            "Dati di utilizzo e analisi",
+            "Preferenze di comunicazione",
+            "Informazioni tecniche sul dispositivo e sul browser"
+          ]
+        },
+        "4": {
+          "title": "4. Condivisione dei Dati e Terze Parti",
+          "p1": "Non vendiamo, scambiamo o trasferiamo in altro modo i tuoi dati personali a terzi senza il tuo consenso, salvo quanto descritto in questa informativa sulla privacy o come richiesto dalla legge."
+        },
+        "5": {
+          "title": "5. I Tuoi Diritti",
+          "p1": "Ai sensi del GDPR, hai i seguenti diritti riguardo ai tuoi dati personali:",
+          "list": [
+            "Diritto di accesso ai tuoi dati personali",
+            "Diritto di rettifica dei dati inesatti",
+            "Diritto alla cancellazione (\"diritto all'oblio\")",
+            "Diritto alla limitazione del trattamento",
+            "Diritto alla portabilità dei dati",
+            "Diritto di opposizione al trattamento"
+          ]
+        },
+        "6": {
+          "title": "6. Sicurezza dei Dati",
+          "p1": "Prendiamo molto seriamente la sicurezza dei tuoi dati personali. Abbiamo implementato misure tecniche e organizzative per proteggere i tuoi dati da accessi non autorizzati, perdite, usi impropri o alterazioni.",
+          "p2": "Nonostante questi sforzi, nessuna misura di sicurezza è completamente infallibile. Pertanto, non possiamo garantire la sicurezza assoluta dei tuoi dati."
+        },
+        "7": {
+          "title": "7. Cookie e Tecnologie di Tracciamento",
+          "p1": "Utilizziamo cookie e tecnologie di tracciamento simili per migliorare la tua esperienza sul nostro sito e analizzare i modelli di utilizzo. Utilizzando il nostro sito, acconsenti all'uso dei cookie.",
+          "p2": "I cookie sono piccoli file di testo memorizzati sul tuo dispositivo. Puoi controllare le impostazioni dei cookie tramite le impostazioni del tuo browser. Tuttavia, disabilitare alcuni cookie può influire sulla tua capacità di utilizzare alcune funzionalità del nostro sito."
+        },
+        "8": {
+          "title": "8. Conservazione dei Dati",
+          "p1": "Conserviamo i tuoi dati personali solo per il tempo necessario a soddisfare gli scopi per cui sono stati raccolti o come richiesto dalla legge. Quando i tuoi dati non sono più necessari, li elimineremo o li renderemo anonimi in modo sicuro."
+        },
+        "9": {
+          "title": "9. Trasferimenti Internazionali di Dati",
+          "p1": "I tuoi dati personali possono essere trasferiti e trattati in un paese al di fuori dello Spazio Economico Europeo (SEE). Garantiremo che tali trasferimenti siano conformi alle leggi applicabili sulla protezione dei dati e che siano in atto garanzie adeguate per proteggere i tuoi dati."
+        },
+        "10": {
+          "title": "10. Aggiornamenti all'Informativa sulla Privacy",
+          "p1": "Possiamo aggiornare di tanto in tanto questa Informativa sulla Privacy per riflettere cambiamenti nelle nostre pratiche o nei requisiti legali. Quando apportiamo modifiche, aggiorneremo la data di \"Ultimo aggiornamento\" nella parte superiore di questa pagina.",
+          "p2": "Ti invitiamo a consultare periodicamente questa Informativa sulla Privacy per rimanere informato su come proteggiamo i tuoi dati."
+        },
+        "11": {
+          "title": "11. Contattaci",
+          "p1": "Se hai domande su questa Informativa sulla Privacy o desideri esercitare uno dei tuoi diritti relativi ai tuoi dati personali, ti preghiamo di contattarci a:",
+          "email": "Email: support@dineri.app",
+          "phone": "Telefono: +123 456 7890"
+        }
+      }
+    },
+    "Terms": {
+      "title": "Termini di servizio",
+      "intro": "Questi Termini di servizio (\"Termini\") regolano l'accesso e l'utilizzo del nostro sito web e dei nostri servizi. Accedendo o utilizzando i nostri servizi, accetti di rispettare questi Termini. Se non accetti questi Termini, non puoi accedere né utilizzare i nostri servizi.",
+      "lastUpdated": "Ultimo aggiornamento: 6 giugno 2023",
+      "sections": {
+        "1": {
+          "title": "1. Accettazione dei Termini",
+          "p1": "Accedendo o utilizzando i nostri servizi, accetti di essere vincolato da questi Termini e dalla nostra Informativa sulla privacy. Se utilizzi i nostri servizi per conto di un'organizzazione, dichiari e garantisci di avere l'autorità di vincolare tale organizzazione a questi Termini."
+        },
+        "2": {
+          "title": "2. Utilizzo dei servizi",
+          "p1": "Accetti di utilizzare i nostri servizi solo per scopi leciti e in conformità con questi Termini. È vietato utilizzare i servizi per:",
+          "list": [
+            "Violazione di leggi o regolamenti applicabili",
+            "Violazione dei diritti di proprietà intellettuale di terzi",
+            "Partecipare ad attività che possano danneggiare o interrompere i servizi",
+            "Tentare di ottenere accesso non autorizzato a sistemi o reti"
+          ]
+        },
+        "3": {
+          "title": "3. Registrazione dell'account",
+          "p1": "Per accedere a determinate funzionalità dei nostri servizi, potresti dover creare un account. Sei responsabile della riservatezza delle credenziali del tuo account e di tutte le attività che si verificano tramite il tuo account."
+        },
+        "4": {
+          "title": "4. Risoluzione",
+          "p1": "Ci riserviamo il diritto di sospendere o terminare il tuo accesso ai servizi a nostra discrezione, senza preavviso, per qualsiasi violazione di questi Termini o per qualsiasi altra ragione ritenuta necessaria."
+        },
+        "5": {
+          "title": "5. Esclusioni di garanzia e limitazione di responsabilità",
+          "p1": "I servizi sono forniti “così come sono” senza garanzie o condizioni di alcun tipo, espresse o implicite. Non garantiamo che i servizi saranno privi di errori, ininterrotti o sicuri.",
+          "p2": "Nella misura massima consentita dalla legge, non saremo responsabili per danni diretti, indiretti, incidentali o consequenziali derivanti dall'utilizzo dei servizi."
+        },
+        "6": {
+          "title": "6. Legge applicabile",
+          "p1": "Questi Termini saranno regolati e interpretati in conformità con le leggi di [La tua giurisdizione]. Eventuali controversie saranno risolte presso i tribunali competenti di [La tua giurisdizione]."
+        },
+        "7": {
+          "title": "7. Modifiche ai Termini",
+          "p1": "Potremmo aggiornare questi Termini di volta in volta. Quando vengono apportate modifiche, aggiorneremo la data di “Ultimo aggiornamento” nella parte superiore di questa pagina. L'uso continuato dei servizi dopo l'entrata in vigore delle modifiche costituisce la tua accettazione dei Termini rivisti."
+        },
+        "8": {
+          "title": "8. Contattaci",
+          "p1": "Se hai domande su questi Termini, contattaci a:",
+          "email": "Email: support@dineri.app",
+          "phone": "Telefono: +123 456 7890"
+        }
+      }
+    }
+  },
+  "About": {
+    "title": "Dalla cucina al codice",
+    "description": "L’idea di Dineri.app è nata da anni di esperienza nella creazione di siti web per ristoranti. Durante quel periodo abbiamo riscontrato sempre lo stesso problema: i proprietari non avevano tempo per aggiornare il proprio sito, trovavano i sistemi troppo complicati o pagavano troppo per funzionalità che non usavano mai. Spesso venivano investiti progetti costosi e innumerevoli ore di lavoro, mentre in realtà gli ospiti vogliono solo vedere alcune cose fondamentali: il menù, le recensioni, la posizione, le opzioni di prenotazione e le possibilità di ordinare.",
+    "p1": "Inoltre, negli ultimi anni molte piattaforme di ordinazione hanno iniziato ad applicare commissioni inutilmente elevate su ogni ordine. Molti ristoratori vorrebbero abbandonare queste piattaforme, ma semplicemente non hanno una vera alternativa. Con Dineri.app puoi offrire ordini online direttamente ai tuoi clienti, senza pagare commissioni né perdere margini di profitto.",
+    "p2": "Siamo un team di sviluppatori web, esperti di marketing e professionisti con anni di esperienza nel settore della ristorazione. Sappiamo quanto sia impegnativo gestire un’attività di ristorazione e quanto sia importante apparire sempre attraenti e aggiornati online. La nostra esperienza combinata in tecnologia, marketing e ospitalità significa che sappiamo esattamente di cosa hanno bisogno i ristoratori."
+  },
+  "CareersPage": {
+    "hero": {
+      "title": "Plasma il <br /> <span class='underline underline-offset-4 decoration-green-600'>futuro</span> in Dineri",
+      "description": "In Dineri crediamo che il talento e le idee guidino l’innovazione. Unisciti al nostro team e aiutaci a costruire soluzioni digitali che avvicinino i ristoranti ai loro clienti."
+    }
   }
 }

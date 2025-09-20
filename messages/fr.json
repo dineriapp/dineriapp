@@ -149,5 +149,290 @@
       "headline": "Élevez. Votre.<span class='sm:hidden flex'> </span>Restaurant.",
       "cta": "Commencez maintenant"
     }
+  },
+  "FeaturesPage": {
+    "Hero": {
+      "title": "Créez une base pour la présence de votre<br />  restaurant.",
+      "description": "Présentez votre menu, attirez plus de clients et gérez tout depuis une plateforme simple — conçue pour évoluer avec votre restaurant.",
+      "features": {
+        "1": {
+          "title": "Générez du trafic là où c’est important",
+          "text": "Liez vos profils sociaux, boutique en ligne, site web et tout ce que vous souhaitez que vos visiteurs découvrent."
+        },
+        "2": {
+          "title": "Générez du trafic là où c’est important",
+          "text": "Liez vos profils sociaux, boutique en ligne, site web et tout ce que vous souhaitez que vos visiteurs découvrent."
+        },
+        "3": {
+          "title": "Générez du trafic là où c’est important",
+          "text": "Liez vos profils sociaux, boutique en ligne, site web et tout ce que vous souhaitez que vos visiteurs découvrent."
+        },
+        "4": {
+          "title": "Générez du trafic là où c’est important",
+          "text": "Liez vos profils sociaux, boutique en ligne, site web et tout ce que vous souhaitez que vos visiteurs découvrent."
+        },
+        "5": {
+          "title": "Générez du trafic là où c’est important",
+          "text": "Liez vos profils sociaux, boutique en ligne, site web et tout ce que vous souhaitez que vos visiteurs découvrent."
+        },
+        "6": {
+          "title": "Générez du trafic là où c’est important",
+          "text": "Liez vos profils sociaux, boutique en ligne, site web et tout ce que vous souhaitez que vos visiteurs découvrent."
+        }
+      }
+    }
+  },
+  "DemoPage": {
+    "Hero": {
+      "title": "Demandez votre démo gratuite <br /> et commencez dès aujourd’hui",
+      "description": "Découvrez comment notre plateforme peut aider votre restaurant à se développer. Remplissez le formulaire ci-dessous et nous vous contacterons pour planifier votre démo personnalisée."
+    },
+    "Form": {
+      "heading": "Demander une démo",
+      "subheading": "Renseignez les informations de votre entreprise et nous vous contacterons par téléphone ou par e-mail.",
+      "fields": {
+        "businessName": {
+          "label": "Nom de l’entreprise",
+          "placeholder": "Nom de votre restaurant",
+          "error": "Le nom de l’entreprise est requis"
+        },
+        "contactPerson": {
+          "label": "Personne de contact",
+          "placeholder": "Votre nom",
+          "error": "La personne de contact est requise"
+        },
+        "email": {
+          "label": "E-mail",
+          "placeholder": "exemple@email.com",
+          "error": "Veuillez entrer une adresse e-mail valide"
+        },
+        "phone": {
+          "label": "Téléphone",
+          "placeholder": "+33 1 23 45 67 89",
+          "error": "Le numéro de téléphone est requis"
+        },
+        "address": {
+          "label": "Adresse",
+          "placeholder": "123 rue Principale",
+          "error": "L’adresse est requise"
+        },
+        "city": {
+          "label": "Ville",
+          "placeholder": "Ville",
+          "error": "La ville est requise"
+        },
+        "country": {
+          "label": "Pays",
+          "placeholder": "Pays",
+          "error": "Le pays est requis"
+        },
+        "message": {
+          "label": "Notes supplémentaires",
+          "placeholder": "Dites-nous en plus sur les besoins de votre entreprise..."
+        }
+      },
+      "submit": "Envoyer la demande",
+      "successMessage": "Votre demande de démo a été envoyée. Nous vous contacterons bientôt !"
+    }
+  },
+  "PlansPage": {
+    "header": {
+      "title": "Choisissez le bon plan pour votre restaurant",
+      "description": "Commencez gratuitement et évoluez à mesure que votre restaurant se développe. Tous les plans incluent des outils puissants pour présenter votre menu, vos événements et votre marque en ligne."
+    },
+    "footer": {
+      "question": "Besoin de quelque chose de personnalisé ?",
+      "action": "Contactez notre équipe"
+    }
+  },
+  "legalPages": {
+    "sidebar": {
+      "Cookies": "Politique de cookies",
+      "Privacy": "Politique de confidentialité",
+      "Terms": "Conditions générales"
+    },
+    "Cookies": {
+      "title": "Politique relative aux cookies",
+      "intro": "Cette politique relative aux cookies explique comment nous utilisons les cookies et technologies similaires pour vous reconnaître lorsque vous visitez notre site Web, dineri.app, et interagissez avec nos services. En continuant à utiliser notre site Web, vous acceptez l'utilisation de cookies telle que décrite dans cette politique.",
+      "lastUpdated": "Dernière mise à jour : 6 juin 2023",
+      "sections": {
+        "1": {
+          "title": "1. Qu'est-ce qu'un cookie ?",
+          "p1": "Les cookies sont de petits fichiers texte qui sont stockés sur votre appareil ou ordinateur lorsque vous visitez un site Web. Les cookies permettent au site Web de reconnaître votre appareil et de se souvenir de certaines informations concernant vos préférences ou actions au fil du temps.",
+          "p2": "Les cookies peuvent être des cookies de session (supprimés lorsque vous fermez votre navigateur) ou des cookies persistants (qui restent sur votre appareil pendant une période spécifiée ou jusqu'à suppression manuelle)."
+        },
+        "2": {
+          "title": "2. Comment nous utilisons les cookies",
+          "intro": "Nous utilisons des cookies pour les finalités suivantes :",
+          "list": [
+            "Se souvenir de vos préférences et paramètres",
+            "Améliorer les performances de notre site Web",
+            "Analyser l'utilisation du site et suivre les statistiques",
+            "Améliorer l'expérience utilisateur grâce à du contenu personnalisé",
+            "Fournir de la publicité ciblée en fonction de vos centres d'intérêt"
+          ]
+        },
+        "3": {
+          "title": "3. Types de cookies que nous utilisons",
+          "intro": "Nous utilisons les types de cookies suivants :",
+          "list": [
+            "Cookies essentiels : Ces cookies sont nécessaires au fonctionnement du site Web et ne peuvent pas être désactivés. Ils sont généralement définis en réponse à vos actions, comme définir vos préférences de confidentialité ou remplir des formulaires.",
+            "Cookies de performance : Ces cookies nous permettent de mesurer la performance du site et de suivre la manière dont les utilisateurs interagissent avec celui-ci. Cela nous aide à améliorer le contenu et la fonctionnalité de notre site.",
+            "Cookies de fonctionnalité : Ces cookies permettent au site Web de se souvenir de vos préférences et choix (par ex. préférences linguistiques) et de fournir des fonctionnalités améliorées et plus personnalisées.",
+            "Cookies de ciblage/publicité : Ces cookies sont utilisés pour diffuser des publicités pertinentes en fonction de vos intérêts et de votre comportement de navigation."
+          ]
+        },
+        "4": {
+          "title": "4. Gestion des cookies",
+          "p1": "Vous pouvez contrôler et gérer les cookies dans les paramètres de votre navigateur. La plupart des navigateurs vous permettent de refuser ou de supprimer les cookies, ou de vous avertir lorsqu'un cookie est défini. Veuillez noter que la désactivation des cookies peut affecter la fonctionnalité de certaines fonctionnalités du site Web.",
+          "p2": "Pour plus d'informations sur la gestion des cookies dans votre navigateur, visitez le site <link>Tout sur les cookies</link>."
+        },
+        "5": {
+          "title": "5. Modifications de la politique relative aux cookies",
+          "p1": "Nous pouvons mettre à jour cette politique relative aux cookies pour refléter les changements dans nos pratiques ou pour d'autres raisons opérationnelles, légales ou réglementaires. Toute modification sera publiée sur cette page et la date de 'Dernière mise à jour' sera révisée en conséquence."
+        },
+        "6": {
+          "title": "6. Contactez-nous",
+          "p1": "Si vous avez des questions ou des préoccupations concernant notre politique relative aux cookies, veuillez nous contacter à :",
+          "email": "E-mail : support@dineri.app",
+          "phone": "Téléphone : +123 456 7890"
+        }
+      }
+    },
+    "Privacy": {
+      "title": "Politique de Confidentialité",
+      "intro": "Votre utilisation et votre accès à notre service sont soumis aux conditions suivantes ; si vous n'êtes pas d'accord avec toutes celles-ci, vous ne pouvez pas utiliser ou accéder au service de quelque manière que ce soit.",
+      "lastUpdated": "Dernière mise à jour : 6 juin 2023",
+      "sections": {
+        "1": {
+          "title": "1. Introduction",
+          "p1": "Ci-dessous, nous fournissons des informations sur la collecte de données personnelles lors de l'utilisation de",
+          "list": [
+            "notre site web <link>dineri.app</link>",
+            "nos profils sur les réseaux sociaux."
+          ],
+          "p2": "Les données personnelles sont toutes les informations pouvant être liées à une personne physique spécifique, comme son nom ou son adresse IP."
+        },
+        "2": {
+          "title": "2. Coordonnées",
+          "p1": "Le responsable au sens de l'art. 4 par. 7 du Règlement Général sur la Protection des Données (RGPD) est :"
+        },
+        "3": {
+          "title": "3. Collecte et Traitement des Données",
+          "p1": "Nous collectons et traitons les données personnelles uniquement dans la mesure nécessaire pour fournir nos services et améliorer l'expérience utilisateur. Cela inclut :",
+          "list": [
+            "Informations que vous fournissez lors de la création d'un compte",
+            "Données d'utilisation et analyses",
+            "Préférences de communication",
+            "Informations techniques sur votre appareil et votre navigateur"
+          ]
+        },
+        "4": {
+          "title": "4. Partage des Données et Tiers",
+          "p1": "Nous ne vendons, n'échangeons ni ne transférons vos données personnelles à des tiers sans votre consentement, sauf tel que décrit dans cette politique de confidentialité ou tel qu'exigé par la loi."
+        },
+        "5": {
+          "title": "5. Vos Droits",
+          "p1": "En vertu du RGPD, vous disposez des droits suivants concernant vos données personnelles :",
+          "list": [
+            "Droit d'accès à vos données personnelles",
+            "Droit de rectification des données inexactes",
+            "Droit à l'effacement (\"droit à l'oubli\")",
+            "Droit à la limitation du traitement",
+            "Droit à la portabilité des données",
+            "Droit d'opposition au traitement"
+          ]
+        },
+        "6": {
+          "title": "6. Sécurité des Données",
+          "p1": "Nous prenons la sécurité de vos données personnelles très au sérieux. Nous avons mis en œuvre des mesures techniques et organisationnelles pour protéger vos données contre tout accès non autorisé, perte, mauvaise utilisation ou altération.",
+          "p2": "Malgré ces efforts, aucune mesure de sécurité n'est totalement infaillible. Par conséquent, nous ne pouvons garantir la sécurité absolue de vos données."
+        },
+        "7": {
+          "title": "7. Cookies et Technologies de Suivi",
+          "p1": "Nous utilisons des cookies et des technologies de suivi similaires pour améliorer votre expérience sur notre site et analyser les schémas d'utilisation. En utilisant notre site, vous consentez à l'utilisation de cookies.",
+          "p2": "Les cookies sont de petits fichiers texte stockés sur votre appareil. Vous pouvez contrôler les paramètres des cookies via les paramètres de votre navigateur. Toutefois, la désactivation de certains cookies peut affecter votre capacité à utiliser certaines fonctionnalités de notre site."
+        },
+        "8": {
+          "title": "8. Conservation des Données",
+          "p1": "Nous conservons vos données personnelles uniquement aussi longtemps que nécessaire pour atteindre les objectifs pour lesquels elles ont été collectées ou conformément à la loi. Lorsque vos données ne sont plus nécessaires, nous les supprimons ou les anonymisons de manière sécurisée."
+        },
+        "9": {
+          "title": "9. Transferts Internationaux de Données",
+          "p1": "Vos données personnelles peuvent être transférées et traitées dans un pays situé en dehors de l'Espace Économique Européen (EEE). Nous veillerons à ce que ces transferts soient conformes aux lois applicables sur la protection des données et que des garanties appropriées soient mises en place pour protéger vos données."
+        },
+        "10": {
+          "title": "10. Mises à Jour de la Politique de Confidentialité",
+          "p1": "Nous pouvons mettre à jour cette Politique de Confidentialité de temps en temps afin de refléter les changements dans nos pratiques ou les exigences légales. Lorsque nous apportons des modifications, nous mettrons à jour la date de \"Dernière mise à jour\" en haut de cette page.",
+          "p2": "Veuillez consulter régulièrement cette Politique de Confidentialité afin de rester informé sur la façon dont nous protégeons vos données."
+        },
+        "11": {
+          "title": "11. Contactez-nous",
+          "p1": "Si vous avez des questions concernant cette Politique de Confidentialité ou si vous souhaitez exercer l'un de vos droits concernant vos données personnelles, veuillez nous contacter à :",
+          "email": "E-mail : support@dineri.app",
+          "phone": "Téléphone : +123 456 7890"
+        }
+      }
+    },
+    "Terms": {
+      "title": "Conditions d'utilisation",
+      "intro": "Ces Conditions d'utilisation (\"Conditions\") régissent votre accès à notre site web et à nos services. En accédant ou en utilisant nos services, vous acceptez de respecter ces Conditions. Si vous n'acceptez pas ces Conditions, vous ne pouvez pas accéder ni utiliser nos services.",
+      "lastUpdated": "Dernière mise à jour : 6 juin 2023",
+      "sections": {
+        "1": {
+          "title": "1. Acceptation des conditions",
+          "p1": "En accédant ou en utilisant nos services, vous acceptez d'être lié par ces Conditions et notre Politique de confidentialité. Si vous utilisez nos services au nom d'une organisation, vous déclarez et garantissez que vous avez le pouvoir de l'engager à respecter ces Conditions."
+        },
+        "2": {
+          "title": "2. Utilisation des services",
+          "p1": "Vous acceptez d'utiliser nos services uniquement à des fins légales et conformément à ces Conditions. Vous n'êtes pas autorisé à utiliser les services pour :",
+          "list": [
+            "Violer toute loi ou réglementation applicable",
+            "Porter atteinte aux droits de propriété intellectuelle d'autrui",
+            "Participer à toute activité pouvant nuire ou perturber les services",
+            "Tenter d'accéder sans autorisation à tout système ou réseau"
+          ]
+        },
+        "3": {
+          "title": "3. Création de compte",
+          "p1": "Pour accéder à certaines fonctionnalités de nos services, vous pouvez être amené à créer un compte. Vous êtes responsable de la confidentialité de vos identifiants et de toutes les activités effectuées via votre compte."
+        },
+        "4": {
+          "title": "4. Résiliation",
+          "p1": "Nous nous réservons le droit de suspendre ou de résilier votre accès aux services à notre discrétion, sans préavis, en cas de violation de ces Conditions ou pour toute autre raison jugée nécessaire."
+        },
+        "5": {
+          "title": "5. Avertissements et limitation de responsabilité",
+          "p1": "Les services sont fournis « tels quels » sans garanties ni conditions d'aucune sorte, expresses ou implicites. Nous ne garantissons pas que les services seront exempts d'erreurs, ininterrompus ou sécurisés.",
+          "p2": "Dans la mesure permise par la loi, nous ne serons pas responsables des dommages directs, indirects, accessoires ou consécutifs résultant de votre utilisation des services."
+        },
+        "6": {
+          "title": "6. Droit applicable",
+          "p1": "Ces Conditions sont régies et interprétées conformément aux lois de [Votre juridiction]. Tout litige sera réglé devant les tribunaux compétents de [Votre juridiction]."
+        },
+        "7": {
+          "title": "7. Modifications des conditions",
+          "p1": "Nous pouvons mettre à jour ces Conditions de temps à autre. Lorsque des modifications sont apportées, nous mettrons à jour la date de « Dernière mise à jour » en haut de cette page. Votre utilisation continue des services après l'entrée en vigueur des modifications constitue votre acceptation des Conditions révisées."
+        },
+        "8": {
+          "title": "8. Contactez-nous",
+          "p1": "Si vous avez des questions concernant ces Conditions, veuillez nous contacter à :",
+          "email": "E-mail : support@dineri.app",
+          "phone": "Téléphone : +123 456 7890"
+        }
+      }
+    }
+  },
+  "About": {
+    "title": "De la cuisine au code",
+    "description": "L’idée de Dineri.app est née de plusieurs années d’expérience dans la création de sites web pour les restaurants. Pendant ce temps, nous avons toujours constaté le même problème : les propriétaires n’avaient pas le temps de mettre à jour leur site, trouvaient les systèmes trop compliqués ou payaient beaucoup trop pour des fonctionnalités qu’ils n’utilisaient jamais. Souvent, des conceptions coûteuses et d’innombrables heures de travail étaient investies, alors qu’en réalité les clients veulent seulement voir quelques éléments clés : le menu, les avis, l’emplacement, les options de réservation et la possibilité de commander.",
+    "p1": "De plus, ces dernières années, de nombreuses plateformes de commande ont commencé à facturer des commissions inutilement élevées sur chaque commande. Beaucoup de restaurateurs aimeraient quitter ces plateformes, mais n’ont tout simplement pas d’alternative réelle. Avec Dineri.app, vous pouvez proposer la commande en ligne directement à vos clients, sans payer de frais ni perdre vos marges bénéficiaires.",
+    "p2": "Nous sommes une équipe de développeurs web, de spécialistes du marketing et de professionnels ayant des années d’expérience dans le secteur de la restauration. Nous savons à quel point la gestion d’un établissement peut être prenante et combien il est important d’avoir une présence en ligne attrayante et à jour. Notre expertise combinée en technologie, marketing et hôtellerie nous permet de savoir exactement ce dont les restaurateurs ont besoin."
+  },
+  "CareersPage": {
+    "hero": {
+      "title": "Façonnez l’<br /> <span class='underline underline-offset-4 decoration-green-600'>avenir</span> chez Dineri",
+      "description": "Chez Dineri, nous croyons que le talent et les idées stimulent l’innovation. Rejoignez notre équipe et aidez-nous à créer des solutions numériques qui rapprochent les restaurants de leurs clients."
+    }
   }
 }

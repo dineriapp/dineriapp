@@ -149,5 +149,290 @@
       "headline": "Verhoog. Jouw.<span class='sm:hidden flex'> </span>Restaurant.",
       "cta": "Begin nu"
     }
+  },
+  "FeaturesPage": {
+    "Hero": {
+      "title": "Maak een basis voor de aanwezigheid van je<br />  restaurant.",
+      "description": "Toon je menu, trek meer klanten aan en beheer alles vanaf één eenvoudig platform — gebouwd om met je restaurant mee te groeien.",
+      "features": {
+        "1": {
+          "title": "Genereer verkeer waar het telt",
+          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+        },
+        "2": {
+          "title": "Genereer verkeer waar het telt",
+          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+        },
+        "3": {
+          "title": "Genereer verkeer waar het telt",
+          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+        },
+        "4": {
+          "title": "Genereer verkeer waar het telt",
+          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+        },
+        "5": {
+          "title": "Genereer verkeer waar het telt",
+          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+        },
+        "6": {
+          "title": "Genereer verkeer waar het telt",
+          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+        }
+      }
+    }
+  },
+  "DemoPage": {
+    "Hero": {
+      "title": "Vraag uw gratis demo aan <br /> en begin vandaag nog",
+      "description": "Ontdek hoe ons platform uw restaurant kan laten groeien. Vul het formulier in en wij nemen contact met u op om uw persoonlijke demo in te plannen."
+    },
+    "Form": {
+      "heading": "Vraag een demo aan",
+      "subheading": "Vul uw bedrijfsgegevens in en wij nemen contact met u op via telefoon of e-mail.",
+      "fields": {
+        "businessName": {
+          "label": "Bedrijfsnaam",
+          "placeholder": "Naam van uw restaurant",
+          "error": "Bedrijfsnaam is verplicht"
+        },
+        "contactPerson": {
+          "label": "Contactpersoon",
+          "placeholder": "Uw naam",
+          "error": "Contactpersoon is verplicht"
+        },
+        "email": {
+          "label": "E-mail",
+          "placeholder": "voorbeeld@email.com",
+          "error": "Voer een geldig e-mailadres in"
+        },
+        "phone": {
+          "label": "Telefoon",
+          "placeholder": "+31 123 456 789",
+          "error": "Telefoonnummer is verplicht"
+        },
+        "address": {
+          "label": "Adres",
+          "placeholder": "Hoofdstraat 123",
+          "error": "Adres is verplicht"
+        },
+        "city": {
+          "label": "Stad",
+          "placeholder": "Stad",
+          "error": "Stad is verplicht"
+        },
+        "country": {
+          "label": "Land",
+          "placeholder": "Land",
+          "error": "Land is verplicht"
+        },
+        "message": {
+          "label": "Aanvullende opmerkingen",
+          "placeholder": "Vertel ons meer over de behoeften van uw bedrijf..."
+        }
+      },
+      "submit": "Verzoek indienen",
+      "successMessage": "Uw demoaanvraag is verzonden. We nemen snel contact met u op!"
+    }
+  },
+  "PlansPage": {
+    "header": {
+      "title": "Kies het juiste plan voor je restaurant",
+      "description": "Begin gratis en upgrade naarmate je restaurant groeit. Alle plannen bevatten krachtige tools om je menu, evenementen en merk online te tonen."
+    },
+    "footer": {
+      "question": "Iets op maat nodig?",
+      "action": "Neem contact op met ons team"
+    }
+  },
+  "legalPages": {
+    "sidebar": {
+      "Cookies": "Cookiebeleid",
+      "Privacy": "Privacybeleid",
+      "Terms": "Algemene voorwaarden"
+    },
+    "Cookies": {
+      "title": "Cookiebeleid",
+      "intro": "Dit cookiebeleid legt uit hoe wij cookies en soortgelijke technologieën gebruiken om u te herkennen wanneer u onze website, dineri.app, bezoekt en gebruikmaakt van onze diensten. Door onze website te blijven gebruiken, gaat u akkoord met het gebruik van cookies zoals beschreven in dit beleid.",
+      "lastUpdated": "Laatst bijgewerkt: 6 juni 2023",
+      "sections": {
+        "1": {
+          "title": "1. Wat zijn cookies?",
+          "p1": "Cookies zijn kleine tekstbestanden die op uw apparaat of computer worden opgeslagen wanneer u een website bezoekt. Cookies stellen de website in staat uw apparaat te herkennen en bepaalde informatie over uw voorkeuren of acties in de loop der tijd te onthouden.",
+          "p2": "Cookies kunnen sessiecookies zijn (die worden verwijderd wanneer u uw browser sluit) of permanente cookies (die op uw apparaat blijven gedurende een bepaalde periode of totdat ze handmatig worden verwijderd)."
+        },
+        "2": {
+          "title": "2. Hoe wij cookies gebruiken",
+          "intro": "Wij gebruiken cookies voor de volgende doeleinden:",
+          "list": [
+            "Om uw voorkeuren en instellingen te onthouden",
+            "Om de prestaties van onze website te verbeteren",
+            "Om het gebruik van de website te analyseren en statistieken bij te houden",
+            "Om de gebruikerservaring te verbeteren met gepersonaliseerde inhoud",
+            "Om gerichte advertenties te tonen op basis van uw interesses"
+          ]
+        },
+        "3": {
+          "title": "3. Soorten cookies die wij gebruiken",
+          "intro": "Wij gebruiken de volgende soorten cookies:",
+          "list": [
+            "Essentiële cookies: Deze cookies zijn noodzakelijk voor de werking van de website en kunnen niet worden uitgeschakeld. Ze worden meestal ingesteld als reactie op acties van u, zoals het instellen van privacyvoorkeuren of het invullen van formulieren.",
+            "Prestatiecookies: Deze cookies stellen ons in staat de prestaties van de website te meten en bij te houden hoe gebruikers met de site omgaan. Dit helpt ons om de inhoud en functionaliteit van onze site te verbeteren.",
+            "Functionele cookies: Deze cookies zorgen ervoor dat de website uw voorkeuren en keuzes (bijv. taalvoorkeuren) onthoudt en verbeterde, meer gepersonaliseerde functies biedt.",
+            "Targeting-/advertentiecookies: Deze cookies worden gebruikt om relevante advertenties te tonen op basis van uw interesses en surfgedrag."
+          ]
+        },
+        "4": {
+          "title": "4. Cookies beheren",
+          "p1": "U kunt cookies beheren en controleren in de instellingen van uw browser. De meeste browsers laten u cookies weigeren of verwijderen, of u waarschuwen wanneer een cookie wordt ingesteld. Houd er rekening mee dat het uitschakelen van cookies de functionaliteit van sommige functies van de website kan beïnvloeden.",
+          "p2": "Voor meer informatie over het beheren van cookies in uw browser, bezoekt u de website <link>Alles over cookies</link>."
+        },
+        "5": {
+          "title": "5. Wijzigingen in het cookiebeleid",
+          "p1": "We kunnen dit cookiebeleid bijwerken om wijzigingen in onze praktijken weer te geven of om andere operationele, juridische of regelgevende redenen. Alle wijzigingen worden op deze pagina gepubliceerd en de datum 'Laatst bijgewerkt' wordt dienovereenkomstig aangepast."
+        },
+        "6": {
+          "title": "6. Neem contact met ons op",
+          "p1": "Als u vragen of opmerkingen heeft over ons cookiebeleid, neem dan contact met ons op via:",
+          "email": "E-mail: support@dineri.app",
+          "phone": "Telefoon: +123 456 7890"
+        }
+      }
+    },
+    "Privacy": {
+      "title": "Privacybeleid",
+      "intro": "Je gebruik van en toegang tot onze service zijn onderworpen aan de volgende voorwaarden; als je niet akkoord gaat met alles, mag je de service op geen enkele manier gebruiken of benaderen.",
+      "lastUpdated": "Laatst bijgewerkt: 6 juni 2023",
+      "sections": {
+        "1": {
+          "title": "1. Inleiding",
+          "p1": "Hieronder geven we informatie over het verzamelen van persoonsgegevens bij het gebruik van",
+          "list": [
+            "onze website <link>dineri.app</link>",
+            "onze profielen op sociale media."
+          ],
+          "p2": "Persoonsgegevens zijn alle gegevens die betrekking hebben op een specifieke natuurlijke persoon, zoals hun naam of IP-adres."
+        },
+        "2": {
+          "title": "2. Contactgegevens",
+          "p1": "De verantwoordelijke in de zin van art. 4 lid 7 EU Algemene Verordening Gegevensbescherming (AVG) is:"
+        },
+        "3": {
+          "title": "3. Gegevensverzameling en Verwerking",
+          "p1": "Wij verzamelen en verwerken persoonsgegevens alleen voor zover nodig om onze diensten te leveren en de gebruikerservaring te verbeteren. Dit omvat:",
+          "list": [
+            "Informatie die je verstrekt bij het aanmaken van een account",
+            "Gebruiksgegevens en analyses",
+            "Communicatievoorkeuren",
+            "Technische informatie over je apparaat en browser"
+          ]
+        },
+        "4": {
+          "title": "4. Gegevensdeling en Derden",
+          "p1": "Wij verkopen, verhandelen of dragen je persoonsgegevens niet over aan derden zonder jouw toestemming, behalve zoals beschreven in dit privacybeleid of zoals wettelijk vereist."
+        },
+        "5": {
+          "title": "5. Jouw Rechten",
+          "p1": "Volgens de AVG heb je de volgende rechten met betrekking tot je persoonsgegevens:",
+          "list": [
+            "Recht op inzage in je persoonsgegevens",
+            "Recht op rectificatie van onjuiste gegevens",
+            "Recht op verwijdering (\"recht om vergeten te worden\")",
+            "Recht op beperking van de verwerking",
+            "Recht op gegevensoverdraagbaarheid",
+            "Recht om bezwaar te maken tegen de verwerking"
+          ]
+        },
+        "6": {
+          "title": "6. Gegevensbeveiliging",
+          "p1": "Wij nemen de beveiliging van je persoonsgegevens zeer serieus. We hebben technische en organisatorische maatregelen genomen om je gegevens te beschermen tegen ongeoorloofde toegang, verlies, misbruik of wijziging.",
+          "p2": "Ondanks deze inspanningen zijn geen enkele beveiligingsmaatregelen volledig waterdicht. Daarom kunnen we de absolute veiligheid van je gegevens niet garanderen."
+        },
+        "7": {
+          "title": "7. Cookies en Trackingtechnologieën",
+          "p1": "Wij gebruiken cookies en vergelijkbare trackingtechnologieën om je ervaring op onze website te verbeteren en gebruikspatronen te analyseren. Door onze website te gebruiken, ga je akkoord met het gebruik van cookies.",
+          "p2": "Cookies zijn kleine tekstbestanden die op je apparaat worden opgeslagen. Je kunt de cookie-instellingen beheren via je browserinstellingen. Het uitschakelen van bepaalde cookies kan echter invloed hebben op je vermogen om sommige functies van onze website te gebruiken."
+        },
+        "8": {
+          "title": "8. Gegevensbewaring",
+          "p1": "Wij bewaren je persoonsgegevens alleen zolang als nodig is om de doeleinden te vervullen waarvoor ze zijn verzameld of zoals wettelijk vereist. Wanneer je gegevens niet meer nodig zijn, zullen we ze veilig verwijderen of anonimiseren."
+        },
+        "9": {
+          "title": "9. Internationale Gegevensoverdrachten",
+          "p1": "Je persoonsgegevens kunnen worden overgedragen naar en verwerkt in een land buiten de Europese Economische Ruimte (EER). Wij zorgen ervoor dat dergelijke overdrachten voldoen aan de toepasselijke wetgeving inzake gegevensbescherming en dat er passende waarborgen zijn om je gegevens te beschermen."
+        },
+        "10": {
+          "title": "10. Updates van het Privacybeleid",
+          "p1": "Wij kunnen dit Privacybeleid van tijd tot tijd bijwerken om veranderingen in onze praktijken of wettelijke vereisten weer te geven. Wanneer we wijzigingen aanbrengen, werken we de datum van \"Laatst bijgewerkt\" bovenaan deze pagina bij.",
+          "p2": "Controleer dit Privacybeleid regelmatig om op de hoogte te blijven van hoe wij je gegevens beschermen."
+        },
+        "11": {
+          "title": "11. Contact",
+          "p1": "Als je vragen hebt over dit Privacybeleid of je rechten met betrekking tot je persoonsgegevens wilt uitoefenen, neem dan contact met ons op via:",
+          "email": "E-mail: support@dineri.app",
+          "phone": "Telefoon: +123 456 7890"
+        }
+      }
+    },
+    "Terms": {
+      "title": "Servicevoorwaarden",
+      "intro": "Deze Servicevoorwaarden (\"Voorwaarden\") regelen je toegang tot en gebruik van onze website en diensten. Door onze diensten te gebruiken, ga je akkoord met deze Voorwaarden. Als je het niet eens bent met deze Voorwaarden, mag je onze diensten niet gebruiken.",
+      "lastUpdated": "Laatst bijgewerkt: 6 juni 2023",
+      "sections": {
+        "1": {
+          "title": "1. Aanvaarding van de voorwaarden",
+          "p1": "Door onze diensten te gebruiken, ga je akkoord met deze Voorwaarden en ons Privacybeleid. Als je onze diensten gebruikt namens een organisatie, verklaar en garandeer je dat je bevoegd bent om die organisatie aan deze Voorwaarden te binden."
+        },
+        "2": {
+          "title": "2. Gebruik van de diensten",
+          "p1": "Je stemt ermee in onze diensten alleen voor legale doeleinden en in overeenstemming met deze Voorwaarden te gebruiken. Het is verboden de diensten te gebruiken om:",
+          "list": [
+            "Enige toepasselijke wetten of voorschriften te overtreden",
+            "Inbreuk te maken op intellectuele eigendomsrechten van anderen",
+            "Deelnemen aan activiteiten die de diensten kunnen schaden of verstoren",
+            "Ongeautoriseerde toegang tot systemen of netwerken te proberen verkrijgen"
+          ]
+        },
+        "3": {
+          "title": "3. Accountregistratie",
+          "p1": "Om toegang te krijgen tot bepaalde functies van onze diensten, moet je mogelijk een account aanmaken. Je bent verantwoordelijk voor het vertrouwelijk houden van je inloggegevens en alle activiteiten die plaatsvinden via je account."
+        },
+        "4": {
+          "title": "4. Beëindiging",
+          "p1": "Wij behouden ons het recht voor je toegang tot de diensten naar eigen inzicht en zonder voorafgaande kennisgeving op te schorten of te beëindigen bij elke schending van deze Voorwaarden of om andere noodzakelijke redenen."
+        },
+        "5": {
+          "title": "5. Uitsluitingen en aansprakelijkheidsbeperkingen",
+          "p1": "De diensten worden geleverd “zoals ze zijn” zonder garanties of voorwaarden van welke aard dan ook, expliciet of impliciet. Wij garanderen niet dat de diensten foutloos, ononderbroken of veilig zullen zijn.",
+          "p2": "Voor zover wettelijk toegestaan, zijn wij niet aansprakelijk voor enige directe, indirecte, incidentele of gevolgschade die voortvloeit uit het gebruik van de diensten."
+        },
+        "6": {
+          "title": "6. Toepasselijk recht",
+          "p1": "Deze Voorwaarden worden beheerst door en geïnterpreteerd in overeenstemming met de wetten van [Jouw jurisdictie]. Geschillen worden beslecht door de bevoegde rechtbanken in [Jouw jurisdictie]."
+        },
+        "7": {
+          "title": "7. Wijzigingen in de voorwaarden",
+          "p1": "Wij kunnen deze Voorwaarden van tijd tot tijd bijwerken. Wanneer er wijzigingen worden aangebracht, werken wij de datum van “Laatst bijgewerkt” bovenaan deze pagina bij. Je voortdurende gebruik van de diensten na de inwerkingtreding van de wijzigingen vormt je aanvaarding van de herziene Voorwaarden."
+        },
+        "8": {
+          "title": "8. Contact",
+          "p1": "Als je vragen hebt over deze Voorwaarden, neem dan contact met ons op via:",
+          "email": "E-mail: support@dineri.app",
+          "phone": "Telefoon: +123 456 7890"
+        }
+      }
+    }
+  },
+  "About": {
+    "title": "Van keuken tot code",
+    "description": "Het idee voor Dineri.app is ontstaan uit jarenlange ervaring met het bouwen van websites voor restaurants. In die tijd zagen we steeds hetzelfde probleem: eigenaren hadden geen tijd om hun site bij te werken, vonden de systemen te ingewikkeld of betaalden veel te veel voor functies die ze nooit gebruikten. Vaak werden dure ontwerpen en talloze uren werk geïnvesteerd, terwijl gasten in werkelijkheid alleen een paar belangrijke dingen willen zien: het menu, recensies, de locatie, reserveringsopties en de mogelijkheid om te bestellen.",
+    "p1": "Bovendien zijn de afgelopen jaren veel bestelplatforms onnodig hoge commissies per bestelling gaan rekenen. Veel restauranteigenaren zouden deze platforms graag verlaten, maar hebben simpelweg geen echt alternatief. Met Dineri.app kun je online bestellingen rechtstreeks aan je klanten aanbieden, zonder kosten te betalen of winstmarges te verliezen.",
+    "p2": "Wij zijn een team van webontwikkelaars, marketeers en professionals met jarenlange ervaring in de horecabranche. We weten hoe druk het runnen van een horecabedrijf kan zijn en hoe belangrijk het is om er online altijd aantrekkelijk en actueel uit te zien. Onze gecombineerde expertise in technologie, marketing en horeca betekent dat we precies weten wat restauranteigenaren nodig hebben."
+  },
+  "CareersPage": {
+    "hero": {
+      "title": "Vorm de <br /> <span class='underline underline-offset-4 decoration-green-600'>toekomst</span> bij Dineri",
+      "description": "Bij Dineri geloven we dat talent en ideeën innovatie stimuleren. Sluit je aan bij ons team en help ons digitale oplossingen te bouwen die restaurants en hun klanten dichter bij elkaar brengen."
+    }
   }
 }
