@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { AppSidebar } from "./_components/app-sidebar";
+import LocaleSwitcher from '@/components/locale-switcher';
 
 export default function RootLayout({
   children,
@@ -30,7 +31,9 @@ export default function RootLayout({
               className="object-contain max-h-10 transition-transform hover:scale-105"
             />
           </Link>
-
+          <div className='md:translate-x-0 -translate-x-8'>
+            <LocaleSwitcher />
+          </div>
         </div>
       </header>
       <SidebarProvider className="mt-0">

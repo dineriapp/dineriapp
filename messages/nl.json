@@ -434,5 +434,436 @@
       "title": "Vorm de <br /> <span class='underline underline-offset-4 decoration-green-600'>toekomst</span> bij Dineri",
       "description": "Bij Dineri geloven we dat talent en ideeën innovatie stimuleren. Sluit je aan bij ons team en help ons digitale oplossingen te bouwen die restaurants en hun klanten dichter bij elkaar brengen."
     }
+  },
+  "CareersSubPage": {
+    "JobForm": {
+      "applyFor": "Solliciteer voor {title}",
+      "applicationSubmittedTitle": "Sollicitatie verzonden!",
+      "applicationSubmittedText": "Bedankt voor je sollicitatie voor de functie {title} bij {company}. We hebben je sollicitatie ontvangen en zullen deze zorgvuldig bekijken. Als je kwalificaties aansluiten bij onze behoeften, nemen we binnenkort contact met je op.",
+      "fields": {
+        "fullName": "Volledige naam",
+        "email": "E-mailadres",
+        "phone": "Telefoonnummer",
+        "experience": "Jaren ervaring",
+        "education": "Opleidingsniveau",
+        "noticePeriod": "Opzegtermijn",
+        "gender": "Geslacht",
+        "address": "Adres",
+        "city": "Stad",
+        "state": "Provincie",
+        "zipCode": "Postcode",
+        "portfolio": "Portfolio-URL (optioneel)",
+        "linkedin": "LinkedIn-profiel (optioneel)",
+        "github": "GitHub-profiel (optioneel)",
+        "salaryExpectations": "Salarisverwachtingen",
+        "resume": "CV",
+        "coverLetter": "Motivatiebrief"
+      },
+      "placeholders": {
+        "fullName": "Volledige naam",
+        "email": "voorbeeld@voorbeeld.com",
+        "phone": "Voer telefoonnummer in",
+        "address": "Straat en huisnummer",
+        "city": "Naam van de stad",
+        "state": "Naam van de provincie",
+        "zipCode": "Postcode",
+        "portfolio": "https://jouw-portfolio.com",
+        "linkedin": "https://linkedin.com/in/jouwprofiel",
+        "github": "https://github.com/jouwgebruikersnaam",
+        "salary": "bijv. €40.000 - €50.000",
+        "coverLetter": "Vertel ons waarom je geïnteresseerd bent in deze functie en waarom je een goede match bent..."
+      },
+      "select": {
+        "experience": {
+          "placeholder": "Selecteer ervaring",
+          "options": {
+            "0-1": "0-1 jaar",
+            "2-3": "2-3 jaar",
+            "4-5": "4-5 jaar",
+            "6-10": "6-10 jaar",
+            "10+": "10+ jaar"
+          }
+        },
+        "education": {
+          "placeholder": "Selecteer opleidingsniveau",
+          "options": {
+            "high-school": "Middelbare school",
+            "associate": "Associate degree",
+            "bachelor": "Bachelor",
+            "master": "Master",
+            "phd": "PhD"
+          }
+        },
+        "noticePeriod": {
+          "placeholder": "Selecteer opzegtermijn",
+          "options": {
+            "immediately": "Onmiddellijk",
+            "1-week": "1 week",
+            "2-weeks": "2 weken",
+            "1-month": "1 maand",
+            "2-months": "2 maanden",
+            "3-months": "3 maanden"
+          }
+        },
+        "gender": {
+          "placeholder": "Liever niet zeggen",
+          "options": {
+            "prefer-not-to-say": "Liever niet zeggen",
+            "male": "Man",
+            "female": "Vrouw",
+            "non-binary": "Non-binair",
+            "other": "Anders"
+          }
+        }
+      },
+      "buttons": {
+        "uploadResume": "Upload CV",
+        "submit": "Sollicitatie verzenden",
+        "submitting": "Bezig met verzenden..."
+      },
+      "errors": {
+        "fullNameMin": "Volledige naam moet minstens 2 tekens bevatten",
+        "invalidEmail": "Voer een geldig e-mailadres in",
+        "invalidPhone": "Voer een geldig telefoonnummer in",
+        "addressMin": "Voer je volledige adres in",
+        "cityMin": "Voer je stad in",
+        "stateMin": "Voer je provincie in",
+        "zipCodeMin": "Voer een geldige postcode in",
+        "experienceRequired": "Selecteer je ervaringsniveau",
+        "educationRequired": "Selecteer je opleidingsniveau",
+        "coverLetterMin": "De motivatiebrief moet minstens 50 tekens bevatten",
+        "resumeRequired": "CV is verplicht",
+        "invalidUrl": "Voer een geldige URL in",
+        "salaryRequired": "Voer je salarisverwachtingen in",
+        "noticePeriodRequired": "Selecteer je opzegtermijn",
+        "genderRequired": "Selecteer je geslacht"
+      },
+      "toasts": {
+        "applicationSuccess": "Sollicitatie succesvol verzonden!",
+        "applicationError": "Er is een fout opgetreden. Probeer het opnieuw."
+      }
+    }
+  },
+  "HelpCenter": {
+    "Introduction": {
+      "pageTitle": "Introductie",
+      "welcome": "Welkom op het platform! Deze gids helpt je snel op weg en legt de basis uit. Of je nu een restaurant­eigenaar, manager of deel van een hospitalityteam bent, ons platform is gebouwd om je dagelijkse werkzaamheden eenvoudiger en efficiënter te maken.",
+      "welcome2": "Wij combineren eenvoud, flexibiliteit en krachtige functies zodat jij je kunt concentreren op het runnen van je bedrijf terwijl wij de technische kant regelen.",
+      "whyTitle": "Waarom dit platform gebruiken?",
+      "why": {
+        "centralizedManagement": {
+          "title": "Gecentraliseerd beheer",
+          "description": "Beheer menu’s, bestellingen, evenementen en promoties allemaal op één plek."
+        },
+        "seamlessExperience": {
+          "title": "Naadloze gastervaring",
+          "description": "Geef je klanten een moderne en soepele manier om met je bedrijf te communiceren."
+        },
+        "insights": {
+          "title": "Praktische inzichten",
+          "description": "Analyses die je laten zien wat werkt en waar je kunt verbeteren."
+        },
+        "scalable": {
+          "title": "Schaalbaar en flexibel",
+          "description": "Begin klein en groei met geavanceerde functies naarmate je behoeften toenemen."
+        },
+        "easyToUse": {
+          "title": "Eenvoudig te gebruiken",
+          "description": "Geen technische kennis vereist – ontworpen voor iedereen."
+        }
+      },
+      "whoTitle": "Voor wie is het?",
+      "who": {
+        "restaurants": {
+          "title": "Restaurants & Cafés",
+          "description": "Vereenvoudig reserveringen, bestellingen en menu­beheer."
+        },
+        "bars": {
+          "title": "Bars & Lounges",
+          "description": "Promoot evenementen en betrek klanten met QR-codes en pop-ups."
+        },
+        "hospitality": {
+          "title": "Hospitalitybedrijven",
+          "description": "Verkrijg inzichten via analyses en stroomlijn de operaties."
+        },
+        "chefs": {
+          "title": "Privékoks & Cateringdiensten",
+          "description": "Toon menu’s, beheer boekingen en bied klanten een persoonlijke ervaring."
+        },
+        "foodTrucks": {
+          "title": "Foodtrucks & Pop-ups",
+          "description": "Deel je locatie, menu en updates direct."
+        }
+      },
+      "keyPointsTitle": "Belangrijke punten om te onthouden",
+      "keyPoints": [
+        "Eén centraal dashboard – Alles wat je nodig hebt (menu’s, bestellingen, analyses, evenementen) wordt vanuit één plek beheerd.",
+        "Snelle installatie – Binnen enkele minuten ben je klaar om te starten.",
+        "Geen technische vaardigheden vereist – De editor is ontworpen om eenvoudig en intuïtief te zijn.",
+        "Flexibele functies – Zet modules (bijv. evenementen, pop-ups, QR-codes) aan of uit naar behoefte.",
+        "Mobielvriendelijk – Werkt naadloos op elk apparaat, zowel voor jou als je gasten.",
+        "Aanpasbaar ontwerp – Pas de look en feel aan zodat het bij je merkidentiteit past.",
+        "Realtime updates – Alle wijzigingen die je aanbrengt worden direct doorgevoerd.",
+        "Veilig & betrouwbaar – Je gegevens en klantinformatie zijn beschermd.",
+        "Schaalbaar – Begin klein en breid uit naarmate je bedrijf groeit.",
+        "Continue verbeteringen – Regelmatige updates brengen nieuwe functies en verbeteringen."
+      ]
+    },
+    "WhatIsNew": {
+      "pageTitle": "Wat is nieuw?",
+      "intro": "Blijf op de hoogte van de nieuwste functies en verbeteringen. We werken continu om het platform krachtiger, betrouwbaarder en gebruiksvriendelijker te maken.",
+
+      "septemberTitle": "September 2025 – Laatste updates",
+      "newFeaturesTitle": "Nieuwe functies",
+      "newFeatures": {
+        "menuEditor": {
+          "title": "Menu-editor",
+          "description": "Maak en pas eenvoudig je menu aan met itembeschrijvingen en prijzen. Gebruik het als een snel menu om direct te delen, of koppel het rechtstreeks aan je bestelsysteem voor een volledig geïntegreerde ervaring. Je kunt op elk moment schakelen tussen gekoppelde of zelfstandige modus."
+        },
+        "qrCodes": {
+          "title": "QR-codes",
+          "description": "Genereer direct QR-codes die je gasten rechtstreeks verbinden met je menu, evenementen of promoties. Elke scan wordt bijgehouden, zodat je precies kunt zien hoe vaak je QR-codes worden gebruikt en de betrokkenheid in realtime kunt meten."
+        },
+        "popups": {
+          "title": "Pop-ups",
+          "description": "Maak eenvoudige, aanpasbare pop-ups om aankondigingen op je bestelpagina te delen, aankomende evenementen te benadrukken of gasten simpelweg te verwelkomen wanneer ze je pagina bezoeken."
+        }
+      },
+
+      "octoberTitle": "Oktober 2025 – Updates",
+      "improvementsTitle": "Verbeteringen",
+      "improvements": {
+        "typography": {
+          "title": "Meer typografie-opties",
+          "description": "Uitgebreidere lettertypekeuzes voor meer maatwerk."
+        },
+        "dashboard": {
+          "title": "Dashboard-ontwerpaanpassingen",
+          "description": "Kleine aanpassingen voor een overzichtelijker en gebruiksvriendelijker ontwerp."
+        },
+        "bugFixes": {
+          "title": "Bugfixes",
+          "description": "Kleine problemen opgelost voor een soepelere ervaring."
+        }
+      },
+
+      "comingSoonTitle": "Binnenkort beschikbaar",
+      "comingSoon": {
+        "loyaltyTools": {
+          "title": "Loyaliteits­tools",
+          "description": "Beloon terugkerende gasten met kortingen en digitale spaarkaarten."
+        },
+        "reservationIntegration": {
+          "title": "Integratie reserveringstools",
+          "description": "Koppel Dineri.app aan je bestaande reserveringssysteem."
+        },
+        "advancedAnalytics": {
+          "title": "Geavanceerde analyses",
+          "description": "Exporteer rapporten en krijg diepgaandere inzichten in prestaties."
+        }
+      }
+    },
+    "Support": {
+      "pageTitle": "Contact opnemen met support",
+      "intro": "Vul het onderstaande formulier in en ons team neemt zo snel mogelijk contact met je op.",
+
+      "fields": {
+        "name": "Volledige naam",
+        "email": "E-mail",
+        "urgency": "Urgentie",
+        "issueType": "Type probleem",
+        "subject": "Onderwerp",
+        "message": "Bericht",
+        "attachments": "Bijlagen (optioneel)",
+        "terms": "Ik ga akkoord met de algemene voorwaarden"
+      },
+
+      "placeholders": {
+        "name": "Jouw naam",
+        "email": "jouw.email@voorbeeld.com",
+        "subject": "Korte beschrijving van je probleem",
+        "message": "Beschrijf je probleem in detail...",
+        "urgency": {
+          "low": "Laag",
+          "medium": "Gemiddeld",
+          "high": "Hoog"
+        },
+        "issueType": {
+          "placeholder": "Selecteer een type probleem",
+          "technical": "Technisch probleem",
+          "billing": "Factureringsvraag",
+          "account": "Accountprobleem",
+          "feature": "Functieaanvraag",
+          "other": "Overig"
+        }
+      },
+
+      "descriptions": {
+        "message": "Geef zoveel mogelijk details om ons te helpen je beter te ondersteunen.",
+        "attachments": "Upload screenshots of documenten die ons kunnen helpen je probleem te begrijpen.",
+        "terms": "Je gaat akkoord met onze Servicevoorwaarden en ons Privacybeleid."
+      },
+
+      "buttons": {
+        "submit": "Verzoek indienen",
+        "submitting": "Versturen..."
+      },
+
+      "alerts": {
+        "successTitle": "Succes!",
+        "successMessage": "Je supportverzoek is succesvol verzonden. We nemen binnenkort contact met je op.",
+        "errorTitle": "Fout",
+        "errorMessage": "Er is een probleem opgetreden bij het indienen van je formulier. Probeer het opnieuw."
+      },
+
+      "errors": {
+        "nameMin": "Naam moet minimaal 2 tekens bevatten.",
+        "invalidEmail": "Voer een geldig e-mailadres in.",
+        "urgencyRequired": "Selecteer een urgentieniveau.",
+        "issueTypeRequired": "Selecteer een type probleem.",
+        "subjectMin": "Onderwerp moet minimaal 5 tekens bevatten.",
+        "messageMin": "Bericht moet minimaal 10 tekens bevatten.",
+        "termsRequired": "Je moet akkoord gaan met de algemene voorwaarden."
+      }
+    },
+
+    "Features": {
+      "Analytics": {
+        "pageTitle": "Analyse",
+        "intro": "Volg weergaven, QR-scans en bestellingen om te begrijpen hoe je gasten met je bedrijf omgaan. Duidelijke inzichten helpen je om menu’s, promoties en prestaties te verbeteren.",
+
+        "overviewTitle": "Overzicht",
+        "overviewText": "Analyse geeft je waardevolle inzichten in hoe gasten omgaan met je menu’s, QR-codes en bestelsysteem. Met duidelijke data zie je wat werkt, herken je trends en neem je slimmere zakelijke beslissingen.",
+
+        "metricsTitle": "Belangrijkste statistieken uitgelegd",
+        "metrics": {
+          "totalLinkViews": {
+            "title": "Totaal aantal linkweergaven",
+            "description": "Het totale aantal keren dat je gedeelde link is aangeklikt (inclusief herhaalde klikken van dezelfde persoon)."
+          },
+          "uniqueLinkVisitors": {
+            "title": "Unieke linkbezoekers",
+            "description": "Het aantal individuele personen dat op je link heeft geklikt. Eén persoon die meerdere keren klikt, telt nog steeds als 1."
+          },
+          "pageViews": {
+            "title": "Paginaweergaven",
+            "description": "Het totale aantal keren dat je menu of pagina is bekeken (inclusief herhaalde weergaven)."
+          },
+          "uniquePageVisitors": {
+            "title": "Unieke paginabezoekers",
+            "description": "Het aantal verschillende personen dat je pagina heeft bezocht. Meerdere bezoeken door dezelfde persoon worden slechts één keer geteld."
+          }
+        },
+
+        "benefitsTitle": "Belangrijkste voordelen",
+        "benefits": [
+          "Begrijp gastgedrag – Zie welke items en categorieën de meeste aandacht krijgen.",
+          "Meet de prestaties van QR-codes – Volg hoe vaak en waar je QR-codes worden gescand.",
+          "Bestelinzichten – Ontdek welke producten het beste verkopen en wanneer.",
+          "Datagestuurde beslissingen – Gebruik analyses om je menu, prijzen en promoties te optimaliseren."
+        ],
+
+        "tipsTitle": "Tips",
+        "tips": [
+          "Controleer je analyses wekelijks om trends vroegtijdig te herkennen.",
+          "Vergelijk verschillende perioden (bijv. vorige week vs. deze week) om groei te meten.",
+          "Gebruik inzichten om nieuwe promoties te testen of populaire items te benadrukken.",
+          "Combineer analyses met Evenementen of Pop-ups om te zien welke strategieën meer betrokkenheid opleveren."
+        ]
+      },
+      "Orders": {
+        "pageTitle": "Bestellingen",
+
+        "accessShopTitle": "1. Toegang tot je winkel",
+        "accessShop": [
+          "Ga naar je restaurantpagina door <span class=\"text-main-action\">\"/menu\"</span> in te typen na je domein. Voorbeeld: <span class=\"text-main-action\">\"dineri.me/jouw-restaurant/menu\"</span>.",
+          "Dit is je <b>winkelpagina</b>, waar gasten bestellingen kunnen plaatsen.",
+          "Je kunt deze pagina volledig aanpassen via de <b>Knop Aanpassen</b> (rechtsonder).",
+          "<b>Tip:</b> Voeg eerst al je producten toe en gebruik daarna Aanpassen; het is gemakkelijker te ontwerpen wanneer je het volledige menu kunt zien."
+        ],
+
+        "addProductsTitle": "2. Producten toevoegen",
+        "addProducts": [
+          "Ga in je dashboard naar <b>Menu</b> → Product toevoegen.",
+          "Bij het toevoegen van een product kun je ervoor kiezen het op te nemen in het <b>Snelle menu</b>.",
+          "Als je dit overslaat, verschijnt het product alleen in de <b>Winkel</b>."
+        ],
+
+        "manageOrdersTitle": "3. Bestellingen beheren",
+        "manageOrders": [
+          "Bestellingen worden weergegeven in je <b>Bestellingen</b>-dashboard met details zoals items, aantal en tijd van bestelling.",
+          {
+            "title": "Werk de bestelstatus bij:",
+            "items": [
+              "<b>In afwachting</b> → wacht op bevestiging",
+              "<b>In uitvoering</b> → wordt bereid",
+              "<b>Voltooid</b> → geleverd of opgehaald",
+              "<b>Geannuleerd</b> → bestelling geannuleerd"
+            ]
+          }
+        ],
+
+        "dashboardFunctionsTitle": "Aanvullende functies in het Bestellingen-dashboard",
+        "dashboardFunctions": [
+          "<b>Restaurantstatus</b><br/>Stel de beschikbaarheid van je restaurant in voor <b>bezorging, afhalen</b> of <b>niet beschikbaar</b>. Perfect voor drukke tijden of tijdelijke problemen wanneer je bestellingen moet stopzetten.",
+          "<b>Bezorgkosten</b><br/>Definieer je eigen bezorgtarieven direct in het dashboard.",
+          "<b>Verversingsinterval</b><br/>Laat je bestelpagina openstaan in je werkruimte en kies een automatisch verversingsinterval (bijv. elke 2, 5 of 15 minuten). Zo zie je altijd nieuwe bestellingen zonder het scherm aan te raken.",
+          "<b>Openingstijden</b><br/>Pas de openingstijden van je restaurant aan.<br/><b>Belangrijk:</b> Je kunt geen aparte tijden instellen voor bezorging vs. afhalen. Als je keuken andere tijden heeft (bijv. bezorging sluit eerder), zorg er dan voor dat dit wordt weerspiegeld in je hoofdopeningstijden.",
+          "<b>Bestelling exporteren</b><br/>Download je volledige bestelgeschiedenis als een Excel-bestand. Dit bevat alle belangrijke gegevens die je nodig kunt hebben voor boekhouding en administratie."
+        ],
+
+        "benefitsTitle": "Belangrijkste voordelen",
+        "benefits": [
+          "<b>Gecentraliseerd beheer –</b> Alle bestellingen, producten en instellingen op één plek.",
+          "<b>Aanpasbare winkel –</b> Pas je bestelpagina aan zodat deze bij je merk past.",
+          "<b>Operationele flexibiliteit –</b> Pas status, bezorgkosten en verversingsinterval naar wens aan.",
+          "<b>Gegevens binnen handbereik –</b> Exporteer bestelgeschiedenis voor rapportage of boekhouding."
+        ],
+
+        "tipsTitle": "Tips",
+        "tips": [
+          "Voeg producten toe voordat je je winkel aanpast voor de beste bewerkingservaring.",
+          "Controleer regelmatig je <b>restaurantstatus</b> om gemiste bestellingen tijdens drukke tijden te voorkomen.",
+          "Gebruik de <b>verversingsinterval</b> op een tablet of scherm in je keuken om handsfree up-to-date te blijven.",
+          "Exporteer je bestelgeschiedenis maandelijks om je administratie georganiseerd te houden."
+        ],
+
+        "paymentsTitle": "Betalingen",
+        "payments": "Om betalingen rechtstreeks op je bankrekening te ontvangen, moet je je <b>Stripe-account</b> koppelen. Klik hier om te leren hoe je Stripe instelt en koppelt aan je restaurant."
+      },
+      "Links": {
+        "title": "Links",
+        "intro": "Deel belangrijke links met je gasten in slechts een paar klikken. Leid bezoekers naar je website, sociale media, reserveringstool of een andere online pagina rechtstreeks vanaf je Dineri-profiel.",
+        "overviewTitle": "Overzicht",
+        "overviewText": "Met de Links-functie kun je al je belangrijke links centraliseren op één plek. In plaats van meerdere URL’s te delen, kun je een centrale hub maken waar gasten gemakkelijk alles kunnen vinden wat ze nodig hebben, van je menu tot je Instagram-pagina of reserveringssysteem.",
+        "howItWorksTitle": "Hoe het werkt",
+        "howItWorks": [
+          {
+            "title": "Klik op <b>Link toevoegen</b> en voer in:",
+            "items": [
+              "Een <b>titel</b> (bijv. “Instagram” of “Tafel reserveren”).",
+              "De <b>URL</b> van de pagina.",
+              "(Optioneel) Een <b>icoon of afbeelding</b> voor snelle herkenning."
+            ]
+          },
+          "Herschik links door ze in de gewenste volgorde te slepen.",
+          "Sla wijzigingen op → Je updates zijn direct live."
+        ],
+        "benefitsTitle": "Belangrijkste voordelen",
+        "benefits": [
+          "<b>Centrale hub –</b> Verzamel al je belangrijke links op één toegankelijke plek.",
+          "<b>Aanpasbaar –</b> Titels, volgorde en iconen kunnen worden afgestemd op je merk.",
+          "<b>Directe updates –</b> Elke wijziging die je in het dashboard maakt, wordt onmiddellijk doorgevoerd.",
+          "<b>Meer betrokkenheid –</b> Maak het gasten gemakkelijk om met je in contact te komen op meerdere platforms."
+        ],
+        "tipsTitle": "Tips",
+        "tips": [
+          "Voeg je <b>reserveringslink</b> toe zodat gasten direct kunnen boeken.",
+          "Voeg links toe naar <b>sociale media</b> voor meer zichtbaarheid en betrokkenheid.",
+          "Houd de lijst kort en relevant; te veel links kunnen gasten overweldigen.",
+          "Gebruik <b>Analyse</b> om bij te houden welke links de meeste klikken krijgen."
+        ]
+      }
+    }
   }
 }

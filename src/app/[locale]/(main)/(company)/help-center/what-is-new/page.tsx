@@ -5,18 +5,20 @@ import {
     Clock,
     Wrench
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-export default function Page() {
+export default function WhatIsNew() {
+    const t = useTranslations("HelpCenter.WhatIsNew");
+
     return (
         <div id="new-features" className="px-6 scroll-mt-26 py-8 md:py-16 w-full flex justify-center">
             <div className="max-w-5xl w-full">
                 {/* Intro Header */}
                 <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 text-main-blue">
-                    What’s New?
+                    {t("pageTitle")}
                 </h1>
                 <p className="text-lg text-muted-foreground mb-4">
-                    Stay up to date with the latest features and improvements. We’re continuously working to
-                    make the platform more powerful, reliable, and easy to use.
+                    {t("intro")}
                 </p>
 
                 <Separator className="my-12" />
@@ -24,38 +26,29 @@ export default function Page() {
                 {/* September Updates */}
                 <section >
                     <h2 className="text-3xl font-bold  mb-6">
-                        September 2025 – Latest Updates
+                        {t("septemberTitle")}
                     </h2>
 
                     <h3 className="flex items-center gap-2 text-xl font-semibold mb-4 text-slate-800">
-                        New Features
+                        {t("newFeaturesTitle")}
                     </h3>
                     <ul className="space-y-4 mb-10">
                         <li className="p-4 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                             <p className="text-slate-700">
-                                <span className="font-semibold">Menu Editor –</span> Easily
-                                create and customize your menu with item descriptions and
-                                pricing. Use it as a quick menu for instant sharing, or connect
-                                it directly to your order system for a fully integrated
-                                experience. You can switch between linked or standalone mode at
-                                any time.
+                                <span className="font-semibold">{t("newFeatures.menuEditor.title")} {"–"}{" "}</span>
+                                {t("newFeatures.menuEditor.description")}
                             </p>
                         </li>
                         <li className="p-4 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                             <p className="text-slate-700">
-                                <span className="font-semibold">QR Codes –</span> Instantly
-                                generate QR codes that connect your guests directly to your
-                                menu, events, or promotions. Every scan is tracked, so you can
-                                see exactly how often your QR codes are used and measure
-                                engagement in real time.
+                                <span className="font-semibold">{t("newFeatures.qrCodes.title")} {"–"}{" "}</span>
+                                {t("newFeatures.qrCodes.description")}
                             </p>
                         </li>
                         <li className="p-4 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                             <p className="text-slate-700">
-                                <span className="font-semibold">Popups –</span> Create simple,
-                                customizable popups to share announcements on your food ordering
-                                page, highlight upcoming events, or simply welcome guests when
-                                they visit.
+                                <span className="font-semibold">{t("newFeatures.popups.title")} {"–"}{" "}</span>
+                                {t("newFeatures.popups.description")}
                             </p>
                         </li>
                     </ul>
@@ -66,30 +59,30 @@ export default function Page() {
                 {/* October Updates */}
                 <section id="improvements" className="scroll-mt-26">
                     <h2 className="text-3xl font-bold text-green-700 mb-6">
-                        October 2025 – Updates
+                        {t("octoberTitle")}
                     </h2>
 
                     <h3 className="flex items-center gap-2 text-xl font-semibold mb-4 text-slate-800">
                         <Wrench className="h-5 w-5 text-green-600" />
-                        Improvements
+                        {t("improvementsTitle")}
                     </h3>
                     <ul className="space-y-4 mb-10">
                         <li className="p-4 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                             <p className="text-slate-700">
-                                <span className="font-semibold">More typography options –</span>{" "}
-                                Expanded font choices for greater customization.
+                                <span className="font-semibold">{t("improvements.typography.title")} {"–"}{" "}</span>
+                                {t("improvements.typography.description")}
                             </p>
                         </li>
                         <li className="p-4 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                             <p className="text-slate-700">
-                                <span className="font-semibold">Dashboard design tweaks –</span>{" "}
-                                Small adjustments for a cleaner, more user-friendly layout.
+                                <span className="font-semibold">{t("improvements.dashboard.title")} {"–"}{" "}</span>
+                                {t("improvements.dashboard.description")}
                             </p>
                         </li>
                         <li className="p-4 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                             <p className="text-slate-700">
-                                <span className="font-semibold">Bug fixes –</span> Minor issues
-                                resolved for a smoother experience.
+                                <span className="font-semibold">{t("improvements.bugFixes.title")} {"–"}{" "}</span>
+                                {t("improvements.bugFixes.description")}
                             </p>
                         </li>
                     </ul>
@@ -100,27 +93,31 @@ export default function Page() {
                 <section id="coming-soon" className="scroll-mt-26">
                     <h3 className="flex items-center gap-2 text-xl font-semibold mb-4 text-slate-800">
                         <Clock className="h-5 w-5 text-amber-600" />
-                        Coming Soon
+                        {t("comingSoonTitle")}
                     </h3>
                     <ul className="space-y-4">
                         <li className="p-4 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                             <p className="text-slate-700">
-                                <span className="font-semibold">Loyalty Tools –</span> Reward
-                                repeat guests with discounts and digital punch cards.
+                                <span className="font-semibold">
+                                    {t("comingSoon.loyaltyTools.title")} {"–"}{" "}
+                                </span>
+                                {t("comingSoon.loyaltyTools.description")}
                             </p>
                         </li>
                         <li className="p-4 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                             <p className="text-slate-700">
                                 <span className="font-semibold">
-                                    Reservation Tool Integration –
-                                </span>{" "}
-                                Connect Dineri.app with your existing booking system.
+                                    {t("comingSoon.reservationIntegration.title")} {"–"}{" "}
+                                </span>
+                                {t("comingSoon.reservationIntegration.description")}
                             </p>
                         </li>
                         <li className="p-4 rounded-md border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
                             <p className="text-slate-700">
-                                <span className="font-semibold">Advanced Analytics –</span>{" "}
-                                Export reports and gain deeper insights into performance.
+                                <span className="font-semibold">
+                                    {t("comingSoon.advancedAnalytics.title")} {"–"}{" "}
+                                </span>
+                                {t("comingSoon.advancedAnalytics.description")}
                             </p>
                         </li>
                     </ul>

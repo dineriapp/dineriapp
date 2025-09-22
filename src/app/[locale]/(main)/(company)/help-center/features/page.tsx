@@ -1,444 +1,317 @@
 "use client";
 
 import { Separator } from "@/components/ui/separator";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-export default function Page() {
+export default function FeaturesPage() {
+    const a = useTranslations("HelpCenter.Features.Analytics")
+    const o = useTranslations("HelpCenter.Features.Orders")
+    const l = useTranslations("HelpCenter.Features.Links")
     return (
         <div className="px-6 py-8 md:py-16 w-full flex justify-center">
             <div className="max-w-5xl w-full">
                 <div id="analytics" className="scroll-mt-32">
                     <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-main-blue">
-                        Analytics
+                        {a("pageTitle")}
                     </h1>
                     <p className="text-lg text-muted-foreground mb-4">
-                        Track views, QR scans, and orders to understand how your guests interact with your
-                        business. Clear insights help you improve menus, promotions, and overall performance.
+                        {a("intro")}
                     </p>
                     <h1 className="text-xl md:text-2xl font-semibold tracking-tight mb-4 text-main-blue">
-                        Overview
+                        {a("overviewTitle")}
                     </h1>
                     <p className="text-lg text-muted-foreground mb-4">
-                        Analytics gives you valuable insights into how guests interact with your menus, QR codes,
-                        and order system. With clear data, you can see what’s working, identify trends, and make
-                        smarter business decisions.
+                        {a("overviewText")}
                     </p>
                     <Separator className="my-12" />
                     <section >
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            Key Metrics Explained
+                            {a("metricsTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
                             <li className="">
                                 <p className="text-slate-700">
-                                    <span className="font-semibold">Total Link Views –</span>{" "}
-                                    The total number of times your shared link has been clicked
-                                    (including repeat clicks from the same person).
+                                    <span className="font-semibold">{a("metrics.totalLinkViews.title")} –</span>{" "}
+                                    {a("metrics.totalLinkViews.description")}
                                 </p>
                             </li>
                             <li className="">
                                 <p className="text-slate-700">
-                                    <span className="font-semibold">Unique Link Visitors –</span>{" "}
-                                    The number of individual people who clicked your link. One
-                                    person clicking multiple times still counts as 1.
+                                    <span className="font-semibold">{a("metrics.uniqueLinkVisitors.title")} –</span>{" "}
+                                    {a("metrics.uniqueLinkVisitors.description")}
                                 </p>
                             </li>
                             <li className="">
                                 <p className="text-slate-700">
-                                    <span className="font-semibold">Page Views –</span>{" "}
-                                    The total number of times your menu or page has been viewed
-                                    (including repeat views).
+                                    <span className="font-semibold">{a("metrics.pageViews.title")} –</span>{" "}
+                                    {a("metrics.pageViews.description")}
                                 </p>
                             </li>
                             <li className="">
                                 <p className="text-slate-700">
-                                    <span className="font-semibold">Unique Page Visitors –</span>{" "}
-                                    The number of different people who visited your page.
-                                    Multiple visits from the same person are only counted once.
+                                    <span className="font-semibold">{a("metrics.uniquePageVisitors.title")} –</span>{" "}
+                                    {a("metrics.uniquePageVisitors.description")}
                                 </p>
                             </li>
                         </ul>
                     </section>
                     <section >
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            Key Benefits
+                            {a("benefitsTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Understand guest behavior – See which items and categories get the most attention.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Measure QR code performance – Track how often and where your QR codes are
-                                    scanned.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Order insights – Learn which products sell best and when.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Data-driven decisions – Use analytics to optimize your menu, pricing, and
-                                    promotions.
-                                </p>
-                            </li>
+                            {
+                                a.raw("benefits")?.map((item: string, idx: number) => (
+
+                                    <li key={`benifit-${idx}`} className="">
+                                        <p className="text-slate-700">
+                                            {item}
+                                        </p>
+                                    </li>
+                                ))
+                            }
                         </ul>
                     </section>
                     <section >
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            Tips
+                            {a("tipsTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Check your analytics weekly to spot trends early.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Compare different time periods (e.g. last week vs. this week) to measure growth.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Use insights to test new promotions or highlight popular items.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Combine analytics with Events or Popups to see which strategies drive more
-                                    engagement.
-                                </p>
-                            </li>
+                            {
+                                a.raw("tips")?.map((item: string, idx: number) => (
+
+                                    <li key={`tips-${idx}`} className="">
+                                        <p className="text-slate-700">
+                                            {item}
+                                        </p>
+                                    </li>
+                                ))
+                            }
                         </ul>
                     </section>
                 </div>
                 <Separator className="my-12" />
                 <div id="orders" className="scroll-mt-26">
                     <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8 text-main-blue">
-                        Orders
+                        {o("pageTitle")}
                     </h1>
                     <section>
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            1. Access your shop
+                            {o("accessShopTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Go to your restaurant page by typing <span className="text-main-action">{`"/menu"`}</span> after your domain.
-                                    Example: <span className="text-main-action">{`"dineri.me/your-restaurant/menu"`}</span>.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    This is your <b>shop page</b>, where guests can place orders.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    You can fully customize this page via the <b>Customize button</b> (bottom-right
-                                    corner).
-
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Tip:</b> Add all your products first, then use Customize, it’s easier to design
-                                    when you can see the full menu.
-                                </p>
-                            </li>
+                            {o.raw("accessShop")?.map((item: string, idx: number) => (
+                                <li key={`shop-${idx}`} className="">
+                                    <p dangerouslySetInnerHTML={{
+                                        __html: item
+                                    }} className="text-slate-700">
+                                    </p>
+                                </li>
+                            ))}
                         </ul>
                     </section>
                     <section>
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            2. Add products
+                            {o("addProductsTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    In your dashboard, go to <b>Menu</b> → Add Product.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    When adding a product, you can choose to include it in the <b>Quick Menu</b>.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    If you skip this, the product will only appear in the <b>Shop</b>.
-                                </p>
-                            </li>
+                            {o.raw("addProducts")?.map((item: string, idx: number) => (
+                                <li key={`addProducts-${idx}`} className="">
+                                    <p dangerouslySetInnerHTML={{
+                                        __html: item
+                                    }} className="text-slate-700">
+                                    </p>
+                                </li>
+                            ))}
                         </ul>
                     </section>
                     <section>
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            3. Manage orders
+                            {o("manageOrdersTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Orders are displayed in your <b>Orders</b> dashboard with details like items,
-                                    quantity, and time of order.
+                            {o.raw("manageOrders")?.map(
+                                (
+                                    item: string | { title: string, items: string[] },
+                                    index: number
+                                ) => (
+                                    typeof item === "string" ? (
+                                        <li key={index * 3432} className="">
+                                            <p
+                                                dangerouslySetInnerHTML={{ __html: item }}
+                                                className="text-slate-700">
+                                            </p>
+                                        </li>
+                                    ) : (
+                                        <li key={index * 22} className="">
+                                            <p className="text-slate-700">
+                                                {item.title}
+                                            </p>
+                                            <ul className="space-y-4 list-disc mt-3 list-outside mb-10 pl-5">
+                                                {
+                                                    item.items.map((im, id) => {
+                                                        return <li key={id * 9} className="">
+                                                            <p
+                                                                dangerouslySetInnerHTML={{ __html: im }}
+                                                                className="text-slate-700">
 
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Update order status:
-                                </p>
-                                <ul className="space-y-4 list-disc mt-3 list-outside mb-10 pl-5">
-                                    <li className="">
-                                        <p className="text-slate-700">
-                                            <b>Pending</b> → waiting for confirmation
-                                        </p>
-                                    </li>
-                                    <li className="">
-                                        <p className="text-slate-700">
-                                            <b>In Progress</b> → being prepared
-                                        </p>
-                                    </li>
-                                    <li className="">
-                                        <p className="text-slate-700">
-                                            <b>Completed</b> → delivered or picked up
-                                        </p>
-                                    </li>
-                                    <li className="">
-                                        <p className="text-slate-700">
-                                            <b>Cancelled</b> → order cancelled
-                                        </p>
-                                    </li>
-                                </ul>
-                            </li>
+                                                            </p>
+                                                        </li>
+                                                    })
+                                                }
+                                            </ul>
+                                        </li>
+                                    )
+                                ))}
                         </ul>
                     </section>
                     <section>
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            Additional Functions in the Orders Dashboard
+                            {o("dashboardFunctionsTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Restaurant Status</b> <br />
-                                    Set your restaurant availability for <b>delivery, pickup</b>, or <b>unavailable</b>. Perfect for busy
-                                    times or temporary issues when you need to stop orders.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b> Delivery Costs</b> <br />
-                                    Define your own delivery fees directly in the dashboard.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Refresh Timer</b> <br />
-                                    Keep your order page open in your workspace and choose an auto-refresh interval
-                                    (e.g. every 2, 5, or 15 minutes). This way, you’ll always see new orders without
-                                    touching the screen.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Opening Hours</b> <br />
-                                    Adjust your restaurant’s opening times. <br />
-                                    <b>Important:</b> You cannot set separate hours for delivery vs. pickup. If your kitchen has
-                                    different timings (e.g. delivery closes earlier), make sure to reflect this in your main
-                                    opening times.
-
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Order Export File</b> <br />
-                                    Download your complete order history as an Excel sheet. This includes all key data
-                                    you may need for accounting and administration.
-                                </p>
-                            </li>
+                            {o.raw("dashboardFunctions").map((item: string, idx: number) => (
+                                <li key={`dashboardFunctions=${idx}`} className="">
+                                    <p
+                                        dangerouslySetInnerHTML={{ __html: item }}
+                                        className="text-slate-700">
+                                    </p>
+                                </li>
+                            ))}
                         </ul>
                     </section>
                     <section >
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            Key Benefits
+                            {o("benefitsTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Centralized management –</b> All orders, products, and settings in one place.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Customizable shop –</b> Tailor your ordering page to fit your brand.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Operational flexibility –</b> Adjust status, delivery costs, and refresh timer as needed.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Data at your fingertips –</b> Export order history for reporting or accounting.
-                                </p>
-                            </li>
+                            {o.raw("benefits").map((item: string, idx: number) => (
+                                <li key={`benefits=${idx}`} className="">
+                                    <p
+                                        dangerouslySetInnerHTML={{ __html: item }}
+                                        className="text-slate-700">
+                                    </p>
+                                </li>
+                            ))}
                         </ul>
                     </section>
                     <section >
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            Tips
+                            {o("tipsTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Add products before customizing your shop for the best editing experience.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Regularly check your <b>restaurant status</b> to avoid missed orders during busy times.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Use the <b>refresh timer</b> on a tablet or screen in your kitchen to stay up-to-date
-                                    hands-free.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Export your order history monthly to keep your records organized.
-                                </p>
-                            </li>
+                            {o.raw("tips").map((item: string, idx: number) => (
+                                <li key={`tips-231=${idx}`} className="">
+                                    <p
+                                        dangerouslySetInnerHTML={{ __html: item }}
+                                        className="text-slate-700">
+                                    </p>
+                                </li>
+                            ))}
                         </ul>
                     </section>
                     <section >
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            Payments
+                            {o("paymentsTitle")}
                         </h3>
-                        <p className="text-slate-700">
-                            To receive payments directly into your bank account, you need to connect your <b>Stripe
-                                account</b>. Click here to learn how to set up and link Stripe with your restaurant.
+                        <p
+                            dangerouslySetInnerHTML={{ __html: o.raw("payments") }}
+                            className="text-slate-700">
                         </p>
                     </section>
                 </div>
                 <Separator className="my-12" />
                 <div id="links" className="scroll-mt-26">
                     <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-main-blue">
-                        Links
+                        {l("title")}
                     </h1>
                     <p className="text-lg text-muted-foreground mb-4">
-                        Share important links with your guests in just a few clicks. Direct visitors to your website,
-                        social media, reservation tool, or any other online page straight from your Dineri profile.
+                        {l("intro")}
                     </p>
                     <h1 className="text-xl md:text-2xl font-semibold tracking-tight mb-4 text-main-blue">
-                        Overview
+                        {l("overviewTitle")}
                     </h1>
                     <p className="text-lg text-muted-foreground mb-4">
-                        The Links feature allows you to centralize all your important links in one place. Instead of
-                        sharing multiple URLs, you can create a single hub where guests can easily find everything
-                        they need, from your menu to your Instagram page or reservation system.
+                        {l("overviewText")}
                     </p>
                     <Separator className="my-12" />
                     <section>
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            How it works
+                            {l("howItWorksTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Click <b>Add Link</b> and enter:
-                                </p>
-                                <ul className="space-y-4 mt-3 list-disc list-outside mb-10 pl-5">
-                                    <li className="">
-                                        <p className="text-slate-700">
-                                            A <b>title</b> (e.g. “Instagram” or “Reserve a Table”).
-                                        </p>
-                                    </li>
-                                    <li className="">
-                                        <p className="text-slate-700">
-                                            The <b>URL</b> of the page.
-                                        </p>
-                                    </li>
-                                    <li className="">
-                                        <p className="text-slate-700">
-                                            (Optional) An <b>icon or image</b> for quick recognition.
-                                        </p>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Reorder links by dragging them into your preferred order.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Save changes → Your updates are instantly live.
-                                </p>
-                            </li>
+                            {l.raw("howItWorks")?.map(
+                                (
+                                    item: string | { title: string, items: string[] },
+                                    index: number
+                                ) => (
+                                    typeof item === "string" ? (
+                                        <li key={index * 3432} className="">
+                                            <p
+                                                dangerouslySetInnerHTML={{ __html: item }}
+                                                className="text-slate-700">
+                                            </p>
+                                        </li>
+                                    ) : (
+                                        <li key={index * 22} className="">
+                                            <p className="text-slate-700">
+                                                {item.title}
+                                            </p>
+                                            <ul className="space-y-4 list-disc mt-3 list-outside mb-10 pl-5">
+                                                {
+                                                    item.items.map((im, id) => {
+                                                        return <li key={id * 9} className="">
+                                                            <p
+                                                                dangerouslySetInnerHTML={{ __html: im }}
+                                                                className="text-slate-700">
+
+                                                            </p>
+                                                        </li>
+                                                    })
+                                                }
+                                            </ul>
+                                        </li>
+                                    )
+                                ))}
                         </ul>
                     </section>
                     <section>
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            Key Benefits
+                            {l("benefitsTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Central hub –</b> Collect all your important links in one accessible place.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Customizable –</b> Titles, order, and icons can be personalized to match your brand.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>Instant updates –</b> Any change you make in the dashboard is reflected immediately.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    <b>More engagement –</b> Make it easy for guests to connect with you on multiple
-                                    platforms.
-                                </p>
-                            </li>
+                            {l.raw("benefits")?.map((item: string, idx: number) => (
+                                <li key={`benefits-${idx}`} className="">
+                                    <p
+                                        dangerouslySetInnerHTML={{
+                                            __html: item
+                                        }}
+                                        className="text-slate-700">
+                                    </p>
+                                </li>
+                            ))}
                         </ul>
                     </section>
                     <section>
                         <h3 className="flex items-center gap-2 text-2xl font-bold mb-4 text-slate-800">
-                            Tips
+                            {l("tipsTitle")}
                         </h3>
                         <ul className="space-y-4 list-disc list-outside mb-10 pl-5">
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Add your <b>reservation tool link</b> so guests can book directly.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Include links to <b>social media</b> for more visibility and engagement.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Keep the list short and relevant, too many links can overwhelm guests.
-                                </p>
-                            </li>
-                            <li className="">
-                                <p className="text-slate-700">
-                                    Use <b>Analytics</b> to track which links get the most clicks.
-                                </p>
-                            </li>
+                            {l.raw("tips")?.map((item: string, idx: number) => (
+                                <li key={`tips-2323-${idx}`} className="">
+                                    <p
+                                        dangerouslySetInnerHTML={{
+                                            __html: item
+                                        }}
+                                        className="text-slate-700">
+                                    </p>
+                                </li>
+                            ))}
                         </ul>
                     </section>
                 </div>
+                {/* d  */}
                 <Separator className="my-12" />
                 <div id="menu" className="scroll-mt-26">
                     <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-main-blue">

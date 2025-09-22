@@ -434,5 +434,436 @@
       "title": "Gestalte die <br /> <span class='underline underline-offset-4 decoration-green-600'>Zukunft</span> bei Dineri",
       "description": "Bei Dineri glauben wir, dass Talent und Ideen Innovation vorantreiben. Werde Teil unseres Teams und hilf uns, digitale Lösungen zu entwickeln, die Restaurants und ihre Gäste näher zusammenbringen."
     }
+  },
+  "CareersSubPage": {
+    "JobForm": {
+      "applyFor": "Bewerben für {title}",
+      "applicationSubmittedTitle": "Bewerbung eingereicht!",
+      "applicationSubmittedText": "Vielen Dank für Ihre Bewerbung für die Position {title} bei {company}. Wir haben Ihre Bewerbung erhalten und werden sie sorgfältig prüfen. Wenn Ihre Qualifikationen unseren Anforderungen entsprechen, werden wir uns in Kürze mit Ihnen in Verbindung setzen.",
+      "fields": {
+        "fullName": "Vollständiger Name",
+        "email": "E-Mail-Adresse",
+        "phone": "Telefonnummer",
+        "experience": "Berufserfahrung",
+        "education": "Bildungsniveau",
+        "noticePeriod": "Kündigungsfrist",
+        "gender": "Geschlecht",
+        "address": "Adresse",
+        "city": "Stadt",
+        "state": "Bundesland",
+        "zipCode": "Postleitzahl",
+        "portfolio": "Portfolio-URL (optional)",
+        "linkedin": "LinkedIn-Profil (optional)",
+        "github": "GitHub-Profil (optional)",
+        "salaryExpectations": "Gehaltsvorstellungen",
+        "resume": "Lebenslauf",
+        "coverLetter": "Anschreiben"
+      },
+      "placeholders": {
+        "fullName": "Vollständiger Name",
+        "email": "beispiel@beispiel.de",
+        "phone": "Telefonnummer eingeben",
+        "address": "Straße und Hausnummer",
+        "city": "Stadtname",
+        "state": "Bundesland",
+        "zipCode": "Postleitzahl",
+        "portfolio": "https://ihr-portfolio.com",
+        "linkedin": "https://linkedin.com/in/ihrprofil",
+        "github": "https://github.com/ihrusername",
+        "salary": "z. B. 80.000 € - 100.000 €",
+        "coverLetter": "Erzählen Sie uns, warum Sie sich für diese Position interessieren und warum Sie besonders geeignet sind..."
+      },
+      "select": {
+        "experience": {
+          "placeholder": "Erfahrung auswählen",
+          "options": {
+            "0-1": "0-1 Jahre",
+            "2-3": "2-3 Jahre",
+            "4-5": "4-5 Jahre",
+            "6-10": "6-10 Jahre",
+            "10+": "10+ Jahre"
+          }
+        },
+        "education": {
+          "placeholder": "Bildungsniveau auswählen",
+          "options": {
+            "high-school": "Realschule / Abitur",
+            "associate": "Fachhochschulabschluss",
+            "bachelor": "Bachelor-Abschluss",
+            "master": "Master-Abschluss",
+            "phd": "Promotion (PhD)"
+          }
+        },
+        "noticePeriod": {
+          "placeholder": "Kündigungsfrist auswählen",
+          "options": {
+            "immediately": "Sofort",
+            "1-week": "1 Woche",
+            "2-weeks": "2 Wochen",
+            "1-month": "1 Monat",
+            "2-months": "2 Monate",
+            "3-months": "3 Monate"
+          }
+        },
+        "gender": {
+          "placeholder": "Keine Angabe",
+          "options": {
+            "prefer-not-to-say": "Keine Angabe",
+            "male": "Männlich",
+            "female": "Weiblich",
+            "non-binary": "Nicht-binär",
+            "other": "Sonstiges"
+          }
+        }
+      },
+      "buttons": {
+        "uploadResume": "Lebenslauf hochladen",
+        "submit": "Bewerbung absenden",
+        "submitting": "Wird gesendet..."
+      },
+      "errors": {
+        "fullNameMin": "Der vollständige Name muss mindestens 2 Zeichen enthalten",
+        "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+        "invalidPhone": "Bitte geben Sie eine gültige Telefonnummer ein",
+        "addressMin": "Bitte geben Sie Ihre vollständige Adresse ein",
+        "cityMin": "Bitte geben Sie Ihre Stadt ein",
+        "stateMin": "Bitte geben Sie Ihr Bundesland ein",
+        "zipCodeMin": "Bitte geben Sie eine gültige Postleitzahl ein",
+        "experienceRequired": "Bitte wählen Sie Ihr Erfahrungsniveau",
+        "educationRequired": "Bitte wählen Sie Ihr Bildungsniveau",
+        "coverLetterMin": "Das Anschreiben muss mindestens 50 Zeichen enthalten",
+        "resumeRequired": "Ein Lebenslauf ist erforderlich",
+        "invalidUrl": "Bitte geben Sie eine gültige URL ein",
+        "salaryRequired": "Bitte geben Sie Ihre Gehaltsvorstellungen an",
+        "noticePeriodRequired": "Bitte wählen Sie Ihre Kündigungsfrist",
+        "genderRequired": "Bitte wählen Sie Ihr Geschlecht"
+      },
+      "toasts": {
+        "applicationSuccess": "Bewerbung erfolgreich eingereicht!",
+        "applicationError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+      }
+    }
+  },
+  "HelpCenter": {
+    "Introduction": {
+      "pageTitle": "Einführung",
+      "welcome": "Willkommen auf der Plattform! Dieser Leitfaden hilft Ihnen, schnell loszulegen und die Grundlagen zu verstehen. Ob Sie ein Restaurantbesitzer, Manager oder Teil eines Gastgewerbeteams sind, unsere Plattform ist darauf ausgelegt, Ihren Alltag einfacher und effizienter zu machen.",
+      "welcome2": "Wir kombinieren Einfachheit, Flexibilität und leistungsstarke Funktionen, damit Sie sich auf Ihr Geschäft konzentrieren können, während wir die technische Seite übernehmen.",
+      "whyTitle": "Warum diese Plattform nutzen?",
+      "why": {
+        "centralizedManagement": {
+          "title": "Zentralisierte Verwaltung",
+          "description": "Verwalten Sie Menüs, Bestellungen, Veranstaltungen und Aktionen an einem Ort."
+        },
+        "seamlessExperience": {
+          "title": "Nahtloses Gästeerlebnis",
+          "description": "Bieten Sie Ihren Kunden eine moderne und reibungslose Möglichkeit, mit Ihrem Unternehmen zu interagieren."
+        },
+        "insights": {
+          "title": "Verwertbare Erkenntnisse",
+          "description": "Analysen, die Ihnen zeigen, was funktioniert und wo Sie sich verbessern können."
+        },
+        "scalable": {
+          "title": "Skalierbar & Flexibel",
+          "description": "Klein anfangen und mit erweiterten Funktionen wachsen, wenn Ihre Anforderungen steigen."
+        },
+        "easyToUse": {
+          "title": "Einfach zu bedienen",
+          "description": "Keine technischen Vorkenntnisse erforderlich – für alle konzipiert."
+        }
+      },
+      "whoTitle": "Für wen ist es gedacht?",
+      "who": {
+        "restaurants": {
+          "title": "Restaurants & Cafés",
+          "description": "Vereinfachen Sie Reservierungen, Bestellungen und Menüverwaltung."
+        },
+        "bars": {
+          "title": "Bars & Lounges",
+          "description": "Bewerben Sie Veranstaltungen und binden Sie Kunden mit QR-Codes und Popups ein."
+        },
+        "hospitality": {
+          "title": "Gastgewerbe",
+          "description": "Gewinnen Sie Einblicke durch Analysen und optimieren Sie Abläufe."
+        },
+        "chefs": {
+          "title": "Privatköche & Catering-Services",
+          "description": "Präsentieren Sie Menüs, verwalten Sie Buchungen und bieten Sie Kunden ein personalisiertes Erlebnis."
+        },
+        "foodTrucks": {
+          "title": "Foodtrucks & Pop-ups",
+          "description": "Teilen Sie Ihren Standort, Ihr Menü und Ihre Updates sofort."
+        }
+      },
+      "keyPointsTitle": "Wichtige Punkte zum Merken",
+      "keyPoints": [
+        "Ein zentrales Dashboard – Alles, was Sie brauchen (Menüs, Bestellungen, Analysen, Veranstaltungen), wird an einem Ort verwaltet.",
+        "Schnelle Einrichtung – In nur wenigen Minuten einsatzbereit.",
+        "Keine technischen Kenntnisse erforderlich – Der Editor ist einfach und intuitiv gestaltet.",
+        "Flexible Funktionen – Aktivieren oder deaktivieren Sie Module (z. B. Veranstaltungen, Popups, QR-Codes) nach Bedarf.",
+        "Mobilfreundlich – Funktioniert nahtlos auf jedem Gerät für Sie und Ihre Gäste.",
+        "Anpassbares Design – Passen Sie das Erscheinungsbild an Ihre Markenidentität an.",
+        "Echtzeit-Updates – Alle Änderungen, die Sie vornehmen, werden sofort übernommen.",
+        "Sicher & zuverlässig – Ihre Daten und Kundeninformationen sind geschützt.",
+        "Skalierbar – Klein anfangen und mit Ihrem Geschäft wachsen.",
+        "Kontinuierliche Verbesserungen – Regelmäßige Updates bringen neue Funktionen und Verbesserungen."
+      ]
+    },
+    "WhatIsNew": {
+      "pageTitle": "Was ist neu?",
+      "intro": "Bleiben Sie über die neuesten Funktionen und Verbesserungen auf dem Laufenden. Wir arbeiten kontinuierlich daran, die Plattform leistungsfähiger, zuverlässiger und benutzerfreundlicher zu machen.",
+
+      "septemberTitle": "September 2025 – Neueste Updates",
+      "newFeaturesTitle": "Neue Funktionen",
+      "newFeatures": {
+        "menuEditor": {
+          "title": "Menü-Editor",
+          "description": "Erstellen und passen Sie Ihr Menü ganz einfach mit Artikelbeschreibungen und Preisen an. Verwenden Sie es als Schnellmenü für die sofortige Freigabe oder verbinden Sie es direkt mit Ihrem Bestellsystem für ein vollständig integriertes Erlebnis. Sie können jederzeit zwischen verknüpftem oder eigenständigem Modus wechseln."
+        },
+        "qrCodes": {
+          "title": "QR-Codes",
+          "description": "Generieren Sie sofort QR-Codes, die Ihre Gäste direkt mit Ihrem Menü, Veranstaltungen oder Aktionen verbinden. Jeder Scan wird verfolgt, sodass Sie genau sehen können, wie oft Ihre QR-Codes genutzt werden und das Engagement in Echtzeit messen."
+        },
+        "popups": {
+          "title": "Pop-ups",
+          "description": "Erstellen Sie einfache, anpassbare Pop-ups, um Ankündigungen auf Ihrer Bestellseite zu teilen, bevorstehende Veranstaltungen hervorzuheben oder Gäste bei ihrem Besuch zu begrüßen."
+        }
+      },
+
+      "octoberTitle": "Oktober 2025 – Updates",
+      "improvementsTitle": "Verbesserungen",
+      "improvements": {
+        "typography": {
+          "title": "Weitere Typografieoptionen",
+          "description": "Erweiterte Schriftarten-Auswahl für mehr Anpassungsmöglichkeiten."
+        },
+        "dashboard": {
+          "title": "Dashboard-Design-Optimierungen",
+          "description": "Kleine Anpassungen für ein saubereres und benutzerfreundlicheres Layout."
+        },
+        "bugFixes": {
+          "title": "Fehlerbehebungen",
+          "description": "Kleinere Probleme wurden behoben, um ein reibungsloseres Erlebnis zu gewährleisten."
+        }
+      },
+
+      "comingSoonTitle": "Demnächst",
+      "comingSoon": {
+        "loyaltyTools": {
+          "title": "Treue-Tools",
+          "description": "Belohnen Sie wiederkehrende Gäste mit Rabatten und digitalen Stempelkarten."
+        },
+        "reservationIntegration": {
+          "title": "Integration des Reservierungstools",
+          "description": "Verbinden Sie Dineri.app mit Ihrem bestehenden Buchungssystem."
+        },
+        "advancedAnalytics": {
+          "title": "Erweiterte Analysen",
+          "description": "Exportieren Sie Berichte und erhalten Sie tiefere Einblicke in die Leistung."
+        }
+      }
+    },
+    "Support": {
+      "pageTitle": "Support kontaktieren",
+      "intro": "Füllen Sie das untenstehende Formular aus, und unser Team wird sich so schnell wie möglich bei Ihnen melden.",
+
+      "fields": {
+        "name": "Vollständiger Name",
+        "email": "E-Mail",
+        "urgency": "Dringlichkeit",
+        "issueType": "Art des Problems",
+        "subject": "Betreff",
+        "message": "Nachricht",
+        "attachments": "Anhänge (optional)",
+        "terms": "Ich stimme den Allgemeinen Geschäftsbedingungen zu"
+      },
+
+      "placeholders": {
+        "name": "Ihr Name",
+        "email": "ihre.email@beispiel.com",
+        "subject": "Kurze Beschreibung Ihres Problems",
+        "message": "Bitte beschreiben Sie Ihr Problem ausführlich...",
+        "urgency": {
+          "low": "Niedrig",
+          "medium": "Mittel",
+          "high": "Hoch"
+        },
+        "issueType": {
+          "placeholder": "Wählen Sie eine Problemart",
+          "technical": "Technisches Problem",
+          "billing": "Frage zur Abrechnung",
+          "account": "Konto-Problem",
+          "feature": "Funktionsanfrage",
+          "other": "Sonstiges"
+        }
+      },
+
+      "descriptions": {
+        "message": "Geben Sie so viele Details wie möglich an, damit wir Ihnen bestmöglich helfen können.",
+        "attachments": "Laden Sie Screenshots oder Dokumente hoch, die uns helfen könnten, Ihr Problem zu verstehen.",
+        "terms": "Sie stimmen unseren Nutzungsbedingungen und unserer Datenschutzerklärung zu."
+      },
+
+      "buttons": {
+        "submit": "Anfrage absenden",
+        "submitting": "Wird gesendet..."
+      },
+
+      "alerts": {
+        "successTitle": "Erfolg!",
+        "successMessage": "Ihre Support-Anfrage wurde erfolgreich eingereicht. Wir werden uns bald bei Ihnen melden.",
+        "errorTitle": "Fehler",
+        "errorMessage": "Beim Absenden des Formulars ist ein Problem aufgetreten. Bitte versuchen Sie es erneut."
+      },
+
+      "errors": {
+        "nameMin": "Der Name muss mindestens 2 Zeichen enthalten.",
+        "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        "urgencyRequired": "Bitte wählen Sie eine Dringlichkeitsstufe.",
+        "issueTypeRequired": "Bitte wählen Sie eine Problemart.",
+        "subjectMin": "Der Betreff muss mindestens 5 Zeichen enthalten.",
+        "messageMin": "Die Nachricht muss mindestens 10 Zeichen enthalten.",
+        "termsRequired": "Sie müssen die Allgemeinen Geschäftsbedingungen akzeptieren."
+      }
+    },
+
+    "Features": {
+      "Analytics": {
+        "pageTitle": "Analysen",
+        "intro": "Verfolgen Sie Ansichten, QR-Scans und Bestellungen, um zu verstehen, wie Ihre Gäste mit Ihrem Unternehmen interagieren. Klare Einblicke helfen Ihnen, Menüs, Aktionen und die Gesamtleistung zu verbessern.",
+
+        "overviewTitle": "Übersicht",
+        "overviewText": "Analysen geben Ihnen wertvolle Einblicke, wie Gäste mit Ihren Menüs, QR-Codes und dem Bestellsystem interagieren. Mit klaren Daten können Sie erkennen, was funktioniert, Trends identifizieren und klügere Geschäftsentscheidungen treffen.",
+
+        "metricsTitle": "Wichtige Kennzahlen erklärt",
+        "metrics": {
+          "totalLinkViews": {
+            "title": "Gesamtanzahl Link-Aufrufe",
+            "description": "Die Gesamtanzahl, wie oft Ihr geteilter Link angeklickt wurde (einschließlich wiederholter Klicks derselben Person)."
+          },
+          "uniqueLinkVisitors": {
+            "title": "Eindeutige Link-Besucher",
+            "description": "Die Anzahl einzelner Personen, die auf Ihren Link geklickt haben. Mehrere Klicks derselben Person zählen trotzdem nur als 1."
+          },
+          "pageViews": {
+            "title": "Seitenaufrufe",
+            "description": "Die Gesamtanzahl, wie oft Ihr Menü oder Ihre Seite angesehen wurde (einschließlich wiederholter Aufrufe)."
+          },
+          "uniquePageVisitors": {
+            "title": "Eindeutige Seitenbesucher",
+            "description": "Die Anzahl verschiedener Personen, die Ihre Seite besucht haben. Mehrere Besuche derselben Person werden nur einmal gezählt."
+          }
+        },
+
+        "benefitsTitle": "Wichtige Vorteile",
+        "benefits": [
+          "Gästeverhalten verstehen – Sehen Sie, welche Artikel und Kategorien die meiste Aufmerksamkeit erhalten.",
+          "QR-Code-Leistung messen – Verfolgen Sie, wie oft und wo Ihre QR-Codes gescannt werden.",
+          "Bestell-Einblicke – Erfahren Sie, welche Produkte sich am besten und wann verkaufen.",
+          "Datenbasierte Entscheidungen – Verwenden Sie Analysen, um Ihr Menü, Ihre Preise und Aktionen zu optimieren."
+        ],
+
+        "tipsTitle": "Tipps",
+        "tips": [
+          "Überprüfen Sie Ihre Analysen wöchentlich, um Trends frühzeitig zu erkennen.",
+          "Vergleichen Sie verschiedene Zeiträume (z. B. letzte Woche vs. diese Woche), um Wachstum zu messen.",
+          "Nutzen Sie Erkenntnisse, um neue Aktionen zu testen oder beliebte Artikel hervorzuheben.",
+          "Kombinieren Sie Analysen mit Events oder Popups, um zu sehen, welche Strategien mehr Engagement fördern."
+        ]
+      },
+      "Orders": {
+        "pageTitle": "Bestellungen",
+
+        "accessShopTitle": "1. Zugriff auf Ihren Shop",
+        "accessShop": [
+          "Gehen Sie zu Ihrer Restaurantseite, indem Sie <span class=\"text-main-action\">\"/menu\"</span> nach Ihrer Domain eingeben. Beispiel: <span class=\"text-main-action\">\"dineri.me/your-restaurant/menu\"</span>.",
+          "Dies ist Ihre <b>Shop-Seite</b>, auf der Gäste Bestellungen aufgeben können.",
+          "Sie können diese Seite vollständig über die <b>Schaltfläche Anpassen</b> (unten rechts) anpassen.",
+          "<b>Tipp:</b> Fügen Sie zuerst alle Ihre Produkte hinzu und verwenden Sie dann Anpassen. Es ist einfacher zu gestalten, wenn Sie das vollständige Menü sehen können."
+        ],
+
+        "addProductsTitle": "2. Produkte hinzufügen",
+        "addProducts": [
+          "Gehen Sie in Ihrem Dashboard zu <b>Menü</b> → Produkt hinzufügen.",
+          "Wenn Sie ein Produkt hinzufügen, können Sie es im <b>Schnellmenü</b> aufnehmen.",
+          "Wenn Sie dies überspringen, erscheint das Produkt nur im <b>Shop</b>."
+        ],
+
+        "manageOrdersTitle": "3. Bestellungen verwalten",
+        "manageOrders": [
+          "Bestellungen werden in Ihrem <b>Bestellungen</b>-Dashboard mit Details wie Artikeln, Menge und Bestellzeit angezeigt.",
+          {
+            "title": "Bestellstatus aktualisieren:",
+            "items": [
+              "<b>Ausstehend</b> → wartet auf Bestätigung",
+              "<b>In Bearbeitung</b> → wird vorbereitet",
+              "<b>Abgeschlossen</b> → geliefert oder abgeholt",
+              "<b>Storniert</b> → Bestellung storniert"
+            ]
+          }
+        ],
+
+        "dashboardFunctionsTitle": "Zusätzliche Funktionen im Bestellungen-Dashboard",
+        "dashboardFunctions": [
+          "<b>Restaurantstatus</b><br/>Legen Sie die Verfügbarkeit Ihres Restaurants für <b>Lieferung, Abholung</b> oder <b>nicht verfügbar</b> fest. Perfekt für Stoßzeiten oder vorübergehende Probleme, wenn Sie Bestellungen stoppen müssen.",
+          "<b>Lieferkosten</b><br/>Definieren Sie Ihre eigenen Liefergebühren direkt im Dashboard.",
+          "<b>Aktualisierungs-Timer</b><br/>Lassen Sie Ihre Bestellseite in Ihrem Arbeitsbereich geöffnet und wählen Sie ein automatisches Aktualisierungsintervall (z. B. alle 2, 5 oder 15 Minuten). So sehen Sie immer neue Bestellungen, ohne den Bildschirm zu berühren.",
+          "<b>Öffnungszeiten</b><br/>Passen Sie die Öffnungszeiten Ihres Restaurants an.<br/><b>Wichtig:</b> Sie können keine separaten Zeiten für Lieferung und Abholung festlegen. Wenn Ihre Küche unterschiedliche Zeiten hat (z. B. schließt die Lieferung früher), stellen Sie sicher, dass dies in Ihren Hauptöffnungszeiten reflektiert wird.",
+          "<b>Bestell-Exportdatei</b><br/>Laden Sie Ihre vollständige Bestellhistorie als Excel-Datei herunter. Dies umfasst alle wichtigen Daten, die Sie möglicherweise für Buchhaltung und Verwaltung benötigen."
+        ],
+
+        "benefitsTitle": "Wichtige Vorteile",
+        "benefits": [
+          "<b>Zentrale Verwaltung –</b> Alle Bestellungen, Produkte und Einstellungen an einem Ort.",
+          "<b>Anpassbarer Shop –</b> Gestalten Sie Ihre Bestellseite passend zu Ihrer Marke.",
+          "<b>Betriebliche Flexibilität –</b> Passen Sie Status, Lieferkosten und Aktualisierungs-Timer nach Bedarf an.",
+          "<b>Daten jederzeit verfügbar –</b> Exportieren Sie Bestellhistorien für Berichte oder Buchhaltung."
+        ],
+
+        "tipsTitle": "Tipps",
+        "tips": [
+          "Fügen Sie Produkte hinzu, bevor Sie Ihren Shop anpassen, um die beste Bearbeitungserfahrung zu haben.",
+          "Überprüfen Sie regelmäßig Ihren <b>Restaurantstatus</b>, um verpasste Bestellungen während Stoßzeiten zu vermeiden.",
+          "Verwenden Sie den <b>Aktualisierungs-Timer</b> auf einem Tablet oder Bildschirm in Ihrer Küche, um freihändig auf dem neuesten Stand zu bleiben.",
+          "Exportieren Sie Ihre Bestellhistorie monatlich, um Ihre Aufzeichnungen organisiert zu halten."
+        ],
+
+        "paymentsTitle": "Zahlungen",
+        "payments": "Um Zahlungen direkt auf Ihr Bankkonto zu erhalten, müssen Sie Ihr <b>Stripe-Konto</b> verbinden. Klicken Sie hier, um zu erfahren, wie Sie Stripe mit Ihrem Restaurant einrichten und verknüpfen."
+      },
+      "Links": {
+        "title": "Links",
+        "intro": "Teilen Sie wichtige Links mit Ihren Gästen mit nur wenigen Klicks. Leiten Sie Besucher direkt von Ihrem Dineri-Profil auf Ihre Website, soziale Medien, Reservierungstools oder eine andere Online-Seite.",
+        "overviewTitle": "Übersicht",
+        "overviewText": "Die Links-Funktion ermöglicht es Ihnen, alle Ihre wichtigen Links an einem Ort zu zentralisieren. Anstatt mehrere URLs zu teilen, können Sie ein einziges Hub erstellen, wo Gäste alles leicht finden – von Ihrem Menü bis zu Ihrer Instagram-Seite oder Ihrem Reservierungssystem.",
+        "howItWorksTitle": "So funktioniert es",
+        "howItWorks": [
+          {
+            "title": "Klicken Sie auf <b>Link hinzufügen</b> und geben Sie ein:",
+            "items": [
+              "Einen <b>Titel</b> (z. B. „Instagram“ oder „Tisch reservieren“).",
+              "Die <b>URL</b> der Seite.",
+              "(Optional) Ein <b>Symbol oder Bild</b> zur schnellen Erkennung."
+            ]
+          },
+          "Ordnen Sie Links neu an, indem Sie sie in Ihre bevorzugte Reihenfolge ziehen.",
+          "Änderungen speichern → Ihre Aktualisierungen sind sofort live."
+        ],
+        "benefitsTitle": "Wichtige Vorteile",
+        "benefits": [
+          "<b>Zentrale Anlaufstelle –</b> Sammeln Sie alle Ihre wichtigen Links an einem zugänglichen Ort.",
+          "<b>Anpassbar –</b> Titel, Reihenfolge und Symbole können personalisiert werden, um Ihre Marke widerzuspiegeln.",
+          "<b>Sofortige Aktualisierungen –</b> Jede Änderung, die Sie im Dashboard vornehmen, wird sofort übernommen.",
+          "<b>Mehr Engagement –</b> Machen Sie es Gästen einfach, mit Ihnen auf mehreren Plattformen zu interagieren."
+        ],
+        "tipsTitle": "Tipps",
+        "tips": [
+          "Fügen Sie Ihren <b>Reservierungstool-Link</b> hinzu, damit Gäste direkt buchen können.",
+          "Fügen Sie Links zu <b>sozialen Medien</b> hinzu, um mehr Sichtbarkeit und Engagement zu erreichen.",
+          "Halten Sie die Liste kurz und relevant, zu viele Links können Gäste überfordern.",
+          "Verwenden Sie <b>Analysen</b>, um zu verfolgen, welche Links die meisten Klicks erhalten."
+        ]
+      }
+    }
   }
 }

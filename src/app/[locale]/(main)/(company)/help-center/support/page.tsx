@@ -27,40 +27,44 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle2, Send } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-// Form validation schema
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  urgency: z.enum(["low", "medium", "high"], {
-    required_error: "Please select an urgency level.",
-  }),
-  issueType: z.string({
-    required_error: "Please select an issue type.",
-  }),
-  subject: z.string().min(5, {
-    message: "Subject must be at least 5 characters.",
-  }),
-  message: z.string().min(10, {
-    message: "Message must be at least 10 characters.",
-  }),
-  attachments: z.any().optional(),
-  terms: z.boolean().refine((val) => val === true, {
-    message: "You must accept the terms and conditions.",
-  }),
-});
 
-type FormValues = z.infer<typeof formSchema>;
 
 export default function SupportForm() {
+  const t = useTranslations("HelpCenter.Support")
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+
+  // Form validation schema
+  const formSchema = z.object({
+    name: z.string().min(2, {
+      message: t("errors.nameMin"),
+    }),
+    email: z.string().email({
+      message: t("errors.invalidEmail"),
+    }),
+    urgency: z.enum(["low", "medium", "high"], {
+      required_error: t("errors.urgencyRequired"),
+    }),
+    issueType: z.string({
+      required_error: t("errors.issueTypeRequired"),
+    }),
+    subject: z.string().min(5, {
+      message: t("errors.subjectMin"),
+    }),
+    message: z.string().min(10, {
+      message: t("errors.messageMin"),
+    }),
+    attachments: z.any().optional(),
+    terms: z.boolean().refine((val) => val === true, {
+      message: t("errors.termsRequired"),
+    }),
+  });
+
+  type FormValues = z.infer<typeof formSchema>;
 
   // Initialize form
   const form = useForm<FormValues>({
@@ -106,20 +110,22 @@ export default function SupportForm() {
   return (
     <div className=" mx-auto px-6 scroll-mt-32 pb-10 pt-10 w-full max-w-5xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Contact Support</h1>
+        <h1 className="text-3xl font-bold mb-2">
+          {t("pageTitle")}
+        </h1>
         <p className="text-muted-foreground">
-          Fill out the form below and our team will get back to you as soon as
-          possible.
+          {t("intro")}
         </p>
       </div>
 
       {submitStatus === "success" && (
         <Alert variant="default" className="bg-green-50 border-green-200 mb-6">
           <CheckCircle2 className="h-4 w-4 text-green-600" />
-          <AlertTitle className="text-green-800">Success!</AlertTitle>
+          <AlertTitle className="text-green-800">
+            {t("alerts.successTitle")}
+          </AlertTitle>
           <AlertDescription className="text-green-700">
-            Your support request has been submitted successfully. We`&apos;ll
-            get back to you soon.
+            {t("alerts.successMessage")}
           </AlertDescription>
         </Alert>
       )}
@@ -127,9 +133,11 @@ export default function SupportForm() {
       {submitStatus === "error" && (
         <Alert variant="destructive" className="mb-6">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>
+            {t("alerts.errorTitle")}
+          </AlertTitle>
           <AlertDescription>
-            There was a problem submitting your form. Please try again.
+            {t("alerts.errorMessage")}
           </AlertDescription>
         </Alert>
       )}
@@ -142,10 +150,12 @@ export default function SupportForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>
+                    {t("fields.name")}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Your name"
+                      placeholder={t("placeholders.name")}
                       className="!h-10"
                       {...field}
                     />
@@ -160,10 +170,12 @@ export default function SupportForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>
+                    {t("fields.email")}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="your.email@example.com"
+                      placeholder={t("placeholders.email")}
                       className="!h-10"
                       {...field}
                     />
@@ -179,7 +191,9 @@ export default function SupportForm() {
             name="urgency"
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel>Urgency</FormLabel>
+                <FormLabel>
+                  {t("fields.urgency")}
+                </FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -190,19 +204,25 @@ export default function SupportForm() {
                       <FormControl>
                         <RadioGroupItem value="low" />
                       </FormControl>
-                      <FormLabel className="font-normal">Low</FormLabel>
+                      <FormLabel className="font-normal">
+                        {t("placeholders.urgency.low")}
+                      </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
                         <RadioGroupItem value="medium" />
                       </FormControl>
-                      <FormLabel className="font-normal">Medium</FormLabel>
+                      <FormLabel className="font-normal">
+                        {t("placeholders.urgency.medium")}
+                      </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
                         <RadioGroupItem value="high" />
                       </FormControl>
-                      <FormLabel className="font-normal">High</FormLabel>
+                      <FormLabel className="font-normal">
+                        {t("placeholders.urgency.high")}
+                      </FormLabel>
                     </FormItem>
                   </RadioGroup>
                 </FormControl>
@@ -216,22 +236,34 @@ export default function SupportForm() {
             name="issueType"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Issue Type</FormLabel>
+                <FormLabel>
+                  {t("fields.issueType")}
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full !h-10">
-                      <SelectValue placeholder="Select an issue type" />
+                      <SelectValue placeholder={t("placeholders.issueType.placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="technical">Technical Issue</SelectItem>
-                    <SelectItem value="billing">Billing Question</SelectItem>
-                    <SelectItem value="account">Account Problem</SelectItem>
-                    <SelectItem value="feature">Feature Request</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="technical">
+                      {t("placeholders.issueType.technical")}
+                    </SelectItem>
+                    <SelectItem value="billing">
+                      {t("placeholders.issueType.billing")}
+                    </SelectItem>
+                    <SelectItem value="account">
+                      {t("placeholders.issueType.account")}
+                    </SelectItem>
+                    <SelectItem value="feature">
+                      {t("placeholders.issueType.feature")}
+                    </SelectItem>
+                    <SelectItem value="other">
+                      {t("placeholders.issueType.other")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -244,10 +276,12 @@ export default function SupportForm() {
             name="subject"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Subject</FormLabel>
+                <FormLabel>
+                  {t("fields.subject")}
+                </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Brief description of your issue"
+                    placeholder={t("placeholders.subject")}
                     {...field}
                     className="!h-10"
                   />
@@ -262,16 +296,18 @@ export default function SupportForm() {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Message</FormLabel>
+                <FormLabel>
+                  {t("fields.message")}
+                </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Please describe your issue in detail..."
+                    placeholder={t("placeholders.message")}
                     className="min-h-32"
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  Provide as much detail as possible to help us assist you.
+                  {t("descriptions.message")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -283,7 +319,9 @@ export default function SupportForm() {
             name="attachments"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Attachments (Optional)</FormLabel>
+                <FormLabel>
+                  {t("fields.attachments")}
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="file"
@@ -293,8 +331,7 @@ export default function SupportForm() {
                   />
                 </FormControl>
                 <FormDescription>
-                  Upload screenshots or documents that might help us understand
-                  your issue.
+                  {t("descriptions.attachments")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -305,20 +342,24 @@ export default function SupportForm() {
             control={form.control}
             name="terms"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>I agree to the terms and conditions</FormLabel>
-                  <FormDescription>
-                    You agree to our Terms of Service and Privacy Policy.
-                  </FormDescription>
+              <FormItem className="flex flex-col items-start space-x-3 space-y-0 rounded-md border p-4">
+                <div className="flex flex-row items-start space-x-3">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      {t("fields.terms")}
+                    </FormLabel>
+                    <FormDescription>
+                      {t("descriptions.terms")}
+                    </FormDescription>
+                  </div>
                 </div>
-                <FormMessage />
+                <FormMessage className="mt-2" />
               </FormItem>
             )}
           />
@@ -327,11 +368,12 @@ export default function SupportForm() {
             {isSubmitting ? (
               <>
                 <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent" />
-                Submitting...
+                {t("buttons.submitting")}
               </>
             ) : (
               <>
-                <Send className="mr-2 h-4 w-4" /> Submit Request
+                <Send className="mr-2 h-4 w-4" />
+                {t("buttons.submit")}
               </>
             )}
           </Button>

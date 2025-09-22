@@ -433,5 +433,435 @@
       "title": "Shape the  <br /> <span class='underline underline-offset-4 decoration-green-600'>future</span> at Dineri",
       "description": "At Dineri, we believe talent and ideas drive innovation. Join our team and help us build digital solutions that bring restaurants and their customers closer together."
     }
+  },
+  "CareersSubPage": {
+    "JobForm": {
+      "applyFor": "Apply for {title}",
+      "applicationSubmittedTitle": "Application Submitted!",
+      "applicationSubmittedText": "Thank you for applying to the {title} position at {company}. We've received your application and will review it carefully. If your qualifications match our needs, we'll be in touch shortly.",
+      "fields": {
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "experience": "Years of Experience",
+        "education": "Education Level",
+        "noticePeriod": "Notice Period",
+        "gender": "Gender",
+        "address": "Address",
+        "city": "City",
+        "state": "State",
+        "zipCode": "ZIP Code",
+        "portfolio": "Portfolio URL (Optional)",
+        "linkedin": "LinkedIn Profile (Optional)",
+        "github": "GitHub Profile (Optional)",
+        "salaryExpectations": "Salary Expectations",
+        "resume": "Resume/CV",
+        "coverLetter": "Cover Letter"
+      },
+      "placeholders": {
+        "fullName": "Full Name",
+        "email": "example@example.com",
+        "phone": "Enter phone number",
+        "address": "Street address",
+        "city": "City Name",
+        "state": "State Name",
+        "zipCode": "Zip Code",
+        "portfolio": "https://your-portfolio.com",
+        "linkedin": "https://linkedin.com/in/yourprofile",
+        "github": "https://github.com/yourusername",
+        "salary": "e.g. $80,000 - $100,000",
+        "coverLetter": "Tell us why you're interested in this role and what makes you a great fit..."
+      },
+      "select": {
+        "experience": {
+          "placeholder": "Select experience",
+          "options": {
+            "0-1": "0-1 years",
+            "2-3": "2-3 years",
+            "4-5": "4-5 years",
+            "6-10": "6-10 years",
+            "10+": "10+ years"
+          }
+        },
+        "education": {
+          "placeholder": "Select education",
+          "options": {
+            "high-school": "High School",
+            "associate": "Associate Degree",
+            "bachelor": "Bachelor's Degree",
+            "master": "Master's Degree",
+            "phd": "PhD"
+          }
+        },
+        "noticePeriod": {
+          "placeholder": "Select notice period",
+          "options": {
+            "immediately": "Immediately",
+            "1-week": "1 week",
+            "2-weeks": "2 weeks",
+            "1-month": "1 month",
+            "2-months": "2 months",
+            "3-months": "3 months"
+          }
+        },
+        "gender": {
+          "placeholder": "Prefer not to say",
+          "options": {
+            "prefer-not-to-say": "Prefer not to say",
+            "male": "Male",
+            "female": "Female",
+            "non-binary": "Non-binary",
+            "other": "Other"
+          }
+        }
+      },
+      "buttons": {
+        "uploadResume": "Upload Resume",
+        "submit": "Submit Application",
+        "submitting": "Submitting..."
+      },
+      "errors": {
+        "fullNameMin": "Full name must be at least 2 characters",
+        "invalidEmail": "Please enter a valid email address",
+        "invalidPhone": "Please enter a valid phone number",
+        "addressMin": "Please enter your complete address",
+        "cityMin": "Please enter your city",
+        "stateMin": "Please enter your state",
+        "zipCodeMin": "Please enter a valid zip code",
+        "experienceRequired": "Please select your experience level",
+        "educationRequired": "Please select your education level",
+        "coverLetterMin": "Cover letter must be at least 50 characters",
+        "resumeRequired": "Resume is required",
+        "invalidUrl": "Please enter a valid URL",
+        "salaryRequired": "Please enter your salary expectations",
+        "noticePeriodRequired": "Please select your notice period",
+        "genderRequired": "Please select your gender"
+      },
+      "toasts": {
+        "applicationSuccess": "Application submitted successfully!",
+        "applicationError": "Something went wrong. Please try again."
+      }
+    }
+  },
+  "HelpCenter": {
+    "Introduction": {
+      "pageTitle": "Introduction",
+      "welcome": "Welcome to the platform! This guide will help you get started quickly and understand the essentials. Whether you are a restaurant owner, manager, or part of a hospitality team, our platform is built to make your day-to-day operations easier and more efficient.",
+      "welcome2": "We combine simplicity, flexibility, and powerful features so you can focus on running your business while we handle the technical side.",
+      "whyTitle": "Why use this platform?",
+      "why": {
+        "centralizedManagement": {
+          "title": "Centralized Management",
+          "description": "Manage menus, orders, events, and promotions all in one place."
+        },
+        "seamlessExperience": {
+          "title": "Seamless Guest Experience",
+          "description": "Give your customers a modern and smooth way to interact with your business."
+        },
+        "insights": {
+          "title": "Actionable Insights",
+          "description": "Analytics that show you what’s working and where you can improve."
+        },
+        "scalable": {
+          "title": "Scalable & Flexible",
+          "description": "Start small and grow with advanced features as your needs expand."
+        },
+        "easyToUse": {
+          "title": "Easy to Use",
+          "description": "No technical background required – designed for everyone."
+        }
+      },
+      "whoTitle": "Who is it for?",
+      "who": {
+        "restaurants": {
+          "title": "Restaurants & Cafés",
+          "description": "Simplify reservations, orders, and menu management."
+        },
+        "bars": {
+          "title": "Bars & Lounges",
+          "description": "Promote events and engage customers with QR codes and popups."
+        },
+        "hospitality": {
+          "title": "Hospitality Businesses",
+          "description": "Gain insights through analytics and streamline operations."
+        },
+        "chefs": {
+          "title": "Private Chefs & Catering Services",
+          "description": "Showcase menus, manage bookings, and provide clients with a personalized experience."
+        },
+        "foodTrucks": {
+          "title": "Food Trucks & Pop-ups",
+          "description": "Share your location, menu, and updates instantly."
+        }
+      },
+      "keyPointsTitle": "Key Points to Remember",
+      "keyPoints": [
+        "One central dashboard – Everything you need (menus, orders, analytics, events) is managed from one place.",
+        "Quick setup – You can be up and running in just a few minutes.",
+        "No technical skills required – The editor is designed to be simple and intuitive.",
+        "Flexible features – Turn modules (e.g. events, popups, QR codes) on or off as needed.",
+        "Mobile-friendly – Works seamlessly on any device for both you and your guests.",
+        "Customizable design – Adapt the look and feel to match your brand identity.",
+        "Real-time updates – Any changes you make are reflected instantly.",
+        "Secure & reliable – Your data and customer information are protected.",
+        "Scalable – Start small and expand as your business grows.",
+        "Continuous improvements – Regular updates bring new features and enhancements."
+      ]
+    },
+    "WhatIsNew": {
+      "pageTitle": "What’s New?",
+      "intro": "Stay up to date with the latest features and improvements. We’re continuously working to make the platform more powerful, reliable, and easy to use.",
+
+      "septemberTitle": "September 2025 – Latest Updates",
+      "newFeaturesTitle": "New Features",
+      "newFeatures": {
+        "menuEditor": {
+          "title": "Menu Editor",
+          "description": "Easily create and customize your menu with item descriptions and pricing. Use it as a quick menu for instant sharing, or connect it directly to your order system for a fully integrated experience. You can switch between linked or standalone mode at any time."
+        },
+        "qrCodes": {
+          "title": "QR Codes",
+          "description": "Instantly generate QR codes that connect your guests directly to your menu, events, or promotions. Every scan is tracked, so you can see exactly how often your QR codes are used and measure engagement in real time."
+        },
+        "popups": {
+          "title": "Popups",
+          "description": "Create simple, customizable popups to share announcements on your food ordering page, highlight upcoming events, or simply welcome guests when they visit."
+        }
+      },
+
+      "octoberTitle": "October 2025 – Updates",
+      "improvementsTitle": "Improvements",
+      "improvements": {
+        "typography": {
+          "title": "More typography options",
+          "description": "Expanded font choices for greater customization."
+        },
+        "dashboard": {
+          "title": "Dashboard design tweaks",
+          "description": "Small adjustments for a cleaner, more user-friendly layout."
+        },
+        "bugFixes": {
+          "title": "Bug fixes",
+          "description": "Minor issues resolved for a smoother experience."
+        }
+      },
+
+      "comingSoonTitle": "Coming Soon",
+      "comingSoon": {
+        "loyaltyTools": {
+          "title": "Loyalty Tools",
+          "description": "Reward repeat guests with discounts and digital punch cards."
+        },
+        "reservationIntegration": {
+          "title": "Reservation Tool Integration",
+          "description": "Connect Dineri.app with your existing booking system."
+        },
+        "advancedAnalytics": {
+          "title": "Advanced Analytics",
+          "description": "Export reports and gain deeper insights into performance."
+        }
+      }
+    },
+    "Support": {
+      "pageTitle": "Contact Support",
+      "intro": "Fill out the form below and our team will get back to you as soon as possible.",
+
+      "fields": {
+        "name": "Full Name",
+        "email": "Email",
+        "urgency": "Urgency",
+        "issueType": "Issue Type",
+        "subject": "Subject",
+        "message": "Message",
+        "attachments": "Attachments (Optional)",
+        "terms": "I agree to the terms and conditions"
+      },
+
+      "placeholders": {
+        "name": "Your name",
+        "email": "your.email@example.com",
+        "subject": "Brief description of your issue",
+        "message": "Please describe your issue in detail...",
+        "urgency": {
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High"
+        },
+        "issueType": {
+          "placeholder": "Select an issue type",
+          "technical": "Technical Issue",
+          "billing": "Billing Question",
+          "account": "Account Problem",
+          "feature": "Feature Request",
+          "other": "Other"
+        }
+      },
+
+      "descriptions": {
+        "message": "Provide as much detail as possible to help us assist you.",
+        "attachments": "Upload screenshots or documents that might help us understand your issue.",
+        "terms": "You agree to our Terms of Service and Privacy Policy."
+      },
+
+      "buttons": {
+        "submit": "Submit Request",
+        "submitting": "Submitting..."
+      },
+
+      "alerts": {
+        "successTitle": "Success!",
+        "successMessage": "Your support request has been submitted successfully. We'll get back to you soon.",
+        "errorTitle": "Error",
+        "errorMessage": "There was a problem submitting your form. Please try again."
+      },
+
+      "errors": {
+        "nameMin": "Name must be at least 2 characters.",
+        "invalidEmail": "Please enter a valid email address.",
+        "urgencyRequired": "Please select an urgency level.",
+        "issueTypeRequired": "Please select an issue type.",
+        "subjectMin": "Subject must be at least 5 characters.",
+        "messageMin": "Message must be at least 10 characters.",
+        "termsRequired": "You must accept the terms and conditions."
+      }
+    },
+    "Features": {
+      "Analytics": {
+        "pageTitle": "Analytics",
+        "intro": "Track views, QR scans, and orders to understand how your guests interact with your business. Clear insights help you improve menus, promotions, and overall performance.",
+
+        "overviewTitle": "Overview",
+        "overviewText": "Analytics gives you valuable insights into how guests interact with your menus, QR codes, and order system. With clear data, you can see what’s working, identify trends, and make smarter business decisions.",
+
+        "metricsTitle": "Key Metrics Explained",
+        "metrics": {
+          "totalLinkViews": {
+            "title": "Total Link Views",
+            "description": "The total number of times your shared link has been clicked (including repeat clicks from the same person)."
+          },
+          "uniqueLinkVisitors": {
+            "title": "Unique Link Visitors",
+            "description": "The number of individual people who clicked your link. One person clicking multiple times still counts as 1."
+          },
+          "pageViews": {
+            "title": "Page Views",
+            "description": "The total number of times your menu or page has been viewed (including repeat views)."
+          },
+          "uniquePageVisitors": {
+            "title": "Unique Page Visitors",
+            "description": "The number of different people who visited your page. Multiple visits from the same person are only counted once."
+          }
+        },
+
+        "benefitsTitle": "Key Benefits",
+        "benefits": [
+          "Understand guest behavior – See which items and categories get the most attention.",
+          "Measure QR code performance – Track how often and where your QR codes are scanned.",
+          "Order insights – Learn which products sell best and when.",
+          "Data-driven decisions – Use analytics to optimize your menu, pricing, and promotions."
+        ],
+
+        "tipsTitle": "Tips",
+        "tips": [
+          "Check your analytics weekly to spot trends early.",
+          "Compare different time periods (e.g. last week vs. this week) to measure growth.",
+          "Use insights to test new promotions or highlight popular items.",
+          "Combine analytics with Events or Popups to see which strategies drive more engagement."
+        ]
+      },
+      "Orders": {
+        "pageTitle": "Orders",
+
+        "accessShopTitle": "1. Access your shop",
+        "accessShop": [
+          "Go to your restaurant page by typing <span class=\"text-main-action\">\"/menu\"</span> after your domain. Example: <span class=\"text-main-action\">\"dineri.me/your-restaurant/menu\"</span>.",
+          "This is your <b>shop page</b>, where guests can place orders.",
+          "You can fully customize this page via the <b>Customize button</b> (bottom-right corner).",
+          "<b>Tip:</b> Add all your products first, then use Customize, it’s easier to design when you can see the full menu."
+        ],
+
+        "addProductsTitle": "2. Add products",
+        "addProducts": [
+          "In your dashboard, go to <b>Menu</b> → Add Product.",
+          "When adding a product, you can choose to include it in the <b>Quick Menu</b>.",
+          "If you skip this, the product will only appear in the <b>Shop</b>."
+        ],
+
+        "manageOrdersTitle": "3. Manage orders",
+        "manageOrders": [
+          "Orders are displayed in your <b>Orders</b> dashboard with details like items, quantity, and time of order.",
+          {
+            "title": "Update order status:",
+            "items": [
+              "<b>Pending</b> → waiting for confirmation",
+              "<b>In Progress</b> → being prepared",
+              "<b>Completed</b> → delivered or picked up",
+              "<b>Cancelled</b> → order cancelled"
+            ]
+          }
+        ],
+
+        "dashboardFunctionsTitle": "Additional Functions in the Orders Dashboard",
+        "dashboardFunctions": [
+          "<b>Restaurant Status</b><br/>Set your restaurant availability for <b>delivery, pickup</b>, or <b>unavailable</b>. Perfect for busy times or temporary issues when you need to stop orders.",
+          "<b>Delivery Costs</b><br/>Define your own delivery fees directly in the dashboard.",
+          "<b>Refresh Timer</b><br/>Keep your order page open in your workspace and choose an auto-refresh interval (e.g. every 2, 5, or 15 minutes). This way, you’ll always see new orders without touching the screen.",
+          "<b>Opening Hours</b><br/>Adjust your restaurant’s opening times.<br/><b>Important:</b> You cannot set separate hours for delivery vs. pickup. If your kitchen has different timings (e.g. delivery closes earlier), make sure to reflect this in your main opening times.",
+          "<b>Order Export File</b><br/>Download your complete order history as an Excel sheet. This includes all key data you may need for accounting and administration."
+        ],
+
+        "benefitsTitle": "Key Benefits",
+        "benefits": [
+          "<b>Centralized management –</b> All orders, products, and settings in one place.",
+          "<b>Customizable shop –</b> Tailor your ordering page to fit your brand.",
+          "<b>Operational flexibility –</b> Adjust status, delivery costs, and refresh timer as needed.",
+          "<b>Data at your fingertips –</b> Export order history for reporting or accounting."
+        ],
+
+        "tipsTitle": "Tips",
+        "tips": [
+          "Add products before customizing your shop for the best editing experience.",
+          "Regularly check your <b>restaurant status</b> to avoid missed orders during busy times.",
+          "Use the <b>refresh timer</b> on a tablet or screen in your kitchen to stay up-to-date hands-free.",
+          "Export your order history monthly to keep your records organized."
+        ],
+
+        "paymentsTitle": "Payments",
+        "payments": "To receive payments directly into your bank account, you need to connect your <b>Stripe account</b>. Click here to learn how to set up and link Stripe with your restaurant."
+      },
+      "Links": {
+        "title": "Links",
+        "intro": "Share important links with your guests in just a few clicks. Direct visitors to your website, social media, reservation tool, or any other online page straight from your Dineri profile.",
+        "overviewTitle": "Overview",
+        "overviewText": "The Links feature allows you to centralize all your important links in one place. Instead of sharing multiple URLs, you can create a single hub where guests can easily find everything they need, from your menu to your Instagram page or reservation system.",
+        "howItWorksTitle": "How it works",
+        "howItWorks": [
+          {
+            "title": "Click <b>Add Link</b> and enter:",
+            "items": [
+              "A <b>title</b> (e.g. “Instagram” or “Reserve a Table”).",
+              "The <b>URL</b> of the page.",
+              "(Optional) An <b>icon or image</b> for quick recognition."
+            ]
+          },
+          "Reorder links by dragging them into your preferred order.",
+          "Save changes → Your updates are instantly live."
+        ],
+        "benefitsTitle": "Key Benefits",
+        "benefits": [
+          "<b>Central hub –</b> Collect all your important links in one accessible place.",
+          "<b>Customizable –</b> Titles, order, and icons can be personalized to match your brand.",
+          "<b>Instant updates –</b> Any change you make in the dashboard is reflected immediately.",
+          "<b>More engagement –</b> Make it easy for guests to connect with you on multiple platforms."
+        ],
+        "tipsTitle": "Tips",
+        "tips": [
+          "Add your <b>reservation tool link</b> so guests can book directly.",
+          "Include links to <b>social media</b> for more visibility and engagement.",
+          "Keep the list short and relevant, too many links can overwhelm guests.",
+          "Use <b>Analytics</b> to track which links get the most clicks."
+        ]
+      }
+    }
   }
 }

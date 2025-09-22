@@ -23,53 +23,44 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import JobListings from "@/app/[locale]/Data/job-data";
+import { useLocale, useTranslations } from "next-intl";
+import { Locale } from "@/i18n/routing";
 
-const applicationSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Please enter a valid phone number"),
-  address: z.string().min(5, "Please enter your complete address"),
-  city: z.string().min(2, "Please enter your city"),
-  state: z.string().min(2, "Please enter your state"),
-  zipCode: z.string().min(5, "Please enter a valid zip code"),
-  experience: z.string().min(1, "Please select your experience level"),
-  education: z.string().min(1, "Please select your education level"),
-  coverLetter: z
-    .string()
-    .min(50, "Cover letter must be at least 50 characters"),
-  resume: z.instanceof(File, { message: "Resume is required" }),
-  portfolio: z
-    .string()
-    .url("Please enter a valid URL")
-    .optional()
-    .or(z.literal("")),
-  linkedIn: z
-    .string()
-    .url("Please enter a valid URL")
-    .optional()
-    .or(z.literal("")),
-  github: z
-    .string()
-    .url("Please enter a valid URL")
-    .optional()
-    .or(z.literal("")),
-  salaryExpectations: z
-    .string()
-    .min(1, "Please enter your salary expectations"),
-  noticePeriod: z.string().min(1, "Please select your notice period"),
-  gender: z.string().min(1, "Please select your gender"),
-  ethnicity: z.string().optional(),
-  veteranStatus: z.string().optional(),
-  disability: z.string().optional(),
-});
 
-type ApplicationForm = z.infer<typeof applicationSchema>;
 
 export default function JobForm({ id }: { id: number }) {
-  const job = JobListings.find((j) => j.id == id);
+  const locale: Locale = useLocale() as Locale;
+  const t = useTranslations("CareersSubPage.JobForm");
+
+  const job = JobListings[locale]?.find((j) => j.id == id);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const applicationSchema = z.object({
+    fullName: z.string().min(2, t("errors.fullNameMin")),
+    email: z.string().email(t("errors.invalidEmail")),
+    phone: z.string().min(10, t("errors.invalidPhone")),
+    address: z.string().min(5, t("errors.addressMin")),
+    city: z.string().min(2, t("errors.cityMin")),
+    state: z.string().min(2, t("errors.stateMin")),
+    zipCode: z.string().min(5, t("errors.zipCodeMin")),
+    experience: z.string().min(1, t("errors.experienceRequired")),
+    education: z.string().min(1, t("errors.educationRequired")),
+    coverLetter: z.string().min(50, t("errors.coverLetterMin")),
+    resume: z.instanceof(File, { message: t("errors.resumeRequired") }),
+    portfolio: z.string().url(t("errors.invalidUrl")).optional().or(z.literal("")),
+    linkedIn: z.string().url(t("errors.invalidUrl")).optional().or(z.literal("")),
+    github: z.string().url(t("errors.invalidUrl")).optional().or(z.literal("")),
+    salaryExpectations: z.string().min(1, t("errors.salaryRequired")),
+    noticePeriod: z.string().min(1, t("errors.noticePeriodRequired")),
+    gender: z.string().min(1, t("errors.genderRequired")),
+    ethnicity: z.string().optional(),
+    veteranStatus: z.string().optional(),
+    disability: z.string().optional(),
+  });
+
+  type ApplicationForm = z.infer<typeof applicationSchema>;
 
   const {
     register,
@@ -88,12 +79,16 @@ export default function JobForm({ id }: { id: number }) {
 
   const onSubmit = async (data: ApplicationForm) => {
     console.log("Application submitted:", data);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    toast.success("Application submitted successfully!");
-    setIsSubmitted(true);
-    reset();
-    setSelectedFile(null);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      toast.success(t("toasts.applicationSuccess"));
+      setIsSubmitted(true);
+      reset();
+      setSelectedFile(null);
+    } catch {
+      toast.error(t("toasts.applicationError"));
+    }
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,19 +111,17 @@ export default function JobForm({ id }: { id: number }) {
           {/* Application Form Section */}
           <section id="apply" className="pt-8 border-t">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Apply for {job.title}
+              {t("applyFor", { title: job.title })}
             </h2>
 
             {isSubmitted ? (
               <div className="bg-green-50 p-6 rounded-lg border border-green-200">
                 <h3 className="text-xl font-semibold text-green-800 mb-2">
                   Application Submitted!
+                  {t("applicationSubmittedTitle")}
                 </h3>
                 <p className="text-green-700">
-                  Thank you for applying to the {job.title} position at{" "}
-                  {job.company}. We&apos;ve received your application and will
-                  review it carefully. If your qualifications match our needs,
-                  we&apos;ll be in touch shortly.
+                  {t("applicationSubmittedText", { title: job.title, company: job.company })}
                 </p>
               </div>
             ) : (
@@ -138,12 +131,12 @@ export default function JobForm({ id }: { id: number }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label className="mb-3" htmlFor="fullName">
-                          Full Name *
+                          {t("fields.fullName")} *
                         </Label>
                         <Input
                           id="fullName"
                           {...register("fullName")}
-                          placeholder="Full Name"
+                          placeholder={t("placeholders.fullName")}
                           className="mt-1 h-[54px]  font-poppins"
                         />
                         {errors.fullName && (
@@ -155,11 +148,11 @@ export default function JobForm({ id }: { id: number }) {
 
                       <div>
                         <Label className="mb-3" htmlFor="email">
-                          Email Address *
+                          {t("fields.email")} *
                         </Label>
                         <Input
                           id="email"
-                          placeholder="example@example.com"
+                          placeholder={t("placeholders.email")}
                           type="email"
                           {...register("email")}
                           className="mt-1 h-[54px]  font-poppins"
@@ -175,11 +168,12 @@ export default function JobForm({ id }: { id: number }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label className="mb-3" htmlFor="phone">
-                          Phone Number *
+                          {t("fields.phone")} *
                         </Label>
                         <Input
                           id="phone"
                           {...register("phone")}
+                          placeholder={t("placeholders.phone")}
                           className="mt-1 h-[54px]  font-poppins"
                         />
                         {errors.phone && (
@@ -191,7 +185,7 @@ export default function JobForm({ id }: { id: number }) {
 
                       <div>
                         <Label className="mb-3" htmlFor="experience">
-                          Years of Experience *
+                          {t("fields.experience")} *
                         </Label>
                         <Select
                           onValueChange={(value) =>
@@ -205,14 +199,26 @@ export default function JobForm({ id }: { id: number }) {
                             id="experience"
                             className="mt-1 w-full !h-[54px] font-poppins"
                           >
-                            <SelectValue placeholder="Select experience" className="" />
+                            <SelectValue
+                              placeholder={t("select.experience.placeholder")}
+                              className="" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="0-1">0-1 years</SelectItem>
-                            <SelectItem value="2-3">2-3 years</SelectItem>
-                            <SelectItem value="4-5">4-5 years</SelectItem>
-                            <SelectItem value="6-10">6-10 years</SelectItem>
-                            <SelectItem value="10+">10+ years</SelectItem>
+                            <SelectItem value="0-1">
+                              {t("select.experience.options.0-1")}
+                            </SelectItem>
+                            <SelectItem value="2-3">
+                              {t("select.experience.options.2-3")}
+                            </SelectItem>
+                            <SelectItem value="4-5">
+                              {t("select.experience.options.4-5")}
+                            </SelectItem>
+                            <SelectItem value="6-10">
+                              {t("select.experience.options.6-10")}
+                            </SelectItem>
+                            <SelectItem value="10+">
+                              {t("select.experience.options.10+")}
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         {errors.experience && (
@@ -226,7 +232,7 @@ export default function JobForm({ id }: { id: number }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label className="mb-3" htmlFor="education">
-                          Education Level *
+                          {t("fields.education")} *
                         </Label>
                         <Select
                           onValueChange={(value) =>
@@ -240,22 +246,26 @@ export default function JobForm({ id }: { id: number }) {
                             id="education"
                             className="mt-1 w-full !h-[54px] font-poppins"
                           >
-                            <SelectValue placeholder="Select education" />
+                            <SelectValue
+                              placeholder={t("select.education.placeholder")}
+                            />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="high-school">
-                              High School
+                              {t("select.education.options.high-school")}
                             </SelectItem>
                             <SelectItem value="associate">
-                              Associate Degree
+                              {t("select.education.options.associate")}
                             </SelectItem>
                             <SelectItem value="bachelor">
-                              Bachelor&apos;s Degree
+                              {t("select.education.options.bachelor")}
                             </SelectItem>
                             <SelectItem value="master">
-                              Master&apos;s Degree
+                              {t("select.education.options.master")}
                             </SelectItem>
-                            <SelectItem value="phd">PhD</SelectItem>
+                            <SelectItem value="phd">
+                              {t("select.education.options.phd")}
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         {errors.education && (
@@ -267,7 +277,7 @@ export default function JobForm({ id }: { id: number }) {
 
                       <div>
                         <Label className="mb-3" htmlFor="noticePeriod">
-                          Notice Period *
+                          {t("fields.noticePeriod")} *
                         </Label>
                         <Select
                           onValueChange={(value) =>
@@ -281,17 +291,29 @@ export default function JobForm({ id }: { id: number }) {
                             id="noticePeriod"
                             className="mt-1 w-full !h-[54px] font-poppins"
                           >
-                            <SelectValue placeholder="Select notice period" />
+                            <SelectValue
+                              placeholder={t("select.noticePeriod.placeholder")}
+                            />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="immediately">
-                              Immediately
+                              {t("select.noticePeriod.options.immediately")}
                             </SelectItem>
-                            <SelectItem value="1-week">1 week</SelectItem>
-                            <SelectItem value="2-weeks">2 weeks</SelectItem>
-                            <SelectItem value="1-month">1 month</SelectItem>
-                            <SelectItem value="2-months">2 months</SelectItem>
-                            <SelectItem value="3-months">3 months</SelectItem>
+                            <SelectItem value="1-week">
+                              {t("select.noticePeriod.options.1-week")}
+                            </SelectItem>
+                            <SelectItem value="2-weeks">
+                              {t("select.noticePeriod.options.2-weeks")}
+                            </SelectItem>
+                            <SelectItem value="1-month">
+                              {t("select.noticePeriod.options.1-month")}
+                            </SelectItem>
+                            <SelectItem value="2-months">
+                              {t("select.noticePeriod.options.2-months")}
+                            </SelectItem>
+                            <SelectItem value="3-months">
+                              {t("select.noticePeriod.options.3-months")}
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         {errors.noticePeriod && (
@@ -305,7 +327,7 @@ export default function JobForm({ id }: { id: number }) {
                       {/* Gender Field */}
 
                       <Label className="mb-3" htmlFor="gender">
-                        Gender
+                        {t("fields.gender")} *
                       </Label>
                       <Select
                         onValueChange={(value) =>
@@ -317,29 +339,39 @@ export default function JobForm({ id }: { id: number }) {
                           id="gender"
                           className="mt-3 w-full !h-[54px] font-poppins"
                         >
-                          <SelectValue placeholder="Prefer not to say" />
+                          <SelectValue
+                            placeholder={t("select.gender.placeholder")}
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="prefer-not-to-say">
-                            Prefer not to say
+                            {t("select.gender.options.prefer-not-to-say")}
                           </SelectItem>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
-                          <SelectItem value="non-binary">Non-binary</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                          <SelectItem value="male">
+                            {t("select.gender.options.male")}
+                          </SelectItem>
+                          <SelectItem value="female">
+                            {t("select.gender.options.female")}
+                          </SelectItem>
+                          <SelectItem value="non-binary">
+                            {t("select.gender.options.non-binary")}
+                          </SelectItem>
+                          <SelectItem value="other">
+                            {t("select.gender.options.other")}
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div>
                       <Label className="mb-3" htmlFor="address">
-                        Address *
+                        {t("fields.address")} *
                       </Label>
                       <Input
                         id="address"
                         {...register("address")}
                         className="mt-1 h-11"
-                        placeholder="Street address"
+                        placeholder={t("placeholders.address")}
                       />
                       {errors.address && (
                         <p className="text-red-500 text-sm mt-1">
@@ -351,12 +383,12 @@ export default function JobForm({ id }: { id: number }) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                         <Label className="mb-3" htmlFor="city">
-                          City *
+                          {t("fields.city")} *
                         </Label>
                         <Input
                           id="city"
                           {...register("city")}
-                          placeholder="City Name"
+                          placeholder={t("placeholders.city")}
                           className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.city && (
@@ -368,12 +400,12 @@ export default function JobForm({ id }: { id: number }) {
 
                       <div>
                         <Label className="mb-3" htmlFor="state">
-                          State *
+                          {t("fields.state")} *
                         </Label>
                         <Input
                           id="state"
                           {...register("state")}
-                          placeholder="State Name"
+                          placeholder={t("placeholders.state")}
                           className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.state && (
@@ -385,12 +417,12 @@ export default function JobForm({ id }: { id: number }) {
 
                       <div>
                         <Label className="mb-3" htmlFor="zipCode">
-                          ZIP Code *
+                          {t("fields.zipCode")} *
                         </Label>
                         <Input
                           id="zipCode"
                           {...register("zipCode")}
-                          placeholder="ZipCode"
+                          placeholder={t("placeholders.zipCode")}
                           className="mt-1 !h-[54px] font-poppins"
                         />
                         {errors.zipCode && (
@@ -404,12 +436,12 @@ export default function JobForm({ id }: { id: number }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label className="mb-3" htmlFor="portfolio">
-                          Portfolio URL (Optional)
+                          {t("fields.portfolio")}
                         </Label>
                         <Input
                           id="portfolio"
                           type="url"
-                          placeholder="https://your-portfolio.com"
+                          placeholder={t("placeholders.portfolio")}
                           {...register("portfolio")}
                           className="mt-1 !h-[54px] font-poppins"
                         />
@@ -422,12 +454,12 @@ export default function JobForm({ id }: { id: number }) {
 
                       <div>
                         <Label className="mb-3" htmlFor="linkedIn">
-                          LinkedIn Profile (Optional)
+                          {t("fields.linkedin")}
                         </Label>
                         <Input
                           id="linkedIn"
                           type="url"
-                          placeholder="https://linkedin.com/in/yourprofile"
+                          placeholder={t("placeholders.linkedin")}
                           {...register("linkedIn")}
                           className="mt-1 !h-[54px] font-poppins"
                         />
@@ -442,12 +474,12 @@ export default function JobForm({ id }: { id: number }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label className="mb-3" htmlFor="github">
-                          GitHub Profile (Optional)
+                          {t("fields.github")}
                         </Label>
                         <Input
                           id="github"
                           type="url"
-                          placeholder="https://github.com/yourusername"
+                          placeholder={t("placeholders.github")}
                           {...register("github")}
                           className="mt-1 !h-[54px] font-poppins"
                         />
@@ -460,11 +492,11 @@ export default function JobForm({ id }: { id: number }) {
 
                       <div>
                         <Label className="mb-3" htmlFor="salaryExpectations">
-                          Salary Expectations *
+                          {t("fields.salaryExpectations")} *
                         </Label>
                         <Input
                           id="salaryExpectations"
-                          placeholder="e.g. $80,000 - $100,000"
+                          placeholder={t("placeholders.salary")}
                           {...register("salaryExpectations")}
                           className="mt-1 !h-[54px] font-poppins"
                         />
@@ -478,7 +510,7 @@ export default function JobForm({ id }: { id: number }) {
 
                     <div>
                       <Label className="mb-3" htmlFor="resume">
-                        Resume/CV *
+                        {t("fields.resume")} *
                       </Label>
                       <div className="mt-1 flex items-center gap-4">
                         <input
@@ -497,7 +529,7 @@ export default function JobForm({ id }: { id: number }) {
                           }
                         >
                           <Upload className="w-4 h-4 mr-2" />
-                          Upload Resume
+                          {t("buttons.uploadResume")}
                         </Button>
                         {selectedFile && (
                           <span className="text-sm text-gray-600">
@@ -514,11 +546,11 @@ export default function JobForm({ id }: { id: number }) {
 
                     <div>
                       <Label className="mb-3" htmlFor="coverLetter">
-                        Cover Letter *
+                        {t("fields.coverLetter")} *
                       </Label>
                       <Textarea
                         id="coverLetter"
-                        placeholder="Tell us why you're interested in this role and what makes you a great fit..."
+                        placeholder={t("placeholders.coverLetter")}
                         {...register("coverLetter")}
                         className="mt-1 h-32 pt-4 font-poppins resize-none"
                       />
@@ -535,7 +567,7 @@ export default function JobForm({ id }: { id: number }) {
                         disabled={isSubmitting}
                         className="w-full bg-[#002147] hover:bg-main-hover/80 cursor-pointer transition-all font-poppins text-lg h-[60px] "
                       >
-                        {isSubmitting ? "Submitting..." : "Submit Application"}
+                        {isSubmitting ? t("buttons.submitting") : t("buttons.submit")}
                       </Button>
                     </div>
                   </form>

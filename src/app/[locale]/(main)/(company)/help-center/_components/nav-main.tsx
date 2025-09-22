@@ -1,7 +1,5 @@
 "use client";
 
-import { BookOpen, Boxes, LifeBuoy, Sparkles, type LucideIcon } from "lucide-react";
-import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -18,106 +16,23 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Locale } from "@/i18n/routing";
+import { navMain } from "@/lib/help-center-nav-links";
+import { useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
-const navMain: {
-  title: string;
-  icon?: LucideIcon;
-  items?: {
-    title: string;
-    url: string;
-  }[];
-}[] = [
-    {
-      title: "Introduction",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Why use this platform?",
-          url: "/help-center/introduction#why-use-this-platform",
-        },
-        {
-          title: "Who is it for?",
-          url: "/help-center/introduction#who-is-it-for",
-        },
-        {
-          title: "Key Points to Remember",
-          url: "/help-center/introduction#key-Points-to-remember",
-        },
-      ],
-    },
-    {
-      title: "What’s New?",
-      icon: Sparkles,
-      items: [
-        {
-          title: "New Features",
-          url: "/help-center/what-is-new#new-features",
-        },
-        {
-          title: "Improvements",
-          url: "/help-center/what-is-new#improvements",
-        },
-        {
-          title: "Coming Soon",
-          url: "/help-center/what-is-new#coming-soon",
-        },
-      ],
-    },
-    {
-      title: "Features",
-      icon: Boxes,
-      items: [
-        {
-          title: "Analytics",
-          url: "/help-center/features#analytics",
-        },
-        {
-          title: "Orders",
-          url: "/help-center/features#orders",
-        },
-        {
-          title: "Links",
-          url: "/help-center/features#links",
-        },
-        {
-          title: "Menu",
-          url: "/help-center/features#menu",
-        },
-        {
-          title: "Events",
-          url: "/help-center/features#events",
-        },
-        {
-          title: "FAQ",
-          url: "/help-center/features#faq",
-        },
-        {
-          title: "Popups",
-          url: "/help-center/features#popups",
-        },
-        {
-          title: "QR Codes",
-          url: "/help-center/features#qr-codes",
-        },
-      ],
-    },
-    {
-      title: "Contact Us",
-      icon: LifeBuoy,
-      items: [
-        {
-          title: "Get Help",
-          url: "/help-center/support",
-        },
-      ],
-    }
-  ];
+
 
 export function NavMain() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const locale: Locale = useLocale() as Locale;
   const [currentHash, setCurrentHash] = useState("");
   const { setOpenMobile } = useSidebar()
+
+  const stripLocale = (path: string) =>
+    path.replace(/^\/(en|de|es|fr|it|nl)(?=\/|$)/, "");
+
   useEffect(() => {
     setCurrentHash(window.location.hash);
 
@@ -128,19 +43,20 @@ export function NavMain() {
   }, [pathname, searchParams]);
 
   const isActive = (href: string) => {
-    if (href.includes("#")) {
-      const basePath = href.split("#")[0];
-      const hash = href.split("#")[1];
-      return pathname === basePath && currentHash === `#${hash}`;
-    } else {
-      return pathname === href && currentHash === "";
-    }
-  };
+    const [basePath, hash] = href.split("#");
 
+    const cleanPathname = stripLocale(pathname);
+    const cleanBasePath = stripLocale(basePath);
+
+    if (hash) {
+      return cleanPathname === cleanBasePath && currentHash === `#${hash}`;
+    }
+    return cleanPathname === cleanBasePath && !currentHash;
+  };
   return (
     <SidebarGroup className="h-full bg-white font-poppins shadow-md overflow-y-auto px-2">
       <SidebarMenu className="gap-1 py-3 pb-20">
-        {navMain.map((item) => {
+        {navMain[locale]?.map((item) => {
           const isMainActive = item.items?.some((sub) => isActive(sub.url));
 
           return (
