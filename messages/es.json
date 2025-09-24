@@ -861,6 +861,283 @@
           "Mantén la lista corta y relevante, demasiados enlaces pueden abrumar a los clientes.",
           "Usa <b>Analíticas</b> para ver qué enlaces reciben más clics."
         ]
+      },
+      "Menu": {
+        "title": "Menú",
+        "intro": "Cree y personalice su menú digital con descripciones de productos, precios y categorías. Úselo como un simple <b>Menú Rápido</b> para compartir al instante, o conéctelo directamente a su <b>sistema de pedidos</b> para una experiencia completa de tienda digital.",
+        "overview_title": "Descripción general",
+        "overview_text": "La función de Menú es la base de su configuración en Dineri. Le permite crear un menú estructurado y profesional que siempre está actualizado. Los clientes pueden explorar sus platos en línea y, si el sistema de pedidos está habilitado, también pueden realizar pedidos directamente a través de su tienda.",
+        "how_it_works": {
+          "title": "Cómo funciona",
+          "steps": [
+            {
+              "title": "<b>1. Crear categorías</b>",
+              "points": [
+                "Organice sus productos en categorías (por ejemplo: Entradas, Platos principales, Bebidas).",
+                "Elija si una categoría debe estar <b>habilitada en el Menú Rápido</b> o no.",
+                "Las categorías deshabilitadas para el Menú Rápido seguirán apareciendo en su Tienda (conectada a Pedidos)."
+              ]
+            },
+            {
+              "title": "<b>2. Agregar productos</b>",
+              "points": [
+                "Vaya a su panel → <b>Menú</b> → <b>Agregar producto.</b>",
+                "Complete el <b>nombre</b>, la <b>descripción</b> y el <b>precio</b> del producto.",
+                "Asigne el producto a la categoría correcta.",
+                "<b>Nota:</b> Las imágenes no están soportadas en este momento."
+              ]
+            },
+            {
+              "title": "<b>3. Alergias y complementos</b>",
+              "points": [
+                "Para cada producto puede especificar <b>alérgenos</b> (por ejemplo: frutos secos, gluten, lácteos).",
+                "Agregue <b>complementos</b> opcionales (por ejemplo: “Queso extra” o “Agregar salsa”).",
+                "Importante: Los complementos <b>no son visibles en el Menú Rápido</b> — solo aparecen en la <b>Tienda</b> cuando los clientes realizan un pedido."
+              ]
+            },
+            {
+              "title": "<b>4. Guardar y publicar</b>",
+              "points": [
+                "Su menú se actualiza al instante en todos los canales: Menú Rápido, Tienda, códigos QR y enlaces.",
+                "Agregue <b>complementos</b> opcionales (por ejemplo: “Queso extra” o “Agregar salsa”).",
+                "Importante: Los complementos <b>no son visibles en el Menú Rápido</b> — solo aparecen en la <b>Tienda</b> cuando los clientes realizan un pedido."
+              ]
+            }
+          ]
+        },
+        "key_benefits": {
+          "title": "Beneficios clave",
+          "list": [
+            "<b>Menús estructurados –</b> Organice los productos con categorías para una navegación fácil.",
+            "<b>Menú Rápido vs. Tienda –</b> Comparta un menú ligero independiente o una tienda de pedidos totalmente integrada.",
+            "<b>Detalles de alérgenos –</b> Ayude a los clientes a tomar decisiones informadas.",
+            "<b>Complementos flexibles –</b> Ofrezca personalización (por ejemplo: ingredientes adicionales, extras) para aumentar el valor del pedido.",
+            "<b>Actualizaciones en tiempo real –</b> Cualquier cambio se refleja al instante en todas partes."
+          ]
+        },
+        "tips": {
+          "title": "Consejos",
+          "list": [
+            "Cree categorías antes de agregar productos, así su menú se mantiene ordenado.",
+            "Habilite solo las categorías más relevantes para el <b>Menú Rápido</b> (por ejemplo: Bebidas, Comida) y mantenga otras exclusivas para su Tienda.",
+            "Mantenga las descripciones claras y sencillas, demasiado texto hace que el menú sea más difícil de leer.",
+            "Use los complementos con estrategia: extras como ingredientes adicionales o salsas pueden aumentar las ventas.",
+            "Revise periódicamente la información de alérgenos para mantenerla precisa y en conformidad."
+          ]
+        }
+      },
+      "Events": {
+        "title": "Eventos",
+        "intro": "Anuncia y promociona eventos especiales directamente a tus invitados. Ya sea una noche de música en vivo, una cena festiva o una degustación privada, puedes compartir todos los detalles en un solo lugar.",
+        "overview_title": "Resumen",
+        "overview_text": "La función de Eventos te ayuda a conectar con tu audiencia mostrando las próximas actividades en tu restaurante, bar o local. Los invitados pueden ver qué ocurre, cuándo ocurre y cómo participar, todo desde tu perfil digital.",
+        "note": "<b>Nota</b>: Los eventos están disponibles en todos los planes. Con un plan de pago, puedes crear <b>eventos ilimitados</b>.",
+        "how_it_works": {
+          "title": "Cómo funciona",
+          "steps": [
+            "1. Ve a la sección de <b>Eventos</b>.",
+            "2. Haz clic en <b>Agregar evento</b> e ingresa los detalles:",
+            [
+              "<b>Título del evento</b>",
+              "<b>Descripción</b> (por ejemplo, programa, artistas o platos destacados del menú)",
+              "<b>Fecha y hora</b>",
+              "<b>Ubicación</b> (si es diferente de tu local principal)"
+            ],
+            "3. Guardar → El evento se muestra automáticamente en tu <b>página de perfil</b>.",
+            "4. Se añade un nuevo <b>enlace de Eventos</b> a la navegación de tu perfil para que los invitados puedan encontrar fácilmente todas las actividades próximas.",
+            "5. Puedes editar o eliminar eventos en cualquier momento y los cambios se reflejan al instante."
+          ]
+        },
+        "key_benefits": {
+          "title": "Beneficios clave",
+          "list": [
+            "<b>Promociona tu negocio –</b> Destaca noches especiales, ofertas o actividades de temporada.",
+            "<b>Eventos ilimitados –</b> Agrega todos los eventos que quieras (solo en planes de pago).",
+            "<b>Visibilidad automática –</b> Los eventos se añaden inmediatamente a tu perfil y aparecen bajo un enlace dedicado de “Eventos”.",
+            "<b>Marketing integrado –</b> Combínalo con popups para anunciar tus eventos en tiempo real."
+          ]
+        },
+        "integration_popups": {
+          "title": "Integración con Popups",
+          "text": "Además de mostrar los eventos en tu perfil, también puedes exhibirlos en un popup cuando los visitantes entren en tu página.",
+          "list": [
+            "Es una excelente manera de captar la atención al instante.",
+            "Para configurarlo, consulta la <a href=\"/help-center/features#popups\" class=\"underline text-blue-500\">Guía de Popups</a> en el Centro de ayuda."
+          ]
+        },
+        "tips": {
+          "title": "Consejos",
+          "list": [
+            "Agrega descripciones atractivas (por ejemplo, “DJ en vivo + cócteles especiales”) para captar la atención.",
+            "Usa un <b>código QR</b> específico para tu página de eventos y colócalo en folletos, carteles o mesas.",
+            "Mantén los eventos pasados archivados o elimínalos rápidamente para que tu perfil esté siempre actualizado.",
+            "Combina eventos con <b>popups</b> para lograr la máxima visibilidad."
+          ]
+        }
+      },
+      "FAQ": {
+        "title": "FAQ",
+        "intro": "Agrega preguntas frecuentes a tu perfil para que los invitados puedan encontrar respuestas rápidamente sin tener que contactarte directamente.",
+        "overview_title": "Visión general",
+        "overview_text": "La función de Preguntas Frecuentes te permite crear una lista de preguntas y respuestas comunes sobre tu restaurante, servicios o políticas. Esto ahorra tiempo tanto para ti como para tus invitados, al mismo tiempo que ofrece una mejor experiencia.",
+        "note": "Puedes usar la <b>Herramienta de Configuración Rápida</b> (con preguntas frecuentes preescritas que solo necesitas ajustar ligeramente), o escribir tus propias preguntas y respuestas desde cero.",
+        "how_it_works": {
+          "title": "Cómo funciona",
+          "steps": [
+            "1. Elige una de dos opciones:",
+            [
+              "<b>Configuración rápida</b> → Selecciona de un conjunto de preguntas preescritas (por ejemplo, horarios de apertura, métodos de pago, opciones dietéticas) y haz pequeños ajustes para adaptarlas a tu negocio.",
+              "<b>Configuración manual</b> → Escribe tus propias preguntas y respuestas una por una."
+            ],
+            "2. Guardar → Las preguntas frecuentes se muestran automáticamente en tu página de perfil en una sección dedicada de “FAQ”.",
+            "3. Puedes editar o eliminar preguntas en cualquier momento."
+          ]
+        },
+        "key_benefits": {
+          "title": "Beneficios clave",
+          "list": [
+            "<b>Ahorra tiempo –</b> Las preguntas frecuentes preescritas te permiten empezar en minutos.",
+            "<b>Reduce preguntas repetitivas –</b> Los invitados pueden encontrar respuestas al instante.",
+            "<b>Configuración flexible –</b> Configuración rápida para mayor velocidad, configuración manual para control total.",
+            "<b>Mejor experiencia del cliente –</b> Los invitados se sienten informados y seguros."
+          ]
+        },
+        "tips": {
+          "title": "Consejos",
+          "list": [
+            "Si estás comenzando, usa la <b>Herramienta de Configuración Rápida</b> para publicar preguntas frecuentes rápidamente.",
+            "Mantén las respuestas cortas, claras y fáciles de leer.",
+            "Cubre primero lo básico: horarios de apertura, alérgenos, opciones de entrega y recogida, métodos de pago.",
+            "Actualiza tus preguntas frecuentes cada vez que cambien tu menú, políticas o eventos."
+          ]
+        }
+      },
+      "Popups": {
+        "title": "Popups",
+        "intro": "<b>Popups –</b> Cree popups simples y personalizables para captar la atención de sus invitados. Úselos para hacer anuncios, promocionar eventos o dar la bienvenida a los visitantes en su página.",
+        "overview_title": "Descripción general",
+        "overview_text": "La función de Popups le permite destacar información importante en el momento en que un invitado visita su perfil o página de pedidos. Los popups son una herramienta de comunicación flexible — perfecta para promociones temporales, anuncios urgentes o simplemente dar la bienvenida a los visitantes. A diferencia del contenido estático, un popup asegura que su mensaje no pase desapercibido.",
+        "note": "Los popups también se pueden conectar con su <b>función de Eventos</b>, de modo que los próximos eventos se muestren automáticamente en una ventana emergente.",
+        "popup_types": {
+          "title": "Tipos de Popups",
+          "text": "Hay <b>tres opciones de popups</b>, que se pueden habilitar o deshabilitar individualmente — o incluso combinar:",
+          "list": [
+            "<b>Popup de página principal –</b> Muestra un anuncio cuando un visitante abre su página de perfil principal.",
+            "<b>Popup de página de restaurante –</b> Muestra mensajes directamente en su página de pedidos de comida.",
+            "<b>Popup de eventos –</b> Resalta sus próximos eventos en un popup."
+          ],
+          "note": "💡 El Popup de eventos se puede combinar con el Popup de página principal. En ese caso, su mensaje general aparecerá <b>junto con los anuncios de eventos</b>. También puede desactivar uno de ellos si prefiere mantenerlo simple."
+        },
+        "how_it_works": {
+          "title": "Cómo funciona",
+          "steps": [
+            "1. Vaya a la sección Popups.",
+            "2. Cree un popup y configure los siguientes ajustes:",
+            [
+              "<b>Título</b> – Un encabezado corto para su popup.",
+              "<b>Mensaje –</b> El contenido que desea mostrar.",
+              "<b>Tipo de popup –</b> Elija página principal, página de restaurante, eventos o una combinación.",
+              "<b>Función de retraso –</b> Establezca cuántos segundos después de la carga de la página debe aparecer el popup.",
+              "<b>Mostrar botón de acción (Explorar) –</b> Actívelo o desactívelo. Cuando está habilitado, los visitantes pueden hacer clic en “Explorar” para cerrar el popup y continuar en su página.",
+              "<b>Opciones de eventos</b> (si usa Popups de eventos):",
+              [
+                "<b>Rango de tiempo de los eventos –</b> Seleccione qué eventos se deben mostrar.",
+                "<b>Número máximo de eventos en el popup –</b> Limite cuántos eventos se muestran.",
+                "<b>Velocidad de rotación de eventos –</b> Controle la rapidez con la que rotan los eventos dentro del popup."
+              ]
+            ],
+            "3. Guardar → Su popup estará activo e inmediatamente visible para los visitantes."
+          ]
+        },
+        "use_cases": {
+          "title": "Casos de uso",
+          "list": [
+            "<b>Anuncios –</b> Informe a los invitados sobre horarios de apertura, días festivos o noticias especiales.",
+            "<b>Promociones –</b> Destaque descuentos, happy hours o nuevos platos en el menú.",
+            "<b>Eventos –</b> Muestre automáticamente los próximos eventos en un popup.",
+            "<b>Mensaje de bienvenida –</b> Salude a los visitantes la primera vez que entren a su página."
+          ]
+        },
+        "key_benefits": {
+          "title": "Beneficios clave",
+          "list": [
+            "<b>Altamente flexible –</b> Combine diferentes tipos de popups para la mejor comunicación.",
+            "<b>Tiempo personalizado –</b> Controle exactamente cuándo aparece su popup.",
+            "<b>Integración de eventos –</b> Resalte automáticamente sus eventos sin esfuerzo adicional.",
+            "<b>Fácil de usar –</b> Rápido de configurar y fácil de ajustar en cualquier momento."
+          ]
+        },
+        "tips": {
+          "title": "Consejos",
+          "list": [
+            "Use un retraso corto (por ejemplo, 2–3 segundos) para que los popups se sientan naturales y no intrusivos.",
+            "Combine un popup general de página principal con popups de eventos para lograr la máxima visibilidad.",
+            "Limite el número de eventos en un solo popup para no abrumar a los visitantes.",
+            "Actualice regularmente el contenido de los popups para mantener su comunicación relevante."
+          ]
+        }
+      },
+      "QRCodes": {
+        "title": "Códigos QR",
+        "intro": "Genera al instante códigos QR que conectan a tus invitados directamente con tu menú, eventos o promociones. Cada escaneo se rastrea para que puedas medir la interacción en tiempo real.",
+        "overview_title": "Descripción general",
+        "overview_text": "Los códigos QR facilitan que los invitados accedan a tu contenido digital con solo escanear desde su smartphone. Ya sea tu menú, tu tienda o un evento especial, los códigos QR son una forma rápida y moderna de conectar con los clientes, sin descargas ni pasos complicados.",
+        "how_it_works": {
+          "title": "Cómo funciona",
+          "steps": [
+            "1. Generar un código QR",
+            [
+              "Ve al <b>Generador de Códigos QR</b> en tu panel de control.",
+              "Ingresa un <b>nombre</b> para tu código QR (para reconocerlo después).",
+              "Selecciona el <b>tipo</b>:",
+              [
+                "<b>Página del restaurante</b> → Enlace directo a tu página principal de perfil.",
+                "<b>Enlace existente</b> → Elige un enlace que ya hayas creado en la sección de Enlaces mediante el menú desplegable.",
+                "<b>Enlace personalizado</b> → Añade una URL externa, como redes sociales, venta de entradas, videos u otra página."
+              ]
+            ],
+            "2. Personalizar el diseño",
+            [
+              "En el lado derecho, visualiza una vista previa del diseño actual de tu código QR.",
+              "Ajusta los <b>colores</b> para que coincidan con la identidad de tu marca.",
+              "Sube tu <b>logo</b> para colocarlo en el centro.",
+              "Agrega un <b>texto personalizado</b> debajo del código QR para dar más contexto."
+            ],
+            "3. Guardar y gestionar",
+            [
+              "Después de generarlo, el código se almacena en tu <b>lista de vista general</b>.",
+              "Desde allí, puedes descargarlo y usarlo para impresión o difusión digital.",
+              "Cada código QR se rastrea: puedes ver cuándo y con qué frecuencia se ha escaneado en tu <b>panel de Analytics</b>."
+            ]
+          ]
+        },
+        "key_benefits": {
+          "title": "Beneficios clave",
+          "list": [
+            "<b>Enlaces flexibles –</b> Conecta códigos QR a tu página del restaurante, enlaces existentes o cualquier URL personalizada.",
+            "<b>Personalización de marca –</b> Adapta los códigos QR a los colores de tu marca, añade tu logo y personaliza el texto.",
+            "<b>Rastreables –</b> Cada escaneo se registra para que puedas medir el rendimiento.",
+            "<b>Reutilizables –</b> Los códigos QR no cambian; cuando actualizas el contenido vinculado, el mismo código sigue siendo válido."
+          ]
+        },
+        "use_cases": {
+          "title": "Casos de uso",
+          "list": [
+            "Coloca códigos QR en las mesas para acceso instantáneo al menú.",
+            "Añade códigos QR a volantes o carteles para promocionar eventos.",
+            "Comparte códigos QR en redes sociales para acceso rápido a promociones o videos.",
+            "Usa códigos QR con tu marca en la entrada para dar una primera impresión profesional."
+          ]
+        },
+        "tips": {
+          "title": "Consejos",
+          "list": [
+            "Asigna siempre <b>nombres claros</b> a tus códigos QR para reconocerlos después en tu vista general.",
+            "Prueba los códigos QR antes de imprimirlos para asegurarte de que funcionen en todos los dispositivos.",
+            "Usa los colores de tu marca y tu logo para reforzar el reconocimiento.",
+            "Revisa regularmente las analíticas para ver qué códigos QR funcionan mejor."
+          ]
+        }
       }
     }
   }

@@ -861,6 +861,283 @@
           "Keep the list short and relevant, too many links can overwhelm guests.",
           "Use <b>Analytics</b> to track which links get the most clicks."
         ]
+      },
+      "Menu": {
+        "title": "Menu",
+        "intro": "Create and customize your digital menu with item descriptions, pricing, and categories. Use it as a simple <b>Quick Menu</b> for instant sharing, or connect it directly to your <b>order system</b> for a complete digital shop experience.",
+        "overview_title": "Overview",
+        "overview_text": "The Menu feature is the foundation of your Dineri setup. It allows you to build a structured, professional menu that’s always up to date. Guests can browse your dishes online, and if you have the order system enabled, they can also place orders directly through your shop.",
+        "how_it_works": {
+          "title": "How it works",
+          "steps": [
+            {
+              "title": "<b>1. Create categories</b>",
+              "points": [
+                "Organize your items into categories (e.g. Starters, Main Courses, Drinks).",
+                "Choose whether a category should be <b>enabled in the Quick</b> Menu or not.",
+                "Categories disabled for the Quick Menu will still appear in your Shop (connected to Orders)."
+              ]
+            },
+            {
+              "title": "<b>2. Add products</b>",
+              "points": [
+                "Go to your dashboard → <b>Menu</b> → <b>Add Product.</b>",
+                "Fill in the product <b>name</b>, <b>description</b>, and <b>price</b>.",
+                "Assign the product to the correct category.",
+                "<b>Note:</b> Images are not supported at this time."
+              ]
+            },
+            {
+              "title": "<b>3. Allergies & Add-ons</b>",
+              "points": [
+                "For each product, you can specify <b>allergens</b> (e.g. nuts, gluten, dairy).",
+                "Add optional <b>add-ons</b> (e.g. “Extra Cheese” or “Add Sauce”).",
+                "Important: Add-ons are <b>not visible in the Quick Menu</b> — they only appear in the <b>Shop</b> when guests are placing an order."
+              ]
+            },
+            {
+              "title": "<b>4. Save & publish</b>",
+              "points": [
+                "Your menu is updated instantly across all channels: Quick Menu, Shop, QR codes, and links.",
+                "Add optional <b>add-ons</b> (e.g. “Extra Cheese” or “Add Sauce”).",
+                "Important: Add-ons are <b>not visible in the Quick Menu</b> — they only appear in the <b>Shop</b> when guests are placing an order."
+              ]
+            }
+          ]
+        },
+        "key_benefits": {
+          "title": "Key Benefits",
+          "list": [
+            "<b>Structured menus –</b> Organize items with categories for easy navigation.",
+            "<b>Quick Menu vs. Shop –</b> Share a lightweight standalone menu or a fully integrated order shop.",
+            "<b>Allergen details –</b> Help guests make informed choices.",
+            "<b>Flexible add-ons –</b> Offer customization (e.g. toppings, extras) to increase order value.",
+            "<b>Real-time updates –</b> Any changes are instantly reflected everywhere."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "Create categories before adding items, it keeps your menu tidy.",
+            "Enable only the most relevant categories for the <b>Quick Menu</b> (e.g. Drinks, Food), and keep others exclusive to your Shop.",
+            "Keep descriptions clear and simple, too much text makes the menu harder to read.",
+            "Use add-ons wisely: extras like toppings or sauces can boost upsells.",
+            "Regularly review allergen info to stay accurate and compliant."
+          ]
+        }
+      },
+      "Events": {
+        "title": "Events",
+        "intro": "Announce and promote special events directly to your guests. Whether it’s a live music night, a holiday dinner, or a private tasting, you can share all the details in one place.",
+        "overview_title": "Overview",
+        "overview_text": "The Events feature helps you engage your audience by showcasing upcoming activities at your restaurant, bar, or venue. Guests can see what’s happening, when it’s happening, and how to join, all from your digital profile.",
+        "note": "<b>Note</b>: Events are available on all plans. With a paid plan, you can create <b>unlimited events</b>.",
+        "how_it_works": {
+          "title": "How it works",
+          "steps": [
+            "1. Navigate to the <b>Events</b> section.",
+            "2. Click <b>Add Event</b> and enter the details:",
+            [
+              "<b>Event title</b>",
+              "<b>Description</b> (e.g. program, performers, or menu highlights)",
+              "<b>Date & time</b>",
+              "<b>Location</b> (if different from your main venue)"
+            ],
+            "3. Save → The event is automatically displayed on your <b>profile page</b>.",
+            "4. A new <b>Events link</b> is added to your profile navigation so guests can easily find all upcoming activities.",
+            "5. You can edit or remove events at any time and changes are reflected instantly."
+          ]
+        },
+        "key_benefits": {
+          "title": "Key Benefits",
+          "list": [
+            "<b>Promote your business –</b> Highlight special nights, offers, or seasonal activities.",
+            "<b>Unlimited events –</b> Add as many events as you like (paid plans only).",
+            "<b>Automatic visibility –</b> Events are instantly added to your profile and shown under a dedicated “Events” link.",
+            "<b>Integrated marketing –</b> Combine with popups to announce your events in real-time."
+          ]
+        },
+        "integration_popups": {
+          "title": "Integration with Popups",
+          "text": "In addition to showing events on your profile, you can also display them in a popup when visitors land on your page.",
+          "list": [
+            "This is a great way to instantly grab attention.",
+            "To configure this, see the <a href=\"/help-center/features#popups\" class=\"underline text-blue-500\">Popups Guide</a> in the Help Center."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "Add engaging descriptions (e.g. “Live DJ + cocktail specials”) to capture attention.",
+            "Use a <b>QR code</b> specifically for your event page and place it on flyers, posters, or tables.",
+            "Keep past events archived or remove them quickly to keep your profile fresh.",
+            "Combine events with <b>popups</b> for maximum visibility."
+          ]
+        }
+      },
+      "FAQ": {
+        "title": "FAQ",
+        "intro": "Add frequently asked questions to your profile so guests can quickly find answers without contacting you directly.",
+        "overview_title": "Overview",
+        "overview_text": "The FAQ feature allows you to create a list of common questions and answers about your restaurant, services, or policies. This saves time for both you and your guests, while providing a better experience.",
+        "note": "You can either use the <b>Quick Setup Tool</b> (with pre-written FAQs you only need to adjust slightly), or write your own questions and answers from scratch.",
+        "how_it_works": {
+          "title": "How it works",
+          "steps": [
+            "1. Choose one of two options:",
+            [
+              "<b>Quick Setup</b> → Select from a set of pre-written questions (e.g. opening hours, payment methods, dietary options) and make small edits to fit your business.",
+              "<b>Manual Setup</b> → Write your own questions and answers one by one."
+            ],
+            "2. Save → The FAQ is automatically displayed on your profile page under a dedicated “FAQ” section.",
+            "3. You can edit or remove questions at any time."
+          ]
+        },
+        "key_benefits": {
+          "title": "Key Benefits",
+          "list": [
+            "<b>Save time –</b> Pre-written FAQs get you started in minutes.",
+            "<b>Reduce repetitive questions –</b> Guests can find answers instantly.",
+            "<b>Flexible setup –</b> Quick setup for speed, manual setup for full control.",
+            "<b>Better customer experience –</b> Guests feel informed and confident."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "If you’re just getting started, use the <b>Quick Setup Tool</b> to get a FAQ live fast.",
+            "Keep answers short, clear, and easy to read.",
+            "Cover the basics first: opening hours, allergens, delivery & pickup options, payment methods.",
+            "Update your FAQ whenever your menu, policies, or events change."
+          ]
+        }
+      },
+      "Popups": {
+        "title": "Popups",
+        "intro": "<b>Popups –</b> Create simple, customizable popups to capture your guests’ attention. Use them to make announcements, promote events, or welcome visitors to your page.",
+        "overview_title": "Overview",
+        "overview_text": "The Popups feature allows you to highlight important information the moment a guest visits your profile or ordering page. Popups are a flexible communication tool — perfect for temporary promotions, urgent announcements, or simply welcoming visitors. Unlike static content, a popup ensures your message won’t be missed.",
+        "note": "Popups can also be connected to your <b>Events feature</b>, so upcoming events can automatically be displayed in a popup window.",
+        "popup_types": {
+          "title": "Popup Types",
+          "text": "There are <b>three popup options</b>, which can be enabled or disabled individually — or even combined:",
+          "list": [
+            "<b>Homepage Popup –</b> Display an announcement when a visitor opens your main profile page.",
+            "<b>Restaurant Page Popup –</b> Show messages directly on your food ordering page.",
+            "<b>Events Popup –</b> Highlight your upcoming events in a popup."
+          ],
+          "note": "💡 The Events Popup can be combined with the Homepage Popup. In that case, your general message will appear <b>together with event announcements</b>. You can also choose to disable one of them if you prefer to keep it simple."
+        },
+        "how_it_works": {
+          "title": "How it works",
+          "steps": [
+            "1. Go to the Popups section.",
+            "2. Create a popup and configure the following settings:",
+            [
+              "<b>Title</b> – A short headline for your popup.",
+              "<b>Message –</b> The content you want to display.",
+              "<b>Popup type –</b> Choose homepage, restaurant page, events, or a combination.",
+              "<b>Delay function –</b> Set how many seconds after page load the popup should appear.",
+              "<b>Show Action (Explore) button –</b> Toggle this on/off. When enabled, visitors can click “Explore” to close the popup and continue to your page.",
+              "<b>Event options</b> (if using Event Popups):",
+              [
+                "<b>Event time range –</b> Select which events should be shown.",
+                "<b>Maximum events in popup –</b> Limit how many events are displayed.",
+                "<b>Event rotation speed –</b> Control how fast events rotate inside the popup."
+              ]
+            ],
+            "3. Save → Your popup is instantly live and visible to visitors."
+          ]
+        },
+        "use_cases": {
+          "title": "Use cases",
+          "list": [
+            "<b>Announcements –</b> Inform guests about opening hours, holidays, or special news.",
+            "<b>Promotions –</b> Highlight discounts, happy hours, or new menu items.",
+            "<b>Events –</b> Automatically display upcoming events in a popup.",
+            "<b>Welcome message –</b> Greet visitors the first time they land on your page."
+          ]
+        },
+        "key_benefits": {
+          "title": "Key Benefits",
+          "list": [
+            "<b>Highly flexible –</b> Mix and match popup types for the best communication.",
+            "<b>Custom timing –</b> Control exactly when your popup appears.",
+            "<b>Event integration –</b> Automatically highlight your events without extra effort.",
+            "<b>User-friendly –</b> Quick to set up and easy to adjust anytime."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "Use a short delay (e.g. 2–3 seconds) to make popups feel natural and not intrusive.",
+            "Combine a general homepage popup with event popups for maximum visibility.",
+            "Limit the number of events in one popup so it doesn’t overwhelm visitors.",
+            "Regularly update popup content to keep your communication relevant."
+          ]
+        }
+      },
+      "QRCodes": {
+        "title": "QR Codes",
+        "intro": "Instantly generate QR codes that connect your guests directly to your menu, events, or promotions. Every scan is tracked so you can measure engagement in real time.",
+        "overview_title": "Overview",
+        "overview_text": "QR codes make it easy for guests to access your digital content with just a scan from their smartphone. Whether it’s your menu, your shop, or a special event, QR codes are a quick and modern way to connect with customers, no downloads or complicated steps required.",
+        "how_it_works": {
+          "title": "How it works",
+          "steps": [
+            "1. Generate a QR code",
+            [
+              "Go to the <b>QR Code Generator</b> in your dashboard.",
+              "Enter a <b>name</b> for your QR code (to recognize it later).",
+              "Select the <b>type</b>:",
+              [
+                "<b>Restaurant Page</b> → Link directly to your main profile page.",
+                "<b>Existing Link</b> → Choose a link you’ve already created in the Links section via the dropdown.",
+                "<b>Custom Link</b> → Add an external URL, such as social media, ticket sales, videos, or any other page."
+              ]
+            ],
+            "2. Customize the design",
+            [
+              "On the right-hand side, preview the current design of your QR code.",
+              "Adjust the <b>colors</b> to match your brand identity.",
+              "Upload your <b>logo</b> to be placed in the center.",
+              "Add a <b>personalized text</b> below the QR code for extra context."
+            ],
+            "3. Save & manage",
+            [
+              "After generating the code, it is stored in your <b>overview list</b>.",
+              "From here, you can download and use it for printing or digital sharing.",
+              "Each QR code is tracked — you can see when and how often it has been scanned in your <b>Analytics dashboard</b>."
+            ]
+          ]
+        },
+        "key_benefits": {
+          "title": "Key Benefits",
+          "list": [
+            "<b>Flexible linking –</b> Connect QR codes to your restaurant page, existing links, or any custom URL.",
+            "<b>Brand customization –</b> Match QR codes to your brand colors, add your logo, and personalize text.",
+            "<b>Trackable –</b> Every scan is logged so you can measure performance.",
+            "<b>Reusable –</b> QR codes don’t change; when you update the linked content, the same code stays valid."
+          ]
+        },
+        "use_cases": {
+          "title": "Use cases",
+          "list": [
+            "Place QR codes on tables for instant menu access.",
+            "Add QR codes to flyers or posters to promote events.",
+            "Share QR codes on social media for quick access to promotions or videos.",
+            "Use branded QR codes at the entrance for a professional first impression."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "Always give your QR codes <b>clear names</b> so you can recognize them later in your overview.",
+            "Test QR codes before printing to ensure they work on all devices.",
+            "Use brand colors and your logo to build recognition.",
+            "Regularly check analytics to see which QR codes perform best."
+          ]
+        }
       }
     }
   }

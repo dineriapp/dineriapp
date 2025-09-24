@@ -726,7 +726,6 @@
         "termsRequired": "Je moet akkoord gaan met de algemene voorwaarden."
       }
     },
-
     "Features": {
       "Analytics": {
         "pageTitle": "Analyse",
@@ -863,6 +862,283 @@
           "Houd de lijst kort en relevant; te veel links kunnen gasten overweldigen.",
           "Gebruik <b>Analyse</b> om bij te houden welke links de meeste klikken krijgen."
         ]
+      },
+      "Menu": {
+        "title": "Menu",
+        "intro": "Maak en personaliseer uw digitale menu met artikelbeschrijvingen, prijzen en categorieën. Gebruik het als een eenvoudig <b>Snelmenu</b> om direct te delen, of koppel het rechtstreeks aan uw <b>bestselsysteem</b> voor een complete digitale winkelervaring.",
+        "overview_title": "Overzicht",
+        "overview_text": "De menufunctie is de basis van uw Dineri-configuratie. Hiermee kunt u een gestructureerd, professioneel menu opbouwen dat altijd up-to-date is. Gasten kunnen uw gerechten online bekijken en, als het bestelsysteem is ingeschakeld, ook direct via uw winkel bestellen.",
+        "how_it_works": {
+          "title": "Hoe het werkt",
+          "steps": [
+            {
+              "title": "<b>1. Categorieën maken</b>",
+              "points": [
+                "Organiseer uw artikelen in categorieën (bijv. Voorgerechten, Hoofdgerechten, Dranken).",
+                "Kies of een categorie <b>ingeschakeld moet worden in het Snelmenu</b> of niet.",
+                "Categorieën die zijn uitgeschakeld voor het Snelmenu verschijnen nog steeds in uw Winkel (verbonden met Bestellingen)."
+              ]
+            },
+            {
+              "title": "<b>2. Producten toevoegen</b>",
+              "points": [
+                "Ga naar uw dashboard → <b>Menu</b> → <b>Product toevoegen.</b>",
+                "Vul de <b>naam</b>, <b>beschrijving</b> en de <b>prijs</b> van het product in.",
+                "Wijs het product toe aan de juiste categorie.",
+                "<b>Opmerking:</b> Afbeeldingen worden momenteel niet ondersteund."
+              ]
+            },
+            {
+              "title": "<b>3. Allergieën & extra’s</b>",
+              "points": [
+                "Voor elk product kunt u <b>allergenen</b> specificeren (bijv. noten, gluten, zuivel).",
+                "Voeg optionele <b>extra’s</b> toe (bijv. “Extra kaas” of “Saus toevoegen”).",
+                "Belangrijk: Extra’s zijn <b>niet zichtbaar in het Snelmenu</b> — ze verschijnen alleen in de <b>Winkel</b> wanneer gasten een bestelling plaatsen."
+              ]
+            },
+            {
+              "title": "<b>4. Opslaan & publiceren</b>",
+              "points": [
+                "Uw menu wordt direct bijgewerkt op alle kanalen: Snelmenu, Winkel, QR-codes en links.",
+                "Voeg optionele <b>extra’s</b> toe (bijv. “Extra kaas” of “Saus toevoegen”).",
+                "Belangrijk: Extra’s zijn <b>niet zichtbaar in het Snelmenu</b> — ze verschijnen alleen in de <b>Winkel</b> wanneer gasten een bestelling plaatsen."
+              ]
+            }
+          ]
+        },
+        "key_benefits": {
+          "title": "Belangrijkste voordelen",
+          "list": [
+            "<b>Gestructureerde menu’s –</b> Organiseer artikelen met categorieën voor eenvoudige navigatie.",
+            "<b>Snelmenu vs. Winkel –</b> Deel een lichtgewicht zelfstandig menu of een volledig geïntegreerde bestelwinkel.",
+            "<b>Allergeeninformatie –</b> Help gasten weloverwogen keuzes te maken.",
+            "<b>Flexibele extra’s –</b> Bied maatwerkopties (bijv. toppings, extra’s) om de bestelwaarde te verhogen.",
+            "<b>Updates in realtime –</b> Alle wijzigingen worden direct overal doorgevoerd."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "Maak categorieën voordat u artikelen toevoegt, dit houdt uw menu overzichtelijk.",
+            "Schakel alleen de meest relevante categorieën in voor het <b>Snelmenu</b> (bijv. Dranken, Eten) en houd andere exclusief voor uw Winkel.",
+            "Houd beschrijvingen duidelijk en eenvoudig — te veel tekst maakt het menu moeilijker leesbaar.",
+            "Gebruik extra’s verstandig: toevoegingen zoals toppings of sauzen kunnen de omzet verhogen.",
+            "Controleer regelmatig de allergeneninformatie om deze correct en up-to-date te houden."
+          ]
+        }
+      },
+      "Events": {
+        "title": "Evenementen",
+        "intro": "Kondig speciale evenementen aan en promoot ze rechtstreeks bij je gasten. Of het nu gaat om een live muziekavond, een feestelijk diner of een privéproeverij, je kunt alle details op één plek delen.",
+        "overview_title": "Overzicht",
+        "overview_text": "De functie Evenementen helpt je je publiek te betrekken door aankomende activiteiten in je restaurant, bar of locatie te tonen. Gasten kunnen zien wat er gebeurt, wanneer het plaatsvindt en hoe ze kunnen deelnemen – allemaal via je digitale profiel.",
+        "note": "<b>Opmerking</b>: Evenementen zijn beschikbaar in alle pakketten. Met een betaald pakket kun je <b>onbeperkte evenementen</b> maken.",
+        "how_it_works": {
+          "title": "Hoe het werkt",
+          "steps": [
+            "1. Ga naar de sectie <b>Evenementen</b>.",
+            "2. Klik op <b>Evenement toevoegen</b> en voer de details in:",
+            [
+              "<b>Titel van het evenement</b>",
+              "<b>Beschrijving</b> (bijv. programma, artiesten of menupunten)",
+              "<b>Datum & tijd</b>",
+              "<b>Locatie</b> (indien anders dan je hoofdlocatie)"
+            ],
+            "3. Opslaan → Het evenement wordt automatisch weergegeven op je <b>profielpagina</b>.",
+            "4. Er wordt een nieuwe <b>Evenementen-link</b> toegevoegd aan de navigatie van je profiel zodat gasten eenvoudig alle aankomende activiteiten kunnen vinden.",
+            "5. Je kunt evenementen op elk moment bewerken of verwijderen en wijzigingen worden direct doorgevoerd."
+          ]
+        },
+        "key_benefits": {
+          "title": "Belangrijkste voordelen",
+          "list": [
+            "<b>Promoot je bedrijf –</b> Benadruk speciale avonden, aanbiedingen of seizoensgebonden activiteiten.",
+            "<b>Onbeperkte evenementen –</b> Voeg zoveel evenementen toe als je wilt (alleen bij betaalde pakketten).",
+            "<b>Automatische zichtbaarheid –</b> Evenementen worden direct toegevoegd aan je profiel en weergegeven onder een speciale “Evenementen”-link.",
+            "<b>Geïntegreerde marketing –</b> Combineer met pop-ups om je evenementen in realtime aan te kondigen."
+          ]
+        },
+        "integration_popups": {
+          "title": "Integratie met pop-ups",
+          "text": "Naast het tonen van evenementen op je profiel kun je ze ook weergeven in een pop-up wanneer bezoekers op je pagina landen.",
+          "list": [
+            "Dit is een geweldige manier om direct de aandacht te trekken.",
+            "Om dit in te stellen, zie de <a href=\"/help-center/features#popups\" class=\"underline text-blue-500\">Pop-ups Gids</a> in het Helpcentrum."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "Voeg pakkende beschrijvingen toe (bijv. “Live DJ + cocktail specials”) om de aandacht te trekken.",
+            "Gebruik een <b>QR-code</b> speciaal voor je evenementenpagina en plaats deze op flyers, posters of tafels.",
+            "Archiveer afgelopen evenementen of verwijder ze snel om je profiel actueel te houden.",
+            "Combineer evenementen met <b>pop-ups</b> voor maximale zichtbaarheid."
+          ]
+        }
+      },
+      "FAQ": {
+        "title": "FAQ",
+        "intro": "Voeg veelgestelde vragen toe aan je profiel zodat gasten snel antwoorden kunnen vinden zonder je rechtstreeks te hoeven contacteren.",
+        "overview_title": "Overzicht",
+        "overview_text": "Met de FAQ-functie kun je een lijst maken van veelvoorkomende vragen en antwoorden over je restaurant, diensten of beleid. Dit bespaart tijd voor zowel jou als je gasten en zorgt tegelijk voor een betere ervaring.",
+        "note": "Je kunt de <b>Snelle Configuratietool</b> gebruiken (met vooraf geschreven veelgestelde vragen die je slechts licht hoeft aan te passen), of je eigen vragen en antwoorden helemaal zelf schrijven.",
+        "how_it_works": {
+          "title": "Hoe het werkt",
+          "steps": [
+            "1. Kies een van de twee opties:",
+            [
+              "<b>Snelle configuratie</b> → Kies uit een reeks vooraf geschreven vragen (bijv. openingstijden, betaalmethoden, dieetopties) en maak kleine aanpassingen om ze geschikt te maken voor jouw bedrijf.",
+              "<b>Handmatige configuratie</b> → Schrijf je eigen vragen en antwoorden één voor één."
+            ],
+            "2. Opslaan → De FAQ wordt automatisch weergegeven op je profielpagina in een speciale “FAQ”-sectie.",
+            "3. Je kunt vragen op elk moment bewerken of verwijderen."
+          ]
+        },
+        "key_benefits": {
+          "title": "Belangrijkste voordelen",
+          "list": [
+            "<b>Tijdbesparing –</b> Vooraf geschreven FAQ’s helpen je binnen enkele minuten te starten.",
+            "<b>Minder herhalende vragen –</b> Gasten kunnen direct antwoorden vinden.",
+            "<b>Flexibele configuratie –</b> Snelle configuratie voor snelheid, handmatige configuratie voor volledige controle.",
+            "<b>Betere klantervaring –</b> Gasten voelen zich geïnformeerd en zeker."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "Als je net begint, gebruik de <b>Snelle Configuratietool</b> om snel een FAQ online te zetten.",
+            "Houd antwoorden kort, duidelijk en gemakkelijk leesbaar.",
+            "Behandel eerst de basis: openingstijden, allergenen, bezorg- & afhaalopties, betaalmethoden.",
+            "Werk je FAQ bij zodra je menu, beleid of evenementen veranderen."
+          ]
+        }
+      },
+      "Popups": {
+        "title": "Popups",
+        "intro": "<b>Popups –</b> Maak eenvoudige, aanpasbare pop-ups om de aandacht van je gasten te trekken. Gebruik ze om aankondigingen te doen, evenementen te promoten of bezoekers op je pagina te verwelkomen.",
+        "overview_title": "Overzicht",
+        "overview_text": "Met de functie Popups kun je belangrijke informatie benadrukken zodra een gast je profiel of bestellingspagina bezoekt. Pop-ups zijn een flexibel communicatiemiddel — perfect voor tijdelijke promoties, dringende aankondigingen of gewoon om bezoekers te verwelkomen. In tegenstelling tot statische inhoud zorgt een pop-up ervoor dat je boodschap niet over het hoofd wordt gezien.",
+        "note": "Pop-ups kunnen ook worden gekoppeld aan je <b>Evenementenfunctie</b>, zodat aankomende evenementen automatisch in een pop-upvenster worden weergegeven.",
+        "popup_types": {
+          "title": "Soorten Pop-ups",
+          "text": "Er zijn <b>drie pop-upopties</b>, die afzonderlijk kunnen worden in- of uitgeschakeld — of zelfs gecombineerd:",
+          "list": [
+            "<b>Homepage Pop-up –</b> Toon een aankondiging wanneer een bezoeker je hoofdpagina opent.",
+            "<b>Restaurantpagina Pop-up –</b> Toon berichten direct op je bestelpagina.",
+            "<b>Evenementen Pop-up –</b> Benadruk je aankomende evenementen in een pop-up."
+          ],
+          "note": "💡 De Evenementen Pop-up kan worden gecombineerd met de Homepage Pop-up. In dat geval verschijnt je algemene bericht <b>samen met de evenementaankondigingen</b>. Je kunt er ook voor kiezen om er één uit te schakelen als je het eenvoudig wilt houden."
+        },
+        "how_it_works": {
+          "title": "Hoe het werkt",
+          "steps": [
+            "1. Ga naar de sectie Popups.",
+            "2. Maak een pop-up en configureer de volgende instellingen:",
+            [
+              "<b>Titel</b> – Een korte kop voor je pop-up.",
+              "<b>Bericht –</b> De inhoud die je wilt tonen.",
+              "<b>Type pop-up –</b> Kies homepage, restaurantpagina, evenementen of een combinatie.",
+              "<b>Vertragingsfunctie –</b> Stel in hoeveel seconden na het laden van de pagina de pop-up moet verschijnen.",
+              "<b>Toon Actieknop (Verkennen) –</b> Zet dit aan/uit. Wanneer ingeschakeld, kunnen bezoekers op “Verkennen” klikken om de pop-up te sluiten en verder te gaan naar je pagina.",
+              "<b>Evenementopties</b> (bij gebruik van Evenementen Pop-ups):",
+              [
+                "<b>Tijdspanne van evenementen –</b> Selecteer welke evenementen moeten worden weergegeven.",
+                "<b>Maximum aantal evenementen in pop-up –</b> Beperk hoeveel evenementen worden getoond.",
+                "<b>Rotatiesnelheid evenementen –</b> Bepaal hoe snel evenementen in de pop-up wisselen."
+              ]
+            ],
+            "3. Opslaan → Je pop-up is direct actief en zichtbaar voor bezoekers."
+          ]
+        },
+        "use_cases": {
+          "title": "Gebruikssituaties",
+          "list": [
+            "<b>Aankondigingen –</b> Informeer gasten over openingstijden, feestdagen of belangrijk nieuws.",
+            "<b>Promoties –</b> Benadruk kortingen, happy hours of nieuwe menu-items.",
+            "<b>Evenementen –</b> Toon automatisch aankomende evenementen in een pop-up.",
+            "<b>Welkomstbericht –</b> Verwelkom bezoekers de eerste keer dat ze op je pagina komen."
+          ]
+        },
+        "key_benefits": {
+          "title": "Belangrijkste voordelen",
+          "list": [
+            "<b>Zeer flexibel –</b> Combineer verschillende soorten pop-ups voor de beste communicatie.",
+            "<b>Aangepaste timing –</b> Bepaal precies wanneer je pop-up verschijnt.",
+            "<b>Evenementintegratie –</b> Benadruk automatisch je evenementen zonder extra moeite.",
+            "<b>Gebruiksvriendelijk –</b> Snel in te stellen en eenvoudig op elk moment aan te passen."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "Gebruik een korte vertraging (bijv. 2–3 seconden) zodat pop-ups natuurlijk en niet opdringerig aanvoelen.",
+            "Combineer een algemene homepage pop-up met evenementen pop-ups voor maximale zichtbaarheid.",
+            "Beperk het aantal evenementen in één pop-up zodat bezoekers niet worden overladen.",
+            "Werk de pop-upinhoud regelmatig bij om je communicatie relevant te houden."
+          ]
+        }
+      },
+      "QRCodes": {
+        "title": "QR-codes",
+        "intro": "Genereer direct QR-codes die je gasten rechtstreeks verbinden met je menu, evenementen of promoties. Elke scan wordt bijgehouden zodat je de betrokkenheid in realtime kunt meten.",
+        "overview_title": "Overzicht",
+        "overview_text": "QR-codes maken het gasten gemakkelijk om toegang te krijgen tot je digitale inhoud met slechts één scan vanaf hun smartphone. Of het nu je menu, je shop of een speciaal evenement is, QR-codes zijn een snelle en moderne manier om met klanten in contact te komen, zonder downloads of ingewikkelde stappen.",
+        "how_it_works": {
+          "title": "Hoe het werkt",
+          "steps": [
+            "1. Genereer een QR-code",
+            [
+              "Ga naar de <b>QR-codegenerator</b> in je dashboard.",
+              "Voer een <b>naam</b> in voor je QR-code (om hem later te herkennen).",
+              "Selecteer het <b>type</b>:",
+              [
+                "<b>Restaurantpagina</b> → Link direct naar je hoofdprofielpagina.",
+                "<b>Bestaande link</b> → Kies een link die je al hebt aangemaakt in de sectie Links via het dropdownmenu.",
+                "<b>Aangepaste link</b> → Voeg een externe URL toe, zoals sociale media, ticketverkoop, video’s of een andere pagina."
+              ]
+            ],
+            "2. Pas het ontwerp aan",
+            [
+              "Bekijk aan de rechterkant een voorbeeld van het huidige ontwerp van je QR-code.",
+              "Pas de <b>kleuren</b> aan om ze af te stemmen op je merkidentiteit.",
+              "Upload je <b>logo</b> om in het midden te plaatsen.",
+              "Voeg een <b>gepersonaliseerde tekst</b> toe onder de QR-code voor extra context."
+            ],
+            "3. Opslaan & beheren",
+            [
+              "Na het genereren wordt de code opgeslagen in je <b>overzichtslijst</b>.",
+              "Vanaf hier kun je hem downloaden en gebruiken voor drukwerk of digitale verspreiding.",
+              "Elke QR-code wordt bijgehouden — je kunt in je <b>Analytics-dashboard</b> zien wanneer en hoe vaak hij is gescand."
+            ]
+          ]
+        },
+        "key_benefits": {
+          "title": "Belangrijkste voordelen",
+          "list": [
+            "<b>Flexibele koppelingen –</b> Verbind QR-codes met je restaurantpagina, bestaande links of een aangepaste URL.",
+            "<b>Merkpersonalisatie –</b> Stem QR-codes af op je merk, voeg je logo toe en personaliseer de tekst.",
+            "<b>Traceerbaar –</b> Elke scan wordt geregistreerd zodat je prestaties kunt meten.",
+            "<b>Hergebruikbaar –</b> QR-codes veranderen niet; wanneer je de gekoppelde inhoud bijwerkt, blijft dezelfde code geldig."
+          ]
+        },
+        "use_cases": {
+          "title": "Toepassingen",
+          "list": [
+            "Plaats QR-codes op tafels voor directe toegang tot het menu.",
+            "Voeg QR-codes toe aan flyers of posters om evenementen te promoten.",
+            "Deel QR-codes op sociale media voor snelle toegang tot promoties of video’s.",
+            "Gebruik merkgebonden QR-codes bij de ingang voor een professionele eerste indruk."
+          ]
+        },
+        "tips": {
+          "title": "Tips",
+          "list": [
+            "Geef je QR-codes altijd <b>duidelijke namen</b> zodat je ze later in je overzicht kunt herkennen.",
+            "Test QR-codes voordat je ze afdrukt om zeker te zijn dat ze op alle apparaten werken.",
+            "Gebruik merkkleuren en je logo om herkenning op te bouwen.",
+            "Controleer regelmatig de statistieken om te zien welke QR-codes het beste presteren."
+          ]
+        }
       }
     }
   }
