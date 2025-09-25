@@ -1141,5 +1141,120 @@
         }
       }
     }
+  },
+  "CreateRestaurantPage": {
+    "page": {
+      "title": "Maak je Restaurant aan",
+      "subtitle": "Stel je restaurantprofiel in om te beginnen met dineri.app"
+    },
+    "card": {
+      "title": "Restaurantgegevens",
+      "description": "Vertel ons over je restaurant om je profiel aan te maken"
+    },
+    "form": {
+      "labels": {
+        "name": "Naam van het Restaurant",
+        "slug": "Pagina-URL",
+        "bio": "Korte Beschrijving"
+      },
+      "placeholders": {
+        "name": "bijv. Trattoria Milano",
+        "slug": "jouw-restaurant",
+        "bio": "Vertel klanten in een paar woorden over je restaurant (max. 200 tekens)"
+      },
+      "help": {
+        "slug": "Gebruik alleen letters, cijfers en streepjes",
+        "bio_count": "{count}/200 tekens"
+      },
+      "errors": {
+        "name_required": "De naam van het restaurant is verplicht",
+        "slug_required": "De slug moet minimaal 3 tekens bevatten",
+        "slug_invalid": "De slug mag alleen kleine letters, cijfers en streepjes bevatten"
+      },
+      "buttons": {
+        "cancel": "Annuleren",
+        "submit": "Maak Restaurantprofiel aan",
+        "submitting": "Bezig met aanmaken..."
+      },
+      "error_box": {
+        "title": "Fout"
+      }
+    },
+    "tip": {
+      "title": "Pro Tip",
+      "text": "Kies een gedenkwaardige en gemakkelijk te typen URL voor je restaurant. Dit maakt het eenvoudiger voor klanten om je profiel te vinden en te delen."
+    }
+  },
+  "DashboardSidebar": {
+    "restaurants_label": "Jouw restaurants",
+    "new_restaurant": "Nieuw restaurant",
+    "need_more": "Meer nodig?",
+    "multi_restaurant_text": "Multi-restaurantbeheer is beschikbaar in het Enterprise-abonnement.",
+    "upgrade_plan": "Abonnement upgraden",
+    "locked_feature": "Deze functie is beschikbaar in het Premium-abonnement.",
+    "switch_error_title": "Wisselen van restaurant niet toegestaan",
+    "switch_error_description": "Je kunt niet van restaurant wisselen terwijl je in het Basic-abonnement zit of als je huidige abonnement inactief is vanwege een openstaande betaling. Upgrade of los de facturering op om toegang te krijgen tot deze functie."
+  },
+  "UnsavedChangesPanel": {
+    "reset_button": "Resetten",
+    "save_button": "Wijzigingen opslaan",
+    "saving_button": "Bezig met opslaan...",
+    "unsaved_changes_message": "Je hebt niet-opgeslagen wijzigingen."
+  },
+  "Settings": {
+    "business-information": {
+      "page": {
+        "title": "Bedrijfsinformatie",
+        "description": "Beheer de basisinformatie en branding van je restaurant"
+      },
+      "form": {
+        "labels": {
+          "name": "Naam van het restaurant *",
+          "slug": "Pagina-URL *",
+          "bio": "Beschrijving",
+          "logo": "Logo"
+        },
+        "placeholders": {
+          "name": "De naam van je restaurant",
+          "slug": "restaurant-naam",
+          "bio": "Vertel klanten over je restaurant..."
+        },
+        "help": {
+          "slug": "Dit wordt het unieke webadres van je restaurant. Alleen kleine letters, cijfers en koppeltekens zijn toegestaan.",
+          "bio_optional": "Optioneel: korte beschrijving van je restaurant",
+          "logo_preview": "Logo voorbeeld:"
+        },
+        "errors": {
+          "name_required": "Naam van het restaurant is verplicht",
+          "name_max": "De naam van het restaurant moet minder dan 100 tekens bevatten",
+          "slug_required": "Pagina-URL moet minimaal 3 tekens bevatten",
+          "slug_max": "Pagina-URL moet minder dan 50 tekens bevatten",
+          "slug_invalid": "Pagina-URL mag alleen kleine letters, cijfers en koppeltekens bevatten",
+          "bio_max": "Beschrijving moet minder dan 200 tekens bevatten",
+          "logo_invalid": "Logo-URL moet een geldige URL zijn",
+          "logo_upload_failed": "Upload mislukt. Probeer opnieuw.",
+          "logo_upload_not_file": "Kies een afbeeldingsbestand",
+          "logo_unable_load": "Afbeelding kan niet worden geladen vanaf deze URL"
+        },
+        "upload": {
+          "uploading": "Bezig met uploaden…"
+        }
+      },
+      "toasts": {
+        "reset_success": "Formulier teruggezet naar de oorspronkelijke waarden",
+        "no_restaurant": "Geen restaurant geselecteerd",
+        "fix_errors": "Los de fouten op voordat je opslaat",
+        "slug_taken_title": "Pagina-URL al in gebruik",
+        "slug_taken_description": "Kies een andere pagina-URL",
+        "failed_to_save": "Bijwerken van bedrijfsinformatie mislukt",
+        "update_success_title": "Bedrijfsinformatie bijgewerkt",
+        "update_success_description": "Je bedrijfsinformatie is succesvol bijgewerkt",
+        "update_error_title": "Fout bij het bijwerken",
+        "update_error_description": "Er is een fout opgetreden bij het bijwerken van je bedrijfsinformatie"
+      },
+      "loading": {
+        "text": "Bedrijfsinformatie laden..."
+      }
+    }
   }
 }

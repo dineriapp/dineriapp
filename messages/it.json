@@ -1141,5 +1141,120 @@
         }
       }
     }
+  },
+  "CreateRestaurantPage": {
+    "page": {
+      "title": "Crea il tuo Ristorante",
+      "subtitle": "Configura il profilo del tuo ristorante per iniziare con dineri.app"
+    },
+    "card": {
+      "title": "Dettagli del Ristorante",
+      "description": "Raccontaci del tuo ristorante per creare il tuo profilo"
+    },
+    "form": {
+      "labels": {
+        "name": "Nome del Ristorante",
+        "slug": "URL della Pagina",
+        "bio": "Breve Descrizione"
+      },
+      "placeholders": {
+        "name": "es. Trattoria Milano",
+        "slug": "il-tuo-ristorante",
+        "bio": "Descrivi il tuo ristorante in poche parole (max 200 caratteri)"
+      },
+      "help": {
+        "slug": "Usa solo lettere, numeri e trattini",
+        "bio_count": "{count}/200 caratteri"
+      },
+      "errors": {
+        "name_required": "Il nome del ristorante è obbligatorio",
+        "slug_required": "Lo slug deve avere almeno 3 caratteri",
+        "slug_invalid": "Lo slug può contenere solo lettere minuscole, numeri e trattini"
+      },
+      "buttons": {
+        "cancel": "Annulla",
+        "submit": "Crea il Profilo del Ristorante",
+        "submitting": "Creazione in corso..."
+      },
+      "error_box": {
+        "title": "Errore"
+      }
+    },
+    "tip": {
+      "title": "Suggerimento",
+      "text": "Scegli un URL memorabile e facile da digitare per il tuo ristorante. Questo renderà più semplice per i clienti trovare e condividere il tuo profilo."
+    }
+  },
+  "DashboardSidebar": {
+    "restaurants_label": "I tuoi ristoranti",
+    "new_restaurant": "Nuovo ristorante",
+    "need_more": "Hai bisogno di più?",
+    "multi_restaurant_text": "La gestione multi-ristorante è disponibile nel Piano Enterprise.",
+    "upgrade_plan": "Aggiorna piano",
+    "locked_feature": "Questa funzione è disponibile nel piano Premium.",
+    "switch_error_title": "Cambio di ristorante non consentito",
+    "switch_error_description": "Non puoi cambiare ristorante mentre sei nel piano Basic o se il tuo piano attuale è inattivo a causa di un pagamento in sospeso. Ti preghiamo di aggiornare o risolvere la fatturazione per accedere a questa funzione."
+  },
+  "UnsavedChangesPanel": {
+    "reset_button": "Reimposta",
+    "save_button": "Salva modifiche",
+    "saving_button": "Salvataggio...",
+    "unsaved_changes_message": "Hai modifiche non salvate."
+  },
+  "Settings": {
+    "business-information": {
+      "page": {
+        "title": "Informazioni aziendali",
+        "description": "Gestisci le informazioni di base e il branding del tuo ristorante"
+      },
+      "form": {
+        "labels": {
+          "name": "Nome del ristorante *",
+          "slug": "URL della pagina *",
+          "bio": "Descrizione",
+          "logo": "Logo"
+        },
+        "placeholders": {
+          "name": "Nome del tuo ristorante",
+          "slug": "nome-ristorante",
+          "bio": "Racconta ai clienti del tuo ristorante..."
+        },
+        "help": {
+          "slug": "Questo sarà l'indirizzo web unico del tuo ristorante. Sono consentite solo lettere minuscole, numeri e trattini.",
+          "bio_optional": "Opzionale: breve descrizione del tuo ristorante",
+          "logo_preview": "Anteprima logo:"
+        },
+        "errors": {
+          "name_required": "Il nome del ristorante è obbligatorio",
+          "name_max": "Il nome del ristorante deve contenere meno di 100 caratteri",
+          "slug_required": "L'URL della pagina deve contenere almeno 3 caratteri",
+          "slug_max": "L'URL della pagina deve contenere meno di 50 caratteri",
+          "slug_invalid": "L'URL della pagina può contenere solo lettere minuscole, numeri e trattini",
+          "bio_max": "La descrizione deve contenere meno di 200 caratteri",
+          "logo_invalid": "L'URL del logo deve essere valido",
+          "logo_upload_failed": "Caricamento non riuscito. Riprova.",
+          "logo_upload_not_file": "Seleziona un file immagine",
+          "logo_unable_load": "Impossibile caricare l'immagine da questo URL"
+        },
+        "upload": {
+          "uploading": "Caricamento…"
+        }
+      },
+      "toasts": {
+        "reset_success": "Modulo ripristinato ai valori originali",
+        "no_restaurant": "Nessun ristorante selezionato",
+        "fix_errors": "Correggi gli errori prima di salvare",
+        "slug_taken_title": "URL della pagina già in uso",
+        "slug_taken_description": "Scegli un URL diverso",
+        "failed_to_save": "Impossibile aggiornare le informazioni aziendali",
+        "update_success_title": "Informazioni aziendali aggiornate",
+        "update_success_description": "Le informazioni aziendali sono state aggiornate correttamente",
+        "update_error_title": "Errore durante l'aggiornamento delle informazioni aziendali",
+        "update_error_description": "Si è verificato un errore durante l'aggiornamento delle informazioni aziendali"
+      },
+      "loading": {
+        "text": "Caricamento delle informazioni aziendali..."
+      }
+    }
   }
 }

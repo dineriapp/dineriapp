@@ -2,75 +2,13 @@
 
 import type React from "react"
 
-import { Building2, Clock, CreditCard, Globe2, Instagram, Phone, ShieldAlert, Zap } from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { Link, usePathname } from "@/i18n/navigation"
+import { useLocale } from "next-intl"
+import { SettingsSidebarTabs } from "@/lib/reuseable-data"
+import { Locale } from "@/i18n/routing"
 
-const sections = [
-    {
-        id: "business-information",
-        title: "Business Information",
-        icon: Building2,
-        description: "Basic information about your restaurant",
-        href: "/dashboard/settings/business-information",
-    },
-    {
-        id: "contact",
-        title: "Contact Information",
-        icon: Phone,
-        description: "How customers can reach you",
-        href: "/dashboard/settings/contact",
-    },
-    {
-        id: "change-password",
-        title: "Change Password",
-        icon: ShieldAlert,
-        description: "Update your profile password",
-        href: "/dashboard/settings/change-password",
-    },
-    {
-        id: "hours",
-        title: "Opening Hours",
-        icon: Clock,
-        description: "When your restaurant is open",
-        href: "/dashboard/settings/hours",
-    },
-    {
-        id: "social",
-        title: "Social Media",
-        icon: Instagram,
-        description: "Connect your social profiles",
-        href: "/dashboard/settings/social",
-    },
-    {
-        id: "stripe",
-        title: "Stripe Settings",
-        icon: CreditCard,
-        description: "Configure payment processing",
-        href: "/dashboard/settings/stripe",
-    },
-    {
-        id: "popups",
-        title: "Popups",
-        icon: Zap,
-        description: "Manage welcome popups and notifications",
-        href: "/dashboard/settings/popups",
-    },
-    {
-        id: "integrations",
-        title: "Integrations",
-        icon: Globe2,
-        description: "Connect third-party services",
-        href: "/dashboard/settings/integrations",
-    },
-    {
-        id: "subscription",
-        title: "Subscription",
-        icon: Globe2,
-        description: "Manage Subscription",
-        href: "/dashboard/settings/subscription",
-    },
-]
+
+
 
 export default function SettingsLayout({
     children,
@@ -78,19 +16,41 @@ export default function SettingsLayout({
     children: React.ReactNode
 }) {
     const pathname = usePathname()
-
+    const locale: Locale = useLocale() as Locale
     return (
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-                <p className="mt-1 text-muted-foreground">Manage your restaurant profile and settings</p>
-
+                <h1 className="text-3xl font-bold text-gray-900">
+                    {locale === "de"
+                        ? "Einstellungen"
+                        : locale === "es"
+                            ? "Configuración"
+                            : locale === "fr"
+                                ? "Paramètres"
+                                : locale === "it"
+                                    ? "Impostazioni"
+                                    : locale === "nl"
+                                        ? "Instellingen"
+                                        : "Settings"}
+                </h1>
+                <p className="mt-1 text-muted-foreground">
+                    {locale === "de"
+                        ? "Verwalte dein Restaurantprofil und deine Einstellungen"
+                        : locale === "es"
+                            ? "Gestiona el perfil de tu restaurante y la configuración"
+                            : locale === "fr"
+                                ? "Gérez votre profil de restaurant et vos paramètres"
+                                : locale === "it"
+                                    ? "Gestisci il profilo del tuo ristorante e le impostazioni"
+                                    : locale === "nl"
+                                        ? "Beheer je restaurantprofiel en instellingen"
+                                        : "Manage your restaurant profile and settings"}
+                </p>
             </div>
-
             <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
                 {/* Sidebar Navigation */}
                 <div className="space-y-4">
-                    {sections.map((section) => {
+                    {SettingsSidebarTabs[locale].map((section) => {
                         const Icon = section.icon
                         const isActive = pathname === section.href
 

@@ -45,47 +45,207 @@ import { useUpgradePopupStore } from "@/stores/upgrade-popup-store";
 import { User as prismaUserType, User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { NavUser } from "./nav-user";
+import { Locale } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/navigation";
 
-const navigationGroups = [
-  {
-    label: "Overview",
-    items: [
-      { href: "/dashboard", label: "Dashboard", icon: Home },
-      { href: "/dashboard/stats", label: "Analytics", icon: BarChart },
-      { href: "/dashboard/orders", label: "Orders", icon: ShoppingCart },
-    ],
-  },
-  {
-    label: "Content",
-    items: [
-      { href: "/dashboard/links", label: "Links", icon: LinkIcon },
-      { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
-      { href: "/dashboard/events", label: "Events", icon: Calendar },
-      { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
-      { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
-    ],
-  },
-  {
-    label: "Marketing",
-    items: [{ href: "/dashboard/qr-codes", label: "QR Codes", icon: QrCode }],
-  },
-  {
-    label: "Customization",
-    items: [
-      // { href: "/dashboard/templates", label: "Templates", icon: Layout },
-      { href: "/dashboard/appearance", label: "Appearance", icon: Palette },
-      {
-        href: "/dashboard/settings/business-information",
-        label: "Settings",
-        icon: Settings,
-      },
-    ],
-  },
-];
+const navigationGroups = {
+  en: [
+    {
+      label: "Overview",
+      items: [
+        { href: "/dashboard", label: "Dashboard", icon: Home },
+        { href: "/dashboard/stats", label: "Analytics", icon: BarChart },
+        { href: "/dashboard/orders", label: "Orders", icon: ShoppingCart },
+      ],
+    },
+    {
+      label: "Content",
+      items: [
+        { href: "/dashboard/links", label: "Links", icon: LinkIcon },
+        { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
+        { href: "/dashboard/events", label: "Events", icon: Calendar },
+        { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
+      ],
+    },
+    {
+      label: "Marketing",
+      items: [{ href: "/dashboard/qr-codes", label: "QR Codes", icon: QrCode }],
+    },
+    {
+      label: "Customization",
+      items: [
+        { href: "/dashboard/appearance", label: "Appearance", icon: Palette },
+        { href: "/dashboard/settings/business-information", label: "Settings", icon: Settings },
+      ],
+    },
+  ],
+
+  de: [
+    {
+      label: "Übersicht",
+      items: [
+        { href: "/dashboard", label: "Dashboard", icon: Home },
+        { href: "/dashboard/stats", label: "Analytik", icon: BarChart },
+        { href: "/dashboard/orders", label: "Bestellungen", icon: ShoppingCart },
+      ],
+    },
+    {
+      label: "Inhalt",
+      items: [
+        { href: "/dashboard/links", label: "Links", icon: LinkIcon },
+        { href: "/dashboard/menu", label: "Menü", icon: UtensilsCrossed },
+        { href: "/dashboard/events", label: "Veranstaltungen", icon: Calendar },
+        { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
+      ],
+    },
+    {
+      label: "Marketing",
+      items: [{ href: "/dashboard/qr-codes", label: "QR-Codes", icon: QrCode }],
+    },
+    {
+      label: "Anpassung",
+      items: [
+        { href: "/dashboard/appearance", label: "Erscheinungsbild", icon: Palette },
+        { href: "/dashboard/settings/business-information", label: "Einstellungen", icon: Settings },
+      ],
+    },
+  ],
+
+  es: [
+    {
+      label: "Resumen",
+      items: [
+        { href: "/dashboard", label: "Panel", icon: Home },
+        { href: "/dashboard/stats", label: "Analíticas", icon: BarChart },
+        { href: "/dashboard/orders", label: "Pedidos", icon: ShoppingCart },
+      ],
+    },
+    {
+      label: "Contenido",
+      items: [
+        { href: "/dashboard/links", label: "Enlaces", icon: LinkIcon },
+        { href: "/dashboard/menu", label: "Menú", icon: UtensilsCrossed },
+        { href: "/dashboard/events", label: "Eventos", icon: Calendar },
+        { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
+      ],
+    },
+    {
+      label: "Marketing",
+      items: [{ href: "/dashboard/qr-codes", label: "Códigos QR", icon: QrCode }],
+    },
+    {
+      label: "Personalización",
+      items: [
+        { href: "/dashboard/appearance", label: "Apariencia", icon: Palette },
+        { href: "/dashboard/settings/business-information", label: "Configuración", icon: Settings },
+      ],
+    },
+  ],
+
+  fr: [
+    {
+      label: "Aperçu",
+      items: [
+        { href: "/dashboard", label: "Tableau de bord", icon: Home },
+        { href: "/dashboard/stats", label: "Analyses", icon: BarChart },
+        { href: "/dashboard/orders", label: "Commandes", icon: ShoppingCart },
+      ],
+    },
+    {
+      label: "Contenu",
+      items: [
+        { href: "/dashboard/links", label: "Liens", icon: LinkIcon },
+        { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
+        { href: "/dashboard/events", label: "Événements", icon: Calendar },
+        { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
+      ],
+    },
+    {
+      label: "Marketing",
+      items: [{ href: "/dashboard/qr-codes", label: "Codes QR", icon: QrCode }],
+    },
+    {
+      label: "Personnalisation",
+      items: [
+        { href: "/dashboard/appearance", label: "Apparence", icon: Palette },
+        { href: "/dashboard/settings/business-information", label: "Paramètres", icon: Settings },
+      ],
+    },
+  ],
+
+  it: [
+    {
+      label: "Panoramica",
+      items: [
+        { href: "/dashboard", label: "Dashboard", icon: Home },
+        { href: "/dashboard/stats", label: "Analitiche", icon: BarChart },
+        { href: "/dashboard/orders", label: "Ordini", icon: ShoppingCart },
+      ],
+    },
+    {
+      label: "Contenuto",
+      items: [
+        { href: "/dashboard/links", label: "Link", icon: LinkIcon },
+        { href: "/dashboard/menu", label: "Menù", icon: UtensilsCrossed },
+        { href: "/dashboard/events", label: "Eventi", icon: Calendar },
+        { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
+      ],
+    },
+    {
+      label: "Marketing",
+      items: [{ href: "/dashboard/qr-codes", label: "Codici QR", icon: QrCode }],
+    },
+    {
+      label: "Personalizzazione",
+      items: [
+        { href: "/dashboard/appearance", label: "Aspetto", icon: Palette },
+        { href: "/dashboard/settings/business-information", label: "Impostazioni", icon: Settings },
+      ],
+    },
+  ],
+
+  nl: [
+    {
+      label: "Overzicht",
+      items: [
+        { href: "/dashboard", label: "Dashboard", icon: Home },
+        { href: "/dashboard/stats", label: "Statistieken", icon: BarChart },
+        { href: "/dashboard/orders", label: "Bestellingen", icon: ShoppingCart },
+      ],
+    },
+    {
+      label: "Inhoud",
+      items: [
+        { href: "/dashboard/links", label: "Links", icon: LinkIcon },
+        { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
+        { href: "/dashboard/events", label: "Evenementen", icon: Calendar },
+        { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
+      ],
+    },
+    {
+      label: "Marketing",
+      items: [{ href: "/dashboard/qr-codes", label: "QR-codes", icon: QrCode }],
+    },
+    {
+      label: "Aanpassing",
+      items: [
+        { href: "/dashboard/appearance", label: "Uiterlijk", icon: Palette },
+        { href: "/dashboard/settings/business-information", label: "Instellingen", icon: Settings },
+      ],
+    },
+  ],
+};
 
 export function AppSidebar({
   user,
@@ -94,6 +254,8 @@ export function AppSidebar({
   user: any;
   prismaUser: prismaUserType;
 }) {
+  const locale: Locale = useLocale() as Locale
+  const t = useTranslations("DashboardSidebar")
   const {
     restaurants,
     initializeRestaurants,
@@ -109,7 +271,7 @@ export function AppSidebar({
   }, []);
 
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname()
   const openPopup = useUpgradePopupStore((state) => state.open);
   const { setSupabaseUser, setPrismaUser } = useUserStore();
 
@@ -141,9 +303,8 @@ export function AppSidebar({
           <SidebarMenuItem>
             <DropdownMenu>
               <p className="text-xs py-1 mb-1 text-main-text/60 font-medium">
-                Your Restaurants
+                {t("restaurants_label")}
               </p>
-
               <DropdownMenuTrigger
                 asChild
                 className="border w-full rounded-full px-5 !py-4 h-[40px]"
@@ -171,9 +332,8 @@ export function AppSidebar({
                           if (isPremium) {
                             setSelectedRestaurant(rest, { refresh: true });
                           } else {
-                            toast.error("Restaurant switch not allowed", {
-                              description:
-                                "You can't change your restaurant while on the Basic plan or if your current plan is inactive due to a pending payment. Please upgrade or resolve billing to access this feature.",
+                            toast.error(t("switch_error_title"), {
+                              description: t("switch_error_description"),
                             });
                           }
                         }}
@@ -207,18 +367,15 @@ export function AppSidebar({
                       className="w-full bg-main-action hover:bg-emerald-700 font-poppins rounded-full h-[38px] text-white text-sm"
                       onClick={() => router.push("/dashboard/create")}
                     >
-                      <Plus /> New Restaurant
+                      <Plus /> {t("new_restaurant")}
                     </Button>
                   ) : (
                     <div className="bg-main-background p-3 rounded-md text-xs text-main-text/80">
                       <p className="mb-1 font-semibold text-main-text">
-                        Need more?
+                        {t("need_more")}
                       </p>
                       <p className="max-w-[200px]">
-                        Multi-restaurant management is available in the{" "}
-                        <span className="text-main-action font-semibold">
-                          Enterprise Plan
-                        </span>
+                        {t("multi_restaurant_text")}
                         .
                       </p>
                       <Button
@@ -226,12 +383,12 @@ export function AppSidebar({
                         variant="secondary"
                         onClick={() =>
                           openPopup(
-                            "Multiple restaurant management is available in the Enterprise Plan."
+                            t("multi_restaurant_text")
                           )
                         }
                         className="mt-2 w-full bg-main-action hover:bg-emerald-700 rounded-full h-[38px] text-white text-sm"
                       >
-                        Upgrade Plan
+                        {t("upgrade_plan")}
                       </Button>
                     </div>
                   )}
@@ -242,7 +399,7 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="gap-1">
-        {navigationGroups.map((group) => (
+        {navigationGroups[locale]?.map((group) => (
           <SidebarGroup key={group.label} className="py-0">
             <SidebarGroupLabel className="!text-[12px] font-semibold uppercase">
               {group.label}
@@ -260,7 +417,7 @@ export function AppSidebar({
                     if (isLocked) {
                       e.preventDefault();
                       openPopup(
-                        "This feature is available on the premium plan."
+                        t("locked_feature")
                       );
                     }
                   };

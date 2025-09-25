@@ -11,26 +11,11 @@ import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { uploadImage } from "@/supabase/clients/client"
 import { Building2, Globe } from "lucide-react"
+import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
-
-// Validation schemas
-const nameSchema = z
-    .string()
-    .min(1, "Restaurant name is required")
-    .max(100, "Restaurant name must be less than 100 characters")
-
-const slugSchema = z
-    .string()
-    .min(3, "Page URL must be at least 3 characters")
-    .max(50, "Page URL must be less than 50 characters")
-    .regex(/^[a-z0-9-]+$/, "Page URL can only contain lowercase letters, numbers, and hyphens")
-
-const bioSchema = z.string().max(200, "Bio must be less than 200 characters")
-
-const logoUrlSchema = z.string().url("Logo URL must be a valid URL")
 
 interface FormErrors {
     name?: string
@@ -49,6 +34,22 @@ interface BusinessFormData {
 export default function BusinessInformationPage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
     const [uploadingLogo, setUploadingLogo] = useState(false);
+    const t = useTranslations("Settings.business-information")
+    // Validation schemas
+    const nameSchema = z
+        .string()
+        .min(1, t("form.errors.name_required"))
+        .max(100, t("form.errors.name_max"))
+
+    const slugSchema = z
+        .string()
+        .min(3, t("form.errors.slug_required"))
+        .max(50, t("form.errors.slug_max"))
+        .regex(/^[a-z0-9-]+$/, t("form.errors.slug_invalid"))
+
+    const bioSchema = z.string().max(200, t("form.errors.bio_max"))
+
+    const logoUrlSchema = z.string().url(t("form.errors.logo_invalid"))
 
     // Form state
     const [formData, setFormData] = useState<BusinessFormData>({
@@ -145,7 +146,7 @@ export default function BusinessInformationPage() {
         if (!file) return;
         // optional: quick client validation
         if (!file.type.startsWith("image/")) {
-            setErrors((p) => ({ ...p, logo_url: "Please choose an image file" }));
+            setErrors((p) => ({ ...p, logo_url: t("form.errors.logo_upload_not_file") }));
             return;
         }
         setErrors((p) => ({ ...p, logo_url: undefined }));
@@ -156,7 +157,7 @@ export default function BusinessInformationPage() {
 
         } catch (e) {
             console.log(e)
-            setErrors((p) => ({ ...p, logo_url: "Upload failed. Try again." }));
+            setErrors((p) => ({ ...p, logo_url: t("form.errors.logo_upload_failed") }));
         } finally {
             setUploadingLogo(false);
         }
@@ -212,17 +213,17 @@ export default function BusinessInformationPage() {
     const resetForm = () => {
         setFormData(initialData)
         setErrors({})
-        toast.success("Form reset to original values")
+        toast.success(t("toasts.reset_success"))
     }
 
     const saveBusinessInfo = async () => {
         if (!selectedRestaurant) {
-            toast.error("No restaurant selected")
+            toast.error(t("toasts.no_restaurant"))
             return
         }
 
         if (!validateForm()) {
-            toast.error("Please fix the errors before saving")
+            toast.error(t("toasts.fix_errors"))
             return
         }
 
@@ -249,12 +250,12 @@ export default function BusinessInformationPage() {
             if (!response.ok) {
                 if (response.status === 409) {
                     setErrors({ slug: result.error })
-                    toast.error("Page URL already taken", {
-                        description: "Please choose a different page URL",
+                    toast.error(t("toasts.slug_taken_title"), {
+                        description: t("toasts.slug_taken_description"),
                     })
                     return
                 }
-                throw new Error(result.error || "Failed to update business information")
+                throw new Error(result.error || t("toasts.failed_to_save"))
             }
 
             // Update the store with the new data
@@ -269,13 +270,13 @@ export default function BusinessInformationPage() {
             }
             setInitialData(savedData)
 
-            toast.success("Business information updated", {
-                description: "Your business information has been updated successfully",
+            toast.success(t("toasts.update_success_title"), {
+                description: t("toasts.update_success_description"),
             })
         } catch (error: any) {
-            console.error("Error updating business information:", error)
-            toast.error("Error updating business information", {
-                description: error.message || "An error occurred while updating your business information",
+            console.error(t("toasts.update_error_title"), error)
+            toast.error(t("toasts.update_error_title"), {
+                description: error.message || t("toasts.update_error_description"),
             })
         } finally {
             setSaving(false)
@@ -284,7 +285,7 @@ export default function BusinessInformationPage() {
 
     if (!selectedRestaurant) {
         return (
-            <LoadingUI text="Loading business information..." />
+            <LoadingUI text={t("form.loading.text")} />
         )
     }
 
@@ -292,13 +293,13 @@ export default function BusinessInformationPage() {
         <>
             <Card className="border-gray-200 pt-0 box-shad-every-2 shadow-md">
                 <CardHeader className="bg-gray-50/50 py-4 font-poppins">
-                    <CardTitle className="text-gray-900">Business Information</CardTitle>
-                    <CardDescription>Manage your restaurant&apos;s basic information and branding</CardDescription>
+                    <CardTitle className="text-gray-900">{t("page.title")}</CardTitle>
+                    <CardDescription>{t("page.description")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
                     {/* Restaurant Name */}
                     <div className="space-y-2">
-                        <Label htmlFor="name">Restaurant Name *</Label>
+                        <Label htmlFor="name">{t("form.labels.name")}</Label>
                         <div className="relative">
                             <Building2 className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
                             <Input
@@ -306,7 +307,7 @@ export default function BusinessInformationPage() {
                                 type="text"
                                 value={formData.name}
                                 onChange={(e) => handleNameChange(e.target.value)}
-                                placeholder="Your Restaurant Name"
+                                placeholder={t("form.placeholders.name")}
                                 className={`pl-10 focus:border-emerald-500 focus:ring-emerald-500 ${errors.name ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                                     }`}
                             />
@@ -316,7 +317,9 @@ export default function BusinessInformationPage() {
 
                     {/* Page URL/Slug */}
                     <div className="space-y-2">
-                        <Label htmlFor="slug">Page URL *</Label>
+                        <Label htmlFor="slug">
+                            {t("form.labels.slug")}
+                        </Label>
                         <div className="relative">
                             <Globe className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
                             <div className="flex">
@@ -328,7 +331,7 @@ export default function BusinessInformationPage() {
                                     type="text"
                                     value={formData.slug}
                                     onChange={(e) => handleSlugChange(e.target.value)}
-                                    placeholder="restaurant-name"
+                                    placeholder={t("form.placeholders.slug")}
                                     className={`rounded-l-none focus:border-emerald-500 focus:ring-emerald-500 ${errors.slug ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                                         }`}
                                 />
@@ -336,32 +339,38 @@ export default function BusinessInformationPage() {
                         </div>
                         {errors.slug && <p className="text-sm text-red-600">{errors.slug}</p>}
                         <p className="text-xs text-gray-500">
-                            This will be your restaurant&apos;s unique web address. Only lowercase letters, numbers, and hyphens allowed.
+                            {t("form.help.slug")}
                         </p>
                     </div>
 
                     {/* Bio */}
                     <div className="space-y-2">
-                        <Label htmlFor="bio">Bio</Label>
+                        <Label htmlFor="bio">
+                            {t("form.labels.bio")}
+                        </Label>
                         <Textarea
                             id="bio"
                             value={formData.bio}
                             onChange={(e) => handleBioChange(e.target.value)}
-                            placeholder="Tell customers about your restaurant..."
+                            placeholder={t("form.placeholders.bio")}
                             rows={3}
                             className={`focus:border-emerald-500 focus:ring-emerald-500 resize-none ${errors.bio ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                                 }`}
                         />
                         {errors.bio && <p className="text-sm text-red-600">{errors.bio}</p>}
                         <div className="flex justify-between text-xs text-gray-500">
-                            <span>Optional: Brief description of your restaurant</span>
+                            <span>
+                                {t("form.help.bio_optional")}
+                            </span>
                             <span>{formData.bio.length}/200</span>
                         </div>
                     </div>
 
                     {/* Logo URL */}
                     <div className="space-y-2">
-                        <Label htmlFor="logo_url">Logo </Label>
+                        <Label htmlFor="logo_url">
+                            {t("form.labels.logo")}
+                        </Label>
                         <div className="relative">
                             <Input
                                 id="logo_file"
@@ -372,14 +381,18 @@ export default function BusinessInformationPage() {
 
                             />
                             {uploadingLogo && (
-                                <span className="absolute right-3 top-3 text-xs text-slate-500">Uploading…</span>
+                                <span className="absolute right-3 top-3 text-xs text-slate-500">
+                                    {t("form.upload.uploading")}
+                                </span>
                             )}
                         </div>
 
                         {/* Logo Preview */}
                         {formData.logo_url && !errors.logo_url && (
                             <div className="mt-3">
-                                <p className="text-sm font-medium text-gray-700 mb-2">Logo Preview:</p>
+                                <p className="text-sm font-medium text-gray-700 mb-2">
+                                    {t("form.help.logo_preview")}
+                                </p>
                                 <div className="border rounded-lg p-4 bg-gray-50">
                                     <Image
                                         src={formData.logo_url || "/placeholder.svg"}

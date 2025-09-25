@@ -2,10 +2,11 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useLocale } from "next-intl"
 
 export default function SettingsPage() {
     const router = useRouter()
-
+    const locale = useLocale()
     useEffect(() => {
         // Redirect to business information page by default
         router.replace("/dashboard/settings/business-information")
@@ -27,7 +28,21 @@ export default function SettingsPage() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                 </svg>
-                <span>Redirecting...</span>
+                <span>
+                    {locale === "en"
+                        ? "Redirecting..."
+                        : locale === "de"
+                            ? "Weiterleitung..."
+                            : locale === "fr"
+                                ? "Redirection..."
+                                : locale === "es"
+                                    ? "Redirigiendo..."
+                                    : locale === "it"
+                                        ? "Reindirizzamento..."
+                                        : locale === "nl"
+                                            ? "Doorsturen..."
+                                            : "Redirecting..."}
+                </span>
             </div>
         </div>
     )

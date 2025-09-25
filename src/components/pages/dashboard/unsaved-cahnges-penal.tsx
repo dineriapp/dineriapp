@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { RotateCcw, Save } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface UnsavedChangesPanelProps {
     hasChanges: boolean;
@@ -21,6 +22,7 @@ export const UnsavedChangesPanel: React.FC<UnsavedChangesPanelProps> = ({
     ResetChangesBtnClasses = "",
     SaveChangesBtnClasses = "",
 }) => {
+    const t = useTranslations("UnsavedChangesPanel")
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -40,7 +42,7 @@ export const UnsavedChangesPanel: React.FC<UnsavedChangesPanelProps> = ({
                     className={ResetChangesBtnClasses}
                 >
                     <RotateCcw className="h-4 w-4" />
-                    Reset
+                    {t("reset_button")}
                 </Button>
                 <Button
                     onClick={saveSettings}
@@ -49,7 +51,8 @@ export const UnsavedChangesPanel: React.FC<UnsavedChangesPanelProps> = ({
                     className={SaveChangesBtnClasses}
                 >
                     <Save className="h-4 w-4" />
-                    {saving ? "Saving..." : "Save Changes"}
+                    {saving ? t("saving_button")
+                        : t("save_button")}
                 </Button>
             </div>
         </motion.div>

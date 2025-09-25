@@ -8,52 +8,38 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, ArrowRight, Check, Loader2, Utensils } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 // Reuse the same schema for client-side validation
-const formSchema = z.object({
-  name: z.string().min(1, "Restaurant name is required").max(100),
-  slug: z
-    .string()
-    .min(3, "Slug must be at least 3 characters")
-    .max(50)
-    .regex(/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens"),
-  bio: z.string().max(200).optional(),
-});
 
-type FormValues = z.infer<typeof formSchema>;
 
-function SubmitButton({ loading }: { loading: boolean }) {
-
-  return (
-    <Button
-      type="submit"
-      className="flex-1 bg-main-green rounded-full h-[44px] font-poppins cursor-pointer hover:bg-main-green/90"
-      disabled={loading}
-    >
-      {loading ? (
-        <>
-          <Loader2 className="animate-spin" />
-          Creating...
-        </>
-      ) : (
-        <span className="flex items-center">
-          Create Restaurant Profile
-          <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-        </span>
-      )}
-    </Button>
-  );
-}
 
 export default function CreateRestaurantPage() {
   const router = useRouter();
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState("")
+  const t = useTranslations("CreateRestaurantPage")
+  const f = useTranslations("CreateRestaurantPage.form")
+
+  const formSchema = z.object({
+    name: z
+      .string()
+      .min(1, f("errors.name_required"))
+      .max(100),
+    slug: z
+      .string()
+      .min(3, f("errors.slug_required"))
+      .max(50)
+      .regex(/^[a-z0-9-]+$/, f("errors.slug_invalid")),
+    bio: z.string().max(200).optional(),
+  });
+
+  type FormValues = z.infer<typeof formSchema>;
 
   const {
     register,
@@ -98,13 +84,18 @@ export default function CreateRestaurantPage() {
       })
     })
   }
+
   return (
     <div className="min-h-screen bg-slate-50">
       <main className="max-w-[1200px] mx-auto px-4 py-10 lg:py-12">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900">Create Your Restaurant</h1>
-            <p className="mt-2 text-slate-600">Set up your restaurant profile to get started with dineri.app</p>
+            <h1 className="text-3xl font-bold text-slate-900">
+              {t("page.title")}
+            </h1>
+            <p className="mt-2 text-slate-600">
+              {t("page.subtitle")}
+            </p>
           </div>
 
           <Card className="border-slate-200 shadow-sm">
@@ -114,9 +105,11 @@ export default function CreateRestaurantPage() {
                   <Utensils className="h-5 w-5" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl text-slate-900">Restaurant Details</CardTitle>
+                  <CardTitle className="text-xl text-slate-900">
+                    {t("card.title")}
+                  </CardTitle>
                   <CardDescription className="text-slate-500">
-                    Tell us about your restaurant to create your profile
+                    {t("card.description")}
                   </CardDescription>
                 </div>
               </div>
@@ -126,14 +119,13 @@ export default function CreateRestaurantPage() {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-slate-700">
-                    Restaurant Name
+                    {f("labels.name")}
                   </Label>
                   <Input
                     id="name"
                     {...register("name")}
-                    placeholder="e.g. Trattoria Milano"
+                    placeholder={f("placeholders.name")}
                     className="border-slate-200 focus:border-teal-500 focus:ring-teal-500/20 !h-[44px]"
-                    required
                   />
                   {errors.name && (
                     <p className="text-sm text-red-500">{errors.name.message}</p>
@@ -142,16 +134,15 @@ export default function CreateRestaurantPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="slug" className="text-slate-700">
-                    Page URL
+                    {f("labels.slug")}
                   </Label>
                   <div className="flex items-center">
                     <span className="text-slate-500 mr-2">dineri.app/</span>
                     <Input
                       id="slug"
                       {...register("slug")}
-                      placeholder="your-restaurant"
+                      placeholder={f("placeholders.slug")}
                       className="border-slate-200 focus:border-teal-500 focus:ring-teal-500/20 !h-[44px]"
-                      required
                       onChange={(e) => {
                         setIsSlugManuallyEdited(true);
                         register("slug").onChange(e);
@@ -160,7 +151,7 @@ export default function CreateRestaurantPage() {
                   </div>
                   <div className="flex justify-between">
                     <p className="text-xs text-slate-500">
-                      Only use letters, numbers, and hyphens
+                      {f("help.slug")}
                     </p>
                     {errors.slug && (
                       <p className="text-xs text-red-500">{errors.slug.message}</p>
@@ -170,18 +161,18 @@ export default function CreateRestaurantPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="bio" className="text-slate-700">
-                    Short Description
+                    {f("labels.bio")}
                   </Label>
                   <Textarea
                     id="bio"
                     {...register("bio")}
-                    placeholder="Tell customers about your restaurant in a few words (max 200 characters)"
+                    placeholder={f("placeholders.bio")}
                     maxLength={200}
                     rows={3}
                     className="border-slate-200 focus:border-teal-500 focus:ring-teal-500/20 resize-none"
                   />
                   <div className="text-xs text-right text-slate-500">
-                    {bio?.length || 0}/200 characters
+                    {f("help.bio_count", { count: bio?.length || 0 })}
                   </div>
                 </div>
                 {error && (
@@ -199,9 +190,25 @@ export default function CreateRestaurantPage() {
                     className="border-slate-200  bg-main-blue text-white !h-[44px] font-poppins !px-5 rounded-full hover:bg-main-blue/80"
                     onClick={() => router.push("/dashboard")}
                   >
-                    Cancel
+                    {f("buttons.cancel")}
                   </Button>
-                  <SubmitButton loading={isPending} />
+                  <Button
+                    type="submit"
+                    className="flex-1 bg-main-green rounded-full h-[44px] font-poppins cursor-pointer hover:bg-main-green/90"
+                    disabled={isPending}
+                  >
+                    {isPending ? (
+                      <>
+                        <Loader2 className="animate-spin" />
+                        {f("buttons.submitting")}
+                      </>
+                    ) : (
+                      <span className="flex items-center">
+                        {f("buttons.submit")}
+                        <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    )}
+                  </Button>
                 </div>
               </CardFooter>
             </form>
@@ -213,11 +220,12 @@ export default function CreateRestaurantPage() {
                 <Check className="h-5 w-5 text-teal-600" />
               </div>
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-teal-800">Pro Tip</h3>
+                <h3 className="text-sm font-medium text-teal-800">
+                  {t("tip.title")}
+                </h3>
                 <div className="mt-2 text-sm text-teal-700">
                   <p>
-                    Choose a memorable and easy-to-type URL for your restaurant. This will make it easier for customers
-                    to find and share your profile.
+                    {t("tip.text")}
                   </p>
                 </div>
               </div>

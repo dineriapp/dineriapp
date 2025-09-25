@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/app/[locale]/(dashboard)/_components/app-sidebar";
+import LocaleSwitcher from "@/components/locale-switcher";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import UpgradeBtn from "@/components/upgrade-btn";
 import VisitBtn from "@/components/visit-btn";
@@ -69,6 +70,7 @@ export default async function WithResttaurantLayout({
                                 <div className="flex items-center justify-between gap-2 md:flex-row flex-row-reverse md:w-full">
                                     <SidebarTrigger />
                                     <div className="flex items-center gap-2">
+                                        <LocaleSwitcher />
                                         {!isPremium && (
                                             <UpgradeBtn />
                                         )}

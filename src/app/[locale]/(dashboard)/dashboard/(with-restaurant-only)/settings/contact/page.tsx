@@ -14,34 +14,6 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
-// Validation schemas
-const emailSchema = z.string().email("Please enter a valid email address").min(1, "Email is required")
-
-const phoneSchema = z
-    .string()
-    .regex(/^\+?[\d\s\-().]{10,}$/, "Please enter a valid phone number")
-    .min(10, "Phone number must be at least 10 digits")
-
-const addressSchema = z
-    .string()
-    .min(10, "Address must be at least 10 characters")
-    .max(500, "Address must be less than 500 characters")
-
-const latitudeSchema = z.preprocess(
-    (val) => Number(val),
-    z
-        .number()
-        .min(-90, "Latitude must be between -90 and 90")
-        .max(90, "Latitude must be between -90 and 90")
-);
-
-const longitudeSchema = z.preprocess(
-    (val) => Number(val),
-    z
-        .number()
-        .min(-180, "Longitude must be between -180 and 180")
-        .max(180, "Longitude must be between -180 and 180")
-);
 
 
 interface FormErrors {
@@ -62,6 +34,36 @@ interface ContactFormData {
 
 export default function ContactPage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
+
+    // Validation schemas
+    const emailSchema = z.string().email("Please enter a valid email address").min(1, "Email is required")
+
+    const phoneSchema = z
+        .string()
+        .regex(/^\+?[\d\s\-().]{10,}$/, "Please enter a valid phone number")
+        .min(10, "Phone number must be at least 10 digits")
+
+    const addressSchema = z
+        .string()
+        .min(10, "Address must be at least 10 characters")
+        .max(500, "Address must be less than 500 characters")
+
+    const latitudeSchema = z.preprocess(
+        (val) => Number(val),
+        z
+            .number()
+            .min(-90, "Latitude must be between -90 and 90")
+            .max(90, "Latitude must be between -90 and 90")
+    );
+
+    const longitudeSchema = z.preprocess(
+        (val) => Number(val),
+        z
+            .number()
+            .min(-180, "Longitude must be between -180 and 180")
+            .max(180, "Longitude must be between -180 and 180")
+    );
+
 
     const [formData, setFormData] = useState<ContactFormData>({
         phone: "",

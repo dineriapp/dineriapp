@@ -1140,5 +1140,172 @@
         }
       }
     }
+  },
+  "CreateRestaurantPage": {
+    "page": {
+      "title": "Create Your Restaurant",
+      "subtitle": "Set up your restaurant profile to get started with dineri.app"
+    },
+    "card": {
+      "title": "Restaurant Details",
+      "description": "Tell us about your restaurant to create your profile"
+    },
+    "form": {
+      "labels": {
+        "name": "Restaurant Name",
+        "slug": "Page URL",
+        "bio": "Short Description"
+      },
+      "placeholders": {
+        "name": "e.g. Trattoria Milano",
+        "slug": "your-restaurant",
+        "bio": "Tell customers about your restaurant in a few words (max 200 characters)"
+      },
+      "help": {
+        "slug": "Only use letters, numbers, and hyphens",
+        "bio_count": "{count}/200 characters"
+      },
+      "errors": {
+        "name_required": "Restaurant name is required",
+        "slug_required": "Slug must be at least 3 characters",
+        "slug_invalid": "Slug can only contain lowercase letters, numbers, and hyphens"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "submit": "Create Restaurant Profile",
+        "submitting": "Creating..."
+      },
+      "error_box": {
+        "title": "Error"
+      }
+    },
+    "tip": {
+      "title": "Pro Tip",
+      "text": "Choose a memorable and easy-to-type URL for your restaurant. This will make it easier for customers to find and share your profile."
+    }
+  },
+  "DashboardSidebar": {
+    "restaurants_label": "Your Restaurants",
+    "new_restaurant": "New Restaurant",
+    "need_more": "Need more?",
+    "multi_restaurant_text": "Multi-restaurant management is available in the Enterprise Plan.",
+    "upgrade_plan": "Upgrade Plan",
+    "locked_feature": "This feature is available on the premium plan.",
+    "switch_error_title": "Restaurant switch not allowed",
+    "switch_error_description": "You can't change your restaurant while on the Basic plan or if your current plan is inactive due to a pending payment. Please upgrade or resolve billing to access this feature."
+  },
+  "UnsavedChangesPanel": {
+    "reset_button": "Reset",
+    "save_button": "Save Changes",
+    "saving_button": "Saving...",
+    "unsaved_changes_message": "You have unsaved changes."
+  },
+  "Settings": {
+    "business-information": {
+      "page": {
+        "title": "Business Information",
+        "description": "Manage your restaurant's basic information and branding"
+      },
+      "form": {
+        "labels": {
+          "name": "Restaurant Name *",
+          "slug": "Page URL *",
+          "bio": "Bio",
+          "logo": "Logo"
+        },
+        "placeholders": {
+          "name": "Your Restaurant Name",
+          "slug": "restaurant-name",
+          "bio": "Tell customers about your restaurant..."
+        },
+        "help": {
+          "slug": "This will be your restaurant's unique web address. Only lowercase letters, numbers, and hyphens allowed.",
+          "bio_optional": "Optional: Brief description of your restaurant",
+          "logo_preview": "Logo Preview:"
+        },
+        "errors": {
+          "name_required": "Restaurant name is required",
+          "name_max": "Restaurant name must be less than 100 characters",
+          "slug_required": "Page URL must be at least 3 characters",
+          "slug_max": "Page URL must be less than 50 characters",
+          "slug_invalid": "Page URL can only contain lowercase letters, numbers, and hyphens",
+          "bio_max": "Bio must be less than 200 characters",
+          "logo_invalid": "Logo URL must be a valid URL",
+          "logo_upload_failed": "Upload failed. Try again.",
+          "logo_upload_not_file": "Please choose an image file",
+          "logo_unable_load": "Unable to load image from this URL"
+        },
+        "upload": {
+          "uploading": "Uploading…"
+        }
+      },
+      "toasts": {
+        "reset_success": "Form reset to original values",
+        "no_restaurant": "No restaurant selected",
+        "fix_errors": "Please fix the errors before saving",
+        "slug_taken_title": "Page URL already taken",
+        "slug_taken_description": "Please choose a different page URL",
+        "failed_to_save": "Failed to update business information",
+        "update_success_title": "Business information updated",
+        "update_success_description": "Your business information has been updated successfully",
+        "update_error_title": "Error updating business information",
+        "update_error_description": "An error occurred while updating your business information"
+      },
+      "loading": {
+        "text": "Loading business information..."
+      }
+    },
+    "contact-information": {
+      "page": {
+        "title": "Contact Information",
+        "description": "Manage your restaurant's contact details and location"
+      },
+      "form": {
+        "labels": {
+          "email": "Email Address",
+          "phone": "Phone Number",
+          "address": "Address",
+          "latitude": "Latitude",
+          "longitude": "Longitude"
+        },
+        "placeholders": {
+          "email": "contact@restaurant.com",
+          "phone": "+1 (555) 123-4567",
+          "address": "123 Restaurant Street, City, State, Country"
+        },
+        "help": {
+          "email": "Primary contact email for your restaurant",
+          "phone": "Include country code for international numbers",
+          "address": "Full address including city, state/province, and country"
+        },
+        "errors": {
+          "email_required": "Email is required",
+          "email_invalid": "Please enter a valid email address",
+          "phone_invalid": "Please enter a valid phone number",
+          "phone_min": "Phone number must be at least 10 digits",
+          "address_min": "Address must be at least 10 characters",
+          "address_max": "Address must be less than 500 characters",
+          "latitude_invalid": "Latitude must be between -90 and 90",
+          "longitude_invalid": "Longitude must be between -180 and 180",
+          "latitude_required_with_longitude": "Latitude is required when longitude is provided",
+          "longitude_required_with_latitude": "Longitude is required when latitude is provided"
+        },
+        "upload": {
+          "uploading": "Uploading…"
+        }
+      },
+      "toasts": {
+        "no_restaurant": "No restaurant selected",
+        "fix_errors": "Please fix the errors before saving",
+        "failed_to_save": "Failed to update contact information",
+        "update_success_title": "Contact information updated",
+        "update_success_description": "Your contact information has been updated successfully",
+        "update_error_title": "Error updating contact information",
+        "update_error_description": "An error occurred while updating your contact information"
+      },
+      "loading": {
+        "text": "Loading contact information..."
+      }
+    }
   }
 }
