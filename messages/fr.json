@@ -1255,6 +1255,206 @@
       "loading": {
         "text": "Chargement des informations de l’entreprise..."
       }
+    },
+    "contact-information": {
+      "page": {
+        "title": "Informations de contact",
+        "description": "Gérez les coordonnées et l’emplacement de votre restaurant"
+      },
+      "form": {
+        "labels": {
+          "email": "Adresse e-mail",
+          "phone": "Numéro de téléphone",
+          "address": "Adresse",
+          "latitude": "Latitude",
+          "longitude": "Longitude"
+        },
+        "placeholders": {
+          "email": "contact@restaurant.com",
+          "phone": "+33 (555) 123-4567",
+          "address": "123 Rue du Restaurant, Ville, Région, Pays"
+        },
+        "help": {
+          "email": "Adresse e-mail principale de contact de votre restaurant",
+          "phone": "Incluez l’indicatif du pays pour les numéros internationaux",
+          "address": "Adresse complète incluant la ville, la région/département et le pays"
+        },
+        "errors": {
+          "email_required": "L’adresse e-mail est obligatoire",
+          "email_invalid": "Veuillez entrer une adresse e-mail valide",
+          "phone_invalid": "Veuillez entrer un numéro de téléphone valide",
+          "phone_min": "Le numéro de téléphone doit comporter au moins 10 chiffres",
+          "address_min": "L’adresse doit comporter au moins 10 caractères",
+          "address_max": "L’adresse doit comporter moins de 500 caractères",
+          "latitude_invalid": "La latitude doit être comprise entre -90 et 90",
+          "longitude_invalid": "La longitude doit être comprise entre -180 et 180",
+          "latitude_required_with_longitude": "La latitude est requise lorsque la longitude est fournie",
+          "longitude_required_with_latitude": "La longitude est requise lorsque la latitude est fournie"
+        },
+        "upload": {
+          "uploading": "Téléversement…"
+        }
+      },
+      "toasts": {
+        "no_restaurant": "Aucun restaurant sélectionné",
+        "fix_errors": "Veuillez corriger les erreurs avant d’enregistrer",
+        "failed_to_save": "Échec de la mise à jour des informations de contact",
+        "update_success_title": "Informations de contact mises à jour",
+        "update_success_description": "Vos informations de contact ont été mises à jour avec succès",
+        "update_error_title": "Erreur lors de la mise à jour des informations de contact",
+        "update_error_description": "Une erreur est survenue lors de la mise à jour de vos informations de contact"
+      },
+      "loading": {
+        "text": "Chargement des informations de contact..."
+      }
+    },
+    "change-password": {
+      "page": {
+        "title": "Changer le mot de passe",
+        "description": "Mettez à jour le mot de passe de votre compte en toute sécurité"
+      },
+      "form": {
+        "labels": {
+          "currentPassword": "Mot de passe actuel",
+          "newPassword": "Nouveau mot de passe",
+          "confirmPassword": "Confirmer le nouveau mot de passe"
+        },
+        "placeholders": {
+          "currentPassword": "Entrez votre mot de passe actuel",
+          "newPassword": "Entrez votre nouveau mot de passe",
+          "confirmPassword": "Confirmez votre nouveau mot de passe"
+        },
+        "help": {
+          "passwordRequirements": "Le mot de passe doit comporter au moins 8 caractères, avec une majuscule, une minuscule et un chiffre"
+        },
+        "errors": {
+          "currentPassword_required": "Le mot de passe actuel est requis",
+          "currentPassword_incorrect": "Le mot de passe actuel est incorrect",
+          "newPassword_required": "Le nouveau mot de passe est requis",
+          "newPassword_length": "Le mot de passe doit comporter au moins 8 caractères",
+          "newPassword_invalid": "Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre",
+          "newPassword_same_as_current": "Le nouveau mot de passe doit être différent de l’actuel",
+          "confirmPassword_required": "Veuillez confirmer votre nouveau mot de passe",
+          "confirmPassword_mismatch": "Les mots de passe ne correspondent pas"
+        }
+      },
+      "passwordStrength": {
+        "label": "Niveau de sécurité du mot de passe :",
+        "weak": "Faible",
+        "fair": "Moyen",
+        "good": "Bon",
+        "strong": "Fort"
+      },
+      "toasts": {
+        "fix_errors": "Veuillez corriger les erreurs avant de continuer",
+        "change_success_title": "Mot de passe changé avec succès",
+        "change_success_description": "Votre mot de passe a été mis à jour en toute sécurité",
+        "change_error_title": "Échec du changement de mot de passe",
+        "change_error_description": "Une erreur inattendue est survenue",
+        "form_reset_title": "Formulaire réinitialisé",
+        "form_reset_description": "Tous les champs ont été effacés"
+      },
+      "links": {
+        "forgotPassword": "Vous avez oublié votre mot de passe actuel ?"
+      },
+      "loading": {
+        "text": "Enregistrement..."
+      }
+    },
+    "opening-hours": {
+      "page": {
+        "title": "Heures d'ouverture",
+        "description": "Définissez les heures d'ouverture de votre restaurant pour chaque jour de la semaine"
+      },
+      "form": {
+        "labels": {
+          "timezone": "Fuseau horaire",
+          "openingTime": "Heure d'ouverture",
+          "closingTime": "Heure de fermeture"
+        },
+        "placeholders": {
+          "selectTimezone": "Sélectionnez le fuseau horaire du restaurant",
+          "selectOpeningTime": "Sélectionnez l'heure d'ouverture",
+          "selectClosingTime": "Sélectionnez l'heure de fermeture"
+        },
+        "buttons": {
+          "open": "Ouvert",
+          "closed": "Fermé"
+        },
+        "tips": {
+          "general": "Astuce : Cliquez sur « Fermé » pour les jours où votre restaurant n'est pas ouvert. Assurez-vous que l'heure de fermeture soit postérieure à l'heure d'ouverture pour les jours ouverts."
+        },
+        "errors": {
+          "noRestaurant": "Aucun restaurant sélectionné",
+          "invalidHours_title": "Heures d'ouverture invalides",
+          "invalidHours_description": "Veuillez définir à la fois les heures d'ouverture et de fermeture pour les jours ouverts, ou marquez-les comme fermés",
+          "invalidRange_title": "Plage horaire invalide",
+          "invalidRange_description": "L'heure de fermeture doit être postérieure à l'heure d'ouverture",
+          "updateError_title": "Erreur lors de la mise à jour des heures d'ouverture",
+          "updateError_description": "Une erreur s'est produite lors de la mise à jour des heures d'ouverture"
+        }
+      },
+      "toasts": {
+        "form_reset_title": "Formulaire réinitialisé",
+        "form_reset_description": "Toutes les modifications ont été supprimées",
+        "update_success_title": "Heures d'ouverture mises à jour",
+        "update_success_description": "Les heures d'ouverture de votre restaurant ont été mises à jour avec succès"
+      },
+      "loading": {
+        "text": "Chargement des heures d'ouverture..."
+      }
+    },
+    "social": {
+      "page": {
+        "title": "Réseaux Sociaux",
+        "description": "Connectez vos comptes de réseaux sociaux et gérez leur affichage"
+      },
+      "form": {
+        "labels": {
+          "instagram": "URL du profil Instagram",
+          "facebook": "URL de la page Facebook",
+          "whatsapp": "Numéro WhatsApp",
+          "tiktok": "Nom d'utilisateur TikTok",
+          "social_icons_position": "Position des icônes sociales"
+        },
+        "placeholders": {
+          "instagram": "https://instagram.com/votre.restaurant",
+          "facebook": "https://facebook.com/votre.restaurant",
+          "whatsapp": "+1234567890",
+          "tiktok": "@nomutilisateur",
+          "selectPosition": "Sélectionner la position"
+        },
+        "help": {
+          "instagram": "Saisissez l'URL de votre profil Instagram (exemple : https://instagram.com/votrerestaurant)",
+          "facebook": "Saisissez l'URL de votre page Facebook (exemple : https://facebook.com/votrerestaurant)",
+          "whatsapp": "Saisissez votre numéro WhatsApp avec l'indicatif du pays (exemple : +1234567890)",
+          "tiktok": "Saisissez votre nom d'utilisateur TikTok commençant par @ (exemple : @monrestaurant)",
+          "social_icons_position": "Choisissez où les icônes de réseaux sociaux apparaissent sur la page de votre restaurant"
+        },
+        "selectOptions": {
+          "top": "Haut de la page",
+          "bottom": "Bas de la page"
+        }
+      },
+      "errors": {
+        "instagram_invalid": "Veuillez saisir une URL Instagram valide",
+        "facebook_invalid": "Veuillez saisir une URL Facebook valide",
+        "whatsapp_invalid": "Veuillez saisir un numéro WhatsApp valide avec l'indicatif du pays (exemple : +1234567890)",
+        "url_invalid": "Veuillez saisir une URL valide pour {platform}",
+        "noRestaurant": "Aucun restaurant sélectionné",
+        "fixBeforeSave": "Veuillez corriger les erreurs avant d'enregistrer",
+        "updateError_title": "Erreur lors de la mise à jour des paramètres des réseaux sociaux",
+        "updateError_description": "Une erreur est survenue lors de la mise à jour de vos paramètres de réseaux sociaux"
+      },
+      "toasts": {
+        "form_reset_title": "Formulaire réinitialisé",
+        "form_reset_description": "Toutes les modifications ont été annulées",
+        "update_success_title": "Paramètres des réseaux sociaux mis à jour",
+        "update_success_description": "Vos informations de réseaux sociaux ont été mises à jour avec succès"
+      },
+      "loading": {
+        "text": "Chargement des informations de réseaux sociaux..."
+      }
     }
   }
 }

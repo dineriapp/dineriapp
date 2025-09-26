@@ -1,19 +1,19 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import LoadingUI from "@/components/loading-ui"
+import { UnsavedChangesPanel } from "@/components/pages/dashboard/unsaved-cahnges-penal"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlertCircle, Facebook, Instagram, MessageCircle, RotateCcw, Save } from "lucide-react"
-import { motion } from "motion/react"
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
-import { useRestaurantStore } from "@/stores/restaurant-store"
-import { FaTiktok } from "react-icons/fa";
-import LoadingUI from "@/components/loading-ui"
-import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import UnsavedChangesUi from "@/components/unsaved-changes-ui"
+import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
+import { useRestaurantStore } from "@/stores/restaurant-store"
+import { AlertCircle, Facebook, Instagram, MessageCircle } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useEffect, useState } from "react"
+import { FaTiktok } from "react-icons/fa"
+import { toast } from "sonner"
 
 interface SocialFormData {
   instagram: string
@@ -25,6 +25,7 @@ interface SocialFormData {
 
 export default function SocialPage() {
   const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
+  const t = useTranslations("Settings.social")
 
   const [formData, setFormData] = useState<SocialFormData>({
     instagram: "",
@@ -70,14 +71,14 @@ export default function SocialPage() {
     try {
       new URL(url)
       if (platform === "instagram" && !url.includes("instagram.com")) {
-        return "Please enter a valid Instagram URL"
+        return t("errors.instagram_invalid")
       }
       if (platform === "facebook" && !url.includes("facebook.com")) {
-        return "Please enter a valid Facebook URL"
+        return t("errors.facebook_invalid")
       }
       return null
     } catch {
-      return `Please enter a valid ${platform} URL`
+      return t("errors.url_invalid", { platform: platform })
     }
   }
 
@@ -87,7 +88,7 @@ export default function SocialPage() {
 
     const phoneRegex = /^\+[1-9]\d{1,14}$/
     if (!phoneRegex.test(number)) {
-      return "Please enter a valid WhatsApp number with country code (e.g., +1234567890)"
+      return t("errors.whatsapp_invalid")
     }
     return null
   }
@@ -132,20 +133,20 @@ export default function SocialPage() {
   const resetForm = () => {
     setFormData(initialData)
     setErrors({})
-    toast.success("Form reset", {
-      description: "All changes have been discarded",
+    toast.success(t("toasts.form_reset_title"), {
+      description: t("toasts.form_reset_description"),
     })
   }
 
   // Save social media settings
   const saveSocialSettings = async () => {
     if (!selectedRestaurant) {
-      toast.error("No restaurant selected")
+      toast.error(t("errors.noRestaurant"))
       return
     }
 
     if (!validateForm()) {
-      toast.error("Please fix the errors before saving")
+      toast.error(t("errors.fixBeforeSave"))
       return
     }
 
@@ -163,7 +164,7 @@ export default function SocialPage() {
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error || "Failed to update social media settings")
+        throw new Error(result.error || t("errors.updateError_title"))
       }
 
       // Update store with response data
@@ -172,13 +173,13 @@ export default function SocialPage() {
       // Update initial data to reflect saved state
       setInitialData(formData)
 
-      toast.success("Social media settings updated", {
-        description: "Your social media information has been updated successfully",
+      toast.success(t("toasts.update_success_title"), {
+        description: t("toasts.update_success_description"),
       })
     } catch (error: any) {
-      console.error("Error updating social media settings:", error)
-      toast.error("Error updating social media settings", {
-        description: error.message || "An error occurred while updating your social media settings",
+      console.error(t("errors.updateError_title"), error)
+      toast.error(t("errors.updateError_title"), {
+        description: error.message || t("errors.updateError_description"),
       })
     } finally {
       setSaving(false)
@@ -187,7 +188,7 @@ export default function SocialPage() {
 
   if (!selectedRestaurant) {
     return (
-      <LoadingUI text="Loading social information..." />
+      <LoadingUI text={t("loading.text")} />
     )
   }
 
@@ -195,19 +196,25 @@ export default function SocialPage() {
     <>
       <Card className="pt-0 box-shad-every-2 shadow-md border-gray-200">
         <CardHeader className="bg-gray-50/50 font-poppins py-4">
-          <CardTitle className="text-gray-900">Social Media</CardTitle>
-          <CardDescription>Connect your social media accounts and manage how they appear</CardDescription>
+          <CardTitle className="text-gray-900">
+            {t("page.title")}
+          </CardTitle>
+          <CardDescription>
+            {t("page.description")}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 pt-6">
           <div className="space-y-2">
-            <Label htmlFor="instagram">Instagram Profile URL</Label>
+            <Label htmlFor="instagram">
+              {t("form.labels.instagram")}
+            </Label>
             <div className="relative">
               <Instagram className="absolute left-3 top-3 h-4 w-4 text-pink-600" />
               <Input
                 id="instagram"
                 value={formData.instagram}
                 onChange={(e) => handleInputChange("instagram", e.target.value)}
-                placeholder="https://instagram.com/your.restaurant"
+                placeholder={t("form.placeholders.instagram")}
                 className={`pl-10 focus:border-pink-500 focus:ring-pink-500 ${errors.instagram ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
               />
@@ -219,19 +226,21 @@ export default function SocialPage() {
               </p>
             )}
             <p className="text-xs text-muted-foreground">
-              Enter your Instagram profile URL (e.g., https://instagram.com/yourrestaurant)
+              {t("form.help.instagram")}
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="facebook">Facebook Page URL</Label>
+            <Label htmlFor="facebook">
+              {t("form.labels.facebook")}
+            </Label>
             <div className="relative">
               <Facebook className="absolute left-3 top-3 h-4 w-4 text-blue-600" />
               <Input
                 id="facebook"
                 value={formData.facebook}
                 onChange={(e) => handleInputChange("facebook", e.target.value)}
-                placeholder="https://facebook.com/your.restaurant"
+                placeholder={t("form.placeholders.facebook")}
                 className={`pl-10 focus:border-blue-500 focus:ring-blue-500 ${errors.facebook ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
               />
@@ -243,19 +252,22 @@ export default function SocialPage() {
               </p>
             )}
             <p className="text-xs text-muted-foreground">
-              Enter your Facebook page URL (e.g., https://facebook.com/yourrestaurant)
+              {t("form.help.facebook")}
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="whatsapp">WhatsApp Number</Label>
+            <Label htmlFor="whatsapp">
+              {t("form.labels.whatsapp")}
+
+            </Label>
             <div className="relative">
               <MessageCircle className="absolute left-3 top-3 h-4 w-4 text-green-600" />
               <Input
                 id="whatsapp"
                 value={formData.whatsapp}
                 onChange={(e) => handleInputChange("whatsapp", e.target.value)}
-                placeholder="+1234567890"
+                placeholder={t("form.placeholders.whatsapp")}
                 className={`pl-10 focus:border-green-500 focus:ring-green-500 ${errors.whatsapp ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
               />
@@ -267,12 +279,14 @@ export default function SocialPage() {
               </p>
             )}
             <p className="text-xs text-muted-foreground">
-              Enter your WhatsApp number with country code (e.g., +1234567890)
+              {t("form.help.whatsapp")}
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="tiktok">TikTok Username</Label>
+            <Label htmlFor="tiktok">
+              {t("form.labels.tiktok")}
+            </Label>
             <div className="relative">
               {/* Replace with a TikTok icon SVG or component */}
               <FaTiktok className="absolute left-3 top-3 h-4 w-4" />
@@ -287,7 +301,7 @@ export default function SocialPage() {
                   }
                   handleInputChange("tiktok", value);
                 }}
-                placeholder="@username"
+                placeholder={t("form.placeholders.tiktok")}
                 className={`pl-10 focus:border-pink-500 focus:ring-pink-500 ${errors.tiktok
                   ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                   : ""
@@ -301,12 +315,14 @@ export default function SocialPage() {
               </p>
             )}
             <p className="text-xs text-muted-foreground">
-              Enter your TikTok username starting with @ (e.g., @myrestaurant)
+              {t("form.help.tiktok")}
             </p>
           </div>
 
           <div className="space-y-4 border-t pt-4">
-            <Label>Social Icons Position</Label>
+            <Label>
+              {t("form.labels.social_icons_position")}
+            </Label>
             <Select
               value={formData.social_icons_position}
               onValueChange={(value: "top" | "bottom") => {
@@ -317,49 +333,31 @@ export default function SocialPage() {
                 <SelectValue placeholder="Select position" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="top">Top of page</SelectItem>
-                <SelectItem value="bottom">Bottom of page</SelectItem>
+                <SelectItem value="top">
+                  {t("form.selectOptions.top")}
+                </SelectItem>
+                <SelectItem value="bottom">
+                  {t("form.selectOptions.bottom")}
+                </SelectItem>
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              Choose where social media icons appear on your restaurant page
+              {t("form.help.social_icons_position")}
             </p>
           </div>
         </CardContent>
       </Card>
 
       {/* Floating Action Buttons */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{
-          opacity: hasChanges ? 1 : 0,
-          y: hasChanges ? 0 : 20,
-        }}
-        className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-2"
-      >
-        <UnsavedChangesUi />
-        <div className="flex gap-2">
-          <Button
-            onClick={resetForm}
-            disabled={saving || !hasChanges}
-            size="lg"
-            variant="outline"
-            className={ResetChangesBtnClasses}
-          >
-            <RotateCcw className="h-4 w-4" />
-            Reset
-          </Button>
-          <Button
-            onClick={saveSocialSettings}
-            disabled={saving || !hasChanges}
-            size="lg"
-            className={SaveChangesBtnClasses}
-          >
-            <Save className="h-4 w-4" />
-            {saving ? "Saving..." : "Save Changes"}
-          </Button>
-        </div>
-      </motion.div>
+      <UnsavedChangesPanel
+        hasChanges={hasChanges}
+        saving={saving}
+        resetForm={resetForm}
+        saveSettings={saveSocialSettings}
+        UnsavedChangesUi={UnsavedChangesUi}
+        ResetChangesBtnClasses={ResetChangesBtnClasses}
+        SaveChangesBtnClasses={SaveChangesBtnClasses}
+      />
     </>
   )
 }

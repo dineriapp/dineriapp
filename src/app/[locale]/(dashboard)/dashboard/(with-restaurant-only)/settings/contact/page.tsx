@@ -10,6 +10,7 @@ import UnsavedChangesUi from "@/components/unsaved-changes-ui"
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { Mail, MapPin, Phone } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -34,34 +35,35 @@ interface ContactFormData {
 
 export default function ContactPage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
+    const t = useTranslations("Settings.contact-information")
 
     // Validation schemas
-    const emailSchema = z.string().email("Please enter a valid email address").min(1, "Email is required")
+    const emailSchema = z.string().email(t("form.errors.email_invalid")).min(1, t("form.errors.email_required"))
 
     const phoneSchema = z
         .string()
-        .regex(/^\+?[\d\s\-().]{10,}$/, "Please enter a valid phone number")
-        .min(10, "Phone number must be at least 10 digits")
+        .regex(/^\+?[\d\s\-().]{10,}$/, t("form.errors.phone_invalid"))
+        .min(10, t("form.errors.phone_min"))
 
     const addressSchema = z
         .string()
-        .min(10, "Address must be at least 10 characters")
-        .max(500, "Address must be less than 500 characters")
+        .min(10, t("form.errors.address_min"))
+        .max(500, t("form.errors.address_max"))
 
     const latitudeSchema = z.preprocess(
         (val) => Number(val),
         z
             .number()
-            .min(-90, "Latitude must be between -90 and 90")
-            .max(90, "Latitude must be between -90 and 90")
+            .min(-90, t("form.errors.latitude_invalid"))
+            .max(90, t("form.errors.latitude_invalid"))
     );
 
     const longitudeSchema = z.preprocess(
         (val) => Number(val),
         z
             .number()
-            .min(-180, "Longitude must be between -180 and 180")
-            .max(180, "Longitude must be between -180 and 180")
+            .min(-180, t("form.errors.longitude_invalid"))
+            .max(180, t("form.errors.longitude_invalid"))
     );
 
 
@@ -223,10 +225,10 @@ export default function ContactPage() {
         const hasLongitude = formData.longitude.trim() !== ""
 
         if (hasLatitude && !hasLongitude) {
-            newErrors.longitude = "Longitude is required when latitude is provided"
+            newErrors.longitude = t("form.errors.longitude_required_with_latitude")
         }
         if (hasLongitude && !hasLatitude) {
-            newErrors.latitude = "Latitude is required when longitude is provided"
+            newErrors.latitude = t("form.errors.latitude_required_with_longitude")
         }
 
         setErrors(newErrors)
@@ -235,12 +237,12 @@ export default function ContactPage() {
 
     const saveContactInfo = async () => {
         if (!selectedRestaurant) {
-            toast.error("No restaurant selected")
+            toast.error(t("toasts.no_restaurant"))
             return
         }
 
         if (!validateForm()) {
-            toast.error("Please fix the errors before saving")
+            toast.error(t("toasts.fix_errors"))
             return
         }
 
@@ -266,7 +268,7 @@ export default function ContactPage() {
             const result = await response.json()
 
             if (!response.ok) {
-                throw new Error(result.error || "Failed to update contact information")
+                throw new Error(result.error || t("toasts.failed_to_save"))
             }
 
             // Update the store with the new data from API response
@@ -282,13 +284,13 @@ export default function ContactPage() {
             }
             setInitialData(newInitialData)
 
-            toast.success("Contact information updated", {
-                description: "Your contact information has been updated successfully",
+            toast.success(t("toasts.update_success_title"), {
+                description: t("toasts.update_success_description"),
             })
         } catch (error: any) {
-            console.error("Error updating contact information:", error)
-            toast.error("Error updating contact information", {
-                description: error.message || "An error occurred while updating your contact information",
+            console.error(t("toasts.update_error_title"), error)
+            toast.error(t("toasts.update_error_title"), {
+                description: error.message || t("toasts.update_error_description"),
             })
         } finally {
             setSaving(false)
@@ -304,7 +306,7 @@ export default function ContactPage() {
 
     if (!selectedRestaurant) {
         return (
-            <LoadingUI text="Loading contact information..." />
+            <LoadingUI text={t("loading.text")} />
 
         )
     }
@@ -313,13 +315,19 @@ export default function ContactPage() {
         <>
             <Card className="border-gray-200 pt-0 box-shad-every-2 shadow-md">
                 <CardHeader className="bg-gray-50/50 py-4 font-poppins">
-                    <CardTitle className="text-gray-900">Contact Information</CardTitle>
-                    <CardDescription>Manage your restaurant&apos;s contact details and location</CardDescription>
+                    <CardTitle className="text-gray-900">
+                        {t("page.title")}
+                    </CardTitle>
+                    <CardDescription>
+                        {t("page.description")}
+                    </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
                     {/* Email Address - Now Editable */}
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email Address</Label>
+                        <Label htmlFor="email">
+                            {t("form.labels.email")}
+                        </Label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
                             <Input
@@ -327,18 +335,22 @@ export default function ContactPage() {
                                 type="email"
                                 value={formData.email}
                                 onChange={(e) => handleInputChange("email", e.target.value)}
-                                placeholder="contact@restaurant.com"
+                                placeholder={t("form.placeholders.email")}
                                 className={`pl-10 focus:border-emerald-500 focus:ring-emerald-500 ${errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                                     }`}
                             />
                         </div>
                         {errors.email && <p className="text-sm text-red-600">{errors.email}</p>}
-                        <p className="text-xs text-gray-500">Primary contact email for your restaurant</p>
+                        <p className="text-xs text-gray-500">
+                            {t("form.help.email")}
+                        </p>
                     </div>
 
                     {/* Phone Number */}
                     <div className="space-y-2">
-                        <Label htmlFor="phone">Phone Number</Label>
+                        <Label htmlFor="phone">
+                            {t("form.labels.phone")}
+                        </Label>
                         <div className="relative">
                             <Phone className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
                             <Input
@@ -346,32 +358,38 @@ export default function ContactPage() {
                                 type="tel"
                                 value={formData.phone}
                                 onChange={(e) => handleInputChange("phone", e.target.value)}
-                                placeholder="+1 (555) 123-4567"
+                                placeholder={t("form.placeholders.phone")}
                                 className={`pl-10 focus:border-emerald-500 focus:ring-emerald-500 ${errors.phone ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                                     }`}
                             />
                         </div>
                         {errors.phone && <p className="text-sm text-red-600">{errors.phone}</p>}
-                        <p className="text-xs text-gray-500">Include country code for international numbers</p>
+                        <p className="text-xs text-gray-500">
+                            {t("form.help.phone")}
+                        </p>
                     </div>
 
                     {/* Address */}
                     <div className="space-y-2">
-                        <Label htmlFor="address">Address</Label>
+                        <Label htmlFor="address">
+                            {t("form.labels.address")}
+                        </Label>
                         <div className="relative">
                             <MapPin className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
                             <Textarea
                                 id="address"
                                 value={formData.address}
                                 onChange={(e) => handleInputChange("address", e.target.value)}
-                                placeholder="123 Restaurant Street, City, State, Country"
+                                placeholder={t("form.placeholders.address")}
                                 rows={3}
                                 className={`pl-10 focus:border-emerald-500 focus:ring-emerald-500 resize-none ${errors.address ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                                     }`}
                             />
                         </div>
                         {errors.address && <p className="text-sm text-red-600">{errors.address}</p>}
-                        <p className="text-xs text-gray-500">Full address including city, state/province, and country</p>
+                        <p className="text-xs text-gray-500">
+                            {t("form.help.address")}
+                        </p>
                     </div>
 
                 </CardContent>

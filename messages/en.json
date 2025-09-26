@@ -1306,6 +1306,253 @@
       "loading": {
         "text": "Loading contact information..."
       }
+    },
+    "change-password": {
+      "page": {
+        "title": "Change Password",
+        "description": "Update your account password securely"
+      },
+      "form": {
+        "labels": {
+          "currentPassword": "Current Password",
+          "newPassword": "New Password",
+          "confirmPassword": "Confirm New Password"
+        },
+        "placeholders": {
+          "currentPassword": "Enter your current password",
+          "newPassword": "Enter your new password",
+          "confirmPassword": "Confirm your new password"
+        },
+        "help": {
+          "passwordRequirements": "Password must be at least 8 characters with uppercase, lowercase, and number"
+        },
+        "errors": {
+          "currentPassword_required": "Current password is required",
+          "currentPassword_incorrect": "Current password is incorrect",
+          "newPassword_required": "New password is required",
+          "newPassword_length": "Password must be at least 8 characters long",
+          "newPassword_invalid": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+          "newPassword_same_as_current": "New password must be different from current password",
+          "confirmPassword_required": "Please confirm your new password",
+          "confirmPassword_mismatch": "Passwords do not match"
+        }
+      },
+      "passwordStrength": {
+        "label": "Password strength:",
+        "weak": "Weak",
+        "fair": "Fair",
+        "good": "Good",
+        "strong": "Strong"
+      },
+      "toasts": {
+        "fix_errors": "Please fix the errors before submitting",
+        "change_success_title": "Password changed successfully",
+        "change_success_description": "Your password has been updated securely",
+        "change_error_title": "Failed to change password",
+        "change_error_description": "An unexpected error occurred",
+        "form_reset_title": "Form reset",
+        "form_reset_description": "All fields have been cleared"
+      },
+      "links": {
+        "forgotPassword": "Forgot your current password?"
+      },
+      "loading": {
+        "text": "Saving..."
+      }
+    },
+    "opening-hours": {
+      "page": {
+        "title": "Opening Hours",
+        "description": "Set your restaurant's opening hours for each day of the week"
+      },
+      "form": {
+        "labels": {
+          "timezone": "Timezone",
+          "openingTime": "Opening time",
+          "closingTime": "Closing time"
+        },
+        "placeholders": {
+          "selectTimezone": "Select restaurant timezone",
+          "selectOpeningTime": "Select opening time",
+          "selectClosingTime": "Select closing time"
+        },
+        "buttons": {
+          "open": "Open",
+          "closed": "Closed"
+        },
+        "tips": {
+          "general": "Tip: Click \"Closed\" for days when your restaurant is not open. Make sure closing time is after opening time for open days."
+        },
+        "errors": {
+          "noRestaurant": "No restaurant selected",
+          "invalidHours_title": "Invalid opening hours",
+          "invalidHours_description": "Please set both opening and closing times for open days, or mark them as closed",
+          "invalidRange_title": "Invalid time range",
+          "invalidRange_description": "Closing time must be after opening time",
+          "updateError_title": "Error updating opening hours",
+          "updateError_description": "An error occurred while updating your opening hours"
+        }
+      },
+      "toasts": {
+        "form_reset_title": "Form reset",
+        "form_reset_description": "All changes have been discarded",
+        "update_success_title": "Opening hours updated",
+        "update_success_description": "Your restaurant opening hours have been updated successfully"
+      },
+      "loading": {
+        "text": "Loading opening hours..."
+      }
+    },
+    "social": {
+      "page": {
+        "title": "Social Media",
+        "description": "Connect your social media accounts and manage how they appear"
+      },
+      "form": {
+        "labels": {
+          "instagram": "Instagram Profile URL",
+          "facebook": "Facebook Page URL",
+          "whatsapp": "WhatsApp Number",
+          "tiktok": "TikTok Username",
+          "social_icons_position": "Social Icons Position"
+        },
+        "placeholders": {
+          "instagram": "https://instagram.com/your.restaurant",
+          "facebook": "https://facebook.com/your.restaurant",
+          "whatsapp": "+1234567890",
+          "tiktok": "@username",
+          "selectPosition": "Select position"
+        },
+        "help": {
+          "instagram": "Enter your Instagram profile URL (e.g., https://instagram.com/yourrestaurant)",
+          "facebook": "Enter your Facebook page URL (e.g., https://facebook.com/yourrestaurant)",
+          "whatsapp": "Enter your WhatsApp number with country code (e.g., +1234567890)",
+          "tiktok": "Enter your TikTok username starting with @ (e.g., @myrestaurant)",
+          "social_icons_position": "Choose where social media icons appear on your restaurant page"
+        },
+        "selectOptions": {
+          "top": "Top of page",
+          "bottom": "Bottom of page"
+        }
+      },
+      "errors": {
+        "instagram_invalid": "Please enter a valid Instagram URL",
+        "facebook_invalid": "Please enter a valid Facebook URL",
+        "whatsapp_invalid": "Please enter a valid WhatsApp number with country code (e.g., +1234567890)",
+        "url_invalid": "Please enter a valid {platform} URL",
+        "noRestaurant": "No restaurant selected",
+        "fixBeforeSave": "Please fix the errors before saving",
+        "updateError_title": "Error updating social media settings",
+        "updateError_description": "An error occurred while updating your social media settings"
+      },
+      "toasts": {
+        "form_reset_title": "Form reset",
+        "form_reset_description": "All changes have been discarded",
+        "update_success_title": "Social media settings updated",
+        "update_success_description": "Your social media information has been updated successfully"
+      },
+      "loading": {
+        "text": "Loading social information..."
+      }
+    },
+    "stripeSettings": {
+      "page": {
+        "title": "Stripe Settings",
+        "description": "Configure your Stripe payment processing keys"
+      },
+      "alerts": {
+        "security_notice": {
+          "title": "Your keys are secure:",
+          "description": "We encrypt and store your Stripe keys using industry-standard encryption. Your actual keys are never stored in plain text and cannot be viewed by anyone, including our team."
+        },
+        "important_notice": {
+          "title": "Important:",
+          "description": "Never share your secret key publicly. Only enter it in secure, trusted applications like this one."
+        }
+      },
+      "status": {
+        "title": "Current Status",
+        "configured": "Stripe keys are configured and encrypted",
+        "not_configured": "No Stripe keys configured",
+        "public_key": {
+          "configured": "Public Key: Configured",
+          "not_configured": "Public Key: Not Configured"
+        },
+        "secret_key": {
+          "configured": "Secret Key: Configured",
+          "not_configured": "Secret Key: Not Configured"
+        },
+        "webhook_secret": {
+          "configured": "Webhook Secret: Configured",
+          "not_configured": "Webhook Secret: Not Configured"
+        },
+        "remove_keys_button": "Remove Keys"
+      },
+      "form": {
+        "title_add": "Add Stripe Keys",
+        "title_update": "Update Stripe Keys",
+        "description_add": "Enter your Stripe API keys to enable payment processing",
+        "description_update": "Enter new keys to update your current configuration",
+        "labels": {
+          "public_key": "Stripe Publishable Key",
+          "secret_key": "Stripe Secret Key"
+        },
+        "placeholders": {
+          "public_key": "pk_test_... or pk_live_...",
+          "secret_key": "sk_test_... or sk_live_..."
+        },
+        "helpers": {
+          "public_key": "This key is safe to use in your frontend code",
+          "secret_key": "This key must be kept secret and only used on the server"
+        },
+        "buttons": {
+          "save": "Save Keys",
+          "update": "Update Keys",
+          "clear": "Clear"
+        }
+      },
+      "help": {
+        "title": "How to get your Stripe keys",
+        "steps": {
+          "1": "Log in to your Stripe Dashboard",
+          "2": "Navigate to Developers → API keys",
+          "3": "Copy your Publishable key (starts with pk_)",
+          "4": "Reveal and copy your Secret key (starts with sk_)",
+          "5": "For live payments, make sure to use your live keys instead of test keys"
+        }
+      },
+      "errors": {
+        "invalid_public": {
+          "title": "Invalid Public Key",
+          "description": "Stripe public key should start with 'pk_'"
+        },
+        "invalid_secret": {
+          "title": "Invalid Secret Key",
+          "description": "Stripe secret key should start with 'sk_'"
+        },
+        "update_failed": {
+          "title": "Error",
+          "description": "Failed to update Stripe settings"
+        },
+        "remove_failed": {
+          "title": "Error",
+          "description": "Failed to remove Stripe keys"
+        }
+      },
+      "toasts": {
+        "update_success": {
+          "title": "Success",
+          "description": "Stripe settings updated successfully"
+        },
+        "remove_success": {
+          "title": "Success",
+          "description": "Stripe keys removed successfully"
+        }
+      },
+      "loading": {
+        "page": "Loading....",
+        "stripe": "Loading Stripe settings..."
+      }
     }
   }
 }

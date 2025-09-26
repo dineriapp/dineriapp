@@ -13,10 +13,12 @@ import { AlertCircle, CheckCircle, Eye, EyeOff, Loader2, Shield } from "lucide-r
 import { useState } from "react"
 import { toast } from "sonner"
 import LoadingUI from "@/components/loading-ui"
+import { useTranslations } from "next-intl"
 
 export default function StripeSettingsPage() {
     const { selectedRestaurant: restaurant, initializeRestaurants } = useRestaurantStore()
     const { refetch } = useRestaurants()
+    const t = useTranslations("Settings.stripeSettings")
 
     const [saving, setSaving] = useState(false)
     const [showPublicKey, setShowPublicKey] = useState(false)
@@ -42,15 +44,15 @@ export default function StripeSettingsPage() {
 
         // Validate Stripe keys format
         if (formData.stripe_public_key && !formData.stripe_public_key.startsWith("pk_")) {
-            toast.error("Invalid Public Key", {
-                description: "Stripe public key should start with 'pk_'",
+            toast.error(t("errors.invalid_public.title"), {
+                description: t("errors.invalid_public.description"),
             })
             return
         }
 
         if (formData.stripe_secret_key && !formData.stripe_secret_key.startsWith("sk_")) {
-            toast.error("Invalid Secret Key", {
-                description: "Stripe secret key should start with 'sk_'",
+            toast.error(t("errors.invalid_secret.title"), {
+                description: t("errors.invalid_secret.description"),
             })
             return
         }
@@ -69,11 +71,11 @@ export default function StripeSettingsPage() {
             const data = await response.json()
 
             if (!response.ok) {
-                throw new Error(data.error || "Failed to update Stripe settings")
+                throw new Error(data.error || t("errors.update_failed.description"))
             }
 
-            toast.success("Success", {
-                description: "Stripe settings updated successfully",
+            toast.success(t("toasts.update_success.title"), {
+                description: t("toasts.update_success.description"),
             })
 
             // Clear form and refresh restaurant data
@@ -89,8 +91,8 @@ export default function StripeSettingsPage() {
 
         } catch (error) {
             console.error("Error updating Stripe settings:", error)
-            toast.error("Error", {
-                description: error instanceof Error ? error.message : "Failed to update Stripe settings",
+            toast.error(t("errors.update_failed.title"), {
+                description: error instanceof Error ? error.message : t("errors.update_failed.description"),
             })
         } finally {
             setSaving(false)
@@ -110,11 +112,11 @@ export default function StripeSettingsPage() {
             const data = await response.json()
 
             if (!response.ok) {
-                throw new Error(data.error || "Failed to remove Stripe keys")
+                throw new Error(data.error || t("errors.remove_failed.description"))
             }
 
-            toast.success("Success", {
-                description: "Stripe keys removed successfully",
+            toast.success(t("toasts.remove_success.title"), {
+                description: t("toasts.remove_success.description"),
             })
 
             const result = await refetch()
@@ -123,9 +125,9 @@ export default function StripeSettingsPage() {
             }
 
         } catch (error) {
-            console.error("Error removing Stripe keys:", error)
-            toast.error("Error", {
-                description: error instanceof Error ? error.message : "Failed to remove Stripe keys",
+            console.error(t("errors.remove_failed.title"), error)
+            toast.error(t("errors.remove_failed.title"), {
+                description: error instanceof Error ? error.message : t("errors.remove_failed.description"),
             })
         } finally {
             setSaving(false)
@@ -134,7 +136,7 @@ export default function StripeSettingsPage() {
 
     if (!restaurant) {
         return (
-            <LoadingUI text="Loading...." />
+            <LoadingUI text={t("loading.page")} />
         )
     }
 
@@ -143,8 +145,12 @@ export default function StripeSettingsPage() {
     return (
         <Card className="pt-0 box-shad-every-2 shadow-md border-gray-200 gap-5">
             <CardHeader className="bg-gray-50/50 py-4 font-poppins">
-                <CardTitle className="text-gray-900">Stripe Settings</CardTitle>
-                <CardDescription>Configure your Stripe payment processing keys</CardDescription>
+                <CardTitle className="text-gray-900">
+                    {t("page.title")}
+                </CardTitle>
+                <CardDescription>
+                    {t("page.description")}
+                </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
 

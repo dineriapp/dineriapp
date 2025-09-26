@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import UnsavedChangesUi from "@/components/unsaved-changes-ui"
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -61,8 +62,6 @@ const defaultFormData: OpeningHoursFormData = {
 
 const allTimezones = Intl.supportedValuesOf("timeZone")
 
-
-
 export default function HoursPage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
     const [formData, setFormData] = useState<OpeningHoursFormData>(defaultFormData)
@@ -71,6 +70,7 @@ export default function HoursPage() {
     const [saving, setSaving] = useState(false)
     const [hasChanges, setHasChanges] = useState(false)
     const [selectedTimeZone, setSelectedTimeZone] = useState<string>("")
+    const t = useTranslations("Settings.opening-hours")
 
     // Load initial data from restaurant store
     useEffect(() => {
@@ -155,14 +155,14 @@ export default function HoursPage() {
 
     const resetForm = () => {
         setFormData(initialData)
-        toast.success("Form reset", {
-            description: "All changes have been discarded",
+        toast.success(t("toasts.form_reset_title"), {
+            description: t("toasts.form_reset_description"),
         })
     }
 
     const saveOpeningHours = async () => {
         if (!selectedRestaurant) {
-            toast.error("No restaurant selected")
+            toast.error(t("form.errors.noRestaurant"))
             return
         }
 
@@ -176,8 +176,8 @@ export default function HoursPage() {
             })
 
             if (invalidDays.length > 0) {
-                toast.error("Invalid opening hours", {
-                    description: "Please set both opening and closing times for open days, or mark them as closed",
+                toast.error(t("form.errors.invalidHours_title"), {
+                    description: t("form.errors.invalidHours_description"),
                 })
                 return
             }
@@ -193,8 +193,8 @@ export default function HoursPage() {
             })
 
             if (invalidTimes.length > 0) {
-                toast.error("Invalid time range", {
-                    description: "Closing time must be after opening time",
+                toast.error(t("form.errors.invalidRange_title"), {
+                    description: t("form.errors.invalidRange_description"),
                 })
                 return
             }
@@ -214,7 +214,7 @@ export default function HoursPage() {
 
             if (!response.ok) {
                 const errorData = await response.json()
-                throw new Error(errorData.error || "Failed to update opening hours")
+                throw new Error(errorData.error || t("form.errors.updateError_description"))
             }
 
             const result = await response.json()
@@ -228,13 +228,13 @@ export default function HoursPage() {
             // Update initial data to reflect saved state
             setInitialData(formData)
 
-            toast.success("Opening hours updated", {
-                description: "Your restaurant opening hours have been updated successfully",
+            toast.success(t("toasts.update_success_title"), {
+                description: t("toasts.update_success_description"),
             })
         } catch (error: any) {
-            console.error("Error updating opening hours:", error)
-            toast.error("Error updating opening hours", {
-                description: error.message || "An error occurred while updating your opening hours",
+            console.error(t("form.errors.updateError_title"), error)
+            toast.error(t("form.errors.updateError_title"), {
+                description: error.message || t("form.errors.updateError_description"),
             })
         } finally {
             setSaving(false)
@@ -243,7 +243,7 @@ export default function HoursPage() {
 
     if (loading || !selectedRestaurant) {
         return (
-            <LoadingUI text="Loading opening hours..." />
+            <LoadingUI text={t("loading.text")} />
         )
     }
 
@@ -251,12 +251,18 @@ export default function HoursPage() {
         <>
             <Card className="border-gray-200 pt-0 box-shad-every-2 shadow-md gap-0">
                 <CardHeader className="bg-gray-50/50 py-4 font-poppins">
-                    <CardTitle className="text-gray-900">Opening Hours</CardTitle>
-                    <CardDescription>Set your restaurant&apos;s opening hours for each day of the week</CardDescription>
+                    <CardTitle className="text-gray-900">
+                        {t("page.title")}
+                    </CardTitle>
+                    <CardDescription>
+                        {t("page.description")}
+                    </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-4">
                     <div className="mb-6">
-                        <Label className="text-base font-medium mb-2">Timezone</Label>
+                        <Label className="text-base font-medium mb-2">
+                            {t("form.labels.timezone")}
+                        </Label>
                         <Select
                             value={selectedTimeZone}
                             onValueChange={(value) =>
@@ -264,7 +270,7 @@ export default function HoursPage() {
                             }
                         >
                             <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select restaurant timezone" />
+                                <SelectValue placeholder={t("form.placeholders.selectTimezone")} />
                             </SelectTrigger>
                             <SelectContent className="">
                                 <div className="!max-h-[300px] !overflow-y-auto h-[300px] py-1">
@@ -291,7 +297,7 @@ export default function HoursPage() {
                                             `h-[38px] rounded-full px-4 text-xs font-poppins cursor-pointer ${dayData.closed ? "text-white bg-main-blue hover:bg-main-blue/70 hover:text-white" : "bg-main-green text-white hover:bg-main-green/70 hover:text-white"}`
                                         }
                                     >
-                                        {dayData.closed ? "Closed" : "Open"}
+                                        {dayData.closed ? t("form.buttons.closed") : t("form.buttons.open")}
                                     </Button>
                                 </div>
 
@@ -299,7 +305,7 @@ export default function HoursPage() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2 w-full">
                                             <Label htmlFor={`${dayKey}-open`} className="text-sm text-slate-600">
-                                                Opening time
+                                                {t("form.labels.openingTime")}
                                             </Label>
                                             <Select
 
@@ -307,7 +313,7 @@ export default function HoursPage() {
                                                 onValueChange={(value) => updateDayHours(dayKey as keyof OpeningHoursFormData, "open", value)}
                                             >
                                                 <SelectTrigger className="focus:border-emerald-500 focus:ring-emerald-500 w-full">
-                                                    <SelectValue placeholder="Select opening time" />
+                                                    <SelectValue placeholder={t("form.placeholders.selectOpeningTime")} />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {timeSlots.map((slot) => (
@@ -321,14 +327,14 @@ export default function HoursPage() {
 
                                         <div className="space-y-2 w-full">
                                             <Label htmlFor={`${dayKey}-close`} className="text-sm text-slate-600">
-                                                Closing time
+                                                {t("form.labels.closingTime")}
                                             </Label>
                                             <Select
                                                 value={dayData.close}
                                                 onValueChange={(value) => updateDayHours(dayKey as keyof OpeningHoursFormData, "close", value)}
                                             >
                                                 <SelectTrigger className="focus:border-emerald-500 w-full focus:ring-emerald-500">
-                                                    <SelectValue placeholder="Select closing time" />
+                                                    <SelectValue placeholder={t("form.placeholders.selectClosingTime")} />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {timeSlots.map((slot) => (
@@ -346,8 +352,7 @@ export default function HoursPage() {
 
                         <div className="mt-6 p-4 bg-slate-50 rounded-lg">
                             <p className="text-sm text-slate-600">
-                                <strong>Tip:</strong> Click &quot;Closed&quot; for days when your restaurant is not open. Make sure closing time
-                                is after opening time for open days.
+                                {t("form.tips.general")}
                             </p>
                         </div>
                     </div>

@@ -8,7 +8,8 @@ import { Label } from "@/components/ui/label"
 import UnsavedChangesUi from "@/components/unsaved-changes-ui"
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { supabase } from "@/supabase/clients/client"
-import { Eye, EyeOff, Lock } from "lucide-react"
+import { Eye, EyeOff } from "lucide-react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -32,6 +33,7 @@ export default function ChangePasswordPage() {
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [errors, setErrors] = useState<Partial<PasswordFormData>>({})
+    const t = useTranslations("Settings.change-password")
 
     // Check if form has changes
     const hasChanges = Object.values(formData).some((value) => value.trim() !== "")
@@ -49,26 +51,26 @@ export default function ChangePasswordPage() {
         const newErrors: Partial<PasswordFormData> = {}
 
         if (!formData.currentPassword.trim()) {
-            newErrors.currentPassword = "Current password is required"
+            newErrors.currentPassword = t("form.errors.currentPassword_required")
         }
 
         if (!formData.newPassword.trim()) {
-            newErrors.newPassword = "New password is required"
+            newErrors.newPassword = t("form.errors.newPassword_required")
         } else if (formData.newPassword.length < 8) {
-            newErrors.newPassword = "Password must be at least 8 characters long"
+            newErrors.newPassword = t("form.errors.newPassword_length")
         } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.newPassword)) {
             newErrors.newPassword =
-                "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+                t("form.errors.newPassword_invalid")
         }
 
         if (!formData.confirmPassword.trim()) {
-            newErrors.confirmPassword = "Please confirm your new password"
+            newErrors.confirmPassword = t("form.errors.confirmPassword_required")
         } else if (formData.newPassword !== formData.confirmPassword) {
-            newErrors.confirmPassword = "Passwords do not match"
+            newErrors.confirmPassword = t("form.errors.confirmPassword_mismatch")
         }
 
         if (formData.currentPassword === formData.newPassword) {
-            newErrors.newPassword = "New password must be different from current password"
+            newErrors.newPassword = t("form.errors.newPassword_same_as_current")
         }
 
         setErrors(newErrors)
@@ -77,7 +79,7 @@ export default function ChangePasswordPage() {
 
     const handleChangePassword = async () => {
         if (!validateForm()) {
-            toast.error("Please fix the errors before submitting")
+            toast.error(t("toasts.fix_errors"))
             return
         }
 
@@ -91,8 +93,8 @@ export default function ChangePasswordPage() {
             })
 
             if (signInError) {
-                setErrors({ currentPassword: "Current password is incorrect" })
-                toast.error("Current password is incorrect")
+                setErrors({ currentPassword: t("form.errors.currentPassword_incorrect") })
+                toast.error(t("form.errors.currentPassword_incorrect"))
                 return
             }
 
@@ -105,17 +107,17 @@ export default function ChangePasswordPage() {
                 throw updateError
             }
 
-            toast.success("Password changed successfully", {
-                description: "Your password has been updated securely",
+            toast.success(t("toasts.change_success_title"), {
+                description: t("toasts.change_success_description"),
             })
 
             // Clear form
             setFormData(initialFormData)
             setErrors({})
         } catch (error: any) {
-            console.error("Password change error:", error)
-            toast.error("Failed to change password", {
-                description: error.message || "An unexpected error occurred",
+            console.error(t("toasts.change_error_title"), error)
+            toast.error(t("toasts.change_error_title"), {
+                description: error.message || t("toasts.change_error_description"),
             })
         } finally {
             setSaving(false)
@@ -125,8 +127,8 @@ export default function ChangePasswordPage() {
     const handleResetForm = () => {
         setFormData(initialFormData)
         setErrors({})
-        toast.success("Form reset", {
-            description: "All fields have been cleared",
+        toast.success(t("toasts.form_reset_title"), {
+            description: t("toasts.form_reset_description"),
         })
     }
 
@@ -169,10 +171,10 @@ export default function ChangePasswordPage() {
         if (/[A-Z]/.test(password)) strength += 25
         if (/\d/.test(password)) strength += 25
 
-        if (strength <= 25) return { strength, label: "Weak", color: "bg-red-500" }
-        if (strength <= 50) return { strength, label: "Fair", color: "bg-orange-500" }
-        if (strength <= 75) return { strength, label: "Good", color: "bg-yellow-500" }
-        return { strength, label: "Strong", color: "bg-green-500" }
+        if (strength <= 25) return { strength, label: t("passwordStrength.weak"), color: "bg-red-500" }
+        if (strength <= 50) return { strength, label: t("passwordStrength.fair"), color: "bg-orange-500" }
+        if (strength <= 75) return { strength, label: t("passwordStrength.good"), color: "bg-yellow-500" }
+        return { strength, label: t("passwordStrength.strong"), color: "bg-green-500" }
     }
 
     const passwordStrength = getPasswordStrength(formData.newPassword)
@@ -182,24 +184,29 @@ export default function ChangePasswordPage() {
             <Card className=" border-gray-200 pt-0 box-shad-every-2 shadow-md">
                 <CardHeader className="bg-gray-50/50 py-4 font-poppins">
                     <div className="flex items-center gap-2">
-                        <Lock className="h-5 w-5 text-gray-600" />
                         <div>
-                            <CardTitle className="text-gray-900">Change Password</CardTitle>
-                            <CardDescription>Update your account password securely</CardDescription>
+                            <CardTitle className="text-gray-900">
+                                {t("page.title")}
+                            </CardTitle>
+                            <CardDescription>
+                                {t("page.description")}
+                            </CardDescription>
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
                     {/* Current Password */}
                     <div className="space-y-2">
-                        <Label htmlFor="current-password">Current Password</Label>
+                        <Label htmlFor="current-password">
+                            {t("form.labels.currentPassword")}
+                        </Label>
                         <div className="relative">
                             <Input
                                 id="current-password"
                                 type={showCurrentPassword ? "text" : "password"}
                                 value={formData.currentPassword}
                                 onChange={(e) => handleInputChange("currentPassword", e.target.value)}
-                                placeholder="Enter your current password"
+                                placeholder={t("form.placeholders.currentPassword")}
                                 className={`pr-10 focus:border-emerald-500 focus:ring-emerald-500 ${errors.currentPassword ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                                     }`}
                             />
@@ -222,14 +229,16 @@ export default function ChangePasswordPage() {
 
                     {/* New Password */}
                     <div className="space-y-2">
-                        <Label htmlFor="new-password">New Password</Label>
+                        <Label htmlFor="new-password">
+                            {t("form.labels.newPassword")}
+                        </Label>
                         <div className="relative">
                             <Input
                                 id="new-password"
                                 type={showNewPassword ? "text" : "password"}
                                 value={formData.newPassword}
                                 onChange={(e) => handleInputChange("newPassword", e.target.value)}
-                                placeholder="Enter your new password"
+                                placeholder={t("form.placeholders.newPassword")}
                                 className={`pr-10 focus:border-emerald-500 focus:ring-emerald-500 ${errors.newPassword ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                                     }`}
                             />
@@ -252,7 +261,9 @@ export default function ChangePasswordPage() {
                         {formData.newPassword && (
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-gray-600">Password strength:</span>
+                                    <span className="text-gray-600">
+                                        {t("passwordStrength.label")}
+                                    </span>
                                     <span
                                         className={`font-medium ${passwordStrength.strength <= 25
                                             ? "text-red-600"
@@ -277,20 +288,22 @@ export default function ChangePasswordPage() {
 
                         {errors.newPassword && <p className="text-sm text-red-600">{errors.newPassword}</p>}
                         <p className="text-xs text-muted-foreground">
-                            Password must be at least 8 characters with uppercase, lowercase, and number
+                            {t("form.help.passwordRequirements")}
                         </p>
                     </div>
 
                     {/* Confirm Password */}
                     <div className="space-y-2">
-                        <Label htmlFor="confirm-password">Confirm New Password</Label>
+                        <Label htmlFor="confirm-password">
+                            {t("form.labels.confirmPassword")}
+                        </Label>
                         <div className="relative">
                             <Input
                                 id="confirm-password"
                                 type={showConfirmPassword ? "text" : "password"}
                                 value={formData.confirmPassword}
                                 onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                                placeholder="Confirm your new password"
+                                placeholder={t("form.placeholders.confirmPassword")}
                                 className={`pr-10 focus:border-emerald-500 focus:ring-emerald-500 ${errors.confirmPassword ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                                     }`}
                             />
@@ -317,7 +330,7 @@ export default function ChangePasswordPage() {
                             variant="link"
                             className="text-emerald-600 hover:text-emerald-700 p-0 h-auto"
                         >
-                            Forgot your current password?
+                            {t("links.forgotPassword")}
                         </Button>
                     </Link>
                 </CardContent>

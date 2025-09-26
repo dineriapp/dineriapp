@@ -1255,6 +1255,206 @@
       "loading": {
         "text": "Bedrijfsinformatie laden..."
       }
+    },
+    "contact-information": {
+      "page": {
+        "title": "Contactgegevens",
+        "description": "Beheer de contactgegevens en locatie van je restaurant"
+      },
+      "form": {
+        "labels": {
+          "email": "E-mailadres",
+          "phone": "Telefoonnummer",
+          "address": "Adres",
+          "latitude": "Breedtegraad",
+          "longitude": "Lengtegraad"
+        },
+        "placeholders": {
+          "email": "contact@restaurant.com",
+          "phone": "+31 (555) 123-4567",
+          "address": "Restaurantstraat 123, Stad, Provincie, Land"
+        },
+        "help": {
+          "email": "Primair contact e-mailadres voor je restaurant",
+          "phone": "Voeg landcode toe voor internationale nummers",
+          "address": "Volledig adres inclusief stad, provincie en land"
+        },
+        "errors": {
+          "email_required": "E-mailadres is verplicht",
+          "email_invalid": "Voer een geldig e-mailadres in",
+          "phone_invalid": "Voer een geldig telefoonnummer in",
+          "phone_min": "Telefoonnummer moet minimaal 10 cijfers bevatten",
+          "address_min": "Adres moet minimaal 10 tekens bevatten",
+          "address_max": "Adres mag niet langer zijn dan 500 tekens",
+          "latitude_invalid": "Breedtegraad moet tussen -90 en 90 liggen",
+          "longitude_invalid": "Lengtegraad moet tussen -180 en 180 liggen",
+          "latitude_required_with_longitude": "Breedtegraad is vereist wanneer lengtegraad is opgegeven",
+          "longitude_required_with_latitude": "Lengtegraad is vereist wanneer breedtegraad is opgegeven"
+        },
+        "upload": {
+          "uploading": "Bezig met uploaden…"
+        }
+      },
+      "toasts": {
+        "no_restaurant": "Geen restaurant geselecteerd",
+        "fix_errors": "Corrigeer de fouten voordat je opslaat",
+        "failed_to_save": "Het bijwerken van de contactgegevens is mislukt",
+        "update_success_title": "Contactgegevens bijgewerkt",
+        "update_success_description": "Je contactgegevens zijn succesvol bijgewerkt",
+        "update_error_title": "Fout bij het bijwerken van contactgegevens",
+        "update_error_description": "Er is een fout opgetreden bij het bijwerken van je contactgegevens"
+      },
+      "loading": {
+        "text": "Contactgegevens laden..."
+      }
+    },
+    "change-password": {
+      "page": {
+        "title": "Wachtwoord wijzigen",
+        "description": "Werk het wachtwoord van je account veilig bij"
+      },
+      "form": {
+        "labels": {
+          "currentPassword": "Huidig wachtwoord",
+          "newPassword": "Nieuw wachtwoord",
+          "confirmPassword": "Bevestig nieuw wachtwoord"
+        },
+        "placeholders": {
+          "currentPassword": "Voer je huidige wachtwoord in",
+          "newPassword": "Voer je nieuwe wachtwoord in",
+          "confirmPassword": "Bevestig je nieuwe wachtwoord"
+        },
+        "help": {
+          "passwordRequirements": "Het wachtwoord moet minimaal 8 tekens bevatten, met een hoofdletter, een kleine letter en een cijfer"
+        },
+        "errors": {
+          "currentPassword_required": "Het huidige wachtwoord is verplicht",
+          "currentPassword_incorrect": "Het huidige wachtwoord is onjuist",
+          "newPassword_required": "Het nieuwe wachtwoord is verplicht",
+          "newPassword_length": "Het wachtwoord moet minimaal 8 tekens lang zijn",
+          "newPassword_invalid": "Het wachtwoord moet minstens één hoofdletter, één kleine letter en één cijfer bevatten",
+          "newPassword_same_as_current": "Het nieuwe wachtwoord moet verschillen van het huidige",
+          "confirmPassword_required": "Bevestig je nieuwe wachtwoord",
+          "confirmPassword_mismatch": "De wachtwoorden komen niet overeen"
+        }
+      },
+      "passwordStrength": {
+        "label": "Wachtwoordsterkte:",
+        "weak": "Zwak",
+        "fair": "Matig",
+        "good": "Goed",
+        "strong": "Sterk"
+      },
+      "toasts": {
+        "fix_errors": "Corrigeer de fouten voordat je doorgaat",
+        "change_success_title": "Wachtwoord succesvol gewijzigd",
+        "change_success_description": "Je wachtwoord is veilig bijgewerkt",
+        "change_error_title": "Fout bij het wijzigen van het wachtwoord",
+        "change_error_description": "Er is een onverwachte fout opgetreden",
+        "form_reset_title": "Formulier gereset",
+        "form_reset_description": "Alle velden zijn gewist"
+      },
+      "links": {
+        "forgotPassword": "Je huidige wachtwoord vergeten?"
+      },
+      "loading": {
+        "text": "Bezig met opslaan..."
+      }
+    },
+    "opening-hours": {
+      "page": {
+        "title": "Openingstijden",
+        "description": "Stel de openingstijden van je restaurant in voor elke dag van de week"
+      },
+      "form": {
+        "labels": {
+          "timezone": "Tijdzone",
+          "openingTime": "Openingstijd",
+          "closingTime": "Sluitingstijd"
+        },
+        "placeholders": {
+          "selectTimezone": "Selecteer de tijdzone van het restaurant",
+          "selectOpeningTime": "Selecteer de openingstijd",
+          "selectClosingTime": "Selecteer de sluitingstijd"
+        },
+        "buttons": {
+          "open": "Open",
+          "closed": "Gesloten"
+        },
+        "tips": {
+          "general": "Tip: Klik op \"Gesloten\" voor dagen waarop je restaurant niet open is. Zorg ervoor dat de sluitingstijd later is dan de openingstijd op dagen dat je open bent."
+        },
+        "errors": {
+          "noRestaurant": "Geen restaurant geselecteerd",
+          "invalidHours_title": "Ongeldige openingstijden",
+          "invalidHours_description": "Stel zowel een openingstijd als een sluitingstijd in voor open dagen, of markeer ze als gesloten",
+          "invalidRange_title": "Ongeldig tijdsbereik",
+          "invalidRange_description": "De sluitingstijd moet later zijn dan de openingstijd",
+          "updateError_title": "Fout bij het bijwerken van openingstijden",
+          "updateError_description": "Er is een fout opgetreden bij het bijwerken van de openingstijden"
+        }
+      },
+      "toasts": {
+        "form_reset_title": "Formulier gereset",
+        "form_reset_description": "Alle wijzigingen zijn verwijderd",
+        "update_success_title": "Openingstijden bijgewerkt",
+        "update_success_description": "De openingstijden van je restaurant zijn succesvol bijgewerkt"
+      },
+      "loading": {
+        "text": "Openingstijden laden..."
+      }
+    },
+    "social": {
+      "page": {
+        "title": "Sociale Media",
+        "description": "Koppel je sociale media-accounts en beheer hoe ze worden weergegeven"
+      },
+      "form": {
+        "labels": {
+          "instagram": "Instagram-profiel URL",
+          "facebook": "Facebook-pagina URL",
+          "whatsapp": "WhatsApp-nummer",
+          "tiktok": "TikTok-gebruikersnaam",
+          "social_icons_position": "Positie van sociale iconen"
+        },
+        "placeholders": {
+          "instagram": "https://instagram.com/jouw.restaurant",
+          "facebook": "https://facebook.com/jouw.restaurant",
+          "whatsapp": "+1234567890",
+          "tiktok": "@gebruikersnaam",
+          "selectPosition": "Selecteer positie"
+        },
+        "help": {
+          "instagram": "Voer de URL van je Instagram-profiel in (bijv. https://instagram.com/jouwrestaurant)",
+          "facebook": "Voer de URL van je Facebook-pagina in (bijv. https://facebook.com/jouwrestaurant)",
+          "whatsapp": "Voer je WhatsApp-nummer in met landcode (bijv. +1234567890)",
+          "tiktok": "Voer je TikTok-gebruikersnaam in beginnend met @ (bijv. @mijnrestaurant)",
+          "social_icons_position": "Kies waar de sociale media-iconen op je restaurantpagina worden weergegeven"
+        },
+        "selectOptions": {
+          "top": "Bovenaan de pagina",
+          "bottom": "Onderaan de pagina"
+        }
+      },
+      "errors": {
+        "instagram_invalid": "Voer een geldige Instagram-URL in",
+        "facebook_invalid": "Voer een geldige Facebook-URL in",
+        "whatsapp_invalid": "Voer een geldig WhatsApp-nummer in met landcode (bijv. +1234567890)",
+        "url_invalid": "Voer een geldige {platform}-URL in",
+        "noRestaurant": "Geen restaurant geselecteerd",
+        "fixBeforeSave": "Los de fouten op voordat je opslaat",
+        "updateError_title": "Fout bij het bijwerken van sociale media-instellingen",
+        "updateError_description": "Er is een fout opgetreden bij het bijwerken van je sociale media-instellingen"
+      },
+      "toasts": {
+        "form_reset_title": "Formulier opnieuw ingesteld",
+        "form_reset_description": "Alle wijzigingen zijn verwijderd",
+        "update_success_title": "Sociale media-instellingen bijgewerkt",
+        "update_success_description": "Je sociale media-informatie is succesvol bijgewerkt"
+      },
+      "loading": {
+        "text": "Sociale informatie laden..."
+      }
     }
   }
 }
