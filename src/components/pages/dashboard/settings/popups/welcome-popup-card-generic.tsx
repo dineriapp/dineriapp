@@ -27,6 +27,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { PopupFormData, RestaurantWithCount } from "@/types";
+import { useTranslations } from "next-intl";
 
 interface WelcomePopupGenericProps {
     prefix: "menu" | "welcome"; // can extend for other cases
@@ -47,6 +48,7 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
     handlePopupInfoChange,
     selectedRestaurant,
 }) => {
+    const t = useTranslations("Settings.popups");
     const enabledKey = `${prefix}_popup_enabled`;
     const messageKey = `${prefix}_popup_message`;
     const delayKey = `${prefix}_popup_delay`;
@@ -67,9 +69,11 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                 {/* Enable/Disable Toggle */}
                 <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                        <Label className="text-base">Enable Welcome Popup</Label>
+                        <Label className="text-base">
+                            {t("genericPopup.enable.label")}
+                        </Label>
                         <p className="text-sm text-muted-foreground">
-                            Show a welcome popup to new visitors
+                            {t("genericPopup.enable.description")}
                         </p>
                     </div>
                     <Switch
@@ -89,7 +93,7 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                         <div className="space-y-2">
                             <Label htmlFor={`${prefix}-popup-message`} className="flex items-center gap-2">
                                 <MessageSquare className="h-4 w-4" />
-                                Welcome Message
+                                {t("genericPopup.message.label")}
                             </Label>
                             <Textarea
                                 id={`${prefix}-popup-message`}
@@ -100,13 +104,13 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                                         [messageKey]: e.target.value,
                                     }))
                                 }
-                                placeholder="Welcome! We're excited to have you visit us."
+                                placeholder={t("genericPopup.message.placeholder")}
                                 rows={3}
                                 maxLength={200}
                                 className="focus:border-emerald-500 focus:ring-emerald-500"
                             />
                             <div className="text-right text-xs text-muted-foreground">
-                                {formData[messageKey]?.length}/200 characters
+                                {formData[messageKey]?.length}/{t("genericPopup.message.counter")}
                             </div>
                         </div>
 
@@ -114,7 +118,7 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                         <div className="space-y-2">
                             <Label className="flex items-center gap-2">
                                 <Timer className="h-4 w-4" />
-                                Show Delay
+                                {t("genericPopup.delay.label")}
                             </Label>
                             <Select
                                 value={formData[delayKey].toString()}
@@ -131,22 +135,24 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                                 <SelectContent>
                                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((seconds) => (
                                         <SelectItem key={seconds} value={seconds.toString()}>
-                                            {seconds} second{seconds > 1 ? "s" : ""}
+                                            {t("genericPopup.delay.option", { seconds: seconds, s: seconds > 1 ? "s" : "" })}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
                             <p className="text-xs text-muted-foreground">
-                                How long to wait before showing the popup
+                                {t("genericPopup.delay.helper")}
                             </p>
                         </div>
 
                         {/* Show Button Toggle */}
                         <div className="flex items-center justify-between">
                             <div className="space-y-0.5">
-                                <Label className="text-base">Show Action Button</Label>
+                                <Label className="text-base">
+                                    {t("genericPopup.button.label")}
+                                </Label>
                                 <p className="text-sm text-muted-foreground">
-                                    Display the &quot;Explore&quot; button in the popup
+                                    {t("genericPopup.button.description")}
                                 </p>
                             </div>
                             <Switch
@@ -162,13 +168,15 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
 
                         {/* Information Display Options */}
                         <div className="space-y-4">
-                            <Label className="text-base">Show Information</Label>
+                            <Label className="text-base">
+                                {t("genericPopup.info.label")}
+                            </Label>
                             <div className="grid grid-cols-2 gap-4">
                                 {[
-                                    { key: "ratings", icon: <Star className="h-4 w-4" />, label: "Ratings" },
-                                    { key: "address", icon: <MapPinIcon className="h-4 w-4" />, label: "Address" },
-                                    { key: "hours", icon: <Clock className="h-4 w-4" />, label: "Opening Hours" },
-                                    { key: "phone", icon: <Phone className="h-4 w-4" />, label: "Phone Number" },
+                                    { key: "ratings", icon: <Star className="h-4 w-4" />, label: t("genericPopup.info.ratings") },
+                                    { key: "address", icon: <MapPinIcon className="h-4 w-4" />, label: t("genericPopup.info.address") },
+                                    { key: "hours", icon: <Clock className="h-4 w-4" />, label: t("genericPopup.info.hours") },
+                                    { key: "phone", icon: <Phone className="h-4 w-4" />, label: t("genericPopup.info.phone") },
                                 ].map(({ key, icon, label }) => (
                                     <div key={key} className="flex items-center space-x-2">
                                         <Switch
@@ -191,7 +199,7 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                         <div className="space-y-2">
                             <Label className="flex items-center gap-2">
                                 <Eye className="h-4 w-4" />
-                                Preview
+                                {t("genericPopup.preview.label")}
                             </Label>
                             <div className="rounded-lg border bg-muted/50 p-4">
                                 <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-lg">
@@ -202,7 +210,7 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                                             </span>
                                         </div>
                                         <h3 className="mb-2 text-lg font-bold">
-                                            Welcome to {selectedRestaurant?.name || "Your Restaurant"}!
+                                            {t("genericPopup.preview.title", { restaurant: selectedRestaurant?.name || "Your Restaurant" })}
                                         </h3>
                                         <p className="mb-4 text-sm text-gray-600">
                                             {formData[messageKey]}
@@ -212,7 +220,8 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                                                 <div className="flex items-center justify-center gap-1">
                                                     <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                                                     <span>
-                                                        {selectedRestaurant.average_rating.toFixed(1)} ({selectedRestaurant.review_count} reviews)
+
+                                                        {selectedRestaurant.average_rating.toFixed(1)} ({selectedRestaurant.review_count} {t("genericPopup.preview.ratings")})
                                                     </span>
                                                 </div>
                                             )}
@@ -225,7 +234,9 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                                             {formData[infoKey].hours && (
                                                 <div className="flex items-center justify-center gap-1">
                                                     <Clock className="h-3 w-3" />
-                                                    <span>Open Today</span>
+                                                    <span>
+                                                        {t("genericPopup.preview.hours")}
+                                                    </span>
                                                 </div>
                                             )}
                                             {formData[infoKey].phone && selectedRestaurant?.phone && (
@@ -240,14 +251,15 @@ export const WelcomePopupCardGeneric: React.FC<WelcomePopupGenericProps> = ({
                                                 size="sm"
                                                 className="mt-4 bg-emerald-600 hover:bg-emerald-700"
                                             >
-                                                Explore
+                                                {t("genericPopup.button.text")}
                                             </Button>
                                         )}
                                     </div>
                                 </div>
                             </div>
                             <p className="text-xs text-muted-foreground">
-                                This is how your welcome popup will appear to visitors
+                                {t("genericPopup.preview.description")}
+
                             </p>
                         </div>
                     </>

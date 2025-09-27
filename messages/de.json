@@ -1455,6 +1455,333 @@
       "loading": {
         "text": "Lade Social-Media-Informationen..."
       }
+    },
+    "stripeSettings": {
+      "page": {
+        "title": "Stripe-Einstellungen",
+        "description": "Konfigurieren Sie Ihre Stripe-Zahlungsverarbeitungsschlüssel"
+      },
+      "alerts": {
+        "security_notice": {
+          "title": "Ihre Schlüssel sind sicher:",
+          "description": "Wir verschlüsseln und speichern Ihre Stripe-Schlüssel mit branchenüblicher Verschlüsselung. Ihre tatsächlichen Schlüssel werden niemals im Klartext gespeichert und können von niemandem, auch nicht von unserem Team, eingesehen werden."
+        },
+        "important_notice": {
+          "title": "Wichtig:",
+          "description": "Geben Sie Ihren geheimen Schlüssel niemals öffentlich weiter. Geben Sie ihn nur in sicheren, vertrauenswürdigen Anwendungen wie dieser ein."
+        }
+      },
+      "status": {
+        "title": "Aktueller Status",
+        "configured": "Stripe-Schlüssel sind konfiguriert und verschlüsselt",
+        "not_configured": "Keine Stripe-Schlüssel konfiguriert",
+        "public_key": {
+          "configured": "Öffentlicher Schlüssel: Konfiguriert",
+          "not_configured": "Öffentlicher Schlüssel: Nicht konfiguriert"
+        },
+        "secret_key": {
+          "configured": "Geheimer Schlüssel: Konfiguriert",
+          "not_configured": "Geheimer Schlüssel: Nicht konfiguriert"
+        },
+        "webhook_secret": {
+          "configured": "Webhook-Secret: Konfiguriert",
+          "not_configured": "Webhook-Secret: Nicht konfiguriert"
+        },
+        "remove_keys_button": "Schlüssel entfernen"
+      },
+      "form": {
+        "title_add": "Stripe-Schlüssel hinzufügen",
+        "title_update": "Stripe-Schlüssel aktualisieren",
+        "description_add": "Geben Sie Ihre Stripe-API-Schlüssel ein, um die Zahlungsabwicklung zu aktivieren",
+        "description_update": "Geben Sie neue Schlüssel ein, um Ihre aktuelle Konfiguration zu aktualisieren",
+        "labels": {
+          "public_key": "Stripe Publishable Key",
+          "secret_key": "Stripe Secret Key"
+        },
+        "placeholders": {
+          "public_key": "pk_test_... oder pk_live_...",
+          "secret_key": "sk_test_... oder sk_live_..."
+        },
+        "helpers": {
+          "public_key": "Dieser Schlüssel kann sicher in Ihrem Frontend-Code verwendet werden",
+          "secret_key": "Dieser Schlüssel muss geheim bleiben und darf nur auf dem Server verwendet werden"
+        },
+        "buttons": {
+          "save": "Schlüssel speichern",
+          "update": "Schlüssel aktualisieren",
+          "clear": "Löschen"
+        }
+      },
+      "help": {
+        "title": "So erhalten Sie Ihre Stripe-Schlüssel",
+        "steps": [
+          "1. Melden Sie sich in Ihrem <a href='https://dashboard.stripe.com' target='_blank' rel='noopener noreferrer' class='text-blue-600 hover:underline'>Stripe-Dashboard</a> an",
+          "2. Navigieren Sie zu <strong>Entwickler → API-Schlüssel</strong>",
+          "3. Kopieren Sie Ihren <strong>Publishable Key</strong> (beginnt mit <code>pk_</code>)",
+          "4. Anzeigen und Kopieren Ihres <strong>Secret Key</strong> (beginnt mit <code>sk_</code>)",
+          "5. Verwenden Sie für Live-Zahlungen unbedingt Ihre <strong>Live-Schlüssel</strong> anstelle von Testschlüsseln"
+        ]
+      },
+      "errors": {
+        "invalid_public": {
+          "title": "Ungültiger öffentlicher Schlüssel",
+          "description": "Der Stripe Public Key sollte mit 'pk_' beginnen"
+        },
+        "invalid_secret": {
+          "title": "Ungültiger geheimer Schlüssel",
+          "description": "Der Stripe Secret Key sollte mit 'sk_' beginnen"
+        },
+        "update_failed": {
+          "title": "Fehler",
+          "description": "Stripe-Einstellungen konnten nicht aktualisiert werden"
+        },
+        "remove_failed": {
+          "title": "Fehler",
+          "description": "Stripe-Schlüssel konnten nicht entfernt werden"
+        }
+      },
+      "toasts": {
+        "update_success": {
+          "title": "Erfolg",
+          "description": "Stripe-Einstellungen erfolgreich aktualisiert"
+        },
+        "remove_success": {
+          "title": "Erfolg",
+          "description": "Stripe-Schlüssel erfolgreich entfernt"
+        }
+      },
+      "loading": {
+        "page": "Lädt....",
+        "stripe": "Stripe-Einstellungen werden geladen..."
+      }
+    },
+    "popups": {
+      "loading": {
+        "text": "Lade Popup-Informationen..."
+      },
+      "welcomePopupRestaurant": {
+        "title": "Willkommens-Popup Restaurantseite",
+        "description": "Zeige neuen Besuchern eine Willkommensnachricht"
+      },
+      "welcomePopupMenu": {
+        "title": "Willkommens-Popup Menüseite",
+        "description": "Zeige neuen Besuchern eine Willkommensnachricht"
+      },
+      "eventAnnouncements": {
+        "title": "Veranstaltungsankündigungen",
+        "description": "Bewerbe automatisch deine kommenden Veranstaltungen im Willkommens-Popup",
+        "enable_label": "Veranstaltungsankündigungen aktivieren",
+        "enable_description": "Zeige bevorstehende Veranstaltungen anstelle der Willkommensnachricht, wenn verfügbar",
+        "eventTimeRange": {
+          "label": "Zeitraum für Veranstaltungen",
+          "helper": "Nur Veranstaltungen innerhalb dieses Zeitraums anzeigen",
+          "options": {
+            "7": "Nächste 7 Tage",
+            "14": "Nächste 2 Wochen",
+            "30": "Nächste 30 Tage",
+            "60": "Nächste 2 Monate",
+            "90": "Nächste 3 Monate"
+          }
+        },
+        "maxEvents": {
+          "label": "Maximale Anzahl an Veranstaltungen im Popup",
+          "helper": "Wie viele Veranstaltungen gleichzeitig angezeigt werden (dringendste zuerst)",
+          "options": {
+            "1": "1 Veranstaltung",
+            "2": "2 Veranstaltungen",
+            "3": "3 Veranstaltungen",
+            "5": "5 Veranstaltungen"
+          }
+        },
+        "rotationSpeed": {
+          "label": "Rotationsgeschwindigkeit der Veranstaltungen",
+          "helper": "Wie schnell zwischen mehreren Veranstaltungen gewechselt wird",
+          "options": {
+            "3": "3 Sekunden",
+            "5": "5 Sekunden",
+            "7": "7 Sekunden",
+            "10": "10 Sekunden"
+          }
+        },
+        "preview": {
+          "label": "Vorschau der Veranstaltungsankündigung",
+          "title": "Willkommen bei { restaurant }!",
+          "mockEvent": {
+            "date": "Diesen Freitag",
+            "title": "Live-Jazz-Abend",
+            "description": "Begleite uns zu einem Abend mit sanftem Jazz und gutem Essen",
+            "cta": "Event-Tickets kaufen"
+          },
+          "helper": "So werden Veranstaltungsankündigungen in deinem Popup angezeigt"
+        }
+      },
+      "form": {
+        "reset": {
+          "title": "Formular zurückgesetzt",
+          "description": "Alle Änderungen wurden verworfen"
+        },
+        "save": {
+          "title": "Popup-Einstellungen aktualisiert",
+          "description": "Deine Popup-Einstellungen wurden erfolgreich aktualisiert"
+        },
+        "error": {
+          "title": "Fehler beim Aktualisieren der Popup-Einstellungen",
+          "description": "Beim Aktualisieren deiner Popup-Einstellungen ist ein Fehler aufgetreten"
+        },
+        "noRestaurant": "Kein Restaurant ausgewählt"
+      },
+      "genericPopup": {
+        "enable": {
+          "label": "Willkommens-Popup aktivieren",
+          "description": "Zeige neuen Besuchern ein Willkommens-Popup"
+        },
+        "message": {
+          "label": "Willkommensnachricht",
+          "placeholder": "Willkommen! Wir freuen uns, dass du uns besuchst.",
+          "counter": "200 Zeichen"
+        },
+        "delay": {
+          "label": "Verzögerung anzeigen",
+          "helper": "Wie lange gewartet wird, bevor das Popup angezeigt wird",
+          "option": "{ seconds } Sekunde{ s }"
+        },
+        "button": {
+          "label": "Aktionsbutton anzeigen",
+          "description": "Zeige den \"Entdecken\"-Button im Popup an",
+          "text": "Entdecken"
+        },
+        "info": {
+          "label": "Informationen anzeigen",
+          "ratings": "Bewertungen",
+          "address": "Adresse",
+          "hours": "Öffnungszeiten",
+          "phone": "Telefonnummer"
+        },
+        "preview": {
+          "label": "Vorschau",
+          "title": "Willkommen bei { restaurant }!",
+          "description": "So wird dein Willkommens-Popup für Besucher angezeigt",
+          "ratings": "Bewertungen",
+          "address": "{{address}}",
+          "hours": "Heute geöffnet",
+          "phone": "{{phone}}"
+        }
+      },
+      "unsavedChanges": {
+        "reset": "Änderungen verwerfen",
+        "save": "Änderungen speichern",
+        "saving": "Speichern...",
+        "unsaved": "Du hast ungespeicherte Änderungen"
+      }
+    },
+    "integrations": {
+      "loading": {
+        "text": "Lade Integrationsinformationen..."
+      },
+      "googlePlaces": {
+        "title": "Google Places Integration",
+        "description": "Verbinden Sie Ihren Google Places-Eintrag, um Bewertungen und Rezensionen anzuzeigen",
+        "label": "Google Place ID",
+        "placeholder": "z. B. ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "upgradePlaceholder": "Upgrade erforderlich, um Place ID einzugeben",
+        "basicPlanTag": "Basisplan",
+        "finder": {
+          "text": "Finden Sie Ihre Place ID mit dem",
+          "link": "Place ID Finder"
+        },
+        "integrationDetected": {
+          "title": "Integration erkannt",
+          "premiumDescription": "Ihr Restaurant ist mit Google Places verbunden. Bewertungen und Rezensionen werden auf Ihrer Seite angezeigt.",
+          "basicDescription": "Ihr Restaurant ist mit Google Places verbunden, aber diese Funktion ist nur sichtbar, wenn Sie den Pro- oder Enterprise-Plan nutzen.",
+          "placeId": "Place ID: "
+        },
+        "upgradeMessage": "Diese Funktion ist im Premium-Plan verfügbar."
+      },
+      "form": {
+        "reset": {
+          "title": "Formular zurückgesetzt",
+          "description": "Alle Änderungen wurden verworfen"
+        },
+        "save": {
+          "title": "Integrationseinstellungen aktualisiert",
+          "description": "Ihre Integrationseinstellungen wurden erfolgreich aktualisiert"
+        },
+        "error": {
+          "title": "Fehler beim Aktualisieren der Integrationseinstellungen",
+          "description": "Beim Aktualisieren Ihrer Integrationseinstellungen ist ein Fehler aufgetreten"
+        },
+        "noRestaurant": "Kein Restaurant ausgewählt"
+      }
+    },
+    "subscription": {
+      "loading": {
+        "text": "Abonnementinformationen werden geladen..."
+      },
+      "error": {
+        "title": "Fehler",
+        "fetchDescription": "Abonnementinformationen konnten nicht geladen werden",
+        "portalDescription": "Das Abrechnungsportal konnte nicht geöffnet werden"
+      },
+      "page": {
+        "title": "Abonnement",
+        "description": "Verwalten Sie Ihr Abonnement und Ihre Abrechnungsinformationen."
+      },
+      "alert": {
+        "pastDue": {
+          "title": "Ihre Abonnementzahlung ist überfällig.",
+          "description": "Bitte aktualisieren Sie Ihre Zahlungsmethode, um Premium-Funktionen weiterhin nutzen zu können."
+        },
+        "noSubscription": {
+          "description": "Abonnementinformationen konnten nicht geladen werden."
+        }
+      },
+      "plan": {
+        "current": {
+          "title": "Aktueller Plan",
+          "basicDescription": "Kostenloser Plan mit grundlegenden Funktionen",
+          "premiumDescription": "Premium-Plan mit erweiterten Funktionen",
+          "pricePerMonth": "/Monat",
+          "featuresTitle": "Enthaltene Funktionen:",
+          "moreFeatures": "weitere Funktionen"
+        },
+        "basic": {
+          "upgradeButton": "Plan upgraden"
+        },
+        "premium": {
+          "manageButton": {
+            "default": "Abrechnung verwalten",
+            "loading": "Wird geladen..."
+          }
+        }
+      },
+      "billing": {
+        "title": "Abrechnungsinformationen",
+        "description": "Ihre Abonnement- und Zahlungsdetails",
+        "status": "Status",
+        "nextBillingDate": "Nächstes Abrechnungsdatum",
+        "plan": "Plan",
+        "updatePayment": {
+          "button": "Zahlungsmethode aktualisieren",
+          "loading": "Wird geladen..."
+        }
+      },
+      "upgrade": {
+        "title": "Plan upgraden",
+        "description": "Schalten Sie unbegrenzte Funktionen und erweiterte Möglichkeiten frei",
+        "pro": {
+          "title": "Pro-Plan - 19 €/Monat",
+          "features": [
+            "Unbegrenzte Nutzung",
+            "Erweiterte Analysen",
+            "Priorisierter Support"
+          ]
+        },
+        "enterprise": {
+          "title": "Enterprise-Plan - 49 €/Monat",
+          "features": ["Alles im Pro-Plan", "White-Label-Lösung", "API-Zugang"]
+        },
+        "viewPlansButton": "Alle Pläne anzeigen"
+      }
     }
   }
 }

@@ -1455,6 +1455,333 @@
       "loading": {
         "text": "Sociale informatie laden..."
       }
+    },
+    "stripeSettings": {
+      "page": {
+        "title": "Stripe-instellingen",
+        "description": "Configureer je Stripe-sleutels voor betalingsverwerking"
+      },
+      "alerts": {
+        "security_notice": {
+          "title": "Je sleutels zijn veilig:",
+          "description": "We versleutelen en bewaren je Stripe-sleutels met industriestandaardversleuteling. Je werkelijke sleutels worden nooit in platte tekst opgeslagen en kunnen door niemand worden bekeken, ook niet door ons team."
+        },
+        "important_notice": {
+          "title": "Belangrijk:",
+          "description": "Deel je geheime sleutel nooit openbaar. Voer deze alleen in bij veilige, vertrouwde toepassingen zoals deze."
+        }
+      },
+      "status": {
+        "title": "Huidige status",
+        "configured": "Stripe-sleutels zijn geconfigureerd en versleuteld",
+        "not_configured": "Geen Stripe-sleutels geconfigureerd",
+        "public_key": {
+          "configured": "Publieke sleutel: Geconfigureerd",
+          "not_configured": "Publieke sleutel: Niet geconfigureerd"
+        },
+        "secret_key": {
+          "configured": "Geheime sleutel: Geconfigureerd",
+          "not_configured": "Geheime sleutel: Niet geconfigureerd"
+        },
+        "webhook_secret": {
+          "configured": "Webhook-geheim: Geconfigureerd",
+          "not_configured": "Webhook-geheim: Niet geconfigureerd"
+        },
+        "remove_keys_button": "Sleutels verwijderen"
+      },
+      "form": {
+        "title_add": "Stripe-sleutels toevoegen",
+        "title_update": "Stripe-sleutels bijwerken",
+        "description_add": "Voer je Stripe API-sleutels in om betalingsverwerking in te schakelen",
+        "description_update": "Voer nieuwe sleutels in om je huidige configuratie bij te werken",
+        "labels": {
+          "public_key": "Stripe Publishable Key",
+          "secret_key": "Stripe Secret Key"
+        },
+        "placeholders": {
+          "public_key": "pk_test_... of pk_live_...",
+          "secret_key": "sk_test_... of sk_live_..."
+        },
+        "helpers": {
+          "public_key": "Deze sleutel kan veilig in je frontend-code worden gebruikt",
+          "secret_key": "Deze sleutel moet geheim blijven en mag alleen op de server worden gebruikt"
+        },
+        "buttons": {
+          "save": "Sleutels opslaan",
+          "update": "Sleutels bijwerken",
+          "clear": "Wissen"
+        }
+      },
+      "help": {
+        "title": "Hoe je je Stripe-sleutels verkrijgt",
+        "steps": [
+          "1. Log in op je <a href='https://dashboard.stripe.com' target='_blank' rel='noopener noreferrer' class='text-blue-600 hover:underline'>Stripe-dashboard</a>",
+          "2. Ga naar <strong>Ontwikkelaars → API-sleutels</strong>",
+          "3. Kopieer je <strong>Publishable Key</strong> (begint met <code>pk_</code>)",
+          "4. Toon en kopieer je <strong>Secret Key</strong> (begint met <code>sk_</code>)",
+          "5. Voor live-betalingen moet je ervoor zorgen dat je je <strong>live-sleutels</strong> gebruikt in plaats van testsleutels"
+        ]
+      },
+      "errors": {
+        "invalid_public": {
+          "title": "Ongeldige publieke sleutel",
+          "description": "De publieke sleutel van Stripe moet beginnen met 'pk_'"
+        },
+        "invalid_secret": {
+          "title": "Ongeldige geheime sleutel",
+          "description": "De geheime sleutel van Stripe moet beginnen met 'sk_'"
+        },
+        "update_failed": {
+          "title": "Fout",
+          "description": "Het bijwerken van de Stripe-instellingen is mislukt"
+        },
+        "remove_failed": {
+          "title": "Fout",
+          "description": "Het verwijderen van de Stripe-sleutels is mislukt"
+        }
+      },
+      "toasts": {
+        "update_success": {
+          "title": "Succes",
+          "description": "Stripe-instellingen succesvol bijgewerkt"
+        },
+        "remove_success": {
+          "title": "Succes",
+          "description": "Stripe-sleutels succesvol verwijderd"
+        }
+      },
+      "loading": {
+        "page": "Bezig met laden....",
+        "stripe": "Stripe-instellingen laden..."
+      }
+    },
+    "popups": {
+      "loading": {
+        "text": "Pop-upinformatie laden..."
+      },
+      "welcomePopupRestaurant": {
+        "title": "Welkom Pop-up Restaurantpagina",
+        "description": "Toon een welkomstbericht aan eerste bezoekers"
+      },
+      "welcomePopupMenu": {
+        "title": "Welkom Pop-up Menupagina",
+        "description": "Toon een welkomstbericht aan eerste bezoekers"
+      },
+      "eventAnnouncements": {
+        "title": "Evenementaankondigingen",
+        "description": "Promoot automatisch je komende evenementen in de welkomstpop-up",
+        "enable_label": "Evenementaankondigingen inschakelen",
+        "enable_description": "Toon aankomende evenementen in plaats van een welkomstbericht wanneer beschikbaar",
+        "eventTimeRange": {
+          "label": "Tijdsbereik van Evenement",
+          "helper": "Toon alleen evenementen die in deze periode plaatsvinden",
+          "options": {
+            "7": "Volgende 7 dagen",
+            "14": "Volgende 2 weken",
+            "30": "Volgende 30 dagen",
+            "60": "Volgende 2 maanden",
+            "90": "Volgende 3 maanden"
+          }
+        },
+        "maxEvents": {
+          "label": "Maximum Aantal Evenementen in Pop-up",
+          "helper": "Hoeveel evenementen tegelijk weergeven (de meest dringende eerst)",
+          "options": {
+            "1": "1 evenement",
+            "2": "2 evenementen",
+            "3": "3 evenementen",
+            "5": "5 evenementen"
+          }
+        },
+        "rotationSpeed": {
+          "label": "Rotatiesnelheid Evenementen",
+          "helper": "Hoe snel wisselen tussen meerdere evenementen",
+          "options": {
+            "3": "3 seconden",
+            "5": "5 seconden",
+            "7": "7 seconden",
+            "10": "10 seconden"
+          }
+        },
+        "preview": {
+          "label": "Voorbeeld Evenementaankondiging",
+          "title": "Welkom bij { restaurant }!",
+          "mockEvent": {
+            "date": "Aanstaande vrijdag",
+            "title": "Live Jazzavond",
+            "description": "Kom langs voor een avond met zachte jazz en heerlijk eten",
+            "cta": "Evenementtickets kopen"
+          },
+          "helper": "Zo zullen evenementaankondigingen verschijnen in je pop-up"
+        }
+      },
+      "form": {
+        "reset": {
+          "title": "Formulier resetten",
+          "description": "Alle wijzigingen zijn geannuleerd"
+        },
+        "save": {
+          "title": "Pop-upinstellingen bijgewerkt",
+          "description": "Je pop-upinstellingen zijn succesvol bijgewerkt"
+        },
+        "error": {
+          "title": "Fout bij het bijwerken van pop-upinstellingen",
+          "description": "Er is een fout opgetreden bij het bijwerken van je pop-upinstellingen"
+        },
+        "noRestaurant": "Geen restaurant geselecteerd"
+      },
+      "genericPopup": {
+        "enable": {
+          "label": "Welkomstpop-up inschakelen",
+          "description": "Toon een welkomstpop-up aan nieuwe bezoekers"
+        },
+        "message": {
+          "label": "Welkomstbericht",
+          "placeholder": "Welkom! We zijn blij dat je ons bezoekt.",
+          "counter": "200 tekens"
+        },
+        "delay": {
+          "label": "Vertraging Weergave",
+          "helper": "Hoelang wachten voordat de pop-up verschijnt",
+          "option": "{ seconds } seconde{ s }"
+        },
+        "button": {
+          "label": "Actieknop Weergeven",
+          "description": "Toon de knop \"Ontdek\" in de pop-up",
+          "text": "Ontdek"
+        },
+        "info": {
+          "label": "Informatie Weergeven",
+          "ratings": "Beoordelingen",
+          "address": "Adres",
+          "hours": "Openingstijden",
+          "phone": "Telefoonnummer"
+        },
+        "preview": {
+          "label": "Voorbeeld",
+          "title": "Welkom bij { restaurant }!",
+          "description": "Zo zal je welkomstpop-up aan bezoekers verschijnen",
+          "ratings": "beoordelingen",
+          "address": "{{address}}",
+          "hours": "Vandaag geopend",
+          "phone": "{{phone}}"
+        }
+      },
+      "unsavedChanges": {
+        "reset": "Wijzigingen Annuleren",
+        "save": "Wijzigingen Opslaan",
+        "saving": "Opslaan...",
+        "unsaved": "Je hebt niet-opgeslagen wijzigingen"
+      }
+    },
+    "integrations": {
+      "loading": {
+        "text": "Integratie-informatie wordt geladen..."
+      },
+      "googlePlaces": {
+        "title": "Google Places-integratie",
+        "description": "Verbind je Google Places-vermelding om beoordelingen en recensies te tonen",
+        "label": "Google Place ID",
+        "placeholder": "bijv. ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "upgradePlaceholder": "Upgrade om een Place ID in te voeren",
+        "basicPlanTag": "Basisplan",
+        "finder": {
+          "text": "Vind je Place ID met de",
+          "link": "Place ID Finder"
+        },
+        "integrationDetected": {
+          "title": "Integratie gedetecteerd",
+          "premiumDescription": "Je restaurant is verbonden met Google Places. Recensies en beoordelingen worden op je pagina weergegeven.",
+          "basicDescription": "Je restaurant is verbonden met Google Places, maar deze functie is alleen zichtbaar op je restaurantpagina als je een Pro- of Enterprise-abonnement hebt.",
+          "placeId": "Place ID: "
+        },
+        "upgradeMessage": "Deze functie is beschikbaar in het premiumplan."
+      },
+      "form": {
+        "reset": {
+          "title": "Formulier opnieuw ingesteld",
+          "description": "Alle wijzigingen zijn geannuleerd"
+        },
+        "save": {
+          "title": "Integratie-instellingen bijgewerkt",
+          "description": "Je integratie-instellingen zijn succesvol bijgewerkt"
+        },
+        "error": {
+          "title": "Fout bij het bijwerken van integratie-instellingen",
+          "description": "Er is een fout opgetreden bij het bijwerken van je integratie-instellingen"
+        },
+        "noRestaurant": "Geen restaurant geselecteerd"
+      }
+    },
+    "subscription": {
+      "loading": {
+        "text": "Abonnementsinformatie wordt geladen..."
+      },
+      "error": {
+        "title": "Fout",
+        "fetchDescription": "Kan abonnementsinformatie niet laden",
+        "portalDescription": "Kan het factureringsportaal niet openen"
+      },
+      "page": {
+        "title": "Abonnement",
+        "description": "Beheer je abonnement en factureringsinformatie."
+      },
+      "alert": {
+        "pastDue": {
+          "title": "Je abonnementsbetaling is achterstallig.",
+          "description": "Werk je betaalmethode bij om premiumfuncties te blijven gebruiken."
+        },
+        "noSubscription": {
+          "description": "Kan abonnementsinformatie niet laden."
+        }
+      },
+      "plan": {
+        "current": {
+          "title": "Huidig plan",
+          "basicDescription": "Gratis plan met basisfuncties",
+          "premiumDescription": "Premiumplan met geavanceerde functies",
+          "pricePerMonth": "/maand",
+          "featuresTitle": "Inbegrepen functies:",
+          "moreFeatures": "meer functies"
+        },
+        "basic": {
+          "upgradeButton": "Upgrade plan"
+        },
+        "premium": {
+          "manageButton": {
+            "default": "Facturering beheren",
+            "loading": "Laden..."
+          }
+        }
+      },
+      "billing": {
+        "title": "Factureringsinformatie",
+        "description": "Je abonnements- en betalingsgegevens",
+        "status": "Status",
+        "nextBillingDate": "Volgende facturatiedatum",
+        "plan": "Plan",
+        "updatePayment": {
+          "button": "Betaalmethode bijwerken",
+          "loading": "Laden..."
+        }
+      },
+      "upgrade": {
+        "title": "Upgrade je plan",
+        "description": "Ontgrendel onbeperkte functies en geavanceerde mogelijkheden",
+        "pro": {
+          "title": "Pro Plan - €19/maand",
+          "features": [
+            "Alles onbeperkt",
+            "Geavanceerde analyses",
+            "Prioritaire ondersteuning"
+          ]
+        },
+        "enterprise": {
+          "title": "Enterprise Plan - €49/maand",
+          "features": ["Alles in Pro", "White label-oplossing", "API-toegang"]
+        },
+        "viewPlansButton": "Bekijk alle plannen"
+      }
     }
   }
 }

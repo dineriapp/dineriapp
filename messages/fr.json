@@ -1455,6 +1455,337 @@
       "loading": {
         "text": "Chargement des informations de réseaux sociaux..."
       }
+    },
+    "stripeSettings": {
+      "page": {
+        "title": "Paramètres Stripe",
+        "description": "Configurez vos clés de traitement des paiements Stripe"
+      },
+      "alerts": {
+        "security_notice": {
+          "title": "Vos clés sont sécurisées :",
+          "description": "Nous chiffrons et stockons vos clés Stripe à l’aide d’un chiffrement conforme aux normes de l’industrie. Vos clés réelles ne sont jamais stockées en clair et ne peuvent être vues par personne, y compris notre équipe."
+        },
+        "important_notice": {
+          "title": "Important :",
+          "description": "Ne partagez jamais votre clé secrète publiquement. Saisissez-la uniquement dans des applications sécurisées et de confiance comme celle-ci."
+        }
+      },
+      "status": {
+        "title": "Statut actuel",
+        "configured": "Les clés Stripe sont configurées et chiffrées",
+        "not_configured": "Aucune clé Stripe configurée",
+        "public_key": {
+          "configured": "Clé publique : Configurée",
+          "not_configured": "Clé publique : Non configurée"
+        },
+        "secret_key": {
+          "configured": "Clé secrète : Configurée",
+          "not_configured": "Clé secrète : Non configurée"
+        },
+        "webhook_secret": {
+          "configured": "Secret du Webhook : Configuré",
+          "not_configured": "Secret du Webhook : Non configuré"
+        },
+        "remove_keys_button": "Supprimer les clés"
+      },
+      "form": {
+        "title_add": "Ajouter des clés Stripe",
+        "title_update": "Mettre à jour les clés Stripe",
+        "description_add": "Saisissez vos clés API Stripe pour activer le traitement des paiements",
+        "description_update": "Saisissez de nouvelles clés pour mettre à jour votre configuration actuelle",
+        "labels": {
+          "public_key": "Stripe Publishable Key",
+          "secret_key": "Stripe Secret Key"
+        },
+        "placeholders": {
+          "public_key": "pk_test_... ou pk_live_...",
+          "secret_key": "sk_test_... ou sk_live_..."
+        },
+        "helpers": {
+          "public_key": "Cette clé peut être utilisée en toute sécurité dans votre code frontend",
+          "secret_key": "Cette clé doit rester secrète et être utilisée uniquement côté serveur"
+        },
+        "buttons": {
+          "save": "Enregistrer les clés",
+          "update": "Mettre à jour les clés",
+          "clear": "Effacer"
+        }
+      },
+      "help": {
+        "title": "Comment obtenir vos clés Stripe",
+        "steps": [
+          "1. Connectez-vous à votre <a href='https://dashboard.stripe.com' target='_blank' rel='noopener noreferrer' class='text-blue-600 hover:underline'>Tableau de bord Stripe</a>",
+          "2. Allez dans <strong>Développeurs → Clés API</strong>",
+          "3. Copiez votre <strong>Publishable Key</strong> (commence par <code>pk_</code>)",
+          "4. Révélez et copiez votre <strong>Secret Key</strong> (commence par <code>sk_</code>)",
+          "5. Pour les paiements en direct, assurez-vous d’utiliser vos <strong>clés live</strong> au lieu des clés de test"
+        ]
+      },
+      "errors": {
+        "invalid_public": {
+          "title": "Clé publique invalide",
+          "description": "La clé publique Stripe doit commencer par 'pk_'"
+        },
+        "invalid_secret": {
+          "title": "Clé secrète invalide",
+          "description": "La clé secrète Stripe doit commencer par 'sk_'"
+        },
+        "update_failed": {
+          "title": "Erreur",
+          "description": "Échec de la mise à jour des paramètres Stripe"
+        },
+        "remove_failed": {
+          "title": "Erreur",
+          "description": "Échec de la suppression des clés Stripe"
+        }
+      },
+      "toasts": {
+        "update_success": {
+          "title": "Succès",
+          "description": "Paramètres Stripe mis à jour avec succès"
+        },
+        "remove_success": {
+          "title": "Succès",
+          "description": "Clés Stripe supprimées avec succès"
+        }
+      },
+      "loading": {
+        "page": "Chargement....",
+        "stripe": "Chargement des paramètres Stripe..."
+      }
+    },
+    "popups": {
+      "loading": {
+        "text": "Chargement des informations des popups..."
+      },
+      "welcomePopupRestaurant": {
+        "title": "Popup de Bienvenue Page Restaurant",
+        "description": "Afficher un message de bienvenue aux visiteurs pour la première fois"
+      },
+      "welcomePopupMenu": {
+        "title": "Popup de Bienvenue Page Menu",
+        "description": "Afficher un message de bienvenue aux visiteurs pour la première fois"
+      },
+      "eventAnnouncements": {
+        "title": "Annonces d'Événements",
+        "description": "Promouvoir automatiquement vos prochains événements dans le popup de bienvenue",
+        "enable_label": "Activer les Annonces d'Événements",
+        "enable_description": "Afficher les événements à venir au lieu du message de bienvenue lorsqu'ils sont disponibles",
+        "eventTimeRange": {
+          "label": "Plage de Temps de l'Événement",
+          "helper": "Afficher uniquement les événements ayant lieu pendant cette période",
+          "options": {
+            "7": "7 prochains jours",
+            "14": "2 prochaines semaines",
+            "30": "30 prochains jours",
+            "60": "2 prochains mois",
+            "90": "3 prochains mois"
+          }
+        },
+        "maxEvents": {
+          "label": "Nombre Maximum d'Événements dans le Popup",
+          "helper": "Combien d'événements afficher en même temps (les plus urgents en premier)",
+          "options": {
+            "1": "1 événement",
+            "2": "2 événements",
+            "3": "3 événements",
+            "5": "5 événements"
+          }
+        },
+        "rotationSpeed": {
+          "label": "Vitesse de Rotation des Événements",
+          "helper": "À quelle vitesse faire défiler plusieurs événements",
+          "options": {
+            "3": "3 secondes",
+            "5": "5 secondes",
+            "7": "7 secondes",
+            "10": "10 secondes"
+          }
+        },
+        "preview": {
+          "label": "Aperçu de l'Annonce d'Événement",
+          "title": "Bienvenue chez { restaurant } !",
+          "mockEvent": {
+            "date": "Ce vendredi",
+            "title": "Soirée Jazz en Direct",
+            "description": "Rejoignez-nous pour une soirée de jazz doux et de bonne cuisine",
+            "cta": "Obtenir des Billets"
+          },
+          "helper": "Voici comment les annonces d'événements apparaîtront dans votre popup"
+        }
+      },
+      "form": {
+        "reset": {
+          "title": "Réinitialisation du formulaire",
+          "description": "Toutes les modifications ont été annulées"
+        },
+        "save": {
+          "title": "Paramètres du popup mis à jour",
+          "description": "Vos paramètres de popup ont été mis à jour avec succès"
+        },
+        "error": {
+          "title": "Erreur lors de la mise à jour des paramètres du popup",
+          "description": "Une erreur est survenue lors de la mise à jour de vos paramètres de popup"
+        },
+        "noRestaurant": "Aucun restaurant sélectionné"
+      },
+      "genericPopup": {
+        "enable": {
+          "label": "Activer le Popup de Bienvenue",
+          "description": "Afficher un popup de bienvenue aux nouveaux visiteurs"
+        },
+        "message": {
+          "label": "Message de Bienvenue",
+          "placeholder": "Bienvenue ! Nous sommes ravis de votre visite.",
+          "counter": "200 caractères"
+        },
+        "delay": {
+          "label": "Délai d'Affichage",
+          "helper": "Combien de temps attendre avant d'afficher le popup",
+          "option": "{ seconds } seconde{ s }"
+        },
+        "button": {
+          "label": "Afficher le Bouton d'Action",
+          "description": "Afficher le bouton \"Explorer\" dans le popup",
+          "text": "Explorer"
+        },
+        "info": {
+          "label": "Afficher les Informations",
+          "ratings": "Avis",
+          "address": "Adresse",
+          "hours": "Horaires",
+          "phone": "Numéro de Téléphone"
+        },
+        "preview": {
+          "label": "Aperçu",
+          "title": "Bienvenue chez { restaurant } !",
+          "description": "Voici comment votre popup de bienvenue apparaîtra aux visiteurs",
+          "ratings": "avis",
+          "address": "{{address}}",
+          "hours": "Ouvert Aujourd'hui",
+          "phone": "{{phone}}"
+        }
+      },
+      "unsavedChanges": {
+        "reset": "Annuler les Modifications",
+        "save": "Enregistrer les Modifications",
+        "saving": "Enregistrement...",
+        "unsaved": "Vous avez des modifications non enregistrées"
+      }
+    },
+    "integrations": {
+      "loading": {
+        "text": "Chargement des informations d'intégration..."
+      },
+      "googlePlaces": {
+        "title": "Intégration Google Places",
+        "description": "Connectez votre fiche Google Places pour afficher les notes et avis",
+        "label": "ID Google Place",
+        "placeholder": "ex. ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "upgradePlaceholder": "Mettre à niveau pour entrer l'ID de Place",
+        "basicPlanTag": "Forfait Basique",
+        "finder": {
+          "text": "Trouvez votre ID de Place avec le",
+          "link": "Place ID Finder"
+        },
+        "integrationDetected": {
+          "title": "Intégration détectée",
+          "premiumDescription": "Votre restaurant est connecté à Google Places. Les avis et notes seront affichés sur votre page.",
+          "basicDescription": "Votre restaurant est connecté à Google Places, mais cette fonctionnalité est uniquement visible sur votre page si vous disposez du forfait Pro ou Enterprise.",
+          "placeId": "ID de Place : "
+        },
+        "upgradeMessage": "Cette fonctionnalité est disponible avec le forfait premium."
+      },
+      "form": {
+        "reset": {
+          "title": "Formulaire réinitialisé",
+          "description": "Toutes les modifications ont été annulées"
+        },
+        "save": {
+          "title": "Paramètres d'intégration mis à jour",
+          "description": "Vos paramètres d'intégration ont été mis à jour avec succès"
+        },
+        "error": {
+          "title": "Erreur lors de la mise à jour des paramètres d'intégration",
+          "description": "Une erreur est survenue lors de la mise à jour de vos paramètres d'intégration"
+        },
+        "noRestaurant": "Aucun restaurant sélectionné"
+      }
+    },
+    "subscription": {
+      "loading": {
+        "text": "Chargement des informations sur l’abonnement..."
+      },
+      "error": {
+        "title": "Erreur",
+        "fetchDescription": "Impossible de charger les informations sur l’abonnement",
+        "portalDescription": "Impossible d’ouvrir le portail de facturation"
+      },
+      "page": {
+        "title": "Abonnement",
+        "description": "Gérez votre abonnement et vos informations de facturation."
+      },
+      "alert": {
+        "pastDue": {
+          "title": "Le paiement de votre abonnement est en retard.",
+          "description": "Veuillez mettre à jour votre méthode de paiement pour continuer à utiliser les fonctionnalités premium."
+        },
+        "noSubscription": {
+          "description": "Impossible de charger les informations sur l’abonnement."
+        }
+      },
+      "plan": {
+        "current": {
+          "title": "Plan actuel",
+          "basicDescription": "Plan gratuit avec des fonctionnalités de base",
+          "premiumDescription": "Plan premium avec des fonctionnalités avancées",
+          "pricePerMonth": "/mois",
+          "featuresTitle": "Fonctionnalités incluses :",
+          "moreFeatures": "plus de fonctionnalités"
+        },
+        "basic": {
+          "upgradeButton": "Mettre à niveau le plan"
+        },
+        "premium": {
+          "manageButton": {
+            "default": "Gérer la facturation",
+            "loading": "Chargement..."
+          }
+        }
+      },
+      "billing": {
+        "title": "Informations de facturation",
+        "description": "Vos détails d’abonnement et de paiement",
+        "status": "Statut",
+        "nextBillingDate": "Prochaine date de facturation",
+        "plan": "Plan",
+        "updatePayment": {
+          "button": "Mettre à jour le mode de paiement",
+          "loading": "Chargement..."
+        }
+      },
+      "upgrade": {
+        "title": "Améliorez votre plan",
+        "description": "Débloquez des fonctionnalités illimitées et des capacités avancées",
+        "pro": {
+          "title": "Plan Pro - 19 €/mois",
+          "features": [
+            "Tout illimité",
+            "Analyses avancées",
+            "Support prioritaire"
+          ]
+        },
+        "enterprise": {
+          "title": "Plan Enterprise - 49 €/mois",
+          "features": [
+            "Tout dans le Pro",
+            "Solution en marque blanche",
+            "Accès à l’API"
+          ]
+        },
+        "viewPlansButton": "Voir tous les plans"
+      }
     }
   }
 }

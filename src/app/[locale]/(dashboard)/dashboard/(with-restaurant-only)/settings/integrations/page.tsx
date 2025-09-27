@@ -11,6 +11,7 @@ import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { Globe2, Lock } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -23,6 +24,7 @@ export default function IntegrationsPage() {
     const { prismaUser } = useUserStore()
     const openPopup = useUpgradePopupStore(state => state.open)
     const isBasicPlan = prismaUser?.subscription_plan === "basic"
+    const t = useTranslations("Settings.integrations");
 
     const [formData, setFormData] = useState<IntegrationFormData>({
         google_place_id: "",
@@ -48,14 +50,14 @@ export default function IntegrationsPage() {
 
     const resetForm = () => {
         setFormData(initialData)
-        toast.success("Form reset", {
-            description: "All changes have been discarded",
+        toast.success(t("form.reset.title"), {
+            description: t("form.reset.description"),
         })
     }
 
     const saveSettings = async () => {
         if (!selectedRestaurant) {
-            toast.error("No restaurant selected")
+            toast.error(t("form.noRestaurant"))
             return
         }
 
@@ -72,7 +74,7 @@ export default function IntegrationsPage() {
 
             if (!response.ok) {
                 const errorData = await response.json()
-                throw new Error(errorData.error || "Failed to update integration settings")
+                throw new Error(errorData.error || t("form.error.description"))
             }
 
             const result = await response.json()
@@ -83,13 +85,13 @@ export default function IntegrationsPage() {
             // Update initial data to reflect saved state
             setInitialData(formData)
 
-            toast.success("Integration settings updated", {
-                description: "Your integration settings have been updated successfully",
+            toast.success(t("form.save.title"), {
+                description: t("form.save.description"),
             })
         } catch (error: any) {
-            console.error("Error updating integration settings:", error)
-            toast.error("Error updating integration settings", {
-                description: error.message || "An error occurred while updating your integration settings",
+            console.error(t("form.error.title"), error)
+            toast.error(t("form.error.title"), {
+                description: error.message || t("form.error.description"),
             })
         } finally {
             setSaving(false)
@@ -98,7 +100,7 @@ export default function IntegrationsPage() {
 
     if (!selectedRestaurant) {
         return (
-            <LoadingUI text="Loading integrations information..." />
+            <LoadingUI text={t("loading.text")} />
         )
     }
 
@@ -106,16 +108,22 @@ export default function IntegrationsPage() {
         <>
             <Card className=" pt-0 box-shad-every-2 shadow-md border-gray-200">
                 <CardHeader className="bg-gray-50/50 py-4 font-poppins">
-                    <CardTitle className="text-gray-900">Google Places Integration</CardTitle>
-                    <CardDescription>Connect your Google Places listing to show ratings and reviews</CardDescription>
+                    <CardTitle className="text-gray-900">
+                        {t("googlePlaces.title")}
+                    </CardTitle>
+                    <CardDescription>
+                        {t("googlePlaces.description")}
+                    </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
                     <div className="space-y-2">
-                        <Label htmlFor="googlePlaceId">Google Place ID</Label>
+                        <Label htmlFor="googlePlaceId">
+                            {t("googlePlaces.label")}
+                        </Label>
                         {isBasicPlan ? (
                             <div
                                 onClick={() => {
-                                    openPopup("This feature is available on the premium plan.")
+                                    openPopup(t("googlePlaces.upgradeMessage"))
                                 }}
                                 className="relative cursor-pointer group"
                             >
@@ -123,13 +131,15 @@ export default function IntegrationsPage() {
                                     id="googlePlaceId"
                                     readOnly
                                     value={formData.google_place_id}
-                                    placeholder="Upgrade to enter Place ID"
+                                    placeholder={t("googlePlaces.upgradePlaceholder")}
                                     className="pl-10 opacity-60 cursor-not-allowed group-hover:opacity-80 transition"
                                 />
                                 <Globe2 className="absolute left-3 top-3 h-4 w-4 text-emerald-500" />
                                 <div className="absolute right-3 top-2.5 flex items-center gap-1 text-sm text-muted-foreground">
                                     <Lock className="h-4 w-4 text-red-500" />
-                                    <span className="text-xs">Basic Plan</span>
+                                    <span className="text-xs">
+                                        {t("googlePlaces.basicPlanTag")}
+                                    </span>
                                 </div>
                             </div>
                         ) : (
@@ -144,22 +154,22 @@ export default function IntegrationsPage() {
                                         }
                                     }}
                                     onFocus={() => {
-                                        if (isBasicPlan) openPopup("This feature is available on the premium plan.")
+                                        if (isBasicPlan) openPopup(t("googlePlaces.upgradeMessage"))
                                     }}
-                                    placeholder="e.g. ChIJN1t_tDeuEmsRUsoyG83frY4"
+                                    placeholder={t("googlePlaces.placeholder")}
                                     className="pl-10 focus:border-emerald-500 focus:ring-emerald-500"
                                 />
                             </div>
                         )}
                         <p className="text-xs text-muted-foreground">
-                            Find your Place ID using the{" "}
+                            {t("googlePlaces.finder.text")}{" "}
                             <a
                                 href="https://developers.google.com/maps/documentation/places/web-service/place-id"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-emerald-600 hover:underline"
                             >
-                                Place ID Finder
+                                {t("googlePlaces.finder.link")}
                             </a>
                         </p>
                     </div>
@@ -181,21 +191,21 @@ export default function IntegrationsPage() {
                                         className={`font-medium ${isBasicPlan ? "text-yellow-900" : "text-emerald-900"
                                             }`}
                                     >
-                                        Integration Detected
+                                        {t("googlePlaces.integrationDetected.title")}
                                     </h4>
                                     <p
                                         className={`text-sm mt-1 ${isBasicPlan ? "text-yellow-800" : "text-emerald-700"
                                             }`}
                                     >
                                         {isBasicPlan
-                                            ? "Your restaurant is connected to Google Places, but this feature is only visible on your restaurant page if you're on the Pro or Enterprise plan."
-                                            : "Your restaurant is connected to Google Places. Reviews and ratings will be displayed on your page."}
+                                            ? t("googlePlaces.integrationDetected.basicDescription")
+                                            : t("googlePlaces.integrationDetected.premiumDescription")}
                                     </p>
                                     <p
                                         className={`text-xs mt-2 font-mono ${isBasicPlan ? "text-yellow-700" : "text-emerald-600"
                                             }`}
                                     >
-                                        Place ID: {formData.google_place_id}
+                                        {t("googlePlaces.integrationDetected.placeId")} {formData.google_place_id}
                                     </p>
                                 </div>
                             </div>

@@ -1454,6 +1454,337 @@
       "loading": {
         "text": "Cargando información de redes sociales..."
       }
+    },
+    "stripeSettings": {
+      "page": {
+        "title": "Configuración de Stripe",
+        "description": "Configura tus claves de procesamiento de pagos de Stripe"
+      },
+      "alerts": {
+        "security_notice": {
+          "title": "Tus claves están seguras:",
+          "description": "Ciframos y almacenamos tus claves de Stripe utilizando cifrado estándar de la industria. Tus claves reales nunca se almacenan en texto plano y no pueden ser vistas por nadie, incluido nuestro equipo."
+        },
+        "important_notice": {
+          "title": "Importante:",
+          "description": "Nunca compartas tu clave secreta públicamente. Solo introdúcela en aplicaciones seguras y de confianza como esta."
+        }
+      },
+      "status": {
+        "title": "Estado actual",
+        "configured": "Las claves de Stripe están configuradas y cifradas",
+        "not_configured": "No hay claves de Stripe configuradas",
+        "public_key": {
+          "configured": "Clave pública: Configurada",
+          "not_configured": "Clave pública: No configurada"
+        },
+        "secret_key": {
+          "configured": "Clave secreta: Configurada",
+          "not_configured": "Clave secreta: No configurada"
+        },
+        "webhook_secret": {
+          "configured": "Secreto del Webhook: Configurado",
+          "not_configured": "Secreto del Webhook: No configurado"
+        },
+        "remove_keys_button": "Eliminar claves"
+      },
+      "form": {
+        "title_add": "Agregar claves de Stripe",
+        "title_update": "Actualizar claves de Stripe",
+        "description_add": "Introduce tus claves de la API de Stripe para habilitar el procesamiento de pagos",
+        "description_update": "Introduce nuevas claves para actualizar tu configuración actual",
+        "labels": {
+          "public_key": "Stripe Publishable Key",
+          "secret_key": "Stripe Secret Key"
+        },
+        "placeholders": {
+          "public_key": "pk_test_... o pk_live_...",
+          "secret_key": "sk_test_... o sk_live_..."
+        },
+        "helpers": {
+          "public_key": "Esta clave es segura para usar en tu código frontend",
+          "secret_key": "Esta clave debe mantenerse secreta y solo usarse en el servidor"
+        },
+        "buttons": {
+          "save": "Guardar claves",
+          "update": "Actualizar claves",
+          "clear": "Borrar"
+        }
+      },
+      "help": {
+        "title": "Cómo obtener tus claves de Stripe",
+        "steps": [
+          "1. Inicia sesión en tu <a href='https://dashboard.stripe.com' target='_blank' rel='noopener noreferrer' class='text-blue-600 hover:underline'>Panel de Stripe</a>",
+          "2. Navega a <strong>Desarrolladores → Claves de API</strong>",
+          "3. Copia tu <strong>Publishable Key</strong> (empieza con <code>pk_</code>)",
+          "4. Revela y copia tu <strong>Secret Key</strong> (empieza con <code>sk_</code>)",
+          "5. Para pagos en vivo, asegúrate de usar tus <strong>claves en vivo</strong> en lugar de claves de prueba"
+        ]
+      },
+      "errors": {
+        "invalid_public": {
+          "title": "Clave pública inválida",
+          "description": "La clave pública de Stripe debe comenzar con 'pk_'"
+        },
+        "invalid_secret": {
+          "title": "Clave secreta inválida",
+          "description": "La clave secreta de Stripe debe comenzar con 'sk_'"
+        },
+        "update_failed": {
+          "title": "Error",
+          "description": "No se pudo actualizar la configuración de Stripe"
+        },
+        "remove_failed": {
+          "title": "Error",
+          "description": "No se pudieron eliminar las claves de Stripe"
+        }
+      },
+      "toasts": {
+        "update_success": {
+          "title": "Éxito",
+          "description": "La configuración de Stripe se actualizó correctamente"
+        },
+        "remove_success": {
+          "title": "Éxito",
+          "description": "Las claves de Stripe se eliminaron correctamente"
+        }
+      },
+      "loading": {
+        "page": "Cargando....",
+        "stripe": "Cargando configuración de Stripe..."
+      }
+    },
+    "popups": {
+      "loading": {
+        "text": "Cargando información de popups..."
+      },
+      "welcomePopupRestaurant": {
+        "title": "Popup de Bienvenida en la Página del Restaurante",
+        "description": "Muestra un mensaje de bienvenida a los visitantes por primera vez"
+      },
+      "welcomePopupMenu": {
+        "title": "Popup de Bienvenida en la Página del Menú",
+        "description": "Muestra un mensaje de bienvenida a los visitantes por primera vez"
+      },
+      "eventAnnouncements": {
+        "title": "Anuncios de Eventos",
+        "description": "Promociona automáticamente tus próximos eventos en el popup de bienvenida",
+        "enable_label": "Activar Anuncios de Eventos",
+        "enable_description": "Muestra los próximos eventos en lugar del mensaje de bienvenida cuando estén disponibles",
+        "eventTimeRange": {
+          "label": "Rango de tiempo del evento",
+          "helper": "Solo mostrar eventos que ocurran dentro de este período",
+          "options": {
+            "7": "Próximos 7 días",
+            "14": "Próximas 2 semanas",
+            "30": "Próximos 30 días",
+            "60": "Próximos 2 meses",
+            "90": "Próximos 3 meses"
+          }
+        },
+        "maxEvents": {
+          "label": "Eventos Máximos en el Popup",
+          "helper": "Cuántos eventos mostrar a la vez (los más urgentes primero)",
+          "options": {
+            "1": "1 evento",
+            "2": "2 eventos",
+            "3": "3 eventos",
+            "5": "5 eventos"
+          }
+        },
+        "rotationSpeed": {
+          "label": "Velocidad de Rotación de Eventos",
+          "helper": "Qué tan rápido rotar entre múltiples eventos",
+          "options": {
+            "3": "3 segundos",
+            "5": "5 segundos",
+            "7": "7 segundos",
+            "10": "10 segundos"
+          }
+        },
+        "preview": {
+          "label": "Vista Previa de Anuncio de Evento",
+          "title": "¡Bienvenido a { restaurant }!",
+          "mockEvent": {
+            "date": "Este viernes",
+            "title": "Noche de Jazz en Vivo",
+            "description": "Únete a nosotros para una velada de jazz suave y buena comida",
+            "cta": "Obtener Entradas"
+          },
+          "helper": "Así es como se verán los anuncios de eventos en tu popup"
+        }
+      },
+      "form": {
+        "reset": {
+          "title": "Formulario restablecido",
+          "description": "Todos los cambios han sido descartados"
+        },
+        "save": {
+          "title": "Configuración de popup actualizada",
+          "description": "Tu configuración de popup se ha actualizado correctamente"
+        },
+        "error": {
+          "title": "Error al actualizar la configuración del popup",
+          "description": "Ocurrió un error al actualizar tu configuración de popup"
+        },
+        "noRestaurant": "Ningún restaurante seleccionado"
+      },
+      "genericPopup": {
+        "enable": {
+          "label": "Activar Popup de Bienvenida",
+          "description": "Muestra un popup de bienvenida a los nuevos visitantes"
+        },
+        "message": {
+          "label": "Mensaje de Bienvenida",
+          "placeholder": "¡Bienvenido! Estamos emocionados de que nos visites.",
+          "counter": "200 caracteres"
+        },
+        "delay": {
+          "label": "Mostrar Retraso",
+          "helper": "Cuánto tiempo esperar antes de mostrar el popup",
+          "option": "{ seconds } segundo{ s }"
+        },
+        "button": {
+          "label": "Mostrar Botón de Acción",
+          "description": "Muestra el botón \"Explorar\" en el popup",
+          "text": "Explorar"
+        },
+        "info": {
+          "label": "Mostrar Información",
+          "ratings": "Valoraciones",
+          "address": "Dirección",
+          "hours": "Horario",
+          "phone": "Número de Teléfono"
+        },
+        "preview": {
+          "label": "Vista Previa",
+          "title": "¡Bienvenido a { restaurant }!",
+          "description": "Así es como se mostrará tu popup de bienvenida a los visitantes",
+          "ratings": "reseñas",
+          "address": "{{address}}",
+          "hours": "Abierto Hoy",
+          "phone": "{{phone}}"
+        }
+      },
+      "unsavedChanges": {
+        "reset": "Descartar Cambios",
+        "save": "Guardar Cambios",
+        "saving": "Guardando...",
+        "unsaved": "Tienes cambios sin guardar"
+      }
+    },
+    "integrations": {
+      "loading": {
+        "text": "Cargando información de integraciones..."
+      },
+      "googlePlaces": {
+        "title": "Integración con Google Places",
+        "description": "Conecta tu ficha de Google Places para mostrar calificaciones y reseñas",
+        "label": "ID de Google Place",
+        "placeholder": "p. ej. ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "upgradePlaceholder": "Mejora tu plan para ingresar el ID de Place",
+        "basicPlanTag": "Plan Básico",
+        "finder": {
+          "text": "Encuentra tu ID de Place usando el",
+          "link": "Buscador de ID de Place"
+        },
+        "integrationDetected": {
+          "title": "Integración detectada",
+          "premiumDescription": "Tu restaurante está conectado a Google Places. Las reseñas y calificaciones se mostrarán en tu página.",
+          "basicDescription": "Tu restaurante está conectado a Google Places, pero esta función solo es visible en tu página si tienes el plan Pro o Enterprise.",
+          "placeId": "ID de Place: "
+        },
+        "upgradeMessage": "Esta función está disponible en el plan premium."
+      },
+      "form": {
+        "reset": {
+          "title": "Formulario restablecido",
+          "description": "Todos los cambios han sido descartados"
+        },
+        "save": {
+          "title": "Configuración de integración actualizada",
+          "description": "La configuración de integración se ha actualizado correctamente"
+        },
+        "error": {
+          "title": "Error al actualizar la configuración de integración",
+          "description": "Ocurrió un error al actualizar la configuración de integración"
+        },
+        "noRestaurant": "Ningún restaurante seleccionado"
+      }
+    },
+    "subscription": {
+      "loading": {
+        "text": "Cargando información de la suscripción..."
+      },
+      "error": {
+        "title": "Error",
+        "fetchDescription": "No se pudo cargar la información de la suscripción",
+        "portalDescription": "No se pudo abrir el portal de facturación"
+      },
+      "page": {
+        "title": "Suscripción",
+        "description": "Administra tu suscripción e información de facturación."
+      },
+      "alert": {
+        "pastDue": {
+          "title": "El pago de tu suscripción está vencido.",
+          "description": "Por favor actualiza tu método de pago para seguir usando las funciones premium."
+        },
+        "noSubscription": {
+          "description": "No se pudo cargar la información de la suscripción."
+        }
+      },
+      "plan": {
+        "current": {
+          "title": "Plan actual",
+          "basicDescription": "Plan gratuito con funciones básicas",
+          "premiumDescription": "Plan premium con funciones avanzadas",
+          "pricePerMonth": "/mes",
+          "featuresTitle": "Funciones incluidas:",
+          "moreFeatures": "más funciones"
+        },
+        "basic": {
+          "upgradeButton": "Mejorar plan"
+        },
+        "premium": {
+          "manageButton": {
+            "default": "Administrar facturación",
+            "loading": "Cargando..."
+          }
+        }
+      },
+      "billing": {
+        "title": "Información de facturación",
+        "description": "Detalles de tu suscripción y pago",
+        "status": "Estado",
+        "nextBillingDate": "Próxima fecha de facturación",
+        "plan": "Plan",
+        "updatePayment": {
+          "button": "Actualizar método de pago",
+          "loading": "Cargando..."
+        }
+      },
+      "upgrade": {
+        "title": "Mejora tu plan",
+        "description": "Desbloquea funciones ilimitadas y capacidades avanzadas",
+        "pro": {
+          "title": "Plan Pro - 19 €/mes",
+          "features": [
+            "Todo ilimitado",
+            "Analíticas avanzadas",
+            "Soporte prioritario"
+          ]
+        },
+        "enterprise": {
+          "title": "Plan Enterprise - 49 €/mes",
+          "features": [
+            "Todo en Pro",
+            "Solución de marca blanca",
+            "Acceso a la API"
+          ]
+        },
+        "viewPlansButton": "Ver todos los planes"
+      }
     }
   }
 }

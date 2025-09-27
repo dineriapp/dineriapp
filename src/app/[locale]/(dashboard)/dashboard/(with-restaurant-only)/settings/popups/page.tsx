@@ -16,6 +16,7 @@ import {
     Calendar,
     Eye
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -23,10 +24,11 @@ import { toast } from "sonner"
 
 export default function PopupsPage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
+    const t = useTranslations("Settings.popups");
 
     const [formData, setFormData] = useState<PopupFormData>({
         welcome_popup_enabled: true,
-        welcome_popup_message: "Welcome! We're excited to have you visit us.",
+        welcome_popup_message: t("genericPopup.message.placeholder"),
         welcome_popup_delay: 2,
         welcome_popup_show_button: true,
         welcome_popup_show_info: {
@@ -36,7 +38,7 @@ export default function PopupsPage() {
             phone: true,
         },
         menu_popup_enabled: true,
-        menu_popup_message: "Welcome! We're excited to have you visit us.",
+        menu_popup_message: t("genericPopup.message.placeholder"),
         menu_popup_delay: 2,
         menu_popup_show_button: true,
         menu_popup_show_info: {
@@ -71,13 +73,13 @@ export default function PopupsPage() {
             const data: PopupFormData = {
                 welcome_popup_enabled: selectedRestaurant.welcome_popup_enabled ?? true,
                 welcome_popup_message:
-                    selectedRestaurant.welcome_popup_message || "Welcome! We're excited to have you visit us.",
+                    selectedRestaurant.welcome_popup_message || t("genericPopup.message.placeholder"),
                 welcome_popup_delay: selectedRestaurant.welcome_popup_delay || 2,
                 welcome_popup_show_button: selectedRestaurant.welcome_popup_show_button ?? true,
                 welcome_popup_show_info: welcomePopupShowInfo,
                 menu_popup_enabled: selectedRestaurant.menu_popup_enabled ?? true,
                 menu_popup_message:
-                    selectedRestaurant.menu_popup_message || "Welcome! We're excited to have you visit us.",
+                    selectedRestaurant.menu_popup_message || t("genericPopup.message.placeholder"),
                 menu_popup_delay: selectedRestaurant.menu_popup_delay || 2,
                 menu_popup_show_button: selectedRestaurant.menu_popup_show_button ?? true,
                 menu_popup_show_info: menuPopupShowInfo,
@@ -116,14 +118,14 @@ export default function PopupsPage() {
 
     const resetForm = () => {
         setFormData(initialData)
-        toast.success("Form reset", {
-            description: "All changes have been discarded",
+        toast.success(t("form.reset.title"), {
+            description: t("form.reset.description"),
         })
     }
 
     const saveSettings = async () => {
         if (!selectedRestaurant) {
-            toast.error("No restaurant selected")
+            toast.error(t("form.noRestaurant"))
             return
         }
 
@@ -140,7 +142,7 @@ export default function PopupsPage() {
 
             if (!response.ok) {
                 const errorData = await response.json()
-                throw new Error(errorData.error || "Failed to update popup settings")
+                throw new Error(errorData.error || t("form.description"))
             }
 
             const result = await response.json()
@@ -151,13 +153,13 @@ export default function PopupsPage() {
             // Update initial data to reflect saved state
             setInitialData(formData)
 
-            toast.success("Popup settings updated", {
-                description: "Your popup settings have been updated successfully",
+            toast.success(t("form.save.title"), {
+                description: t("form.save.description"),
             })
         } catch (error: any) {
-            console.error("Error updating popup settings:", error)
-            toast.error("Error updating popup settings", {
-                description: error.message || "An error occurred while updating your popup settings",
+            console.error(t("form.error.title"), error)
+            toast.error(t("form.error.title"), {
+                description: error.message || t("form.error.description"),
             })
         } finally {
             setSaving(false)
@@ -166,7 +168,7 @@ export default function PopupsPage() {
 
     if (!selectedRestaurant) {
         return (
-            <LoadingUI text="Loading popups information..." />
+            <LoadingUI text={t("loading.text")} />
         )
     }
 
@@ -175,8 +177,8 @@ export default function PopupsPage() {
             <div className="space-y-6">
                 <WelcomePopupCardGeneric
                     prefix="welcome"
-                    title="Welcome Popup Restaurant Page"
-                    description="Show a welcome message to first-time visitors"
+                    title={t("welcomePopupRestaurant.title")}
+                    description={t("welcomePopupRestaurant.description")}
                     formData={formData}
                     setFormData={setFormData}
                     handlePopupInfoChange={(key, value) =>
@@ -187,8 +189,8 @@ export default function PopupsPage() {
                 />
                 <WelcomePopupCardGeneric
                     prefix="menu"
-                    title="Welcome Popup Menu Page"
-                    description="Show a welcome message to first-time visitors"
+                    title={t("welcomePopupMenu.title")}
+                    description={t("welcomePopupMenu.description")}
                     formData={formData}
                     setFormData={setFormData}
                     handlePopupInfoChange={(key, value) =>
@@ -202,17 +204,21 @@ export default function PopupsPage() {
                     <CardHeader className="bg-gray-50/50 py-4 font-poppins">
                         <CardTitle className="flex items-center gap-2 text-gray-900">
                             <Calendar className="h-5 w-5 text-emerald-600" />
-                            Event Announcements
+                            {t("eventAnnouncements.title")}
                         </CardTitle>
-                        <CardDescription>Automatically promote your upcoming events in the welcome popup</CardDescription>
+                        <CardDescription>
+                            {t("eventAnnouncements.description")}
+                        </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6 pt-6">
                         {/* Enable/Disable Event Announcements */}
                         <div className="flex items-center justify-between">
                             <div className="space-y-0.5">
-                                <Label className="text-base">Enable Event Announcements</Label>
+                                <Label className="text-base">
+                                    {t("eventAnnouncements.enable_label")}
+                                </Label>
                                 <p className="text-sm text-muted-foreground">
-                                    Show upcoming events instead of welcome message when available
+                                    {t("eventAnnouncements.enable_description")}
                                 </p>
                             </div>
                             <Switch
@@ -227,7 +233,9 @@ export default function PopupsPage() {
                             <>
                                 {/* Event Time Range */}
                                 <div className="space-y-2">
-                                    <Label>Event Time Range</Label>
+                                    <Label>
+                                        {t("eventAnnouncements.eventTimeRange.label")}
+                                    </Label>
                                     <Select
                                         value={formData.event_announcement_days.toString()}
                                         onValueChange={(value) => {
@@ -238,19 +246,34 @@ export default function PopupsPage() {
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="7">Next 7 days</SelectItem>
-                                            <SelectItem value="14">Next 2 weeks</SelectItem>
-                                            <SelectItem value="30">Next 30 days</SelectItem>
-                                            <SelectItem value="60">Next 2 months</SelectItem>
-                                            <SelectItem value="90">Next 3 months</SelectItem>
+                                            <SelectItem value="7">
+                                                {t("eventAnnouncements.eventTimeRange.options.7")}
+                                            </SelectItem>
+                                            <SelectItem value="14">
+                                                {t("eventAnnouncements.eventTimeRange.options.14")}
+
+                                            </SelectItem>
+                                            <SelectItem value="30">
+                                                {t("eventAnnouncements.eventTimeRange.options.30")}
+                                            </SelectItem>
+                                            <SelectItem value="60">
+                                                {t("eventAnnouncements.eventTimeRange.options.60")}
+                                            </SelectItem>
+                                            <SelectItem value="90">
+                                                {t("eventAnnouncements.eventTimeRange.options.90")}
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    <p className="text-xs text-muted-foreground">Only show events happening within this time period</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {t("eventAnnouncements.eventTimeRange.helper")}
+                                    </p>
                                 </div>
 
                                 {/* Maximum Events */}
                                 <div className="space-y-2">
-                                    <Label>Maximum Events in Popup</Label>
+                                    <Label>
+                                        {t("eventAnnouncements.maxEvents.label")}
+                                    </Label>
                                     <Select
                                         value={formData.max_events_in_popup.toString()}
                                         onValueChange={(value) => {
@@ -261,18 +284,30 @@ export default function PopupsPage() {
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="1">1 event</SelectItem>
-                                            <SelectItem value="2">2 events</SelectItem>
-                                            <SelectItem value="3">3 events</SelectItem>
-                                            <SelectItem value="5">5 events</SelectItem>
+                                            <SelectItem value="1">
+                                                {t("eventAnnouncements.maxEvents.options.1")}
+                                            </SelectItem>
+                                            <SelectItem value="2">
+                                                {t("eventAnnouncements.maxEvents.options.2")}
+                                            </SelectItem>
+                                            <SelectItem value="3">
+                                                {t("eventAnnouncements.maxEvents.options.3")}
+                                            </SelectItem>
+                                            <SelectItem value="5">
+                                                {t("eventAnnouncements.maxEvents.options.5")}
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    <p className="text-xs text-muted-foreground">How many events to show at once (most urgent first)</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {t("eventAnnouncements.maxEvents.helper")}
+                                    </p>
                                 </div>
 
                                 {/* Rotation Speed */}
                                 <div className="space-y-2">
-                                    <Label>Event Rotation Speed</Label>
+                                    <Label>
+                                        {t("eventAnnouncements.rotationSpeed.helper")}
+                                    </Label>
                                     <Select
                                         value={formData.event_rotation_speed.toString()}
                                         onValueChange={(value) => {
@@ -283,20 +318,30 @@ export default function PopupsPage() {
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="3">3 seconds</SelectItem>
-                                            <SelectItem value="5">5 seconds</SelectItem>
-                                            <SelectItem value="7">7 seconds</SelectItem>
-                                            <SelectItem value="10">10 seconds</SelectItem>
+                                            <SelectItem value="3">
+                                                {t("eventAnnouncements.rotationSpeed.options.3")}
+                                            </SelectItem>
+                                            <SelectItem value="5">
+                                                {t("eventAnnouncements.rotationSpeed.options.5")}
+                                            </SelectItem>
+                                            <SelectItem value="7">
+                                                {t("eventAnnouncements.rotationSpeed.options.7")}
+                                            </SelectItem>
+                                            <SelectItem value="10">
+                                                {t("eventAnnouncements.rotationSpeed.options.10")}
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    <p className="text-xs text-muted-foreground">How fast to rotate between multiple events</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {t("eventAnnouncements.rotationSpeed.helper")}
+                                    </p>
                                 </div>
 
                                 {/* Event Preview */}
                                 <div className="space-y-2">
                                     <Label className="flex items-center gap-2">
                                         <Eye className="h-4 w-4" />
-                                        Event Announcement Preview
+                                        {t("eventAnnouncements.preview.label")}
                                     </Label>
                                     <div className="rounded-lg border bg-muted/50 p-4">
                                         <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-lg">
@@ -307,19 +352,25 @@ export default function PopupsPage() {
                                                     </span>
                                                 </div>
                                                 <h3 className="mb-2 text-lg font-bold">
-                                                    Welcome to {selectedRestaurant?.name || "Your Restaurant"}!
+                                                    {t("eventAnnouncements.preview.title", { restaurant: selectedRestaurant?.name || "Your Restaurant" })}
                                                 </h3>
 
                                                 {/* Mock Event */}
                                                 <div className="space-y-3">
                                                     <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-800">
                                                         <Calendar className="h-4 w-4" />
-                                                        <span>This Friday</span>
+                                                        <span>
+                                                            {t("eventAnnouncements.preview.mockEvent.date")}
+                                                        </span>
                                                     </div>
 
-                                                    <h4 className="text-lg font-semibold text-gray-900">Live Jazz Night</h4>
+                                                    <h4 className="text-lg font-semibold text-gray-900">
+                                                        {t("eventAnnouncements.preview.mockEvent.title")}
+                                                    </h4>
 
-                                                    <p className="text-sm text-gray-600">Join us for an evening of smooth jazz and great food</p>
+                                                    <p className="text-sm text-gray-600">
+                                                        {t("eventAnnouncements.preview.mockEvent.description")}
+                                                    </p>
 
                                                     <div className="mt-3 flex justify-center gap-2">
                                                         <div className="h-2 w-2 rounded-full bg-emerald-600"></div>
@@ -329,13 +380,13 @@ export default function PopupsPage() {
                                                 </div>
 
                                                 <Button size="sm" className="mt-4 w-full bg-emerald-600 hover:bg-emerald-700">
-                                                    Get Event Tickets
+                                                    {t("eventAnnouncements.preview.mockEvent.cta")}
                                                 </Button>
                                             </div>
                                         </div>
                                     </div>
                                     <p className="text-xs text-muted-foreground">
-                                        This is how event announcements will appear in your popup
+                                        {t("eventAnnouncements.preview.helper")}
                                     </p>
                                 </div>
                             </>

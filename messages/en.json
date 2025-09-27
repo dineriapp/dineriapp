@@ -1513,13 +1513,13 @@
       },
       "help": {
         "title": "How to get your Stripe keys",
-        "steps": {
-          "1": "Log in to your Stripe Dashboard",
-          "2": "Navigate to Developers → API keys",
-          "3": "Copy your Publishable key (starts with pk_)",
-          "4": "Reveal and copy your Secret key (starts with sk_)",
-          "5": "For live payments, make sure to use your live keys instead of test keys"
-        }
+        "steps": [
+          "1. Log in to your <a href='https://dashboard.stripe.com' target='_blank' rel='noopener noreferrer' class='text-blue-600 hover:underline'>Stripe Dashboard</a>",
+          "2. Navigate to <strong>Developers → API keys</strong>",
+          "3. Copy your <strong>Publishable key</strong> (starts with <code>pk_</code>)",
+          "4. Reveal and copy your <strong>Secret key</strong> (starts with <code>sk_</code>)",
+          "5. For live payments, make sure to use your <strong>live keys</strong> instead of test keys"
+        ]
       },
       "errors": {
         "invalid_public": {
@@ -1552,6 +1552,238 @@
       "loading": {
         "page": "Loading....",
         "stripe": "Loading Stripe settings..."
+      }
+    },
+    "popups": {
+      "loading": {
+        "text": "Loading popups information..."
+      },
+      "welcomePopupRestaurant": {
+        "title": "Welcome Popup Restaurant Page",
+        "description": "Show a welcome message to first-time visitors"
+      },
+      "welcomePopupMenu": {
+        "title": "Welcome Popup Menu Page",
+        "description": "Show a welcome message to first-time visitors"
+      },
+      "eventAnnouncements": {
+        "title": "Event Announcements",
+        "description": "Automatically promote your upcoming events in the welcome popup",
+        "enable_label": "Enable Event Announcements",
+        "enable_description": "Show upcoming events instead of welcome message when available",
+        "eventTimeRange": {
+          "label": "Event Time Range",
+          "helper": "Only show events happening within this time period",
+          "options": {
+            "7": "Next 7 days",
+            "14": "Next 2 weeks",
+            "30": "Next 30 days",
+            "60": "Next 2 months",
+            "90": "Next 3 months"
+          }
+        },
+        "maxEvents": {
+          "label": "Maximum Events in Popup",
+          "helper": "How many events to show at once (most urgent first)",
+          "options": {
+            "1": "1 event",
+            "2": "2 events",
+            "3": "3 events",
+            "5": "5 events"
+          }
+        },
+        "rotationSpeed": {
+          "label": "Event Rotation Speed",
+          "helper": "How fast to rotate between multiple events",
+          "options": {
+            "3": "3 seconds",
+            "5": "5 seconds",
+            "7": "7 seconds",
+            "10": "10 seconds"
+          }
+        },
+        "preview": {
+          "label": "Event Announcement Preview",
+          "title": "Welcome to { restaurant }!",
+          "mockEvent": {
+            "date": "This Friday",
+            "title": "Live Jazz Night",
+            "description": "Join us for an evening of smooth jazz and great food",
+            "cta": "Get Event Tickets"
+          },
+          "helper": "This is how event announcements will appear in your popup"
+        }
+      },
+      "form": {
+        "reset": {
+          "title": "Form reset",
+          "description": "All changes have been discarded"
+        },
+        "save": {
+          "title": "Popup settings updated",
+          "description": "Your popup settings have been updated successfully"
+        },
+        "error": {
+          "title": "Error updating popup settings",
+          "description": "An error occurred while updating your popup settings"
+        },
+        "noRestaurant": "No restaurant selected"
+      },
+      "genericPopup": {
+        "enable": {
+          "label": "Enable Welcome Popup",
+          "description": "Show a welcome popup to new visitors"
+        },
+        "message": {
+          "label": "Welcome Message",
+          "placeholder": "Welcome! We're excited to have you visit us.",
+          "counter": "200 characters"
+        },
+        "delay": {
+          "label": "Show Delay",
+          "helper": "How long to wait before showing the popup",
+          "option": "{ seconds } second{ s }"
+        },
+        "button": {
+          "label": "Show Action Button",
+          "description": "Display the \"Explore\" button in the popup",
+          "text": "Explore"
+        },
+        "info": {
+          "label": "Show Information",
+          "ratings": "Ratings",
+          "address": "Address",
+          "hours": "Opening Hours",
+          "phone": "Phone Number"
+        },
+        "preview": {
+          "label": "Preview",
+          "title": "Welcome to { restaurant }!",
+          "description": "This is how your welcome popup will appear to visitors",
+          "ratings": "reviews",
+          "address": "{{address}}",
+          "hours": "Open Today",
+          "phone": "{{phone}}"
+        }
+      },
+      "unsavedChanges": {
+        "reset": "Discard Changes",
+        "save": "Save Changes",
+        "saving": "Saving...",
+        "unsaved": "You have unsaved changes"
+      }
+    },
+    "integrations": {
+      "loading": {
+        "text": "Loading integrations information..."
+      },
+      "googlePlaces": {
+        "title": "Google Places Integration",
+        "description": "Connect your Google Places listing to show ratings and reviews",
+        "label": "Google Place ID",
+        "placeholder": "e.g. ChIJN1t_tDeuEmsRUsoyG83frY4",
+        "upgradePlaceholder": "Upgrade to enter Place ID",
+        "basicPlanTag": "Basic Plan",
+        "finder": {
+          "text": "Find your Place ID using the",
+          "link": "Place ID Finder"
+        },
+        "integrationDetected": {
+          "title": "Integration Detected",
+          "premiumDescription": "Your restaurant is connected to Google Places. Reviews and ratings will be displayed on your page.",
+          "basicDescription": "Your restaurant is connected to Google Places, but this feature is only visible on your restaurant page if you're on the Pro or Enterprise plan.",
+          "placeId": "Place ID: "
+        },
+        "upgradeMessage": "This feature is available on the premium plan."
+      },
+      "form": {
+        "reset": {
+          "title": "Form reset",
+          "description": "All changes have been discarded"
+        },
+        "save": {
+          "title": "Integration settings updated",
+          "description": "Your integration settings have been updated successfully"
+        },
+        "error": {
+          "title": "Error updating integration settings",
+          "description": "An error occurred while updating your integration settings"
+        },
+        "noRestaurant": "No restaurant selected"
+      }
+    },
+    "subscription": {
+      "loading": {
+        "text": "Loading subscription information..."
+      },
+      "error": {
+        "title": "Error",
+        "fetchDescription": "Failed to load subscription information",
+        "portalDescription": "Failed to open billing portal"
+      },
+      "page": {
+        "title": "Subscription",
+        "description": "Manage your subscription and billing information."
+      },
+      "alert": {
+        "pastDue": {
+          "title": "Your subscription payment is past due.",
+          "description": "Please update your payment method to continue using premium features."
+        },
+        "noSubscription": {
+          "description": "Failed to load subscription information."
+        }
+      },
+      "plan": {
+        "current": {
+          "title": "Current Plan",
+          "basicDescription": "Free plan with basic features",
+          "premiumDescription": "Premium plan with advanced features",
+          "pricePerMonth": "/month",
+          "featuresTitle": "Features included:",
+          "moreFeatures": "more features"
+        },
+        "basic": {
+          "upgradeButton": "Upgrade Plan"
+        },
+        "premium": {
+          "manageButton": {
+            "default": "Manage Billing",
+            "loading": "Loading..."
+          }
+        }
+      },
+      "billing": {
+        "title": "Billing Information",
+        "description": "Your subscription and payment details",
+        "status": "Status",
+        "nextBillingDate": "Next billing date",
+        "plan": "Plan",
+        "updatePayment": {
+          "button": "Update Payment Method",
+          "loading": "Loading..."
+        }
+      },
+      "upgrade": {
+        "title": "Upgrade Your Plan",
+        "description": "Unlock unlimited features and advanced capabilities",
+        "pro": {
+          "title": "Pro Plan - €19/month",
+          "features": [
+            "Unlimited everything",
+            "Advanced analytics",
+            "Priority support"
+          ]
+        },
+        "enterprise": {
+          "title": "Enterprise Plan - €49/month",
+          "features": [
+            "Everything in Pro",
+            "White label solution",
+            "API access"
+          ]
+        },
+        "viewPlansButton": "View All Plans"
       }
     }
   }

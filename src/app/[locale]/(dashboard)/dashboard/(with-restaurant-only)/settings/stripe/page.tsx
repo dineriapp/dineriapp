@@ -158,9 +158,10 @@ export default function StripeSettingsPage() {
                 <Alert className="">
                     <Shield className="h-4 w-4" />
                     <AlertDescription>
-                        <strong>Your keys are secure:</strong> We encrypt and store your Stripe keys using industry-standard
-                        encryption. Your actual keys are never stored in plain text and cannot be viewed by anyone, including our
-                        team.
+                        <strong>
+                            {t("alerts.security_notice.title")}
+                        </strong>
+                        {t("alerts.security_notice.description")}
                     </AlertDescription>
                 </Alert>
 
@@ -168,7 +169,7 @@ export default function StripeSettingsPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            Current Status
+                            {t("status.title")}
                             {hasKeys ? (
                                 <CheckCircle className="h-5 w-5 text-green-600" />
                             ) : (
@@ -176,7 +177,7 @@ export default function StripeSettingsPage() {
                             )}
                         </CardTitle>
                         <CardDescription>
-                            {hasKeys ? "Stripe keys are configured and encrypted" : "No Stripe keys configured"}
+                            {hasKeys ? t("status.configured") : t("status.not_configured")}
                         </CardDescription>
                     </CardHeader>
                     {hasKeys && (
@@ -186,17 +187,17 @@ export default function StripeSettingsPage() {
                                     <div className="space-y-2">
                                         <div className={`flex items-center gap-2 text-sm ${restaurant.stripe_public_key_encrypted ? 'text-green-600' : 'text-red-600'}`}>
                                             <CheckCircle className="h-4 w-4" />
-                                            <span>Public Key: {restaurant.stripe_public_key_encrypted ? 'Configured' : 'Not Configured'}</span>
+                                            <span> {restaurant.stripe_public_key_encrypted ? t("status.public_key.configured") : t("status.public_key.not_configured")}</span>
                                         </div>
 
                                         <div className={`flex items-center gap-2 text-sm ${restaurant.stripe_secret_key_encrypted ? 'text-green-600' : 'text-red-600'}`}>
                                             <CheckCircle className="h-4 w-4" />
-                                            <span>Secret Key: {restaurant.stripe_secret_key_encrypted ? 'Configured' : 'Not Configured'}</span>
+                                            <span>{restaurant.stripe_secret_key_encrypted ? t("status.secret_key.configured") : t("status.secret_key.not_configured")}</span>
                                         </div>
 
                                         <div className={`flex items-center gap-2 text-sm ${restaurant.stripe_webhook_secret_encrypted ? 'text-green-600' : 'text-red-600'}`}>
                                             <CheckCircle className="h-4 w-4" />
-                                            <span>Webhook Secret: {restaurant.stripe_webhook_secret_encrypted ? 'Configured' : 'Not Configured'}</span>
+                                            <span>{restaurant.stripe_webhook_secret_encrypted ? t("status.webhook_secret.configured") : t("status.webhook_secret.not_configured")}</span>
                                         </div>
                                     </div>
                                 )}
@@ -209,7 +210,7 @@ export default function StripeSettingsPage() {
                                 className="mt-4 hover:text-white text-white rounded-full font-poppins px-4 cursor-pointer hover:bg-destructive/70 text-xs border-red-200 bg-destructive"
                             >
                                 {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                                Remove Keys
+                                {t("status.remove_keys_button")}
                             </Button>
                         </CardContent>
                     )}
@@ -218,24 +219,28 @@ export default function StripeSettingsPage() {
                 {/* Stripe Keys Form */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>{hasKeys ? "Update" : "Add"} Stripe Keys</CardTitle>
+                        <CardTitle>
+                            {hasKeys ? t("form.title_update") : t("status.title_add")}
+                        </CardTitle>
                         <CardDescription>
                             {hasKeys
-                                ? "Enter new keys to update your current configuration"
-                                : "Enter your Stripe API keys to enable payment processing"}
+                                ? t("form.description_update")
+                                : t("form.description_add")}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="stripe_public_key">Stripe Publishable Key</Label>
+                                <Label htmlFor="stripe_public_key">
+                                    {t("form.labels.public_key")}
+                                </Label>
                                 <div className="relative">
                                     <Input
                                         id="stripe_public_key"
                                         type={showPublicKey ? "text" : "password"}
                                         value={formData.stripe_public_key}
                                         onChange={(e) => handleInputChange("stripe_public_key", e.target.value)}
-                                        placeholder="pk_test_... or pk_live_..."
+                                        placeholder={t("form.placeholders.public_key")}
                                         className="pr-10"
                                     />
                                     <Button
@@ -248,18 +253,22 @@ export default function StripeSettingsPage() {
                                         {showPublicKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                     </Button>
                                 </div>
-                                <p className="text-xs text-muted-foreground">This key is safe to use in your frontend code</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {t("form.helpers.public_key")}
+                                </p>
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="stripe_secret_key">Stripe Secret Key</Label>
+                                <Label htmlFor="stripe_secret_key">
+                                    {t("form.labels.secret_key")}
+                                </Label>
                                 <div className="relative">
                                     <Input
                                         id="stripe_secret_key"
                                         type={showSecretKey ? "text" : "password"}
                                         value={formData.stripe_secret_key}
                                         onChange={(e) => handleInputChange("stripe_secret_key", e.target.value)}
-                                        placeholder="sk_test_... or sk_live_..."
+                                        placeholder={t("form.placeholders.secret_key")}
                                         className="pr-10"
                                     />
                                     <Button
@@ -272,7 +281,9 @@ export default function StripeSettingsPage() {
                                         {showSecretKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                     </Button>
                                 </div>
-                                <p className="text-xs text-muted-foreground">This key must be kept secret and only used on the server</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {t("form.helpers.secret_key")}
+                                </p>
                             </div>
 
                             <div className="flex gap-2 pt-4">
@@ -282,7 +293,7 @@ export default function StripeSettingsPage() {
                                     className="bg-main-green hover:bg-main-green/70 cursor-pointer px-5 font-poppins rounded-full text-white"
                                 >
                                     {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                                    {hasKeys ? "Update Keys" : "Save Keys"}
+                                    {hasKeys ? t("form.buttons.update") : t("form.buttons.save")}
                                 </Button>
                                 <Button
                                     type="button"
@@ -291,7 +302,7 @@ export default function StripeSettingsPage() {
                                     disabled={saving}
                                     className="bg-main-blue cursor-pointer px-5 font-poppins rounded-full text-white"
                                 >
-                                    Clear
+                                    {t("form.buttons.clear")}
                                 </Button>
                             </div>
                         </form>
@@ -301,39 +312,27 @@ export default function StripeSettingsPage() {
                 {/* Help Section */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>How to get your Stripe keys</CardTitle>
+                        <CardTitle>
+                            {
+                                t("help.title")
+                            }
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                        <div className="text-sm text-muted-foreground space-y-2">
-                            <p>
-                                1. Log in to your{" "}
-                                <a
-                                    href="https://dashboard.stripe.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline"
-                                >
-                                    Stripe Dashboard
-                                </a>
-                            </p>
-                            <p>
-                                2. Navigate to <strong>Developers → API keys</strong>
-                            </p>
-                            <p>
-                                3. Copy your <strong>Publishable key</strong> (starts with pk_)
-                            </p>
-                            <p>
-                                4. Reveal and copy your <strong>Secret key</strong> (starts with sk_)
-                            </p>
-                            <p>
-                                5. For live payments, make sure to use your <strong>live keys</strong> instead of test keys
-                            </p>
-                        </div>
+                        <ul className="text-sm text-muted-foreground space-y-2">
+                            {t.raw("help.steps")?.map((item: string, idx: number) => (
+                                <li dangerouslySetInnerHTML={{ __html: item }} key={`432432432423-2434-${idx}`}>
+
+                                </li>
+                            ))}
+                        </ul>
                         <Alert>
                             <AlertCircle className="h-4 w-4" />
                             <AlertDescription className="text-xs">
-                                <strong>Important:</strong> Never share your secret key publicly. Only enter it in secure, trusted
-                                applications like this one.
+                                <strong>
+                                    {t("alerts.important_notice.title")}
+                                </strong>
+                                {t("alerts.important_notice.description")}
                             </AlertDescription>
                         </Alert>
                     </CardContent>
