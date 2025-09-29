@@ -12,11 +12,12 @@ import { motion } from "motion/react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { QRCodeGeneratorComponent } from "./qr-code-generator"
+import { useTranslations } from "next-intl"
 
 export default function QRCodesPage() {
     const { selectedRestaurant: restaurant } = useRestaurantStore()
     const [activeTab, setActiveTab] = useState("analytics")
-
+    const t = useTranslations("qr-codes-page")
     const { data: qrCodes = [], isLoading: qrCodesLoading, error: qrCodesError } = useQRCodes(restaurant?.id || "")
 
     const { data: stats, isLoading: statsLoading, error: statsError } = useQRCodeStats(restaurant?.id || "")
@@ -24,7 +25,7 @@ export default function QRCodesPage() {
     const deleteQRCodeMutation = useDeleteQRCode(restaurant?.id || "")
 
     const handleDeleteQRCode = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this QR code?")) return
+        if (!confirm(t("actions.deleteConfirm"))) return
 
         try {
             await deleteQRCodeMutation.mutateAsync(id)
@@ -40,12 +41,12 @@ export default function QRCodesPage() {
     const copyScanUrl = (qrCodeId: string) => {
         const url = getScanUrl(qrCodeId)
         navigator.clipboard.writeText(url)
-        toast.success("Scan URL copied to clipboard!")
+        toast.success(t("actions.copySuccess"))
     }
 
     const downloadQRCode = (qrCode: any) => {
         if (!qrCode.qr_data_url) {
-            toast.error("QR code image not available")
+            toast.error(t("actions.downloadError"))
             return
         }
 
@@ -57,17 +58,17 @@ export default function QRCodesPage() {
         link.click()
         document.body.removeChild(link)
 
-        toast.success("QR code downloaded!")
+        toast.success(t("actions.downloadSuccess"))
     }
 
     const getTypeLabel = (type: string) => {
         switch (type) {
             case "restaurant_page":
-                return "Restaurant Page"
+                return t("types.restaurant_page")
             case "link":
-                return "Link"
+                return t("types.link")
             case "custom":
-                return "Custom URL"
+                return t("types.custom")
             default:
                 return type
         }
@@ -90,15 +91,15 @@ export default function QRCodesPage() {
 
     if (loading || !restaurant) {
         return (
-            <LoadingUI text="Loading..." />
+            <LoadingUI text={t("loading")} />
         )
     }
 
     if (qrCodesError || statsError) {
         return (
             <ErrorMessage
-                title="Error loading QR codes"
-                message="Please try refreshing the page."
+                title={t("errors.loadErrorTitle")}
+                message={t("errors.loadErrorMessage")}
             />
         )
     }
@@ -107,20 +108,22 @@ export default function QRCodesPage() {
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                 <h1 className="text-4xl font-bold text-main-blue">
-                    QR Codes
+                    {t("title")}
                 </h1>
-                <p className="mt-2 text-muted-foreground">Generate and manage branded QR codes for your restaurant</p>
+                <p className="mt-2 text-muted-foreground">
+                    {t("subtitle")}
+                </p>
             </motion.div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
                 <TabsList className="grid w-full grid-cols-2 h-[44px]">
                     <TabsTrigger value="analytics" className="flex items-center gap-2">
                         <BarChart3 className="h-4 w-4" />
-                        Analytics
+                        {t("tabs.analytics")}
                     </TabsTrigger>
                     <TabsTrigger value="generator" className="flex items-center gap-2">
                         <QrCode className="h-4 w-4" />
-                        Generator
+                        {t("tabs.generator")}
                     </TabsTrigger>
                 </TabsList>
 
@@ -131,36 +134,46 @@ export default function QRCodesPage() {
                             <div className="grid gap-6 md:grid-cols-3">
                                 <Card className=" box-shad-every-2 bg-white border-main-green/20">
                                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                        <CardTitle className="text-sm font-medium text-muted-foreground">Total QR Codes</CardTitle>
+                                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                                            {t("stats.totalQRCodes")}
+                                        </CardTitle>
                                         <QrCode className="h-4 w-4 text-teal-600" />
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-3xl font-bold text-teal-700">{stats.totalQRCodes}</div>
-                                        <p className="mt-1 text-xs text-muted-foreground">{stats.activeQRCodes} active</p>
+                                        <p className="mt-1 text-xs text-muted-foreground">{stats.activeQRCodes} {t("stats.active")}</p>
                                     </CardContent>
                                 </Card>
 
                                 <Card className=" box-shad-every-2 bg-white border-main-green/20">
                                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                        <CardTitle className="text-sm font-medium text-muted-foreground">Total Scans</CardTitle>
+                                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                                            {t("stats.totalScans")}
+                                        </CardTitle>
                                         <Eye className="h-4 w-4 text-blue-600" />
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-3xl font-bold text-blue-700">{stats.totalScans}</div>
-                                        <p className="mt-1 text-xs text-muted-foreground">All time</p>
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            {t("stats.allTime")}
+                                        </p>
                                     </CardContent>
                                 </Card>
 
                                 <Card className=" box-shad-every-2 bg-white border-main-green/20">
                                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                        <CardTitle className="text-sm font-medium text-muted-foreground">Avg. Scans</CardTitle>
+                                        <CardTitle className="text-sm font-medium text-muted-foreground">
+                                            {t("stats.avgScans")}
+                                        </CardTitle>
                                         <BarChart3 className="h-4 w-4 text-green-600" />
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-3xl font-bold text-green-700">
                                             {stats.totalQRCodes > 0 ? Math.round(stats.totalScans / stats.totalQRCodes) : 0}
                                         </div>
-                                        <p className="mt-1 text-xs text-muted-foreground">Per QR code</p>
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            {t("stats.perQRCode")}
+                                        </p>
                                     </CardContent>
                                 </Card>
                             </div>
@@ -169,8 +182,12 @@ export default function QRCodesPage() {
                         {/* QR Code List */}
                         <Card className="pt-0 ">
                             <CardHeader className="font-poppins bg-gray-100/50 py-4 ">
-                                <CardTitle>Your QR Codes</CardTitle>
-                                <CardDescription>Manage and track your generated QR codes</CardDescription>
+                                <CardTitle>
+                                    {t("list.title")}
+                                </CardTitle>
+                                <CardDescription>
+                                    {t("list.description")}
+                                </CardDescription>
                             </CardHeader>
                             <CardContent>
                                 {qrCodes.length > 0 ? (
@@ -194,8 +211,12 @@ export default function QRCodesPage() {
                                 ) : (
                                     <div className="py-12 text-center">
                                         <QrCode className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                                        <h3 className="mb-2 text-lg font-semibold">No QR codes yet</h3>
-                                        <p className="mb-4 text-sm text-muted-foreground">Generate your first QR code to start tracking scans</p>
+                                        <h3 className="mb-2 text-lg font-semibold">
+                                            {t("list.empty.title")}
+                                        </h3>
+                                        <p className="mb-4 text-sm text-muted-foreground">
+                                            {t("list.empty.title")}
+                                        </p>
 
                                     </div>
                                 )}

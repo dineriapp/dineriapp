@@ -1,10 +1,11 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Copy, Download, ExternalLink, QrCode, Trash2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export const QRCodeItem = ({ qr, getScanUrl, onCopy, onDownload, onDelete, isDeleting }: any) => {
     const scanUrl = getScanUrl(qr.id)
-
+    const t = useTranslations("qr-codes-page.qrCodeItem")
     return (
         <div className="flex items-center justify-between p-4 rounded-lg border bg-gradient-to-r from-gray-50 to-white">
             <div className="flex items-center gap-4">
@@ -15,16 +16,22 @@ export const QRCodeItem = ({ qr, getScanUrl, onCopy, onDownload, onDelete, isDel
                     <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-medium">{qr.name}</h3>
                         <Badge className={qr.typeClass}>{qr.typeLabel}</Badge>
-                        {!qr.is_active && <Badge variant="secondary">Inactive</Badge>}
+                        {!qr.is_active && <Badge variant="secondary">
+                            {t("inactive")}
+                        </Badge>}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                        Created {new Date(qr.created_at).toLocaleDateString()}
+                        {t("created", { date: new Date(qr.created_at).toLocaleDateString() })}
                         {qr.last_scanned_at && (
-                            <span> • Last scanned {new Date(qr.last_scanned_at).toLocaleDateString()}</span>
+                            <span> •{" "}
+                                {t("lastScanned", { date: new Date(qr.last_scanned_at).toLocaleDateString() })}
+                            </span>
                         )}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
-                        <p className="text-xs text-muted-foreground">Scan URL:</p>
+                        <p className="text-xs text-muted-foreground">
+                            {t("scanUrl")}
+                        </p>
                         <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">{scanUrl.substring(0, 50)}...</code>
                         <Button variant="ghost" size="sm" onClick={() => onCopy(qr.id)} className="h-6 w-6 p-0">
                             <Copy className="h-3 w-3" />
@@ -34,9 +41,11 @@ export const QRCodeItem = ({ qr, getScanUrl, onCopy, onDownload, onDelete, isDel
             </div>
             <div className="flex items-center gap-4">
                 <div className="text-right">
-                    <p className="font-medium">{qr.scan_count} scans</p>
+                    <p className="font-medium">
+                        {t("scans", { count: qr.scan_count })}
+                    </p>
                     <p className="text-sm text-main-green font-semibold">
-                        {qr.scan_count === 0 ? "Never scanned" : "Active"}
+                        {qr.scan_count === 0 ? t("neverScanned") : t("active")}
                     </p>
                 </div>
                 <div className="flex items-center gap-2">

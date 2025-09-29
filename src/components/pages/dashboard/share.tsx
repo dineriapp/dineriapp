@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useUserStore } from '@/stores/auth-store'
 import { Copy, QrCode } from 'lucide-react'
 import { motion } from "motion/react"
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { toast } from 'sonner'
 
@@ -11,18 +12,24 @@ const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant:
 
     const { prismaUser } = useUserStore();
 
+    const t = useTranslations("dashboard.share")
+
     const copyToClipboard = () => {
         if (selectedRestaurant) {
             navigator.clipboard.writeText(`https://dineri.app/${slug}`)
-            toast("URL copied to clipboard")
+            toast(t("copyToast"))
         }
     }
 
     return (
         <Card className="hover:shadow-md transition-shadow backdrop-blur-sm bg-white border-slate-200">
             <CardHeader className='font-poppins'>
-                <CardTitle className="text-slate-900">Your Restaurant Page</CardTitle>
-                <CardDescription className="text-slate-500">Share your page with customers</CardDescription>
+                <CardTitle className="text-slate-900">
+                    {t("title")}
+                </CardTitle>
+                <CardDescription className="text-slate-500">
+                    {t("description")}
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <motion.div
@@ -39,14 +46,15 @@ const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant:
                                 onClick={copyToClipboard}
                             >
                                 <Copy className="h-4 w-4" />
-                                <span className="sr-only">Copy URL</span>
+                                <span className="sr-only">
+                                    {t("copyButton")}
+                                </span>
                             </Button>
                         </div>
                     </div>
                 </motion.div>
                 <p className="text-xs text-slate-500 mt-4">
-                    This is your unique page URL. Share it with your customers to help them find all your important links
-                    in one place.
+                    {t("uniqueUrlInfo")}
                 </p>
             </CardContent>
             {
@@ -59,7 +67,7 @@ const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant:
                     >
                         <Link className='flex items-center justify-center !leading-[1]' href={"/dashboard/qr-codes"}>
                             <QrCode className="h-4 w-4 mr-2" />
-                            Generate QR Code
+                            {t("generateQrCode")}
                         </Link>
                     </Button>
                 </CardFooter>

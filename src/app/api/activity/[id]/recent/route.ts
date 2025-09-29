@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 interface Params {
     params: Promise<{ id: string }>;
@@ -8,6 +10,10 @@ interface Params {
 export async function GET(req: Request, { params }: Params) {
     const { id } = await params;
     const restaurantId = id
+
+    const cookieStore = await cookies();
+    const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
+    const t = await getTranslations({ locale, namespace: 'api-activity' });
     try {
         const [restaurantViews, linkViews, reviews] = await Promise.all([
             prisma.restaurantView.findMany({
@@ -34,17 +40,17 @@ export async function GET(req: Request, { params }: Params) {
             ...restaurantViews.map(v => ({
                 type: "restaurant_view",
                 createdAt: v.createdAt,
-                message: `Someone viewed the restaurant page.`,
+                message: t("restaurantView"),
             })),
             ...linkViews.map(v => ({
                 type: "link_click",
                 createdAt: v.createdAt,
-                message: `Link clicked: ${v.link.title}`,
+                message: `${t("linkClick", { title: v.link.title })}`,
             })),
             ...reviews.map(r => ({
                 type: "review",
                 createdAt: r.createdAt,
-                message: `New review by ${r.author_name}: ${r.rating}⭐`,
+                message: `${t("newReview", { author: r.author_name, rating: r.rating })}`,
             })),
         ];
 
@@ -55,6 +61,6 @@ export async function GET(req: Request, { params }: Params) {
         return NextResponse.json({ activity: sorted });
     } catch (error) {
         console.error("Error fetching activity:", error);
-        return NextResponse.json({ activity: [], error: "Failed to fetch activity" }, { status: 500 });
+        return NextResponse.json({ activity: [], error: t("error") }, { status: 500 });
     }
 }

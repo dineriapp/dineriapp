@@ -14,10 +14,12 @@ import { OpeningHoursData } from '@/types'
 import { Restaurant } from '@prisma/client'
 import { Battery, ExternalLink, MoreVertical, Signal, Wifi } from 'lucide-react'
 import { motion } from "motion/react"
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useState } from 'react'
 
 const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Restaurant }) => {
+    const t = useTranslations("dashboard.dashboardMobilePreview");
     const [currentTime] = useState(() => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }))
     const openingHours = selectedRestaurant?.opening_hours ? (selectedRestaurant?.opening_hours as OpeningHoursData) : null
     const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(selectedRestaurant?.google_place_id);
@@ -28,15 +30,17 @@ const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Re
             <CardHeader>
                 <div className="flex items-center justify-between font-poppins">
                     <div>
-                        <CardTitle className="text-slate-900">Preview</CardTitle>
+                        <CardTitle className="text-slate-900">
+                            {t("card.title")}
+                        </CardTitle>
                         <CardDescription className="text-slate-500">
-                            See how your page looks on mobile devices
+                            {t("card.description")}
                         </CardDescription>
                     </div>
                     <Link href={`/${selectedRestaurant?.slug}`} target="_blank">
                         <Button variant="outline" size="sm" className="text-white h-[38px] !px-5 hover:text-white cursor-pointer font-poppins rounded-full bg-[#009A5E] hover:bg-[#009A5E]/80">
                             <ExternalLink className="h-4 w-4" />
-                            Visit
+                            {t("card.visitButton")}
                         </Button>
                     </Link>
                 </div>
@@ -204,7 +208,7 @@ const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Re
                                         {
                                             linksLoading ?
                                                 <p className="w-full text-center text-sm">
-                                                    Loading..
+                                                    {t("loading.links")}
                                                 </p>
                                                 :
                                                 <>
@@ -268,7 +272,7 @@ const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Re
                                                             </>
                                                             :
                                                             <p className="w-full text-center text-sm">
-                                                                No links yet add some to see preview.
+                                                                {t("emptyState.noLinks")}
                                                             </p>
                                                     }
                                                 </>

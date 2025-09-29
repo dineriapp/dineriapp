@@ -16,12 +16,15 @@ import { toast } from "sonner"
 import { Switch } from "@/components/ui/switch"
 
 import { v4 as uuidv4 } from 'uuid';
+import { useTranslations } from "next-intl"
 
 interface QRCodeGeneratorProps {
     restaurant: any
 }
 
 export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
+
+    const t = useTranslations("qr-codes-page.qrCodeGenerator")
     const [formData, setFormData] = useState({
         name: "",
         type: "restaurant_page" as "restaurant_page" | "link" | "custom",
@@ -31,7 +34,7 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
         color: "#000000",
         include_logo: true,
         include_frame: true,
-        frame_text: "Scan for Menu & More",
+        frame_text: t("form.frameTextPlaceholder"),
     })
 
     const { data: links } = useLinks(restaurant.id)
@@ -97,17 +100,17 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
         if (!restaurant?.id) return
 
         if (!formData.name.trim()) {
-            toast.error("Please enter a name for your QR code")
+            toast.error(t("errors.nameRequired"))
             return
         }
 
         if (formData.type === "link" && !formData.link_id) {
-            toast.error("Please select a link")
+            toast.error(t("errors.linkRequired"))
             return
         }
 
         if (formData.type === "custom" && !formData.custom_url.trim()) {
-            toast.error("Please enter a custom URL")
+            toast.error(t("errors.customUrlRequired"))
             return
         }
 
@@ -124,7 +127,7 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                 color: "#000000",
                 include_logo: true,
                 include_frame: false,
-                frame_text: "Scan for Menu & More",
+                frame_text: t("form.frameTextPlaceholder"),
             })
         } catch {
             // Error handling is done in the mutation
@@ -133,7 +136,7 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
 
     const downloadPreview = () => {
         if (!qrDataUrl) {
-            toast.error("No QR code to download")
+            toast.error(t("preview.downloadError"))
             return
         }
 
@@ -144,31 +147,39 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
         link.click()
         document.body.removeChild(link)
 
-        toast.success("QR code preview downloaded!")
+        toast.success(t("preview.downloadSuccess"))
     }
 
     return (
         <div className="grid gap-6 md:grid-cols-2">
             <Card className="pt-0">
                 <CardHeader className="bg-gray-100/50 py-4 font-poppins">
-                    <CardTitle>Generate QR Code</CardTitle>
-                    <CardDescription>Create a branded QR code for your restaurant</CardDescription>
+                    <CardTitle>
+                        {t("preview.title")}
+                    </CardTitle>
+                    <CardDescription>
+                        {t("preview.description")}
+                    </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="name">QR Code Name</Label>
+                            <Label htmlFor="name">
+                                {t("form.nameLabel")}
+                            </Label>
                             <Input
                                 id="name"
                                 value={formData.name}
                                 onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                                placeholder="e.g., Main Menu QR Code"
+                                placeholder={t("form.namePlaceholder")}
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="type">QR Code Type</Label>
+                            <Label htmlFor="type">
+                                {t("form.typeLabel")}
+                            </Label>
                             <Select
                                 value={formData.type}
                                 onValueChange={(value: any) =>
@@ -179,23 +190,31 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="restaurant_page">Restaurant Page</SelectItem>
-                                    <SelectItem value="link">Existing Link</SelectItem>
-                                    <SelectItem value="custom">Custom URL</SelectItem>
+                                    <SelectItem value="restaurant_page">
+                                        {t("form.typeOptions.restaurant_page")}
+                                    </SelectItem>
+                                    <SelectItem value="link">
+                                        {t("form.typeOptions.link")}
+                                    </SelectItem>
+                                    <SelectItem value="custom">
+                                        {t("form.typeOptions.custom")}
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
                         {formData.type === "link" && (
                             <div className="space-y-2 w-full">
-                                <Label htmlFor="link">Select Link</Label>
+                                <Label htmlFor="link">
+                                    {t("form.linkLabel")}
+                                </Label>
                                 <Select
                                     value={formData.link_id}
 
                                     onValueChange={(value) => setFormData((prev) => ({ ...prev, link_id: value }))}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Choose a link" />
+                                        <SelectValue placeholder={t("form.linkPlaceholder")} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {links?.map((link) => (
@@ -210,13 +229,15 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
 
                         {formData.type === "custom" && (
                             <div>
-                                <Label htmlFor="custom_url">Custom URL</Label>
+                                <Label htmlFor="custom_url">
+                                    {t("form.customUrlLabel")}
+                                </Label>
                                 <Input
                                     id="custom_url"
                                     type="url"
                                     value={formData.custom_url}
                                     onChange={(e) => setFormData((prev) => ({ ...prev, custom_url: e.target.value }))}
-                                    placeholder="https://example.com"
+                                    placeholder={t("form.customUrlPlaceholder")}
                                     required
                                 />
                             </div>
@@ -235,7 +256,9 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                                 />
                             </div> */}
                             <div className="space-y-2 w-full">
-                                <Label htmlFor="color">Color</Label>
+                                <Label htmlFor="color">
+                                    {t("form.colorLabel")}
+                                </Label>
                                 <Input
                                     id="color"
                                     type="color"
@@ -251,7 +274,9 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                                 checked={formData.include_logo}
                                 onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, include_logo: checked }))}
                             />
-                            <Label htmlFor="include_logo">Include Restaurant Logo</Label>
+                            <Label htmlFor="include_logo">
+                                {t("form.includeLogo")}
+                            </Label>
                         </div>
 
                         <div className="flex items-center space-x-2">
@@ -260,23 +285,27 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                                 checked={formData.include_frame}
                                 onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, include_frame: checked }))}
                             />
-                            <Label htmlFor="include_frame">Include Frame Text</Label>
+                            <Label htmlFor="include_frame">
+                                {t("form.includeFrame")}
+                            </Label>
                         </div>
 
                         {formData.include_frame && (
                             <div>
-                                <Label htmlFor="frame_text">Frame Text</Label>
+                                <Label htmlFor="frame_text">
+                                    {t("form.frameTextLabel")}
+                                </Label>
                                 <Input
                                     id="frame_text"
                                     value={formData.frame_text}
                                     onChange={(e) => setFormData((prev) => ({ ...prev, frame_text: e.target.value }))}
-                                    placeholder="Scan for Menu & More"
+                                    placeholder={t("form.frameTextPlaceholder")}
                                 />
                             </div>
                         )}
 
                         <Button type="submit" className="w-full rounded-full font-poppins cursor-pointer h-[44px]" disabled={createQRCodeMutation.isPending}>
-                            {createQRCodeMutation.isPending ? "Creating..." : "Create QR Code"}
+                            {createQRCodeMutation.isPending ? t("form.submitting") : t("form.submit")}
                         </Button>
                     </form>
                 </CardContent>
@@ -284,15 +313,21 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
 
             <Card className="w-full h-full pt-0">
                 <CardHeader className="bg-gray-100/50 py-4 font-poppins">
-                    <CardTitle>Preview</CardTitle>
-                    <CardDescription>Preview of QR code created.</CardDescription>
+                    <CardTitle>
+                        {t("preview.title")}
+                    </CardTitle>
+                    <CardDescription>
+                        {t("preview.description")}
+                    </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2 items-center space-y-4">
                     {generating ? (
                         <div className="flex items-center min-h-[360px] justify-center w-64 h-64 border-2 border-dashed border-gray-300 rounded-lg">
                             <div className="text-center">
                                 <QrCode className="mx-auto h-8 w-8 text-gray-400 animate-pulse" />
-                                <p className="mt-2 text-sm text-gray-500">Generating...</p>
+                                <p className="mt-2 text-sm text-gray-500">
+                                    {t("preview.generating")}
+                                </p>
                             </div>
                         </div>
                     ) : qrDataUrl ? (
@@ -308,7 +343,7 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                             <div className="flex gap-2 mt-4 w-full">
                                 <Button onClick={downloadPreview} variant="default" className="w-full cursor-pointer hover:bg-main-green/70 rounded-full bg-main-green text-white h-[44px]">
                                     <Download className="h-4 w-4" />
-                                    Download Preview
+                                    {t("preview.download")}
                                 </Button>
                             </div>
                         </div>
@@ -316,7 +351,9 @@ export function QRCodeGeneratorComponent({ restaurant }: QRCodeGeneratorProps) {
                         <div className="flex items-center min-h-[360px] justify-center w-64 h-64 border-2 border-dashed border-gray-300 rounded-lg">
                             <div className="text-center">
                                 <QrCode className="mx-auto h-8 w-8 text-gray-400" />
-                                <p className="mt-2 text-sm text-gray-500">QR code will appear here</p>
+                                <p className="mt-2 text-sm text-gray-500">
+                                    {t("preview.empty")}
+                                </p>
                             </div>
                         </div>
                     )}

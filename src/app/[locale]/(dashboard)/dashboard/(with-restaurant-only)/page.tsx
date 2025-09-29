@@ -21,6 +21,7 @@ import {
     UtensilsCrossed
 } from "lucide-react"
 import { motion } from "motion/react"
+import { useTranslations } from "next-intl"
 import { useEffect } from "react"
 
 export default function DashboardPage() {
@@ -29,62 +30,60 @@ export default function DashboardPage() {
     const { data: activityData, isLoading: activityLoading } = useRecentActivity(selectedRestaurant?.id);
     const { fetchAndSet } = useSyncRestaurants();
     const { monthlyVisits } = useMonthlyVisits(selectedRestaurant?.id);
-
-
-
+    const t = useTranslations("dashboard")
     useEffect(() => {
         fetchAndSet();
     }, []);
 
     if (restaurants.length === 0 || !selectedRestaurant || isLoading || isFetching) {
         return (
-            <LoadingUI text="Loading your dashboard..." />
+            <LoadingUI text={t("loadingText")} />
         )
     }
 
     const stats = [
         {
-            title: 'Total Links',
+            title: t("stats.totalLinks.title"),
             count: selectedRestaurant?._count?.links,
             icon: <LinkIcon className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
-            description: 'Active links on your page',
+            description: t("stats.totalLinks.description"),
         },
         {
-            title: 'Total Menus',
+            title: t("stats.totalMenus.title"),
             count: selectedRestaurant?._count?.menuCategories,
             icon: <UtensilsCrossed className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
-            description: 'Active menus on your page',
+            description: t("stats.totalMenus.description"),
         },
         {
-            title: 'Total Events',
+            title: t("stats.totalEvents.title"),
             count: selectedRestaurant?._count?.events,
             icon: <Calendar className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
-            description: 'Active events on your page',
+            description: t("stats.totalEvents.description"),
         },
         {
-            title: 'Total Faqs',
+            title: t("stats.totalFaqs.title"),
             count: selectedRestaurant?._count?.faqCategories,
             icon: <HelpCircle className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
-            description: 'Active faq categories on your page',
+            description: t("stats.totalFaqs.description"),
         },
         {
-            title: 'Visitors This Month',
+            title: t("stats.visitorsThisMonth.title"),
             count: monthlyVisits ?? <Loader2 className="animate-spin opacity-80" />,
             icon: <BarChart2 className="h-4 w-4 text-white" />,
             iconBg: 'bg-blue-50',
-            description: 'Visitors this month',
+            description: t("stats.visitorsThisMonth.description"),
             bg: 'from-blue-50',
         },
         {
-            title: 'Total Visitors',
+            title: t("stats.totalVisitors.title"),
             count: selectedRestaurant?._count?.restaurantViews,
             icon: <Users className="h-4 w-4 text-white" />,
             iconBg: 'bg-teal-50',
-            description: 'Total visitors all time',
+            description: t("stats.totalVisitors.description"),
         },
     ];
 
@@ -92,9 +91,11 @@ export default function DashboardPage() {
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                 <h1 className="text-4xl font-bold text-main-blue">
-                    Welcome Back
+                    {t("welcomeTitle")}
                 </h1>
-                <p className="text-slate-500 mt-2">Manage your restaurant profile and track performance</p>
+                <p className="text-slate-500 mt-2">
+                    {t("welcomeSubtitle")}
+                </p>
             </motion.div>
 
             <motion.div

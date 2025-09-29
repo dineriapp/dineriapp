@@ -1787,5 +1787,250 @@
         "viewPlansButton": "Voir tous les plans"
       }
     }
+  },
+  "dashboard": {
+    "loadingText": "Chargement de votre tableau de bord...",
+    "welcomeTitle": "Bon retour",
+    "welcomeSubtitle": "Gérez le profil de votre restaurant et suivez les performances",
+    "stats": {
+      "totalLinks": {
+        "title": "Liens totaux",
+        "description": "Liens actifs sur votre page"
+      },
+      "totalMenus": {
+        "title": "Menus totaux",
+        "description": "Menus actifs sur votre page"
+      },
+      "totalEvents": {
+        "title": "Événements totaux",
+        "description": "Événements actifs sur votre page"
+      },
+      "totalFaqs": {
+        "title": "FAQs totales",
+        "description": "Catégories de FAQ actives sur votre page"
+      },
+      "visitorsThisMonth": {
+        "title": "Visiteurs ce mois-ci",
+        "description": "Visiteurs de ce mois"
+      },
+      "totalVisitors": {
+        "title": "Visiteurs totaux",
+        "description": "Visiteurs totaux de tous les temps"
+      }
+    },
+    "dashboardMobilePreview": {
+      "card": {
+        "title": "Aperçu",
+        "description": "Voyez à quoi ressemble votre page sur les appareils mobiles",
+        "visitButton": "Visiter"
+      },
+      "loading": {
+        "links": "Chargement.."
+      },
+      "emptyState": {
+        "noLinks": "Aucun lien pour l’instant, ajoutez-en pour voir l’aperçu."
+      }
+    },
+    "quickActions": {
+      "title": "Actions rapides",
+      "description": "Tâches et paramètres courants",
+      "buttons": {
+        "addNewLink": "Ajouter un nouveau lien",
+        "editProfile": "Modifier le profil",
+        "generateQrCode": "Générer un code QR",
+        "viewAnalytics": "Voir les statistiques"
+      }
+    },
+    "share": {
+      "title": "Votre page de restaurant",
+      "description": "Partagez votre page avec vos clients",
+      "copyToast": "URL copiée dans le presse-papiers",
+      "copyButton": "Copier l’URL",
+      "uniqueUrlInfo": "Ceci est l’URL unique de votre page. Partagez-la avec vos clients pour qu’ils retrouvent tous vos liens importants au même endroit.",
+      "generateQrCode": "Générer un code QR"
+    },
+    "recentActivity": {
+      "title": "Activité récente",
+      "description": "Dernières activités de votre restaurant { name }",
+      "loading": "Chargement...",
+      "empty": "Vous n’avez encore aucune activité."
+    }
+  },
+  "api-activity": {
+    "restaurantView": "Quelqu’un a consulté la page du restaurant.",
+    "linkClick": "Lien cliqué : { title }",
+    "newReview": "Nouvel avis de { author } : { rating }⭐",
+    "error": "Échec du chargement de l’activité"
+  },
+  "dashboard-stats": {
+    "loading": "Chargement des analyses...",
+    "error": {
+      "title": "Impossible de charger les analyses",
+      "message": "Veuillez essayer de rafraîchir la page"
+    },
+    "noData": {
+      "title": "Aucune donnée disponible",
+      "message": "Partagez la page de votre restaurant pour voir les analyses"
+    },
+    "page": {
+      "title": "Analyses",
+      "subtitle": "Statistiques en temps réel pour",
+      "lastUpdated": "Dernière mise à jour : "
+    },
+    "overviewCards": {
+      "totalLinkViews": {
+        "title": "Vues totales des liens",
+        "extra": {
+          "thisWeek": "+{ count } cette semaine",
+          "uniquePercent": "{ percent }% uniques",
+          "noData": "Pas encore de données"
+        }
+      },
+      "uniqueLinkVisitors": {
+        "title": "Visiteurs uniques des liens",
+        "extra": {
+          "uniquePercent": "{ percent }% uniques",
+          "noData": "Pas encore de données"
+        }
+      },
+      "pageViews": {
+        "title": "Vues de la page",
+        "extra": {
+          "thisWeek": "+{ count } cette semaine"
+        }
+      },
+      "uniquePageVisitors": {
+        "title": "Visiteurs uniques de la page",
+        "extra": {
+          "uniquePercent": "{ percent }% uniques",
+          "noData": "Pas encore de données"
+        }
+      }
+    },
+    "linkPerformance": {
+      "title": "Performance des liens",
+      "description": "Clics sur les liens",
+      "noLinks": {
+        "description": "Aucun lien créé pour le moment",
+        "message": "Créez quelques liens pour voir les analyses de performance"
+      },
+      "chart": {
+        "totalClicks": "Clics totaux",
+        "uniqueClicks": "Clics uniques"
+      }
+    },
+    "detailedStats": {
+      "title": "Statistiques détaillées",
+      "description": "Détail par lien",
+      "table": {
+        "link": "Lien",
+        "totalClicks": "Clics totaux",
+        "uniqueClicks": "Clics uniques"
+      }
+    },
+    "deviceBreakdown": {
+      "title": "Répartition par appareil",
+      "description": "Comment les visiteurs accèdent à votre page",
+      "noData": "Aucune donnée sur les appareils disponible pour le moment",
+      "devices": {
+        "mobile": "Mobile",
+        "desktop": "Ordinateur",
+        "tablet": "Tablette",
+        "percentageOfTotal": "{ percent }% du total"
+      }
+    }
+  },
+  "qr-codes-page": {
+    "loading": "Chargement...",
+    "title": "Codes QR",
+    "subtitle": "Générez et gérez des codes QR personnalisés pour votre restaurant",
+    "tabs": {
+      "analytics": "Analyses",
+      "generator": "Générateur"
+    },
+    "stats": {
+      "totalQRCodes": "Nombre total de codes QR",
+      "active": "{count} actifs",
+      "totalScans": "Nombre total de scans",
+      "allTime": "Depuis toujours",
+      "avgScans": "Moy. de scans",
+      "perQRCode": "Par code QR"
+    },
+    "list": {
+      "title": "Vos codes QR",
+      "description": "Gérez et suivez vos codes QR générés",
+      "empty": {
+        "title": "Pas encore de codes QR",
+        "description": "Générez votre premier code QR pour commencer à suivre les scans"
+      }
+    },
+    "errors": {
+      "loadErrorTitle": "Erreur lors du chargement des codes QR",
+      "loadErrorMessage": "Veuillez essayer de rafraîchir la page."
+    },
+    "actions": {
+      "copySuccess": "URL de scan copiée dans le presse-papiers !",
+      "downloadSuccess": "Code QR téléchargé !",
+      "downloadError": "Image du code QR non disponible",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce code QR ?"
+    },
+    "types": {
+      "restaurant_page": "Page du restaurant",
+      "link": "Lien",
+      "custom": "URL personnalisée"
+    },
+    "qrCodeGenerator": {
+      "title": "Générer un code QR",
+      "description": "Créez un code QR personnalisé pour votre restaurant",
+      "form": {
+        "nameLabel": "Nom du code QR",
+        "namePlaceholder": "ex. : Code QR du menu principal",
+        "typeLabel": "Type de code QR",
+        "typeOptions": {
+          "restaurant_page": "Page du restaurant",
+          "link": "Lien existant",
+          "custom": "URL personnalisée"
+        },
+        "linkLabel": "Sélectionner un lien",
+        "linkPlaceholder": "Choisissez un lien",
+        "customUrlLabel": "URL personnalisée",
+        "customUrlPlaceholder": "https://exemple.com",
+        "colorLabel": "Couleur",
+        "includeLogo": "Inclure le logo du restaurant",
+        "includeFrame": "Inclure le texte du cadre",
+        "frameTextLabel": "Texte du cadre",
+        "frameTextPlaceholder": "Scannez pour voir le menu et plus",
+        "submit": "Créer un code QR",
+        "submitting": "Création en cours..."
+      },
+      "preview": {
+        "title": "Aperçu",
+        "description": "Aperçu du code QR créé.",
+        "generating": "Génération en cours...",
+        "empty": "Le code QR apparaîtra ici",
+        "download": "Télécharger l’aperçu",
+        "downloadSuccess": "Aperçu du code QR téléchargé !",
+        "downloadError": "Aucun code QR à télécharger"
+      },
+      "errors": {
+        "nameRequired": "Veuillez entrer un nom pour votre code QR",
+        "linkRequired": "Veuillez sélectionner un lien",
+        "customUrlRequired": "Veuillez entrer une URL personnalisée"
+      }
+    },
+    "qrCodeItem": {
+      "inactive": "Inactif",
+      "created": "Créé le { date }",
+      "lastScanned": "Dernier scan le { date }",
+      "scanUrl": "URL de scan :",
+      "scans": "{ count } scans",
+      "neverScanned": "Jamais scanné",
+      "active": "Actif",
+      "actions": {
+        "open": "Ouvrir",
+        "download": "Télécharger",
+        "delete": "Supprimer"
+      }
+    }
   }
 }

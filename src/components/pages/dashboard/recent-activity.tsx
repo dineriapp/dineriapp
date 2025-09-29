@@ -1,18 +1,31 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 const RecentActivity = ({ activityData, activityLoading, name }: { activityData: { activity: { message: string, createdAt: string }[] } | undefined, activityLoading: boolean, name: string }) => {
+    const t = useTranslations("dashboard.recentActivity")
     return (
         <Card className="hover:shadow-md transition-shadow border-slate-200">
             <CardHeader className="pb-3 font-poppins">
-                <CardTitle className="text-slate-900">Recent Activity</CardTitle>
-                <CardDescription className="text-slate-500">Latest activities of your restaurent{" "}<span className="font-bold text-black">{name}</span></CardDescription>
+                <CardTitle className="text-slate-900">
+                    {t("title")}
+                </CardTitle>
+                <CardDescription
+                    dangerouslySetInnerHTML={{ __html: t("description", { name: `<span class="font-bold text-black">${name}</span>` }) }}
+                    className="text-slate-500">
+                </CardDescription>
             </CardHeader>
             <CardContent className="p-0 font-poppins">
                 <div className="px-6 space-y-2">
-                    {activityLoading && <p className="text-sm text-center text-gray-400">Loading...</p>}
+                    {
+                        activityLoading && <p className="text-sm text-center text-gray-400">
+                            {t("loading")}
+                        </p>
+                    }
                     {!activityLoading && activityData?.activity.length === 0 && (
-                        <p className="text-xs text-center text-neutral-500">You don&apos;t have any yet.</p>
+                        <p className="text-xs text-center text-neutral-500">
+                            {t("empty")}
+                        </p>
                     )}
                     {!activityLoading &&
                         activityData?.activity
@@ -26,7 +39,6 @@ const RecentActivity = ({ activityData, activityLoading, name }: { activityData:
                                 </div>
                             ))}
                 </div>
-
             </CardContent>
         </Card>
     )

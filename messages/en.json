@@ -1786,5 +1786,250 @@
         "viewPlansButton": "View All Plans"
       }
     }
+  },
+  "dashboard": {
+    "loadingText": "Loading your dashboard...",
+    "welcomeTitle": "Welcome Back",
+    "welcomeSubtitle": "Manage your restaurant profile and track performance",
+    "stats": {
+      "totalLinks": {
+        "title": "Total Links",
+        "description": "Active links on your page"
+      },
+      "totalMenus": {
+        "title": "Total Menus",
+        "description": "Active menus on your page"
+      },
+      "totalEvents": {
+        "title": "Total Events",
+        "description": "Active events on your page"
+      },
+      "totalFaqs": {
+        "title": "Total Faqs",
+        "description": "Active faq categories on your page"
+      },
+      "visitorsThisMonth": {
+        "title": "Visitors This Month",
+        "description": "Visitors this month"
+      },
+      "totalVisitors": {
+        "title": "Total Visitors",
+        "description": "Total visitors all time"
+      }
+    },
+    "dashboardMobilePreview": {
+      "card": {
+        "title": "Preview",
+        "description": "See how your page looks on mobile devices",
+        "visitButton": "Visit"
+      },
+      "loading": {
+        "links": "Loading.."
+      },
+      "emptyState": {
+        "noLinks": "No links yet add some to see preview."
+      }
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "description": "Common tasks and settings",
+      "buttons": {
+        "addNewLink": "Add new link",
+        "editProfile": "Edit profile",
+        "generateQrCode": "Generate QR code",
+        "viewAnalytics": "View analytics"
+      }
+    },
+    "share": {
+      "title": "Your Restaurant Page",
+      "description": "Share your page with customers",
+      "copyToast": "URL copied to clipboard",
+      "copyButton": "Copy URL",
+      "uniqueUrlInfo": "This is your unique page URL. Share it with your customers to help them find all your important links in one place.",
+      "generateQrCode": "Generate QR Code"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "description": "Latest activities of your restaurant { name }",
+      "loading": "Loading...",
+      "empty": "You don't have any yet."
+    }
+  },
+  "api-activity": {
+    "restaurantView": "Someone viewed the restaurant page.",
+    "linkClick": "Link clicked: { title }",
+    "newReview": "New review by { author }: { rating }⭐",
+    "error": "Failed to fetch activity"
+  },
+  "dashboard-stats": {
+    "loading": "Loading analytics...",
+    "error": {
+      "title": "Unable to load analytics",
+      "message": "Please try refreshing the page"
+    },
+    "noData": {
+      "title": "No data available",
+      "message": "Start sharing your restaurant page to see analytics"
+    },
+    "page": {
+      "title": "Analytics",
+      "subtitle": "Real-time statistics for",
+      "lastUpdated": "Last updated: "
+    },
+    "overviewCards": {
+      "totalLinkViews": {
+        "title": "Total Link Views",
+        "extra": {
+          "thisWeek": "+{ count } this week",
+          "uniquePercent": "{ percent }% unique",
+          "noData": "No data yet"
+        }
+      },
+      "uniqueLinkVisitors": {
+        "title": "Unique Link Visitors",
+        "extra": {
+          "uniquePercent": "{ percent }% unique",
+          "noData": "No data yet"
+        }
+      },
+      "pageViews": {
+        "title": "Page Views",
+        "extra": {
+          "thisWeek": "+{ count } this week"
+        }
+      },
+      "uniquePageVisitors": {
+        "title": "Unique Page Visitors",
+        "extra": {
+          "uniquePercent": "{ percent }% unique",
+          "noData": "No data yet"
+        }
+      }
+    },
+    "linkPerformance": {
+      "title": "Link Performance",
+      "description": "Clicks on link",
+      "noLinks": {
+        "description": "No links created yet",
+        "message": "Create some links to see performance analytics"
+      },
+      "chart": {
+        "totalClicks": "Total Clicks",
+        "uniqueClicks": "Unique Clicks"
+      }
+    },
+    "detailedStats": {
+      "title": "Detailed Statistics",
+      "description": "Breakdown by link",
+      "table": {
+        "link": "Link",
+        "totalClicks": "Total Clicks",
+        "uniqueClicks": "Unique Clicks"
+      }
+    },
+    "deviceBreakdown": {
+      "title": "Device Breakdown",
+      "description": "How visitors access your page",
+      "noData": "No device data available yet",
+      "devices": {
+        "mobile": "Mobile",
+        "desktop": "Desktop",
+        "tablet": "Tablet",
+        "percentageOfTotal": "{ percent }% of total"
+      }
+    }
+  },
+  "qr-codes-page": {
+    "loading": "Loading...",
+    "title": "QR Codes",
+    "subtitle": "Generate and manage branded QR codes for your restaurant",
+    "tabs": {
+      "analytics": "Analytics",
+      "generator": "Generator"
+    },
+    "stats": {
+      "totalQRCodes": "Total QR Codes",
+      "active": "{count} active",
+      "totalScans": "Total Scans",
+      "allTime": "All time",
+      "avgScans": "Avg. Scans",
+      "perQRCode": "Per QR code"
+    },
+    "list": {
+      "title": "Your QR Codes",
+      "description": "Manage and track your generated QR codes",
+      "empty": {
+        "title": "No QR codes yet",
+        "description": "Generate your first QR code to start tracking scans"
+      }
+    },
+    "errors": {
+      "loadErrorTitle": "Error loading QR codes",
+      "loadErrorMessage": "Please try refreshing the page."
+    },
+    "actions": {
+      "copySuccess": "Scan URL copied to clipboard!",
+      "downloadSuccess": "QR code downloaded!",
+      "downloadError": "QR code image not available",
+      "deleteConfirm": "Are you sure you want to delete this QR code?"
+    },
+    "types": {
+      "restaurant_page": "Restaurant Page",
+      "link": "Link",
+      "custom": "Custom URL"
+    },
+    "qrCodeGenerator": {
+      "title": "Generate QR Code",
+      "description": "Create a branded QR code for your restaurant",
+      "form": {
+        "nameLabel": "QR Code Name",
+        "namePlaceholder": "e.g., Main Menu QR Code",
+        "typeLabel": "QR Code Type",
+        "typeOptions": {
+          "restaurant_page": "Restaurant Page",
+          "link": "Existing Link",
+          "custom": "Custom URL"
+        },
+        "linkLabel": "Select Link",
+        "linkPlaceholder": "Choose a link",
+        "customUrlLabel": "Custom URL",
+        "customUrlPlaceholder": "https://example.com",
+        "colorLabel": "Color",
+        "includeLogo": "Include Restaurant Logo",
+        "includeFrame": "Include Frame Text",
+        "frameTextLabel": "Frame Text",
+        "frameTextPlaceholder": "Scan for Menu & More",
+        "submit": "Create QR Code",
+        "submitting": "Creating..."
+      },
+      "preview": {
+        "title": "Preview",
+        "description": "Preview of QR code created.",
+        "generating": "Generating...",
+        "empty": "QR code will appear here",
+        "download": "Download Preview",
+        "downloadSuccess": "QR code preview downloaded!",
+        "downloadError": "No QR code to download"
+      },
+      "errors": {
+        "nameRequired": "Please enter a name for your QR code",
+        "linkRequired": "Please select a link",
+        "customUrlRequired": "Please enter a custom URL"
+      }
+    },
+    "qrCodeItem": {
+      "inactive": "Inactive",
+      "created": "Created { date }",
+      "lastScanned": "Last scanned { date }",
+      "scanUrl": "Scan URL:",
+      "scans": "{ count } scans",
+      "neverScanned": "Never scanned",
+      "active": "Active",
+      "actions": {
+        "open": "Open",
+        "download": "Download",
+        "delete": "Delete"
+      }
+    }
   }
 }

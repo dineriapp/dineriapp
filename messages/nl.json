@@ -1783,5 +1783,250 @@
         "viewPlansButton": "Bekijk alle plannen"
       }
     }
+  },
+  "dashboard": {
+    "loadingText": "Je dashboard wordt geladen...",
+    "welcomeTitle": "Welkom terug",
+    "welcomeSubtitle": "Beheer het profiel van je restaurant en volg de prestaties",
+    "stats": {
+      "totalLinks": {
+        "title": "Totaal aantal links",
+        "description": "Actieve links op je pagina"
+      },
+      "totalMenus": {
+        "title": "Totaal aantal menu’s",
+        "description": "Actieve menu’s op je pagina"
+      },
+      "totalEvents": {
+        "title": "Totaal aantal evenementen",
+        "description": "Actieve evenementen op je pagina"
+      },
+      "totalFaqs": {
+        "title": "Totaal aantal FAQ’s",
+        "description": "Actieve FAQ-categorieën op je pagina"
+      },
+      "visitorsThisMonth": {
+        "title": "Bezoekers deze maand",
+        "description": "Bezoekers van deze maand"
+      },
+      "totalVisitors": {
+        "title": "Totaal aantal bezoekers",
+        "description": "Bezoekers in totaal"
+      }
+    },
+    "dashboardMobilePreview": {
+      "card": {
+        "title": "Voorbeeld",
+        "description": "Bekijk hoe je pagina eruitziet op mobiele apparaten",
+        "visitButton": "Bezoeken"
+      },
+      "loading": {
+        "links": "Laden.."
+      },
+      "emptyState": {
+        "noLinks": "Nog geen links, voeg er een paar toe om het voorbeeld te zien."
+      }
+    },
+    "quickActions": {
+      "title": "Snelle acties",
+      "description": "Veelgebruikte taken en instellingen",
+      "buttons": {
+        "addNewLink": "Nieuwe link toevoegen",
+        "editProfile": "Profiel bewerken",
+        "generateQrCode": "QR-code genereren",
+        "viewAnalytics": "Statistieken bekijken"
+      }
+    },
+    "share": {
+      "title": "Je restaurantpagina",
+      "description": "Deel je pagina met klanten",
+      "copyToast": "URL gekopieerd naar klembord",
+      "copyButton": "URL kopiëren",
+      "uniqueUrlInfo": "Dit is de unieke URL van je pagina. Deel deze met je klanten zodat ze al je belangrijke links op één plek kunnen vinden.",
+      "generateQrCode": "QR-code genereren"
+    },
+    "recentActivity": {
+      "title": "Recente activiteit",
+      "description": "Laatste activiteiten van je restaurant { name }",
+      "loading": "Laden...",
+      "empty": "Je hebt nog geen activiteiten."
+    }
+  },
+  "api-activity": {
+    "restaurantView": "Iemand heeft de restaurantpagina bekeken.",
+    "linkClick": "Link aangeklikt: { title }",
+    "newReview": "Nieuwe recensie van { author }: { rating}⭐",
+    "error": "Activiteit ophalen mislukt"
+  },
+  "dashboard-stats": {
+    "loading": "Analytics laden...",
+    "error": {
+      "title": "Kan analytics niet laden",
+      "message": "Probeer de pagina te vernieuwen"
+    },
+    "noData": {
+      "title": "Geen gegevens beschikbaar",
+      "message": "Deel je restaurantpagina om analytics te bekijken"
+    },
+    "page": {
+      "title": "Analytics",
+      "subtitle": "Realtime statistieken voor",
+      "lastUpdated": "Laatst bijgewerkt: "
+    },
+    "overviewCards": {
+      "totalLinkViews": {
+        "title": "Totale linkweergaven",
+        "extra": {
+          "thisWeek": "+{ count } deze week",
+          "uniquePercent": "{ percent }% uniek",
+          "noData": "Nog geen gegevens"
+        }
+      },
+      "uniqueLinkVisitors": {
+        "title": "Unieke linkbezoekers",
+        "extra": {
+          "uniquePercent": "{ percent }% uniek",
+          "noData": "Nog geen gegevens"
+        }
+      },
+      "pageViews": {
+        "title": "Paginaweergaven",
+        "extra": {
+          "thisWeek": "+{ count } deze week"
+        }
+      },
+      "uniquePageVisitors": {
+        "title": "Unieke paginabezoekers",
+        "extra": {
+          "uniquePercent": "{ percent }% uniek",
+          "noData": "Nog geen gegevens"
+        }
+      }
+    },
+    "linkPerformance": {
+      "title": "Linkprestaties",
+      "description": "Kliks op link",
+      "noLinks": {
+        "description": "Nog geen links aangemaakt",
+        "message": "Maak links aan om prestatie-analytics te bekijken"
+      },
+      "chart": {
+        "totalClicks": "Totale kliks",
+        "uniqueClicks": "Unieke kliks"
+      }
+    },
+    "detailedStats": {
+      "title": "Gedetailleerde statistieken",
+      "description": "Uitsplitsing per link",
+      "table": {
+        "link": "Link",
+        "totalClicks": "Totale kliks",
+        "uniqueClicks": "Unieke kliks"
+      }
+    },
+    "deviceBreakdown": {
+      "title": "Apparaatuitsplitsing",
+      "description": "Hoe bezoekers je pagina openen",
+      "noData": "Nog geen apparaatgegevens beschikbaar",
+      "devices": {
+        "mobile": "Mobiel",
+        "desktop": "Desktop",
+        "tablet": "Tablet",
+        "percentageOfTotal": "{ percent }% van totaal"
+      }
+    }
+  },
+  "qr-codes-page": {
+    "loading": "Laden...",
+    "title": "QR-codes",
+    "subtitle": "Genereer en beheer gepersonaliseerde QR-codes voor je restaurant",
+    "tabs": {
+      "analytics": "Statistieken",
+      "generator": "Generator"
+    },
+    "stats": {
+      "totalQRCodes": "Totaal aantal QR-codes",
+      "active": "{count} actief",
+      "totalScans": "Totaal aantal scans",
+      "allTime": "Altijd",
+      "avgScans": "Gem. scans",
+      "perQRCode": "Per QR-code"
+    },
+    "list": {
+      "title": "Je QR-codes",
+      "description": "Beheer en volg je gegenereerde QR-codes",
+      "empty": {
+        "title": "Nog geen QR-codes",
+        "description": "Genereer je eerste QR-code om scans te volgen"
+      }
+    },
+    "errors": {
+      "loadErrorTitle": "Fout bij het laden van QR-codes",
+      "loadErrorMessage": "Probeer de pagina opnieuw te laden."
+    },
+    "actions": {
+      "copySuccess": "Scan-URL gekopieerd naar klembord!",
+      "downloadSuccess": "QR-code gedownload!",
+      "downloadError": "QR-codeafbeelding niet beschikbaar",
+      "deleteConfirm": "Weet je zeker dat je deze QR-code wilt verwijderen?"
+    },
+    "types": {
+      "restaurant_page": "Restaurantpagina",
+      "link": "Link",
+      "custom": "Aangepaste URL"
+    },
+    "qrCodeGenerator": {
+      "title": "Genereer QR-code",
+      "description": "Maak een gepersonaliseerde QR-code voor je restaurant",
+      "form": {
+        "nameLabel": "Naam van QR-code",
+        "namePlaceholder": "bijv. Hoofdmenu QR-code",
+        "typeLabel": "Type QR-code",
+        "typeOptions": {
+          "restaurant_page": "Restaurantpagina",
+          "link": "Bestaande link",
+          "custom": "Aangepaste URL"
+        },
+        "linkLabel": "Selecteer link",
+        "linkPlaceholder": "Kies een link",
+        "customUrlLabel": "Aangepaste URL",
+        "customUrlPlaceholder": "https://voorbeeld.com",
+        "colorLabel": "Kleur",
+        "includeLogo": "Restaurantlogo opnemen",
+        "includeFrame": "Randtekst opnemen",
+        "frameTextLabel": "Randtekst",
+        "frameTextPlaceholder": "Scan voor menu en meer",
+        "submit": "Maak QR-code",
+        "submitting": "Bezig met aanmaken..."
+      },
+      "preview": {
+        "title": "Voorbeeld",
+        "description": "Voorbeeld van de aangemaakte QR-code.",
+        "generating": "Bezig met genereren...",
+        "empty": "De QR-code verschijnt hier",
+        "download": "Voorbeeld downloaden",
+        "downloadSuccess": "QR-codevoorbeeld gedownload!",
+        "downloadError": "Geen QR-code om te downloaden"
+      },
+      "errors": {
+        "nameRequired": "Voer een naam in voor je QR-code",
+        "linkRequired": "Selecteer een link",
+        "customUrlRequired": "Voer een aangepaste URL in"
+      }
+    },
+    "qrCodeItem": {
+      "inactive": "Inactief",
+      "created": "Gemaakt op { date }",
+      "lastScanned": "Laatst gescand op { date }",
+      "scanUrl": "Scan-URL:",
+      "scans": "{ count } scans",
+      "neverScanned": "Nooit gescand",
+      "active": "Actief",
+      "actions": {
+        "open": "Openen",
+        "download": "Downloaden",
+        "delete": "Verwijderen"
+      }
+    }
   }
 }
