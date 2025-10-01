@@ -5,6 +5,7 @@ import {
     SelectContent,
     SelectItem,
 } from "@/components/ui/select"
+import { useTranslations } from "next-intl"
 
 type RefreshSelectProps = {
     refreshSeconds: number
@@ -15,20 +16,26 @@ export function RefreshIntervalSelect({
     refreshSeconds,
     handleRefreshChange,
 }: RefreshSelectProps) {
+    const t = useTranslations("orders.refreshInterval")
     return (
         <Select
             value={String(refreshSeconds)}
             onValueChange={(value) => handleRefreshChange(Number(value))}
         >
             <SelectTrigger className="bg-white font-semibold">
-                <SelectValue placeholder="Refresh Interval" />
+                <SelectValue placeholder={t("label")} />
             </SelectTrigger>
             <SelectContent>
                 {Array.from({ length: 11 }, (_, i) => {
                     const seconds = i * 60
                     return (
                         <SelectItem key={i} value={String(seconds)}>
-                            {i === 0 ? "Off" : `${i} minute${i > 1 ? "s" : ""}`}
+                            {i === 0
+                                ? t("off")
+                                : i === 1
+                                    ? t("minutes", { count: i })
+                                    : t("minutes_plural", { count: i })
+                            }
                         </SelectItem>
                     )
                 })}

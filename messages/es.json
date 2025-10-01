@@ -2031,5 +2031,148 @@
         "delete": "Eliminar"
       }
     }
+  },
+  "orders": {
+    "title": "Pedidos",
+    "subtitle": "Administra y sigue todos los pedidos de tu restaurante",
+    "loading": "Cargando pedidos...",
+    "error": {
+      "failed": "Error al cargar los pedidos",
+      "tryAgain": "Intentar de nuevo"
+    },
+    "buttons": {
+      "refresh": "Actualizar",
+      "refreshing": "Actualizando...",
+      "changeTimeline": "Cambiar período",
+      "export": "Exportar",
+      "exporting": "Exportando..."
+    },
+    "stats": {
+      "totalOrders": "Pedidos totales",
+      "totalRevenue": "Ingresos totales",
+      "pendingOrders": "Pedidos pendientes",
+      "avgOrderValue": "Valor promedio por pedido",
+      "todayOrders": "{ count } hoy",
+      "todayRevenue": "€{ amount } hoy",
+      "needAttention": "Requiere atención",
+      "perOrder": "Por pedido"
+    },
+    "filters": {
+      "searchPlaceholder": "Buscar por número de pedido, nombre del cliente o correo...",
+      "orderStatus": {
+        "label": "Estado del pedido",
+        "all": "Todos los estados",
+        "pending": "Pendiente",
+        "confirmed": "Confirmado",
+        "preparing": "En preparación",
+        "ready": "Listo",
+        "delivered": "Entregado",
+        "cancelled": "Cancelado"
+      },
+      "paymentStatus": {
+        "label": "Estado del pago",
+        "all": "Todos los pagos",
+        "completed": "Completado",
+        "pending": "Pendiente",
+        "failed": "Fallido",
+        "refunded": "Reembolsado"
+      },
+      "orderType": {
+        "label": "Tipo de pedido",
+        "all": "Todos los tipos",
+        "pickup": "Para llevar",
+        "delivery": "Entrega"
+      },
+      "dateRange": {
+        "label": "Rango de fechas",
+        "all": "Todo el tiempo",
+        "today": "Hoy",
+        "week": "Esta semana",
+        "month": "Este mes"
+      }
+    },
+    "orderTable": {
+      "title": "Pedidos ({ count })",
+      "description": "Administra los pedidos de tu restaurante y actualiza su estado",
+      "headers": {
+        "orderNumber": "Pedido #",
+        "customer": "Cliente",
+        "type": "Tipo",
+        "deliveryTime": "Hora de entrega",
+        "status": "Estado",
+        "payment": "Pago",
+        "total": "Total",
+        "time": "Hora",
+        "actions": "Acciones"
+      },
+      "noOrders": "No se encontraron pedidos que coincidan con tus criterios",
+      "detailsTitle": "Detalles del Pedido - { orderNumber }",
+      "buttons": {
+        "view": "Ver",
+        "updating": "Actualizando...",
+        "cancel": "Cancelar"
+      },
+      "view-dialog": {
+        "orderStatus": "Estado del pedido",
+        "created": "Creado",
+        "customerInfo": "Información del cliente",
+        "orderInfo": "Información del pedido",
+        "orderType": "Tipo de pedido",
+        "estimatedReady": "Hora estimada de preparación",
+        "deliveryInfo": "Información de entrega",
+        "fullAddress": "Dirección completa",
+        "street": "Calle",
+        "city": "Ciudad",
+        "state": "Provincia/Estado",
+        "zip": "Código postal",
+        "gps": "Coordenadas GPS",
+        "notes": "Notas de entrega",
+        "orderItems": "Artículos del pedido",
+        "subtotal": "Subtotal",
+        "tax": "Impuesto",
+        "deliveryFee": "Costo de entrega",
+        "total": "Total",
+        "specialInstructions": "Instrucciones especiales",
+        "paymentInfo": "Información de pago",
+        "paymentStatus": "Estado del pago",
+        "special": "Especial"
+      }
+    },
+    "refreshInterval": {
+      "label": "Intervalo de actualización",
+      "off": "Desactivado",
+      "minutes": "{ count } minuto",
+      "minutes_plural": "{ count } minutos"
+    }
+  },
+  "restaurantSettings": {
+    "saving": "Guardando...",
+    "saveChanges": "Guardar cambios",
+    "saveSuccess": "Configuración actualizada",
+    "saveError": "No se pudieron guardar los cambios",
+    "saveErrorDescription": "Por favor, inténtalo de nuevo.",
+    "invalidFee": "Introduce una tarifa de entrega válida y no negativa.",
+    "invalidTax": "Introduce un porcentaje de impuesto válido entre 0 y 100.",
+    "invalidAmount": "Introduce una cantidad válida y no negativa.",
+    "fields": {
+      "status": {
+        "label": "Estado del restaurante",
+        "placeholder": "Seleccionar estado",
+        "options": {
+          "ALLOKAY": "Todo bien (Abierto)",
+          "DISABLE_DELIVERY": "Desactivar entrega",
+          "DISABLE_PICKUP": "Desactivar recogida",
+          "DISABLE_BOTH": "Desactivar ambos"
+        }
+      },
+      "deliveryFee": {
+        "label": "Tarifa de entrega (€)",
+        "placeholder": "0.00"
+      },
+      "tax": {
+        "label": "Impuesto %",
+        "placeholder": "0.00"
+      }
+    }
   }
 }

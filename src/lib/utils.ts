@@ -1,6 +1,8 @@
-import { RestaurantStatus } from "@prisma/client";
+import { OrderStatus, RestaurantStatus } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { OrderStatusActions } from "./reuseable-data";
+import { Locale } from "@/i18n/routing";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -103,20 +105,14 @@ export const getNextStatus = (currentStatus: string) => {
   }
 };
 
-export const getStatusAction = (currentStatus: string) => {
-  switch (currentStatus) {
-    case "pending":
-      return "Confirm Order";
-    case "confirmed":
-      return "Start Preparing";
-    case "preparing":
-      return "Mark as Ready";
-    case "ready":
-      return "Mark as Delivered";
-    default:
-      return null;
-  }
+export const getStatusAction = (
+  status: OrderStatus,
+  locale: Locale
+) => {
+  return OrderStatusActions[locale]?.[status] ?? null;
 };
+
+
 
 export const SaveChangesBtnClasses = "bg-main-green cursor-pointer rounded-full shadow-lg !px-5 font-poppins !h-[44px] transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl disabled:opacity-50"
 export const ResetChangesBtnClasses = "shadow-lg cursor-pointer transition-all duration-200 !px-5 font-poppins !h-[44px] rounded-full bg-white hover:shadow-xl disabled:opacity-50"

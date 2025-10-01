@@ -2031,5 +2031,148 @@
         "delete": "Delete"
       }
     }
+  },
+  "orders": {
+    "title": "Orders",
+    "subtitle": "Manage and track all your restaurant orders",
+    "loading": "Loading orders...",
+    "error": {
+      "failed": "Failed to load orders",
+      "tryAgain": "Try Again"
+    },
+    "buttons": {
+      "refresh": "Refresh",
+      "refreshing": "Refreshing...",
+      "changeTimeline": "Change Timeline",
+      "export": "Export",
+      "exporting": "Exporting..."
+    },
+    "stats": {
+      "totalOrders": "Total Orders",
+      "totalRevenue": "Total Revenue",
+      "pendingOrders": "Pending Orders",
+      "avgOrderValue": "Avg Order Value",
+      "todayOrders": "{ count } today",
+      "todayRevenue": "€{ amount } today",
+      "needAttention": "Need attention",
+      "perOrder": "Per order"
+    },
+    "filters": {
+      "searchPlaceholder": "Search by order number, customer name, or email...",
+      "orderStatus": {
+        "label": "Order Status",
+        "all": "All Status",
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "preparing": "Preparing",
+        "ready": "Ready",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "paymentStatus": {
+        "label": "Payment Status",
+        "all": "All Payments",
+        "completed": "Completed",
+        "pending": "Pending",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      },
+      "orderType": {
+        "label": "Order Type",
+        "all": "All Types",
+        "pickup": "Pickup",
+        "delivery": "Delivery"
+      },
+      "dateRange": {
+        "label": "Date Range",
+        "all": "All Time",
+        "today": "Today",
+        "week": "This Week",
+        "month": "This Month"
+      }
+    },
+    "orderTable": {
+      "title": "Orders ({ count })",
+      "description": "Manage your restaurant orders and update their status",
+      "headers": {
+        "orderNumber": "Order #",
+        "customer": "Customer",
+        "type": "Type",
+        "deliveryTime": "Order to be delivered",
+        "status": "Status",
+        "payment": "Payment",
+        "total": "Total",
+        "time": "Time",
+        "actions": "Actions"
+      },
+      "noOrders": "No orders found matching your criteria",
+      "detailsTitle": "Order Details - { orderNumber }",
+      "buttons": {
+        "view": "View",
+        "updating": "Updating...",
+        "cancel": "Cancel"
+      },
+      "view-dialog": {
+        "orderStatus": "Order Status",
+        "created": "Created",
+        "customerInfo": "Customer Information",
+        "orderInfo": "Order Information",
+        "orderType": "Order Type",
+        "estimatedReady": "Estimated Ready Time",
+        "deliveryInfo": "Delivery Information",
+        "fullAddress": "Full Address",
+        "street": "Street",
+        "city": "City",
+        "state": "State",
+        "zip": "ZIP Code",
+        "gps": "GPS Coordinates",
+        "notes": "Delivery Notes",
+        "orderItems": "Order Items",
+        "subtotal": "Subtotal",
+        "tax": "Tax",
+        "deliveryFee": "Delivery Fee",
+        "total": "Total",
+        "specialInstructions": "Special Instructions",
+        "paymentInfo": "Payment Information",
+        "paymentStatus": "Payment Status",
+        "special": "Special"
+      }
+    },
+    "refreshInterval": {
+      "label": "Refresh Interval",
+      "off": "Off",
+      "minutes": "{ count } minute",
+      "minutes_plural": "{ count } minutes"
+    }
+  },
+  "restaurantSettings": {
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "saveSuccess": "Settings updated",
+    "saveError": "Could not save changes",
+    "saveErrorDescription": "Please try again.",
+    "invalidFee": "Please enter a valid non-negative delivery fee.",
+    "invalidTax": "Please enter a valid tax percentage between 0 and 100.",
+    "invalidAmount": "Please enter a valid non-negative amount.",
+    "fields": {
+      "status": {
+        "label": "Restaurant Status",
+        "placeholder": "Select status",
+        "options": {
+          "ALLOKAY": "All Okay (Open)",
+          "DISABLE_DELIVERY": "Disable delivery",
+          "DISABLE_PICKUP": "Disable pickup",
+          "DISABLE_BOTH": "Disable both"
+        }
+      },
+      "deliveryFee": {
+        "label": "Delivery Fee (€)",
+        "placeholder": "0.00"
+      },
+      "tax": {
+        "label": "Tax %",
+        "placeholder": "0.00"
+      }
+    }
   }
 }

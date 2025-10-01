@@ -4,19 +4,22 @@ import { OrderWithItems } from '@/lib/order-queries';
 import { getStatusColor } from '@/lib/utils';
 import { getStatusIcon } from '@/lib/utils-jsx';
 import { Mail, MapPin, Navigation, Phone, Receipt } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import React from 'react'
 
 const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
 
-
+    const t = useTranslations("orders.orderTable.view-dialog")
     return (
         <div className="space-y-6">
             {/* Order Status */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h3 className="text-lg font-semibold">Order Status</h3>
+                    <h3 className="text-lg font-semibold">
+                        {t("orderStatus")}
+                    </h3>
                     <p className="text-sm text-gray-500">
-                        Created {new Date(order.createdAt).toLocaleString()}
+                        {t("created")} {new Date(order.createdAt).toLocaleString()}
                     </p>
                 </div>
                 <Badge
@@ -31,7 +34,9 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-base">Customer Information</CardTitle>
+                        <CardTitle className="text-base">
+                            {t("customerInfo")}
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="flex items-center gap-2">
@@ -52,18 +57,24 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-base">Order Information</CardTitle>
+                        <CardTitle className="text-base">
+                            {t("orderInfo")}
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div>
-                            <p className="text-sm text-gray-600">Order Type</p>
+                            <p className="text-sm text-gray-600">
+                                {t("orderType")}
+                            </p>
                             <Badge variant="outline" className="capitalize">
                                 {order.order_type}
                             </Badge>
                         </div>
                         {order.estimated_ready_time && (
                             <div>
-                                <p className="text-sm text-gray-600">Estimated Ready Time</p>
+                                <p className="text-sm text-gray-600">
+                                    {t("estimatedReady")}
+                                </p>
                                 <p className="text-sm font-medium">
                                     {new Date(order.estimated_ready_time).toLocaleString()}
                                 </p>
@@ -79,31 +90,41 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
                             <MapPin className="h-4 w-4" />
-                            Delivery Information
+                            {t("deliveryInfo")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div>
-                            <p className="text-sm text-gray-600">Full Address</p>
+                            <p className="text-sm text-gray-600">
+                                {t("fullAddress")}
+                            </p>
                             <p className="text-sm font-medium">{order.delivery_address}</p>
                         </div>
 
                         {order.street && (
                             <div className="grid grid-cols-2 gap-4 text-sm">
                                 <div>
-                                    <p className="text-gray-600">Street</p>
+                                    <p className="text-gray-600">
+                                        {t("street")}
+                                    </p>
                                     <p className="font-medium">{order.street}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-600">City</p>
+                                    <p className="text-gray-600">
+                                        {t("city")}
+                                    </p>
                                     <p className="font-medium">{order.city}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-600">State</p>
+                                    <p className="text-gray-600">
+                                        {t("state")}
+                                    </p>
                                     <p className="font-medium">{order.state}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-600">ZIP Code</p>
+                                    <p className="text-gray-600">
+                                        {t("zip")}
+                                    </p>
                                     <p className="font-medium">{order.postal_code}</p>
                                 </div>
                             </div>
@@ -113,7 +134,9 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
                             <div className="flex items-center gap-2">
                                 <Navigation className="h-4 w-4 text-gray-400" />
                                 <div>
-                                    <p className="text-sm text-gray-600">GPS Coordinates</p>
+                                    <p className="text-sm text-gray-600">
+                                        {t("gps")}
+                                    </p>
                                     <p className="text-sm font-medium">
                                         {order.latitude.toFixed(6)}, {order.longitude.toFixed(6)}
                                     </p>
@@ -123,7 +146,9 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
 
                         {order.notes && (
                             <div>
-                                <p className="text-sm text-gray-600">Delivery Notes</p>
+                                <p className="text-sm text-gray-600">
+                                    {t("notes")}
+                                </p>
                                 <p className="text-sm font-medium">{order.notes}</p>
                             </div>
                         )}
@@ -136,7 +161,7 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <Receipt className="h-5 w-5" />
-                        Order Items
+                        {t("orderItems")}
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -194,7 +219,7 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
 
                                     {item.special_requests && (
                                         <p className="text-sm text-blue-600 mt-1">
-                                            Special: {item.special_requests}
+                                            {t("special")}: {item.special_requests}
                                         </p>
                                     )}
 
@@ -231,21 +256,29 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
 
                         <div className="border-t pt-4 space-y-2">
                             <div className="flex justify-between text-sm">
-                                <span>Subtotal</span>
+                                <span>
+                                    {t("subtotal")}
+                                </span>
                                 <span>€{order.subtotal.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                                <span>Tax</span>
+                                <span>
+                                    {t("tax")}
+                                </span>
                                 <span>€{order.tax_amount.toFixed(2)}</span>
                             </div>
                             {order.delivery_fee > 0 && (
                                 <div className="flex justify-between text-sm">
-                                    <span>Delivery Fee</span>
+                                    <span>
+                                        {t("deliveryFee")}
+                                    </span>
                                     <span>€{order.delivery_fee.toFixed(2)}</span>
                                 </div>
                             )}
                             <div className="flex justify-between font-semibold text-lg border-t pt-2">
-                                <span>Total</span>
+                                <span>
+                                    {t("total")}
+                                </span>
                                 <span>€{order.total_amount.toFixed(2)}</span>
                             </div>
                         </div>
@@ -257,7 +290,9 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
             {order.special_instructions && (
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-base">Special Instructions</CardTitle>
+                        <CardTitle className="text-base">
+                            {t("specialInstructions")}
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <p className="text-gray-700">{order.special_instructions}</p>
@@ -268,11 +303,15 @@ const OrderDetailsModel = ({ order }: { order: OrderWithItems }) => {
             {/* Payment Information */}
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-base">Payment Information</CardTitle>
+                    <CardTitle className="text-base">
+                        {t("paymentStatus")}
+                    </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="flex items-center justify-between">
-                        <span>Payment Status</span>
+                        <span>
+                            {t("paymentInfo")}
+                        </span>
                         <Badge
                             className={`${order.payment_status === "completed"
                                 ? "bg-green-100 text-green-800"

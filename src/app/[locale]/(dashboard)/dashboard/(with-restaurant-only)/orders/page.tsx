@@ -31,6 +31,7 @@ import {
   RefreshCw,
   TrendingUp
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -49,7 +50,7 @@ export default function OrdersPage() {
   );
   const refreshOrders = useRefreshOrders(restaurant?.id);
   const exportOrders = useExportOrders(restaurant?.id);
-
+  const t = useTranslations("orders")
   // Filters
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -151,7 +152,7 @@ export default function OrdersPage() {
   // Show loading state when menu is being fetched
   if (isLoading || !restaurant) {
     return (
-      <LoadingUI text="Loading orders..." />
+      <LoadingUI text={t("loading")} />
     );
   }
 
@@ -161,9 +162,11 @@ export default function OrdersPage() {
       <div className="space-y-6 max-w-[1200px] mx-auto py-16">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {t("title")}
+            </h1>
             <p className="text-muted-foreground">
-              Manage and track all your restaurant orders
+              {t("subtitle")}
             </p>
           </div>
         </div>
@@ -171,12 +174,12 @@ export default function OrdersPage() {
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="w-12 h-12 text-red-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Failed to load orders
+              {t("error.failed")}
             </h3>
             <p className="text-gray-600 text-center mb-4">{error.message}</p>
             <Button onClick={handleRefresh} disabled={refreshOrders.isPending}>
               <RefreshCw className="h-4 w-4 mr-2" />
-              Try Again
+              {t("error.tryAgain")}
             </Button>
           </CardContent>
         </Card>
@@ -188,9 +191,11 @@ export default function OrdersPage() {
     <div className="space-y-6 max-w-[1200px] mx-auto px-4 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {t("title")}
+          </h1>
           <p className="text-muted-foreground">
-            Manage and track all your restaurant orders
+            {t("subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -202,7 +207,7 @@ export default function OrdersPage() {
             <RefreshCw
               className={`h-4 w-4  ${isRefetching ? "animate-spin" : ""}`}
             />
-            Refresh
+            {t("buttons.refresh")}
           </Button>
           <RefreshIntervalSelect
             refreshSeconds={refreshSeconds}
@@ -214,7 +219,7 @@ export default function OrdersPage() {
           >
             <Button variant="outline">
               <Clock4 className="h-4 w-4 " />
-              Change Timeline{" "}
+              {t("buttons.changeTimeline")}
             </Button>
           </Link>
           <Button
@@ -223,7 +228,7 @@ export default function OrdersPage() {
             disabled={exportOrders.isPending}
           >
             <Download className="h-4 w-4 " />
-            {exportOrders.isPending ? "Exporting..." : "Export"}
+            {exportOrders.isPending ? t("buttons.exporting") : t("buttons.export")}
           </Button>
         </div>
       </div>
@@ -250,14 +255,14 @@ export default function OrdersPage() {
             <Card className="box-shad-every-2">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Total Orders
+                  {t("stats.totalOrders")}
                 </CardTitle>
                 <Package className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.total_orders}</div>
                 <p className="text-xs text-muted-foreground">
-                  {stats.today_orders} today
+                  {t("stats.todayOrders", { count: stats.today_orders })}
                 </p>
               </CardContent>
             </Card>
@@ -265,16 +270,17 @@ export default function OrdersPage() {
             <Card className="box-shad-every-2">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Total Revenue
+                  {t("stats.totalRevenue")}
                 </CardTitle>
                 <Euro className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
                   €{stats.total_revenue.toFixed(2)}
+
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  €{stats.today_revenue.toFixed(2)} today
+                  {t("stats.todayRevenue", { amount: stats.today_revenue.toFixed(2) })}
                 </p>
               </CardContent>
             </Card>
@@ -282,20 +288,22 @@ export default function OrdersPage() {
             <Card className="box-shad-every-2">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Pending Orders
+                  {t("stats.pendingOrders")}
                 </CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.pending_orders}</div>
-                <p className="text-xs text-muted-foreground">Need attention</p>
+                <p className="text-xs text-muted-foreground">
+                  {t("stats.needAttention")}
+                </p>
               </CardContent>
             </Card>
 
             <Card className="box-shad-every-2">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Avg Order Value
+                  {t("stats.avgOrderValue")}
                 </CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
@@ -303,7 +311,9 @@ export default function OrdersPage() {
                 <div className="text-2xl font-bold">
                   €{stats.average_order_value.toFixed(2)}
                 </div>
-                <p className="text-xs text-muted-foreground">Per order</p>
+                <p className="text-xs text-muted-foreground">
+                  {t("stats.perOrder")}
+                </p>
               </CardContent>
             </Card>
           </>

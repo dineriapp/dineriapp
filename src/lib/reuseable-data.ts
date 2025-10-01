@@ -647,3 +647,56 @@ export const SettingsSidebarTabs = {
         },
     ],
 };
+
+
+export const OrderStatusActions = {
+    en: {
+        pending: "Confirm Order",
+        confirmed: "Start Preparing",
+        preparing: "Mark as Ready",
+        ready: "Mark as Delivered",
+        delivered: "Delivered",
+        cancelled: "Cancelled",
+    },
+    de: {
+        pending: "Bestellung bestätigen",
+        confirmed: "Zubereitung starten",
+        preparing: "Als fertig markieren",
+        ready: "Als geliefert markieren",
+        delivered: "Geliefert",
+        cancelled: "Storniert",
+    },
+    es: {
+        pending: "Confirmar pedido",
+        confirmed: "Comenzar preparación",
+        preparing: "Marcar como listo",
+        ready: "Marcar como entregado",
+        delivered: "Entregado",
+        cancelled: "Cancelado",
+    },
+    fr: {
+        pending: "Confirmer la commande",
+        confirmed: "Commencer la préparation",
+        preparing: "Marquer comme prêt",
+        ready: "Marquer comme livré",
+        delivered: "Livré",
+        cancelled: "Annulé",
+    },
+    it: {
+        pending: "Conferma ordine",
+        confirmed: "Inizia preparazione",
+        preparing: "Segna come pronto",
+        ready: "Segna come consegnato",
+        delivered: "Consegnato",
+        cancelled: "Annullato",
+    },
+    nl: {
+        pending: "Bestelling bevestigen",
+        confirmed: "Start met bereiden",
+        preparing: "Markeer als klaar",
+        ready: "Markeer als geleverd",
+        delivered: "Geleverd",
+        cancelled: "Geannuleerd",
+    },
+};
+

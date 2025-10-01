@@ -9,6 +9,7 @@ import {
     SelectItem,
 } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
+import { useTranslations } from 'next-intl'
 
 type OrderFiltersProps = {
     searchTerm: string
@@ -35,6 +36,7 @@ const OrderFilters = ({
     dateFilter,
     setDateFilter,
 }: OrderFiltersProps) => {
+    const t = useTranslations("orders.filters")
     return (
         <Card>
             <CardContent className="px-6">
@@ -42,7 +44,7 @@ const OrderFilters = ({
                     <div className="relative flex-1">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                         <Input
-                            placeholder="Search by order number, customer name, or email..."
+                            placeholder={t("searchPlaceholder")}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-10"
@@ -52,16 +54,30 @@ const OrderFilters = ({
                     <div className="flex flex-wrap gap-2">
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
                             <SelectTrigger className="w-40">
-                                <SelectValue placeholder="Order Status" />
+                                <SelectValue placeholder={t("orderStatus.label")} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">All Status</SelectItem>
-                                <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="confirmed">Confirmed</SelectItem>
-                                <SelectItem value="preparing">Preparing</SelectItem>
-                                <SelectItem value="ready">Ready</SelectItem>
-                                <SelectItem value="delivered">Delivered</SelectItem>
-                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                                <SelectItem value="all">
+                                    {t("orderStatus.all")}
+                                </SelectItem>
+                                <SelectItem value="pending">
+                                    {t("orderStatus.pending")}
+                                </SelectItem>
+                                <SelectItem value="confirmed">
+                                    {t("orderStatus.confirmed")}
+                                </SelectItem>
+                                <SelectItem value="preparing">
+                                    {t("orderStatus.preparing")}
+                                </SelectItem>
+                                <SelectItem value="ready">
+                                    {t("orderStatus.ready")}
+                                </SelectItem>
+                                <SelectItem value="delivered">
+                                    {t("orderStatus.delivered")}
+                                </SelectItem>
+                                <SelectItem value="cancelled">
+                                    {t("orderStatus.cancelled")}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
 
@@ -70,14 +86,24 @@ const OrderFilters = ({
                             onValueChange={setPaymentStatusFilter}
                         >
                             <SelectTrigger className="w-40">
-                                <SelectValue placeholder="Payment Status" />
+                                <SelectValue placeholder={t("paymentStatus.label")} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">All Payments</SelectItem>
-                                <SelectItem value="completed">Completed</SelectItem>
-                                <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="failed">Failed</SelectItem>
-                                <SelectItem value="refunded">Refunded</SelectItem>
+                                <SelectItem value="all">
+                                    {t("paymentStatus.all")}
+                                </SelectItem>
+                                <SelectItem value="completed">
+                                    {t("paymentStatus.completed")}
+                                </SelectItem>
+                                <SelectItem value="pending">
+                                    {t("paymentStatus.pending")}
+                                </SelectItem>
+                                <SelectItem value="failed">
+                                    {t("paymentStatus.failed")}
+                                </SelectItem>
+                                <SelectItem value="refunded">
+                                    {t("paymentStatus.refunded")}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
 
@@ -86,24 +112,39 @@ const OrderFilters = ({
                             onValueChange={setOrderTypeFilter}
                         >
                             <SelectTrigger className="w-32">
-                                <SelectValue placeholder="Order Type" />
+                                <SelectValue placeholder={t("orderType.label")}
+                                />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">All Types</SelectItem>
-                                <SelectItem value="pickup">Pickup</SelectItem>
-                                <SelectItem value="delivery">Delivery</SelectItem>
+                                <SelectItem value="all">
+                                    {t("orderType.all")}
+                                </SelectItem>
+                                <SelectItem value="pickup">
+                                    {t("orderType.pickup")}
+                                </SelectItem>
+                                <SelectItem value="delivery">
+                                    {t("orderType.delivery")}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
 
                         <Select value={dateFilter} onValueChange={setDateFilter}>
                             <SelectTrigger className="w-32">
-                                <SelectValue placeholder="Date Range" />
+                                <SelectValue placeholder={t("dateRange.label")} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">All Time</SelectItem>
-                                <SelectItem value="today">Today</SelectItem>
-                                <SelectItem value="week">This Week</SelectItem>
-                                <SelectItem value="month">This Month</SelectItem>
+                                <SelectItem value="all">
+                                    {t("dateRange.all")}
+                                </SelectItem>
+                                <SelectItem value="today">
+                                    {t("dateRange.today")}
+                                </SelectItem>
+                                <SelectItem value="week">
+                                    {t("dateRange.week")}
+                                </SelectItem>
+                                <SelectItem value="month">
+                                    {t("dateRange.month")}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>

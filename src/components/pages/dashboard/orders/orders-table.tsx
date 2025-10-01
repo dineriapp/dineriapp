@@ -28,8 +28,10 @@ import { OrderWithItems, useUpdateOrderStatus } from '@/lib/order-queries';
 import { getNextStatus, getPaymentStatusColor, getStatusAction, getStatusColor } from '@/lib/utils';
 import { getStatusIcon } from '@/lib/utils-jsx';
 import { Restaurant } from '@prisma/client';
-import { Eye } from 'lucide-react';
+import { Check, Eye, X } from 'lucide-react';
 import OrderDetailsModel from './order-details-model';
+import { useLocale, useTranslations } from 'next-intl';
+import { Locale } from '@/i18n/routing';
 
 
 const OrdersTable = ({ orders: filteredOrders, loading: isLoading, restaurant, setSelectedOrder, selectedOrder, }: { orders: OrderWithItems[], loading: boolean, restaurant: Restaurant, setSelectedOrder: (order: OrderWithItems) => void, selectedOrder: OrderWithItems | null }) => {
@@ -37,12 +39,16 @@ const OrdersTable = ({ orders: filteredOrders, loading: isLoading, restaurant, s
     const handleStatusUpdate = (orderId: string, newStatus: string) => {
         updateOrderStatus.mutate({ orderId, status: newStatus });
     };
+    const t = useTranslations("orders.orderTable")
+    const locale = useLocale() as Locale
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Orders ({filteredOrders.length})</CardTitle>
+                <CardTitle>
+                    {t("title", { count: filteredOrders.length })}
+                </CardTitle>
                 <CardDescription>
-                    Manage your restaurant orders and update their status
+                    {t("description")}
                 </CardDescription>
             </CardHeader>
             <CardContent className="grid">
@@ -50,15 +56,33 @@ const OrdersTable = ({ orders: filteredOrders, loading: isLoading, restaurant, s
                     <Table>
                         <TableHeader>
                             <TableRow className='hover:bg-[#EBE3CC]/70'>
-                                <TableHead>Order #</TableHead>
-                                <TableHead>Customer</TableHead>
-                                <TableHead>Type</TableHead>
-                                <TableHead>Order to be delivered</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Payment</TableHead>
-                                <TableHead>Total</TableHead>
-                                <TableHead>Time</TableHead>
-                                <TableHead>Actions</TableHead>
+                                <TableHead>
+                                    {t("headers.orderNumber")}
+                                </TableHead>
+                                <TableHead>
+                                    {t("headers.customer")}
+                                </TableHead>
+                                <TableHead>
+                                    {t("headers.type")}
+                                </TableHead>
+                                <TableHead>
+                                    {t("headers.deliveryTime")}
+                                </TableHead>
+                                <TableHead>
+                                    {t("headers.status")}
+                                </TableHead>
+                                <TableHead>
+                                    {t("headers.payment")}
+                                </TableHead>
+                                <TableHead>
+                                    {t("headers.total")}
+                                </TableHead>
+                                <TableHead>
+                                    {t("headers.time")}
+                                </TableHead>
+                                <TableHead>
+                                    {t("headers.actions")}
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -98,7 +122,7 @@ const OrdersTable = ({ orders: filteredOrders, loading: isLoading, restaurant, s
                                         colSpan={8}
                                         className="text-center py-8 text-gray-500"
                                     >
-                                        No orders found matching your criteria
+                                        {t("noOrders")}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -167,7 +191,7 @@ const OrdersTable = ({ orders: filteredOrders, loading: isLoading, restaurant, s
                                                     <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                                                         <DialogHeader>
                                                             <DialogTitle>
-                                                                Order Details - {order.order_number}
+                                                                {t("detailsTitle", { orderNumber: order.order_number })}
                                                             </DialogTitle>
                                                         </DialogHeader>
                                                         {selectedOrder && (
@@ -190,9 +214,10 @@ const OrdersTable = ({ orders: filteredOrders, loading: isLoading, restaurant, s
                                                             className='bg-main-green text-white cursor-pointer hover:bg-main-green/70 hover:text-white'
                                                             disabled={updateOrderStatus.isPending}
                                                         >
+                                                            <Check size={16} />
                                                             {updateOrderStatus.isPending
-                                                                ? "Updating..."
-                                                                : getStatusAction(order.status)}
+                                                                ? t("buttons.updating")
+                                                                : getStatusAction(order.status, locale)}
                                                         </Button>
                                                     )}
 
@@ -204,10 +229,12 @@ const OrdersTable = ({ orders: filteredOrders, loading: isLoading, restaurant, s
                                                             onClick={() =>
                                                                 handleStatusUpdate(order.id, "cancelled")
                                                             }
+                                                            title={t("buttons.cancel")}
                                                             className='cursor-pointer hover:opacity-70'
                                                             disabled={updateOrderStatus.isPending}
                                                         >
-                                                            Cancel
+                                                            <X size={16} />
+                                                            {t("buttons.cancel")}
                                                         </Button>
                                                     )}
                                             </div>

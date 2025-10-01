@@ -2028,5 +2028,148 @@
         "delete": "Verwijderen"
       }
     }
+  },
+  "orders": {
+    "title": "Bestellingen",
+    "subtitle": "Beheer en volg alle bestellingen van je restaurant",
+    "loading": "Bestellingen laden...",
+    "error": {
+      "failed": "Bestellingen konden niet worden geladen",
+      "tryAgain": "Opnieuw proberen"
+    },
+    "buttons": {
+      "refresh": "Vernieuwen",
+      "refreshing": "Bezig met vernieuwen...",
+      "changeTimeline": "Periode wijzigen",
+      "export": "Exporteren",
+      "exporting": "Bezig met exporteren..."
+    },
+    "stats": {
+      "totalOrders": "Totaal aantal bestellingen",
+      "totalRevenue": "Totale omzet",
+      "pendingOrders": "Openstaande bestellingen",
+      "avgOrderValue": "Gem. bestelwaarde",
+      "todayOrders": "{ count } vandaag",
+      "todayRevenue": "€{ amount } vandaag",
+      "needAttention": "Vereist aandacht",
+      "perOrder": "Per bestelling"
+    },
+    "filters": {
+      "searchPlaceholder": "Zoek op bestelnummer, klantnaam of e-mail...",
+      "orderStatus": {
+        "label": "Bestelstatus",
+        "all": "Alle statussen",
+        "pending": "In afwachting",
+        "confirmed": "Bevestigd",
+        "preparing": "In voorbereiding",
+        "ready": "Klaar",
+        "delivered": "Geleverd",
+        "cancelled": "Geannuleerd"
+      },
+      "paymentStatus": {
+        "label": "Betaalstatus",
+        "all": "Alle betalingen",
+        "completed": "Voltooid",
+        "pending": "In afwachting",
+        "failed": "Mislukt",
+        "refunded": "Terugbetaald"
+      },
+      "orderType": {
+        "label": "Type bestelling",
+        "all": "Alle types",
+        "pickup": "Afhalen",
+        "delivery": "Bezorging"
+      },
+      "dateRange": {
+        "label": "Datumbereik",
+        "all": "Alle periodes",
+        "today": "Vandaag",
+        "week": "Deze week",
+        "month": "Deze maand"
+      }
+    },
+    "orderTable": {
+      "title": "Bestellingen ({ count })",
+      "description": "Beheer de bestellingen van je restaurant en werk hun status bij",
+      "headers": {
+        "orderNumber": "Bestelnummer",
+        "customer": "Klant",
+        "type": "Type",
+        "deliveryTime": "Bezorgtijd",
+        "status": "Status",
+        "payment": "Betaling",
+        "total": "Totaal",
+        "time": "Tijd",
+        "actions": "Acties"
+      },
+      "noOrders": "Geen bestellingen gevonden die aan je criteria voldoen",
+      "detailsTitle": "Bestelgegevens - { orderNumber }",
+      "buttons": {
+        "view": "Bekijken",
+        "updating": "Bezig met bijwerken...",
+        "cancel": "Annuleren"
+      },
+      "view-dialog": {
+        "orderStatus": "Bestelstatus",
+        "created": "Aangemaakt",
+        "customerInfo": "Klantinformatie",
+        "orderInfo": "Bestelinformatie",
+        "orderType": "Type bestelling",
+        "estimatedReady": "Geschatte gereedtijd",
+        "deliveryInfo": "Bezorginformatie",
+        "fullAddress": "Volledig adres",
+        "street": "Straat",
+        "city": "Stad",
+        "state": "Provincie",
+        "zip": "Postcode",
+        "gps": "GPS-coördinaten",
+        "notes": "Bezorgnotities",
+        "orderItems": "Bestelitems",
+        "subtotal": "Subtotaal",
+        "tax": "Belasting",
+        "deliveryFee": "Bezorgkosten",
+        "total": "Totaal",
+        "specialInstructions": "Speciale instructies",
+        "paymentInfo": "Betaalinformatie",
+        "paymentStatus": "Betaalstatus",
+        "special": "Speciaal"
+      }
+    },
+    "refreshInterval": {
+      "label": "Vernieuwingsinterval",
+      "off": "Uit",
+      "minutes": "{ count } minuut",
+      "minutes_plural": "{ count } minuten"
+    }
+  },
+  "restaurantSettings": {
+    "saving": "Opslaan...",
+    "saveChanges": "Wijzigingen opslaan",
+    "saveSuccess": "Instellingen bijgewerkt",
+    "saveError": "Kon wijzigingen niet opslaan",
+    "saveErrorDescription": "Probeer het alstublieft opnieuw.",
+    "invalidFee": "Voer een geldige niet-negatieve bezorgkosten in.",
+    "invalidTax": "Voer een geldig belastingpercentage in tussen 0 en 100.",
+    "invalidAmount": "Voer een geldig niet-negatief bedrag in.",
+    "fields": {
+      "status": {
+        "label": "Restaurantstatus",
+        "placeholder": "Selecteer status",
+        "options": {
+          "ALLOKAY": "Alles in orde (Open)",
+          "DISABLE_DELIVERY": "Bezorging uitschakelen",
+          "DISABLE_PICKUP": "Afhalen uitschakelen",
+          "DISABLE_BOTH": "Beide uitschakelen"
+        }
+      },
+      "deliveryFee": {
+        "label": "Bezorgkosten (€)",
+        "placeholder": "0.00"
+      },
+      "tax": {
+        "label": "Belasting %",
+        "placeholder": "0.00"
+      }
+    }
   }
 }

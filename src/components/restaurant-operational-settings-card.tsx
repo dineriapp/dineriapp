@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useRestaurantStore } from "@/stores/restaurant-store";
 import type { RestaurantStatus } from "@prisma/client";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -15,21 +16,22 @@ function formatToTwoDecimals(n: number) {
     return Math.round(n * 100) / 100;
 }
 
-const STATUS_OPTIONS: { label: string; value: RestaurantStatus }[] = [
-    { label: "All Okay (Open)", value: "ALLOKAY" },
-    { label: "Disable delivery", value: "DISABLE_DELIVERY" },
-    { label: "Disable pickup", value: "DISABLE_PICKUP" },
-    { label: "Disable both", value: "DISABLE_BOTH" },
-];
+
 
 export default function RestaurantOperationalSettingsCard() {
     const { selectedRestaurant: restaurant, updateSelectedRestaurant } = useRestaurantStore();
-
+    const t = useTranslations("restaurantSettings")
     // ----- INITIALS -----
     const initialFee = useMemo(
         () => formatToTwoDecimals(restaurant?.delivery_fee ?? 0),
         [restaurant?.delivery_fee]
     );
+    const STATUS_OPTIONS: { label: string; value: RestaurantStatus }[] = [
+        { label: t("fields.status.options.ALLOKAY"), value: "ALLOKAY" },
+        { label: t("fields.status.options.DISABLE_DELIVERY"), value: "DISABLE_DELIVERY" },
+        { label: t("fields.status.options.DISABLE_PICKUP"), value: "DISABLE_PICKUP" },
+        { label: t("fields.status.options.DISABLE_BOTH"), value: "DISABLE_BOTH" },
+    ];
     const initialTax = useMemo(
         () => formatToTwoDecimals(restaurant?.tax_percentage ?? 0),
         [restaurant?.tax_percentage]
@@ -97,11 +99,11 @@ export default function RestaurantOperationalSettingsCard() {
 
         // Validate before attempting save
         if (hasFeeChanged && feeIsInvalid) {
-            toast.error("Please enter a valid non-negative delivery fee.");
+            toast.error(t("invalidFee"));
             return;
         }
         if (hasTaxChanged && taxIsInvalid) {
-            toast.error("Please enter a valid tax percentage between 0 and 100.");
+            toast.error(t("invalidTax"));
             return;
         }
 
@@ -168,7 +170,7 @@ export default function RestaurantOperationalSettingsCard() {
             // here’s a cheap re-sync:
             // (Skip extra fetch: we already optimistically set correct values)
 
-            toast.success("Settings updated");
+            toast.success(t("saveSuccess"));
         } catch (e: any) {
             // Rollback
             updateSelectedRestaurant({
@@ -179,7 +181,7 @@ export default function RestaurantOperationalSettingsCard() {
             setStatus(prev.status);
             setFeeInput(formatToTwoDecimals(prev.delivery_fee ?? 0).toFixed(2));
 
-            toast.error("Could not save changes", {
+            toast.error(t("saveError"), {
                 description: e?.message ?? "Please try again.",
             });
         } finally {
@@ -192,19 +194,23 @@ export default function RestaurantOperationalSettingsCard() {
             {saving && (
                 <div className="flex items-center justify-center flex-col gap-1 absolute inset-0 bg-white/90">
                     <Loader2 className="animate-spin text-black/50" />
-                    <p className="text-sm text-black/50">Saving...</p>
+                    <p className="text-sm text-black/50">
+                        {t("saving")}
+                    </p>
                 </div>
             )}
 
             {/* Status */}
             <div className="space-y-2 ">
-                <Label>Restaurant Status</Label>
+                <Label>
+                    {t("fields.status.label")}
+                </Label>
                 <Select
                     disabled={saving}
                     value={status}
                     onValueChange={(v) => setStatus(v as RestaurantStatus)}>
                     <SelectTrigger className="w-full bg-white !h-10">
-                        <SelectValue placeholder="Select status" className="!h-10" />
+                        <SelectValue placeholder={t("fields.status.placeholder")} className="!h-10" />
                     </SelectTrigger>
                     <SelectContent>
                         {STATUS_OPTIONS.map((opt) => (
@@ -217,7 +223,9 @@ export default function RestaurantOperationalSettingsCard() {
             </div>
             {/* Delivery Fee */}
             <div className="space-y-2 ">
-                <Label htmlFor="delivery_fee">Delivery Fee (€)</Label>
+                <Label htmlFor="delivery_fee">
+                    {t("fields.deliveryFee.label")}
+                </Label>
                 <div className="flex gap-2">
                     <Input
                         id="delivery_fee"
@@ -229,13 +237,15 @@ export default function RestaurantOperationalSettingsCard() {
                         value={feeInput}
                         onChange={(e) => setFeeInput(e.target.value)}
                         className={feeIsInvalid ? "border-red-500 h-10" : "h-10"}
-                        placeholder="0.00"
+                        placeholder={t("fields.deliveryFee.placeholder")}
                     />
                 </div>
             </div>
             {/* Tax Fee */}
             <div className="space-y-2 ">
-                <Label htmlFor="tax_percentage">Tax %</Label>
+                <Label htmlFor="tax_percentage">
+                    {t("fields.tax.label")}
+                </Label>
                 <div className="flex gap-2">
                     <Input
                         id="tax_percentage"
@@ -247,7 +257,7 @@ export default function RestaurantOperationalSettingsCard() {
                         value={taxInput}
                         onChange={(e) => setTaxInput(e.target.value)}
                         className={taxIsInvalid ? "border-red-500 h-10" : "h-10"}
-                        placeholder="0.00"
+                        placeholder={t("fields.tax.placeholder")}
                     />
                 </div>
             </div>
@@ -258,12 +268,14 @@ export default function RestaurantOperationalSettingsCard() {
                     disabled={saving || (!hasChanges || (hasFeeChanged && feeIsInvalid) || (hasTaxChanged && taxIsInvalid))}
                     className="whitespace-nowrap bg-main-green rounded-full w-full !h-10 hover:bg-main-green/70 cursor-pointer"
                 >
-                    {saving ? "Saving..." : "Save Changes"}
+                    {saving ? t("saving") : t("saveChanges")}
                 </Button>
             </div>
             <div>
                 {feeIsInvalid && (
-                    <p className="text-xs text-red-600">Please enter a valid non-negative amount.</p>
+                    <p className="text-xs text-red-600">
+                        {t("invalidAmount")}
+                    </p>
                 )}
             </div>
         </Card>
