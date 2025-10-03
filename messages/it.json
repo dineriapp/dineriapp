@@ -2171,5 +2171,196 @@
         "placeholder": "0.00"
       }
     }
+  },
+  "LinksPage": {
+    "loadingText": "Caricamento dei tuoi link...",
+    "errorTitle": "Errore durante il caricamento dei link",
+    "errorMessage": "Impossibile caricare i link per { restaurantName }.",
+    "tryAgain": "Riprova",
+    "title": "Gestisci i link",
+    "subtitle": "Aggiungi, modifica o rimuovi i link per ",
+    "bulkDeleteButton": "Elimina selezionati ( { count } )",
+    "bulkDeleteConfirmTitle": "Sei sicuro?",
+    "bulkDeleteConfirmDescription": "Questo eliminerà definitivamente i link selezionati dal tuo ristorante. Questa azione non può essere annullata.",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "addNewLink": "Aggiungi nuovo link",
+    "limitReachedMessage": "Sei limitato a { limit } link con il piano { planName }. Passa a Pro o Enterprise per aggiungerne altri.",
+    "yourLinksTitle": "I tuoi link",
+    "yourLinksDescription": "Seleziona più link per eseguire azioni collettive",
+    "noLinksMessage": "Nessun link aggiunto ancora per { restaurantName }",
+    "clicksLabel": "Clic:",
+    "edit": "Modifica",
+    "deleteSingleConfirmTitle": "Sei sicuro?",
+    "deleteSingleConfirmDescription": "Questa azione non può essere annullata. Questo eliminerà definitivamente il link \"{ linkTitle }\" dalla pagina di { restaurantName }.",
+    "moveUp": "Sposta su",
+    "moveDown": "Sposta giù",
+    "LinkDialog": {
+      "trigger": {
+        "addNewLink": "Aggiungi nuovo link"
+      },
+      "title": {
+        "add": "Aggiungi nuovo link",
+        "edit": "Modifica link"
+      },
+      "description": {
+        "add": "Aggiungi un link alla pagina di { restaurantName }",
+        "edit": "Aggiorna i dettagli del tuo link per { restaurantName }"
+      },
+      "label": {
+        "linkTitle": "Titolo del link",
+        "url": "URL",
+        "icon": "Icona"
+      },
+      "placeholder": {
+        "linkTitle": "es. Visualizza il nostro menu",
+        "url": "es. https://esempio.com/menu",
+        "selectIcon": "Seleziona un'icona"
+      },
+      "buttons": {
+        "cancel": "Annulla",
+        "adding": "Aggiunta in corso...",
+        "saving": "Salvataggio...",
+        "addLink": "Aggiungi link",
+        "saveChanges": "Salva modifiche"
+      }
+    },
+    "EditLinkDialog": {
+      "title": "Modifica link",
+      "description": "Aggiorna i dettagli del tuo link per { restaurantName }",
+      "label": {
+        "linkTitle": "Titolo del link",
+        "url": "URL",
+        "icon": "Icona"
+      },
+      "placeholder": {
+        "selectIcon": "Seleziona un'icona"
+      },
+      "buttons": {
+        "cancel": "Annulla",
+        "saveChanges": "Salva modifiche",
+        "saving": "Salvataggio..."
+      }
+    }
+  },
+  "MenuPage": {
+    "loadingText": "Caricamento del menu...",
+    "errorTitle": "Errore nel caricamento del menu",
+    "errorMessage": "Impossibile caricare il menu di { restaurantName }.",
+    "tryAgain": "Riprova",
+    "title": "Gestione del menu",
+    "subtitle": "Gestisci le categorie e gli elementi del menu per { restaurantName }",
+    "searchPlaceholder": "Cerca elementi del menu...",
+    "addCategory": "Aggiungi categoria",
+    "addItem": "Aggiungi elemento",
+    "quickMenuLabel": "Menu rapido",
+    "editCategory": "Modifica categoria",
+    "deleteCategory": "Elimina categoria",
+    "deleteCategoryDialog": {
+      "title": "Elimina categoria",
+      "description": "Questo eliminerà definitivamente la categoria \"{ categoryName }\" e tutti i suoi elementi dal menu di { restaurantName }. Questa azione non può essere annullata.",
+      "cancel": "Annulla",
+      "confirm": "Elimina"
+    },
+    "moveUp": "Sposta su",
+    "moveDown": "Sposta giù",
+    "categoryLimitMessage": "Sei limitato a { limit } categorie di menu nel piano { planName }. Passa a Pro o Enterprise per aggiungerne di più.",
+    "itemLimitMessage": "Sei limitato a { limit } elementi per categoria nel piano { planName }. Passa a Pro o Enterprise per aggiungerne di più.",
+    "noCategoriesTitle": "Nessuna categoria di menu ancora",
+    "noCategoriesMessage": "Inizia a creare il menu di { restaurantName } creando la tua prima categoria.",
+    "noSearchResults": "Nessun elemento del menu corrisponde alla tua ricerca",
+    "halalLabel": "Halal",
+    "AddCategoryDialog": {
+      "trigger": "Aggiungi categoria",
+      "title": "Aggiungi categoria del menu",
+      "description": "Crea una nuova categoria per gli elementi del tuo menu",
+      "label": {
+        "name": "Nome della categoria",
+        "description": "Descrizione (opzionale)",
+        "showQuickMenu": "Mostra nel menu rapido"
+      },
+      "placeholder": {
+        "name": "es. Antipasti",
+        "description": "Aggiungi una descrizione per questa categoria"
+      },
+      "helperText": {
+        "showQuickMenu": "Attiva questa opzione per mostrare la categoria nel menu rapido."
+      },
+      "buttons": {
+        "cancel": "Annulla",
+        "adding": "Aggiunta in corso...",
+        "addCategory": "Aggiungi categoria"
+      }
+    },
+    "EditCategoryDialog": {
+      "title": "Modifica categoria",
+      "description": "Aggiorna i dettagli della categoria",
+      "label": {
+        "name": "Nome della categoria",
+        "description": "Descrizione (opzionale)",
+        "showQuickMenu": "Mostra nel menu rapido"
+      },
+      "helperText": {
+        "showQuickMenu": "Attiva questa opzione per mostrare la categoria nel menu rapido."
+      },
+      "buttons": {
+        "cancel": "Annulla",
+        "saving": "Salvataggio...",
+        "saveChanges": "Salva modifiche"
+      }
+    },
+    "AddAndEditItemDialog": {
+      "addTitle": "Aggiungi elemento del menu",
+      "editTitle": "Modifica elemento del menu",
+      "addDescription": "Aggiungi un nuovo elemento a { categoryName }",
+      "editDescription": "Aggiorna i dettagli dell'elemento del menu",
+      "itemName": "Nome dell'elemento",
+      "itemNamePlaceholder": "es. Insalata Caesar",
+      "itemPrice": "Prezzo (€)",
+      "itemPricePlaceholder": "0,00",
+      "descriptionLabel": "Descrizione (opzionale)",
+      "descriptionPlaceholder": "Aggiungi una descrizione per questo elemento",
+      "allergens": "Allergeni",
+      "additionalAllergenInfo": "Informazioni aggiuntive sugli allergeni",
+      "additionalAllergenPlaceholder": "Aggiungi eventuali informazioni aggiuntive sugli allergeni",
+      "addons": "Aggiunte",
+      "addonNamePlaceholder": "Nome aggiunta (es. Formaggio extra)",
+      "addonPricePlaceholder": "Prezzo",
+      "addAddonButton": "+ Aggiungi aggiunta",
+      "halalLabel": "Questo elemento è certificato halal",
+      "quickMenuLabel": "Mostra questo elemento nel menu rapido",
+      "cancel": "Annulla",
+      "saveChanges": "Salva modifiche",
+      "addItem": "Aggiungi elemento",
+      "uploading": "Caricamento...",
+      "saving": "Salvataggio...",
+      "adding": "Aggiunta in corso...",
+      "allergensList": {
+        "gluten": "Glutine",
+        "dairy": "Latticini",
+        "nuts": "Frutta secca",
+        "eggs": "Uova",
+        "soy": "Soia",
+        "shellfish": "Crostacei",
+        "fish": "Pesce"
+      }
+    },
+    "halalBadge": "Halal",
+    "quickMenuBadge": "Quick Menu",
+    "allergensBadge": "Allergeni",
+    "availableAddons": "Componenti aggiuntivi disponibili:",
+    "priceSymbol": "€",
+    "editItemButton": "Modifica articolo",
+    "deleteItemButton": "Elimina articolo",
+    "moveUpButton": "Sposta su",
+    "moveDownButton": "Sposta giù",
+    "noItemsMessage": "Nessun articolo in questa categoria ancora",
+    "addFirstItem": "Aggiungi il primo articolo",
+    "deleteDialog": {
+      "title": "Elimina voce di menu",
+      "description": "Questo eliminerà definitivamente \"{ itemName }\" dal menu di { restaurantName }. Questa azione non può essere annullata.",
+      "cancel": "Annulla",
+      "confirm": "Elimina"
+    }
   }
 }

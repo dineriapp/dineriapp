@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
+import { useTranslations } from "next-intl"
 
 interface EditCategoryDialogProps {
     open: boolean
@@ -34,18 +35,25 @@ export default function EditCategoryDialog({
     setSelectedCategory,
     isPending,
 }: EditCategoryDialogProps) {
+    const t = useTranslations("MenuPage.EditCategoryDialog")
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-md">
                 <form onSubmit={handleEditCategory}>
                     <DialogHeader>
-                        <DialogTitle>Edit Category</DialogTitle>
-                        <DialogDescription>Update the category details</DialogDescription>
+                        <DialogTitle>
+                            {t("title")}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {t("description")}
+                        </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="editName">Category Name</Label>
+                            <Label htmlFor="editName">
+                                {t("label.name")}
+                            </Label>
                             <Input
                                 id="editName"
                                 value={categoryName}
@@ -55,7 +63,9 @@ export default function EditCategoryDialog({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="editDescription">Description (Optional)</Label>
+                            <Label htmlFor="editDescription">
+                                {t("label.description")}
+                            </Label>
                             <Textarea
                                 id="editDescription"
                                 value={categoryDescription}
@@ -65,9 +75,11 @@ export default function EditCategoryDialog({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="showQuickMenu">Show in Quick Menu</Label>
+                            <Label htmlFor="showQuickMenu">
+                                {t("label.showQuickMenu")}
+                            </Label>
                             <p className="text-sm text-muted-foreground">
-                                Enable this category to appear in the quick menu.
+                                {t("helperText.showQuickMenu")}
                             </p>
                             <Switch
                                 id="showQuickMenu"
@@ -89,14 +101,14 @@ export default function EditCategoryDialog({
                             className="hover:opacity-75 cursor-pointer rounded-full h-[40px] font-poppins !px-5"
                             disabled={isPending}
                         >
-                            Cancel
+                            {t("buttons.cancel")}
                         </Button>
                         <Button
                             type="submit"
                             disabled={!categoryName || isPending}
                             className="hover:opacity-75 !bg-main-blue cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                         >
-                            {isPending ? "Saving..." : "Save Changes"}
+                            {isPending ? t("buttons.saving") : t("buttons.saveChanges")}
                         </Button>
                     </DialogFooter>
                 </form>

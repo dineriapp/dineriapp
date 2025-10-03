@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface AddCategoryDialogProps {
     isOpen: boolean;
@@ -47,6 +48,7 @@ const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({
     onCancel,
     isPending = false,
 }) => {
+    const t = useTranslations("MenuPage.AddCategoryDialog")
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>
@@ -56,45 +58,53 @@ const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({
                     className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                 >
                     <Plus className="h-4 w-4" />
-                    Add Category
+                    {t("trigger")}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
                 <form onSubmit={onSubmit}>
                     <DialogHeader>
-                        <DialogTitle>Add Menu Category</DialogTitle>
+                        <DialogTitle>
+                            {t("title")}
+                        </DialogTitle>
                         <DialogDescription>
-                            Create a new category for your menu items
+                            {t("description")}
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="name">Category Name</Label>
+                            <Label htmlFor="name">
+                                {t("label.name")}
+                            </Label>
                             <Input
                                 id="name"
                                 value={categoryName}
                                 onChange={(e) => setCategoryName(e.target.value)}
-                                placeholder="e.g. Appetizers"
+                                placeholder={t("placeholder.name")}
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="description">Description (Optional)</Label>
+                            <Label htmlFor="description">
+                                {t("label.description")}
+                            </Label>
                             <Textarea
                                 id="description"
                                 value={categoryDescription}
                                 onChange={(e) => setCategoryDescription(e.target.value)}
-                                placeholder="Add a description for this category"
+                                placeholder={t("placeholder.description")}
                                 rows={3}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="showQuickMenu">Show in Quick Menu</Label>
+                            <Label htmlFor="showQuickMenu">
+                                {t("label.showQuickMenu")}
+                            </Label>
                             <p className="text-sm text-muted-foreground">
-                                Enable this category to appear in the quick menu.
+                                {t("helperText.showQuickMenu")}
                             </p>
                             <Switch
                                 id="showQuickMenu"
@@ -112,14 +122,14 @@ const AddCategoryDialog: React.FC<AddCategoryDialogProps> = ({
                             className="hover:opacity-75 cursor-pointer rounded-full h-[40px] font-poppins !px-5"
                             disabled={isPending}
                         >
-                            Cancel
+                            {t("buttons.cancel")}
                         </Button>
                         <Button
                             type="submit"
                             disabled={!categoryName || isPending || !restaurantId}
                             className="hover:opacity-75 !bg-main-blue cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                         >
-                            {isPending ? "Adding..." : "Add Category"}
+                            {isPending ? t("buttons.adding") : t("buttons.addCategory")}
                         </Button>
                     </DialogFooter>
                 </form>

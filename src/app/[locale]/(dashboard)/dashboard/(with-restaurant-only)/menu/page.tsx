@@ -42,12 +42,13 @@ import { MenuCategory, MenuItem, SubscriptionPlan } from "@prisma/client"
 import { ArrowDown, ArrowUp, Check, Edit, Plus, Search, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 
 export default function MenuPage() {
     const { restaurants, selectedRestaurant } = useRestaurantStore()
     const { prismaUser } = useUserStore()
     const openPopup = useUpgradePopupStore(state => state.open)
-
+    const t = useTranslations("MenuPage")
     const [searchTerm, setSearchTerm] = useState("")
     const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState(false)
     const [isEditCategoryDialogOpen, setIsEditCategoryDialogOpen] = useState(false)
@@ -242,7 +243,7 @@ export default function MenuPage() {
 
     if (isLoading || !selectedRestaurant || !restaurants) {
         return (
-            <LoadingUI text="Loading menu..." />
+            <LoadingUI text={t("loadingText")} />
         )
     }
 
@@ -250,10 +251,14 @@ export default function MenuPage() {
         return (
             <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
                 <div className="text-center">
-                    <h2 className="text-2xl font-semibold text-red-600 mb-2">Error Loading Menu</h2>
-                    <p className="text-slate-500">Failed to load menu for {selectedRestaurant.name}.</p>
+                    <h2 className="text-2xl font-semibold text-red-600 mb-2">
+                        {t("errorTitle")}
+                    </h2>
+                    <p className="text-slate-500">
+                        {t("errorMessage", { restaurantName: selectedRestaurant.name })}
+                    </p>
                     <Button onClick={() => window.location.reload()} className="mt-4" variant="outline">
-                        Try Again
+                        {t("tryAgain")}
                     </Button>
                 </div>
             </div>
@@ -276,12 +281,10 @@ export default function MenuPage() {
                 >
                     <div>
                         <h1 className="text-4xl font-bold text-main-blue">
-                            Menu Management
+                            {t("title")}
                         </h1>
                         <p className="mt-2 text-slate-500">
-                            Manage menu categories and items for{" "}
-
-                            <span className="font-medium text-slate-700">{selectedRestaurant.name}</span>
+                            {t("subtitle", { restaurantName: selectedRestaurant.name })}
                         </p>
                     </div>
 
@@ -289,7 +292,7 @@ export default function MenuPage() {
                         <div className="relative bg-white rounded-full ">
                             <Search className="absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                             <Input
-                                placeholder="Search menu items..."
+                                placeholder={t("searchPlaceholder")}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="pl-12 font-poppins rounded-full w-64 h-[42px]"
@@ -322,12 +325,15 @@ export default function MenuPage() {
                                             const plan = prismaUser?.subscription_plan ?? "basic"
                                             const planName = STRIPE_PLANS[plan].name
                                             const limit = STRIPE_PLANS[plan].limits?.menuCategories
-                                            openPopup(`You are limited to ${limit} menu categories on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`)
+                                            openPopup(t("categoryLimitMessage", {
+                                                limit: limit || "",
+                                                planName: planName
+                                            }))
                                         }}
                                         className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                     >
                                         <Plus className="h-4 w-4" />
-                                        Add Category
+                                        {t("addCategory")}
                                     </Button>
                                 </>
                         }
@@ -344,7 +350,7 @@ export default function MenuPage() {
                                         <CardTitle className="text-xl">{category.name}</CardTitle>
                                         {category.show_in_quick_menu && (
                                             <div className="inline-flex items-center gap-1 rounded-md bg-[#002147] px-2.5 py-1 text-xs font-medium text-white shadow-sm">
-                                                Quick Menu
+                                                {t("quickMenuLabel")}
                                                 <Check className="size-4 text-[#009a5e]" />
                                             </div>
                                         )}
@@ -366,7 +372,9 @@ export default function MenuPage() {
                                             className="h-8 w-8 p-0   bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full"
                                         >
                                             <Edit className="h-4 w-4" />
-                                            <span className="sr-only">Edit category</span>
+                                            <span className="sr-only">
+                                                {t("editCategory")}
+                                            </span>
                                         </Button>
 
                                         <AlertDialog>
@@ -378,23 +386,33 @@ export default function MenuPage() {
                                                     disabled={deleteCategoryMutation.isPending}
                                                 >
                                                     <Trash2 className="h-4 w-4" />
-                                                    <span className="sr-only">Delete category</span>
+                                                    <span className="sr-only">
+                                                        {t("deleteCategory")}
+                                                    </span>
                                                 </Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle>Delete Category</AlertDialogTitle>
+                                                    <AlertDialogTitle>
+                                                        {t("deleteCategoryDialog.title")}
+                                                    </AlertDialogTitle>
                                                     <AlertDialogDescription>
-                                                        This will permanently delete the category &quot;{category.name}&quot; and all its items from{" "}
-                                                        {selectedRestaurant.name}&apos;s menu. This action cannot be undone.
+                                                        {t("deleteCategoryDialog.description",
+                                                            {
+                                                                categoryName: category.name,
+                                                                restaurantName: selectedRestaurant.name
+                                                            }
+                                                        )}
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                    <AlertDialogCancel className="font-poppins rounded-full !px-5">Cancel</AlertDialogCancel>
+                                                    <AlertDialogCancel className="font-poppins rounded-full !px-5">
+                                                        {t("deleteCategoryDialog.cancel")}
+                                                    </AlertDialogCancel>
                                                     <AlertDialogAction
                                                         onClick={() => deleteCategoryMutation.mutate(category.id)}
                                                         className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"                                                    >
-                                                        Delete
+                                                        {t("deleteCategoryDialog.confirm")}
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
@@ -407,7 +425,9 @@ export default function MenuPage() {
                                             disabled={categoryIndex === 0 || reorderCategoryMutation.isPending}
                                             className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                        >
                                             <ArrowUp className="h-4 w-4" />
-                                            <span className="sr-only">Move up</span>
+                                            <span className="sr-only">
+                                                {t("moveUp")}
+                                            </span>
                                         </Button>
 
                                         <Button
@@ -417,7 +437,9 @@ export default function MenuPage() {
                                             disabled={categoryIndex === filteredCategories.length - 1 || reorderCategoryMutation.isPending}
                                             className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                         >
                                             <ArrowDown className="h-4 w-4" />
-                                            <span className="sr-only">Move down</span>
+                                            <span className="sr-only">
+                                                {t("moveDown")}
+                                            </span>
                                         </Button>
                                     </div>
                                 </CardHeader>
@@ -432,7 +454,10 @@ export default function MenuPage() {
 
                                                     if (limit !== undefined && category.items.length >= limit) {
                                                         const planName = STRIPE_PLANS[plan].name;
-                                                        openPopup(`You are limited to ${limit} menu items per category on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`);
+                                                        openPopup(t("itemLimitMessage", {
+                                                            limit: limit,
+                                                            planName: planName
+                                                        }));
                                                     } else {
                                                         setSelectedCategory(category);
                                                         setSelectedItem(null)
@@ -450,7 +475,7 @@ export default function MenuPage() {
                                                 className="flex items-center gap-2 cursor-pointer text-white hover:text-white hover:opacity-75 !bg-main-green rounded-full !px-5 font-poppins h-[42px]"
                                             >
                                                 <Plus className="h-4 w-4" />
-                                                Add Item
+                                                {t("addItem")}
                                             </Button>
                                         }
                                         <MenuCategoryComponent
@@ -480,9 +505,11 @@ export default function MenuPage() {
                     {categories.length === 0 && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-12 text-center">
                             <div className="mx-auto max-w-md">
-                                <h3 className="text-lg font-semibold mb-2">No menu categories yet</h3>
+                                <h3 className="text-lg font-semibold mb-2">
+                                    {t("noCategoriesTitle")}
+                                </h3>
                                 <p className="text-slate-500 mb-6">
-                                    Start building your menu for {selectedRestaurant.name} by creating your first category
+                                    {t("noCategoriesMessage", { restaurantName: selectedRestaurant.name })}
                                 </p>
                             </div>
                         </motion.div>
@@ -490,7 +517,9 @@ export default function MenuPage() {
 
                     {filteredCategories.length === 0 && categories.length > 0 && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-12 text-center">
-                            <p className="text-slate-500">No menu items match your search</p>
+                            <p className="text-slate-500">
+                                {t("noSearchResults")}
+                            </p>
                         </motion.div>
                     )}
                 </motion.div>

@@ -33,16 +33,17 @@ import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { SubscriptionPlan } from "@prisma/client"
-import { ArrowDown, ArrowUp, Edit, Plus, Trash2 } from "lucide-react"
+import { ArrowDown, ArrowUp, Edit, Loader2, Plus, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 
 
 export default function LinksPage() {
     const { restaurants, selectedRestaurant } = useRestaurantStore()
     const { prismaUser } = useUserStore()
     const openPopup = useUpgradePopupStore(state => state.open)
-
+    const t = useTranslations("LinksPage")
     const [newTitle, setNewTitle] = useState("")
     const [newUrl, setNewUrl] = useState("")
     const [editingLink, setEditingLink] = useState<any>(null)
@@ -122,7 +123,7 @@ export default function LinksPage() {
 
     if (restaurants.length === 0 || !selectedRestaurant || isLoading) {
         return (
-            <LoadingUI text="Loading your Link..." />
+            <LoadingUI text={t("loadingText")} />
         )
     }
 
@@ -131,10 +132,14 @@ export default function LinksPage() {
         return (
             <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
                 <div className="text-center">
-                    <h2 className="text-2xl font-semibold text-red-600 mb-2">Error Loading Links</h2>
-                    <p className="text-slate-500">Failed to load links for {selectedRestaurant.name}.</p>
+                    <h2 className="text-2xl font-semibold text-red-600 mb-2">
+                        {t("errorTitle")}
+                    </h2>
+                    <p className="text-slate-500">
+                        {t("errorMessage", { restaurantName: selectedRestaurant.name })}
+                    </p>
                     <Button onClick={() => window.location.reload()} className="mt-4" variant="outline">
-                        Try Again
+                        {t("tryAgain")}
                     </Button>
                 </div>
             </div>
@@ -157,11 +162,12 @@ export default function LinksPage() {
                 >
                     <div>
                         <h1 className=" text-4xl font-bold text-main-blue">
-                            Manage Links
+                            {t("title")}
                         </h1>
-                        <p className="mt-2 text-slate-500">
-                            Add, edit, or remove links for{" "}
-                            <span className="font-medium text-main-green">{selectedRestaurant.name}</span>
+                        <p
+                            className="mt-2 text-slate-500">
+                            {t("subtitle")} <span className="font-medium text-main-green">{selectedRestaurant.name}</span>
+
                         </p>
                     </div>
 
@@ -176,25 +182,28 @@ export default function LinksPage() {
                                         className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-red-500 rounded-full !px-5 font-poppins h-[42px]"
                                     >
                                         <Trash2 className="h-4 w-4" />
-                                        {bulkDeleteMutation.isPending ? "Deleting..." : `Delete Selected (${selectedLinks.size})`}
+                                        {bulkDeleteMutation.isPending ? <Loader2 className="animate-spin" /> : t("bulkDeleteButton", { count: selectedLinks.size })}
                                     </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                        <AlertDialogTitle>
+                                            {t("bulkDeleteConfirmTitle")}
+                                        </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            This will permanently delete {selectedLinks.size} selected link
-                                            {selectedLinks.size > 1 ? "s" : ""} from {selectedRestaurant.name}. This action cannot be undone.
+                                            {t("bulkDeleteConfirmDescription")}
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel disabled={bulkDeleteMutation.isPending}>Cancel</AlertDialogCancel>
+                                        <AlertDialogCancel disabled={bulkDeleteMutation.isPending}>
+                                            {t("cancel")}
+                                        </AlertDialogCancel>
                                         <AlertDialogAction
                                             onClick={handleBulkDelete}
                                             disabled={bulkDeleteMutation.isPending}
                                             className="bg-destructive text-white hover:opacity-80 hover:bg-destructive/90"
                                         >
-                                            {bulkDeleteMutation.isPending ? "Deleting..." : "Delete"}
+                                            {bulkDeleteMutation.isPending ? <Loader2 className="animate-spin" /> : t("delete")}
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -234,12 +243,15 @@ export default function LinksPage() {
                                             const planName = STRIPE_PLANS[plan].name
                                             const limit = STRIPE_PLANS[plan].limits?.links
 
-                                            openPopup(`You are limited to ${limit} links on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`)
+                                            openPopup(t("limitReachedMessage", {
+                                                limit: limit || "",
+                                                planName: planName
+                                            }))
                                         }}
                                         className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                                     >
                                         <Plus className="h-4 w-4" />
-                                        Add new link
+                                        {t("addNewLink")}
                                     </Button>
                                 </>
                         }
@@ -253,9 +265,11 @@ export default function LinksPage() {
                         <CardHeader className="font-poppins">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle className="text-slate-900">Your Links</CardTitle>
+                                    <CardTitle className="text-slate-900">
+                                        {t("yourLinksTitle")}
+                                    </CardTitle>
                                     <CardDescription className="text-slate-500">
-                                        Select multiple links to perform bulk actions
+                                        {t("yourLinksDescription")}
                                     </CardDescription>
                                 </div>
                                 {links.length > 0 && (
@@ -288,7 +302,9 @@ export default function LinksPage() {
                                                     <p className="truncate text-sm text-slate-500">{link.url}</p>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
-                                                    <span className="text-sm font-medium text-gray-700">Clicks:</span>
+                                                    <span className="text-sm font-medium text-gray-700">
+                                                        {t("clicksLabel")}
+                                                    </span>
                                                     <div className="inline-block bg-gray-200 text-gray-800 text-sm font-semibold px-3 py-1 rounded-full shadow-sm">
                                                         {link?._count?.views}
                                                     </div>
@@ -302,7 +318,9 @@ export default function LinksPage() {
                                                         className="h-8 w-8 p-0 bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                     >
                                                         <Edit className="h-4 w-4" />
-                                                        <span className="sr-only">Edit</span>
+                                                        <span className="sr-only">
+                                                            {t("edit")}
+                                                        </span>
                                                     </Button>
 
                                                     <AlertDialog>
@@ -314,24 +332,33 @@ export default function LinksPage() {
                                                                 disabled={deleteMutation.isPending}
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
-                                                                <span className="sr-only">Delete</span>
+                                                                <span className="sr-only">
+                                                                    {t("delete")}
+                                                                </span>
                                                             </Button>
                                                         </AlertDialogTrigger>
                                                         <AlertDialogContent>
                                                             <AlertDialogHeader>
-                                                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                                <AlertDialogTitle>
+                                                                    {t("deleteSingleConfirmTitle")}
+                                                                </AlertDialogTitle>
                                                                 <AlertDialogDescription>
-                                                                    This action cannot be undone. This will permanently delete the link &quot;{link.title}&quot; from{" "}
-                                                                    {selectedRestaurant.name}&apos;s page.
+                                                                    {t("deleteSingleConfirmDescription", {
+                                                                        linkTitle: link.title,
+                                                                        restaurantName: selectedRestaurant.name
+                                                                    })
+                                                                    }
                                                                 </AlertDialogDescription>
                                                             </AlertDialogHeader>
                                                             <AlertDialogFooter>
-                                                                <AlertDialogCancel className="font-poppins rounded-full !px-5">Cancel</AlertDialogCancel>
+                                                                <AlertDialogCancel className="font-poppins rounded-full !px-5">
+                                                                    {t("cancel")}
+                                                                </AlertDialogCancel>
                                                                 <AlertDialogAction
                                                                     onClick={() => deleteMutation.mutate(link.id)}
                                                                     className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"
                                                                 >
-                                                                    Delete
+                                                                    {t("delete")}
                                                                 </AlertDialogAction>
                                                             </AlertDialogFooter>
                                                         </AlertDialogContent>
@@ -345,7 +372,9 @@ export default function LinksPage() {
                                                         className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                                     >
                                                         <ArrowUp className="h-4 w-4" />
-                                                        <span className="sr-only">Move up</span>
+                                                        <span className="sr-only">
+                                                            {t("moveUp")}
+                                                        </span>
                                                     </Button>
 
                                                     <Button
@@ -355,7 +384,9 @@ export default function LinksPage() {
                                                         disabled={index === links.length - 1 || reorderMutation.isPending}
                                                         className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"                                                    >
                                                         <ArrowDown className="h-4 w-4" />
-                                                        <span className="sr-only">Move down</span>
+                                                        <span className="sr-only">
+                                                            {t("moveDown")}
+                                                        </span>
                                                     </Button>
                                                 </div>
                                             </div>
@@ -370,7 +401,9 @@ export default function LinksPage() {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="py-12 text-center"
                                 >
-                                    <p className="mb-3 text-sm text-slate-500">No links added yet for {selectedRestaurant.name}</p>
+                                    <p className="mb-3 text-sm text-slate-500">
+                                        {t("noLinksMessage", { restaurantName: selectedRestaurant.name })}
+                                    </p>
                                 </motion.div>
                             )}
                         </CardContent>

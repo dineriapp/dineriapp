@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Leaf, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 export interface Addon {
@@ -69,31 +70,40 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
     createItemPending,
 }) => {
     const allergenList = ["gluten", "dairy", "nuts", "eggs", "soy", "shellfish", "fish"];
-
+    const t = useTranslations("MenuPage.AddAndEditItemDialog")
     return (
         <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
             <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
                 <form onSubmit={onSubmit}>
                     <DialogHeader>
-                        <DialogTitle>Add Menu Item</DialogTitle>
-                        <DialogDescription>Add a new item to {categoryName}</DialogDescription>
+                        <DialogTitle>
+                            {t("addTitle")}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {t("addDescription", { categoryName: categoryName || "" })}
+                        </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         {/* Name & Price */}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="itemName">Item Name</Label>
+                                <Label htmlFor="itemName">
+                                    {t("itemName")}
+                                </Label>
                                 <Input
                                     id="itemName"
                                     value={newItemName}
                                     onChange={(e) => setNewItemName(e.target.value)}
-                                    placeholder="e.g. Caesar Salad"
+                                    placeholder={t("itemNamePlaceholder")}
                                     required
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="itemPrice">Price (€)</Label>
+                                <Label htmlFor="itemPrice">
+                                    {t("itemPrice")}
+
+                                </Label>
                                 <Input
                                     id="itemPrice"
                                     type="number"
@@ -101,7 +111,7 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
                                     min="0"
                                     value={newItemPrice}
                                     onChange={(e) => setNewItemPrice(e.target.value)}
-                                    placeholder="0.00"
+                                    placeholder={t("itemPricePlaceholder")}
                                     required
                                 />
                             </div>
@@ -109,19 +119,24 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
 
                         {/* Description */}
                         <div className="space-y-2">
-                            <Label htmlFor="itemDescription">Description (Optional)</Label>
+                            <Label htmlFor="itemDescription">
+                                {t("descriptionLabel")}
+
+                            </Label>
                             <Textarea
                                 id="itemDescription"
                                 value={newItemDescription}
                                 onChange={(e) => setNewItemDescription(e.target.value)}
-                                placeholder="Add a description for this item"
+                                placeholder={t("descriptionPlaceholder")}
                                 rows={3}
                             />
                         </div>
 
                         {/* Allergens */}
                         <div className="space-y-2">
-                            <Label>Allergens</Label>
+                            <Label>
+                                {t("allergens")}
+                            </Label>
                             <div className="flex flex-wrap gap-2">
                                 {allergenList.map((allergen) => (
                                     <Button
@@ -136,7 +151,7 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
                                         }
                                         className={`capitalize ${allergens.includes(allergen) ? "bg-main-green" : ""}`}
                                     >
-                                        {allergen}
+                                        {t(`allergensList.${allergen}`)}
                                     </Button>
                                 ))}
                             </div>
@@ -144,23 +159,27 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
 
                         {/* Additional Allergen Info */}
                         <div className="space-y-2">
-                            <Label htmlFor="allergenInfo">Additional Allergen Information</Label>
+                            <Label htmlFor="allergenInfo">
+                                {t(`additionalAllergenInfo`)}
+                            </Label>
                             <Textarea
                                 id="allergenInfo"
                                 value={allergenInfo}
                                 onChange={(e) => setAllergenInfo(e.target.value)}
-                                placeholder="Add any additional allergen information"
+                                placeholder={t(`additionalAllergenPlaceholder`)}
                                 rows={2}
                             />
                         </div>
 
                         {/* Addons */}
                         <div className="space-y-2">
-                            <Label>Addons</Label>
+                            <Label>
+                                {t(`addons`)}
+                            </Label>
                             {addons.map((addon, index) => (
                                 <div key={index} className="grid grid-cols-4 gap-2">
                                     <Input
-                                        placeholder="Addon Name (e.g. Extra Cheese)"
+                                        placeholder={t(`addonNamePlaceholder`)}
                                         value={addon.name}
                                         className="col-span-2"
                                         onChange={(e) => {
@@ -170,7 +189,7 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
                                         }}
                                     />
                                     <Input
-                                        placeholder="Price"
+                                        placeholder={t(`addonPricePlaceholder`)}
                                         type="number"
                                         step="0.01"
                                         min="0"
@@ -202,7 +221,7 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
                                 onClick={() => setAddons([...addons, { name: "", price: 0 }])}
                                 className="hover:opacity-75 !bg-main-green text-white cursor-pointer rounded-full h-[38px] !text-xs font-poppins !px-4"
                             >
-                                + Add Addon
+                                {t(`addAddonButton`)}
                             </Button>
                         </div>
 
@@ -215,7 +234,7 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
                             />
                             <Label htmlFor="isHalal" className="flex items-center gap-2">
                                 <Leaf className="h-4 w-4 text-green-600" />
-                                This item is Halal certified
+                                {t(`halalLabel`)}
                             </Label>
                         </div>
 
@@ -226,7 +245,7 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
                                 onCheckedChange={(checked) => setShowInQuickMenu(checked as boolean)}
                             />
                             <Label htmlFor="showInQuickMenu" className="flex items-center gap-2">
-                                Show this item in Quick Menu
+                                {t(`quickMenuLabel`)}
                             </Label>
                         </div>
                     </div>
@@ -239,14 +258,14 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
                             className="hover:opacity-75 h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                             disabled={createItemPending}
                         >
-                            Cancel
+                            {t(`cancel`)}
                         </Button>
                         <Button
                             type="submit"
                             disabled={!newItemName || !newItemPrice || createItemPending || isUploading}
                             className="hover:opacity-75 !bg-main-blue cursor-pointer rounded-full h-[40px] font-poppins !px-5"
                         >
-                            {isUploading ? "Uploading..." : createItemPending ? "Adding..." : "Add Item"}
+                            {isUploading ? t(`uploading`) : createItemPending ? t(`adding`) : t(`addItem`)}
                         </Button>
                     </DialogFooter>
                 </form>

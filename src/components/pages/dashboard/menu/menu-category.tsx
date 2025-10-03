@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MenuCategory as MenuItemType, MenuItem } from "@prisma/client";
 import { AlertTriangle, ArrowDown, ArrowUp, Edit, Leaf, Plus, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface Addon {
     name: string;
@@ -52,6 +53,9 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
     deleteItemMutation,
     reorderItemMutation,
 }) => {
+
+    const t = useTranslations("MenuPage")
+
     return (
         <>
             {category.items && category.items.length > 0 ? (
@@ -74,11 +78,13 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
                                                 title="Halal certified"
                                             >
                                                 <Leaf className="h-3 w-3" />
-                                                Halal
+                                                {t("halalBadge")}
                                             </span>
                                         )}
                                         {item.show_in_quick_menu && (
-                                            <Badge className="bg-primary text-white">Quick Menu</Badge>
+                                            <Badge className="bg-primary text-white">
+                                                {t("quickMenuBadge")}
+                                            </Badge>
                                         )}
                                     </div>
                                     {item.description && <p className="text-sm text-slate-500 mb-2">{item.description}</p>}
@@ -89,14 +95,16 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
                                                 title={`Contains allergens`}
                                             >
                                                 <AlertTriangle className="h-3 w-3" />
-                                                Allergens
+                                                {t("allergensBadge")}
                                             </span>
                                         </div>
                                     )}
                                     {/* Addons */}
                                     {item.addons && parsedAddons.length > 0 && (
                                         <div>
-                                            <h3 className="text-xs mt-2 font-medium mb-1">Available Addons:</h3>
+                                            <h3 className="text-xs mt-2 font-medium mb-1">
+                                                {t("availableAddons")}
+                                            </h3>
                                             <ul className="list-disc list-inside text-xs text-gray-700">
                                                 {parsedAddons.map((addon, index) => (
                                                     <li key={index}>
@@ -132,7 +140,9 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
                                         className="h-8 w-8 p-0 bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                     >
                                         <Edit className="h-4 w-4" />
-                                        <span className="sr-only">Edit item</span>
+                                        <span className="sr-only">
+                                            {t("editItemButton")}
+                                        </span>
                                     </Button>
 
                                     <AlertDialog>
@@ -144,24 +154,33 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
                                                 disabled={deleteItemMutation.isPending}
                                             >
                                                 <Trash2 className="h-4 w-4" />
-                                                <span className="sr-only">Delete item</span>
+                                                <span className="sr-only">
+                                                    {t("deleteItemButton")}
+                                                </span>
                                             </Button>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent>
                                             <AlertDialogHeader>
-                                                <AlertDialogTitle>Delete Menu Item</AlertDialogTitle>
+                                                <AlertDialogTitle>
+                                                    {t("deleteDialog.title")}
+                                                </AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    This will permanently delete &quot;{item.name}&quot; from {selectedRestaurant.name}&apos;s menu.
-                                                    This action cannot be undone.
+                                                    {t("deleteDialog.description", {
+                                                        itemName: item.name,
+                                                        restaurantName: selectedRestaurant.name
+
+                                                    })}
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
-                                                <AlertDialogCancel className="font-poppins rounded-full !px-5">Cancel</AlertDialogCancel>
+                                                <AlertDialogCancel className="font-poppins rounded-full !px-5">
+                                                    {t("deleteDialog.cancel")}
+                                                </AlertDialogCancel>
                                                 <AlertDialogAction
                                                     onClick={() => deleteItemMutation.mutate(item.id)}
                                                     className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"
                                                 >
-                                                    Delete
+                                                    {t("deleteDialog.confirm")}
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
@@ -175,7 +194,9 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
                                         className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                     >
                                         <ArrowUp className="h-4 w-4" />
-                                        <span className="sr-only">Move up</span>
+                                        <span className="sr-only">
+                                            {t("moveUpButton")}
+                                        </span>
                                     </Button>
 
                                     <Button
@@ -186,7 +207,9 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
                                         className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                     >
                                         <ArrowDown className="h-4 w-4" />
-                                        <span className="sr-only">Move down</span>
+                                        <span className="sr-only">
+                                            {t("moveDownButton")}
+                                        </span>
                                     </Button>
                                 </div>
                             </div>
@@ -195,7 +218,9 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
                 </div>
             ) : (
                 <div className="py-8 text-center">
-                    <p className="text-slate-500 mb-4">No items in this category yet</p>
+                    <p className="text-slate-500 mb-4">
+                        {t("noItemsMessage")}
+                    </p>
                     <Button
                         variant="outline"
                         onClick={() => {
@@ -214,7 +239,7 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
                         className="flex items-center gap-2 cursor-pointer text-white hover:text-white hover:opacity-75 !bg-main-green rounded-full !px-5 font-poppins h-[42px] mx-auto"
                     >
                         <Plus className="h-4 w-4" />
-                        Add First Item
+                        {t("addFirstItem")}
                     </Button>
                 </div>
             )}

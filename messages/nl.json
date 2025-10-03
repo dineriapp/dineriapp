@@ -2171,5 +2171,196 @@
         "placeholder": "0.00"
       }
     }
+  },
+  "LinksPage": {
+    "loadingText": "Je links worden geladen...",
+    "errorTitle": "Fout bij het laden van links",
+    "errorMessage": "Het is niet gelukt om links te laden voor { restaurantName }.",
+    "tryAgain": "Opnieuw proberen",
+    "title": "Links beheren",
+    "subtitle": "Voeg links toe, bewerk of verwijder ze voor ",
+    "bulkDeleteButton": "Geselecteerde verwijderen ( { count } )",
+    "bulkDeleteConfirmTitle": "Weet je het zeker?",
+    "bulkDeleteConfirmDescription": "Dit verwijdert de geselecteerde links permanent uit je restaurant. Deze actie kan niet ongedaan worden gemaakt.",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "addNewLink": "Nieuwe link toevoegen",
+    "limitReachedMessage": "Je bent beperkt tot { limit } links met het { planName }-abonnement. Upgrade naar Pro of Enterprise om meer toe te voegen.",
+    "yourLinksTitle": "Jouw links",
+    "yourLinksDescription": "Selecteer meerdere links om bulkacties uit te voeren",
+    "noLinksMessage": "Nog geen links toegevoegd voor { restaurantName }",
+    "clicksLabel": "Kliks:",
+    "edit": "Bewerken",
+    "deleteSingleConfirmTitle": "Weet je het zeker?",
+    "deleteSingleConfirmDescription": "Deze actie kan niet ongedaan worden gemaakt. Dit zal de link \"{ linkTitle }\" permanent verwijderen van de pagina van { restaurantName }.",
+    "moveUp": "Omhoog verplaatsen",
+    "moveDown": "Omlaag verplaatsen",
+    "LinkDialog": {
+      "trigger": {
+        "addNewLink": "Nieuwe link toevoegen"
+      },
+      "title": {
+        "add": "Nieuwe link toevoegen",
+        "edit": "Link bewerken"
+      },
+      "description": {
+        "add": "Voeg een link toe aan de pagina van { restaurantName }",
+        "edit": "Werk de details van je link bij voor { restaurantName }"
+      },
+      "label": {
+        "linkTitle": "Linktitel",
+        "url": "URL",
+        "icon": "Icoon"
+      },
+      "placeholder": {
+        "linkTitle": "bijv. Bekijk ons menu",
+        "url": "bijv. https://voorbeeld.com/menu",
+        "selectIcon": "Selecteer een icoon"
+      },
+      "buttons": {
+        "cancel": "Annuleren",
+        "adding": "Bezig met toevoegen...",
+        "saving": "Bezig met opslaan...",
+        "addLink": "Link toevoegen",
+        "saveChanges": "Wijzigingen opslaan"
+      }
+    },
+    "EditLinkDialog": {
+      "title": "Link bewerken",
+      "description": "Werk de details van je link bij voor { restaurantName }",
+      "label": {
+        "linkTitle": "Linktitel",
+        "url": "URL",
+        "icon": "Icoon"
+      },
+      "placeholder": {
+        "selectIcon": "Selecteer een icoon"
+      },
+      "buttons": {
+        "cancel": "Annuleren",
+        "saveChanges": "Wijzigingen opslaan",
+        "saving": "Bezig met opslaan..."
+      }
+    }
+  },
+  "MenuPage": {
+    "loadingText": "Menu wordt geladen...",
+    "errorTitle": "Fout bij het laden van het menu",
+    "errorMessage": "Het menu van { restaurantName } kon niet worden geladen.",
+    "tryAgain": "Opnieuw proberen",
+    "title": "Menubeheer",
+    "subtitle": "Beheer de menucategorieën en items voor { restaurantName }",
+    "searchPlaceholder": "Zoek menu-items...",
+    "addCategory": "Categorie toevoegen",
+    "addItem": "Item toevoegen",
+    "quickMenuLabel": "Snelmenu",
+    "editCategory": "Categorie bewerken",
+    "deleteCategory": "Categorie verwijderen",
+    "deleteCategoryDialog": {
+      "title": "Categorie verwijderen",
+      "description": "Hierdoor wordt de categorie \"{ categoryName }\" en alle bijbehorende items permanent verwijderd uit het menu van { restaurantName }. Deze actie kan niet ongedaan worden gemaakt.",
+      "cancel": "Annuleren",
+      "confirm": "Verwijderen"
+    },
+    "moveUp": "Omhoog verplaatsen",
+    "moveDown": "Omlaag verplaatsen",
+    "categoryLimitMessage": "Je bent beperkt tot { limit } menucategorieën in het { planName }-abonnement. Upgrade naar Pro of Enterprise om er meer toe te voegen.",
+    "itemLimitMessage": "Je bent beperkt tot { limit } menu-items per categorie in het { planName }-abonnement. Upgrade naar Pro of Enterprise om er meer toe te voegen.",
+    "noCategoriesTitle": "Nog geen menucategorieën",
+    "noCategoriesMessage": "Begin met het opbouwen van het menu van { restaurantName } door je eerste categorie te maken.",
+    "noSearchResults": "Geen menu-items komen overeen met je zoekopdracht",
+    "halalLabel": "Halal",
+    "AddCategoryDialog": {
+      "trigger": "Categorie toevoegen",
+      "title": "Menucategorie toevoegen",
+      "description": "Maak een nieuwe categorie voor je menu-items",
+      "label": {
+        "name": "Categorienaam",
+        "description": "Beschrijving (optioneel)",
+        "showQuickMenu": "Weergeven in snelmenu"
+      },
+      "placeholder": {
+        "name": "bijv. Voorgerechten",
+        "description": "Voeg een beschrijving toe voor deze categorie"
+      },
+      "helperText": {
+        "showQuickMenu": "Schakel dit in om de categorie in het snelmenu weer te geven."
+      },
+      "buttons": {
+        "cancel": "Annuleren",
+        "adding": "Toevoegen...",
+        "addCategory": "Categorie toevoegen"
+      }
+    },
+    "EditCategoryDialog": {
+      "title": "Categorie bewerken",
+      "description": "Werk de details van de categorie bij",
+      "label": {
+        "name": "Categorienaam",
+        "description": "Beschrijving (optioneel)",
+        "showQuickMenu": "Weergeven in snelmenu"
+      },
+      "helperText": {
+        "showQuickMenu": "Schakel dit in om de categorie in het snelmenu weer te geven."
+      },
+      "buttons": {
+        "cancel": "Annuleren",
+        "saving": "Opslaan...",
+        "saveChanges": "Wijzigingen opslaan"
+      }
+    },
+    "AddAndEditItemDialog": {
+      "addTitle": "Menu-item toevoegen",
+      "editTitle": "Menu-item bewerken",
+      "addDescription": "Voeg een nieuw item toe aan { categoryName }",
+      "editDescription": "Werk de details van het menu-item bij",
+      "itemName": "Naam van het item",
+      "itemNamePlaceholder": "bijv. Caesar salade",
+      "itemPrice": "Prijs (€)",
+      "itemPricePlaceholder": "0,00",
+      "descriptionLabel": "Beschrijving (optioneel)",
+      "descriptionPlaceholder": "Voeg een beschrijving toe voor dit item",
+      "allergens": "Allergenen",
+      "additionalAllergenInfo": "Aanvullende informatie over allergenen",
+      "additionalAllergenPlaceholder": "Voeg aanvullende informatie over allergenen toe",
+      "addons": "Extra's",
+      "addonNamePlaceholder": "Naam van extra (bijv. Extra kaas)",
+      "addonPricePlaceholder": "Prijs",
+      "addAddonButton": "+ Extra toevoegen",
+      "halalLabel": "Dit item is halal-gecertificeerd",
+      "quickMenuLabel": "Toon dit item in het snelmenu",
+      "cancel": "Annuleren",
+      "saveChanges": "Wijzigingen opslaan",
+      "addItem": "Item toevoegen",
+      "uploading": "Uploaden...",
+      "saving": "Opslaan...",
+      "adding": "Toevoegen...",
+      "allergensList": {
+        "gluten": "Gluten",
+        "dairy": "Zuivel",
+        "nuts": "Noten",
+        "eggs": "Eieren",
+        "soy": "Soja",
+        "shellfish": "Schaaldieren",
+        "fish": "Vis"
+      }
+    },
+    "halalBadge": "Halal",
+    "quickMenuBadge": "Quick Menu",
+    "allergensBadge": "Allergenen",
+    "availableAddons": "Beschikbare extra's:",
+    "priceSymbol": "€",
+    "editItemButton": "Item bewerken",
+    "deleteItemButton": "Item verwijderen",
+    "moveUpButton": "Omhoog verplaatsen",
+    "moveDownButton": "Omlaag verplaatsen",
+    "noItemsMessage": "Nog geen items in deze categorie",
+    "addFirstItem": "Eerste item toevoegen",
+    "deleteDialog": {
+      "title": "Menu-item verwijderen",
+      "description": "Hiermee wordt \"{ itemName }\" permanent verwijderd uit het menu van { restaurantName }. Deze actie kan niet ongedaan worden gemaakt.",
+      "cancel": "Annuleren",
+      "confirm": "Verwijderen"
+    }
   }
 }

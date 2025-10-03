@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ALL_ICON_SLUGS, getLucideIconBySlug, IconSlug } from "@/lib/get-icons";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface EditLinkDialogProps {
@@ -40,7 +41,7 @@ const EditLinkDialog: React.FC<EditLinkDialogProps> = ({
         e.preventDefault();
         onSubmit(e);
     };
-
+    const t = useTranslations("LinksPage.EditLinkDialog")
     const handleCancel = () => {
         onCancel();
         setTitle("");
@@ -53,15 +54,19 @@ const EditLinkDialog: React.FC<EditLinkDialogProps> = ({
             <DialogContent>
                 <form onSubmit={handleSubmit}>
                     <DialogHeader>
-                        <DialogTitle>Edit link</DialogTitle>
+                        <DialogTitle>
+                            {t("title")}
+                        </DialogTitle>
                         <DialogDescription>
-                            Update the details of your link for {restaurantName}
+                            {t("description", { restaurantName: restaurantName })}
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="edit-title">Link Title</Label>
+                            <Label htmlFor="edit-title">
+                                {t("label.linkTitle")}
+                            </Label>
                             <Input
                                 id="edit-title"
                                 value={title}
@@ -71,7 +76,10 @@ const EditLinkDialog: React.FC<EditLinkDialogProps> = ({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="edit-url">URL</Label>
+                            <Label htmlFor="edit-url">
+                                {t("label.url")}
+
+                            </Label>
                             <Input
                                 id="edit-url"
                                 value={url}
@@ -81,10 +89,12 @@ const EditLinkDialog: React.FC<EditLinkDialogProps> = ({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="icon">Icon</Label>
+                            <Label htmlFor="icon">
+                                {t("label.icon")}
+                            </Label>
                             <Select value={icon} onValueChange={(val) => setIcon(val as IconSlug)}>
                                 <SelectTrigger id="icon" className="w-full">
-                                    <SelectValue placeholder="Select an icon" />
+                                    <SelectValue placeholder={t("placeholder.selectIcon")} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {ALL_ICON_SLUGS.map((slug) => (
@@ -105,14 +115,14 @@ const EditLinkDialog: React.FC<EditLinkDialogProps> = ({
                             className="hover:opacity-75 cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                             disabled={isPending}
                         >
-                            Cancel
+                            {t("buttons.cancel")}
                         </Button>
                         <Button
                             type="submit"
                             disabled={!title.trim() || !url?.trim() || isPending}
                             className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                         >
-                            {isPending ? "Saving..." : "Save Changes"}
+                            {isPending ? t("buttons.saving") : t("buttons.saveChanges")}
                         </Button>
                     </DialogFooter>
                 </form>

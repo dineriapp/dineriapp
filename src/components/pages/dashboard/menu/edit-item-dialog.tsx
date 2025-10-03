@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { X, Leaf } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface Addon {
     name: string
@@ -62,20 +63,28 @@ export default function EditItemDialog({
     resetForm,
     setSelectedItem,
 }: EditItemDialogProps) {
+    const t = useTranslations("MenuPage.AddAndEditItemDialog")
+
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
                 <form onSubmit={onSubmit}>
                     <DialogHeader>
-                        <DialogTitle>Edit Menu Item</DialogTitle>
-                        <DialogDescription>Update the menu item details</DialogDescription>
+                        <DialogTitle>
+                            {t("editTitle")}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {t("editDescription")}
+                        </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         {/* Item Name + Price */}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="editItemName">Item Name</Label>
+                                <Label htmlFor="editItemName">
+                                    {t("itemName")}
+                                </Label>
                                 <Input
                                     id="editItemName"
                                     value={newItemName}
@@ -85,7 +94,9 @@ export default function EditItemDialog({
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="editItemPrice">Price (€)</Label>
+                                <Label htmlFor="editItemPrice">
+                                    {t("itemPrice")}
+                                </Label>
                                 <Input
                                     id="editItemPrice"
                                     type="number"
@@ -100,7 +111,9 @@ export default function EditItemDialog({
 
                         {/* Description */}
                         <div className="space-y-2">
-                            <Label htmlFor="editItemDescription">Description (Optional)</Label>
+                            <Label htmlFor="editItemDescription">
+                                {t("descriptionLabel")}
+                            </Label>
                             <Textarea
                                 id="editItemDescription"
                                 value={newItemDescription}
@@ -111,7 +124,9 @@ export default function EditItemDialog({
 
                         {/* Allergens */}
                         <div className="space-y-2">
-                            <Label>Allergens</Label>
+                            <Label>
+                                {t("allergens")}
+                            </Label>
                             <div className="flex flex-wrap gap-2">
                                 {["gluten", "dairy", "nuts", "eggs", "soy", "shellfish", "fish"].map((allergen) => (
                                     <Button
@@ -128,7 +143,7 @@ export default function EditItemDialog({
                                         }}
                                         className={`capitalize ${allergens.includes(allergen) ? "bg-main-green" : ""}`}
                                     >
-                                        {allergen}
+                                        {t(`allergensList.${allergen}`)}
                                     </Button>
                                 ))}
                             </div>
@@ -136,23 +151,27 @@ export default function EditItemDialog({
 
                         {/* Additional allergen info */}
                         <div className="space-y-2">
-                            <Label htmlFor="editAllergenInfo">Additional Allergen Information</Label>
+                            <Label htmlFor="editAllergenInfo">
+                                {t("additionalAllergenInfo")}
+                            </Label>
                             <Textarea
                                 id="editAllergenInfo"
                                 value={allergenInfo}
                                 onChange={(e) => setAllergenInfo(e.target.value)}
-                                placeholder="Add any additional allergen information"
+                                placeholder={t("additionalAllergenPlaceholder")}
                                 rows={2}
                             />
                         </div>
 
                         {/* Addons */}
                         <div className="space-y-2">
-                            <Label>Addons</Label>
+                            <Label>
+                                {t("addons")}
+                            </Label>
                             {addons.map((addon, index) => (
                                 <div key={index} className="grid grid-cols-4 gap-2">
                                     <Input
-                                        placeholder="Addon Name (e.g. Extra Cheese)"
+                                        placeholder={t("addonNamePlaceholder")}
                                         value={addon.name}
                                         className="col-span-2"
                                         onChange={(e) => {
@@ -162,7 +181,7 @@ export default function EditItemDialog({
                                         }}
                                     />
                                     <Input
-                                        placeholder="Price"
+                                        placeholder={t("addonPricePlaceholder")}
                                         type="number"
                                         step="0.01"
                                         min="0"
@@ -194,7 +213,7 @@ export default function EditItemDialog({
                                 onClick={() => setAddons([...addons, { name: "", price: 0 }])}
                                 className="hover:opacity-75 !bg-main-green text-white cursor-pointer rounded-full h-[38px] !text-xs font-poppins !px-4"
                             >
-                                + Add Addon
+                                {t("addAddonButton")}
                             </Button>
                         </div>
 
@@ -207,7 +226,7 @@ export default function EditItemDialog({
                             />
                             <Label htmlFor="editIsHalal" className="flex items-center gap-2">
                                 <Leaf className="h-4 w-4 text-green-600" />
-                                This item is Halal certified
+                                {t("halalLabel")}
                             </Label>
                         </div>
 
@@ -219,7 +238,7 @@ export default function EditItemDialog({
                                 onCheckedChange={(checked) => setNewItemshow_in_quick_menu(checked as boolean)}
                             />
                             <Label htmlFor="inQuickMenu" className="flex items-center gap-2">
-                                Show this item in Quick Menu
+                                {t("quickMenuLabel")}
                             </Label>
                         </div>
                     </div>
@@ -236,14 +255,14 @@ export default function EditItemDialog({
                             className="hover:opacity-75 h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                             disabled={updateItemMutation.isPending}
                         >
-                            Cancel
+                            {t("cancel")}
                         </Button>
                         <Button
                             type="submit"
                             disabled={!newItemName || !newItemPrice || updateItemMutation.isPending}
                             className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                         >
-                            {isUploading ? "Uploading..." : updateItemMutation.isPending ? "Saving..." : "Save Changes"}
+                            {isUploading ? t("uploading") : updateItemMutation.isPending ? t("saving") : t("saveChanges")}
                         </Button>
                     </DialogFooter>
                 </form>

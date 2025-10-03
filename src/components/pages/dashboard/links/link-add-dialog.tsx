@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { ALL_ICON_SLUGS, getLucideIconBySlug, IconSlug } from "@/lib/get-icons";
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface LinkDialogProps {
@@ -60,6 +61,7 @@ const LinkDialog: React.FC<LinkDialogProps> = ({
     disabled = false,
 }) => {
 
+    const t = useTranslations("LinksPage.LinkDialog")
 
     const renderTrigger = () => {
         if (type === "add") {
@@ -72,7 +74,7 @@ const LinkDialog: React.FC<LinkDialogProps> = ({
                             className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                         >
                             <Plus className="h-4 w-4" />
-                            Add new link
+                            {t("trigger.addNewLink")}
                         </Button>
                     )}
                 </DialogTrigger>
@@ -87,42 +89,50 @@ const LinkDialog: React.FC<LinkDialogProps> = ({
             <DialogContent>
                 <form onSubmit={onSubmit}>
                     <DialogHeader>
-                        <DialogTitle>{type === "add" ? "Add new link" : "Edit link"}</DialogTitle>
+                        <DialogTitle>{type === "add" ? t("title.add") : t("title.edit")}</DialogTitle>
                         <DialogDescription>
                             {type === "add"
-                                ? `Add a link to ${restaurantName}'s page`
-                                : `Update the details of your link for ${restaurantName}`}
+                                ? t("description.add", { restaurantName: restaurantName })
+                                :
+                                t("description.edit", { restaurantName: restaurantName })
+                            }
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="title">Link Title</Label>
+                            <Label htmlFor="title">
+                                {t("label.linkTitle")}
+                            </Label>
                             <Input
                                 id="title"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder="e.g. View our menu"
+                                placeholder={t("placeholder.linkTitle")}
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="url">URL</Label>
+                            <Label htmlFor="url">
+                                {t("label.url")}
+                            </Label>
                             <Input
                                 id="url"
                                 value={url}
                                 onChange={(e) => setUrl(e.target.value)}
-                                placeholder="e.g. https://example.com/menu"
+                                placeholder={t("placeholder.url")}
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="icon">Icon</Label>
+                            <Label htmlFor="icon">
+                                {t("label.icon")}
+                            </Label>
                             <Select value={icon} onValueChange={(val) => setIcon(val as IconSlug)}>
                                 <SelectTrigger id="icon" className="w-full">
-                                    <SelectValue placeholder="Select an icon" />
+                                    <SelectValue placeholder={t("placeholder.selectIcon")} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {ALL_ICON_SLUGS.map((slug) => (
@@ -143,7 +153,7 @@ const LinkDialog: React.FC<LinkDialogProps> = ({
                             className="hover:opacity-75 cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                             disabled={isPending}
                         >
-                            Cancel
+                            {t("buttons.cancel")}
                         </Button>
                         <Button
                             type="submit"
@@ -152,11 +162,11 @@ const LinkDialog: React.FC<LinkDialogProps> = ({
                         >
                             {isPending
                                 ? type === "add"
-                                    ? "Adding..."
-                                    : "Saving..."
+                                    ? t("buttons.adding")
+                                    : t("buttons.saving")
                                 : type === "add"
-                                    ? "Add Link"
-                                    : "Save Changes"}
+                                    ? t("buttons.addLink")
+                                    : t("buttons.saveChanges")}
                         </Button>
                     </DialogFooter>
                 </form>

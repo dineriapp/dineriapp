@@ -2174,5 +2174,196 @@
         "placeholder": "0.00"
       }
     }
+  },
+  "LinksPage": {
+    "loadingText": "Loading your Link...",
+    "errorTitle": "Error Loading Links",
+    "errorMessage": "Failed to load links for { restaurantName }.",
+    "tryAgain": "Try Again",
+    "title": "Manage Links",
+    "subtitle": "Add, edit, or remove links for ",
+    "bulkDeleteButton": "Delete Selected ( { count } )",
+    "bulkDeleteConfirmTitle": "Are you sure?",
+    "bulkDeleteConfirmDescription": "This will permanently delete  selected links from your restaurent. This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "addNewLink": "Add new link",
+    "limitReachedMessage": "You are limited to { limit } links on the { planName } plan. Upgrade to Pro or Enterprise to add more.",
+    "yourLinksTitle": "Your Links",
+    "yourLinksDescription": "Select multiple links to perform bulk actions",
+    "noLinksMessage": "No links added yet for { restaurantName }",
+    "clicksLabel": "Clicks:",
+    "edit": "Edit",
+    "deleteSingleConfirmTitle": "Are you sure?",
+    "deleteSingleConfirmDescription": "This action cannot be undone. This will permanently delete the link \"{ linkTitle }\" from { restaurantName }'s page.",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "LinkDialog": {
+      "trigger": {
+        "addNewLink": "Add new link"
+      },
+      "title": {
+        "add": "Add new link",
+        "edit": "Edit link"
+      },
+      "description": {
+        "add": "Add a link to { restaurantName }'s page",
+        "edit": "Update the details of your link for { restaurantName }"
+      },
+      "label": {
+        "linkTitle": "Link Title",
+        "url": "URL",
+        "icon": "Icon"
+      },
+      "placeholder": {
+        "linkTitle": "e.g. View our menu",
+        "url": "e.g. https://example.com/menu",
+        "selectIcon": "Select an icon"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "adding": "Adding...",
+        "saving": "Saving...",
+        "addLink": "Add Link",
+        "saveChanges": "Save Changes"
+      }
+    },
+    "EditLinkDialog": {
+      "title": "Edit link",
+      "description": "Update the details of your link for { restaurantName }",
+      "label": {
+        "linkTitle": "Link Title",
+        "url": "URL",
+        "icon": "Icon"
+      },
+      "placeholder": {
+        "selectIcon": "Select an icon"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "saveChanges": "Save Changes",
+        "saving": "Saving..."
+      }
+    }
+  },
+  "MenuPage": {
+    "loadingText": "Loading menu...",
+    "errorTitle": "Error Loading Menu",
+    "errorMessage": "Failed to load menu for { restaurantName }.",
+    "tryAgain": "Try Again",
+    "title": "Menu Management",
+    "subtitle": "Manage menu categories and items for { restaurantName }",
+    "searchPlaceholder": "Search menu items...",
+    "addCategory": "Add Category",
+    "addItem": "Add Item",
+    "quickMenuLabel": "Quick Menu",
+    "editCategory": "Edit category",
+    "deleteCategory": "Delete category",
+    "deleteCategoryDialog": {
+      "title": "Delete Category",
+      "description": "This will permanently delete the category \"{ categoryName }\" and all its items from { restaurantName }'s menu. This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "categoryLimitMessage": "You are limited to { limit } menu categories on the { planName } plan. Upgrade to Pro or Enterprise to add more.",
+    "itemLimitMessage": "You are limited to { limit } menu items per category on the { planName } plan. Upgrade to Pro or Enterprise to add more.",
+    "noCategoriesTitle": "No menu categories yet",
+    "noCategoriesMessage": "Start building your menu for { restaurantName } by creating your first category.",
+    "noSearchResults": "No menu items match your search",
+    "halalLabel": "Halal",
+    "AddCategoryDialog": {
+      "trigger": "Add Category",
+      "title": "Add Menu Category",
+      "description": "Create a new category for your menu items",
+      "label": {
+        "name": "Category Name",
+        "description": "Description (Optional)",
+        "showQuickMenu": "Show in Quick Menu"
+      },
+      "placeholder": {
+        "name": "e.g. Appetizers",
+        "description": "Add a description for this category"
+      },
+      "helperText": {
+        "showQuickMenu": "Enable this category to appear in the quick menu."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "adding": "Adding...",
+        "addCategory": "Add Category"
+      }
+    },
+    "EditCategoryDialog": {
+      "title": "Edit Category",
+      "description": "Update the category details",
+      "label": {
+        "name": "Category Name",
+        "description": "Description (Optional)",
+        "showQuickMenu": "Show in Quick Menu"
+      },
+      "helperText": {
+        "showQuickMenu": "Enable this category to appear in the quick menu."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "saving": "Saving...",
+        "saveChanges": "Save Changes"
+      }
+    },
+    "AddAndEditItemDialog": {
+      "addTitle": "Add Menu Item",
+      "editTitle": "Edit Menu Item",
+      "addDescription": "Add a new item to { categoryName }",
+      "editDescription": "Update the menu item details",
+      "itemName": "Item Name",
+      "itemNamePlaceholder": "e.g. Caesar Salad",
+      "itemPrice": "Price (€)",
+      "itemPricePlaceholder": "0.00",
+      "descriptionLabel": "Description (Optional)",
+      "descriptionPlaceholder": "Add a description for this item",
+      "allergens": "Allergens",
+      "additionalAllergenInfo": "Additional Allergen Information",
+      "additionalAllergenPlaceholder": "Add any additional allergen information",
+      "addons": "Addons",
+      "addonNamePlaceholder": "Addon Name (e.g. Extra Cheese)",
+      "addonPricePlaceholder": "Price",
+      "addAddonButton": "+ Add Addon",
+      "halalLabel": "This item is Halal certified",
+      "quickMenuLabel": "Show this item in Quick Menu",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "addItem": "Add Item",
+      "uploading": "Uploading...",
+      "saving": "Saving...",
+      "adding": "Adding...",
+      "allergensList": {
+        "gluten": "Gluten",
+        "dairy": "Dairy",
+        "nuts": "Nuts",
+        "eggs": "Eggs",
+        "soy": "Soy",
+        "shellfish": "Shellfish",
+        "fish": "Fish"
+      }
+    },
+    "halalBadge": "Halal",
+    "quickMenuBadge": "Quick Menu",
+    "allergensBadge": "Allergens",
+    "availableAddons": "Available Addons:",
+    "priceSymbol": "€",
+    "editItemButton": "Edit item",
+    "deleteItemButton": "Delete item",
+    "moveUpButton": "Move up",
+    "moveDownButton": "Move down",
+    "noItemsMessage": "No items in this category yet",
+    "addFirstItem": "Add First Item",
+    "deleteDialog": {
+      "title": "Delete Menu Item",
+      "description": "This will permanently delete \"{ itemName }\" from { restaurantName }'s menu. This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    }
   }
 }
