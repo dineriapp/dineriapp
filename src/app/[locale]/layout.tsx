@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { UpgradePopup } from "@/components/upgrade-plan-popup";
 import ReactQueryProvider from "@/providers/react-query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
-// import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { routing } from "@/i18n/routing";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { redirect } from "next/navigation";
@@ -65,11 +65,14 @@ import "./globals.css";
 //   display: "swap",
 // });
 
-// export const metadata: Metadata = {
-//   title: 'Dineri.app - Your restaurant, one link away',
-//   description: 'Create a beautiful page with all your restaurant links in one place',
-// };
-
+export const metadata: Metadata = {
+  title: {
+    absolute: 'Dineri.app – All Your Restaurant Links in One Place',
+    default: 'Dineri.app',
+    template: '%s | Dineri.app'
+  },
+  description: 'Dineri helps restaurants create beautiful, shareable pages with all their important links in one place — from menus and reservations to delivery and social media.',
+};
 
 export default async function RootLayout({
   children,

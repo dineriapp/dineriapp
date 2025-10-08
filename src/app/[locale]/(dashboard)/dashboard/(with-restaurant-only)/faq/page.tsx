@@ -29,77 +29,18 @@ import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { Eye, HelpCircle, Search, Star } from "lucide-react"
 import { motion } from "motion/react"
 import { useMemo, useState } from "react"
+import { useLocale, useTranslations } from "next-intl"
+import { Locale } from "@/i18n/routing"
+import { faq_container_animation, faq_item_animation, FAQ_TEMPLATES } from "@/lib/reuseable-data"
 
 // Animation variants
-const container = {
-    hidden: { opacity: 0 },
-    show: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-        },
-    },
-}
 
-const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-}
-
-// Common FAQ templates for quick setup
-const FAQ_TEMPLATES = [
-    {
-        category: "Hours & Location",
-        description: "Information about our location and operating hours",
-        faqs: [
-            { question: "What are your opening hours?", answer: "We are open Monday to Sunday from 11:00 AM to 10:00 PM." },
-            {
-                question: "Where are you located?",
-                answer: "You can find our address and directions in the contact section above.",
-            },
-        ],
-    },
-    {
-        category: "Reservations & Booking",
-        description: "Everything about making and managing reservations",
-        faqs: [
-            {
-                question: "Do you take reservations?",
-                answer: "Yes, we accept reservations. You can book a table using the reservation link above.",
-            },
-            { question: "How far in advance can I book?", answer: "You can make reservations up to 30 days in advance." },
-        ],
-    },
-    {
-        category: "Menu & Dietary",
-        description: "Questions about our menu and dietary accommodations",
-        faqs: [
-            {
-                question: "Do you have vegetarian options?",
-                answer: "Yes, we have a variety of vegetarian dishes clearly marked on our menu.",
-            },
-            {
-                question: "Do you offer vegan meals?",
-                answer: "Yes, we have several vegan options available. Please ask your server for details.",
-            },
-        ],
-    },
-    {
-        category: "Policies & Services",
-        description: "Information about our services and policies",
-        faqs: [
-            { question: "Do you offer takeaway?", answer: "Yes, all our menu items are available for takeaway." },
-            {
-                question: "Do you deliver?",
-                answer: "Yes, we offer delivery through our delivery partners. Check our delivery section for details.",
-            },
-        ],
-    },
-]
 
 export default function FAQPage() {
     const { restaurants, selectedRestaurant } = useRestaurantStore()
     const { prismaUser } = useUserStore()
+    const t = useTranslations("faqs")
+    const locale = useLocale() as Locale
     const openPopup = useUpgradePopupStore(state => state.open)
     const [isEditCategoryDialogOpen, setIsEditCategoryDialogOpen] = useState(false)
     const [isAddFAQDialogOpen, setIsAddFAQDialogOpen] = useState(false)
@@ -279,7 +220,7 @@ export default function FAQPage() {
     // Show loading state when FAQs are being fetched
     if (isLoading || !selectedRestaurant || !restaurants) {
         return (
-            <LoadingUI text="Loading FAQs..." />
+            <LoadingUI text={t("loading")} />
         )
     }
 
@@ -288,10 +229,14 @@ export default function FAQPage() {
         return (
             <div className="max-w-[1200px] mx-auto flex justify-center px-4 py-16">
                 <div className="text-center">
-                    <h2 className="text-2xl font-semibold text-red-600 mb-2">Error Loading FAQs</h2>
-                    <p className="text-slate-500">Failed to load FAQs for {selectedRestaurant.name}.</p>
+                    <h2 className="text-2xl font-semibold text-red-600 mb-2">
+                        {t("errorTitle")}
+                    </h2>
+                    <p className="text-slate-500">
+                        {t("errorMessage", { restaurantName: selectedRestaurant.name })}
+                    </p>
                     <Button onClick={() => window.location.reload()} className="mt-4" variant="outline">
-                        Try Again
+                        {t("tryAgain")}
                     </Button>
                 </div>
             </div>
@@ -317,11 +262,13 @@ export default function FAQPage() {
                 >
                     <div>
                         <h1 className=" text-4xl font-bold text-main-blue">
-                            FAQ Management
+                            {t("faqManagement")}
                         </h1>
                         <p className="mt-2 text-slate-500">
-                            Create and manage frequently asked questions for{" "}
-                            <span className="font-medium text-slate-700">{selectedRestaurant.name}</span>
+                            {t.rich("createManageFaqs", {
+                                restaurantName: selectedRestaurant.name,
+                                b: (chunks) => <b>{chunks}</b>
+                            })}
                         </p>
                     </div>
 
@@ -331,7 +278,7 @@ export default function FAQPage() {
                         categories={categories}
                         restaurantId={restaurantId}
                         isFaqCategoryLimitReached={isFaqCategoryLimitReached}
-                        FAQ_TEMPLATES={FAQ_TEMPLATES}
+                        FAQ_TEMPLATES={FAQ_TEMPLATES[locale]}
                         createCategoryMutation={createCategoryMutation}
                         createFaqMutation={createFaqMutation}
                         openPopup={openPopup}
@@ -346,42 +293,54 @@ export default function FAQPage() {
                 </motion.div>
 
                 {/* Stats Cards */}
-                <motion.div variants={container} initial="hidden" animate="show" className="mb-8 grid gap-6 md:grid-cols-3">
-                    <motion.div variants={item}>
+                <motion.div variants={faq_container_animation} initial="hidden" animate="show" className="mb-8 grid gap-6 md:grid-cols-3">
+                    <motion.div variants={faq_item_animation}>
                         <Card className="bg-gradient-to-br box-shad-every-2 from-white to-white transition-all hover:shadow-lg hover:scale-[1.02]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium text-slate-500">Total Categories</CardTitle>
+                                <CardTitle className="text-sm font-medium text-slate-500">
+                                    {t("totalCategories")}
+                                </CardTitle>
                                 <HelpCircle className="h-4 w-4 text-teal-600" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold text-teal-700">{statistics.totalCategories}</div>
-                                <p className="mt-1 text-xs text-slate-500">FAQ categories</p>
+                                <p className="mt-1 text-xs text-slate-500">
+                                    {t("faqCategories")}
+                                </p>
                             </CardContent>
                         </Card>
                     </motion.div>
 
-                    <motion.div variants={item}>
+                    <motion.div variants={faq_item_animation}>
                         <Card className="bg-gradient-to-br box-shad-every-2 from-white to-white transition-all hover:shadow-lg hover:scale-[1.02]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium text-slate-500">Total FAQs</CardTitle>
+                                <CardTitle className="text-sm font-medium text-slate-500">
+                                    {t("totalFaqs")}
+                                </CardTitle>
                                 <Eye className="h-4 w-4 text-blue-600" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold text-blue-700">{statistics.totalFAQs}</div>
-                                <p className="mt-1 text-xs text-slate-500">Questions answered</p>
+                                <p className="mt-1 text-xs text-slate-500">
+                                    {t("questionsAnswered")}
+                                </p>
                             </CardContent>
                         </Card>
                     </motion.div>
 
-                    <motion.div variants={item}>
+                    <motion.div variants={faq_item_animation}>
                         <Card className="bg-gradient-to-br box-shad-every-2 from-white to-white transition-all hover:shadow-lg hover:scale-[1.02]">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <CardTitle className="text-sm font-medium text-slate-500">Featured FAQs</CardTitle>
+                                <CardTitle className="text-sm font-medium text-slate-500">
+                                    {t("featuredFaqs")}
+                                </CardTitle>
                                 <Star className="h-4 w-4 text-purple-600" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-3xl font-bold text-purple-700">{statistics.featuredFAQs}</div>
-                                <p className="mt-1 text-xs text-slate-500">Popular questions</p>
+                                <p className="mt-1 text-xs text-slate-500">
+                                    {t("popularQuestions")}
+                                </p>
                             </CardContent>
                         </Card>
                     </motion.div>
@@ -397,7 +356,7 @@ export default function FAQPage() {
                     <div className="relative bg-white rounded-full">
                         <Search className="absolute left-5 top-4 h-5 w-5 text-slate-400" />
                         <Input
-                            placeholder="Search FAQs..."
+                            placeholder={t("searchPlaceholder")}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-12 transition-all rounded-full focus:ring-2 font-poppins h-[50px] focus:ring-teal-500"
@@ -411,8 +370,8 @@ export default function FAQPage() {
                     categories={categories}
                     prismaUser={prismaUser}
                     STRIPE_PLANS={STRIPE_PLANS}
-                    container={container}
-                    item={item}
+                    container={faq_container_animation}
+                    item={faq_item_animation}
                     setSelectedCategory={setSelectedCategory}
                     setNewCategoryName={setNewCategoryName}
                     setNewCategoryDescription={setNewCategoryDescription}

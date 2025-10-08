@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { useTranslations } from "next-intl"
 
 interface EditEventDialogProps {
     open: boolean
@@ -44,30 +45,42 @@ export default function EditEventDialog({
     setEditingEvent,
     isPending,
 }: EditEventDialogProps) {
+    const t = useTranslations("events.add_or_edit_events_dialog")
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-[500px]">
                 <form onSubmit={handleUpdateEvent}>
                     <DialogHeader>
-                        <DialogTitle>Edit Event</DialogTitle>
-                        <DialogDescription>Update the event details</DialogDescription>
+                        <DialogTitle>
+                            {t("dialog_edit_title")}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {t("dialog_edit_description")}
+                        </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="editTitle">Event Title</Label>
+                            <Label htmlFor="editTitle">
+                                {t("form_event_title")}
+                            </Label>
                             <Input
                                 id="editTitle"
                                 value={title}
+                                placeholder={t("form_event_title_placeholder")}
                                 onChange={(e) => setTitle(e.target.value)}
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="editDescription">Description</Label>
+                            <Label htmlFor="editDescription">
+                                {t("form_description")}
+                            </Label>
                             <Textarea
                                 id="editDescription"
+                                placeholder={t("form_description_placeholder")}
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 rows={3}
@@ -75,7 +88,9 @@ export default function EditEventDialog({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="editDate">Date & Time</Label>
+                            <Label htmlFor="editDate">
+                                {t("form_date_time")}
+                            </Label>
                             <Input
                                 id="editDate"
                                 type="datetime-local"
@@ -86,16 +101,19 @@ export default function EditEventDialog({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="editTicketUrl">Ticket Link (Optional)</Label>
+                            <Label htmlFor="editTicketUrl">
+                                {t("form_ticket_link")}
+                            </Label>
                             <Input
                                 id="editTicketUrl"
                                 type="url"
                                 value={ticketUrl}
                                 onChange={(e) => setTicketUrl(e.target.value)}
-                                placeholder="https://ticketseller.com/your-event"
+                                placeholder={t("form_ticket_link_placeholder")}
+
                             />
                             <p className="text-xs text-muted-foreground">
-                                Add a link where customers can buy tickets
+                                {t("form_ticket_link_hint")}
                             </p>
                         </div>
                     </div>
@@ -112,14 +130,14 @@ export default function EditEventDialog({
                             className="hover:opacity-75 h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                             disabled={isPending}
                         >
-                            Cancel
+                            {t("button_cancel")}
                         </Button>
                         <Button
                             type="submit"
                             disabled={!title || !date || isPending}
                             className="hover:opacity-75 !bg-main-blue cursor-pointer rounded-full h-[40px] font-poppins !px-5"
                         >
-                            {isPending ? "Saving..." : "Save Changes"}
+                            {isPending ? t("button_saving") : t("button_edit_save")}
                         </Button>
                     </DialogFooter>
                 </form>

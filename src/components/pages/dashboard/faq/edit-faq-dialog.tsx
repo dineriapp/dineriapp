@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Star } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface EditFAQDialogProps {
     open: boolean
@@ -40,18 +41,25 @@ export default function EditFAQDialog({
     resetForm,
     isPending,
 }: EditFAQDialogProps) {
+    const t = useTranslations("faqs.editFAQDialog")
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="max-w-2xl">
                 <form onSubmit={handleEditFAQ}>
                     <DialogHeader>
-                        <DialogTitle>Edit FAQ</DialogTitle>
-                        <DialogDescription>Update the FAQ details</DialogDescription>
+                        <DialogTitle>
+                            {t("title")}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {t("description")}
+                        </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="editFAQQuestion">Question</Label>
+                            <Label htmlFor="editFAQQuestion">
+                                {t("questionLabel")}
+                            </Label>
                             <Input
                                 id="editFAQQuestion"
                                 value={question}
@@ -61,7 +69,9 @@ export default function EditFAQDialog({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="editFAQAnswer">Answer</Label>
+                            <Label htmlFor="editFAQAnswer">
+                                {t("answerLabel")}
+                            </Label>
                             <Textarea
                                 id="editFAQAnswer"
                                 value={answer}
@@ -79,7 +89,7 @@ export default function EditFAQDialog({
                             />
                             <Label htmlFor="editFeatured" className="flex items-center gap-2">
                                 <Star className="h-4 w-4" />
-                                Mark as featured (show prominently)
+                                {t("markAsFeatured")}
                             </Label>
                         </div>
                     </div>
@@ -95,14 +105,14 @@ export default function EditFAQDialog({
                             className="hover:opacity-75 cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                             disabled={isPending}
                         >
-                            Cancel
+                            {t("cancel")}
                         </Button>
                         <Button
                             type="submit"
                             disabled={!question || !answer || isPending}
                             className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                         >
-                            {isPending ? "Saving..." : "Save Changes"}
+                            {isPending ? t("saving") : t("saveChanges")}
                         </Button>
                     </DialogFooter>
                 </form>

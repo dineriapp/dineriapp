@@ -42,6 +42,7 @@ import {
     Search,
 } from "lucide-react";
 import FaqList from "./faq-list";
+import { useTranslations } from "next-intl";
 
 // Types
 interface FaqCategoriesProps {
@@ -107,8 +108,8 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
     setIsEditFAQDialogOpen,
     deleteFaqMutation,
     reorderFaqMutation,
-    setSearchTerm,
 }) => {
+    const t = useTranslations("faqs.faqCategoriesComponent")
     return (
         <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
             {filteredCategories.length > 0 ? (
@@ -127,7 +128,7 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                                             <HelpCircle className="h-5 w-5 text-teal-600" />
                                             {category.name}
                                             <span className="ml-2 rounded-full bg-teal-100 px-2 py-1 text-xs font-medium text-teal-700">
-                                                {category.faqs?.length || 0} FAQs
+                                                {t("faqs", { count: category.faqs?.length || 0 })}
                                             </span>
                                         </CardTitle>
                                         {category.description && (
@@ -148,7 +149,9 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                                             className="h-8 w-8 p-0 bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                         >
                                             <Edit className="h-4 w-4" />
-                                            <span className="sr-only">Edit category</span>
+                                            <span className="sr-only">
+                                                {t("editCategory")}
+                                            </span>
                                         </Button>
 
                                         {/* Delete Category */}
@@ -161,27 +164,25 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                                                     disabled={deleteCategoryMutation.isPending}
                                                 >
                                                     <Trash2 className="h-4 w-4" />
-                                                    <span className="sr-only">Delete category</span>
+                                                    <span className="sr-only"> {t("deleteCategory")}</span>
                                                 </Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle>Delete Category</AlertDialogTitle>
+                                                    <AlertDialogTitle>{t("deleteCategory")}</AlertDialogTitle>
                                                     <AlertDialogDescription>
-                                                        This will permanently delete the category &quot;{category.name}&quot; and all its FAQs ({
-                                                            category.faqs?.length || 0
-                                                        } questions). This action cannot be undone.
+                                                        {t("deleteCategoryConfirm", { category: category.name, count: category.faqs?.length || 0 })}
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                     <AlertDialogCancel className="font-poppins rounded-full !px-5">
-                                                        Cancel
+                                                        {t("cancel")}
                                                     </AlertDialogCancel>
                                                     <AlertDialogAction
                                                         onClick={() => deleteCategoryMutation.mutate(category.id)}
                                                         className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90"
                                                     >
-                                                        Delete
+                                                        {t("delete")}
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
@@ -196,7 +197,9 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                                             className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                         >
                                             <ArrowUp className="h-4 w-4" />
-                                            <span className="sr-only">Move up</span>
+                                            <span className="sr-only">
+                                                {t("moveUp")}
+                                            </span>
                                         </Button>
 
                                         <Button
@@ -207,7 +210,9 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                                             className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110"
                                         >
                                             <ArrowDown className="h-4 w-4" />
-                                            <span className="sr-only">Move down</span>
+                                            <span className="sr-only">
+                                                {t("moveDown")}
+                                            </span>
                                         </Button>
                                     </div>
                                 </CardHeader>
@@ -220,12 +225,12 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                                                 className="w-full justify-center transition-all rounded-full border-main-blue font-poppins h-[40px] hover:text-white hover:bg-main-blue cursor-pointer bg-transparent"
                                                 onClick={() =>
                                                     openPopup(
-                                                        `You are limited to ${faqLimit} FAQs per category on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`
+                                                        t("faqLimitReached", { limit: faqLimit, plan: planName })
                                                     )
                                                 }
                                             >
                                                 <Plus className="mr-2 h-4 w-4" />
-                                                Add FAQ to {category.name}
+                                                {t("addFaqTo", { category: category.name })}
                                             </Button>
                                         ) : (
                                             <Dialog open={isAddFAQDialogOpen} onOpenChange={setIsAddFAQDialogOpen}>
@@ -236,37 +241,43 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                                                         onClick={() => setSelectedCategory(category)}
                                                     >
                                                         <Plus className="mr-2 h-4 w-4" />
-                                                        Add FAQ to {category.name}
+                                                        {t("addFaqTo", { category: category.name })}
                                                     </Button>
                                                 </DialogTrigger>
                                                 <DialogContent className="max-w-2xl">
                                                     <form onSubmit={handleAddFAQ}>
                                                         <DialogHeader>
-                                                            <DialogTitle>Add FAQ</DialogTitle>
+                                                            <DialogTitle>
+                                                                {t("addFaqTitle")}
+                                                            </DialogTitle>
                                                             <DialogDescription>
-                                                                Add a new question and answer to {selectedCategory?.name}
+                                                                {t("addFaqDescription", { category: selectedCategory?.name })}
                                                             </DialogDescription>
                                                         </DialogHeader>
 
                                                         <div className="space-y-4 py-4">
                                                             <div className="space-y-2">
-                                                                <Label htmlFor="faqQuestion">Question</Label>
+                                                                <Label htmlFor="faqQuestion">
+                                                                    {t("questionLabel")}
+                                                                </Label>
                                                                 <Input
                                                                     id="faqQuestion"
                                                                     value={newFAQQuestion}
                                                                     onChange={(e) => setNewFAQQuestion(e.target.value)}
-                                                                    placeholder="e.g. Do you take reservations?"
+                                                                    placeholder={t("questionPlaceholder")}
                                                                     required
                                                                 />
                                                             </div>
 
                                                             <div className="space-y-2">
-                                                                <Label htmlFor="faqAnswer">Answer</Label>
+                                                                <Label htmlFor="faqAnswer">
+                                                                    {t("answerLabel")}
+                                                                </Label>
                                                                 <Textarea
                                                                     id="faqAnswer"
                                                                     value={newFAQAnswer}
                                                                     onChange={(e) => setNewFAQAnswer(e.target.value)}
-                                                                    placeholder="Provide a clear and helpful answer"
+                                                                    placeholder={t("answerPlaceholder")}
                                                                     rows={4}
                                                                     required
                                                                 />
@@ -276,7 +287,7 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                                                                 <Switch id="featured" checked={isFeatured} onCheckedChange={setIsFeatured} />
                                                                 <Label htmlFor="featured" className="flex items-center gap-2">
                                                                     <Star className="h-4 w-4" />
-                                                                    Mark as featured (show prominently)
+                                                                    {t("markAsFeatured")}
                                                                 </Label>
                                                             </div>
                                                         </div>
@@ -292,14 +303,14 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                                                                 className="hover:opacity-75 cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                                                                 disabled={createFaqMutation.isPending}
                                                             >
-                                                                Cancel
+                                                                {t("cancel")}
                                                             </Button>
                                                             <Button
                                                                 type="submit"
                                                                 disabled={!newFAQQuestion || !newFAQAnswer || createFaqMutation.isPending || !selectedCategory}
                                                                 className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                                                             >
-                                                                {createFaqMutation.isPending ? "Adding..." : "Add FAQ"}
+                                                                {createFaqMutation.isPending ? t("adding") : t("addFaq")}
                                                             </Button>
                                                         </DialogFooter>
                                                     </form>
@@ -332,20 +343,21 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
             ) : categories.length === 0 ? (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-16 text-center">
                     <HelpCircle className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                    <h3 className="mb-2 text-lg font-semibold">No FAQs yet</h3>
+                    <h3 className="mb-2 text-lg font-semibold">
+                        {t("noFaqsTitle")}
+                    </h3>
                     <p className="mb-6 text-slate-500 max-w-[330px] mx-auto">
-                        Get started by adding FAQ categories or using our quick setup templates
+                        {t("noFaqsDescription")}
                     </p>
                 </motion.div>
             ) : (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="py-12 text-center">
                     <Search className="mx-auto mb-4 h-16 w-16 text-gray-400" />
-                    <h3 className="mb-2 text-lg font-semibold">No results found</h3>
+                    <h3 className="mb-2 text-lg font-semibold">
+                        {t("noResultsTitle")}
+                    </h3>
                     <p className="text-slate-500">
-                        Try adjusting your search terms or {" "}
-                        <button onClick={() => setSearchTerm("")} className="text-teal-600 hover:underline">
-                            clear the search
-                        </button>
+                        {t("noResultsDescription")}
                     </p>
                 </motion.div>
             )}

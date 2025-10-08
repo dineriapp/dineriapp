@@ -5,11 +5,17 @@ import UpgradeBtn from "@/components/upgrade-btn";
 import VisitBtn from "@/components/visit-btn";
 import prisma from "@/lib/prisma";
 import { createClient } from "@/supabase/clients/server";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+    title: "Dashbaord",
+    description: 'Dineri helps restaurants create beautiful, shareable pages with all their important links in one place — from menus and reservations to delivery and social media.',
+};
 
 export default async function WithResttaurantLayout({
     children,

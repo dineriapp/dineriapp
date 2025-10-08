@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import { useLocale } from "next-intl";
+import { Locale } from "@/i18n/routing";
 
 const predefinedColors = [
     "#FFFFFF", "#000000", "#1DA1F2", "#1877F2", "#E1306C",
@@ -20,7 +22,7 @@ export function ColorSelector({
     onChange: (val: string) => void;
 }) {
     const [customColor, setCustomColor] = useState("#000000");
-
+    const locale = useLocale() as Locale
     return (
         <div className="space-y-2">
             {label
@@ -50,7 +52,15 @@ export function ColorSelector({
                         </SelectItem>
                     ))}
                     <div className="px-4 py-2 border-t mt-2">
-                        <Label className="text-xs text-muted-foreground">Custom Color</Label>
+                        <Label className="text-xs text-muted-foreground">
+                            {locale === "en" ? "Custom Color"
+                                : locale === "es" ? "Color personalizado"
+                                    : locale === "de" ? "Benutzerdefinierte Farbe"
+                                        : locale === "fr" ? "Couleur personnalisée"
+                                            : locale === "nl" ? "Aangepaste kleur"
+                                                : locale === "it" ? "Colore personalizzato"
+                                                    : "Custom Color"}
+                        </Label>
                         <Input
                             type="color"
                             className="w-full h-8 p-0 mt-1 border-none cursor-pointer"

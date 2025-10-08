@@ -198,16 +198,69 @@ export const fonts = [
     { name: "Playfair Display", value: "var(--font-playfair-display)", preview: "Stylish display serif", weights: [400, 500, 600, 700, 800, 900] },
 ];
 
-export const gradientDirections = [
-    { value: "bottom", label: "Bottom", preview: "Top to Bottom" },
-    { value: "top", label: "Top", preview: "Bottom to Top" },
-    { value: "right", label: "Right", preview: "Left to Right" },
-    { value: "left", label: "Left", preview: "Right to Left" },
-    { value: "bottom_right", label: "Bottom Right", preview: "Top Left to Bottom Right" },
-    { value: "bottom_left", label: "Bottom Left", preview: "Top Right to Bottom Left" },
-    { value: "top_right", label: "Top Right", preview: "Bottom Left to Top Right" },
-    { value: "top_left", label: "Top Left", preview: "Bottom Right to Top Left" },
-]
+export const gradientDirectionsLangs = {
+    en: [
+        { value: "bottom", label: "Bottom", preview: "Top to Bottom" },
+        { value: "top", label: "Top", preview: "Bottom to Top" },
+        { value: "right", label: "Right", preview: "Left to Right" },
+        { value: "left", label: "Left", preview: "Right to Left" },
+        { value: "bottom_right", label: "Bottom Right", preview: "Top Left to Bottom Right" },
+        { value: "bottom_left", label: "Bottom Left", preview: "Top Right to Bottom Left" },
+        { value: "top_right", label: "Top Right", preview: "Bottom Left to Top Right" },
+        { value: "top_left", label: "Top Left", preview: "Bottom Right to Top Left" },
+    ],
+    es: [
+        { value: "bottom", label: "Abajo", preview: "De arriba a abajo" },
+        { value: "top", label: "Arriba", preview: "De abajo a arriba" },
+        { value: "right", label: "Derecha", preview: "De izquierda a derecha" },
+        { value: "left", label: "Izquierda", preview: "De derecha a izquierda" },
+        { value: "bottom_right", label: "Abajo derecha", preview: "De arriba izquierda a abajo derecha" },
+        { value: "bottom_left", label: "Abajo izquierda", preview: "De arriba derecha a abajo izquierda" },
+        { value: "top_right", label: "Arriba derecha", preview: "De abajo izquierda a arriba derecha" },
+        { value: "top_left", label: "Arriba izquierda", preview: "De abajo derecha a arriba izquierda" },
+    ],
+    de: [
+        { value: "bottom", label: "Unten", preview: "Von oben nach unten" },
+        { value: "top", label: "Oben", preview: "Von unten nach oben" },
+        { value: "right", label: "Rechts", preview: "Von links nach rechts" },
+        { value: "left", label: "Links", preview: "Von rechts nach links" },
+        { value: "bottom_right", label: "Unten rechts", preview: "Von oben links nach unten rechts" },
+        { value: "bottom_left", label: "Unten links", preview: "Von oben rechts nach unten links" },
+        { value: "top_right", label: "Oben rechts", preview: "Von unten links nach oben rechts" },
+        { value: "top_left", label: "Oben links", preview: "Von unten rechts nach oben links" },
+    ],
+    fr: [
+        { value: "bottom", label: "Bas", preview: "De haut en bas" },
+        { value: "top", label: "Haut", preview: "De bas en haut" },
+        { value: "right", label: "Droite", preview: "De gauche à droite" },
+        { value: "left", label: "Gauche", preview: "De droite à gauche" },
+        { value: "bottom_right", label: "Bas droite", preview: "De haut gauche à bas droite" },
+        { value: "bottom_left", label: "Bas gauche", preview: "De haut droite à bas gauche" },
+        { value: "top_right", label: "Haut droite", preview: "De bas gauche à haut droite" },
+        { value: "top_left", label: "Haut gauche", preview: "De bas droite à haut gauche" },
+    ],
+    nl: [
+        { value: "bottom", label: "Onder", preview: "Van boven naar onder" },
+        { value: "top", label: "Boven", preview: "Van onder naar boven" },
+        { value: "right", label: "Rechts", preview: "Van links naar rechts" },
+        { value: "left", label: "Links", preview: "Van rechts naar links" },
+        { value: "bottom_right", label: "Rechts onder", preview: "Van links boven naar rechts onder" },
+        { value: "bottom_left", label: "Links onder", preview: "Van rechts boven naar links onder" },
+        { value: "top_right", label: "Rechts boven", preview: "Van links onder naar rechts boven" },
+        { value: "top_left", label: "Links boven", preview: "Van rechts onder naar links boven" },
+    ],
+    it: [
+        { value: "bottom", label: "Basso", preview: "Dall'alto verso il basso" },
+        { value: "top", label: "Alto", preview: "Dal basso verso l'alto" },
+        { value: "right", label: "Destra", preview: "Da sinistra a destra" },
+        { value: "left", label: "Sinistra", preview: "Da destra a sinistra" },
+        { value: "bottom_right", label: "In basso a destra", preview: "Da in alto a sinistra a in basso a destra" },
+        { value: "bottom_left", label: "In basso a sinistra", preview: "Da in alto a destra a in basso a sinistra" },
+        { value: "top_right", label: "In alto a destra", preview: "Da in basso a sinistra a in alto a destra" },
+        { value: "top_left", label: "In alto a sinistra", preview: "Da in basso a destra a in alto a sinistra" },
+    ],
+}
+
 
 export const gradientPresets = [
     { name: "Teal", start: "#0d9488", end: "#0891b2" },
@@ -700,3 +753,239 @@ export const OrderStatusActions = {
     },
 };
 
+export const FAQ_TEMPLATES = {
+    en: [
+        {
+            category: "Hours & Location",
+            description: "Information about our location and operating hours",
+            faqs: [
+                { question: "What are your opening hours?", answer: "We are open Monday to Sunday from 11:00 AM to 10:00 PM." },
+                {
+                    question: "Where are you located?",
+                    answer: "You can find our address and directions in the contact section above.",
+                },
+            ],
+        },
+        {
+            category: "Reservations & Booking",
+            description: "Everything about making and managing reservations",
+            faqs: [
+                {
+                    question: "Do you take reservations?",
+                    answer: "Yes, we accept reservations. You can book a table using the reservation link above.",
+                },
+                { question: "How far in advance can I book?", answer: "You can make reservations up to 30 days in advance." },
+            ],
+        },
+        {
+            category: "Menu & Dietary",
+            description: "Questions about our menu and dietary accommodations",
+            faqs: [
+                {
+                    question: "Do you have vegetarian options?",
+                    answer: "Yes, we have a variety of vegetarian dishes clearly marked on our menu.",
+                },
+                {
+                    question: "Do you offer vegan meals?",
+                    answer: "Yes, we have several vegan options available. Please ask your server for details.",
+                },
+            ],
+        },
+        {
+            category: "Policies & Services",
+            description: "Information about our services and policies",
+            faqs: [
+                { question: "Do you offer takeaway?", answer: "Yes, all our menu items are available for takeaway." },
+                {
+                    question: "Do you deliver?",
+                    answer: "Yes, we offer delivery through our delivery partners. Check our delivery section for details.",
+                },
+            ],
+        },
+    ],
+    de: [
+        {
+            category: "Öffnungszeiten & Standort",
+            description: "Informationen zu unserem Standort und unseren Öffnungszeiten",
+            faqs: [
+                { question: "Wie sind Ihre Öffnungszeiten?", answer: "Wir haben Montag bis Sonntag von 11:00 bis 22:00 Uhr geöffnet." },
+                { question: "Wo befinden Sie sich?", answer: "Unsere Adresse und Wegbeschreibung finden Sie im obigen Kontaktbereich." }
+            ]
+        },
+        {
+            category: "Reservierungen & Buchungen",
+            description: "Alles rund um Reservierungen und Buchungen",
+            faqs: [
+                { question: "Nehmen Sie Reservierungen an?", answer: "Ja, Sie können über den obigen Reservierungslink einen Tisch buchen." },
+                { question: "Wie weit im Voraus kann ich buchen?", answer: "Sie können bis zu 30 Tage im Voraus reservieren." }
+            ]
+        },
+        {
+            category: "Speisekarte & Ernährung",
+            description: "Fragen zu unserer Speisekarte und Ernährungsangeboten",
+            faqs: [
+                { question: "Haben Sie vegetarische Optionen?", answer: "Ja, wir haben eine Vielzahl vegetarischer Gerichte, die deutlich auf der Speisekarte gekennzeichnet sind." },
+                { question: "Bieten Sie vegane Mahlzeiten an?", answer: "Ja, wir haben mehrere vegane Optionen. Bitte fragen Sie Ihr Servicepersonal nach Details." }
+            ]
+        },
+        {
+            category: "Richtlinien & Dienstleistungen",
+            description: "Informationen zu unseren Dienstleistungen und Richtlinien",
+            faqs: [
+                { question: "Bieten Sie Essen zum Mitnehmen an?", answer: "Ja, alle unsere Gerichte sind auch zum Mitnehmen erhältlich." },
+                { question: "Liefern Sie auch?", answer: "Ja, wir bieten Lieferungen über unsere Lieferpartner an. Weitere Informationen finden Sie im Lieferbereich." }
+            ]
+        }
+    ],
+    es: [
+        {
+            category: "Horario y Ubicación",
+            description: "Información sobre nuestra ubicación y horarios de apertura",
+            faqs: [
+                { question: "¿Cuál es su horario de apertura?", answer: "Abrimos de lunes a domingo de 11:00 a 22:00." },
+                { question: "¿Dónde están ubicados?", answer: "Puede encontrar nuestra dirección e indicaciones en la sección de contacto arriba." }
+            ]
+        },
+        {
+            category: "Reservas y Citas",
+            description: "Todo sobre cómo hacer y gestionar reservas",
+            faqs: [
+                { question: "¿Aceptan reservas?", answer: "Sí, aceptamos reservas. Puede reservar una mesa usando el enlace de reservas arriba." },
+                { question: "¿Con cuánta antelación puedo reservar?", answer: "Puede hacer reservas con hasta 30 días de anticipación." }
+            ]
+        },
+        {
+            category: "Menú y Dietas",
+            description: "Preguntas sobre nuestro menú y opciones dietéticas",
+            faqs: [
+                { question: "¿Tienen opciones vegetarianas?", answer: "Sí, tenemos una variedad de platos vegetarianos claramente marcados en nuestro menú." },
+                { question: "¿Ofrecen comidas veganas?", answer: "Sí, tenemos varias opciones veganas disponibles. Pregunte a su camarero para más detalles." }
+            ]
+        },
+        {
+            category: "Políticas y Servicios",
+            description: "Información sobre nuestros servicios y políticas",
+            faqs: [
+                { question: "¿Ofrecen comida para llevar?", answer: "Sí, todos nuestros platos están disponibles para llevar." },
+                { question: "¿Hacen entregas?", answer: "Sí, ofrecemos entrega a domicilio a través de nuestros socios de reparto. Consulte la sección de entregas para más detalles." }
+            ]
+        }
+    ],
+    fr: [
+        {
+            category: "Horaires & Emplacement",
+            description: "Informations sur notre emplacement et nos horaires d'ouverture",
+            faqs: [
+                { question: "Quels sont vos horaires d'ouverture ?", answer: "Nous sommes ouverts du lundi au dimanche de 11h00 à 22h00." },
+                { question: "Où êtes-vous situés ?", answer: "Vous pouvez trouver notre adresse et l'itinéraire dans la section contact ci-dessus." }
+            ]
+        },
+        {
+            category: "Réservations",
+            description: "Tout sur la réservation et la gestion des réservations",
+            faqs: [
+                { question: "Acceptez-vous les réservations ?", answer: "Oui, nous acceptons les réservations. Vous pouvez réserver une table via le lien de réservation ci-dessus." },
+                { question: "Combien de temps à l'avance puis-je réserver ?", answer: "Vous pouvez réserver jusqu'à 30 jours à l'avance." }
+            ]
+        },
+        {
+            category: "Menu & Régimes",
+            description: "Questions sur notre menu et nos options alimentaires",
+            faqs: [
+                { question: "Avez-vous des options végétariennes ?", answer: "Oui, nous proposons une variété de plats végétariens clairement indiqués sur notre menu." },
+                { question: "Proposez-vous des repas véganes ?", answer: "Oui, nous avons plusieurs options véganes disponibles. Veuillez demander plus d'informations à votre serveur." }
+            ]
+        },
+        {
+            category: "Politiques & Services",
+            description: "Informations sur nos services et politiques",
+            faqs: [
+                { question: "Proposez-vous des plats à emporter ?", answer: "Oui, tous nos plats sont disponibles à emporter." },
+                { question: "Faites-vous des livraisons ?", answer: "Oui, nous proposons un service de livraison via nos partenaires. Consultez notre section livraison pour plus de détails." }
+            ]
+        }
+    ],
+    it: [
+        {
+            category: "Orari e Posizione",
+            description: "Informazioni sulla nostra posizione e sugli orari di apertura",
+            faqs: [
+                { question: "Quali sono i vostri orari di apertura?", answer: "Siamo aperti dal lunedì alla domenica dalle 11:00 alle 22:00." },
+                { question: "Dove vi trovate?", answer: "Puoi trovare il nostro indirizzo e le indicazioni nella sezione contatti qui sopra." }
+            ]
+        },
+        {
+            category: "Prenotazioni",
+            description: "Tutto sulle prenotazioni e la loro gestione",
+            faqs: [
+                { question: "Accettate prenotazioni?", answer: "Sì, accettiamo prenotazioni. Puoi prenotare un tavolo utilizzando il link alle prenotazioni qui sopra." },
+                { question: "Con quanto anticipo posso prenotare?", answer: "Puoi effettuare prenotazioni fino a 30 giorni in anticipo." }
+            ]
+        },
+        {
+            category: "Menu e Diete",
+            description: "Domande sul nostro menu e sulle opzioni alimentari",
+            faqs: [
+                { question: "Avete opzioni vegetariane?", answer: "Sì, abbiamo una varietà di piatti vegetariani chiaramente indicati nel nostro menu." },
+                { question: "Offrite pasti vegani?", answer: "Sì, abbiamo diverse opzioni vegane disponibili. Chiedi maggiori dettagli al tuo cameriere." }
+            ]
+        },
+        {
+            category: "Politiche e Servizi",
+            description: "Informazioni sui nostri servizi e politiche",
+            faqs: [
+                { question: "Offrite cibo da asporto?", answer: "Sì, tutti i nostri piatti sono disponibili per l'asporto." },
+                { question: "Fate consegne a domicilio?", answer: "Sì, offriamo consegne tramite i nostri partner. Consulta la sezione consegne per maggiori dettagli." }
+            ]
+        }
+    ],
+    nl: [
+        {
+            category: "Openingstijden & Locatie",
+            description: "Informatie over onze locatie en openingstijden",
+            faqs: [
+                { question: "Wat zijn jullie openingstijden?", answer: "Wij zijn geopend van maandag tot en met zondag van 11:00 tot 22:00." },
+                { question: "Waar zijn jullie gevestigd?", answer: "Ons adres en de routebeschrijving vindt u in het bovenstaande contactgedeelte." }
+            ]
+        },
+        {
+            category: "Reserveringen",
+            description: "Alles over het maken en beheren van reserveringen",
+            faqs: [
+                { question: "Accepteren jullie reserveringen?", answer: "Ja, wij accepteren reserveringen. U kunt een tafel boeken via de bovenstaande reserveringslink." },
+                { question: "Hoe ver van tevoren kan ik reserveren?", answer: "U kunt tot 30 dagen van tevoren reserveren." }
+            ]
+        },
+        {
+            category: "Menu & Dieet",
+            description: "Vragen over ons menu en dieetopties",
+            faqs: [
+                { question: "Hebben jullie vegetarische opties?", answer: "Ja, we hebben een verscheidenheid aan vegetarische gerechten die duidelijk op ons menu staan aangegeven." },
+                { question: "Bieden jullie veganistische maaltijden aan?", answer: "Ja, we hebben verschillende veganistische opties beschikbaar. Vraag uw ober om meer informatie." }
+            ]
+        },
+        {
+            category: "Beleid & Diensten",
+            description: "Informatie over onze diensten en beleid",
+            faqs: [
+                { question: "Bieden jullie afhaalmaaltijden aan?", answer: "Ja, al onze gerechten zijn beschikbaar om af te halen." },
+                { question: "Leveren jullie ook?", answer: "Ja, wij leveren via onze bezorgpartners. Bekijk het gedeelte over bezorging voor meer details." }
+            ]
+        }
+    ]
+}
+
+export const faq_container_animation = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+        },
+    },
+}
+
+export const faq_item_animation = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+}

@@ -17,16 +17,17 @@ import { User } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 export function NavUser({ data }: { data: { user: User } }) {
     const { isMobile } = useSidebar()
     const router = useRouter()
-
+    const t = useTranslations("NavUser")
     if (!data?.user) return null
 
     const handleSignOut = async () => {
-        toast("Signed out successfully", {
-            description: "You have been logged out of your account.",
+        toast(t("toastSignedOut"), {
+            description: t("toastDescription"),
         })
         await signout()
         router.push("/")
@@ -47,7 +48,7 @@ export function NavUser({ data }: { data: { user: User } }) {
 
                             <div className="grid flex-1 text-left text-sm leading-tight">
                                 <span className="truncate text-xs text-main-text/80">
-                                    {data?.user.email || "your@email.com"}
+                                    {data?.user?.email}
                                 </span>
                             </div>
 
@@ -74,14 +75,14 @@ export function NavUser({ data }: { data: { user: User } }) {
                         <DropdownMenuItem asChild>
                             <Link href={"/dashboard/change-email"}>
                                 <Mail />
-                                Change Email
+                                {t("changeEmail")}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => {
                             handleSignOut()
                         }}>
                             <LogOutIcon />
-                            Log out
+                            {t("logOut")}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

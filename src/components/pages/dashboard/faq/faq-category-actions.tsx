@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lightbulb, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface FaqTemplate {
     category: string;
@@ -69,7 +70,7 @@ export const FaqCategoryActions = ({
 }: FaqCategoryActionsProps) => {
     const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
     const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState(false);
-
+    const t = useTranslations("faqs.faqActions")
     const checkLimitAndPopup = () => {
         const plan = prismaUser?.subscription_plan ?? "basic";
         const limit = STRIPE_PLANS[plan].limits?.faqCategories;
@@ -77,7 +78,10 @@ export const FaqCategoryActions = ({
 
         if (limit !== undefined && categories.length >= limit) {
             openPopup(
-                `You are limited to ${limit} FAQ categories on the ${planName} plan. Upgrade to Pro or Enterprise to add more.`
+                `${t("limitReachedMessage", {
+                    limit: limit,
+                    planName: planName
+                })}`
             );
             return true;
         }
@@ -95,7 +99,7 @@ export const FaqCategoryActions = ({
                     className="flex items-center gap-2 text-main-blue hover:text-main-blue border-[1px] border-main-blue cursor-pointer hover:opacity-75 !bg-transparent rounded-full !px-5 font-poppins h-[42px]"
                 >
                     <Lightbulb className="h-4 w-4" />
-                    Quick Setup
+                    {t("quickSetup")}
                 </Button>
             ) : (
                 <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
@@ -106,14 +110,16 @@ export const FaqCategoryActions = ({
                             className="flex items-center gap-2 text-main-blue hover:text-main-blue border-[1px] border-main-blue cursor-pointer hover:opacity-75 !bg-transparent rounded-full !px-5 font-poppins h-[42px]"
                         >
                             <Lightbulb className="h-4 w-4" />
-                            Quick Setup
+                            {t("quickSetup")}
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden">
                         <DialogHeader className="flex-shrink-0">
-                            <DialogTitle>Quick FAQ Setup</DialogTitle>
+                            <DialogTitle>
+                                {t("quickSetupTitle")}
+                            </DialogTitle>
                             <DialogDescription>
-                                Choose from common restaurant FAQ templates to get started quickly
+                                {t("quickSetupDescription")}
                             </DialogDescription>
                         </DialogHeader>
 
@@ -128,7 +134,9 @@ export const FaqCategoryActions = ({
                                             <CardTitle className="text-lg leading-[1.3]">
                                                 {template.category}
                                             </CardTitle>
-                                            <CardDescription>{template.faqs.length} common questions</CardDescription>
+                                            <CardDescription>
+                                                {t("commonQuestions", { count: template.faqs.length })}
+                                            </CardDescription>
                                         </CardHeader>
                                         <CardContent className="pt-0 flex px-4 flex-col h-full items-start justify-between">
                                             <div className="mb-4 space-y-1 pl-4">
@@ -141,7 +149,7 @@ export const FaqCategoryActions = ({
                                                 </ul>
                                                 {template.faqs.length > 2 && (
                                                     <p className="text-sm text-slate-500">
-                                                        + {template.faqs.length - 2} more questions
+                                                        {t("moreQuestions", { count: template.faqs.length - 2 })}
                                                     </p>
                                                 )}
                                             </div>
@@ -152,8 +160,8 @@ export const FaqCategoryActions = ({
                                                     disabled={createCategoryMutation.isPending || createFaqMutation.isPending}
                                                 >
                                                     {createCategoryMutation.isPending || createFaqMutation.isPending
-                                                        ? "Adding..."
-                                                        : "Add This Category"}
+                                                        ? t("adding")
+                                                        : t("addThisCategory")}
                                                 </Button>
                                             </div>
                                         </CardContent>
@@ -174,7 +182,7 @@ export const FaqCategoryActions = ({
                     className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                 >
                     <Plus className="h-4 w-4" />
-                    Add Category
+                    {t("addCategory")}
                 </Button>
             ) : (
                 <Dialog open={isAddCategoryDialogOpen} onOpenChange={setIsAddCategoryDialogOpen}>
@@ -185,37 +193,44 @@ export const FaqCategoryActions = ({
                             className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
                         >
                             <Plus className="h-4 w-4" />
-                            Add Category
+                            {t("addCategory")}
+
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <form onSubmit={handleAddCategory}>
                             <DialogHeader>
-                                <DialogTitle>Add FAQ Category</DialogTitle>
+                                <DialogTitle>
+                                    {t("addCategoryTitle")}
+                                </DialogTitle>
                                 <DialogDescription>
-                                    Create a new category to organize your FAQs
+                                    {t("addCategoryDescription")}
                                 </DialogDescription>
                             </DialogHeader>
 
                             <div className="space-y-4 py-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="categoryName">Category Name</Label>
+                                    <Label htmlFor="categoryName">
+                                        {t("categoryNameLabel")}
+                                    </Label>
                                     <Input
                                         id="categoryName"
                                         value={newCategoryName}
                                         onChange={(e) => setNewCategoryName(e.target.value)}
-                                        placeholder="e.g. Reservations"
+                                        placeholder={t("categoryNamePlaceholder")}
                                         required
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="categoryDescription">Description (Optional)</Label>
+                                    <Label htmlFor="categoryDescription">
+                                        {t("categoryDescriptionLabel")}
+                                    </Label>
                                     <Textarea
                                         id="categoryDescription"
                                         value={newCategoryDescription}
                                         onChange={(e) => setNewCategoryDescription(e.target.value)}
-                                        placeholder="Brief description of this category"
+                                        placeholder={t("categoryDescriptionPlaceholder")}
                                         rows={3}
                                     />
                                 </div>
@@ -232,7 +247,7 @@ export const FaqCategoryActions = ({
                                     disabled={createCategoryMutation.isPending}
                                     className="hover:opacity-75 cursor-pointer h-[40px] rounded-full font-poppins !px-5"
                                 >
-                                    Cancel
+                                    {t("cancel")}
                                 </Button>
                                 <Button
                                     type="submit"
@@ -243,7 +258,7 @@ export const FaqCategoryActions = ({
                                     }
                                     className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                                 >
-                                    {createCategoryMutation.isPending ? "Adding..." : "Add Category"}
+                                    {createCategoryMutation.isPending ? t("addingCategory") : t("addCategory")}
                                 </Button>
                             </DialogFooter>
                         </form>

@@ -14,12 +14,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Locale } from "@/i18n/routing"
 import { getLucideIconBySlug } from "@/lib/get-icons"
 import { useLinks } from "@/lib/link-queries"
-import { colorPresets, container2, fonts, gradientDirections, gradientPresets, templates, textColorPresets } from "@/lib/reuseable-data"
+import { colorPresets, container2, fonts, gradientDirectionsLangs, gradientPresets, textColorPresets } from "@/lib/reuseable-data"
 import { useGoogleReviews } from "@/lib/review-api"
-import { AppearanceFormData, Template } from "@/lib/types"
-import { cn, getBackgroundStyle, ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
+import { AppearanceFormData } from "@/lib/types"
+import { getBackgroundStyle, ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { OpeningHoursData } from "@/types"
 import { GradientDirection } from "@prisma/client"
@@ -36,6 +37,7 @@ import {
     Wifi
 } from "lucide-react"
 import { motion } from "motion/react"
+import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -43,7 +45,7 @@ export default function AppearancePage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
     const { data: links = [], isLoading: linksLoading, } = useLinks(selectedRestaurant?.id)
     const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(selectedRestaurant?.google_place_id);
-
+    const t = useTranslations("appearance")
     // Form state
     const [formData, setFormData] = useState<AppearanceFormData>({
         bg_color: "#ffffff",
@@ -72,7 +74,7 @@ export default function AppearancePage() {
     // UI state
     const [saving, setSaving] = useState(false)
     const [currentTime] = useState(() => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }))
-
+    const locale = useLocale() as Locale
     // Load initial data from restaurant store
     useEffect(() => {
         if (selectedRestaurant) {
@@ -113,7 +115,7 @@ export default function AppearancePage() {
     // Reset form to initial state
     const resetForm = () => {
         setFormData(initialData)
-        toast.success("Form reset to original values")
+        toast.success(t("resetToOrignal"))
     }
 
     // Save changes
@@ -133,7 +135,7 @@ export default function AppearancePage() {
 
             if (!response.ok) {
                 const error = await response.json()
-                throw new Error(error.error || "Failed to save appearance settings")
+                throw new Error(error.error || t("failedToChange"))
             }
 
             const result = await response.json()
@@ -144,10 +146,10 @@ export default function AppearancePage() {
             // Update initial data to reflect saved state
             setInitialData(formData)
 
-            toast.success("Appearance settings saved successfully!")
+            toast.success(t("SuccessToChange"))
         } catch (error) {
             console.error("Error saving appearance:", error)
-            toast.error(error instanceof Error ? error.message : "Failed to save appearance settings")
+            toast.error(error instanceof Error ? error.message : t("failedToChange"))
         } finally {
             setSaving(false)
         }
@@ -156,14 +158,14 @@ export default function AppearancePage() {
     const openingHours = selectedRestaurant?.opening_hours ? (selectedRestaurant?.opening_hours as OpeningHoursData) : null
 
     // Apply template
-    const applyTemplate = async (template: Template) => {
-        const templateData = template.preview
-        setFormData(templateData)
-    }
+    // const applyTemplate = async (template: Template) => {
+    //     const templateData = template.preview
+    //     setFormData(templateData)
+    // }
 
     if (!selectedRestaurant) {
         return (
-            <LoadingUI text="Loading appearance..." />
+            <LoadingUI text={t("loadingAppearance")} />
         )
     }
 
@@ -172,9 +174,11 @@ export default function AppearancePage() {
         <main className="max-w-[1200px] mx-auto px-4 py-8">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-main-blue">
-                    Appearance
+                    {t("appearance")}
                 </h1>
-                <p className="text-slate-500 mt-1">Customize how your restaurant page looks</p>
+                <p className="text-slate-500 mt-1">
+                    {t("customizeRestaurantPage")}
+                </p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-8">
@@ -183,15 +187,21 @@ export default function AppearancePage() {
                         <TabsList className="grid grid-cols-3 gap-4 h-[44px] rounded-full w-full">
                             <TabsTrigger value="style" className="flex items-center gap-2 rounded-full">
                                 <Paintbrush className="h-4 w-4" />
-                                <span>Style</span>
+                                <span>
+                                    {t("tabs_style")}
+                                </span>
                             </TabsTrigger>
                             <TabsTrigger value="colors" className="flex items-center gap-2 rounded-full">
                                 <Palette className="h-4 w-4" />
-                                <span>Colors</span>
+                                <span>
+                                    {t("tabs_colors")}
+                                </span>
                             </TabsTrigger>
                             <TabsTrigger value="typography" className="flex items-center gap-2 rounded-full">
                                 <Type className="h-4 w-4" />
-                                <span>Typography</span>
+                                <span>
+                                    {t("tabs_typography")}
+                                </span>
                             </TabsTrigger>
                             {/* <TabsTrigger value="templates" className="flex items-center gap-2 rounded-full">
                                 <Sparkles className="h-4 w-4" />
@@ -202,12 +212,18 @@ export default function AppearancePage() {
                         <TabsContent value="style" className="space-y-4">
                             <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
                                 <CardHeader className="py-4 gap-1 font-poppins bg-gray-100/50">
-                                    <CardTitle className="text-slate-900">Button Style</CardTitle>
-                                    <CardDescription className="text-slate-500">Choose how your buttons should look</CardDescription>
+                                    <CardTitle className="text-slate-900">
+                                        {t("buttonStyle")}
+                                    </CardTitle>
+                                    <CardDescription className="text-slate-500">
+                                        {t("buttonStyle_description")}
+                                    </CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-3 pt-4">
                                     <div className="space-y-4">
-                                        <Label className="text-slate-700">Shape</Label>
+                                        <Label className="text-slate-700">
+                                            {t("shape")}
+                                        </Label>
                                         <RadioGroup
                                             value={formData.button_style}
                                             onValueChange={(value: string) =>
@@ -222,7 +238,9 @@ export default function AppearancePage() {
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
                                                     <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
-                                                    <span className="text-slate-700">Rounded</span>
+                                                    <span className="text-slate-700">
+                                                        {t("rounded")}
+                                                    </span>
                                                 </Label>
                                             </div>
 
@@ -233,7 +251,9 @@ export default function AppearancePage() {
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
                                                     <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
-                                                    <span className="text-slate-700">Square</span>
+                                                    <span className="text-slate-700">
+                                                        {t("square")}
+                                                    </span>
                                                 </Label>
                                             </div>
 
@@ -244,14 +264,18 @@ export default function AppearancePage() {
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
                                                     <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
-                                                    <span className="text-slate-700">Pill</span>
+                                                    <span className="text-slate-700">
+                                                        {t("pill")}
+                                                    </span>
                                                 </Label>
                                             </div>
                                         </RadioGroup>
                                     </div>
 
                                     <div className="space-y-4">
-                                        <Label className="text-slate-700">Style</Label>
+                                        <Label className="text-slate-700">
+                                            {t("style")}
+                                        </Label>
                                         <RadioGroup
                                             value={formData.button_variant}
                                             onValueChange={(value: string) =>
@@ -266,9 +290,13 @@ export default function AppearancePage() {
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
                                                     <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-green to-main-blue mb-2 flex items-center justify-center">
-                                                        <span className="text-white text-xs font-medium">Solid</span>
+                                                        <span className="text-white text-xs font-medium">
+                                                            {t("solid")}
+                                                        </span>
                                                     </div>
-                                                    <span className="text-slate-700">Solid</span>
+                                                    <span className="text-slate-700">
+                                                        {t("solid")}
+                                                    </span>
                                                 </Label>
                                             </div>
 
@@ -279,9 +307,13 @@ export default function AppearancePage() {
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
                                                     <div className="w-full h-10 rounded-xl bg-white border-2 border-teal-600 mb-2 flex items-center justify-center">
-                                                        <span className="text-teal-600 text-xs font-medium">Outline</span>
+                                                        <span className="text-teal-600 text-xs font-medium">
+                                                            {t("outline")}
+                                                        </span>
                                                     </div>
-                                                    <span className="text-slate-700">Outline</span>
+                                                    <span className="text-slate-700">
+                                                        {t("outline")}
+                                                    </span>
                                                 </Label>
                                             </div>
                                         </RadioGroup>
@@ -290,8 +322,12 @@ export default function AppearancePage() {
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between border rounded-lg px-4 py-3">
                                             <div className="space-y-1">
-                                                <Label className="text-slate-700 text-sm font-medium">Show Icons on Buttons</Label>
-                                                <p className="text-sm text-muted-foreground">Enable this to show icons inside your link buttons.</p>
+                                                <Label className="text-slate-700 text-sm font-medium">
+                                                    {t("showIconsOnButtons")}
+                                                </Label>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {t("showIconsOnButtons_description")}
+                                                </p>
                                             </div>
                                             <Switch
                                                 checked={formData.button_icons_show}
@@ -305,10 +341,10 @@ export default function AppearancePage() {
                                     <div className="space-y-2">
                                         <div>
                                             <Label className="text-slate-700 text-sm font-medium">
-                                                Vertical Gap Between Buttons (px)
+                                                {t("verticalGapBetweenButtons")}
                                             </Label>
                                             <p className="text-sm text-muted-foreground">
-                                                Adjust the spacing between stacked buttons.
+                                                {t("verticalGapBetweenButtons_description")}
                                             </p>
                                         </div>
                                         <Select
@@ -318,7 +354,7 @@ export default function AppearancePage() {
                                             }
                                         >
                                             <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select gap in px" />
+                                                <SelectValue placeholder={t("selectGapPlaceholder")} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {[...Array(16)].map((_, i) => {
@@ -337,9 +373,11 @@ export default function AppearancePage() {
                             </Card>
                             <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
                                 <CardHeader className="py-4 gap-1 bg-gray-100/50 font-poppins">
-                                    <CardTitle className="text-slate-900">Social Icon Style</CardTitle>
+                                    <CardTitle className="text-slate-900">
+                                        {t("socialIconStyle")}
+                                    </CardTitle>
                                     <CardDescription className="text-slate-500">
-                                        Customize how your social icons appear.
+                                        {t("socialIconStyle_description")}
                                     </CardDescription>
                                 </CardHeader>
 
@@ -348,9 +386,11 @@ export default function AppearancePage() {
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between border rounded-lg px-4 py-3">
                                             <div className="space-y-1">
-                                                <Label className="text-slate-700 text-sm font-medium">Show Icon Background</Label>
+                                                <Label className="text-slate-700 text-sm font-medium">
+                                                    {t("showIconBackground")}
+                                                </Label>
                                                 <p className="text-sm text-muted-foreground">
-                                                    Enable this to show a colored circular behind each social icon.
+                                                    {t("showIconBackground_description")}
                                                 </p>
                                             </div>
                                             <Switch
@@ -365,9 +405,11 @@ export default function AppearancePage() {
                                     {/* Select background color */}
                                     <div className="space-y-2">
                                         <div>
-                                            <Label className="text-slate-700 text-sm font-medium">Icon Background Color</Label>
+                                            <Label className="text-slate-700 text-sm font-medium">
+                                                {t("iconBackgroundColor")}
+                                            </Label>
                                             <p className="text-sm text-muted-foreground">
-                                                Choose the background color for the icon container.
+                                                {t("iconBackgroundColor_description")}
                                             </p>
                                         </div>
                                         <ColorSelector
@@ -379,9 +421,11 @@ export default function AppearancePage() {
                                     {/* Select icon color */}
                                     <div className="space-y-2">
                                         <div>
-                                            <Label className="text-slate-700 text-sm font-medium">Icon Color</Label>
+                                            <Label className="text-slate-700 text-sm font-medium">
+                                                {t("iconColor")}
+                                            </Label>
                                             <p className="text-sm text-muted-foreground">
-                                                Choose the color of the social icon itself.
+                                                {t("iconColor_description")}
                                             </p>
                                         </div>
                                         <ColorSelector
@@ -393,10 +437,10 @@ export default function AppearancePage() {
                                     <div className="space-y-2">
                                         <div>
                                             <Label className="text-slate-700 text-sm font-medium">
-                                                Horizonal Gap Between Icons (px)
+                                                {t("horizontalGapBetweenIcons")}
                                             </Label>
                                             <p className="text-sm text-muted-foreground">
-                                                Adjust the spacing between social icons.
+                                                {t("horizontalGapBetweenIcons_description")}
                                             </p>
                                         </div>
                                         <Select
@@ -406,7 +450,7 @@ export default function AppearancePage() {
                                             }
                                         >
                                             <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select gap in px" />
+                                                <SelectValue placeholder={t("selectGapPlaceholder")} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {[...Array(12)].map((_, i) => {
@@ -425,114 +469,17 @@ export default function AppearancePage() {
                             </Card>
                         </TabsContent>
 
-                        <TabsContent value="templates">
-                            <Card className="border-slate-200 pt-0 box-shad-every-2">
-                                <CardHeader className="py-4 font-poppins bg-gray-100/50">
-                                    <CardTitle className="text-slate-900">Design Templates</CardTitle>
-                                    <CardDescription className="text-slate-500">
-                                        Choose from professionally designed templates to quickly style your restaurant page
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="grid md:grid-cols-2 gap-6">
-                                        {templates.map((template) => (
-                                            <motion.div
-                                                key={template.id}
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 0.3 }}
-                                                className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white hover:shadow-lg transition-all duration-300"
-                                            >
-                                                {/* Template Preview */}
-                                                <div className="aspect-[4/3] relative overflow-hidden">
-                                                    <div
-                                                        className="absolute inset-0 p-4 flex flex-col items-center justify-center text-center"
-                                                        style={{
-                                                            background: template.preview.bg_type === "gradient"
-                                                                ? `linear-gradient(to bottom right, ${template.preview.bg_gradient_start}, ${template.preview.bg_gradient_end})`
-                                                                : template.preview.bg_color,
-                                                            fontFamily: template.preview.font_family
-                                                        }}
-                                                    >
-                                                        {/* Mock Restaurant Name */}
-                                                        <h3
-                                                            className="text-lg font-bold mb-2"
-                                                            style={{ color: template.preview.headings_text_color }}
-                                                        >
-                                                            {selectedRestaurant?.name}
-                                                        </h3>
 
-                                                        {/* Mock Bio */}
-                                                        <p
-                                                            className="text-sm mb-4 opacity-90"
-                                                            style={{ color: template.preview.headings_text_color }}
-                                                        >
-                                                            Delicious food & great atmosphere
-                                                        </p>
-
-                                                        {/* Mock Button */}
-                                                        <div
-                                                            className={`px-4 py-2 text-sm font-medium transition-all ${template.preview.button_style === "pill"
-                                                                ? "rounded-full"
-                                                                : template.preview.button_style === "square"
-                                                                    ? "rounded-md"
-                                                                    : "rounded-xl"
-                                                                }`}
-                                                            style={{
-                                                                backgroundColor: template.preview.button_variant === "solid"
-                                                                    ? template.preview.accent_color
-                                                                    : "transparent",
-                                                                color: template.preview.button_variant === "solid"
-                                                                    ? template.preview.button_text_icons_color
-                                                                    : template.preview.accent_color,
-                                                                border: template.preview.button_variant === "outline"
-                                                                    ? `2px solid ${template.preview.accent_color}`
-                                                                    : "none"
-                                                            }}
-                                                        >
-                                                            View Menu
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Overlay on hover */}
-                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
-                                                </div>
-
-                                                {/* Template Info */}
-                                                <div className="p-4">
-                                                    <div className="flex items-start justify-between mb-2">
-                                                        <div>
-                                                            <h4 className="font-semibold text-slate-900">{template.name}</h4>
-                                                            <span className="inline-block px-2 py-1 text-xs bg-slate-100 text-slate-600 rounded-full mt-1">
-                                                                {template.category}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <p className="text-sm text-slate-600 mb-4">{template.description}</p>
-
-                                                    <Button
-                                                        onClick={() => applyTemplate(template)}
-                                                        disabled={saving}
-                                                        className={cn(SaveChangesBtnClasses, "w-full !h-[40px] !text-sm")}
-                                                        size="sm"
-                                                    >
-                                                        {saving ? "Applying..." : "Apply Template"}
-                                                    </Button>
-                                                </div>
-                                            </motion.div>
-                                        ))}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
 
                         <TabsContent value="colors">
                             <div className="space-y-4">
                                 <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
                                     <CardHeader className="py-4 font-poppins bg-gray-100/50">
-                                        <CardTitle className="text-slate-900">Background</CardTitle>
+                                        <CardTitle className="text-slate-900">
+                                            {t("background")}
+                                        </CardTitle>
                                         <CardDescription className="text-slate-500">
-                                            Choose between a solid color, gradient, or custom image background
+                                            {t("background_description")}
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-4 pt-4">
@@ -550,7 +497,9 @@ export default function AppearancePage() {
                                                     className="flex flex-col w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
                                                     <div className="w-full h-8 rounded bg-teal-600 mb-2"></div>
-                                                    <span className="text-slate-700">Solid Color</span>
+                                                    <span className="text-slate-700">
+                                                        {t("solidColor")}
+                                                    </span>
                                                 </Label>
                                             </div>
 
@@ -561,7 +510,9 @@ export default function AppearancePage() {
                                                     className="flex flex-col w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
                                                     <div className="w-full h-8 rounded bg-gradient-to-r from-teal-500 to-blue-500 mb-2"></div>
-                                                    <span className="text-slate-700">Gradient</span>
+                                                    <span className="text-slate-700">
+                                                        {t("gradient")}
+                                                    </span>
                                                 </Label>
                                             </div>
 
@@ -574,7 +525,9 @@ export default function AppearancePage() {
                                                     <div className="w-full h-8 rounded bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center mb-2">
                                                         <ImageIcon className="h-6 w-6 text-slate-400" />
                                                     </div>
-                                                    <span className="text-slate-700">Image</span>
+                                                    <span className="text-slate-700">
+                                                        {t("image")}
+                                                    </span>
                                                 </Label>
                                             </div>
                                         </RadioGroup>
@@ -582,7 +535,9 @@ export default function AppearancePage() {
                                         {formData.bg_type === "color" && (
                                             <div className="space-y-4">
                                                 <div className="space-y-2">
-                                                    <Label className="text-slate-700">Background Color</Label>
+                                                    <Label className="text-slate-700">
+                                                        {t("backgroundColor")}
+                                                    </Label>
                                                     <ColorSelector
                                                         value={formData.bg_color}
                                                         colors={["#FFFFFF", "#000000", ...colorPresets.map((item => item.color))]}
@@ -595,7 +550,9 @@ export default function AppearancePage() {
                                         {formData.bg_type === "gradient" && (
                                             <div className="space-y-4">
                                                 <div className="space-y-3">
-                                                    <Label className="text-slate-700">Gradient Presets</Label>
+                                                    <Label className="text-slate-700">
+                                                        {t("gradientPresets")}
+                                                    </Label>
 
                                                     <div className="grid grid-cols-10 gap-2">
                                                         {gradientPresets.map((preset) => (
@@ -618,16 +575,18 @@ export default function AppearancePage() {
                                                 </div>
 
                                                 <div className="space-y-3">
-                                                    <Label className="text-slate-700">Gradient Direction</Label>
+                                                    <Label className="text-slate-700">
+                                                        {t("gradientDirection")}
+                                                    </Label>
                                                     <Select
                                                         value={formData.gradient_direction}
                                                         onValueChange={(value) => updateFormData({ gradient_direction: value as GradientDirection })}
                                                     >
                                                         <SelectTrigger className="border-slate-200 !py-5 w-full">
-                                                            <SelectValue placeholder="Select direction" />
+                                                            <SelectValue placeholder={t("selectDirectionPlaceholder")} />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            {gradientDirections.map((direction) => (
+                                                            {gradientDirectionsLangs[locale].map((direction) => (
                                                                 <SelectItem key={direction.value} value={direction.value} >
                                                                     <div className="flex flex-col items-start">
                                                                         <span>{direction.label}</span>
@@ -641,7 +600,9 @@ export default function AppearancePage() {
 
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <div className="space-y-2">
-                                                        <Label className="text-slate-700">Start Color</Label>
+                                                        <Label className="text-slate-700">
+                                                            {t("startColor")}
+                                                        </Label>
                                                         <ColorSelector
                                                             value={formData.bg_gradient_start}
                                                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item => item.color))]}
@@ -650,7 +611,9 @@ export default function AppearancePage() {
                                                     </div>
 
                                                     <div className="space-y-2">
-                                                        <Label className="text-slate-700">End Color</Label>
+                                                        <Label className="text-slate-700">
+                                                            {t("endColor")}
+                                                        </Label>
                                                         <ColorSelector
                                                             value={formData.bg_gradient_end}
                                                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item => item.color))]}
@@ -664,18 +627,20 @@ export default function AppearancePage() {
                                         {formData.bg_type === "image" && (
                                             <div className="space-y-4">
                                                 <div className="space-y-2">
-                                                    <Label className="text-slate-700">Image URL</Label>
+                                                    <Label className="text-slate-700">
+                                                        {t("imageUrl")}
+                                                    </Label>
                                                     <div className="flex items-center gap-2">
                                                         <Input
                                                             type="url"
                                                             value={formData.bg_image_url || ""}
                                                             onChange={(e) => updateFormData({ bg_image_url: e.target.value })}
-                                                            placeholder="https://example.com/background.jpg"
+                                                            placeholder={t("imageUrl_placeholder")}
                                                             className="flex-1 border-slate-200"
                                                         />
                                                     </div>
                                                     <p className="text-xs text-slate-500">
-                                                        Enter the URL of your background image. For best results, use an image at least 1920x1080px.
+                                                        {t("imageUrl_hint")}
                                                     </p>
                                                 </div>
                                             </div>
@@ -685,14 +650,18 @@ export default function AppearancePage() {
 
                                 <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
                                     <CardHeader className="py-4 font-poppins bg-gray-100/50">
-                                        <CardTitle className="text-slate-900">Accent Color</CardTitle>
+                                        <CardTitle className="text-slate-900">
+                                            {t("accentColor")}
+                                        </CardTitle>
                                         <CardDescription className="text-slate-500">
-                                            This color will be used for buttons and highlights
+                                            {t("accentColor_description")}
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-4 pt-4">
                                         <div className="space-y-4">
-                                            <Label className="text-slate-700">Color Presets</Label>
+                                            <Label className="text-slate-700">
+                                                {t("colorPresets")}
+                                            </Label>
                                             <div >
                                                 <ColorSelector
                                                     value={formData.accent_color}
@@ -706,16 +675,22 @@ export default function AppearancePage() {
 
                                 <Card className="border-slate-200 gap-0 !pt-0 box-shad-every-2">
                                     <CardHeader className="py-4 font-poppins bg-gray-100/50">
-                                        <CardTitle className="text-slate-900">Text Colors</CardTitle>
+                                        <CardTitle className="text-slate-900">
+                                            {t("textColors")}
+                                        </CardTitle>
                                         <CardDescription className="text-slate-500">
-                                            Customize the colors for headings and button text
+                                            {t("textColors_description")}
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-4 pt-4">
                                         <div className="space-y-4">
                                             <div>
-                                                <Label className="text-slate-700">Headings Text Color</Label>
-                                                <p className="text-xs mt-2 text-slate-500">Color for restaurant name and bio text</p>
+                                                <Label className="text-slate-700">
+                                                    {t("headingsTextColor")}
+                                                </Label>
+                                                <p className="text-xs mt-2 text-slate-500">
+                                                    {t("headingsTextColor_hint")}
+                                                </p>
                                             </div>
                                             <div >
                                                 <ColorSelector
@@ -728,8 +703,12 @@ export default function AppearancePage() {
 
                                         <div className="space-y-4">
                                             <div>
-                                                <Label className="text-slate-700">Button Text & Icons Color</Label>
-                                                <p className="text-xs mt-2 text-slate-500">Color for text and icons inside buttons</p>
+                                                <Label className="text-slate-700">
+                                                    {t("buttonTextIconsColor")}
+                                                </Label>
+                                                <p className="text-xs mt-2 text-slate-500">
+                                                    {t("buttonTextIconsColor_hint")}
+                                                </p>
                                             </div>
                                             <div >
                                                 <ColorSelector
@@ -747,26 +726,32 @@ export default function AppearancePage() {
                         <TabsContent value="typography">
                             <Card className="border-slate-200 pt-0 box-shad-every-2">
                                 <CardHeader className="py-4 bg-gray-100/50 font-poppins">
-                                    <CardTitle className="text-slate-900">Font Selection</CardTitle>
-                                    <CardDescription className="text-slate-500">Choose the font for your page</CardDescription>
+                                    <CardTitle className="text-slate-900">
+                                        {t("fontSelection")}
+                                    </CardTitle>
+                                    <CardDescription className="text-slate-500">
+                                        {t("fontSelection_description")}
+                                    </CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-4">
                                         <div className="space-y-2">
-                                            <Label className="text-slate-700">Font</Label>
+                                            <Label className="text-slate-700">
+                                                {t("font")}
+                                            </Label>
                                             <Select
                                                 value={formData.font_family || "var(--font-inter)"}
                                                 onValueChange={(value) => updateFormData({ font_family: value })}
                                             >
                                                 <SelectTrigger className="border-slate-200 !h-[50px] w-full">
-                                                    <SelectValue placeholder="Select a font" />
+                                                    <SelectValue placeholder={t("selectFontPlaceholder")} />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {fonts.map((font) => (
                                                         <SelectItem key={font.value} value={font.value}>
                                                             <div className="flex flex-col items-start ">
                                                                 <span style={{ fontFamily: font.value }}>{font.name}</span>
-                                                                <span className="text-xs text-slate-500">{font.preview}</span>
+                                                                {/* <span className="text-xs text-slate-500">{font.preview}</span> */}
                                                             </div>
                                                         </SelectItem>
                                                     ))}
@@ -775,12 +760,15 @@ export default function AppearancePage() {
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label className="text-slate-700">Preview</Label>
+                                            <Label className="text-slate-700">
+                                                {t("preview")}
+                                            </Label>
                                             <div className="p-4 rounded-lg bg-slate-100" style={{ fontFamily: formData.font_family }}>
-                                                <p className="text-2xl font-bold mb-2 text-slate-900">The quick brown fox</p>
+                                                <p className="text-2xl font-bold mb-2 text-slate-900">
+                                                    {t("preview_text_title")}
+                                                </p>
                                                 <p className="text-slate-600">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-                                                    labore et dolore magna aliqua.
+                                                    {t("preview_text_paragraph")}
                                                 </p>
                                             </div>
                                         </div>
@@ -801,10 +789,10 @@ export default function AppearancePage() {
                                 onClick={resetForm}
                                 variant="outline"
                                 size="sm"
-                                className={ResetChangesBtnClasses}
+                                className={`${ResetChangesBtnClasses} !bg-white`}
                             >
                                 <RotateCcw className="h-4 w-4" />
-                                Reset
+                                {t("reset")}
                             </Button>
                             <Button
                                 onClick={saveChanges}
@@ -813,7 +801,7 @@ export default function AppearancePage() {
                                 className={SaveChangesBtnClasses}
                             >
                                 <Save className="size-4 aspect-square" />
-                                {saving ? "Saving..." : "Save Changes"}
+                                {saving ? t("saving") : t("saveChanges")}
                             </Button>
                         </motion.div>
                     )}
@@ -823,8 +811,12 @@ export default function AppearancePage() {
                 <div className="lg:sticky lg:top-24 space-y-6">
                     <Card className="overflow-hidden pt-0 border-slate-200 box-shad-every-2">
                         <CardHeader className="bg-gray-100/50 py-4 font-poppins">
-                            <CardTitle className="text-slate-900">Live Preview</CardTitle>
-                            <CardDescription className="text-slate-500">See how your page looks on mobile devices</CardDescription>
+                            <CardTitle className="text-slate-900">
+                                {t("livePreview")}
+                            </CardTitle>
+                            <CardDescription className="text-slate-500">
+                                {t("livePreview_description")}
+                            </CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
                             <div className="mx-auto max-w-[350px] lg:max-w-[390px] p-6">
@@ -990,7 +982,7 @@ export default function AppearancePage() {
                                                     {
                                                         linksLoading ?
                                                             <p className="w-full text-center text-sm">
-                                                                Loading..
+                                                                {t("loading")}
                                                             </p>
                                                             :
                                                             <>
@@ -1055,7 +1047,7 @@ export default function AppearancePage() {
                                                                         </>
                                                                         :
                                                                         <p className="w-full text-center text-sm">
-                                                                            No links yet add some to see preview.
+                                                                            {t("noLinksYet")}
                                                                         </p>
                                                                 }
                                                             </>
@@ -1077,3 +1069,108 @@ export default function AppearancePage() {
         </main>
     )
 }
+
+
+
+// {
+//        <TabsContent value="templates">
+//                             <Card className="border-slate-200 pt-0 box-shad-every-2">
+//                                 <CardHeader className="py-4 font-poppins bg-gray-100/50">
+//                                     <CardTitle className="text-slate-900">Design Templates</CardTitle>
+//                                     <CardDescription className="text-slate-500">
+//                                         Choose from professionally designed templates to quickly style your restaurant page
+//                                     </CardDescription>
+//                                 </CardHeader>
+//                                 <CardContent>
+//                                     <div className="grid md:grid-cols-2 gap-6">
+//                                         {templates.map((template) => (
+//                                             <motion.div
+//                                                 key={template.id}
+//                                                 initial={{ opacity: 0, y: 20 }}
+//                                                 animate={{ opacity: 1, y: 0 }}
+//                                                 transition={{ duration: 0.3 }}
+//                                                 className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white hover:shadow-lg transition-all duration-300"
+//                                             >
+//                                                 {/* Template Preview */}
+//                                                 <div className="aspect-[4/3] relative overflow-hidden">
+//                                                     <div
+//                                                         className="absolute inset-0 p-4 flex flex-col items-center justify-center text-center"
+//                                                         style={{
+//                                                             background: template.preview.bg_type === "gradient"
+//                                                                 ? `linear-gradient(to bottom right, ${template.preview.bg_gradient_start}, ${template.preview.bg_gradient_end})`
+//                                                                 : template.preview.bg_color,
+//                                                             fontFamily: template.preview.font_family
+//                                                         }}
+//                                                     >
+//                                                         {/* Mock Restaurant Name */}
+//                                                         <h3
+//                                                             className="text-lg font-bold mb-2"
+//                                                             style={{ color: template.preview.headings_text_color }}
+//                                                         >
+//                                                             {selectedRestaurant?.name}
+//                                                         </h3>
+
+//                                                         {/* Mock Bio */}
+//                                                         <p
+//                                                             className="text-sm mb-4 opacity-90"
+//                                                             style={{ color: template.preview.headings_text_color }}
+//                                                         >
+//                                                             Delicious food & great atmosphere
+//                                                         </p>
+
+//                                                         {/* Mock Button */}
+//                                                         <div
+//                                                             className={`px-4 py-2 text-sm font-medium transition-all ${template.preview.button_style === "pill"
+//                                                                 ? "rounded-full"
+//                                                                 : template.preview.button_style === "square"
+//                                                                     ? "rounded-md"
+//                                                                     : "rounded-xl"
+//                                                                 }`}
+//                                                             style={{
+//                                                                 backgroundColor: template.preview.button_variant === "solid"
+//                                                                     ? template.preview.accent_color
+//                                                                     : "transparent",
+//                                                                 color: template.preview.button_variant === "solid"
+//                                                                     ? template.preview.button_text_icons_color
+//                                                                     : template.preview.accent_color,
+//                                                                 border: template.preview.button_variant === "outline"
+//                                                                     ? `2px solid ${template.preview.accent_color}`
+//                                                                     : "none"
+//                                                             }}
+//                                                         >
+//                                                             View Menu
+//                                                         </div>
+//                                                     </div>
+
+//                                                     {/* Overlay on hover */}
+//                                                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
+//                                                 </div>
+
+//                                                 {/* Template Info */}
+//                                                 <div className="p-4">
+//                                                     <div className="flex items-start justify-between mb-2">
+//                                                         <div>
+//                                                             <h4 className="font-semibold text-slate-900">{template.name}</h4>
+//                                                             <span className="inline-block px-2 py-1 text-xs bg-slate-100 text-slate-600 rounded-full mt-1">
+//                                                                 {template.category}
+//                                                             </span>
+//                                                         </div>
+//                                                     </div>
+//                                                     <p className="text-sm text-slate-600 mb-4">{template.description}</p>
+
+//                                                     <Button
+//                                                         onClick={() => applyTemplate(template)}
+//                                                         disabled={saving}
+//                                                         className={cn(SaveChangesBtnClasses, "w-full !h-[40px] !text-sm")}
+//                                                         size="sm"
+//                                                     >
+//                                                         {saving ? "Applying..." : "Apply Template"}
+//                                                     </Button>
+//                                                 </div>
+//                                             </motion.div>
+//                                         ))}
+//                                     </div>
+//                                 </CardContent>
+//                             </Card>
+//                         </TabsContent>
+// }

@@ -23,8 +23,9 @@ import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import type { Event, SubscriptionPlan } from "@prisma/client"
-import { ArrowDown, ArrowUp, Calendar, Edit, ExternalLink, Trash2 } from "lucide-react"
+import { ArrowDown, ArrowUp, Calendar, Edit, ExternalLink, Search, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
+import { useTranslations } from "next-intl"
 import type React from "react"
 import { useState } from "react"
 
@@ -33,7 +34,7 @@ export default function EventsPage() {
     const restaurantId = selectedRestaurant?.id
     const { prismaUser } = useUserStore()
     const openPopup = useUpgradePopupStore(state => state.open)
-
+    const t = useTranslations("events")
     const { data: events = [], isLoading } = useEvents(restaurantId)
     const createEventMutation = useCreateEvent(restaurantId)
     const updateEventMutation = useUpdateEvent(restaurantId)
@@ -135,7 +136,7 @@ export default function EventsPage() {
 
     if (isLoading || !restaurantId) {
         return (
-            <LoadingUI text="Loading..." />
+            <LoadingUI text={t("loading")} />
         )
     }
 
@@ -158,19 +159,22 @@ export default function EventsPage() {
                 >
                     <div>
                         <h1 className=" text-4xl font-bold text-main-blue">
-                            Events
+                            {t("title")}
                         </h1>
-                        <p className="mt-2 text-muted-foreground">Manage your restaurant&apos;s events and ticket links</p>
+                        <p className="mt-2 text-muted-foreground">
+                            {t("subtitle")}
+                        </p>
                     </div>
 
                     <div className="flex items-center gap-4">
                         {/* Search */}
-                        <div className="relative bg-white rounded-full">
+                        <div className="relative bg-white flex items-center justify-start rounded-full">
+                            <Search className="absolute size-5 left-4" />
                             <input
-                                placeholder="Search events..."
-                                value={""}
-                                onChange={() => { }}
-                                className="pl-12 font-poppins rounded-full w-64 h-[42px] border border-gray-300"
+                                placeholder={t("search_placeholder")}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-11 font-poppins rounded-full w-64 h-[42px] border border-gray-300"
                             />
                         </div>
 
@@ -179,12 +183,15 @@ export default function EventsPage() {
                             <button
                                 onClick={() =>
                                     openPopup(
-                                        `You are limited to ${STRIPE_PLANS[plan].limits?.events} events on the ${STRIPE_PLANS[plan].name} plan. Upgrade to Pro or Enterprise to add more.`
+                                        `${t("upgrade_limit_message", {
+                                            limit: STRIPE_PLANS[plan].limits?.events || "",
+                                            plan: STRIPE_PLANS[plan].name
+                                        })}`
                                     )
                                 }
                                 className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px] text-white"
                             >
-                                + Add Event
+                                {t("add_event")}
                             </button>
                         ) : (
                             <AddEventDialog
@@ -209,9 +216,11 @@ export default function EventsPage() {
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                     <Card className="bg-white/50 backdrop-blur-sm">
                         <CardHeader>
-                            <CardTitle>Your Events</CardTitle>
+                            <CardTitle>
+                                {t("your_events")}
+                            </CardTitle>
                             <CardDescription>
-                                {filteredEvents.length} event{filteredEvents.length !== 1 ? "s" : ""} found
+                                {t("events_found", { count: filteredEvents.length })}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -233,7 +242,7 @@ export default function EventsPage() {
                                                         <h3 className="truncate font-medium">{event.title}</h3>
                                                         {isUpcoming && (
                                                             <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
-                                                                Upcoming
+                                                                {t("upcoming")}
                                                             </span>
                                                         )}
                                                     </div>
@@ -255,7 +264,9 @@ export default function EventsPage() {
                                                             className="h-8 w-8 p-0   bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full"                                                        >
                                                             <a href={event.ticket_url} target="_blank" rel="noopener noreferrer" title="View tickets">
                                                                 <ExternalLink className="h-4 w-4 text-white" />
-                                                                <span className="sr-only">View tickets</span>
+                                                                <span className="sr-only">
+                                                                    {t("view_tickets")}
+                                                                </span>
                                                             </a>
                                                         </Button>
                                                     )}
@@ -274,7 +285,9 @@ export default function EventsPage() {
                                                         className="h-8 w-8 p-0   bg-main-blue text-white hover:text-white hover:bg-main-blue/70 cursor-pointer rounded-full"
                                                     >
                                                         <Edit className="h-4 w-4" />
-                                                        <span className="sr-only">Edit event</span>
+                                                        <span className="sr-only">
+                                                            {t("edit_event")}
+                                                        </span>
                                                     </Button>
 
                                                     <AlertDialog>
@@ -285,22 +298,28 @@ export default function EventsPage() {
                                                                 className="h-8 w-8 p-0   bg-destructive text-white hover:text-white hover:bg-destructive/70 cursor-pointer rounded-full"
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
-                                                                <span className="sr-only">Delete event</span>
+                                                                <span className="sr-only">
+                                                                    {t("delete_event_title")}
+                                                                </span>
                                                             </Button>
                                                         </AlertDialogTrigger>
                                                         <AlertDialogContent>
                                                             <AlertDialogHeader>
-                                                                <AlertDialogTitle>Delete Event</AlertDialogTitle>
+                                                                <AlertDialogTitle>
+                                                                    {t("delete_event_title")}
+                                                                </AlertDialogTitle>
                                                                 <AlertDialogDescription>
-                                                                    This will permanently delete &quot;{event.title}&quot;. This action cannot be undone.
+                                                                    {t("delete_event_description", { title: event.title })}
                                                                 </AlertDialogDescription>
                                                             </AlertDialogHeader>
                                                             <AlertDialogFooter>
-                                                                <AlertDialogCancel className="font-poppins rounded-full !px-5"> Cancel</AlertDialogCancel>
+                                                                <AlertDialogCancel className="font-poppins rounded-full !px-5">
+                                                                    {t("cancel")}
+                                                                </AlertDialogCancel>
                                                                 <AlertDialogAction
                                                                     onClick={() => handleDeleteEvent(event.id)}
                                                                     className="bg-destructive text-white font-poppins rounded-full !px-5 hover:opacity-80 hover:bg-destructive/90">
-                                                                    Delete
+                                                                    {t("delete")}
                                                                 </AlertDialogAction>
                                                             </AlertDialogFooter>
                                                         </AlertDialogContent>
@@ -314,7 +333,9 @@ export default function EventsPage() {
                                                         className="h-8 w-8 p-0 bg-main-green text-white hover:text-white hover:bg-main-green/70 cursor-pointer rounded-full transition-transform hover:scale-110">
 
                                                         <ArrowUp className="h-4 w-4" />
-                                                        <span className="sr-only">Move up</span>
+                                                        <span className="sr-only">
+                                                            {t("move_up")}
+                                                        </span>
                                                     </Button>
 
                                                     <Button
@@ -325,7 +346,9 @@ export default function EventsPage() {
                                                         className="h-8 w-8 p-0 bg-main-text text-white hover:text-white hover:bg-main-text/70 cursor-pointer rounded-full transition-transform hover:scale-110">
 
                                                         <ArrowDown className="h-4 w-4" />
-                                                        <span className="sr-only">Move down</span>
+                                                        <span className="sr-only">
+                                                            {t("move_down")}
+                                                        </span>
                                                     </Button>
                                                 </div>
                                             </div>
@@ -340,14 +363,18 @@ export default function EventsPage() {
                                 >
                                     {searchQuery ? (
                                         <>
-                                            <p className="mb-4 text-muted-foreground">No events found matching &quot;{searchQuery}&quot;</p>
+                                            <p className="mb-4 text-muted-foreground">
+                                                {t("no_events_match", { query: searchQuery })}
+                                            </p>
                                             <Button variant="outline" onClick={() => setSearchQuery("")}>
-                                                Clear search
+                                                {t("clear_search")}
                                             </Button>
                                         </>
                                     ) : (
                                         <>
-                                            <p className="mb-4 text-sm text-muted-foreground">No events added yet</p>
+                                            <p className="mb-4 text-sm text-muted-foreground">
+                                                {t("no_events")}
+                                            </p>
                                         </>
                                     )}
                                 </motion.div>
