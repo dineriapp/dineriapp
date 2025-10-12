@@ -285,7 +285,7 @@ export default function BusinessInformationPage() {
 
     if (!selectedRestaurant) {
         return (
-            <LoadingUI text={t("form.loading.text")} />
+            <LoadingUI text={t("loading.text")} />
         )
     }
 

@@ -44,14 +44,13 @@ import { useRestaurantStore } from "@/stores/restaurant-store";
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store";
 import { User as prismaUserType, User } from "@prisma/client";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { NavUser } from "./nav-user";
 import { Locale } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 
 const navigationGroups = {
   en: [
@@ -61,6 +60,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Analytics", icon: BarChart },
         { href: "/dashboard/orders", label: "Orders", icon: ShoppingCart },
+        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
       ],
     },
     {
@@ -93,6 +93,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Analytik", icon: BarChart },
         { href: "/dashboard/orders", label: "Bestellungen", icon: ShoppingCart },
+        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
       ],
     },
     {
@@ -125,6 +126,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Panel", icon: Home },
         { href: "/dashboard/stats", label: "Analíticas", icon: BarChart },
         { href: "/dashboard/orders", label: "Pedidos", icon: ShoppingCart },
+        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
       ],
     },
     {
@@ -157,6 +159,8 @@ const navigationGroups = {
         { href: "/dashboard", label: "Tableau de bord", icon: Home },
         { href: "/dashboard/stats", label: "Analyses", icon: BarChart },
         { href: "/dashboard/orders", label: "Commandes", icon: ShoppingCart },
+        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
+
       ],
     },
     {
@@ -189,6 +193,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Analitiche", icon: BarChart },
         { href: "/dashboard/orders", label: "Ordini", icon: ShoppingCart },
+        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
       ],
     },
     {
@@ -221,6 +226,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Statistieken", icon: BarChart },
         { href: "/dashboard/orders", label: "Bestellingen", icon: ShoppingCart },
+        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
       ],
     },
     {
