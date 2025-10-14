@@ -2,26 +2,31 @@
 
 import prisma from "@/lib/prisma";
 import { createClient } from "@/supabase/clients/server";
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-const formSchema = z.object({
-    name: z.string().min(1, "Restaurant name is required").max(100),
-    slug: z
-        .string()
-        .min(3, "Slug must be at least 3 characters")
-        .max(50)
-        .regex(/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens"),
-    bio: z.string().max(200).optional(),
-});
+
 
 export async function createRestaurant(formData: FormData) {
+    const t = await getTranslations('create_restaurant_actions');
+
+    const formSchema = z.object({
+        name: z.string().min(1, t("name_required")).max(100),
+        slug: z
+            .string()
+            .min(3, t("slug_too_short"))
+            .max(50)
+            .regex(/^[a-z0-9-]+$/, t("slug_invalid_format")),
+        bio: z.string().max(200).optional(),
+    });
+
     const supabase = await createClient()
     const { data } = await supabase.auth.getUser();
 
     if (!data.user) {
-        return { error: "Not authenticated" };
+        return { error: t("not_authenticated") };
     }
 
     const parsedData = formSchema.safeParse({
@@ -44,7 +49,7 @@ export async function createRestaurant(formData: FormData) {
     });
 
     if (existingRestaurant) {
-        return { error: "Slug is already taken. Please choose another one." };
+        return { error: t("slug_taken") };
     }
 
     // Fetch user
@@ -59,7 +64,7 @@ export async function createRestaurant(formData: FormData) {
     });
 
     if (!prismaUser) {
-        return { error: "User not found" };
+        return { error: t("user_not_found") };
     }
 
     // Count how many restaurants the user already has
@@ -75,7 +80,7 @@ export async function createRestaurant(formData: FormData) {
         restaurantCount >= 1
     ) {
         return {
-            error: "Free Plan allows only one restaurant. Upgrade to add more.",
+            error: t("basic_plan_limit"),
         };
     }
 

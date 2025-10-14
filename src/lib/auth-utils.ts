@@ -1,8 +1,10 @@
-import { createClient } from "@/supabase/clients/server"
-import type { User, Restaurant } from "@prisma/client"
-import prisma from "@/lib/prisma"
+import prisma from "@/lib/prisma";
+import { createClient } from "@/supabase/clients/server";
+import type { Restaurant, User } from "@prisma/client";
 import { User as SupabaseUser } from '@supabase/supabase-js';
-import { STRIPE_PLANS, StripePlan } from "./stripe-plans";
+import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
+import { getStripePlans, StripePlan } from "./stripe-plans";
 
 export interface AuthResult {
     user: User
@@ -27,13 +29,14 @@ export interface LimitCheckResponse {
 }
 
 export async function getCurrentUser(): Promise<GetCurrentUserResponse> {
+    const t = await getTranslations("auth_and_subscription_messages")
     try {
         const supabase = await createClient()
         const { data } = await supabase.auth.getUser()
 
         if (!data.user) {
             return {
-                error: "User not found",
+                error: t("user_not_found"),
                 status: 404
             }
         }
@@ -46,7 +49,7 @@ export async function getCurrentUser(): Promise<GetCurrentUserResponse> {
 
         if (!prismaUser) {
             return {
-                error: "User not found",
+                error: t("user_not_found"),
                 status: 404
             }
         }
@@ -55,20 +58,22 @@ export async function getCurrentUser(): Promise<GetCurrentUserResponse> {
     } catch (error) {
         console.error("Get current user error:", error)
         return {
-            error: "User not found",
+            error: t("user_not_found"),
             status: 404
         }
     }
 }
 
 export async function authenticateAndAuthorize(restaurantId: string): Promise<AuthResponse> {
+    const t = await getTranslations("auth_and_subscription_messages")
+
     try {
         const supabase = await createClient()
         const { data } = await supabase.auth.getUser()
 
         if (!data.user) {
             return {
-                error: "Not authenticated",
+                error: t("not_authenticated"),
                 status: 401
             }
         }
@@ -81,7 +86,7 @@ export async function authenticateAndAuthorize(restaurantId: string): Promise<Au
 
         if (!prismaUser) {
             return {
-                error: "User not found",
+                error: t("user_not_found"),
                 status: 404
             }
         }
@@ -92,7 +97,7 @@ export async function authenticateAndAuthorize(restaurantId: string): Promise<Au
 
         if (!restaurant || restaurant.user_id !== prismaUser.id) {
             return {
-                error: "Unauthorized: You do not own this restaurant",
+                error: t("unauthorized_restaurant"),
                 status: 403
             }
         }
@@ -103,111 +108,12 @@ export async function authenticateAndAuthorize(restaurantId: string): Promise<Au
     } catch (error) {
         console.error("Authentication error:", error)
         return {
-            error: "Authentication failed",
+            error: t("authentication_failed"),
             status: 500
         }
     }
 }
 
-export async function checkSubscriptionLimits(
-    userId: string,
-    restaurantId: string,
-    resourceType: "links" | "menu_categories" | "menu_items" | "events" | "faq_categories" | "faqs",
-    categoryId?: string,
-): Promise<LimitCheckResponse> {
-    try {
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
-        })
-
-        if (!user) {
-            return {
-                error: "User not found",
-                status: 404
-            }
-        }
-
-        if (user.subscription_plan === "basic") {
-            let count = 0
-            let limit = 0
-            let resourceName = ""
-
-            switch (resourceType) {
-                case "links":
-                    count = await prisma.link.count({
-                        where: { restaurant_id: restaurantId },
-                    })
-                    limit = 4
-                    resourceName = "links"
-                    break
-                case "menu_categories":
-                    count = await prisma.menuCategory.count({
-                        where: { restaurant_id: restaurantId },
-                    })
-                    limit = 4
-                    resourceName = "menu categories"
-                    break
-                case "menu_items":
-                    if (!categoryId) {
-                        return {
-                            error: "Category ID required for menu items limit check",
-                            status: 400
-                        }
-                    }
-                    count = await prisma.menuItem.count({
-                        where: { category_id: categoryId },
-                    })
-                    limit = 3
-                    resourceName = "menu items per category"
-                    break
-                case "events":
-                    count = await prisma.event.count({
-                        where: { restaurant_id: restaurantId },
-                    })
-                    limit = 3
-                    resourceName = "events"
-                    break
-                case "faq_categories":
-                    count = await prisma.faqCategory.count({
-                        where: { restaurant_id: restaurantId },
-                    })
-                    limit = 4
-                    resourceName = "FAQ categories"
-                    break
-                case "faqs":
-                    if (!categoryId) {
-                        return {
-                            error: "Category ID required for FAQs limit check",
-                            status: 400
-                        }
-                    }
-                    count = await prisma.faq.count({
-                        where: { category_id: categoryId },
-                    })
-                    limit = 2
-                    resourceName = "FAQs per category"
-                    break
-            }
-
-            if (count >= limit) {
-                return {
-                    error: `You are limited to ${limit} ${resourceName} on the Basic plan`,
-                    status: 403
-                }
-            }
-        }
-
-        return {
-            data: { allowed: true }
-        }
-    } catch (error) {
-        console.error("Subscription limit check error:", error)
-        return {
-            error: "Failed to check subscription limits",
-            status: 500
-        }
-    }
-}
 
 export async function checkSubscriptionLimitsWithPlans(
     userId: string,
@@ -215,6 +121,9 @@ export async function checkSubscriptionLimitsWithPlans(
     resourceType: "links" | "menu_categories" | "menu_items" | "events" | "faq_categories" | "faqs" | "qr_codes",
     categoryId?: string,
 ): Promise<LimitCheckResponse> {
+    const t = await getTranslations("auth_and_subscription_messages")
+    const cookieStore = await cookies();
+    const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId },
@@ -227,14 +136,14 @@ export async function checkSubscriptionLimitsWithPlans(
 
         if (!user) {
             return {
-                error: "User not found",
+                error: t("user_not_found"),
                 status: 404,
             }
         }
 
         // Get user's current plan
         const userPlan = (user.subscription_plan || "basic") as StripePlan
-        const planData = STRIPE_PLANS[userPlan]
+        const planData = getStripePlans(locale)[userPlan]
 
         // Check if subscription is active
         const isSubscriptionActive =
@@ -248,7 +157,7 @@ export async function checkSubscriptionLimitsWithPlans(
         }
 
         // For basic plan or inactive subscriptions, check limits
-        const limits = planData.limits || STRIPE_PLANS.basic.limits!
+        const limits = planData.limits || getStripePlans(locale).basic.limits!
 
         let count = 0
         let limit = 0
@@ -260,19 +169,19 @@ export async function checkSubscriptionLimitsWithPlans(
                     where: { restaurant_id: restaurantId },
                 })
                 limit = limits.links
-                resourceName = "links"
+                resourceName = t("resource_names.links")
                 break
             case "menu_categories":
                 count = await prisma.menuCategory.count({
                     where: { restaurant_id: restaurantId },
                 })
                 limit = limits.menuCategories
-                resourceName = "menu categories"
+                resourceName = t("resource_names.menu_categories")
                 break
             case "menu_items":
                 if (!categoryId) {
                     return {
-                        error: "Category ID required for menu items limit check",
+                        error: t("category_id_required_for_menu_items"),
                         status: 400,
                     }
                 }
@@ -280,26 +189,26 @@ export async function checkSubscriptionLimitsWithPlans(
                     where: { category_id: categoryId },
                 })
                 limit = limits.menuItemsPerCategory
-                resourceName = "menu items per category"
+                resourceName = t("resource_names.menu_items_per_category")
                 break
             case "events":
                 count = await prisma.event.count({
                     where: { restaurant_id: restaurantId },
                 })
                 limit = limits.events
-                resourceName = "events"
+                resourceName = t("resource_names.events")
                 break
             case "faq_categories":
                 count = await prisma.faqCategory.count({
                     where: { restaurant_id: restaurantId },
                 })
                 limit = limits.faqCategories
-                resourceName = "FAQ categories"
+                resourceName = t("resource_names.faq_categories")
                 break
             case "faqs":
                 if (!categoryId) {
                     return {
-                        error: "Category ID required for FAQs limit check",
+                        error: t("category_id_required_for_faqs"),
                         status: 400,
                     }
                 }
@@ -307,20 +216,24 @@ export async function checkSubscriptionLimitsWithPlans(
                     where: { category_id: categoryId },
                 })
                 limit = limits.faqsPerCategory
-                resourceName = "FAQs per category"
+                resourceName = t("resource_names.faqs_per_category")
                 break
             case "qr_codes":
                 count = await prisma.qr_codes.count({
                     where: { restaurant_id: restaurantId },
                 })
                 limit = limits.qr_codes
-                resourceName = "QR codes"
+                resourceName = t("resource_names.qr_codes")
                 break
         }
 
         if (count >= limit) {
             return {
-                error: `You are limited to ${limit} ${resourceName} on the ${userPlan} plan. Upgrade to Pro for unlimited access.`,
+                error: `${t("subscription_limit_reached_dynamic", {
+                    limit: limit,
+                    resourceName: resourceName,
+                    userPlan: userPlan
+                })}`,
                 status: 403,
             }
         }
@@ -331,13 +244,15 @@ export async function checkSubscriptionLimitsWithPlans(
     } catch (error) {
         console.error("Subscription limit check error:", error)
         return {
-            error: "Failed to check subscription limits",
+            error: t("failed_to_check_subscription_limits"),
             status: 500,
         }
     }
 }
 
 export async function getUserSubscriptionPlan(userId: string) {
+    const cookieStore = await cookies();
+    const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId },
@@ -361,7 +276,7 @@ export async function getUserSubscriptionPlan(userId: string) {
         return {
             plan,
             isActive: isActive && !hasExpired,
-            planData: STRIPE_PLANS[plan],
+            planData: getStripePlans(locale)[plan],
             currentPeriodEnd: user.subscription_current_period_end,
         }
     } catch (error) {

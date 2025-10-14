@@ -1,15 +1,17 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { createEventSchema } from "@/lib/validations"
 import { authenticateAndAuthorize, checkSubscriptionLimitsWithPlans } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
+import { getCreateEventSchema } from "@/lib/validations"
+import { getTranslations } from "next-intl/server"
+import { type NextRequest, NextResponse } from "next/server"
+import { ZodError } from "zod"
 
 export async function GET(request: NextRequest) {
+    const t = await getTranslations("event_api_messages")
     try {
         const { searchParams } = new URL(request.url)
         const restaurantId = searchParams.get("restaurant_id")
-
         if (!restaurantId) {
-            return NextResponse.json({ error: "Restaurant ID is required" }, { status: 400 })
+            return NextResponse.json({ error: t("restaurant_id_required") }, { status: 400 })
         }
 
         const authResult = await authenticateAndAuthorize(restaurantId)
@@ -29,14 +31,15 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ data: events })
     } catch (error) {
         console.error("Error fetching events:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }
 
 export async function POST(request: NextRequest) {
+    const t = await getTranslations("event_api_messages")
     try {
         const body = await request.json()
-
+        const createEventSchema = await getCreateEventSchema();
         const validated = createEventSchema.parse(body)
 
         const authResult = await authenticateAndAuthorize(validated.restaurant_id)
@@ -70,7 +73,13 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ data: event }, { status: 201 })
     } catch (error) {
+        if (error instanceof ZodError) {
+            return NextResponse.json(
+                { error: error.errors.map(e => e.message) },
+                { status: 400 }
+            )
+        }
         console.error("Error creating event:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }

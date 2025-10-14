@@ -1,15 +1,18 @@
 import prisma from "@/lib/prisma"
 import { reorderEventSchema } from "@/lib/validations"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest) {
+    const t = await getTranslations("event_api_messages")
+
     try {
         const supabase = await createClient()
         const { data } = await supabase.auth.getUser()
 
         if (!data.user) {
-            return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
+            return NextResponse.json({ error: t("not_authenticated") }, { status: 401 })
         }
 
         const body = await request.json()
@@ -22,11 +25,11 @@ export async function PUT(request: NextRequest) {
         })
 
         if (!event) {
-            return NextResponse.json({ error: "Event not found" }, { status: 404 })
+            return NextResponse.json({ error: t("event_not_found") }, { status: 404 })
         }
 
         if (event.restaurant.user_id !== data.user.id) {
-            return NextResponse.json({ error: "Unauthorized: You do not own this event." }, { status: 403 })
+            return NextResponse.json({ error: t("unauthorized_event") }, { status: 403 })
         }
 
         // Get all events for this restaurant ordered by sort_order
@@ -37,13 +40,13 @@ export async function PUT(request: NextRequest) {
 
         const currentIndex = allEvents.findIndex((e) => e.id === validated.eventId)
         if (currentIndex === -1) {
-            return NextResponse.json({ error: "Event not found in list" }, { status: 404 })
+            return NextResponse.json({ error: t("event_not_found_in_list") }, { status: 404 })
         }
 
         const newIndex = validated.direction === "up" ? currentIndex - 1 : currentIndex + 1
 
         if (newIndex < 0 || newIndex >= allEvents.length) {
-            return NextResponse.json({ error: "Cannot move event in that direction" }, { status: 400 })
+            return NextResponse.json({ error: t("cannot_move_event") }, { status: 400 })
         }
 
         // Swap the sort orders
@@ -70,6 +73,6 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ data: updatedEvents })
     } catch (error) {
         console.error("Error reordering event:", error)
-        return NextResponse.json({ error: "Failed to reorder event" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_reorder_event") }, { status: 500 })
     }
 }

@@ -2630,5 +2630,71 @@
     "resetToOrignal": "Form reset to original values",
     "failedToChange": "Failed to save appearance setting",
     "SuccessToChange": "Appearance settings saved successfully!"
+  },
+  "auth_actions": {
+    "missingCredentials": "Email and password are required.",
+    "invalidCredentials": "Invalid email or password.",
+    "accountExists": "An account with this email already exists.",
+    "signUpFailed": "Failed to create the account.",
+    "confirmEmail": "Please check your inbox and confirm your email before logging in.",
+    "signInFailed": "Could not sign you in.",
+    "userNotFound": "Could not load your user after sign-in."
+  },
+  "create_restaurant_actions": {
+    "not_authenticated": "Not authenticated",
+    "name_required": "Restaurant name is required",
+    "slug_too_short": "Slug must be at least 3 characters",
+    "slug_too_long": "Slug must not exceed 50 characters",
+    "slug_invalid_format": "Slug can only contain lowercase letters, numbers, and hyphens",
+    "bio_too_long": "Bio must not exceed 200 characters",
+    "validation_failed": "There was a problem with your input. Please check the fields and try again.",
+    "slug_taken": "Slug is already taken. Please choose another one.",
+    "user_not_found": "User not found",
+    "basic_plan_limit": "Free Plan allows only one restaurant. Upgrade to add more."
+  },
+  "event_api_messages": {
+    "restaurant_id_required": "Restaurant ID is required",
+    "internal_server_error": "Internal server error",
+    "error_fetching_events": "Error fetching events:",
+    "error_creating_event": "Error creating event:",
+    "not_authenticated": "Not authenticated",
+    "event_not_found": "Event not found",
+    "unauthorized_event": "Unauthorized: You do not own this event.",
+    "event_not_found_in_list": "Event not found in list",
+    "cannot_move_event": "Cannot move event in that direction",
+    "error_reordering_event": "Error reordering event:",
+    "failed_to_reorder_event": "Failed to reorder event",
+    "error_updating_event": "Error updating event:",
+    "error_deleting_event": "Error deleting event:",
+    "restaurant_id_invalid": "Invalid restaurant ID format",
+    "title_required": "Title is required",
+    "title_min": "Title must not be empty",
+    "title_max": "Title must be less than 200 characters",
+    "date_required": "Date is required",
+    "date_invalid": "Invalid date format",
+    "ticket_url_invalid": "Ticket URL must be valid"
+  },
+  "auth_and_subscription_messages": {
+    "user_not_found": "User not found",
+    "get_current_user_error": "Get current user error:",
+    "not_authenticated": "Not authenticated",
+    "unauthorized_restaurant": "Unauthorized: You do not own this restaurant",
+    "authentication_error": "Authentication error:",
+    "authentication_failed": "Authentication failed",
+    "category_id_required_for_menu_items": "Category ID required for menu items limit check",
+    "category_id_required_for_faqs": "Category ID required for FAQs limit check",
+    "subscription_limit_reached_dynamic": "You are limited to { limit } { resourceName } on the { userPlan } plan. Upgrade to Pro for unlimited access.",
+    "subscription_limit_check_error": "Subscription limit check error:",
+    "failed_to_check_subscription_limits": "Failed to check subscription limits",
+    "get_subscription_plan_error": "Get subscription plan error:",
+    "resource_names": {
+      "links": "links",
+      "menu_categories": "menu categories",
+      "menu_items_per_category": "menu items per category",
+      "events": "events",
+      "faq_categories": "FAQ categories",
+      "faqs_per_category": "FAQs per category",
+      "qr_codes": "QR codes"
+    }
   }
 }

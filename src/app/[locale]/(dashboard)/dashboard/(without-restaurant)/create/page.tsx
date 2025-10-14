@@ -187,7 +187,7 @@ export default function CreateRestaurantPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="border-slate-200  bg-main-blue text-white !h-[44px] font-poppins !px-5 rounded-full hover:bg-main-blue/80"
+                    className="border-slate-200  !bg-main-blue !cursor-pointer !text-white !h-[44px] font-poppins !px-5 rounded-full hover:!bg-main-blue/80"
                     onClick={() => router.push("/dashboard")}
                   >
                     {f("buttons.cancel")}

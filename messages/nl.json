@@ -2627,5 +2627,71 @@
     "resetToOrignal": "Formulier teruggezet naar originele waarden",
     "failedToChange": "Het opslaan van de instellingen voor uiterlijk is mislukt",
     "SuccessToChange": "Uiterlijkinstellingen succesvol opgeslagen!"
+  },
+  "auth_actions": {
+    "missingCredentials": "E-mail en wachtwoord zijn vereist.",
+    "invalidCredentials": "Ongeldig e-mailadres of wachtwoord.",
+    "accountExists": "Er bestaat al een account met dit e-mailadres.",
+    "signUpFailed": "Account kon niet worden aangemaakt.",
+    "confirmEmail": "Controleer je inbox en bevestig je e-mailadres voordat je inlogt.",
+    "signInFailed": "Inloggen is mislukt.",
+    "userNotFound": "Je gebruiker kon na het inloggen niet worden geladen."
+  },
+  "create_restaurant_actions": {
+    "not_authenticated": "Niet geauthenticeerd",
+    "name_required": "Restaurantnaam is vereist",
+    "slug_too_short": "Slug moet minimaal 3 tekens lang zijn",
+    "slug_too_long": "Slug mag niet langer zijn dan 50 tekens",
+    "slug_invalid_format": "Slug mag alleen kleine letters, cijfers en koppeltekens bevatten",
+    "bio_too_long": "De biografie mag niet langer zijn dan 200 tekens",
+    "validation_failed": "Er is een probleem opgetreden met je invoer. Controleer de velden en probeer het opnieuw.",
+    "slug_taken": "Slug is al in gebruik. Kies een andere.",
+    "user_not_found": "Gebruiker niet gevonden",
+    "basic_plan_limit": "Het gratis abonnement staat slechts één restaurant toe. Upgrade om er meer toe te voegen."
+  },
+  "event_api_messages": {
+    "restaurant_id_required": "Restaurant-ID is verplicht",
+    "internal_server_error": "Interne serverfout",
+    "error_fetching_events": "Fout bij het ophalen van evenementen:",
+    "error_creating_event": "Fout bij het aanmaken van het evenement:",
+    "not_authenticated": "Niet geauthenticeerd",
+    "event_not_found": "Evenement niet gevonden",
+    "unauthorized_event": "Niet gemachtigd: je bent niet de eigenaar van dit evenement.",
+    "event_not_found_in_list": "Evenement niet gevonden in de lijst",
+    "cannot_move_event": "Kan evenement niet in die richting verplaatsen",
+    "error_reordering_event": "Fout bij het herschikken van evenement:",
+    "failed_to_reorder_event": "Herschikken van evenement mislukt",
+    "error_updating_event": "Fout bij het bijwerken van evenement:",
+    "error_deleting_event": "Fout bij het verwijderen van evenement:",
+    "restaurant_id_invalid": "Ongeldig restaurant-ID-formaat",
+    "title_required": "Titel is verplicht",
+    "title_min": "Titel mag niet leeg zijn",
+    "title_max": "Titel mag maximaal 200 tekens bevatten",
+    "date_required": "Datum is verplicht",
+    "date_invalid": "Ongeldig datumformaat",
+    "ticket_url_invalid": "Ticket-URL moet geldig zijn"
+  },
+  "auth_and_subscription_messages": {
+    "user_not_found": "Gebruiker niet gevonden",
+    "get_current_user_error": "Fout bij het ophalen van de huidige gebruiker:",
+    "not_authenticated": "Niet geauthenticeerd",
+    "unauthorized_restaurant": "Niet gemachtigd: je bent niet de eigenaar van dit restaurant",
+    "authentication_error": "Authenticatiefout:",
+    "authentication_failed": "Authenticatie mislukt",
+    "category_id_required_for_menu_items": "Categorie-ID is vereist om menu-items te controleren",
+    "category_id_required_for_faqs": "Categorie-ID is vereist om FAQ's te controleren",
+    "subscription_limit_reached_dynamic": "Je bent beperkt tot { limit } { resourceName } op het { userPlan }-plan. Upgrade naar Pro voor onbeperkte toegang.",
+    "subscription_limit_check_error": "Fout bij het controleren van abonnementslimieten:",
+    "failed_to_check_subscription_limits": "Fout bij het controleren van abonnementslimieten",
+    "get_subscription_plan_error": "Fout bij het ophalen van het abonnement:",
+    "resource_names": {
+      "links": "links",
+      "menu_categories": "menucategorieën",
+      "menu_items_per_category": "menu-items per categorie",
+      "events": "evenementen",
+      "faq_categories": "FAQ-categorieën",
+      "faqs_per_category": "FAQ's per categorie",
+      "qr_codes": "QR-codes"
+    }
   }
 }

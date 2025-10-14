@@ -4,15 +4,16 @@ import prisma from '@/lib/prisma'
 import { createClient } from '@/supabase/clients/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server';
 
 export async function login(formData: FormData) {
     const supabase = await createClient()
+    const t = await getTranslations('auth_actions');
 
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-
     if (!email || !password) {
-        return { error: "Email and password are required." };
+        return { error: t("missingCredentials") };
     }
 
     const data = {
@@ -33,12 +34,13 @@ export async function login(formData: FormData) {
 
 export async function signup(formData: FormData) {
     const supabase = await createClient();
+    const t = await getTranslations('auth_actions');
 
     const email = (formData.get("email") as string)?.trim();
     const password = formData.get("password") as string;
 
     if (!email || !password) {
-        return { error: "Email and password are required." };
+        return { error: t("missingCredentials") };
     }
 
     const { error: signUpError } = await supabase.auth.signUp({
@@ -53,8 +55,8 @@ export async function signup(formData: FormData) {
         const msg =
             signUpError.message?.toLowerCase().includes("registered") ||
                 signUpError.status === 400
-                ? "An account with this email already exists."
-                : signUpError.message || "Failed to create the account.";
+                ? t("accountExists")
+                : signUpError.message || t("signUpFailed");
         return { error: msg };
     }
 
@@ -66,15 +68,15 @@ export async function signup(formData: FormData) {
     if (signInError) {
         const friendly =
             signInError.message?.toLowerCase().includes("confirm")
-                ? "Please check your inbox and confirm your email before logging in."
-                : signInError.message || "Could not sign you in.";
+                ? t("confirmEmail")
+                : signInError.message || t("signInFailed");
         return { error: friendly };
     }
 
     const { data: userData } = await supabase.auth.getUser();
     const user = userData?.user;
     if (!user) {
-        return { error: "Could not load your user after sign-in." };
+        return { error: t("userNotFound") };
     }
 
 

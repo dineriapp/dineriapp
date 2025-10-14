@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import { z } from "zod"
 
 export const createLinkSchema = z.object({
@@ -98,22 +99,53 @@ export type CreateItemInput = z.infer<typeof createItemSchema>
 export type UpdateItemInput = z.infer<typeof updateItemSchema>
 
 
-// Event validation schemas
-export const createEventSchema = z.object({
-    restaurant_id: z.string().uuid(),
-    title: z.string().min(1).max(200),
-    description: z.string().optional(),
-    date: z.string().datetime(),
-    ticket_url: z.string().url().optional(),
-})
+export async function getCreateEventSchema() {
+    const t = await getTranslations("event_api_messages");
 
-export const updateEventSchema = z.object({
-    title: z.string().min(1).max(200),
-    description: z.string().optional(),
-    date: z.string().datetime(),
-    ticket_url: z.string().url().optional(),
-})
+    return z.object({
+        restaurant_id: z
+            .string({ required_error: t("restaurant_id_required") })
+            .uuid({ message: t("restaurant_id_invalid") }),
 
+        title: z
+            .string({ required_error: t("title_required") })
+            .min(1, { message: t("title_min") })
+            .max(200, { message: t("title_max") }),
+
+        description: z.string().optional(),
+
+        date: z
+            .string({ required_error: t("date_required") })
+            .datetime({ message: t("date_invalid") }),
+
+        ticket_url: z
+            .string()
+            .url({ message: t("ticket_url_invalid") })
+            .optional(),
+    });
+}
+
+export async function getUpdateEventSchema() {
+    const t = await getTranslations("event_api_messages");
+
+    return z.object({
+        title: z
+            .string({ required_error: t("title_required") })
+            .min(1, { message: t("title_min") })
+            .max(200, { message: t("title_max") }),
+
+        description: z.string().optional(),
+
+        date: z
+            .string({ required_error: t("date_required") })
+            .datetime({ message: t("date_invalid") }),
+
+        ticket_url: z
+            .string()
+            .url({ message: t("ticket_url_invalid") })
+            .optional(),
+    });
+}
 // FAQ Category validation schemas
 export const createFaqCategorySchema = z.object({
     restaurant_id: z.string().uuid(),

@@ -2627,5 +2627,71 @@
     "resetToOrignal": "Modulo reimpostato ai valori originali",
     "failedToChange": "Impossibile salvare le impostazioni dell'aspetto",
     "SuccessToChange": "Impostazioni dell'aspetto salvate con successo!"
+  },
+  "auth_actions": {
+    "missingCredentials": "Email e password sono obbligatorie.",
+    "invalidCredentials": "Email o password non valide.",
+    "accountExists": "Esiste già un account con questa email.",
+    "signUpFailed": "Impossibile creare l'account.",
+    "confirmEmail": "Controlla la tua casella di posta e conferma l'email prima di accedere.",
+    "signInFailed": "Accesso non riuscito.",
+    "userNotFound": "Impossibile caricare il tuo utente dopo l'accesso."
+  },
+  "create_restaurant_actions": {
+    "not_authenticated": "Non autenticato",
+    "name_required": "Il nome del ristorante è obbligatorio",
+    "slug_too_short": "Lo slug deve contenere almeno 3 caratteri",
+    "slug_too_long": "Lo slug non deve superare i 50 caratteri",
+    "slug_invalid_format": "Lo slug può contenere solo lettere minuscole, numeri e trattini",
+    "bio_too_long": "La biografia non deve superare i 200 caratteri",
+    "validation_failed": "Si è verificato un problema con i dati inseriti. Controlla i campi e riprova.",
+    "slug_taken": "Lo slug è già stato utilizzato. Scegline un altro.",
+    "user_not_found": "Utente non trovato",
+    "basic_plan_limit": "Il piano gratuito consente solo un ristorante. Passa a un piano superiore per aggiungerne altri."
+  },
+  "event_api_messages": {
+    "restaurant_id_required": "ID del ristorante richiesto",
+    "internal_server_error": "Errore interno del server",
+    "error_fetching_events": "Errore durante il recupero degli eventi:",
+    "error_creating_event": "Errore durante la creazione dell'evento:",
+    "not_authenticated": "Non autenticato",
+    "event_not_found": "Evento non trovato",
+    "unauthorized_event": "Non autorizzato: non possiedi questo evento.",
+    "event_not_found_in_list": "Evento non trovato nell'elenco",
+    "cannot_move_event": "Impossibile spostare l'evento in quella direzione",
+    "error_reordering_event": "Errore durante il riordino dell'evento:",
+    "failed_to_reorder_event": "Impossibile riordinare l'evento",
+    "error_updating_event": "Errore durante l'aggiornamento dell'evento:",
+    "error_deleting_event": "Errore durante l'eliminazione dell'evento:",
+    "restaurant_id_invalid": "Formato ID ristorante non valido",
+    "title_required": "Il titolo è obbligatorio",
+    "title_min": "Il titolo non può essere vuoto",
+    "title_max": "Il titolo deve contenere meno di 200 caratteri",
+    "date_required": "La data è obbligatoria",
+    "date_invalid": "Formato data non valido",
+    "ticket_url_invalid": "L'URL del biglietto deve essere valido"
+  },
+  "auth_and_subscription_messages": {
+    "user_not_found": "Utente non trovato",
+    "get_current_user_error": "Errore durante il recupero dell'utente corrente:",
+    "not_authenticated": "Non autenticato",
+    "unauthorized_restaurant": "Non autorizzato: non possiedi questo ristorante",
+    "authentication_error": "Errore di autenticazione:",
+    "authentication_failed": "Autenticazione non riuscita",
+    "category_id_required_for_menu_items": "ID categoria richiesto per verificare gli elementi del menu",
+    "category_id_required_for_faqs": "ID categoria richiesto per verificare le FAQ",
+    "subscription_limit_reached_dynamic": "Sei limitato a { limit } { resourceName } nel piano { userPlan }. Passa a Pro per accesso illimitato.",
+    "subscription_limit_check_error": "Errore durante la verifica dei limiti di abbonamento:",
+    "failed_to_check_subscription_limits": "Errore nella verifica dei limiti di abbonamento",
+    "get_subscription_plan_error": "Errore durante il recupero del piano di abbonamento:",
+    "resource_names": {
+      "links": "link",
+      "menu_categories": "categorie di menu",
+      "menu_items_per_category": "elementi per categoria",
+      "events": "eventi",
+      "faq_categories": "categorie FAQ",
+      "faqs_per_category": "FAQ per categoria",
+      "qr_codes": "codici QR"
+    }
   }
 }

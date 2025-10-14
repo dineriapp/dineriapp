@@ -2627,5 +2627,71 @@
     "resetToOrignal": "Formular auf ursprüngliche Werte zurückgesetzt",
     "failedToChange": "Speichern der Erscheinungseinstellungen fehlgeschlagen",
     "SuccessToChange": "Erscheinungseinstellungen erfolgreich gespeichert!"
+  },
+  "auth_actions": {
+    "missingCredentials": "E-Mail und Passwort sind erforderlich.",
+    "invalidCredentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort.",
+    "accountExists": "Ein Konto mit dieser E-Mail-Adresse existiert bereits.",
+    "signUpFailed": "Das Konto konnte nicht erstellt werden.",
+    "confirmEmail": "Bitte überprüfe dein Postfach und bestätige deine E-Mail, bevor du dich einloggst.",
+    "signInFailed": "Du konntest nicht angemeldet werden.",
+    "userNotFound": "Dein Benutzerkonto konnte nach der Anmeldung nicht geladen werden."
+  },
+  "create_restaurant_actions": {
+    "not_authenticated": "Nicht authentifiziert",
+    "name_required": "Restaurantname ist erforderlich",
+    "slug_too_short": "Slug muss mindestens 3 Zeichen lang sein",
+    "slug_too_long": "Slug darf 50 Zeichen nicht überschreiten",
+    "slug_invalid_format": "Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten",
+    "bio_too_long": "Die Biografie darf 200 Zeichen nicht überschreiten",
+    "validation_failed": "Es gab ein Problem mit deinen Eingaben. Bitte überprüfe die Felder und versuche es erneut.",
+    "slug_taken": "Slug ist bereits vergeben. Bitte wähle einen anderen.",
+    "user_not_found": "Benutzer nicht gefunden",
+    "basic_plan_limit": "Der kostenlose Plan erlaubt nur ein Restaurant. Upgrade, um mehr hinzuzufügen."
+  },
+  "event_api_messages": {
+    "restaurant_id_required": "Restaurant-ID ist erforderlich",
+    "internal_server_error": "Interner Serverfehler",
+    "error_fetching_events": "Fehler beim Abrufen der Events:",
+    "error_creating_event": "Fehler beim Erstellen des Events:",
+    "not_authenticated": "Nicht authentifiziert",
+    "event_not_found": "Event nicht gefunden",
+    "unauthorized_event": "Nicht autorisiert: Sie besitzen dieses Event nicht.",
+    "event_not_found_in_list": "Event nicht in der Liste gefunden",
+    "cannot_move_event": "Event kann nicht in diese Richtung verschoben werden",
+    "error_reordering_event": "Fehler beim Neuordnen des Events:",
+    "failed_to_reorder_event": "Fehler beim Neuordnen des Events",
+    "error_updating_event": "Fehler beim Aktualisieren des Events:",
+    "error_deleting_event": "Fehler beim Löschen des Events:",
+    "restaurant_id_invalid": "Ungültiges Restaurant-ID-Format",
+    "title_required": "Titel ist erforderlich",
+    "title_min": "Titel darf nicht leer sein",
+    "title_max": "Titel darf maximal 200 Zeichen lang sein",
+    "date_required": "Datum ist erforderlich",
+    "date_invalid": "Ungültiges Datumsformat",
+    "ticket_url_invalid": "Ticket-URL muss gültig sein"
+  },
+  "auth_and_subscription_messages": {
+    "user_not_found": "Benutzer nicht gefunden",
+    "get_current_user_error": "Fehler beim Laden des aktuellen Benutzers:",
+    "not_authenticated": "Nicht authentifiziert",
+    "unauthorized_restaurant": "Nicht autorisiert: Sie besitzen dieses Restaurant nicht",
+    "authentication_error": "Authentifizierungsfehler:",
+    "authentication_failed": "Authentifizierung fehlgeschlagen",
+    "category_id_required_for_menu_items": "Kategorie-ID ist für die Überprüfung der Menüpunkte erforderlich",
+    "category_id_required_for_faqs": "Kategorie-ID ist für die Überprüfung der FAQs erforderlich",
+    "subscription_limit_reached_dynamic": "Sie sind auf { limit } { resourceName } im { userPlan }-Plan beschränkt. Upgrade auf Pro für unbegrenzten Zugriff.",
+    "subscription_limit_check_error": "Fehler bei der Überprüfung des Abonnementlimits:",
+    "failed_to_check_subscription_limits": "Fehler bei der Überprüfung des Abonnementlimits",
+    "get_subscription_plan_error": "Fehler beim Laden des Abonnementplans:",
+    "resource_names": {
+      "links": "Links",
+      "menu_categories": "Menükategorien",
+      "menu_items_per_category": "Menüpunkte pro Kategorie",
+      "events": "Events",
+      "faq_categories": "FAQ-Kategorien",
+      "faqs_per_category": "FAQs pro Kategorie",
+      "qr_codes": "QR-Codes"
+    }
   }
 }
