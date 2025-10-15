@@ -1,6 +1,7 @@
 import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 import prisma from "@/lib/prisma"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
 
@@ -48,6 +49,7 @@ interface CheckoutRequest {
 }
 
 export async function POST(request: NextRequest) {
+    const t = await getTranslations("payments_create_checkout")
     try {
         const body: CheckoutRequest = await request.json()
         const {
@@ -65,11 +67,11 @@ export async function POST(request: NextRequest) {
 
         // Validate required fields
         if (!restaurantSlug || !items?.length || !customerInfo?.name || !customerInfo?.email || !customerInfo?.phone) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+            return NextResponse.json({ error: t("err_missing_fields") }, { status: 400 })
         }
 
         if (orderType === "delivery" && !deliveryAddress) {
-            return NextResponse.json({ error: "Delivery address is required for delivery orders" }, { status: 400 })
+            return NextResponse.json({ error: t("err_delivery_addr_required") }, { status: 400 })
         }
 
         // Get restaurant details
@@ -80,23 +82,23 @@ export async function POST(request: NextRequest) {
 
         if (restaurant?.status === "DISABLE_BOTH") {
             return NextResponse.json(
-                { error: "This restaurant has temporarily disabled all online orders." },
+                { error: t("err_disabled_all") },
                 { status: 403 }
             )
         } else if (restaurant?.status === "DISABLE_DELIVERY" && orderType === "delivery") {
             return NextResponse.json(
-                { error: "This restaurant is not accepting delivery orders right now. Please choose pickup instead." },
+                { error: t("err_disabled_delivery_pickup") },
                 { status: 403 }
             )
         } else if (restaurant?.status === "DISABLE_PICKUP" && orderType === "pickup") {
             return NextResponse.json(
-                { error: "This restaurant is not accepting pickup orders right now. Please choose delivery instead." },
+                { error: t("err_disabled_pickup_delivery") },
                 { status: 403 }
             )
         }
 
         if (!restaurant || !restaurant.stripe_secret_key_encrypted) {
-            return NextResponse.json({ error: "Restaurant or Stripe key not found" }, { status: 404 })
+            return NextResponse.json({ error: t("err_rest_or_stripe_missing") }, { status: 404 })
         }
 
         const stripeSecretKey = decrypt_key(restaurant.stripe_secret_key_encrypted)
@@ -239,6 +241,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ url: session.url })
     } catch (error) {
         console.error("Checkout error:", error)
-        return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 })
+        return NextResponse.json({ error: t("err_checkout_create_failed") }, { status: 500 })
     }
 }

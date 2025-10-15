@@ -2672,7 +2672,11 @@
     "title_max": "Title must be less than 200 characters",
     "date_required": "Date is required",
     "date_invalid": "Invalid date format",
-    "ticket_url_invalid": "Ticket URL must be valid"
+    "ticket_url_invalid": "Ticket URL must be valid",
+    "event_id_required": "Event ID is required",
+    "event_id_invalid": "Event ID must be a valid UUID",
+    "direction_required": "Direction is required",
+    "direction_invalid": "Direction must be either 'up' or 'down'"
   },
   "auth_and_subscription_messages": {
     "user_not_found": "User not found",
@@ -2695,6 +2699,248 @@
       "faq_categories": "FAQ categories",
       "faqs_per_category": "FAQs per category",
       "qr_codes": "QR codes"
+    }
+  },
+  "faq_apis_categories": {
+    "error_restaurant_id_required": "Restaurant ID is required",
+    "error_internal_server_error": "Internal server error",
+    "error_faq_category_not_found": "FAQ category not found",
+    "error_cannot_move_direction": "Cannot move category in that direction",
+    "log_error_fetching_faq_categories": "Error fetching FAQ categories:",
+    "log_error_creating_faq_category": "Error creating FAQ category:",
+    "log_error_updating_faq_category": "Error updating FAQ category:",
+    "log_error_deleting_faq_category": "Error deleting FAQ category:",
+    "log_error_reordering_faq_category": "Error reordering FAQ category:",
+    "faq_schema_messages": {
+      "restaurant_id_required": "Restaurant ID is required",
+      "restaurant_id_invalid": "Restaurant ID must be a valid UUID",
+      "name_required": "Name is required",
+      "name_min": "Name must contain at least 1 character",
+      "name_max": "Name must not exceed 100 characters",
+      "category_id_required": "Category ID is required",
+      "category_id_invalid": "Category ID must be a valid UUID",
+      "direction_required": "Direction is required",
+      "direction_invalid": "Direction must be either 'up' or 'down'"
+    }
+  },
+  "faq_apis_items": {
+    "errors": {
+      "category_not_found": "FAQ category not found",
+      "not_found": "FAQ not found",
+      "cannot_move_direction": "Cannot move FAQ in that direction",
+      "internal_error": "Internal server error"
+    },
+    "faq_schema_messages": {
+      "category_id_required": "Category ID is required",
+      "category_id_invalid": "Category ID must be a valid UUID",
+      "question_required": "Question is required",
+      "question_min": "Question must contain at least 1 character",
+      "question_max": "Question must not exceed 500 characters",
+      "answer_required": "Answer is required",
+      "answer_min": "Answer must contain at least 1 character",
+      "faq_id_required": "FAQ ID is required",
+      "faq_id_invalid": "FAQ ID must be a valid UUID",
+      "direction_required": "Direction is required",
+      "direction_invalid": "Direction must be either 'up' or 'down'"
+    },
+    "track_view": {
+      "faq_id_required": "FAQ ID is required",
+      "failed_to_track": "Failed to track FAQ view"
+    }
+  },
+  "links_apis": {
+    "errors": {
+      "restaurant_id_required": "Restaurant ID required",
+      "failed_to_fetch": "Failed to fetch links",
+      "failed_to_create": "Failed to create link",
+      "link_not_found": "Link not found",
+      "failed_to_update": "Failed to update link",
+      "not_authenticated": "Not authenticated",
+      "unauthorized": "Unauthorized",
+      "failed_to_delete": "Failed to delete link",
+      "invalid_or_empty_link_ids": "Invalid or empty linkIds",
+      "unauthorized_bulk_delete": "Unauthorized: One or more links do not belong to you",
+      "failed_to_delete_bulk": "Failed to delete links",
+      "cannot_move_link_direction": "Cannot move link { direction }",
+      "failed_to_reorder": "Failed to reorder links",
+      "link_id_required": "Link ID is required",
+      "failed_to_track_view": "Failed to track link view"
+    },
+    "link_schema_messages": {
+      "restaurant_id_required": "Restaurant ID is required",
+      "restaurant_id_invalid": "Restaurant ID must be a valid UUID",
+      "title_required": "Title is required",
+      "title_min": "Title must contain at least 1 character",
+      "title_max": "Title must not exceed 255 characters",
+      "url_required": "URL is required",
+      "url_invalid": "URL must be a valid URL",
+      "iconSlug_required": "Icon slug is required",
+      "iconSlug_min": "Icon slug must contain at least 1 character",
+      "iconSlug_max": "Icon slug must not exceed 255 characters",
+      "link_id_required": "Link ID is required",
+      "link_id_invalid": "Link ID must be a valid UUID",
+      "direction_required": "Direction is required",
+      "direction_invalid": "Direction must be either 'up' or 'down'"
+    }
+  },
+
+  "menu_apis": {
+    "categories": {
+      "errors": {
+        "restaurant_id_required": "Restaurant ID required",
+        "failed_to_fetch": "Failed to fetch categories",
+        "failed_to_create": "Failed to create category",
+        "menu_category_not_found": "Menu category not found",
+        "failed_to_update": "Failed to update category",
+        "failed_to_delete": "Failed to delete category",
+        "category_not_found": "Category not found",
+        "cannot_move_category_direction": "Cannot move category in that direction",
+        "failed_to_reorder": "Failed to reorder category"
+      },
+      "category_schema_messages": {
+        "restaurant_id_required": "Restaurant ID is required",
+        "restaurant_id_invalid": "Restaurant ID must be a valid UUID",
+        "name_required": "Name is required",
+        "name_min": "Name must contain at least 1 character",
+        "name_max": "Name must not exceed 255 characters",
+        "category_id_required": "Category ID is required",
+        "category_id_invalid": "Category ID must be a valid UUID",
+        "direction_required": "Direction is required",
+        "direction_invalid": "Direction must be either 'up' or 'down'"
+      }
+    },
+    "items": {
+      "errors": {
+        "menu_category_not_found": "Menu category not found",
+        "menu_item_not_found": "Menu item not found",
+        "item_not_found": "Item not found",
+        "auth_failed": "Authentication failed or unauthorized access",
+        "limit_reached": "You have reached the subscription limit for menu items",
+        "failed_to_create": "Failed to create menu item",
+        "failed_to_update": "Failed to update item",
+        "failed_to_delete": "Failed to delete item",
+        "failed_to_reorder": "Failed to reorder item",
+        "cannot_move_item": "Cannot move item in that direction",
+        "internal_server_error": "Internal server error"
+      },
+      "schema_messages": {
+        "category_id_required": "Category ID is required",
+        "category_id_invalid": "Category ID must be a valid UUID",
+        "name_required": "Item name is required",
+        "name_min": "Item name must be at least 1 character long",
+        "name_max": "Item name must be at most 255 characters long",
+        "price_required": "Price is required",
+        "price_min": "Price cannot be negative",
+        "addon_name_required": "Addon name is required",
+        "addon_name_min": "Addon name must be at least 1 character long",
+        "addon_price_required": "Addon price is required",
+        "addon_price_nonnegative": "Addon price cannot be negative",
+        "item_id_required": "Item ID is required",
+        "item_id_invalid": "Item ID must be a valid UUID",
+        "direction_required": "Direction is required",
+        "direction_invalid": "Direction must be either 'up' or 'down'"
+      }
+    }
+  },
+  "orders_apis": {
+    "error_unauthorized": "Unauthorized",
+    "error_order_not_found": "Order not found",
+    "error_invalid_input": "Invalid input",
+    "error_failed_update_order_status": "Failed to update order status",
+    "success_order_status_updated_to": "Order status updated to { status }"
+  },
+  "payments_create_checkout": {
+    "err_missing_fields": "Missing required fields",
+    "err_delivery_addr_required": "Delivery address is required for delivery orders",
+    "err_disabled_all": "This restaurant has temporarily disabled all online orders.",
+    "err_disabled_delivery_pickup": "This restaurant is not accepting delivery orders right now. Please choose pickup instead.",
+    "err_disabled_pickup_delivery": "This restaurant is not accepting pickup orders right now. Please choose delivery instead.",
+    "err_rest_or_stripe_missing": "Restaurant or Stripe key not found",
+    "err_checkout_create_failed": "Failed to create checkout session"
+  },
+  "places_details_api": {
+    "err_missing_place_id": "Missing place_id"
+  },
+  "qr_code_apis": {
+    "error": {
+      "unauthorized": "Unauthorized",
+      "restaurant_id_required": "Restaurant ID is required",
+      "restaurant_not_found": "Restaurant not found",
+      "invalid_input": "Invalid input",
+      "internal_server_error": "Internal server error",
+      "uuid_required": "UUID as id in body required!",
+      "link_id_required": "Link ID is required for link type",
+      "link_not_found": "Link not found",
+      "custom_url_required": "Custom URL is required for custom type",
+      "qr_code_not_found": "QR code not found"
+    }
+  },
+  "restaurants_apis": {
+    "errors": {
+      "unauthorized": "Unauthorized",
+      "restaurants_not_found": "Restaurants Not Found",
+      "restaurant_not_found": "Restaurant not found",
+      "restaurant_id_required": "Restaurant ID is required",
+      "missing_required_color_fields": "Missing required color fields",
+      "invalid_button_style": "Invalid button style",
+      "invalid_button_variant": "Invalid button variant",
+      "invalid_background_type": "Invalid background type",
+      "email_in_use": "Email address is already in use by another restaurant",
+      "invalid_data_format": "Invalid data format",
+      "invalid_data": "Invalid data",
+      "invalid_opening_hours": "Invalid opening hours",
+      "validation_failed": "Validation failed",
+      "invalid_google_place_id": "Invalid Google Place ID",
+      "failed_validate_google_place_id": "Failed to validate Google Place ID",
+      "upgrade_required_google_places": "Google Places integration is only available for Pro and Enterprise plans. Upgrade your subscription to access this feature.",
+      "invalid_stripe_secret_key": "Invalid Stripe secret key",
+      "invalid_stripe_secret_or_webhook_error": "Invalid Stripe secret key or webhook error",
+      "invalid_stripe_secret_or_webhook_setup_error": "Invalid Stripe secret key or webhook setup error",
+      "failed_to_track_view": "Failed to track view",
+      "failed_to_update_restaurant_styles": "Failed to update restaurant styles",
+      "page_url_taken": "This page URL is already taken. Please choose a different one.",
+      "failed_update_restaurant": "Failed to update restaurant",
+      "failed_fetch_restaurant": "Failed to fetch restaurant",
+      "internal_server_error": "Internal server error",
+      "invalid_email": "Please enter a valid email address",
+      "delivery_fee_min": "Delivery fee cannot be negative",
+      "delivery_fee_max": "Fee is too large",
+      "invalid_days": "closing time must be after opening time"
+    },
+    "success": {
+      "contact_update_success": "Contact information updated successfully",
+      "delivery_fee_update_success": "Delivery fee updated successfully",
+      "opening_hours_update_success": "Opening hours updated successfully",
+      "integration_update_success": "Integration settings updated successfully",
+      "popup_update_success": "Popup settings updated successfully",
+      "social_update_success": "Social media settings updated successfully",
+      "status_update_success": "Status updated successfully",
+      "stripe_update_success": "Stripe settings updated successfully",
+      "stripe_keys_remove_success": "Stripe keys removed successfully",
+      "tax_update_success": "Tax percentage updated successfully",
+      "restaurant_styles_update_success": "Restaurant styles updated successfully",
+      "restaurant_update_success": "Restaurant updated successfully"
+    },
+    "schema": {
+      "update_stripe": {
+        "public_key_required": "Public key is required",
+        "invalid_public_key_format": "Invalid public key format",
+        "secret_key_required": "Secret key is required",
+        "invalid_secret_key_format": "Invalid secret key format"
+      },
+      "update_tax": {
+        "tax_negative": "Tax percentage cannot be negative",
+        "tax_exceed_100": "Tax percentage cannot exceed 100"
+      },
+      "update_restaurant": {
+        "name_required": "Restaurant name is required",
+        "name_max": "Restaurant name must be less than 100 characters",
+        "slug_min": "Slug must be at least 3 characters",
+        "slug_max": "Slug must be less than 50 characters",
+        "slug_pattern": "Slug can only contain lowercase letters, numbers, and hyphens",
+        "bio_max": "Bio must be less than 200 characters",
+        "logo_url_invalid": "Logo URL must be a valid URL"
+      }
     }
   }
 }

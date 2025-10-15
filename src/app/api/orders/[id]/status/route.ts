@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 
@@ -8,14 +9,14 @@ const updateStatusSchema = z.object({
 })
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("orders_apis")
     try {
         const { id } = await params
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
 
-
         if (!user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ error: t("error_unauthorized") }, { status: 401 })
         }
 
         const body = await request.json()
@@ -34,11 +35,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!order) {
-            return NextResponse.json({ error: "Order not found" }, { status: 404 })
+            return NextResponse.json({ error: t("error_order_not_found") }, { status: 404 })
         }
 
         if (order.restaurant.user_id !== user.id) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+            return NextResponse.json({ error: t("error_unauthorized") }, { status: 403 })
         }
 
         // Update the order status
@@ -53,14 +54,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({
             success: true,
             data: updatedOrder,
-            message: `Order status updated to ${status}`,
+            message: t("success_order_status_updated_to", { status: status }),
         })
     } catch (error) {
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: "Invalid input", details: error.errors }, { status: 400 })
+            return NextResponse.json({ error: t("error_invalid_input"), details: error.errors }, { status: 400 })
         }
 
         console.error("Update order status error:", error)
-        return NextResponse.json({ error: "Failed to update order status" }, { status: 500 })
+        return NextResponse.json({ error: t("success_order_status_updated_to") }, { status: 500 })
     }
 }

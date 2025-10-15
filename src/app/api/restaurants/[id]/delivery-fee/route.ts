@@ -2,15 +2,21 @@ import { NextResponse, type NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { authenticateAndAuthorize } from "@/lib/auth-utils";
+import { getTranslations } from "next-intl/server";
 
-const schema = z.object({
-    // accepts string or number, coerces to number
-    delivery_fee: z.coerce.number().min(0, "Delivery fee cannot be negative").max(9999, "Fee is too large")
-        .transform((n) => Math.round(n * 100) / 100), // round to 2 decimals
-});
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis");
+
     try {
+
+        const schema = z.object({
+            // accepts string or number, coerces to number
+            delivery_fee: z.coerce.number().min(0, t("errors.delivery_fee_min")).max(9999, t("errors.delivery_fee_max"))
+                .transform((n) => Math.round(n * 100) / 100), // round to 2 decimals
+        });
+
+
         const { id } = await params;
         const body = await request.json();
         const { delivery_fee } = schema.parse(body);
@@ -22,7 +28,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         }
 
         if (!authResult.data?.restaurant) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
+            return NextResponse.json({ error: t("errors.restaurant_not_found") }, { status: 404 });
         }
 
         const updated = await prisma.restaurant.update({
@@ -34,13 +40,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({
             success: true,
             data: updated,
-            message: "Delivery fee updated successfully",
+            message: t("success.delivery_fee_update_success"),
         });
     } catch (error: any) {
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: "Invalid data", details: error.errors }, { status: 400 });
+            return NextResponse.json({ error: t("errors.invalid_data"), details: error.errors }, { status: 400 });
         }
         console.error("Error updating delivery fee:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json({ error: t("errors.internal_server_error") }, { status: 500 });
     }
 }

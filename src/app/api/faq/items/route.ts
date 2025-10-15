@@ -1,12 +1,15 @@
 import { authenticateAndAuthorize, checkSubscriptionLimitsWithPlans } from "@/lib/auth-utils"
-import { createFaqSchema } from "@/lib/faq-validations"
+import { getCreateFaqSchema } from "@/lib/faq-validations"
 import prisma from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
+    const t = await getTranslations("faq_apis_items.errors")
+
     try {
         const body = await request.json()
-
+        const createFaqSchema = await getCreateFaqSchema()
         const validated = createFaqSchema.parse(body)
 
         // First get the category to check ownership
@@ -15,7 +18,7 @@ export async function POST(request: NextRequest) {
         })
 
         if (!category) {
-            return NextResponse.json({ error: "FAQ category not found" }, { status: 404 })
+            return NextResponse.json({ error: t("category_not_found") }, { status: 404 })
         }
 
         const authResult = await authenticateAndAuthorize(category.restaurant_id)
@@ -49,6 +52,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ data: faq }, { status: 201 })
     } catch (error) {
         console.error("Error creating FAQ:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_error") }, { status: 500 })
     }
 }

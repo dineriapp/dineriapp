@@ -5,20 +5,13 @@ import { encrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 import { getValidStripeClient } from "@/lib/stripe"
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
 
-const updateStripeSchema = z.object({
-    stripe_public_key: z
-        .string()
-        .min(1, "Public key is required")
-        .startsWith("pk_", "Invalid public key format"),
-    stripe_secret_key: z
-        .string()
-        .min(1, "Secret key is required")
-        .startsWith("sk_", "Invalid secret key format"),
-})
+
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params
+
+
 
         const restaurant = await prisma.restaurant.findUnique({
             where: { id },
@@ -52,6 +45,17 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params
+
+        const updateStripeSchema = z.object({
+            stripe_public_key: z
+                .string()
+                .min(1, "Public key is required")
+                .startsWith("pk_", "Invalid public key format"),
+            stripe_secret_key: z
+                .string()
+                .min(1, "Secret key is required")
+                .startsWith("sk_", "Invalid secret key format"),
+        })
 
         const authResult = await authenticateAndAuthorize(id)
         if (authResult.error) {

@@ -4,14 +4,17 @@ import { QRCodeGenerator } from "@/lib/qr-generator"
 import prisma from "@/lib/prisma"
 import { z } from "zod"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("qr_code_apis.error")
+
     try {
         const { id } = await params
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
         const qrCode = await prisma.qr_codes.findUnique({
@@ -37,29 +40,31 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!qrCode) {
-            return NextResponse.json({ error: "QR code not found" }, { status: 404 })
+            return NextResponse.json({ error: t("qr_code_not_found") }, { status: 404 })
         }
 
         // Verify user owns the restaurant
         if (qrCode.restaurant.user_id !== user.id) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 403 })
         }
 
         return NextResponse.json(qrCode)
     } catch (error) {
         console.error("Error in QR code GET:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("qr_code_apis.error")
     try {
+
         const { id } = await params
 
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
         // Verify user owns the QR code
@@ -79,12 +84,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!qrCode) {
-            return NextResponse.json({ error: "QR code not found" }, { status: 404 })
+            return NextResponse.json({ error: t("qr_code_not_found") }, { status: 404 })
         }
 
         // Verify user owns the restaurant
         if (qrCode.restaurant.user_id !== user.id) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 403 })
         }
 
         const body = await request.json()
@@ -139,21 +144,23 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json(updatedQRCode)
     } catch (error) {
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: "Invalid input", details: error.errors }, { status: 400 })
+            return NextResponse.json({ error: t("invalid_input"), details: error.errors }, { status: 400 })
         }
 
         console.error("Error in QR code PUT:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("qr_code_apis.error")
+
     try {
         const { id } = await params
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
         // Verify user owns the QR code
@@ -169,12 +176,12 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         })
 
         if (!qrCode) {
-            return NextResponse.json({ error: "QR code not found" }, { status: 404 })
+            return NextResponse.json({ error: t("qr_code_not_found") }, { status: 404 })
         }
 
         // Verify user owns the restaurant
         if (qrCode.restaurant.user_id !== user.id) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 403 })
         }
 
         await prisma.qr_codes.delete({
@@ -184,6 +191,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         return NextResponse.json({ success: true })
     } catch (error) {
         console.error("Error in QR code DELETE:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }

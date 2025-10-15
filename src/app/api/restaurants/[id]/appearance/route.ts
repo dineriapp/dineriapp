@@ -1,18 +1,23 @@
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server";
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis.errors");
+
     try {
         const supabase = await createClient()
+
         const { id } = await params
+
         const {
             data: { user },
             error: authError,
         } = await supabase.auth.getUser()
 
         if (authError || !user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
         const restaurantId = id
@@ -41,22 +46,22 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
         // Validate required fields
         if (!bg_color || !accent_color || !headings_text_color || !button_text_icons_color) {
-            return NextResponse.json({ error: "Missing required color fields" }, { status: 400 })
+            return NextResponse.json({ error: t("missing_required_color_fields") }, { status: 400 })
         }
 
         // Validate button style
         if (!["rounded", "square", "pill"].includes(button_style)) {
-            return NextResponse.json({ error: "Invalid button style" }, { status: 400 })
+            return NextResponse.json({ error: t("invalid_button_style") }, { status: 400 })
         }
 
         // Validate button variant
         if (!["solid", "outline"].includes(button_variant)) {
-            return NextResponse.json({ error: "Invalid button variant" }, { status: 400 })
+            return NextResponse.json({ error: t("invalid_button_variant") }, { status: 400 })
         }
 
         // Validate background type
         if (!["color", "gradient", "image"].includes(bg_type)) {
-            return NextResponse.json({ error: "Invalid background type" }, { status: 400 })
+            return NextResponse.json({ error: t("invalid_background_type") }, { status: 400 })
         }
 
         // Check if restaurant exists and belongs to user
@@ -68,7 +73,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!existingRestaurant) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("restaurant_not_found") }, { status: 404 })
         }
 
         // Update restaurant appearance
@@ -104,6 +109,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
     } catch (error) {
         console.error("Error updating restaurant appearance:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }

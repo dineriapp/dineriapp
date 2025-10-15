@@ -1,11 +1,17 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { reorderFaqSchema } from "@/lib/faq-validations"
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
+import { getReorderFaqSchema } from "@/lib/faq-validations"
 import prisma from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest) {
+    const t = await getTranslations("faq_apis_items.errors")
+
     try {
         const body = await request.json()
+
+        const reorderFaqSchema = await getReorderFaqSchema()
+
         const { faqId, direction } = reorderFaqSchema.parse(body)
 
         // Get the FAQ to check ownership
@@ -17,7 +23,7 @@ export async function PUT(request: NextRequest) {
         })
 
         if (!faq) {
-            return NextResponse.json({ error: "FAQ not found" }, { status: 404 })
+            return NextResponse.json({ error: t("not_found") }, { status: 404 })
         }
 
         const authResult = await authenticateAndAuthorize(faq.category.restaurant_id)
@@ -35,7 +41,7 @@ export async function PUT(request: NextRequest) {
         const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1
 
         if (targetIndex < 0 || targetIndex >= faqs.length) {
-            return NextResponse.json({ error: "Cannot move FAQ in that direction" }, { status: 400 })
+            return NextResponse.json({ error: t("cannot_move_direction") }, { status: 400 })
         }
 
         // Swap sort orders
@@ -62,6 +68,6 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ data: updatedFaqs })
     } catch (error) {
         console.error("Error reordering FAQ:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_error") }, { status: 500 })
     }
 }

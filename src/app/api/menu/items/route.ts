@@ -1,13 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
-import { createItemSchema } from "@/lib/validations"
 import { authenticateAndAuthorize, checkSubscriptionLimitsWithPlans } from "@/lib/auth-utils"
+import { getCreateItemSchema } from "@/lib/validations"
+import { getTranslations } from "next-intl/server"
 
 
 
 export async function POST(request: NextRequest) {
+    const t = await getTranslations("menu_apis.items.errors")
     try {
         const body = await request.json()
+        const createItemSchema = await getCreateItemSchema()
         const validated = createItemSchema.parse(body)
         console.log(validated)
         // First get the category to check ownership
@@ -16,7 +19,7 @@ export async function POST(request: NextRequest) {
         })
 
         if (!category) {
-            return NextResponse.json({ error: "Menu category not found" }, { status: 404 })
+            return NextResponse.json({ error: t("menu_category_not_found") }, { status: 404 })
         }
 
         // Authenticate user and verify restaurant ownership
@@ -58,6 +61,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ data: item }, { status: 201 })
     } catch (error) {
         console.error("Error creating menu item:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }

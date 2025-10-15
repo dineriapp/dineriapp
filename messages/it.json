@@ -2669,7 +2669,11 @@
     "title_max": "Il titolo deve contenere meno di 200 caratteri",
     "date_required": "La data è obbligatoria",
     "date_invalid": "Formato data non valido",
-    "ticket_url_invalid": "L'URL del biglietto deve essere valido"
+    "ticket_url_invalid": "L'URL del biglietto deve essere valido",
+    "event_id_required": "L'ID dell'evento è obbligatorio",
+    "event_id_invalid": "L'ID dell'evento deve essere un UUID valido",
+    "direction_required": "La direzione è obbligatoria",
+    "direction_invalid": "La direzione deve essere 'up' o 'down'"
   },
   "auth_and_subscription_messages": {
     "user_not_found": "Utente non trovato",
@@ -2692,6 +2696,179 @@
       "faq_categories": "categorie FAQ",
       "faqs_per_category": "FAQ per categoria",
       "qr_codes": "codici QR"
+    }
+  },
+  "faq_apis_categories": {
+    "error_restaurant_id_required": "L'ID del ristorante è obbligatorio",
+    "error_internal_server_error": "Errore interno del server",
+    "error_faq_category_not_found": "Categoria FAQ non trovata",
+    "error_cannot_move_direction": "Impossibile spostare la categoria in quella direzione",
+    "log_error_fetching_faq_categories": "Errore durante il recupero delle categorie FAQ:",
+    "log_error_creating_faq_category": "Errore durante la creazione della categoria FAQ:",
+    "log_error_updating_faq_category": "Errore durante l'aggiornamento della categoria FAQ:",
+    "log_error_deleting_faq_category": "Errore durante l'eliminazione della categoria FAQ:",
+    "log_error_reordering_faq_category": "Errore durante il riordinamento della categoria FAQ:",
+    "faq_schema_messages": {
+      "restaurant_id_required": "L'ID del ristorante è obbligatorio",
+      "restaurant_id_invalid": "L'ID del ristorante deve essere un UUID valido",
+      "name_required": "Il nome è obbligatorio",
+      "name_min": "Il nome deve contenere almeno 1 carattere",
+      "name_max": "Il nome non deve superare i 100 caratteri",
+      "category_id_required": "L'ID della categoria è obbligatorio",
+      "category_id_invalid": "L'ID della categoria deve essere un UUID valido",
+      "direction_required": "La direzione è obbligatoria",
+      "direction_invalid": "La direzione deve essere 'up' o 'down'"
+    }
+  },
+  "faq_apis_items": {
+    "errors": {
+      "category_not_found": "Categoria FAQ non trovata",
+      "not_found": "FAQ non trovata",
+      "cannot_move_direction": "Impossibile spostare la FAQ in quella direzione",
+      "internal_error": "Errore interno del server"
+    },
+    "faq_schema_messages": {
+      "category_id_required": "L'ID della categoria è obbligatorio",
+      "category_id_invalid": "L'ID della categoria deve essere un UUID valido",
+      "question_required": "La domanda è obbligatoria",
+      "question_min": "La domanda deve contenere almeno 1 carattere",
+      "question_max": "La domanda non deve superare i 500 caratteri",
+      "answer_required": "La risposta è obbligatoria",
+      "answer_min": "La risposta deve contenere almeno 1 carattere",
+      "faq_id_required": "L'ID della FAQ è obbligatorio",
+      "faq_id_invalid": "L'ID della FAQ deve essere un UUID valido",
+      "direction_required": "La direzione è obbligatoria",
+      "direction_invalid": "La direzione deve essere 'up' o 'down'"
+    },
+    "track_view": {
+      "faq_id_required": "L'ID della FAQ è obbligatorio",
+      "failed_to_track": "Impossibile registrare la visualizzazione della FAQ"
+    }
+  },
+  "links_apis": {
+    "errors": {
+      "restaurant_id_required": "ID ristorante richiesto",
+      "failed_to_fetch": "Impossibile recuperare i link",
+      "failed_to_create": "Impossibile creare il link",
+      "link_not_found": "Link non trovato",
+      "failed_to_update": "Impossibile aggiornare il link",
+      "not_authenticated": "Non autenticato",
+      "unauthorized": "Non autorizzato",
+      "failed_to_delete": "Impossibile eliminare il link",
+      "invalid_or_empty_link_ids": "linkIds non validi o vuoti",
+      "unauthorized_bulk_delete": "Non autorizzato: uno o più link non ti appartengono",
+      "failed_to_delete_bulk": "Impossibile eliminare i link",
+      "cannot_move_link_direction": "Impossibile spostare il link { direction }",
+      "failed_to_reorder": "Impossibile riordinare i link",
+      "link_id_required": "ID del link richiesto",
+      "failed_to_track_view": "Impossibile tracciare la visualizzazione del link"
+    },
+    "link_schema_messages": {
+      "restaurant_id_required": "L'ID del ristorante è richiesto",
+      "restaurant_id_invalid": "L'ID del ristorante deve essere un UUID valido",
+      "title_required": "Il titolo è richiesto",
+      "title_min": "Il titolo deve contenere almeno 1 carattere",
+      "title_max": "Il titolo non deve superare i 255 caratteri",
+      "url_required": "L'URL è richiesto",
+      "url_invalid": "L'URL deve essere valido",
+      "iconSlug_required": "Icon slug richiesto",
+      "iconSlug_min": "L'icon slug deve contenere almeno 1 carattere",
+      "iconSlug_max": "L'icon slug non deve superare i 255 caratteri",
+      "link_id_required": "L'ID del link è richiesto",
+      "link_id_invalid": "L'ID del link deve essere un UUID valido",
+      "direction_required": "La direzione è richiesta",
+      "direction_invalid": "La direzione deve essere 'up' o 'down'"
+    }
+  },
+  "menu_apis": {
+    "categories": {
+      "errors": {
+        "restaurant_id_required": "ID del ristorante richiesto",
+        "failed_to_fetch": "Impossibile recuperare le categorie",
+        "failed_to_create": "Impossibile creare la categoria",
+        "menu_category_not_found": "Categoria del menu non trovata",
+        "failed_to_update": "Impossibile aggiornare la categoria",
+        "failed_to_delete": "Impossibile eliminare la categoria",
+        "category_not_found": "Categoria non trovata",
+        "cannot_move_category_direction": "Impossibile spostare la categoria in quella direzione",
+        "failed_to_reorder": "Impossibile riordinare la categoria"
+      },
+      "category_schema_messages": {
+        "restaurant_id_required": "L'ID del ristorante è obbligatorio",
+        "restaurant_id_invalid": "L'ID del ristorante deve essere un UUID valido",
+        "name_required": "Il nome è obbligatorio",
+        "name_min": "Il nome deve contenere almeno 1 carattere",
+        "name_max": "Il nome non deve superare i 255 caratteri",
+        "category_id_required": "L'ID della categoria è obbligatorio",
+        "category_id_invalid": "L'ID della categoria deve essere un UUID valido",
+        "direction_required": "La direzione è obbligatoria",
+        "direction_invalid": "La direzione deve essere 'up' o 'down'"
+      }
+    },
+    "items": {
+      "errors": {
+        "menu_category_not_found": "Categoria del menu non trovata",
+        "menu_item_not_found": "Elemento del menu non trovato",
+        "item_not_found": "Articolo non trovato",
+        "auth_failed": "Autenticazione fallita o accesso non autorizzato",
+        "limit_reached": "Hai raggiunto il limite di abbonamento per gli elementi del menu",
+        "failed_to_create": "Impossibile creare l'elemento del menu",
+        "failed_to_update": "Impossibile aggiornare l'articolo",
+        "failed_to_delete": "Impossibile eliminare l'articolo",
+        "failed_to_reorder": "Impossibile riordinare l'articolo",
+        "cannot_move_item": "Impossibile spostare l'articolo in quella direzione",
+        "internal_server_error": "Errore interno del server"
+      },
+      "schema_messages": {
+        "category_id_required": "L'ID della categoria è obbligatorio",
+        "category_id_invalid": "L'ID della categoria deve essere un UUID valido",
+        "name_required": "Il nome dell'articolo è obbligatorio",
+        "name_min": "Il nome dell'articolo deve contenere almeno 1 carattere",
+        "name_max": "Il nome dell'articolo non deve superare i 255 caratteri",
+        "price_required": "Il prezzo è obbligatorio",
+        "price_min": "Il prezzo non può essere negativo",
+        "addon_name_required": "Il nome dell'opzione è obbligatorio",
+        "addon_name_min": "Il nome dell'opzione deve contenere almeno 1 carattere",
+        "addon_price_required": "Il prezzo dell'opzione è obbligatorio",
+        "addon_price_nonnegative": "Il prezzo dell'opzione non può essere negativo",
+        "item_id_required": "L'ID dell'articolo è obbligatorio",
+        "item_id_invalid": "L'ID dell'articolo deve essere un UUID valido",
+        "direction_required": "La direzione è obbligatoria",
+        "direction_invalid": "La direzione deve essere 'up' o 'down'"
+      }
+    }
+  },
+  "orders_apis": {
+    "error_unauthorized": "Non autorizzato",
+    "error_order_not_found": "Ordine non trovato",
+    "error_invalid_input": "Input non valido",
+    "error_failed_update_order_status": "Aggiornamento dello stato dell'ordine non riuscito",
+    "success_order_status_updated_to": "Stato dell'ordine aggiornato a { status }"
+  },
+  "payments_create_checkout": {
+    "err_missing_fields": "Campi obbligatori mancanti",
+    "err_delivery_addr_required": "L'indirizzo di consegna è obbligatorio per gli ordini con consegna",
+    "err_disabled_all": "Questo ristorante ha temporaneamente disattivato tutti gli ordini online.",
+    "err_disabled_delivery_pickup": "Questo ristorante al momento non accetta ordini con consegna. Scegli invece il ritiro.",
+    "err_disabled_pickup_delivery": "Questo ristorante al momento non accetta ordini con ritiro. Scegli invece la consegna.",
+    "err_rest_or_stripe_missing": "Ristorante o chiave Stripe non trovati",
+    "err_checkout_create_failed": "Creazione della sessione di pagamento non riuscita"
+  },
+  "places_details_api": {
+    "err_missing_place_id": "place_id mancante"
+  },
+  "qr_code_apis": {
+    "error": {
+      "unauthorized": "Non autorizzato",
+      "restaurant_id_required": "È richiesto l'ID del ristorante",
+      "restaurant_not_found": "Ristorante non trovato",
+      "invalid_input": "Input non valido",
+      "internal_server_error": "Errore interno del server",
+      "uuid_required": "UUID come id nel body obbligatorio!",
+      "link_id_required": "È richiesto l'ID del link per il tipo link",
+      "link_not_found": "Link non trovato",
+      "custom_url_required": "URL personalizzato richiesto per il tipo personalizzato",
+      "qr_code_not_found": "Codice QR non trovato"
     }
   }
 }

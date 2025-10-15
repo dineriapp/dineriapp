@@ -1,11 +1,15 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { reorderFaqCategorySchema } from "@/lib/faq-validations"
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
+import { getReorderFaqCategorySchema } from "@/lib/faq-validations"
 import prisma from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest) {
+    const t = await getTranslations("faq_apis_categories")
+
     try {
         const body = await request.json()
+        const reorderFaqCategorySchema = await getReorderFaqCategorySchema()
         const { categoryId, direction } = reorderFaqCategorySchema.parse(body)
 
         // Get the category to check ownership
@@ -14,7 +18,7 @@ export async function PUT(request: NextRequest) {
         })
 
         if (!category) {
-            return NextResponse.json({ error: "FAQ category not found" }, { status: 404 })
+            return NextResponse.json({ error: t("error_faq_category_not_found") }, { status: 404 })
         }
 
         const authResult = await authenticateAndAuthorize(category.restaurant_id)
@@ -32,7 +36,7 @@ export async function PUT(request: NextRequest) {
         const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1
 
         if (targetIndex < 0 || targetIndex >= categories.length) {
-            return NextResponse.json({ error: "Cannot move category in that direction" }, { status: 400 })
+            return NextResponse.json({ error: t("error_cannot_move_direction") }, { status: 400 })
         }
 
         // Swap sort orders
@@ -59,6 +63,6 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ data: updatedCategories })
     } catch (error) {
         console.error("Error reordering FAQ category:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("error_internal_server_error") }, { status: 500 })
     }
 }

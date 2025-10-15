@@ -1,12 +1,15 @@
 import prisma from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
+    const t = await getTranslations("links_apis.errors")
+
     try {
         const { linkId } = await request.json()
 
         if (!linkId) {
-            return NextResponse.json({ error: "Link ID is required" }, { status: 400 })
+            return NextResponse.json({ error: t("link_id_required") }, { status: 400 })
         }
 
         // Get IP address and user agent for tracking
@@ -27,6 +30,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true })
     } catch (error) {
         console.error("Error tracking link view:", error)
-        return NextResponse.json({ error: "Failed to track link view" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_track_view") }, { status: 500 })
     }
 }

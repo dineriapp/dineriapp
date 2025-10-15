@@ -1,15 +1,19 @@
 import prisma from "@/lib/prisma"
-import { reorderLinkSchema } from "@/lib/validations"
+import { getReorderLinkSchema } from "@/lib/validations"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest) {
+    const t = await getTranslations("links_apis.errors")
+
     try {
         const body = await request.json()
+        const reorderLinkSchema = await getReorderLinkSchema()
         const { linkId, direction } = reorderLinkSchema.parse(body)
 
         const currentLink = await prisma.link.findUnique({ where: { id: linkId } })
         if (!currentLink) {
-            return NextResponse.json({ error: "Link not found" }, { status: 404 })
+            return NextResponse.json({ error: t("link_not_found") }, { status: 404 })
         }
 
         const allLinks = await prisma.link.findMany({
@@ -21,7 +25,7 @@ export async function PUT(request: NextRequest) {
         const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1
 
         if (newIndex < 0 || newIndex >= allLinks.length) {
-            return NextResponse.json({ error: `Cannot move link ${direction}` }, { status: 400 })
+            return NextResponse.json({ error: t("cannot_move_link_direction", { direction: direction }) }, { status: 400 })
         }
 
         const targetLink = allLinks[newIndex]
@@ -49,6 +53,6 @@ export async function PUT(request: NextRequest) {
 
         return NextResponse.json({ data: updatedLinks })
     } catch {
-        return NextResponse.json({ error: "Failed to reorder links" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_reorder") }, { status: 500 })
     }
 }

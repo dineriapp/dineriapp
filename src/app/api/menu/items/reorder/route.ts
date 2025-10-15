@@ -1,10 +1,14 @@
 import prisma from "@/lib/prisma"
-import { reorderItemSchema } from "@/lib/validations"
+import { getReorderItemSchema } from "@/lib/validations"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest) {
+    const t = await getTranslations("menu_apis.items.errors")
+
     try {
         const body = await request.json()
+        const reorderItemSchema = await getReorderItemSchema()
         const { itemId, direction } = reorderItemSchema.parse(body)
 
         // Get the current item
@@ -13,7 +17,7 @@ export async function PUT(request: NextRequest) {
         })
 
         if (!currentItem) {
-            return NextResponse.json({ error: "Item not found" }, { status: 404 })
+            return NextResponse.json({ error: t("item_not_found") }, { status: 404 })
         }
 
         // Get all items in this category ordered by sort_order
@@ -27,7 +31,7 @@ export async function PUT(request: NextRequest) {
 
         // Check bounds
         if (newIndex < 0 || newIndex >= allItems.length) {
-            return NextResponse.json({ error: "Cannot move item in that direction" }, { status: 400 })
+            return NextResponse.json({ error: t("cannot_move_item") }, { status: 400 })
         }
 
         // Swap sort orders
@@ -53,6 +57,6 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ data: updatedItems })
     } catch (error) {
         console.error("Error reordering item:", error)
-        return NextResponse.json({ error: "Failed to reorder item" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_reorder") }, { status: 500 })
     }
 }

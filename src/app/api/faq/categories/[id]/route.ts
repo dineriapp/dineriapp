@@ -1,14 +1,17 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { updateFaqCategorySchema } from "@/lib/faq-validations"
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
+import { getUpdateFaqCategorySchema } from "@/lib/faq-validations"
 import prisma from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("faq_apis_categories")
+
     try {
         const { id } = await params
         const body = await request.json()
         const categoryId = id
-
+        const updateFaqCategorySchema = await getUpdateFaqCategorySchema()
         const validated = updateFaqCategorySchema.parse(body)
 
         // First get the category to check ownership
@@ -17,7 +20,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!existingCategory) {
-            return NextResponse.json({ error: "FAQ category not found" }, { status: 404 })
+            return NextResponse.json({ error: t("error_faq_category_not_found") }, { status: 404 })
         }
 
         const authResult = await authenticateAndAuthorize(existingCategory.restaurant_id)
@@ -40,11 +43,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({ data: category })
     } catch (error) {
         console.error("Error updating FAQ category:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("error_internal_server_error") }, { status: 500 })
     }
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("faq_apis_categories")
+
     try {
         const { id } = await params
 
@@ -56,7 +61,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         })
 
         if (!existingCategory) {
-            return NextResponse.json({ error: "FAQ category not found" }, { status: 404 })
+            return NextResponse.json({ error: t("error_faq_category_not_found") }, { status: 404 })
         }
 
         const authResult = await authenticateAndAuthorize(existingCategory.restaurant_id)
@@ -77,6 +82,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         return NextResponse.json({ data: { success: true } })
     } catch (error) {
         console.error("Error deleting FAQ category:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("error_internal_server_error") }, { status: 500 })
     }
 }

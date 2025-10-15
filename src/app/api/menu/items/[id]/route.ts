@@ -1,13 +1,17 @@
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
-import { updateItemSchema } from "@/lib/validations"
+import { getUpdateItemSchema } from "@/lib/validations"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("menu_apis.items.errors")
+
     try {
         const body = await request.json()
         const { id } = await params
         const itemId = id
+        const updateItemSchema = await getUpdateItemSchema()
         const validated = updateItemSchema.parse(body)
 
         // First get the item to check ownership
@@ -19,7 +23,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!existingItem) {
-            return NextResponse.json({ error: "Menu item not found" }, { status: 404 })
+            return NextResponse.json({ error: t("menu_item_not_found") }, { status: 404 })
         }
 
         // Authenticate and authorize user
@@ -46,11 +50,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({ data: item })
     } catch (error) {
         console.error("Error updating item:", error)
-        return NextResponse.json({ error: "Failed to update item" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_update") }, { status: 500 })
     }
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("menu_apis.items.errors")
+
     try {
 
         const { id } = await params
@@ -65,7 +71,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         })
 
         if (!existingItem) {
-            return NextResponse.json({ error: "Menu item not found" }, { status: 404 })
+            return NextResponse.json({ error: t("menu_item_not_found") }, { status: 404 })
         }
 
         // Authenticate and authorize user
@@ -82,6 +88,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         return NextResponse.json({ data: { success: true } })
     } catch (error) {
         console.error("Error deleting item:", error)
-        return NextResponse.json({ error: "Failed to delete item" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }

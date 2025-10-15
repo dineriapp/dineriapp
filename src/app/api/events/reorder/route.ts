@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma"
-import { reorderEventSchema } from "@/lib/validations"
+import { getReorderEventSchema } from "@/lib/validations"
 import { createClient } from "@/supabase/clients/server"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
@@ -16,6 +16,7 @@ export async function PUT(request: NextRequest) {
         }
 
         const body = await request.json()
+        const reorderEventSchema = await getReorderEventSchema()
         const validated = reorderEventSchema.parse(body)
 
         // Check if event exists and user owns it

@@ -2669,7 +2669,11 @@
     "title_max": "Titel mag maximaal 200 tekens bevatten",
     "date_required": "Datum is verplicht",
     "date_invalid": "Ongeldig datumformaat",
-    "ticket_url_invalid": "Ticket-URL moet geldig zijn"
+    "ticket_url_invalid": "Ticket-URL moet geldig zijn",
+    "event_id_required": "Event-ID is verplicht",
+    "event_id_invalid": "Event-ID moet een geldige UUID zijn",
+    "direction_required": "Richting is verplicht",
+    "direction_invalid": "Richting moet 'up' of 'down' zijn"
   },
   "auth_and_subscription_messages": {
     "user_not_found": "Gebruiker niet gevonden",
@@ -2692,6 +2696,179 @@
       "faq_categories": "FAQ-categorieën",
       "faqs_per_category": "FAQ's per categorie",
       "qr_codes": "QR-codes"
+    }
+  },
+  "faq_apis_categories": {
+    "error_restaurant_id_required": "Restaurant-ID is verplicht",
+    "error_internal_server_error": "Interne serverfout",
+    "error_faq_category_not_found": "FAQ-categorie niet gevonden",
+    "error_cannot_move_direction": "Kan categorie niet in die richting verplaatsen",
+    "log_error_fetching_faq_categories": "Fout bij het ophalen van FAQ-categorieën:",
+    "log_error_creating_faq_category": "Fout bij het maken van de FAQ-categorie:",
+    "log_error_updating_faq_category": "Fout bij het bijwerken van de FAQ-categorie:",
+    "log_error_deleting_faq_category": "Fout bij het verwijderen van de FAQ-categorie:",
+    "log_error_reordering_faq_category": "Fout bij het opnieuw ordenen van de FAQ-categorie:",
+    "faq_schema_messages": {
+      "restaurant_id_required": "Restaurant-ID is verplicht",
+      "restaurant_id_invalid": "Restaurant-ID moet een geldige UUID zijn",
+      "name_required": "Naam is verplicht",
+      "name_min": "Naam moet minimaal 1 teken bevatten",
+      "name_max": "Naam mag niet meer dan 100 tekens bevatten",
+      "category_id_required": "Categorie-ID is verplicht",
+      "category_id_invalid": "Categorie-ID moet een geldige UUID zijn",
+      "direction_required": "Richting is verplicht",
+      "direction_invalid": "Richting moet 'up' of 'down' zijn"
+    }
+  },
+  "faq_apis_items": {
+    "errors": {
+      "category_not_found": "FAQ-categorie niet gevonden",
+      "not_found": "FAQ niet gevonden",
+      "cannot_move_direction": "FAQ kan niet in die richting worden verplaatst",
+      "internal_error": "Interne serverfout"
+    },
+    "faq_schema_messages": {
+      "category_id_required": "Categorie-ID is verplicht",
+      "category_id_invalid": "Categorie-ID moet een geldige UUID zijn",
+      "question_required": "Vraag is verplicht",
+      "question_min": "De vraag moet minstens 1 teken bevatten",
+      "question_max": "De vraag mag niet meer dan 500 tekens bevatten",
+      "answer_required": "Antwoord is verplicht",
+      "answer_min": "Het antwoord moet minstens 1 teken bevatten",
+      "faq_id_required": "FAQ-ID is verplicht",
+      "faq_id_invalid": "FAQ-ID moet een geldige UUID zijn",
+      "direction_required": "Richting is verplicht",
+      "direction_invalid": "Richting moet 'up' of 'down' zijn"
+    },
+    "track_view": {
+      "faq_id_required": "FAQ-ID is verplicht",
+      "failed_to_track": "Kan FAQ-weergave niet bijhouden"
+    }
+  },
+  "links_apis": {
+    "errors": {
+      "restaurant_id_required": "Restaurant-ID vereist",
+      "failed_to_fetch": "Kan links niet ophalen",
+      "failed_to_create": "Kan link niet maken",
+      "link_not_found": "Link niet gevonden",
+      "failed_to_update": "Kan link niet bijwerken",
+      "not_authenticated": "Niet geauthenticeerd",
+      "unauthorized": "Niet gemachtigd",
+      "failed_to_delete": "Kan link niet verwijderen",
+      "invalid_or_empty_link_ids": "Ongeldige of lege linkIds",
+      "unauthorized_bulk_delete": "Niet gemachtigd: een of meer links zijn niet van jou",
+      "failed_to_delete_bulk": "Kan links niet verwijderen",
+      "cannot_move_link_direction": "Kan link niet { direction } verplaatsen",
+      "failed_to_reorder": "Kan links niet herschikken",
+      "link_id_required": "Link-ID is vereist",
+      "failed_to_track_view": "Kan linkweergave niet bijhouden"
+    },
+    "link_schema_messages": {
+      "restaurant_id_required": "Restaurant-ID is vereist",
+      "restaurant_id_invalid": "Restaurant-ID moet een geldige UUID zijn",
+      "title_required": "Titel is vereist",
+      "title_min": "Titel moet minstens 1 teken bevatten",
+      "title_max": "Titel mag niet meer dan 255 tekens bevatten",
+      "url_required": "URL is vereist",
+      "url_invalid": "URL moet geldig zijn",
+      "iconSlug_required": "Icon slug is vereist",
+      "iconSlug_min": "Icon slug moet minstens 1 teken bevatten",
+      "iconSlug_max": "Icon slug mag niet meer dan 255 tekens bevatten",
+      "link_id_required": "Link-ID is vereist",
+      "link_id_invalid": "Link-ID moet een geldige UUID zijn",
+      "direction_required": "Richting is vereist",
+      "direction_invalid": "Richting moet 'up' of 'down' zijn"
+    }
+  },
+  "menu_apis": {
+    "categories": {
+      "errors": {
+        "restaurant_id_required": "Restaurant-ID vereist",
+        "failed_to_fetch": "Categorieën ophalen mislukt",
+        "failed_to_create": "Categorie aanmaken mislukt",
+        "menu_category_not_found": "Menucategorie niet gevonden",
+        "failed_to_update": "Categorie bijwerken mislukt",
+        "failed_to_delete": "Categorie verwijderen mislukt",
+        "category_not_found": "Categorie niet gevonden",
+        "cannot_move_category_direction": "Kan de categorie niet in die richting verplaatsen",
+        "failed_to_reorder": "Categorie herschikken mislukt"
+      },
+      "category_schema_messages": {
+        "restaurant_id_required": "Restaurant-ID is vereist",
+        "restaurant_id_invalid": "Restaurant-ID moet een geldige UUID zijn",
+        "name_required": "Naam is verplicht",
+        "name_min": "Naam moet minstens 1 teken bevatten",
+        "name_max": "Naam mag niet meer dan 255 tekens bevatten",
+        "category_id_required": "Categorie-ID is vereist",
+        "category_id_invalid": "Categorie-ID moet een geldige UUID zijn",
+        "direction_required": "Richting is verplicht",
+        "direction_invalid": "Richting moet 'up' of 'down' zijn"
+      }
+    },
+    "items": {
+      "errors": {
+        "menu_category_not_found": "Menucategorie niet gevonden",
+        "menu_item_not_found": "Menu-item niet gevonden",
+        "item_not_found": "Item niet gevonden",
+        "auth_failed": "Authenticatie mislukt of geen toegang toegestaan",
+        "limit_reached": "Je hebt de abonnementslimiet voor menu-items bereikt",
+        "failed_to_create": "Menu-item aanmaken mislukt",
+        "failed_to_update": "Item bijwerken mislukt",
+        "failed_to_delete": "Item verwijderen mislukt",
+        "failed_to_reorder": "Item herschikken mislukt",
+        "cannot_move_item": "Kan item niet in die richting verplaatsen",
+        "internal_server_error": "Interne serverfout"
+      },
+      "schema_messages": {
+        "category_id_required": "Categorie-ID is vereist",
+        "category_id_invalid": "Categorie-ID moet een geldige UUID zijn",
+        "name_required": "Itemnaam is verplicht",
+        "name_min": "Itemnaam moet minstens 1 teken bevatten",
+        "name_max": "Itemnaam mag niet meer dan 255 tekens bevatten",
+        "price_required": "Prijs is verplicht",
+        "price_min": "Prijs mag niet negatief zijn",
+        "addon_name_required": "Naam van extra optie is verplicht",
+        "addon_name_min": "Naam van extra optie moet minstens 1 teken bevatten",
+        "addon_price_required": "Prijs van extra optie is verplicht",
+        "addon_price_nonnegative": "Prijs van extra optie mag niet negatief zijn",
+        "item_id_required": "Item-ID is vereist",
+        "item_id_invalid": "Item-ID moet een geldige UUID zijn",
+        "direction_required": "Richting is verplicht",
+        "direction_invalid": "Richting moet 'up' of 'down' zijn"
+      }
+    }
+  },
+  "orders_apis": {
+    "error_unauthorized": "Niet geautoriseerd",
+    "error_order_not_found": "Bestelling niet gevonden",
+    "error_invalid_input": "Ongeldige invoer",
+    "error_failed_update_order_status": "Bijwerken van de bestelstatus mislukt",
+    "success_order_status_updated_to": "Bestelstatus bijgewerkt naar { status }"
+  },
+  "payments_create_checkout": {
+    "err_missing_fields": "Vereiste velden ontbreken",
+    "err_delivery_addr_required": "Voor bezorgbestellingen is een bezorgadres vereist",
+    "err_disabled_all": "Dit restaurant heeft tijdelijk alle online bestellingen uitgeschakeld.",
+    "err_disabled_delivery_pickup": "Dit restaurant accepteert momenteel geen bezorgbestellingen. Kies in plaats daarvan afhalen.",
+    "err_disabled_pickup_delivery": "Dit restaurant accepteert momenteel geen afhaalbestellingen. Kies in plaats daarvan bezorging.",
+    "err_rest_or_stripe_missing": "Restaurant of Stripe-sleutel niet gevonden",
+    "err_checkout_create_failed": "Het aanmaken van de checkout-sessie is mislukt"
+  },
+  "places_details_api": {
+    "err_missing_place_id": "Ontbrekende place_id"
+  },
+  "qr_code_apis": {
+    "error": {
+      "unauthorized": "Niet geautoriseerd",
+      "restaurant_id_required": "Restaurant-ID is vereist",
+      "restaurant_not_found": "Restaurant niet gevonden",
+      "invalid_input": "Ongeldige invoer",
+      "internal_server_error": "Interne serverfout",
+      "uuid_required": "UUID als id in de body vereist!",
+      "link_id_required": "Link-ID is vereist voor het type link",
+      "link_not_found": "Link niet gevonden",
+      "custom_url_required": "Aangepaste URL is vereist voor aangepast type",
+      "qr_code_not_found": "QR-code niet gevonden"
     }
   }
 }

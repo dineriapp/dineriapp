@@ -1,14 +1,17 @@
 import { authenticateAndAuthorize, checkSubscriptionLimitsWithPlans } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
-import { createCategorySchema } from "@/lib/validations"
+import { getCreateMenuCategorySchema } from "@/lib/validations"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 
 export async function GET(request: NextRequest) {
+    const t = await getTranslations("menu_apis.categories.errors")
+
     try {
         const restaurantId = request.nextUrl.searchParams.get("restaurant_id")
         if (!restaurantId) {
-            return NextResponse.json({ error: "Restaurant ID required" }, { status: 400 })
+            return NextResponse.json({ error: t("restaurant_id_required") }, { status: 400 })
         }
 
         const categories = await prisma.menuCategory.findMany({
@@ -24,14 +27,16 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ data: categories })
     } catch (error) {
         console.error("Error fetching categories:", error)
-        return NextResponse.json({ error: "Failed to fetch categories" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_fetch") }, { status: 500 })
     }
 }
 
 export async function POST(request: NextRequest) {
+
     try {
 
         const body = await request.json()
+        const createCategorySchema = await getCreateMenuCategorySchema()
         const validated = createCategorySchema.parse(body)
 
         const authResult = await authenticateAndAuthorize(validated.restaurant_id)
@@ -69,7 +74,8 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ data: category })
     } catch (error) {
+        const t = await getTranslations("menu_apis.categories.errors")
         console.error("Error creating category:", error)
-        return NextResponse.json({ error: "Failed to create category" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_create") }, { status: 500 })
     }
 }

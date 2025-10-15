@@ -1,10 +1,14 @@
 import prisma from "@/lib/prisma"
-import { reorderCategorySchema } from "@/lib/validations"
+import { getReorderMenuCategorySchema } from "@/lib/validations"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest) {
+    const t = await getTranslations("menu_apis.categories.errors")
+
     try {
         const body = await request.json()
+        const reorderCategorySchema = await getReorderMenuCategorySchema()
         const { categoryId, direction } = reorderCategorySchema.parse(body)
 
         // Get the current category
@@ -13,7 +17,7 @@ export async function PUT(request: NextRequest) {
         })
 
         if (!currentCategory) {
-            return NextResponse.json({ error: "Category not found" }, { status: 404 })
+            return NextResponse.json({ error: t("category_not_found") }, { status: 404 })
         }
 
         // Get all categories for this restaurant ordered by sort_order
@@ -27,7 +31,7 @@ export async function PUT(request: NextRequest) {
 
         // Check bounds
         if (newIndex < 0 || newIndex >= allCategories.length) {
-            return NextResponse.json({ error: "Cannot move category in that direction" }, { status: 400 })
+            return NextResponse.json({ error: t("cannot_move_category_direction") }, { status: 400 })
         }
 
         // Swap sort orders
@@ -58,6 +62,6 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ data: updatedCategories })
     } catch (error) {
         console.error("Error reordering category:", error)
-        return NextResponse.json({ error: "Failed to reorder category" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_reorder") }, { status: 500 })
     }
 }

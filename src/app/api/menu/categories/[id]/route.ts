@@ -1,16 +1,18 @@
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
 import prisma from "@/lib/prisma"
-import { updateCategorySchema } from "@/lib/validations"
+import { getUpdateMenuCategorySchema } from "@/lib/validations"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("menu_apis.categories.errors")
+
     try {
         const body = await request.json()
         const { id } = await params
         const categoryId = id
-
+        const updateCategorySchema = await getUpdateMenuCategorySchema()
         const validated = updateCategorySchema.parse(body)
-
 
         // First get the category to check ownership
         const existingCategory = await prisma.menuCategory.findUnique({
@@ -18,7 +20,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!existingCategory) {
-            return NextResponse.json({ error: "Menu category not found" }, { status: 404 })
+            return NextResponse.json({ error: t("menu_category_not_found") }, { status: 404 })
         }
 
         // Authenticate user and verify restaurant ownership
@@ -44,11 +46,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({ data: category })
     } catch (error) {
         console.error("Error updating category:", error)
-        return NextResponse.json({ error: "Failed to update category" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_update") }, { status: 500 })
     }
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("menu_apis.categories.errors")
 
     try {
         const { id } = await params
@@ -60,7 +63,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         })
 
         if (!existingCategory) {
-            return NextResponse.json({ error: "Menu category not found" }, { status: 404 })
+            return NextResponse.json({ error: t("menu_category_not_found") }, { status: 404 })
         }
 
         // Authenticate user and verify restaurant ownership
@@ -82,6 +85,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         return NextResponse.json({ data: { success: true } })
     } catch (error) {
         console.error("Error deleting category:", error)
-        return NextResponse.json({ error: "Failed to delete category" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_to_delete") }, { status: 500 })
     }
 }

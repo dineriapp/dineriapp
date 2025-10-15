@@ -2,22 +2,28 @@ import { type NextRequest, NextResponse } from "next/server"
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
 import { z } from "zod"
 import prisma from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
 
-const updateRestaurantSchema = z.object({
-    name: z.string().min(1, "Restaurant name is required").max(100, "Restaurant name must be less than 100 characters"),
-    slug: z
-        .string()
-        .min(3, "Slug must be at least 3 characters")
-        .max(50, "Slug must be less than 50 characters")
-        .regex(/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens"),
-    bio: z.string().max(200, "Bio must be less than 200 characters").optional(),
-    logo_url: z.string().url("Logo URL must be a valid URL").nullable().optional(),
-})
+
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis");
+    const schema = await getTranslations("restaurants_apis.schema.update_restaurant");
+
     try {
         const { id } = await params
         const restaurantId = id
+
+        const updateRestaurantSchema = z.object({
+            name: z.string().min(1, schema("name_required")).max(100, schema("name_max")),
+            slug: z
+                .string()
+                .min(3, schema("slug_min"))
+                .max(50, schema("slug_max"))
+                .regex(/^[a-z0-9-]+$/, schema("slug_pattern")),
+            bio: z.string().max(200, schema("bio_max")).optional(),
+            logo_url: z.string().url(schema("logo_url_invalid")).nullable().optional(),
+        })
 
         // Authenticate and authorize
         const authResult = await authenticateAndAuthorize(restaurantId)
@@ -42,7 +48,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
             if (existingRestaurant) {
                 return NextResponse.json(
-                    { error: "This page URL is already taken. Please choose a different one." },
+                    { error: t("errors.page_url_taken") },
                     { status: 409 },
                 )
             }
@@ -61,7 +67,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
         return NextResponse.json({
             data: updatedRestaurant,
-            message: "Restaurant updated successfully",
+            message: t("success.restaurant_update_success"),
         })
     } catch (error) {
         console.error("Error updating restaurant:", error)
@@ -69,7 +75,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         if (error instanceof z.ZodError) {
             return NextResponse.json(
                 {
-                    error: "Validation failed",
+                    error: t("errors.validation_failed"),
                     details: error.errors.map((err) => ({
                         field: err.path.join("."),
                         message: err.message,
@@ -79,7 +85,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             )
         }
 
-        return NextResponse.json({ error: "Failed to update restaurant" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.failed_update_restaurant") }, { status: 500 })
     }
 }
 
@@ -101,7 +107,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             data: restaurant,
         })
     } catch (error) {
+        const t = await getTranslations("restaurants_apis.errors");
+
         console.error("Error fetching restaurant:", error)
-        return NextResponse.json({ error: "Failed to fetch restaurant" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_fetch_restaurant") }, { status: 500 })
     }
 }

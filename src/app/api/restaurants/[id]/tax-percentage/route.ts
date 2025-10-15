@@ -3,20 +3,21 @@ import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { authenticateAndAuthorize } from "@/lib/auth-utils";
 
-const schema = z.object({
-    // accepts string or number, coerces to number
-    tax_percentage: z.coerce
-        .number()
-        .min(0, "Tax percentage cannot be negative")
-        .max(100, "Tax percentage cannot exceed 100")
-        .transform((n) => Math.round(n * 100) / 100), // round to 2 decimals
-});
+
 
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
         const body = await request.json();
+        const schema = z.object({
+            // accepts string or number, coerces to number
+            tax_percentage: z.coerce
+                .number()
+                .min(0, "Tax percentage cannot be negative")
+                .max(100, "Tax percentage cannot exceed 100")
+                .transform((n) => Math.round(n * 100) / 100), // round to 2 decimals
+        });
         const { tax_percentage } = schema.parse(body);
 
         const authResult = await authenticateAndAuthorize(id)

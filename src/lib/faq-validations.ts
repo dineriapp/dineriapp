@@ -1,53 +1,102 @@
+import { getTranslations } from "next-intl/server"
 import { z } from "zod"
 
-// FAQ Category validation schemas
-export const createFaqCategorySchema = z.object({
-    restaurant_id: z.string().uuid(),
-    name: z.string().min(1).max(100),
-    description: z.string().optional(),
-})
 
-export const updateFaqCategorySchema = z.object({
-    name: z.string().min(1).max(100),
-    description: z.string().optional(),
-})
+export async function getCreateFaqCategorySchema() {
+    const t = await getTranslations("faq_apis_categories.faq_schema_messages")
 
-// FAQ validation schemas
-export const createFaqSchema = z.object({
-    category_id: z.string().uuid(),
-    question: z.string().min(1).max(500),
-    answer: z.string().min(1),
-    is_featured: z.boolean().optional().default(false),
-})
+    return z.object({
+        restaurant_id: z
+            .string({ required_error: t("restaurant_id_required") })
+            .uuid({ message: t("restaurant_id_invalid") }),
 
-export const updateFaqSchema = z.object({
-    question: z.string().min(1).max(500),
-    answer: z.string().min(1),
-    is_featured: z.boolean().optional(),
-})
+        name: z
+            .string({ required_error: t("name_required") })
+            .min(1, { message: t("name_min") })
+            .max(100, { message: t("name_max") }),
 
-// Reorder validation schemas
-export const reorderFaqCategorySchema = z.object({
-    categoryId: z.string().uuid(),
-    direction: z.enum(["up", "down"]),
-})
+        description: z.string().optional(),
+    })
+}
 
-export const reorderFaqSchema = z.object({
-    faqId: z.string().uuid(),
-    direction: z.enum(["up", "down"]),
-})
+export async function getUpdateFaqCategorySchema() {
+    const t = await getTranslations("faq_apis_categories.faq_schema_messages")
 
-// Bulk operation schemas
-export const bulkDeleteFaqsSchema = z.object({
-    faqIds: z.array(z.string().uuid()).min(1, "At least one FAQ ID is required"),
-})
+    return z.object({
+        name: z
+            .string({ required_error: t("name_required") })
+            .min(1, { message: t("name_min") })
+            .max(100, { message: t("name_max") }),
 
-// Type exports
-export type CreateFaqCategoryInput = z.infer<typeof createFaqCategorySchema>
-export type UpdateFaqCategoryInput = z.infer<typeof updateFaqCategorySchema>
-export type ReorderFaqCategoryInput = z.infer<typeof reorderFaqCategorySchema>
+        description: z.string().optional(),
+    })
+}
 
-export type CreateFaqInput = z.infer<typeof createFaqSchema>
-export type UpdateFaqInput = z.infer<typeof updateFaqSchema>
-export type ReorderFaqInput = z.infer<typeof reorderFaqSchema>
-export type BulkDeleteFaqsInput = z.infer<typeof bulkDeleteFaqsSchema>
+export async function getCreateFaqSchema() {
+    const t = await getTranslations("faq_apis_items.faq_schema_messages")
+
+    return z.object({
+        category_id: z
+            .string({ required_error: t("category_id_required") })
+            .uuid({ message: t("category_id_invalid") }),
+
+        question: z
+            .string({ required_error: t("question_required") })
+            .min(1, { message: t("question_min") })
+            .max(500, { message: t("question_max") }),
+
+        answer: z
+            .string({ required_error: t("answer_required") })
+            .min(1, { message: t("answer_min") }),
+
+        is_featured: z.boolean().optional().default(false),
+    })
+}
+
+export async function getUpdateFaqSchema() {
+    const t = await getTranslations("faq_apis_items.faq_schema_messages")
+
+    return z.object({
+        question: z
+            .string({ required_error: t("question_required") })
+            .min(1, { message: t("question_min") })
+            .max(500, { message: t("question_max") }),
+
+        answer: z
+            .string({ required_error: t("answer_required") })
+            .min(1, { message: t("answer_min") }),
+
+        is_featured: z.boolean().optional(),
+    })
+}
+
+
+export async function getReorderFaqCategorySchema() {
+    const t = await getTranslations("faq_apis_categories.faq_schema_messages")
+
+    return z.object({
+        categoryId: z
+            .string({ required_error: t("category_id_required") })
+            .uuid({ message: t("category_id_invalid") }),
+
+        direction: z.enum(["up", "down"], {
+            required_error: t("direction_required"),
+            invalid_type_error: t("direction_invalid"),
+        }),
+    })
+}
+
+export async function getReorderFaqSchema() {
+    const t = await getTranslations("faq_apis_items.faq_schema_messages")
+
+    return z.object({
+        faqId: z
+            .string({ required_error: t("faq_id_required") })
+            .uuid({ message: t("faq_id_invalid") }),
+
+        direction: z.enum(["up", "down"], {
+            required_error: t("direction_required"),
+            invalid_type_error: t("direction_invalid"),
+        }),
+    })
+}

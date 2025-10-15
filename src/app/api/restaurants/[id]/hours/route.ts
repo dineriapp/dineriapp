@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { z } from "zod"
+import { getTranslations } from "next-intl/server"
 
 const dayHoursSchema = z.object({
     open: z.string(),
@@ -22,6 +23,8 @@ const openingHoursSchema = z.object({
 })
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis");
+
     try {
         const { id } = await params
         const body = await request.json()
@@ -35,7 +38,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!existingRestaurant) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("errors.restaurant_not_found") }, { status: 404 })
         }
 
         // Validate opening hours logic
@@ -55,7 +58,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                 const closeTime = new Date(`2000-01-01 ${hours.close}`)
 
                 if (closeTime <= openTime) {
-                    invalidDays.push(`${day} (closing time must be after opening time)`)
+                    invalidDays.push(`${day} (${t("errors.invalid_days")})`)
                 }
             }
         })
@@ -63,7 +66,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         if (invalidDays.length > 0) {
             return NextResponse.json(
                 {
-                    error: "Invalid opening hours",
+                    error: t("errors.invalid_opening_hours"),
                     details: `Invalid hours for: ${invalidDays.join(", ")}`,
                 },
                 { status: 400 },
@@ -82,7 +85,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({
             success: true,
             data: updatedRestaurant,
-            message: "Opening hours updated successfully",
+            message: t("success.opening_hours_update_success"),
         })
     } catch (error) {
         console.error("Error updating opening hours:", error)
@@ -90,13 +93,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         if (error instanceof z.ZodError) {
             return NextResponse.json(
                 {
-                    error: "Validation failed",
+                    error: t("errors.validation_failed"),
                     details: error.errors,
                 },
                 { status: 400 },
             )
         }
 
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.internal_server_error") }, { status: 500 })
     }
 }

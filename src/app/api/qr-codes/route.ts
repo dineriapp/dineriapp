@@ -3,22 +3,24 @@ import { createQRCodeSchema } from "@/lib/qr-validations"
 import prisma from "@/lib/prisma"
 import { z } from "zod"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server"
 
 export async function GET(request: NextRequest) {
+    const t = await getTranslations("qr_code_apis.error")
     try {
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
 
 
         if (!user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
         const { searchParams } = new URL(request.url)
         const restaurantId = searchParams.get("restaurant_id")
 
         if (!restaurantId) {
-            return NextResponse.json({ error: "Restaurant ID is required" }, { status: 400 })
+            return NextResponse.json({ error: t("restaurant_id_required") }, { status: 400 })
         }
 
         // Verify user owns the restaurant
@@ -28,7 +30,7 @@ export async function GET(request: NextRequest) {
         })
 
         if (!restaurant || restaurant.user_id !== user.id) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("restaurant_not_found") }, { status: 404 })
         }
 
         // Fetch QR codes with related link data
@@ -53,23 +55,25 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(qrCodes)
     } catch (error) {
         console.error("Error in QR codes GET:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }
 
 export async function POST(request: NextRequest) {
+    const t = await getTranslations("qr_code_apis.error")
+
     try {
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
         const { searchParams } = new URL(request.url)
         const restaurantId = searchParams.get("restaurant_id")
 
         if (!restaurantId) {
-            return NextResponse.json({ error: "Restaurant ID is required" }, { status: 400 })
+            return NextResponse.json({ error: t("restaurant_id_required") }, { status: 400 })
         }
 
         // Verify user owns the restaurant and get restaurant data
@@ -84,7 +88,7 @@ export async function POST(request: NextRequest) {
         })
 
         if (!restaurant || restaurant.user_id !== user.id) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("restaurant_not_found") }, { status: 404 })
         }
 
 
@@ -93,7 +97,7 @@ export async function POST(request: NextRequest) {
         const validatedData = createQRCodeSchema.parse(body)
 
         if (!body.id) {
-            return NextResponse.json({ error: "UUID as id in body required!" }, { status: 404 })
+            return NextResponse.json({ error: t("uuid_required") }, { status: 404 })
         }
 
         // Determine target URL based on type
@@ -106,7 +110,7 @@ export async function POST(request: NextRequest) {
                 break
             case "link":
                 if (!validatedData.link_id) {
-                    return NextResponse.json({ error: "Link ID is required for link type" }, { status: 400 })
+                    return NextResponse.json({ error: t("link_id_required") }, { status: 400 })
                 }
 
                 // Verify link belongs to restaurant
@@ -116,7 +120,7 @@ export async function POST(request: NextRequest) {
                 })
 
                 if (!link || link.restaurant_id !== restaurantId) {
-                    return NextResponse.json({ error: "Link not found" }, { status: 404 })
+                    return NextResponse.json({ error: t("link_not_found") }, { status: 404 })
                 }
 
                 targetUrl = link.url
@@ -124,7 +128,7 @@ export async function POST(request: NextRequest) {
                 break
             case "custom":
                 if (!validatedData.custom_url) {
-                    return NextResponse.json({ error: "Custom URL is required for custom type" }, { status: 400 })
+                    return NextResponse.json({ error: t("custom_url_required") }, { status: 400 })
                 }
                 targetUrl = validatedData.custom_url
                 break
@@ -184,10 +188,10 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         if (error instanceof z.ZodError) {
             console.log(error.errors)
-            return NextResponse.json({ error: "Invalid input", details: error.errors }, { status: 400 })
+            return NextResponse.json({ error: t("invalid_input"), details: error.errors }, { status: 400 })
         }
 
         console.error("Error in QR codes POST:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }

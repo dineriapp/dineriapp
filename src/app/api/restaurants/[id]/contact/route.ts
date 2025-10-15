@@ -1,21 +1,25 @@
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { z } from "zod"
+import { getTranslations } from "next-intl/server";
 
-const updateContactSchema = z.object({
-    email: z.string().email("Please enter a valid email address").nullable().optional(),
-    phone: z.string().nullable().optional(),
-    address: z.string().nullable().optional(),
-    latitude: z.number().nullable().optional(),
-    longitude: z.number().nullable().optional(),
-})
+
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis");
 
     try {
         const { id } = await params
         const restaurantId = id
         const body = await request.json()
+
+        const updateContactSchema = z.object({
+            email: z.string().email(t("errors.invalid_email")).nullable().optional(),
+            phone: z.string().nullable().optional(),
+            address: z.string().nullable().optional(),
+            latitude: z.number().nullable().optional(),
+            longitude: z.number().nullable().optional(),
+        })
 
         // Validate request body
         const validatedData = updateContactSchema.parse(body)
@@ -26,7 +30,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!existingRestaurant) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("errors.restaurant_not_found") }, { status: 404 })
         }
 
         // Check if email is already taken by another restaurant (if email is being updated)
@@ -39,7 +43,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             })
 
             if (emailExists) {
-                return NextResponse.json({ error: "Email address is already in use by another restaurant" }, { status: 400 })
+                return NextResponse.json({ error: t("errors.email_in_use") }, { status: 400 })
             }
         }
 
@@ -58,15 +62,15 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({
             success: true,
             data: updatedRestaurant,
-            message: "Contact information updated successfully",
+            message: t("success.contact_update_success"),
         })
     } catch (error) {
         console.error("Error updating contact information:", error)
 
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: "Invalid data format", details: error.errors }, { status: 400 })
+            return NextResponse.json({ error: t("errors.invalid_data_format"), details: error.errors }, { status: 400 })
         }
 
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.internal_server_error") }, { status: 500 })
     }
 }

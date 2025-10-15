@@ -1,23 +1,29 @@
 import { getTranslations } from "next-intl/server"
 import { z } from "zod"
 
-export const createLinkSchema = z.object({
-    restaurant_id: z.string().uuid(),
-    title: z.string().min(1).max(255),
-    url: z.string().url(),
-    iconSlug: z.string().min(1).max(255),
-})
+export async function getCreateLinkSchema() {
+    const t = await getTranslations("links_apis.link_schema_messages")
 
-export const updateLinkSchema = z.object({
-    title: z.string().min(1).max(255),
-    url: z.string().url(),
-    iconSlug: z.string().min(1).max(255),
-})
+    return z.object({
+        restaurant_id: z
+            .string({ required_error: t("restaurant_id_required") })
+            .uuid({ message: t("restaurant_id_invalid") }),
 
-export const reorderLinkSchema = z.object({
-    linkId: z.string().uuid(),
-    direction: z.enum(["up", "down"]),
-})
+        title: z
+            .string({ required_error: t("title_required") })
+            .min(1, { message: t("title_min") })
+            .max(255, { message: t("title_max") }),
+
+        url: z
+            .string({ required_error: t("url_required") })
+            .url({ message: t("url_invalid") }),
+
+        iconSlug: z
+            .string({ required_error: t("iconSlug_required") })
+            .min(1, { message: t("iconSlug_min") })
+            .max(255, { message: t("iconSlug_max") }),
+    })
+}
 
 function formatUrl(url: string): string {
     const trimmedUrl = url.trim()
@@ -29,75 +35,190 @@ function formatUrl(url: string): string {
 
 export { formatUrl }
 
-// Menu Category schemas
-export const createCategorySchema = z.object({
-    restaurant_id: z.string().uuid(),
-    name: z.string().min(1).max(255),
-    description: z.string().optional(),
-    show_in_quick_menu: z.boolean().optional().default(false),
-})
+export async function getUpdateLinkSchema() {
+    const t = await getTranslations("links_apis.link_schema_messages")
 
-export const updateCategorySchema = z.object({
-    name: z.string().min(1).max(255),
-    description: z.string().optional(),
-    show_in_quick_menu: z.boolean().optional().default(false),
-})
+    return z.object({
+        title: z
+            .string({ required_error: t("title_required") })
+            .min(1, { message: t("title_min") })
+            .max(255, { message: t("title_max") }),
 
-export const reorderCategorySchema = z.object({
-    categoryId: z.string().uuid(),
-    direction: z.enum(["up", "down"]),
-})
+        url: z
+            .string({ required_error: t("url_required") })
+            .url({ message: t("url_invalid") }),
+
+        iconSlug: z
+            .string({ required_error: t("iconSlug_required") })
+            .min(1, { message: t("iconSlug_min") })
+            .max(255, { message: t("iconSlug_max") })
+    })
+}
+
+export async function getReorderLinkSchema() {
+    const t = await getTranslations("links_apis.link_schema_messages")
+
+    return z.object({
+        linkId: z
+            .string({ required_error: t("link_id_required") })
+            .uuid({ message: t("link_id_invalid") }),
+
+        direction: z.enum(["up", "down"], {
+            required_error: t("direction_required"),
+            invalid_type_error: t("direction_invalid")
+        })
+    })
+}
+
+export async function getCreateMenuCategorySchema() {
+    const t = await getTranslations("menu_apis.categories.category_schema_messages")
+
+    return z.object({
+        restaurant_id: z
+            .string({ required_error: t("restaurant_id_required") })
+            .uuid({ message: t("restaurant_id_invalid") }),
+
+        name: z
+            .string({ required_error: t("name_required") })
+            .min(1, { message: t("name_min") })
+            .max(255, { message: t("name_max") }),
+
+        description: z.string().optional(),
+
+        show_in_quick_menu: z.boolean().optional().default(false),
+    })
+}
+
+export async function getUpdateMenuCategorySchema() {
+    const t = await getTranslations("menu_apis.categories.category_schema_messages")
+
+    return z.object({
+        name: z
+            .string({ required_error: t("name_required") })
+            .min(1, { message: t("name_min") })
+            .max(255, { message: t("name_max") }),
+
+        description: z.string().optional(),
+
+        show_in_quick_menu: z.boolean().optional().default(false),
+    })
+}
+
+
+export async function getReorderMenuCategorySchema() {
+    const t = await getTranslations("menu_apis.categories.category_schema_messages")
+
+    return z.object({
+        categoryId: z
+            .string({ required_error: t("category_id_required") })
+            .uuid({ message: t("category_id_invalid") }),
+
+        direction: z.enum(["up", "down"], {
+            required_error: t("direction_required"),
+            invalid_type_error: t("direction_invalid"),
+        }),
+    })
+}
 
 // Menu Item schemas
-export const createItemSchema = z.object({
-    category_id: z.string().uuid(),
-    name: z.string().min(1).max(255),
-    description: z.string().optional(),
-    show_in_quick_menu: z.boolean().optional().default(false),
-    price: z.number().min(0), // This will be Float in Prisma
-    allergens: z.array(z.string()).default([]),
-    is_halal: z.boolean().optional().default(false), // Match Boolean? in schema
-    allergen_info: z.string().optional(),
-    image: z.string().optional(), // it can be an empty string or relative path
-    addons: z
-        .array(
-            z.object({
-                name: z.string().min(1),
-                price: z.number().nonnegative(),
-            })
-        )
-        .optional(),
-})
 
-export const updateItemSchema = z.object({
-    name: z.string().min(1).max(255),
-    description: z.string().optional(),
-    show_in_quick_menu: z.boolean().optional().default(false),
-    price: z.number().min(0), // This will be Float in Prisma
-    allergens: z.array(z.string()).default([]),
-    is_halal: z.boolean().optional().default(false), // Match Boolean? in schema
-    allergen_info: z.string().optional(),
-    image: z.string().optional(), // it can be an empty string or relative path
-    addons: z
-        .array(
-            z.object({
-                name: z.string().min(1),
-                price: z.number().nonnegative(),
-            })
-        )
-        .optional(),
-})
+export async function getCreateItemSchema() {
+    const t = await getTranslations("menu_apis.items.schema_messages")
 
-export const reorderItemSchema = z.object({
-    itemId: z.string().uuid(),
-    direction: z.enum(["up", "down"]),
-})
+    return z.object({
+        category_id: z
+            .string({ required_error: t("category_id_required") })
+            .uuid({ message: t("category_id_invalid") }),
 
-export type CreateCategoryInput = z.infer<typeof createCategorySchema>
-export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>
-export type CreateItemInput = z.infer<typeof createItemSchema>
-export type UpdateItemInput = z.infer<typeof updateItemSchema>
+        name: z
+            .string({ required_error: t("name_required") })
+            .min(1, { message: t("name_min") })
+            .max(255, { message: t("name_max") }),
 
+        description: z.string().optional(),
+
+        show_in_quick_menu: z.boolean().optional().default(false),
+
+        price: z
+            .number({ required_error: t("price_required") })
+            .min(0, { message: t("price_min") }),
+
+        allergens: z.array(z.string()).default([]),
+
+        is_halal: z.boolean().optional().default(false),
+
+        allergen_info: z.string().optional(),
+
+        image: z.string().optional(),
+
+        addons: z
+            .array(
+                z.object({
+                    name: z
+                        .string({ required_error: t("addon_name_required") })
+                        .min(1, { message: t("addon_name_min") }),
+                    price: z
+                        .number({ required_error: t("addon_price_required") })
+                        .nonnegative({ message: t("addon_price_nonnegative") }),
+                })
+            )
+            .optional(),
+    })
+}
+
+export async function getUpdateItemSchema() {
+    const t = await getTranslations("menu_apis.items.schema_messages")
+
+    return z.object({
+        name: z
+            .string({ required_error: t("name_required") })
+            .min(1, { message: t("name_min") })
+            .max(255, { message: t("name_max") }),
+
+        description: z.string().optional(),
+
+        show_in_quick_menu: z.boolean().optional().default(false),
+
+        price: z
+            .number({ required_error: t("price_required") })
+            .min(0, { message: t("price_min") }),
+
+        allergens: z.array(z.string()).default([]),
+
+        is_halal: z.boolean().optional().default(false),
+
+        allergen_info: z.string().optional(),
+
+        image: z.string().optional(),
+
+        addons: z
+            .array(
+                z.object({
+                    name: z
+                        .string({ required_error: t("addon_name_required") })
+                        .min(1, { message: t("addon_name_min") }),
+                    price: z
+                        .number({ required_error: t("addon_price_required") })
+                        .nonnegative({ message: t("addon_price_nonnegative") }),
+                })
+            )
+            .optional(),
+    })
+}
+
+export async function getReorderItemSchema() {
+    const t = await getTranslations("menu_apis.items.schema_messages")
+
+    return z.object({
+        itemId: z
+            .string({ required_error: t("item_id_required") })
+            .uuid({ message: t("item_id_invalid") }),
+        direction: z.enum(["up", "down"], {
+            required_error: t("direction_required"),
+            invalid_type_error: t("direction_invalid"),
+        }),
+    })
+}
 
 export async function getCreateEventSchema() {
     const t = await getTranslations("event_api_messages");
@@ -146,56 +267,20 @@ export async function getUpdateEventSchema() {
             .optional(),
     });
 }
-// FAQ Category validation schemas
-export const createFaqCategorySchema = z.object({
-    restaurant_id: z.string().uuid(),
-    name: z.string().min(1).max(100),
-    description: z.string().optional(),
-})
 
-export const updateFaqCategorySchema = z.object({
-    name: z.string().min(1).max(100),
-    description: z.string().optional(),
-})
+export async function getReorderEventSchema() {
+    const t = await getTranslations("event_api_messages")
 
-// FAQ validation schemas
-export const createFaqSchema = z.object({
-    category_id: z.string().uuid(),
-    question: z.string().min(1).max(500),
-    answer: z.string().min(1),
-    is_featured: z.boolean().optional().default(false),
-})
+    return z.object({
+        eventId: z
+            .string({ required_error: t("event_id_required") })
+            .uuid({ message: t("event_id_invalid") }),
 
-export const updateFaqSchema = z.object({
-    question: z.string().min(1).max(500),
-    answer: z.string().min(1),
-    is_featured: z.boolean().optional(),
-})
+        direction: z.enum(["up", "down"], {
+            required_error: t("direction_required"),
+            invalid_type_error: t("direction_invalid"),
+        }),
+    })
+}
 
-export const reorderEventSchema = z.object({
-    eventId: z.string().uuid(),
-    direction: z.enum(["up", "down"]),
-})
 
-export const reorderFaqCategorySchema = z.object({
-    categoryId: z.string().uuid(),
-    direction: z.enum(["up", "down"]),
-})
-
-export const reorderFaqSchema = z.object({
-    faqId: z.string().uuid(),
-    direction: z.enum(["up", "down"]),
-})
-
-// Bulk operation schemas
-export const bulkDeleteLinksSchema = z.object({
-    linkIds: z.array(z.string().uuid()).min(1, "At least one link ID is required"),
-})
-
-export const bulkDeleteEventsSchema = z.object({
-    eventIds: z.array(z.string().uuid()).min(1, "At least one event ID is required"),
-})
-
-export const bulkDeleteFaqsSchema = z.object({
-    faqIds: z.array(z.string().uuid()).min(1, "At least one FAQ ID is required"),
-})
