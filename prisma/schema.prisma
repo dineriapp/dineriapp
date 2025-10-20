@@ -211,13 +211,13 @@ model Restaurant {
 }
 
 model RestaurantView {
-  id            String   @id @default(uuid()) @db.Uuid
-  restaurant_id String   @db.Uuid
-  ip_hash       String
-  user_agent    String?
-  createdAt     DateTime @default(now()) @map("created_at")
+  id         String   @id @default(uuid()) @db.Uuid
+  ip_hash    String
+  user_agent String?
+  createdAt  DateTime @default(now()) @map("created_at")
 
-  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant_id String     @db.Uuid
 
   @@map("restaurant_views")
 }
@@ -462,7 +462,7 @@ model OrderItem {
 
 // Reservation
 model Reservation {
-  id             String               @id @default(uuid())
+  id             String               @id @default(uuid()) @db.Uuid
   name           String
   email          String
   phone          String?
@@ -490,30 +490,31 @@ model Reservation {
 }
 
 model Table {
-  id           String               @id @default(cuid())
-  tableNumber  String               @unique
-  capacity     Int
-  location     String
-  reservations TableOnReservation[]
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
-  Restaurant   Restaurant           @relation(fields: [restaurantId], references: [id])
-  restaurantId String
+  id            String               @id @default(uuid()) @db.Uuid
+  tableNumber   String               @unique
+  capacity      Int
+  location      String
+  reservations  TableOnReservation[]
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  restaurant    Restaurant           @relation(fields: [restaurant_id], references: [id])
+  restaurant_id String               @db.Uuid
 
   @@index([location])
 }
 
 model TableOnReservation {
-  id            String      @id @default(cuid())
-  reservationId String
-  tableId       String
-  reservation   Reservation @relation(fields: [reservationId], references: [id])
-  table         Table       @relation(fields: [tableId], references: [id])
+  id            String @id @default(uuid()) @db.Uuid
+  reservationId String @db.Uuid // ✅ match Reservation.id
+  tableId       String @db.Uuid // ✅ match Table.id
+
+  reservation Reservation @relation(fields: [reservationId], references: [id])
+  table       Table       @relation(fields: [tableId], references: [id])
 }
 
 model Payment {
-  id            String                   @id @default(cuid())
-  reservationId String?                  @unique
+  id            String                   @id @default(uuid()) @db.Uuid
+  reservationId String?                  @unique @db.Uuid // ✅ match Reservation.id
   reservation   Reservation?             @relation(fields: [reservationId], references: [id])
   amount        Decimal                  @db.Decimal(10, 2)
   currency      String                   @default("EUR")
