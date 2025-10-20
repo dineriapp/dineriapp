@@ -11,12 +11,12 @@ import {
     ArrowRight,
     Calendar,
     ExternalLink,
-    HelpCircle,
     MenuIcon,
     MoreVertical,
     UtensilsCrossed
 } from "lucide-react"
 import { motion } from "motion/react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import type React from "react"
@@ -81,7 +81,9 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
     const pathname = usePathname()
     const isMenuPage = pathname.endsWith("/menu")
     const hasTracked = useRef(false);
-
+    const t = useTranslations("slug_page")
+    const e = useTranslations("events_dialog")
+    const m = useTranslations("menu_dialog")
     const [showMenuDialog, setShowMenuDialog] = useState(false)
     const [showEventsDialog, setShowEventsDialog] = useState(false)
     const [showFAQDialog, setShowFAQDialog] = useState(false)
@@ -361,7 +363,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                     restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
                             }}
                         >
-                            Reserve Table – €10
+                            {t("reserve_table")}
                         </span>
                         {
                             restaurant?.button_icons_show
@@ -474,7 +476,8 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                         restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
                                 }}
                             >
-                                Menu
+
+                                {t("menu")}
                             </span>
                             {
                                 restaurant?.button_icons_show
@@ -528,7 +531,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                         restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
                                 }}
                             >
-                                Events
+                                {t("events")}
                             </span>
                             {
                                 restaurant?.button_icons_show
@@ -584,7 +587,8 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                         restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
                                 }}
                             >
-                                FAQ
+
+                                {t("faq")}
                             </span>
                             {
                                 restaurant?.button_icons_show
@@ -604,7 +608,8 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             className="py-8 text-center"
                             style={{ color: headingsColor, opacity: 0.7 }}
                         >
-                            No links added yet
+
+                            {t("no_links_added")}
                         </motion.div>
                     )}
 
@@ -637,14 +642,16 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                 </motion.div>
 
                 {/* Opening Hours Dialog */}
-                {openingHours && restaurant.timezone && <OpeningHoursDialog
-                    isOpen={showOpeningHoursDialog}
-                    onClose={() => setShowOpeningHoursDialog(false)}
-                    openingHours={openingHours}
-                    restaurentTimeZone={restaurant.timezone || ""}
-                    restaurantName={restaurant.name}
-                    accentColor={restaurant.accent_color || "#10b981"}
-                />
+                {openingHours && restaurant.timezone
+                    &&
+                    <OpeningHoursDialog
+                        isOpen={showOpeningHoursDialog}
+                        onClose={() => setShowOpeningHoursDialog(false)}
+                        openingHours={openingHours}
+                        restaurentTimeZone={restaurant.timezone || ""}
+                        restaurantName={restaurant.name}
+                        accentColor={restaurant.accent_color || "#10b981"}
+                    />
                 }
 
                 {/* Enhanced Menu Dialog */}
@@ -662,12 +669,14 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 style={{ color: restaurant.textColor }}
                                 className="flex items-center text-start gap-2 text-xl">
                                 <MenuIcon className="h-6 w-6" />
-                                <span>Menu</span>
+                                <span>
+                                    {m("title")}
+                                </span>
                             </DialogTitle>
                             <DialogDescription
                                 style={{ color: restaurant.textColor }}
                                 className="text-base text-start">
-                                Browse our delicious menu items organized by category
+                                {m("description")}
                             </DialogDescription>
                         </DialogHeader>
 
@@ -689,7 +698,9 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                     )}
                                 >
                                     <span className="flex items-center  gap-2">
-                                        <span className="">All Items</span>
+                                        <span className="">
+                                            {m("all_items_tab")}
+                                        </span>
                                         <span
                                             className="px-2 py-0.5 rounded-full text-xs font-semibold"
                                             style={{
@@ -742,7 +753,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                             {/* View More Button */}
                             <div className="absolute w-[180px] flex justify-end right-0 bottom-0 items-center">
                                 <div
-                                    className="w-[120px] h-full  flex items-center justify-end"
+                                    className="w-fit  flex items-center justify-end"
                                     style={{
                                         background: `linear-gradient(to left, ${restaurant.bgColor} 80%, transparent 100%)`
                                     }}
@@ -756,7 +767,9 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                         }}
                                         onClick={() => setShowMenuDialog(false)}
                                     >
-                                        <span>View All</span>
+                                        <span>
+                                            {m("all_items_tab")}
+                                        </span>
                                         <ArrowRight className="h-3 w-3" />
                                     </Link>
                                 </div>
@@ -786,7 +799,9 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                 onClick={() => setShowMenuDialog(false)}
                             >
                                 <MenuIcon className="h-4 w-4" />
-                                <span>View Full Menu & Order Online</span>
+                                <span>
+                                    {m("view_full_menu_button")}
+                                </span>
                                 <ArrowRight className="h-4 w-4" />
                             </Link>
                         </div>
@@ -799,10 +814,22 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                         <DialogHeader>
                             <DialogTitle className="flex text-start items-center gap-2">
                                 <Calendar className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
-                                <span style={{ color: restaurant.accent_color || "#10b981" }}>Upcoming Events</span>
+                                <span style={{ color: restaurant.accent_color || "#10b981" }}>
+                                    {e("title")}
+                                </span>
                             </DialogTitle>
                             <DialogDescription className="text-start" style={{ color: restaurant.accent_color || "#10b981" }}>
-                                {restaurant.events.length} upcoming {restaurant.events.length === 1 ? "event" : "events"}
+
+                                {
+                                    restaurant.events.length === 1 ?
+                                        <>
+                                            {e("description_singular", { count: restaurant.events.length })}
+                                        </>
+                                        :
+                                        <>
+                                            {e("description_plural", { count: restaurant.events.length })}
+                                        </>
+                                }
                             </DialogDescription>
                         </DialogHeader>
 
@@ -840,7 +867,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                                 className="inline-flex items-center gap-2 rounded-lg px-4 py-2 transition-transform hover:scale-105"
                                                 style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
                                             >
-                                                Get Tickets
+                                                {e("get_tickets_button")}
                                                 <ExternalLink className="h-4 w-4" />
                                             </a>
                                         </div>
@@ -854,17 +881,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                 {/* FAQ Dialog */}
                 <Dialog open={showFAQDialog} onOpenChange={setShowFAQDialog}>
                     <DialogContent className="max-h-[90vh] no-scroll max-w-[90vw] sm:!max-w-[570px] overflow-y-auto border-transparent" >
-                        <DialogHeader>
-                            <DialogTitle className="flex text-start items-center gap-2">
-                                <HelpCircle />
-                                <span >Frequently Asked Questions</span>
-                            </DialogTitle>
-                            <DialogDescription className="text-start" >Find answers to common questions</DialogDescription>
-                        </DialogHeader>
-
-                        <div className="py-0">
-                            <FAQSection faqCategories={restaurant.faqCategories} cardstextColor={restaurant.button_text_icons_color || "black"} accentColor={restaurant.accent_color || "#10b981"} />
-                        </div>
+                        <FAQSection faqCategories={restaurant.faqCategories} cardstextColor={restaurant.button_text_icons_color || "black"} accentColor={restaurant.accent_color || "#10b981"} />
                     </DialogContent>
                 </Dialog>
 
@@ -875,7 +892,8 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                     className="mt-12 pb-6 text-center"
                 >
                     <p className="text-xs" style={{ color: headingsColor, opacity: 0.7 }}>
-                        Powered by{" "}
+                        {" "}
+                        {t("powered_by")}
                         <Link href="/" className="hover:underline" style={{ color: restaurant.accent_color || "#10b981" }}>
                             dineri.app
                         </Link>

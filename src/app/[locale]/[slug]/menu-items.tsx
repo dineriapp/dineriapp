@@ -2,6 +2,7 @@
 
 import type { MenuItem, Restaurant } from "@prisma/client";
 import { MenuItemCard } from "./menu-item-card";
+import { useTranslations } from "next-intl";
 
 type MenuItemWithCategory = MenuItem & {
   categoryName: string;
@@ -21,29 +22,31 @@ export function MenuItems({
   searchQuery,
   selectedCategory,
 }: MenuItemsProps) {
+  const m = useTranslations("menu_dialog")
+
   if (items.length === 0) {
     return (
       <div className="text-center py-12">
         {searchQuery.trim() ? (
           <>
             <h3 className="text-lg font-medium mb-1" style={{ color: restaurant.textColor }}>
-              No results found
+              {m("no_results_title")}
             </h3>
             <p style={{ color: restaurant.textColor }}>
-              We couldn&apos;t find any items matching &quot;{searchQuery}&quot;.
+              {m("no_results_message", { searchQuery })}
             </p>
           </>
         ) : (
           <>
             <h3 className="text-lg font-medium mb-1" style={{ color: restaurant.textColor }}>
               {selectedCategory === "all"
-                ? "No menu items available"
-                : "No items in this category"}
+                ? m("no_items_all_title")
+                : m("no_items_category_title")}
             </h3>
             <p style={{ color: restaurant.textColor }}>
               {selectedCategory === "all"
-                ? "This restaurant hasn't added any menu items yet."
-                : "This category doesn't have any quick menu items yet."}
+                ? m("no_items_all_message")
+                : m("no_items_category_message")}
             </p>
           </>
         )}
@@ -60,7 +63,7 @@ export function MenuItems({
             color: restaurant.textColor
           }}
         >
-          {selectedCategory === "all" ? "All Items" : items[0]?.categoryName}
+          {selectedCategory === "all" ? m("menu_items.section_title_all") : items[0]?.categoryName}
         </h2>
         <p
           className="text-sm opacity-80"
@@ -68,7 +71,19 @@ export function MenuItems({
             color: restaurant.textColor
           }}
         >
-          {items.length} item{items.length !== 1 ? "s" : ""} available
+
+          {
+            items.length === 1
+              ?
+              <>
+                {m("menu_items.items_available_singular", { count: items.length })}
+              </>
+              :
+              <>
+                {m("menu_items.items_available_plural", { count: items.length })}
+
+              </>
+          }
         </p>
       </div>
 

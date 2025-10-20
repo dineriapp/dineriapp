@@ -2870,5 +2870,480 @@
       "custom_url_required": "Aangepaste URL is vereist voor aangepast type",
       "qr_code_not_found": "QR-code niet gevonden"
     }
+  },
+  "restaurants_apis": {
+    "errors": {
+      "unauthorized": "Ongeautoriseerd",
+      "restaurants_not_found": "Restaurants niet gevonden",
+      "restaurant_not_found": "Restaurant niet gevonden",
+      "restaurant_id_required": "Restaurant-ID is verplicht",
+      "missing_required_color_fields": "Vereiste kleurvelden ontbreken",
+      "invalid_button_style": "Ongeldige knopstijl",
+      "invalid_button_variant": "Ongeldige knopvariant",
+      "invalid_background_type": "Ongeldig achtergrondtype",
+      "email_in_use": "Het e-mailadres wordt al gebruikt door een ander restaurant",
+      "invalid_data_format": "Ongeldig gegevensformaat",
+      "invalid_data": "Ongeldige gegevens",
+      "invalid_opening_hours": "Ongeldige openingstijden",
+      "validation_failed": "Validatie mislukt",
+      "invalid_google_place_id": "Ongeldige Google Place ID",
+      "failed_validate_google_place_id": "Validatie van Google Place ID mislukt",
+      "upgrade_required_google_places": "Google Places-integratie is alleen beschikbaar voor Pro- en Enterprise-abonnementen. Upgrade je abonnement om deze functie te gebruiken.",
+      "invalid_stripe_secret_key": "Ongeldige Stripe-geheime sleutel",
+      "invalid_stripe_secret_or_webhook_error": "Ongeldige Stripe-geheime sleutel of webhookfout",
+      "invalid_stripe_secret_or_webhook_setup_error": "Ongeldige Stripe-geheime sleutel of webhookconfiguratiefout",
+      "failed_to_track_view": "Weergave kon niet worden bijgehouden",
+      "failed_to_update_restaurant_styles": "Kon restaurantstijlen niet bijwerken",
+      "page_url_taken": "Deze pagin URL is al in gebruik. Kies een andere.",
+      "failed_update_restaurant": "Kon restaurant niet bijwerken",
+      "failed_fetch_restaurant": "Kon restaurant niet ophalen",
+      "failed_fetch_orders": "Kon bestellingen niet ophalen",
+      "failed_export_orders": "Kon bestellingen niet exporteren",
+      "failed_fetch_orders_stats": "Kon bestelstatistieken niet ophalen",
+      "internal_server_error": "Interne serverfout",
+      "invalid_email": "Voer een geldig e-mailadres in",
+      "delivery_fee_min": "Bezorgkosten mogen niet negatief zijn",
+      "delivery_fee_max": "De bezorgkosten zijn te hoog",
+      "invalid_days": "Sluitingstijd moet later zijn dan openingstijd"
+    },
+    "success": {
+      "contact_update_success": "Contactgegevens succesvol bijgewerkt",
+      "delivery_fee_update_success": "Bezorgkosten succesvol bijgewerkt",
+      "opening_hours_update_success": "Openingstijden succesvol bijgewerkt",
+      "integration_update_success": "Integratie-instellingen succesvol bijgewerkt",
+      "popup_update_success": "Popup-instellingen succesvol bijgewerkt",
+      "social_update_success": "Sociale media-instellingen succesvol bijgewerkt",
+      "status_update_success": "Status succesvol bijgewerkt",
+      "stripe_update_success": "Stripe-instellingen succesvol bijgewerkt",
+      "stripe_keys_remove_success": "Stripe-sleutels succesvol verwijderd",
+      "tax_update_success": "Belastingtarief succesvol bijgewerkt",
+      "restaurant_styles_update_success": "Restaurantstijlen succesvol bijgewerkt",
+      "restaurant_update_success": "Restaurant succesvol bijgewerkt"
+    }
+  },
+  "reviews_api": {
+    "errors": {
+      "missing_place_id": "Ontbrekende placeId-parameter",
+      "invalid_google_api_response": "Ongeldige reactie van de Google API",
+      "server_error": "Serverfout"
+    }
+  },
+  "stats_api": {
+    "errors": {
+      "unauthorized": "Ongeautoriseerd",
+      "missing_restaurant_id": "Restaurant-ID is vereist",
+      "failed_fetch_stats": "Statistieken konden niet worden opgehaald"
+    }
+  },
+  "subscription_api": {
+    "errors": {
+      "authentication_required": "Authenticatie vereist",
+      "user_not_found": "Gebruiker niet gevonden",
+      "failed_fetch_subscription": "Kan abonnement niet ophalen"
+    }
+  },
+  "stripe_webhook_api": {
+    "errors": {
+      "no_signature_provided": "Geen handtekening opgegeven",
+      "webhook_secret_not_configured": "Webhook-geheim niet geconfigureerd",
+      "invalid_signature": "Ongeldige handtekening",
+      "webhook_handler_failed": "Webhook-handler mislukt"
+    }
+  },
+  "customer_portal_api": {
+    "errors": {
+      "authentication_required": "Authenticatie vereist",
+      "no_subscription_found": "Geen abonnement gevonden",
+      "failed_create_portal_session": "Kon portalsessie niet aanmaken"
+    }
+  },
+  "checkout_api": {
+    "errors": {
+      "authentication_required": "Authenticatie vereist",
+      "user_not_found": "Gebruiker niet gevonden",
+      "already_active_same_plan": "Je hebt al een actief { plan }-abonnement. Je kunt je abonnement beheren via de instellingenpagina.",
+      "already_active_different_plan": "Je hebt al een actief { currentPlan }-abonnement. Om over te stappen naar { plan }, annuleer eerst je huidige abonnement via de instellingenpagina en abonneer je daarna op het nieuwe plan.",
+      "invalid_plan_for_checkout": "Ongeldig plan voor betaling",
+      "invalid_request_data": "Ongeldige aanvraaggegevens",
+      "failed_create_checkout_session": "Kon de betaalpagina niet aanmaken"
+    }
+  },
+  "restaurant_webhook_api": {
+    "errors": {
+      "restaurant_id_missing": "Restaurant-ID ontbreekt in de URL",
+      "webhook_secret_not_found": "Webhook-geheim voor restaurant niet gevonden",
+      "no_signature": "Geen handtekening",
+      "invalid_signature": "Ongeldige handtekening",
+      "webhook_handler_failed": "Webhook-handler mislukt"
+    },
+    "info": {
+      "not_a_payment_event": "Geen betalingsevenement"
+    }
+  },
+  "events_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant-ID is vereist",
+      "failed_to_add_event": "Fout bij het toevoegen van het evenement",
+      "failed_to_update_event": "Fout bij het bijwerken van het evenement",
+      "failed_to_delete_event": "Fout bij het verwijderen van het evenement",
+      "failed_to_reorder_event": "Fout bij het herschikken van het evenement"
+    },
+    "success": {
+      "event_added_successfully": "Evenement succesvol toegevoegd",
+      "event_updated_successfully": "Evenement succesvol bijgewerkt",
+      "event_deleted_successfully": "Evenement succesvol verwijderd"
+    }
+  },
+  "faq_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant-ID is vereist",
+      "failed_to_add_faq_category": "Fout bij het toevoegen van de FAQ-categorie",
+      "failed_to_update_faq_category": "Fout bij het bijwerken van de FAQ-categorie",
+      "failed_to_delete_faq_category": "Fout bij het verwijderen van de FAQ-categorie",
+      "failed_to_reorder_faq_category": "Fout bij het herschikken van de FAQ-categorie",
+      "failed_to_add_faq": "Fout bij het toevoegen van de FAQ",
+      "failed_to_update_faq": "Fout bij het bijwerken van de FAQ",
+      "failed_to_delete_faq": "Fout bij het verwijderen van de FAQ",
+      "failed_to_reorder_faq": "Fout bij het herschikken van de FAQ"
+    },
+    "success": {
+      "faq_category_added_successfully": "FAQ-categorie succesvol toegevoegd",
+      "faq_category_updated_successfully": "FAQ-categorie succesvol bijgewerkt",
+      "faq_category_deleted_successfully": "FAQ-categorie succesvol verwijderd",
+      "faq_added_successfully": "FAQ succesvol toegevoegd",
+      "faq_updated_successfully": "FAQ succesvol bijgewerkt",
+      "faq_deleted_successfully": "FAQ succesvol verwijderd"
+    }
+  },
+  "links_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant-ID is vereist",
+      "failed_to_add_link": "Fout bij het toevoegen van de link",
+      "failed_to_update_link": "Fout bij het bijwerken van de link",
+      "failed_to_delete_link": "Fout bij het verwijderen van de link",
+      "failed_to_delete_links": "Fout bij het verwijderen van de links",
+      "failed_to_reorder_link": "Fout bij het herschikken van de link"
+    },
+    "success": {
+      "link_added_successfully": "Link succesvol toegevoegd",
+      "link_updated_successfully": "Link succesvol bijgewerkt",
+      "link_deleted_successfully": "Link succesvol verwijderd",
+      "links_deleted_successfully": "Links succesvol verwijderd",
+      "link_reordered_successfully": "Link succesvol herschikt"
+    }
+  },
+  "menu_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant-ID is vereist",
+      "failed_to_add_category": "Fout bij het toevoegen van de categorie",
+      "failed_to_update_category": "Fout bij het bijwerken van de categorie",
+      "failed_to_delete_category": "Fout bij het verwijderen van de categorie",
+      "failed_to_reorder_category": "Fout bij het herschikken van de categorie",
+      "failed_to_add_menu_item": "Fout bij het toevoegen van het menu-item",
+      "failed_to_update_menu_item": "Fout bij het bijwerken van het menu-item",
+      "failed_to_delete_menu_item": "Fout bij het verwijderen van het menu-item",
+      "failed_to_reorder_menu_item": "Fout bij het herschikken van het menu-item"
+    },
+    "success": {
+      "category_added_successfully": "Categorie succesvol toegevoegd",
+      "category_updated_successfully": "Categorie succesvol bijgewerkt",
+      "category_deleted_successfully": "Categorie succesvol verwijderd",
+      "menu_item_added_successfully": "Menu-item succesvol toegevoegd",
+      "menu_item_updated_successfully": "Menu-item succesvol bijgewerkt",
+      "menu_item_deleted_successfully": "Menu-item succesvol verwijderd"
+    }
+  },
+  "orders_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant-ID is vereist",
+      "failed_to_fetch_orders": "Bestellingen ophalen mislukt",
+      "failed_to_fetch_order_stats": "Bestelstatistieken ophalen mislukt",
+      "failed_to_update_order_status": "Bestelstatus bijwerken mislukt",
+      "failed_to_refresh_orders": "Bestellingen vernieuwen mislukt",
+      "failed_to_export_orders": "Bestellingen exporteren mislukt"
+    },
+    "success": {
+      "order_status_updated": "Bestelling gemarkeerd als { status }",
+      "orders_refreshed": "Bestellingen vernieuwd",
+      "orders_exported_successfully": "Bestellingen succesvol geëxporteerd"
+    }
+  },
+  "qr_code_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant-ID is vereist",
+      "failed_to_fetch_qr_codes": "QR-codes ophalen mislukt",
+      "failed_to_fetch_qr_code": "QR-code ophalen mislukt",
+      "failed_to_fetch_qr_code_stats": "QR-code statistieken ophalen mislukt",
+      "failed_to_create_qr_code": "QR-code aanmaken mislukt",
+      "failed_to_update_qr_code": "QR-code bijwerken mislukt",
+      "failed_to_delete_qr_code": "QR-code verwijderen mislukt"
+    },
+    "success": {
+      "qr_code_created_successfully": "QR-code succesvol aangemaakt",
+      "qr_code_updated_successfully": "QR-code succesvol bijgewerkt",
+      "qr_code_deleted_successfully": "QR-code succesvol verwijderd"
+    }
+  },
+  "restaurant_not_found_page": {
+    "title": "Restaurant niet gevonden",
+    "description": "We konden op dit adres geen restaurant vinden.",
+    "return_home": "Terug naar home"
+  },
+  "opening_hours_status": {
+    "status": {
+      "open": "Open",
+      "closed": "Gesloten",
+      "closing_soon": "Sluit binnenkort",
+      "opening_soon": "Gaat binnenkort open"
+    },
+    "until": "Tot { time }",
+    "opens_in": "Opent over { time }",
+    "opens_in_with_day": "Opent over { time } ({ day })",
+    "closed_fallback": "Gesloten"
+  },
+  "slug_page": {
+    "reserve_table": "Tafel reserveren – €10",
+    "menu": "Menu",
+    "events": "Evenementen",
+    "faq": "FAQ",
+    "no_links_added": "Nog geen links toegevoegd",
+    "powered_by": "Aangedreven door",
+    "welcome_popup": {
+      "welcome_message": "Welkom bij { restaurantName }!",
+      "default_message": "Welkom! We zijn blij dat je er bent.",
+      "event_today": "Vandaag",
+      "event_tomorrow": "Morgen",
+      "event_in_days": "Over { days } dagen",
+      "event_ticket_button": "Evenementtickets kopen",
+      "explore_button": "Verkennen",
+      "dont_show_again": "Niet meer tonen",
+      "reviews_singular": "{ count } beoordeling",
+      "reviews_plural": "{ count } beoordelingen"
+    }
+  },
+  "opening_hours_dialog": {
+    "title": "Openingstijden",
+    "open_now": "Nu open",
+    "closed_now": "Nu gesloten",
+    "operating_hours_text": "Openingstijden van { restaurantName }",
+    "timezone_label": "Tijdzone :- { restaurentTimeZone }",
+    "monday": "Maandag",
+    "tuesday": "Dinsdag",
+    "wednesday": "Woensdag",
+    "thursday": "Donderdag",
+    "friday": "Vrijdag",
+    "saturday": "Zaterdag",
+    "sunday": "Zondag",
+    "today_label": "(Vandaag)",
+    "closed_label": "Gesloten",
+    "hours_notice": "De openingstijden kunnen op feestdagen afwijken. Bel vooraf om te bevestigen."
+  },
+  "faq_dialog": {
+    "title": "Veelgestelde vragen",
+    "description": "Vind antwoorden op veelgestelde vragen",
+    "no_faqs_title": "Geen FAQ's beschikbaar",
+    "no_faqs_description": "Kom later terug om veelgestelde vragen te bekijken",
+    "search_placeholder": "Zoek in FAQ's...",
+    "popular_questions": "Populaire vragen",
+    "no_results_title": "Geen resultaten gevonden",
+    "no_results_description": "Probeer uw zoekopdracht aan te passen"
+  },
+  "events_dialog": {
+    "title": "Aankomende evenementen",
+    "description_singular": "{ count } aankomend evenement",
+    "description_plural": "{ count } aankomende evenementen",
+    "get_tickets_button": "Tickets kopen"
+  },
+  "menu_dialog": {
+    "title": "Menu",
+    "description": "Ontdek onze heerlijke gerechten per categorie",
+    "all_items_tab": "Alle items",
+    "view_all_button": "Alles bekijken",
+    "view_full_menu_button": "Volledig menu bekijken en online bestellen",
+    "category_items_count_singular": "{ count } item",
+    "category_items_count_plural": "{ count } items",
+    "no_results_title": "Geen resultaten gevonden",
+    "no_results_message": "We konden geen items vinden die overeenkomen met \"{ searchQuery }\".",
+    "no_items_all_title": "Geen menu-items beschikbaar",
+    "no_items_all_message": "Dit restaurant heeft nog geen menu-items toegevoegd.",
+    "no_items_category_title": "Geen items in deze categorie",
+    "no_items_category_message": "Deze categorie heeft nog geen snelle menu-items.",
+    "menu_items": {
+      "section_title_all": "Alle items",
+      "section_title_category": "{ categoryName }",
+      "items_available_singular": "{ count } item beschikbaar",
+      "items_available_plural": "{ count } items beschikbaar"
+    },
+    "menu_item_card": {
+      "allergens_more": "+{ count } meer"
+    }
+  },
+  "restaurant_status_alert": {
+    "disable_both_title": "Online bestellingen uitgeschakeld",
+    "disable_both_message": "Dit restaurant heeft tijdelijk alle online bestellingen uitgeschakeld.",
+    "disable_delivery_title": "Bezorging niet beschikbaar",
+    "disable_delivery_message": "Dit restaurant accepteert momenteel geen bezorgbestellingen. Kies alstublieft voor afhalen.",
+    "disable_pickup_title": "Afhalen niet beschikbaar",
+    "disable_pickup_message": "Dit restaurant accepteert momenteel geen afhaalbestellingen. Kies alstublieft voor bezorging."
+  },
+  "menu_page": {
+    "placeholder": "Zoeken in { restaurantName }..."
+  },
+  "restaurant_customizer": {
+    "button_customize": "Aanpassen",
+    "title_customize_styles": "Stijlen aanpassen",
+    "background_image_url_label": "Achtergrondafbeelding URL",
+    "background_image_preview": "Afbeelding Voorbeeld :-",
+    "uploading": "Bezig met uploaden...",
+    "header_section_title": "Koptekst",
+    "header_background": "Koptekst Achtergrond",
+    "header_text": "Koptekst Tekst",
+    "header_cart_button_bg": "Winkelwagenknop Achtergrond",
+    "header_cart_button_border": "Winkelwagenknop Rand",
+    "header_cart_button_count_bg": "Winkelwagenbadge Achtergrond",
+    "header_cart_button_count_border": "Winkelwagenbadge Rand",
+    "overall_section_title": "Algemeen",
+    "overall_text_color": "Tekstkleur",
+    "overall_bg_color": "Achtergrondkleur",
+    "overall_info_icons_color": "Info-iconen Kleur",
+    "category_tabs_section_title": "Categorie Tabs",
+    "tabs_active_bg": "Actieve Tab Achtergrond",
+    "tabs_default_bg": "Standaard Tab Achtergrond",
+    "tabs_active_text": "Actieve Tab Tekst",
+    "tabs_default_text": "Standaard Tab Tekst",
+    "cards_section_title": "Kaarten",
+    "cards_bg": "Kaart Achtergrond",
+    "cards_text": "Kaart Tekst",
+    "cards_badge_bg": "Badge Achtergrond",
+    "cards_badge_text": "Badge Tekst",
+    "button_save_changes": "Wijzigingen opslaan",
+    "button_saving": "Opslaan...",
+    "toast_success": "Stijlen succesvol opgeslagen!",
+    "toast_error": "Opslaan van stijlen mislukt"
+  },
+  "category_buttons": {
+    "section_title": "Menucategorieën",
+    "section_subtitle": "Blader door ons menu op categorie",
+    "all_items": "Alle items",
+    "showing_label": "Weergave:",
+    "items_count": "items"
+  },
+  "menu_items_menu_page": {
+    "no_results_title": "Geen resultaten gevonden",
+    "no_results_message": "We konden geen artikelen vinden die overeenkomen met \"{ searchQuery }\".",
+    "no_items_all_title": "Geen menu-items beschikbaar",
+    "no_items_all_message": "Dit restaurant heeft nog geen menu-items toegevoegd.",
+    "no_items_category_title": "Geen items in deze categorie",
+    "no_items_category_message": "Deze categorie bevat momenteel geen menu-items.",
+    "section_title_all": "Alle items",
+    "section_title_category": "{ categoryName }",
+    "items_available_singular": "{ count } item beschikbaar",
+    "items_available_plural": "{ count } items beschikbaar"
+  },
+  "menu_item_card_menu_page": {
+    "add_to_cart_success_title": "Toegevoegd aan winkelwagen",
+    "add_to_cart_success_description": "Item en geselecteerde extra’s zijn toegevoegd. Extra’s kunnen later niet meer worden gewijzigd.",
+    "restaurant_closed_title": "Restaurant is gesloten",
+    "restaurant_closed_description": "Probeer het later opnieuw.",
+    "restaurant_closed_next_opening": "Opent { day } om { time }",
+    "allergens_more": "+{ count } meer"
+  },
+  "addon_selector_dialog_menu_page": {
+    "dialog_title": "Pas je { itemName } aan",
+    "dialog_subtitle": "Kies uit onze premium extra’s hieronder",
+    "addon_price_label": "€{ price }",
+    "cancel_button": "Annuleren",
+    "confirm_button": "Toevoegen aan winkelwagen"
+  },
+  "cart_drawer": {
+    "header": {
+      "checkout": "Afrekenen",
+      "your_order": "Je bestelling",
+      "from_label": "Van :-",
+      "clear_all": "Alles wissen"
+    },
+    "empty_cart": {
+      "title": "Je winkelwagen is leeg",
+      "subtitle": "Voeg wat heerlijke items van het menu toe!",
+      "continue_shopping_button": "Verder winkelen"
+    },
+    "guest_order_notice": {
+      "text": "Je plaatst een bestelling als gast. Je ontvangt updates via e-mail en kunt je bestelling volgen met het bestelnummer."
+    },
+    "order_summary": {
+      "title": "Bestellingsoverzicht",
+      "items_singular": "{ count } item",
+      "items_plural": "{ count } items",
+      "tax_label": "Belasting ({ taxPercentage }%)",
+      "delivery_fee_label": "Bezorgkosten",
+      "total_label": "Totaal"
+    },
+    "checkout_form": {
+      "contact_information_label": "Contactinformatie *",
+      "full_name_label": "Volledige naam *",
+      "full_name_placeholder": "Je volledige naam",
+      "email_label": "E-mailadres *",
+      "email_placeholder": "jij@email.com",
+      "phone_label": "Telefoonnummer *",
+      "phone_placeholder": "(555) 123-4567",
+      "order_type_label": "Besteltype *",
+      "pickup_label": "Afhalen",
+      "delivery_label": "Bezorging (+€{ deliveryFee })",
+      "delivery_address_label": "Bezorgadres",
+      "delivery_address_placeholder": "Voer je bezorgadres in",
+      "delivery_notes_label": "Bezorgnotities (optioneel)",
+      "delivery_notes_placeholder": "Appartementnummer, toegangscode, speciale instructies...",
+      "special_instructions_label": "Speciale instructies (optioneel)",
+      "special_instructions_placeholder": "Speciale verzoeken, dieetbeperkingen of kookvoorkeuren...",
+      "preferred_time_label": "Voorkeurslever- of afhaaltijd (optioneel)",
+      "note": "Dit is een voorkeurstijd en niet definitief. We doen ons best om rond deze tijd te leveren."
+    },
+    "cart_footer": {
+      "subtotal_label": "Subtotaal",
+      "tax_label": "Belasting ({ taxPercentage }%)",
+      "total_label": "Totaal",
+      "proceed_to_checkout_button": "Ga naar afrekenen",
+      "back_to_cart_button": "Terug naar winkelwagen",
+      "pay_button": "Betaal €{ total }",
+      "processing_button": "Verwerken..."
+    },
+    "buttons": {
+      "proceed_checkout": "Ga naar afrekenen",
+      "back_cart": "Terug naar winkelwagen",
+      "pay_amount": "Betaal €{ total }",
+      "processing": "Verwerken...",
+      "continue_shopping": "Verder winkelen",
+      "remove_item": "Verwijderen"
+    },
+    "toasts": {
+      "cart_empty": "Je winkelwagen is leeg",
+      "validation_error": "Vul alle verplichte velden correct in",
+      "restaurant_closed_title": "Het restaurant is momenteel gesloten.",
+      "restaurant_closed_description_with_day": "Opent op { nextOpeningDay } om { openingTime }",
+      "restaurant_closed_description_with_time": "Opent om { openingTime }",
+      "restaurant_closed_description_fallback": "Controleer de openingstijden.",
+      "restaurant_disabled_title": "Dit restaurant heeft online bestellingen uitgeschakeld.",
+      "delivery_disabled": "Bezorging is momenteel uitgeschakeld.",
+      "pickup_disabled": "Afhalen is momenteel uitgeschakeld.",
+      "restaurant_unavailable_title": "Restaurant niet beschikbaar",
+      "restaurant_unavailable_description": "Dit restaurant kan momenteel geen online bestellingen aannemen.",
+      "checkout_failed_generic": "Afrekenen mislukt"
+    },
+    "address_messages": {
+      "autocomplete_unavailable": "Adres automatisch aanvullen niet beschikbaar. Je kunt je adres handmatig invoeren."
+    },
+    "errors": {
+      "name_required": "Naam is verplicht",
+      "email_required": "E-mail is verplicht",
+      "email_invalid": "Voer een geldig e-mailadres in",
+      "phone_required": "Telefoonnummer is verplicht",
+      "phone_invalid": "Voer een geldig telefoonnummer in",
+      "address_incomplete": "Voer een volledig bezorgadres in",
+      "address_invalid": "Het ingevoerde adres is ongeldig.",
+      "generic_error": "Er is iets misgegaan. Probeer het opnieuw.",
+      "api_missing_keys": "Restaurant- of betalingsconfiguratie ontbreekt.",
+      "checkout_no_url": "Geen afreken-URL ontvangen",
+      "failed_checkout_session": "Afrekeningssessie kon niet worden gemaakt"
+    }
   }
 }

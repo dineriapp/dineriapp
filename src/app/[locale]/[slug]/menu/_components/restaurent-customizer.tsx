@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { supabase, uploadImage } from "@/supabase/clients/client"
 import { Session } from "@supabase/supabase-js"
 import { Loader2, Settings } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -30,7 +31,7 @@ interface RestaurantCustomizerProps {
 }
 
 export default function RestaurantCustomizer({ stylesData, customBgUrl, updateStylesData, restaurentOwnerID, restaurentID }: RestaurantCustomizerProps) {
-
+    const t = useTranslations("restaurant_customizer")
     const [session, setSession] = useState<Session | null>(null);
     const [isSaving, setIsSaving] = useState(false)
     const [initialStylesData, setInitialStylesData] = useState<any>(null)
@@ -92,9 +93,9 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
             if (response.ok) {
                 // setInitialStylesData(JSON.parse(JSON.stringify(stylesData)))
 
-                toast.success("Styles saved successfully!")
+                toast.success(t("toast_success"))
             } else {
-                toast.error("Failed to save styles")
+                toast.error(t("toast_error"))
             }
         } catch (error) {
             console.error("Error saving styles:", error)
@@ -108,19 +109,23 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
             <SheetTrigger asChild>
                 <Button className="fixed bottom-6 cursor-pointer right-6 rounded-full h-14 !px-6 shadow-lg" size="lg">
                     <Settings className="w-5 h-5" />
-                    Customise
+                    {t("button_customize")}
                 </Button>
             </SheetTrigger>
 
             <SheetContent side="left" className="w-96  overflow-y-auto">
                 <SheetHeader className="bg-gray-100">
-                    <SheetTitle className="text-xl">Customize Styles</SheetTitle>
+                    <SheetTitle className="text-xl">
+                        {t("title_customize_styles")}
+                    </SheetTitle>
                 </SheetHeader>
 
                 <div className="space-y-6 px-4 pb-10">
                     {/* Background Image URL */}
                     <div className="space-y-2">
-                        <Label className="text-slate-700 text-sm font-medium">Background Image URL</Label>
+                        <Label className="text-slate-700 text-sm font-medium">
+                            {t("background_image_url_label")}
+                        </Label>
                         <Input
                             type="file"
                             accept="image/*"
@@ -157,12 +162,12 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
                         {customBgUrl && (
                             <>
                                 <p className="text-sm font-semibold">
-                                    Image Preview  :-
+                                    {t("background_image_preview")}
                                 </p>
                                 <div className="w-full relative">
                                     {uploading && <div className="absolute w-full flex-col gap-1 text-sm h-full bg-white top-0 left-0 flex items-center justify-center">
                                         <Loader2 className="animate-spin" />
-                                        Uploading...
+                                        {t("uploading")}
                                     </div>}
                                     <img
                                         src={customBgUrl}
@@ -176,39 +181,41 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
 
                     {/* Header Colors */}
                     <div className="space-y-4">
-                        <h3 className="font-semibold text-lg">Header</h3>
+                        <h3 className="font-semibold text-lg">
+                            {t("header_section_title")}
+                        </h3>
                         <ColorSelector
-                            label="Header Background"
+                            label={t("header_background")}
                             value={stylesData.headerBg}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("headerBg", val)}
                         />
                         <ColorSelector
-                            label="Header Text"
+                            label={t("header_text")}
                             value={stylesData.headerText}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("headerText", val)}
                         />
                         <ColorSelector
-                            label="Cart Button Background"
+                            label={t("header_cart_button_bg")}
                             value={stylesData.headerCartButtonBG}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("headerCartButtonBG", val)}
                         />
                         <ColorSelector
-                            label="Cart Button Border"
+                            label={t("header_cart_button_border")}
                             value={stylesData.headerCartButtonBorder}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("headerCartButtonBorder", val)}
                         />
                         <ColorSelector
-                            label="Cart Button Count Badge Background"
+                            label={t("header_cart_button_count_bg")}
                             value={stylesData.headerCartButtonCountBG}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("headerCartButtonCountBG", val)}
                         />
                         <ColorSelector
-                            label="Cart Button Count Badge Border"
+                            label={t("header_cart_button_count_border")}
                             value={stylesData.headerCartButtonCountBorder}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("headerCartButtonCountBorder", val)}
@@ -217,21 +224,23 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
 
                     {/* Overall Colors */}
                     <div className="space-y-4">
-                        <h3 className="font-semibold text-lg">Overall</h3>
+                        <h3 className="font-semibold text-lg">
+                            {t("overall_section_title")}
+                        </h3>
                         <ColorSelector
-                            label="Text Color"
+                            label={t("overall_text_color")}
                             value={stylesData.textColor}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("textColor", val)}
                         />
                         <ColorSelector
-                            label="Background Color"
+                            label={t("overall_bg_color")}
                             value={stylesData.bgColor}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("bgColor", val)}
                         />
                         <ColorSelector
-                            label="Info Icons Color"
+                            label={t("overall_info_icons_color")}
                             value={stylesData.infoIconsColor}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("infoIconsColor", val)}
@@ -240,27 +249,29 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
 
                     {/* Category Tabs */}
                     <div className="space-y-4">
-                        <h3 className="font-semibold text-lg">Category Tabs</h3>
+                        <h3 className="font-semibold text-lg">
+                            {t("category_tabs_section_title")}
+                        </h3>
                         <ColorSelector
-                            label="Active Tab Background"
+                            label={t("tabs_active_bg")}
                             value={stylesData.tabsButtonBG}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("tabsButtonBG", val)}
                         />
                         <ColorSelector
-                            label="Default Tab Background"
+                            label={t("tabs_default_bg")}
                             value={stylesData.tabsButtonDefault}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("tabsButtonDefault", val)}
                         />
                         <ColorSelector
-                            label="Active Tab Text"
+                            label={t("tabs_active_text")}
                             value={stylesData.tabsTextColor}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("tabsTextColor", val)}
                         />
                         <ColorSelector
-                            label="Default Tab Text"
+                            label={t("tabs_default_text")}
                             value={stylesData.tabsTextDefaultColor}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("tabsTextDefaultColor", val)}
@@ -269,27 +280,29 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
 
                     {/* Cards */}
                     <div className="space-y-4">
-                        <h3 className="font-semibold text-lg">Cards</h3>
+                        <h3 className="font-semibold text-lg">
+                            {t("cards_section_title")}
+                        </h3>
                         <ColorSelector
-                            label="Card Background"
+                            label={t("cards_bg")}
                             value={stylesData.cardsBG}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("cardsBG", val)}
                         />
                         <ColorSelector
-                            label="Card Text"
+                            label={t("cards_text")}
                             value={stylesData.cardsText}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("cardsText", val)}
                         />
                         <ColorSelector
-                            label="Badge Background"
+                            label={t("cards_badge_bg")}
                             value={stylesData.cardsBadgesBg}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("cardsBadgesBg", val)}
                         />
                         <ColorSelector
-                            label="Badge Text"
+                            label={t("cards_badge_text")}
                             value={stylesData.cardsBadgesTextColor}
                             colors={["#FFFFFF", "#000000", ...colorPresets.map((item) => item.color)]}
                             onChange={(val) => updateStylesData("cardsBadgesTextColor", val)}
@@ -298,7 +311,7 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
                     {/* Save Changes Button */}
                     <div className="pt-6 border-t">
                         <Button onClick={handleSaveChanges} disabled={isSaving} className="w-full" size="lg">
-                            {isSaving ? "Saving..." : "Save Changes"}
+                            {isSaving ? t("button_saving") : t("button_save_changes")}
                         </Button>
                     </div>
                 </div>

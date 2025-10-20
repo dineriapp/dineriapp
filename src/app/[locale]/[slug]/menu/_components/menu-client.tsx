@@ -20,6 +20,7 @@ import RestaurantCustomizer from "./restaurent-customizer";
 import ResturantHeader from "./resturant-header";
 import RestaurantStatusAlert from "@/components/restaurant-status-alert";
 import { useRestaurantStatus } from "@/hooks/useRestaurentStatus";
+import { useTranslations } from "next-intl";
 
 type RestaurantWithMenu = Restaurant & {
   user: User
@@ -39,7 +40,7 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
   const [customBgUrl, setCustomBgUrl] = useState(restaurant.menuPageBackgroundImage)
   const [showWelcomePopup, setShowWelcomePopup] = useState(false)
   const [searchQuery, setSearchQuery] = useState("");
-
+  const s = useTranslations("menu_page")
   useEffect(() => {
     // Show welcome popup after component mounts
     const timer = setTimeout(
@@ -280,7 +281,7 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
             className="absolute left-4 top-1/2 transform -translate-y-1/2  w-5 h-5" />
           <input
             type="text"
-            placeholder={`Search in ${restaurant.name}...`}
+            placeholder={s("placeholder", { restaurantName: restaurant.name })}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{

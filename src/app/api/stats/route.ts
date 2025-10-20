@@ -1,8 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server"
 
 export async function GET(request: NextRequest) {
+    const t = await getTranslations("stats_api")
     try {
         const supabase = await createClient()
         const {
@@ -11,7 +13,7 @@ export async function GET(request: NextRequest) {
         } = await supabase.auth.getUser()
 
         if (authError || !user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ error: t("errors.unauthorized") }, { status: 401 })
         }
 
         // Get restaurant_id from query parameters
@@ -19,7 +21,7 @@ export async function GET(request: NextRequest) {
         const restaurantId = searchParams.get("restaurant_id")
 
         if (!restaurantId) {
-            return NextResponse.json({ error: "Restaurant ID is required" }, { status: 400 })
+            return NextResponse.json({ error: t("errors.missing_restaurant_id") }, { status: 400 })
         }
 
         // Get all links with their views
@@ -131,7 +133,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ data: stats })
     } catch (error) {
         console.error("Stats API error:", error)
-        return NextResponse.json({ error: "Failed to fetch stats" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.failed_fetch_stats") }, { status: 500 })
     }
 }
 

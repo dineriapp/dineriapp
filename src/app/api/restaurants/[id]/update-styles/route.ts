@@ -1,8 +1,11 @@
-import { authenticateAndAuthorize } from "@/lib/auth-utils"
-import prisma from "@/lib/prisma"
-import { NextRequest, NextResponse } from "next/server"
+import { authenticateAndAuthorize } from "@/lib/auth-utils";
+import prisma from "@/lib/prisma";
+import { getTranslations } from "next-intl/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis");
+
     try {
         const { id } = await params
         const restaurantId = id
@@ -38,7 +41,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
         // Validate required fields
         if (!restaurantId) {
-            return NextResponse.json({ error: "Restaurant ID is required" }, { status: 400 })
+            return NextResponse.json({ error: t("errors.restaurant_id_required") }, { status: 400 })
         }
 
         // Update the restaurant styles in the database
@@ -71,7 +74,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
         return NextResponse.json({
             success: true,
-            message: "Restaurant styles updated successfully",
+            message: t("success.restaurant_styles_update_success"),
             data: updatedRestaurant,
         })
     } catch (error) {
@@ -79,7 +82,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
         return NextResponse.json(
             {
-                error: "Failed to update restaurant styles",
+                error: t("errors.failed_to_update_restaurant_styles"),
                 details: error instanceof Error ? error.message : "Unknown error",
             },
             { status: 500 },

@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
+import { getTranslations } from "next-intl/server"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -68,7 +69,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             },
         })
     } catch (error) {
+        const t = await getTranslations("restaurants_apis.errors");
         console.error("Get order stats error:", error)
-        return NextResponse.json({ error: "Failed to fetch order statistics" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_fetch_orders_stats") }, { status: 500 })
     }
 }

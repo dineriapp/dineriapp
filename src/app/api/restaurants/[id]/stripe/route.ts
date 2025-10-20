@@ -1,17 +1,19 @@
-import { type NextRequest, NextResponse } from "next/server"
-import prisma from "@/lib/prisma"
-import { z } from "zod"
-import { encrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
-import { getValidStripeClient } from "@/lib/stripe"
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
+import { encrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
+import prisma from "@/lib/prisma"
+import { getValidStripeClient } from "@/lib/stripe"
+import { updateStripeSchema } from "@/lib/validations"
+import { getTranslations } from "next-intl/server"
+import { type NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 
 
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis");
+
     try {
         const { id } = await params
-
-
 
         const restaurant = await prisma.restaurant.findUnique({
             where: { id },
@@ -24,7 +26,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!restaurant) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("errors.restaurant_not_found") }, { status: 404 })
         }
 
         // Return status only, never the actual keys
@@ -38,24 +40,18 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         })
     } catch (error) {
         console.error("Error fetching Stripe settings:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.internal_server_error") }, { status: 500 })
     }
 }
 
+
+
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis");
+
     try {
         const { id } = await params
 
-        const updateStripeSchema = z.object({
-            stripe_public_key: z
-                .string()
-                .min(1, "Public key is required")
-                .startsWith("pk_", "Invalid public key format"),
-            stripe_secret_key: z
-                .string()
-                .min(1, "Secret key is required")
-                .startsWith("sk_", "Invalid secret key format"),
-        })
 
         const authResult = await authenticateAndAuthorize(id)
         if (authResult.error) {
@@ -73,7 +69,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!existingRestaurant) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("errors.restaurant_not_found") }, { status: 404 })
         }
 
         // Prepare update data with encryption
@@ -82,7 +78,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         const stripeClient = await getValidStripeClient(validatedData.stripe_secret_key)
 
         if (!stripeClient) {
-            return NextResponse.json({ error: "Invalid Stripe secret key" }, { status: 400 })
+            return NextResponse.json({ error: t("errors.invalid_stripe_secret_key") }, { status: 400 })
         }
 
         if (validatedData.stripe_public_key) {
@@ -94,8 +90,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         }
 
         // Register webhook for the restaurant
-        // const webhookUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/stripe/${id}/webhook`
-        const webhookUrl = `https://dineri.vercel.app/api/stripe/${id}/webhook`
+        const webhookUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/stripe/${id}/webhook`
+        // const webhookUrl = `https://dineri.vercel.app/api/stripe/${id}/webhook`
 
         try {
             const webhook = await stripeClient.webhookEndpoints.create({
@@ -111,16 +107,16 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             if (webhook?.secret) {
                 updateData.stripe_webhook_secret_encrypted = encrypt_key(webhook.secret)
             } else {
-                return NextResponse.json({ error: "Invalid Stripe secret key or webhook error" }, { status: 400 })
+                return NextResponse.json({ error: t("errors.invalid_stripe_secret_or_webhook_error") }, { status: 400 })
             }
         } catch (err: any) {
             console.error(err)
             // Silently ignore if webhook already exists
             if (err?.raw?.type !== "invalid_request_error") {
                 console.error("Failed to register webhook:", err)
-                return NextResponse.json({ error: "Invalid Stripe secret key or webhook error" }, { status: 400 })
+                return NextResponse.json({ error: t("errors.invalid_stripe_secret_or_webhook_error") }, { status: 400 })
             }
-            return NextResponse.json({ error: "Invalid Stripe secret key or webhook setup error" }, { status: 400 })
+            return NextResponse.json({ error: t("errors.invalid_stripe_secret_or_webhook_error") }, { status: 400 })
         }
 
         // Update restaurant
@@ -142,7 +138,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                 has_secret_key: !!updatedRestaurant.stripe_secret_key_encrypted,
                 has_webhook_setup: !!updatedRestaurant.stripe_webhook_secret_encrypted,
             },
-            message: "Stripe settings updated successfully",
+            message: t("success.stripe_update_success"),
         })
     } catch (error) {
         console.error("Error updating Stripe settings:", error)
@@ -150,18 +146,20 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         if (error instanceof z.ZodError) {
             return NextResponse.json(
                 {
-                    error: "Validation failed",
+                    error: t("errors.validation_failed"),
                     details: error.errors,
                 },
                 { status: 400 },
             )
         }
 
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.internal_server_error") }, { status: 500 })
     }
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis");
+
     try {
         const { id } = await params
 
@@ -176,7 +174,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         })
 
         if (!existingRestaurant) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("errors.restaurant_not_found") }, { status: 404 })
         }
 
         // Remove Stripe keys
@@ -191,10 +189,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
         return NextResponse.json({
             success: true,
-            message: "Stripe keys removed successfully",
+            message: t("success.stripe_keys_remove_success"),
         })
     } catch (error) {
         console.error("Error removing Stripe keys:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.internal_server_error") }, { status: 500 })
     }
 }

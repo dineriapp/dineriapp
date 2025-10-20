@@ -5,6 +5,7 @@ import type Stripe from "stripe"
 import { isValidPlan } from "@/lib/stripe-plans"
 import { stripe } from "@/lib/stripe"
 import prisma from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
 
 interface WebhookMetadata {
     user_id?: string
@@ -12,18 +13,20 @@ interface WebhookMetadata {
 }
 
 export async function POST(request: NextRequest) {
+
+    const t = await getTranslations("stripe_webhook_api")
     const body = await request.text()
     const headersList = await headers()
     const signature = headersList.get("stripe-signature")
 
     if (!signature) {
         console.error("No Stripe signature found")
-        return NextResponse.json({ error: "No signature provided" }, { status: 400 })
+        return NextResponse.json({ error: t("errors.no_signature_provided") }, { status: 400 })
     }
 
     if (!process.env.STRIPE_WEBHOOK_SECRET) {
         console.error("STRIPE_WEBHOOK_SECRET not configured")
-        return NextResponse.json({ error: "Webhook secret not configured" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.webhook_secret_not_configured") }, { status: 500 })
     }
 
     let event: Stripe.Event
@@ -32,7 +35,7 @@ export async function POST(request: NextRequest) {
         event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET)
     } catch (error) {
         console.error("Webhook signature verification failed:", error)
-        return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
+        return NextResponse.json({ error: t("errors.invalid_signature") }, { status: 400 })
     }
 
 
@@ -68,7 +71,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ received: true })
     } catch (error) {
         console.error(`Webhook handler error for ${event.type}:`, error)
-        return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.webhook_handler_failed") }, { status: 500 })
     }
 }
 

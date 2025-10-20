@@ -1,28 +1,27 @@
-import { type NextRequest, NextResponse } from "next/server"
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
-import { z } from "zod"
 import prisma from "@/lib/prisma"
 import { getTranslations } from "next-intl/server"
+import { type NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 
 
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const t = await getTranslations("restaurants_apis");
-    const schema = await getTranslations("restaurants_apis.schema.update_restaurant");
 
     try {
         const { id } = await params
         const restaurantId = id
 
         const updateRestaurantSchema = z.object({
-            name: z.string().min(1, schema("name_required")).max(100, schema("name_max")),
+            name: z.string().min(1).max(100),
             slug: z
                 .string()
-                .min(3, schema("slug_min"))
-                .max(50, schema("slug_max"))
-                .regex(/^[a-z0-9-]+$/, schema("slug_pattern")),
-            bio: z.string().max(200, schema("bio_max")).optional(),
-            logo_url: z.string().url(schema("logo_url_invalid")).nullable().optional(),
+                .min(3,)
+                .max(50)
+                .regex(/^[a-z0-9-]+$/),
+            bio: z.string().max(200).optional(),
+            logo_url: z.string().url().nullable().optional(),
         })
 
         // Authenticate and authorize

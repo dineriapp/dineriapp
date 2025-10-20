@@ -1,6 +1,7 @@
-import { type NextRequest, NextResponse } from "next/server"
-import prisma from "@/lib/prisma"
-import { z } from "zod"
+import prisma from "@/lib/prisma";
+import { getTranslations } from "next-intl/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 const updatePopupsSchema = z.object({
     welcome_popup_enabled: z.boolean().optional(),
@@ -34,6 +35,8 @@ const updatePopupsSchema = z.object({
 })
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis");
+
     try {
         const { id } = await params
         const body = await request.json()
@@ -47,7 +50,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!existingRestaurant) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("errors.restaurant_not_found") }, { status: 404 })
         }
 
         // Prepare update data
@@ -107,7 +110,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json({
             success: true,
             data: updatedRestaurant,
-            message: "Popup settings updated successfully",
+            message: t("success.popup_update_success"),
         })
     } catch (error) {
         console.error("Error updating popup settings:", error)
@@ -115,13 +118,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         if (error instanceof z.ZodError) {
             return NextResponse.json(
                 {
-                    error: "Validation failed",
+                    error: t("errors.validation_failed"),
                     details: error.errors,
                 },
                 { status: 400 },
             )
         }
 
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.internal_server_error") }, { status: 500 })
     }
 }

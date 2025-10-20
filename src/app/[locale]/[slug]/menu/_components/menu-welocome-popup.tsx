@@ -5,6 +5,7 @@ import type { Event } from "@prisma/client"
 import { MapPin, Phone, Star, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { OpeningHoursStatus } from "../../_components/opening-hours-status"
+import { useTranslations } from "next-intl"
 
 interface WelcomePopupProps {
     restaurant: RestaurantWithRelations
@@ -21,6 +22,7 @@ interface WelcomePopupProps {
 }
 
 export function WelcomePopupMenu({ restaurant, isOpen, onClose, RatingInfo, welcomePopupShowInfo }: WelcomePopupProps) {
+    const t = useTranslations("slug_page.welcome_popup")
 
     const handleDontShowAgain = () => {
         localStorage.setItem(`menu-popup-${restaurant.slug}`, "dismissed")
@@ -122,14 +124,14 @@ export function WelcomePopupMenu({ restaurant, isOpen, onClose, RatingInfo, welc
                                 className="mb-6"
                             >
                                 <h2 className="mb-2 text-2xl font-bold" style={{ color: textColor }}>
-                                    Welcome to {restaurant.name}! {restaurant.menu_popup_show_button ? "Yes" : "No"}
+                                    {t("welcome_message", { restaurantName: restaurant.name })}
                                 </h2>
 
                                 {/* Event Announcement or Welcome Message */}
                                 <p className="text-sm leading-relaxed opacity-90" style={{ color: textColor }}>
                                     {restaurant.menu_popup_message ||
                                         restaurant.bio ||
-                                        "Welcome! We're excited to have you visit us."}
+                                        t("default_message")}
                                 </p>
                             </motion.div>
 
@@ -153,7 +155,13 @@ export function WelcomePopupMenu({ restaurant, isOpen, onClose, RatingInfo, welc
                                                 color: restaurant.headings_text_color || "#000000"
                                             }}
                                             className="opacity-80">
-                                            ({RatingInfo?.user_ratings_total || 0} {RatingInfo?.user_ratings_total === 1 ? "review" : "reviews"})
+                                            {
+                                                RatingInfo?.user_ratings_total <= 1
+                                                    ?
+                                                    t("reviews_singular", { count: RatingInfo?.user_ratings_total || 0 })
+                                                    :
+                                                    t("reviews_plural", { count: RatingInfo?.user_ratings_total || 0 })
+                                            })
                                         </span>
                                     </div>
                                 )}
@@ -216,7 +224,7 @@ export function WelcomePopupMenu({ restaurant, isOpen, onClose, RatingInfo, welc
                                         className="w-full rounded-xl py-3 font-medium transition-all hover:scale-105"
                                         style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
                                     >
-                                        Explore
+                                        {t("explore_button")}
                                     </Button>
                                 )}
 
@@ -225,7 +233,7 @@ export function WelcomePopupMenu({ restaurant, isOpen, onClose, RatingInfo, welc
                                     className="text-sm opacity-75 transition-opacity hover:opacity-100"
                                     style={{ color: textColor }}
                                 >
-                                    Don&apos;t show this again
+                                    {t("dont_show_again")}
                                 </button>
                             </motion.div>}
 

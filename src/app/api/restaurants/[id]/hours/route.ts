@@ -38,7 +38,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!existingRestaurant) {
-            return NextResponse.json({ error: t("errors.restaurant_not_found") }, { status: 404 })
+            return NextResponse.json(
+                {
+                    error: t("errors.restaurant_not_found")
+                },
+                {
+                    status: 404
+                })
         }
 
         // Validate opening hours logic
@@ -69,7 +75,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                     error: t("errors.invalid_opening_hours"),
                     details: `Invalid hours for: ${invalidDays.join(", ")}`,
                 },
-                { status: 400 },
+                {
+                    status: 400
+                },
             )
         }
 
@@ -82,13 +90,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             },
         })
 
-        return NextResponse.json({
-            success: true,
-            data: updatedRestaurant,
-            message: t("success.opening_hours_update_success"),
-        })
+        return NextResponse.json(
+            {
+                success: true,
+                data: updatedRestaurant,
+                message: t("success.opening_hours_update_success"),
+            }
+        )
     } catch (error) {
-        console.error("Error updating opening hours:", error)
+        console.error(
+            "Error updating opening hours:",
+            error
+        )
 
         if (error instanceof z.ZodError) {
             return NextResponse.json(
@@ -100,6 +113,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             )
         }
 
-        return NextResponse.json({ error: t("errors.internal_server_error") }, { status: 500 })
+        return NextResponse.json(
+            {
+                error: t("errors.internal_server_error")
+            },
+            {
+                status: 500
+            }
+        )
     }
 }

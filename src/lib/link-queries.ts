@@ -3,6 +3,7 @@ import ky from "./ky"
 import { toast } from "sonner"
 import { Link } from "@prisma/client"
 import { IconSlug } from "./get-icons"
+import { useTranslations } from "next-intl"
 
 type LinkWithCount = Link & {
     _count: {
@@ -25,10 +26,10 @@ export function useLinks(restaurantId: string | undefined) {
 
 export function useCreateLink(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
-
+    const t = useTranslations("links_api_client")
     return useMutation({
         mutationFn: async (data: { title: string; url: string, iconSlug?: IconSlug }) => {
-            if (!restaurantId) throw new Error("Restaurant ID is required")
+            if (!restaurantId) throw new Error(t("errors.restaurant_id_required"))
 
             const response = await ky
                 .post("/api/links", {
@@ -69,10 +70,10 @@ export function useCreateLink(restaurantId: string | undefined) {
             if (restaurantId && context?.previousLinks) {
                 queryClient.setQueryData(["links", restaurantId], context.previousLinks)
             }
-            toast.error("Failed to add link")
+            toast.error(t("errors.failed_to_add_link"))
         },
         onSuccess: () => {
-            toast.success("Link added successfully")
+            toast.success(t("success.link_added_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
@@ -88,6 +89,7 @@ export function useCreateLink(restaurantId: string | undefined) {
 
 export function useUpdateLink(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("links_api_client")
 
     return useMutation({
         mutationFn: async ({ id, ...data }: { id: string; title: string; url: string, iconSlug?: IconSlug }) => {
@@ -115,10 +117,10 @@ export function useUpdateLink(restaurantId: string | undefined) {
             if (restaurantId && context?.previousLinks) {
                 queryClient.setQueryData(["links", restaurantId], context.previousLinks)
             }
-            toast.error("Failed to update link")
+            toast.error(t("errors.failed_to_update_link"))
         },
         onSuccess: () => {
-            toast.success("Link updated successfully")
+            toast.success(t("success.link_updated_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
@@ -134,6 +136,7 @@ export function useUpdateLink(restaurantId: string | undefined) {
 
 export function useDeleteLink(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("links_api_client")
 
     return useMutation({
         mutationFn: async (id: string) => {
@@ -158,10 +161,10 @@ export function useDeleteLink(restaurantId: string | undefined) {
             if (restaurantId && context?.previousLinks) {
                 queryClient.setQueryData(["links", restaurantId], context.previousLinks)
             }
-            toast.error("Failed to delete link")
+            toast.error(t("errors.failed_to_delete_link"))
         },
         onSuccess: () => {
-            toast.success("Link deleted successfully")
+            toast.success(t("success.link_deleted_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
@@ -177,6 +180,7 @@ export function useDeleteLink(restaurantId: string | undefined) {
 
 export function useBulkDeleteLinks(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("links_api_client")
 
     return useMutation({
         mutationFn: async (linkIds: string[]) => {
@@ -205,10 +209,10 @@ export function useBulkDeleteLinks(restaurantId: string | undefined) {
             if (restaurantId && context?.previousLinks) {
                 queryClient.setQueryData(["links", restaurantId], context.previousLinks)
             }
-            toast.error("Failed to delete links")
+            toast.error(t("errors.failed_to_delete_links"))
         },
-        onSuccess: (data) => {
-            toast.success(`Successfully deleted ${data.deletedCount} link${data.deletedCount > 1 ? "s" : ""}`)
+        onSuccess: () => {
+            toast.success(t("success.links_deleted_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["links", restaurantId] })
@@ -224,6 +228,7 @@ export function useBulkDeleteLinks(restaurantId: string | undefined) {
 
 export function useReorderLink(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("links_api_client")
 
     return useMutation({
         mutationFn: async ({ linkId, direction }: { linkId: string; direction: "up" | "down" }) => {
@@ -262,7 +267,7 @@ export function useReorderLink(restaurantId: string | undefined) {
             if (restaurantId && context?.previousLinks) {
                 queryClient.setQueryData(["links", restaurantId], context.previousLinks)
             }
-            toast.error("Failed to reorder link")
+            toast.error(t("errors.failed_to_reorder_link"))
         },
         onSuccess: () => {
             // Force refetch to ensure fresh data

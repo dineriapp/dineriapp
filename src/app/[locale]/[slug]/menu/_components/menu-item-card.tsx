@@ -12,6 +12,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AddonSelectorDialog } from "./addon-selector-dialog";
+import { useTranslations } from "next-intl";
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -61,6 +62,7 @@ export function MenuItemCard({
   stylesData
 }: MenuItemCardProps) {
   const { addItem } = useCartStore();
+  const t = useTranslations("menu_item_card_menu_page")
 
   const openingHours = restaurant.opening_hours ? (restaurant.opening_hours as OpeningHoursData) : {
     monday: { open: "", close: "", closed: true },
@@ -91,17 +93,17 @@ export function MenuItemCard({
       cartItemId: crypto.randomUUID()
     });
 
-    toast.success("Added to cart", {
-      description: "Item and selected addons have been added. You cannot change addons later.",
+    toast.success(t("add_to_cart_success_title"), {
+      description: t("add_to_cart_success_description"),
     });
   };
 
   const handleAddToCart = () => {
     if (!status?.isOpen) {
-      toast.error("Restaurant is closed", {
+      toast.error(t("restaurant_closed_title"), {
         description: status?.nextOpeningDay
-          ? `Opens ${status.nextOpeningDay} at ${status.openingTime}`
-          : "Please check back later.",
+          ? t("restaurant_closed_next_opening", { day: status.nextOpeningDay, time: status.openingTime || "" })
+          : t("restaurant_closed_description"),
       });
       return;
     }
@@ -209,7 +211,7 @@ export function MenuItemCard({
                   variant="secondary"
                   className="text-xs"
                 >
-                  +{item.allergens.length - 3} more
+                  {t("allergens_more", { count: item.allergens.length - 3 })}
                 </Badge>
               )}
             </div>

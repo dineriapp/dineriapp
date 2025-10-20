@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { useRestaurantStatus } from "@/hooks/useRestaurentStatus"
 import { Clock } from "lucide-react"
 import { motion } from "motion/react"
+import { useTranslations } from "next-intl"
 
 interface OpeningHoursData {
     [key: string]: {
@@ -29,17 +30,20 @@ export function OpeningHoursDialog({
     restaurantName,
 }: OpeningHoursDialogProps) {
     const status = useRestaurantStatus(openingHours, restaurentTimeZone)
+    const t = useTranslations("opening_hours_dialog")
+
     if (!openingHours || !restaurentTimeZone) return null
 
     const dayOrder = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+
     const dayNames = {
-        monday: "Monday",
-        tuesday: "Tuesday",
-        wednesday: "Wednesday",
-        thursday: "Thursday",
-        friday: "Friday",
-        saturday: "Saturday",
-        sunday: "Sunday",
+        monday: t("monday"),
+        tuesday: t("tuesday"),
+        wednesday: t("wednesday"),
+        thursday: t("thursday"),
+        friday: t("friday"),
+        saturday: t("saturday"),
+        sunday: t("sunday"),
     }
 
     const getCurrentDay = () => {
@@ -56,28 +60,30 @@ export function OpeningHoursDialog({
 
     const getHoursText = (dayData: { open: string; close: string; closed: boolean }) => {
         if (dayData.closed || !dayData.open || !dayData.close) {
-            return "Closed"
+            return t("closed_label")
         }
         return `${formatTime(dayData.open)} - ${formatTime(dayData.close)}`
     }
-
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-[90vw] sm:!max-w-[570px]">
                 <DialogHeader>
                     <DialogTitle className="flex text-start items-center gap-2">
                         <Clock className="h-5 w-5 text-teal-600" />
-                        <span className="text-gray-800">Opening Hours</span>
+                        <span className="text-gray-800">
+                            {t("title")}
+                        </span>
                         <span
                             className={`text-sm font-semibold px-4 w-fit py-2 rounded-2xl leading-[1.0]  ${status.isOpen ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                                 }`}
                         >
-                            {status.isOpen ? "Open Now" : "Closed Now"}
+                            {status.isOpen ? t("open_now") : t("closed_now")}
                         </span>
                     </DialogTitle>
                     <DialogDescription className="text-start text-gray-500">
-                        {restaurantName} operating hours <br />
-                        Timezone :- {restaurentTimeZone}
+                        {t("operating_hours_text", { restaurantName: restaurantName })}
+                        <br />
+                        {t("timezone_label", { restaurentTimeZone })}
                     </DialogDescription>
 
                 </DialogHeader>
@@ -107,7 +113,9 @@ export function OpeningHoursDialog({
                                     >
                                         {dayNames[day as keyof typeof dayNames]}
                                         {isToday && (
-                                            <span className="ml-2 text-xs font-normal text-gray-500">(Today)</span>
+                                            <span className="ml-2 text-xs font-normal text-gray-500">
+                                                {t("today_label")}
+                                            </span>
                                         )}
                                     </span>
                                 </div>
@@ -127,7 +135,7 @@ export function OpeningHoursDialog({
 
                 <div className="pt-4 border-t">
                     <p className="text-xs text-gray-500 text-center">
-                        Hours may vary on holidays. Please call ahead to confirm.
+                        {t("hours_notice")}
                     </p>
                 </div>
             </DialogContent>

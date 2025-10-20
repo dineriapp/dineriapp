@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ky from "./ky"
 import { toast } from "sonner"
 import type { MenuCategory, MenuItem } from "@prisma/client"
+import { useTranslations } from "next-intl"
 
 // Use Prisma types with relations
 type MenuCategoryWithItems = MenuCategory & {
@@ -25,10 +26,10 @@ export function useMenuCategories(restaurantId: string | undefined) {
 
 export function useCreateCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
-
+    const t = useTranslations("menu_api_client")
     return useMutation({
         mutationFn: async (data: { name: string; description?: string, show_in_quick_menu?: boolean }) => {
-            if (!restaurantId) throw new Error("Restaurant ID is required")
+            if (!restaurantId) throw new Error(t("errors.restaurant_id_required"))
 
             const response = await ky
                 .post("/api/menu/categories", {
@@ -69,10 +70,10 @@ export function useCreateCategory(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["menu-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to add category")
+            toast.error(t("errors.failed_to_add_category"))
         },
         onSuccess: () => {
-            toast.success("Category added successfully")
+            toast.success(t("success.category_added_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["menu-categories", restaurantId] })
@@ -88,6 +89,7 @@ export function useCreateCategory(restaurantId: string | undefined) {
 
 export function useUpdateCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("menu_api_client")
 
     return useMutation({
         mutationFn: async ({ id, ...data }: { id: string; name: string; description?: string, show_in_quick_menu: boolean }) => {
@@ -117,10 +119,10 @@ export function useUpdateCategory(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["menu-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to update category")
+            toast.error(t("errors.failed_to_update_category"))
         },
         onSuccess: () => {
-            toast.success("Category updated successfully")
+            toast.success(t("success.category_updated_successfully"))
         },
         onSettled: () => {
             if (restaurantId) {
@@ -132,6 +134,7 @@ export function useUpdateCategory(restaurantId: string | undefined) {
 
 export function useDeleteCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("menu_api_client")
 
     return useMutation({
         mutationFn: async (id: string) => {
@@ -156,10 +159,10 @@ export function useDeleteCategory(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["menu-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to delete category")
+            toast.error(t("errors.failed_to_delete_category"))
         },
         onSuccess: () => {
-            toast.success("Category deleted successfully")
+            toast.success(t("errors.category_deleted_successfully"))
         },
         onSettled: () => {
             if (restaurantId) {
@@ -171,6 +174,7 @@ export function useDeleteCategory(restaurantId: string | undefined) {
 
 export function useReorderCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("menu_api_client")
 
     return useMutation({
         mutationFn: async ({ categoryId, direction }: { categoryId: string; direction: "up" | "down" }) => {
@@ -209,7 +213,7 @@ export function useReorderCategory(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["menu-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to reorder category")
+            toast.error(t("errors.failed_to_reorder_category"))
         },
         onSettled: () => {
             if (restaurantId) {
@@ -221,6 +225,7 @@ export function useReorderCategory(restaurantId: string | undefined) {
 
 export function useCreateItem(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("menu_api_client")
 
     return useMutation({
         mutationFn: async (data: {
@@ -299,10 +304,10 @@ export function useCreateItem(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["menu-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to add menu item")
+            toast.error(t("errors.failed_to_add_menu_item"))
         },
         onSuccess: () => {
-            toast.success("Menu item added successfully")
+            toast.success(t("success.menu_item_added_successfully"))
         },
         onSettled: () => {
             if (restaurantId) {
@@ -314,6 +319,7 @@ export function useCreateItem(restaurantId: string | undefined) {
 
 export function useUpdateItem(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("menu_api_client")
 
     return useMutation({
         mutationFn: async ({
@@ -380,10 +386,10 @@ export function useUpdateItem(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["menu-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to update menu item")
+            toast.error(t("errors.failed_to_update_menu_item"))
         },
         onSuccess: () => {
-            toast.success("Menu item updated successfully")
+            toast.success(t("success.menu_item_updated_successfully"))
         },
         onSettled: () => {
             if (restaurantId) {
@@ -395,6 +401,7 @@ export function useUpdateItem(restaurantId: string | undefined) {
 
 export function useDeleteItem(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("menu_api_client")
 
     return useMutation({
         mutationFn: async (id: string) => {
@@ -423,10 +430,10 @@ export function useDeleteItem(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["menu-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to delete menu item")
+            toast.error(t("errors.failed_to_delete_menu_item"))
         },
         onSuccess: () => {
-            toast.success("Menu item deleted successfully")
+            toast.success(t("success.menu_item_deleted_successfully"))
         },
         onSettled: () => {
             if (restaurantId) {
@@ -438,6 +445,7 @@ export function useDeleteItem(restaurantId: string | undefined) {
 
 export function useReorderItem(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("menu_api_client")
 
     return useMutation({
         mutationFn: async ({ itemId, direction }: { itemId: string; direction: "up" | "down" }) => {
@@ -481,7 +489,7 @@ export function useReorderItem(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["menu-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to reorder menu item")
+            toast.error(t("errors.failed_to_reorder_menu_item"))
         },
         onSettled: () => {
             if (restaurantId) {

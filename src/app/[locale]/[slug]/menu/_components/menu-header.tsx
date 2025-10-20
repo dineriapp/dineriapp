@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { StylesDataType } from "@/types";
 import type { Restaurant } from "@prisma/client";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,6 +21,7 @@ export function MenuHeader({
   stylesData,
   onCartClick,
 }: MenuHeaderProps) {
+  const t = useTranslations("slug_page")
   return (
     <>
 
@@ -74,7 +76,7 @@ export function MenuHeader({
                     }}
                     className="text-sm opacity-80 !leading-[1]"
                   >
-                    Menu
+                    {t("menu")}
                   </p>
                 </div>
               </div>

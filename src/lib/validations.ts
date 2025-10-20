@@ -284,3 +284,24 @@ export async function getReorderEventSchema() {
 }
 
 
+
+export const updateStripeSchema = z.object({
+    stripe_public_key: z
+        .string()
+        .min(1, "Public key is required")
+        .startsWith("pk_", "Invalid public key format"),
+    stripe_secret_key: z
+        .string()
+        .min(1, "Secret key is required")
+        .startsWith("sk_", "Invalid secret key format"),
+})
+
+
+export const taxPercentageSchema = z.object({
+    // accepts string or number, coerces to number
+    tax_percentage: z.coerce
+        .number()
+        .min(0, "Tax percentage cannot be negative")
+        .max(100, "Tax percentage cannot exceed 100")
+        .transform((n) => Math.round(n * 100) / 100), // round to 2 decimals
+});

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import type { CreateQRCodeInput, UpdateQRCodeInput } from "./qr-validations"
 import { qr_codes as QRCode } from "@prisma/client"
+import { useTranslations } from "next-intl"
 
 export interface QRCodeStats {
     qrCodes: QRCode[]
@@ -23,6 +24,7 @@ export const qrCodeKeys = {
 
 // Fetch QR Codes
 export function useQRCodes(restaurantId: string) {
+    const t = useTranslations("qr_code_api_client")
     return useQuery({
         queryKey: qrCodeKeys.list(restaurantId),
         queryFn: async (): Promise<QRCode[]> => {
@@ -30,7 +32,7 @@ export function useQRCodes(restaurantId: string) {
 
             const response = await fetch(`/api/qr-codes?restaurant_id=${restaurantId}`)
             if (!response.ok) {
-                throw new Error("Failed to fetch QR codes")
+                throw new Error(t("errors.failed_to_fetch_qr_codes"))
             }
             return response.json()
         },
@@ -41,12 +43,14 @@ export function useQRCodes(restaurantId: string) {
 
 // Fetch Single QR Code
 export function useQRCode(id: string) {
+    const t = useTranslations("qr_code_api_client")
+
     return useQuery({
         queryKey: qrCodeKeys.detail(id),
         queryFn: async (): Promise<QRCode> => {
             const response = await fetch(`/api/qr-codes/${id}`)
             if (!response.ok) {
-                throw new Error("Failed to fetch QR code")
+                throw new Error(t("errors.failed_to_fetch_qr_code"))
             }
             return response.json()
         },
@@ -56,6 +60,8 @@ export function useQRCode(id: string) {
 
 // Fetch QR Code Stats
 export function useQRCodeStats(restaurantId: string) {
+    const t = useTranslations("qr_code_api_client")
+
     return useQuery({
         queryKey: qrCodeKeys.stat(restaurantId),
         queryFn: async (): Promise<QRCodeStats> => {
@@ -70,7 +76,7 @@ export function useQRCodeStats(restaurantId: string) {
 
             const response = await fetch(`/api/qr-codes/stats?restaurant_id=${restaurantId}`)
             if (!response.ok) {
-                throw new Error("Failed to fetch QR code stats")
+                throw new Error(t("errors.failed_to_fetch_qr_code_stats"))
             }
             return response.json()
         },
@@ -82,6 +88,7 @@ export function useQRCodeStats(restaurantId: string) {
 // Create QR Code
 export function useCreateQRCode(restaurantId: string) {
     const queryClient = useQueryClient()
+    const t = useTranslations("qr_code_api_client")
 
     return useMutation({
         mutationFn: async (data: CreateQRCodeInput & { dataUrl: string, id: string }): Promise<QRCode> => {
@@ -95,7 +102,7 @@ export function useCreateQRCode(restaurantId: string) {
 
             if (!response.ok) {
                 const error = await response.json()
-                throw new Error(error.error || "Failed to create QR code")
+                throw new Error(error.error || t("errors.failed_to_create_qr_code"))
             }
 
             return response.json()
@@ -109,10 +116,10 @@ export function useCreateQRCode(restaurantId: string) {
             // Invalidate stats to refresh counts
             queryClient.invalidateQueries({ queryKey: qrCodeKeys.stat(restaurantId) })
 
-            toast.success("QR code created successfully!")
+            toast.success(t("success.qr_code_created_successfully"))
         },
         onError: (error) => {
-            toast.error(error instanceof Error ? error.message : "Failed to create QR code")
+            toast.error(error instanceof Error ? error.message : t("errors.failed_to_create_qr_code"))
         },
     })
 }
@@ -120,6 +127,7 @@ export function useCreateQRCode(restaurantId: string) {
 // Update QR Code
 export function useUpdateQRCode(restaurantId: string) {
     const queryClient = useQueryClient()
+    const t = useTranslations("qr_code_api_client")
 
     return useMutation({
         mutationFn: async ({ id, data }: { id: string; data: UpdateQRCodeInput }): Promise<QRCode> => {
@@ -133,7 +141,7 @@ export function useUpdateQRCode(restaurantId: string) {
 
             if (!response.ok) {
                 const error = await response.json()
-                throw new Error(error.error || "Failed to update QR code")
+                throw new Error(error.error || t("errors.failed_to_update_qr_code"))
             }
 
             return response.json()
@@ -152,10 +160,10 @@ export function useUpdateQRCode(restaurantId: string) {
                 queryClient.invalidateQueries({ queryKey: qrCodeKeys.stat(restaurantId) })
             }
 
-            toast.success("QR code updated successfully!")
+            toast.success(t("success.qr_code_updated_successfully"))
         },
         onError: (error) => {
-            toast.error(error instanceof Error ? error.message : "Failed to update QR code")
+            toast.error(error instanceof Error ? error.message : t("errors.failed_to_update_qr_code"))
         },
     })
 }
@@ -163,6 +171,7 @@ export function useUpdateQRCode(restaurantId: string) {
 // Delete QR Code
 export function useDeleteQRCode(restaurantId: string) {
     const queryClient = useQueryClient()
+    const t = useTranslations("qr_code_api_client")
 
     return useMutation({
         mutationFn: async (id: string): Promise<void> => {
@@ -172,7 +181,7 @@ export function useDeleteQRCode(restaurantId: string) {
 
             if (!response.ok) {
                 const error = await response.json()
-                throw new Error(error.error || "Failed to delete QR code")
+                throw new Error(error.error || t("errors.failed_to_delete_qr_code"))
             }
         },
         onSuccess: (_, deletedId) => {
@@ -187,10 +196,10 @@ export function useDeleteQRCode(restaurantId: string) {
             // Invalidate stats to refresh counts
             queryClient.invalidateQueries({ queryKey: qrCodeKeys.stat(restaurantId) })
 
-            toast.success("QR code deleted successfully!")
+            toast.success(t("success.qr_code_deleted_successfully"))
         },
         onError: (error) => {
-            toast.error(error instanceof Error ? error.message : "Failed to delete QR code")
+            toast.error(error instanceof Error ? error.message : t("errors.failed_to_delete_qr_code"))
         },
     })
 }

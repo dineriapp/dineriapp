@@ -2,8 +2,10 @@ import { NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { stripe } from "@/lib/stripe"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server"
 
 export async function POST() {
+    const t = await getTranslations("customer_portal_api")
     try {
         // Authenticate user
         const supabase = await createClient()
@@ -12,7 +14,7 @@ export async function POST() {
         } = await supabase.auth.getUser()
 
         if (!user) {
-            return NextResponse.json({ error: "Authentication required" }, { status: 401 })
+            return NextResponse.json({ error: t("errors.authentication_required") }, { status: 401 })
         }
 
         // Get user from database
@@ -21,7 +23,7 @@ export async function POST() {
         })
 
         if (!dbUser || !dbUser.stripe_customer_id) {
-            return NextResponse.json({ error: "No subscription found" }, { status: 404 })
+            return NextResponse.json({ error: t("errors.no_subscription_found") }, { status: 404 })
         }
 
         // Create customer portal session
@@ -33,6 +35,6 @@ export async function POST() {
         return NextResponse.json({ url: portalSession.url })
     } catch (error) {
         console.error("Customer portal error:", error)
-        return NextResponse.json({ error: "Failed to create portal session" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.failed_create_portal_session") }, { status: 500 })
     }
 }

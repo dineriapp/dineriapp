@@ -31,7 +31,7 @@ export function loadGoogleMapsScript(apiKey: string): Promise<void> {
 
         script.onerror = () => {
             isLoading = false
-            reject(new Error("Failed to load Google Maps script"))
+            reject(new Error("something went wrong while loading google maps"))
         }
 
         document.head.appendChild(script)

@@ -18,12 +18,11 @@ export function RestaurantInfoDialog({ restaurant }: RestaurantInfoDialogProps) 
             </DialogHeader>
 
 
-            <div className="space-y-3 text-sm">
+            <div className="space-y-4 text-sm">
                 {restaurant.address && (
                     <div className="flex items-start gap-2">
                         <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
                         <div>
-                            <p className="text-xs font-semibold text-muted-foreground">Address</p>
                             <p>{restaurant.address}</p>
                         </div>
                     </div>
@@ -33,7 +32,6 @@ export function RestaurantInfoDialog({ restaurant }: RestaurantInfoDialogProps) 
                     <div className="flex items-start gap-2">
                         <Phone className="w-4 h-4 text-muted-foreground mt-0.5" />
                         <div>
-                            <p className="text-xs font-semibold text-muted-foreground">Phone</p>
                             <p>{restaurant.phone}</p>
                         </div>
                     </div>
@@ -43,7 +41,6 @@ export function RestaurantInfoDialog({ restaurant }: RestaurantInfoDialogProps) 
                     <div className="flex items-start gap-2">
                         <Mail className="w-4 h-4 text-muted-foreground mt-0.5" />
                         <div>
-                            <p className="text-xs font-semibold text-muted-foreground">Email</p>
                             <p>{restaurant.email}</p>
                         </div>
                     </div>
@@ -61,7 +58,6 @@ export function RestaurantInfoDialog({ restaurant }: RestaurantInfoDialogProps) 
                                 className="flex items-center gap-1 text-blue-500 hover:underline"
                             >
                                 <Instagram className="w-4 h-4" />
-                                Instagram
                             </a>
                         )}
                         {restaurant.facebook && (
@@ -71,7 +67,6 @@ export function RestaurantInfoDialog({ restaurant }: RestaurantInfoDialogProps) 
                                 className="flex items-center gap-1 text-blue-600 hover:underline"
                             >
                                 <Facebook className="w-4 h-4" />
-                                Facebook
                             </a>
                         )}
                         {restaurant.whatsapp && (
@@ -81,7 +76,6 @@ export function RestaurantInfoDialog({ restaurant }: RestaurantInfoDialogProps) 
                                 className="flex items-center gap-1 text-green-600 hover:underline"
                             >
                                 <MessageCircleMore className="w-4 h-4" />
-                                WhatsApp
                             </a>
                         )}
                     </div>

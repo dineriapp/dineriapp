@@ -2,6 +2,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface Addon {
     name: string;
@@ -18,7 +19,7 @@ interface Props {
 
 export function AddonSelectorDialog({ isOpen, onClose, addons, itemName, onConfirm }: Props) {
     const [selected, setSelected] = useState<Addon[]>([]);
-
+    const t = useTranslations("addon_selector_dialog_menu_page")
     const toggleAddon = (addon: Addon) => {
         setSelected((prev) =>
             prev.find((a) => a.name === addon.name)
@@ -31,8 +32,12 @@ export function AddonSelectorDialog({ isOpen, onClose, addons, itemName, onConfi
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-[95vw] sm:max-w-md rounded-xl shadow-xl">
                 <DialogHeader className="gap-0">
-                    <DialogTitle className="text-lg font-bold text-gray-800">Customize Your {itemName}</DialogTitle>
-                    <p className="text-sm text-gray-500">Choose from our premium addons below</p>
+                    <DialogTitle className="text-lg font-bold text-gray-800">
+                        {t("dialog_title", { itemName })}
+                    </DialogTitle>
+                    <p className="text-sm text-gray-500">
+                        {t("dialog_subtitle")}
+                    </p>
                 </DialogHeader>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
@@ -60,9 +65,11 @@ export function AddonSelectorDialog({ isOpen, onClose, addons, itemName, onConfi
                 </div>
 
                 <div className="pt-6 flex justify-between items-center">
-                    <Button onClick={onClose} variant="ghost">Cancel</Button>
+                    <Button onClick={onClose} variant="ghost">
+                        {t("cancel_button")}
+                    </Button>
                     <Button onClick={() => { onConfirm(selected); onClose(); }} className="bg-teal-600 hover:bg-teal-700 text-white">
-                        Add to Cart
+                        {t("confirm_button")}
                     </Button>
                 </div>
             </DialogContent>

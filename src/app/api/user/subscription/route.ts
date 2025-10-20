@@ -1,16 +1,19 @@
-import { NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server"
+import { NextResponse } from "next/server"
 
 export async function GET() {
+    const t = await getTranslations("subscription_api")
     try {
+
         const supabase = await createClient()
         const {
             data: { user },
         } = await supabase.auth.getUser()
 
         if (!user) {
-            return NextResponse.json({ error: "Authentication required" }, { status: 401 })
+            return NextResponse.json({ error: t("errors.authentication_required") }, { status: 401 })
         }
 
         const dbUser = await prisma.user.findFirst({
@@ -24,7 +27,7 @@ export async function GET() {
         })
 
         if (!dbUser) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 })
+            return NextResponse.json({ error: t("errors.user_not_found") }, { status: 404 })
         }
 
         return NextResponse.json({
@@ -35,6 +38,6 @@ export async function GET() {
         })
     } catch (error) {
         console.error("Subscription fetch error:", error)
-        return NextResponse.json({ error: "Failed to fetch subscription" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.failed_fetch_subscription") }, { status: 500 })
     }
 }

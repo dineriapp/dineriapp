@@ -3,25 +3,26 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { RestaurantStatus } from "@prisma/client"
 import { AlertCircle } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface Props {
     status: RestaurantStatus
 }
 
 export default function RestaurantStatusAlert({ status }: Props) {
-
+    const t = useTranslations("restaurant_status_alert")
     let title = ""
     let message = ""
 
     if (status === "DISABLE_BOTH") {
-        title = "Online Orders Disabled"
-        message = "This restaurant has temporarily disabled all online orders."
+        title = t("disable_both_title")
+        message = t("disable_both_message")
     } else if (status === "DISABLE_DELIVERY") {
-        title = "Delivery Unavailable"
-        message = "This restaurant is not accepting delivery orders right now. Please choose pickup instead."
+        title = t("disable_delivery_title")
+        message = t("disable_delivery_message")
     } else if (status === "DISABLE_PICKUP") {
-        title = "Pickup Unavailable"
-        message = "This restaurant is not accepting pickup orders right now. Please choose delivery instead."
+        title = t("disable_pickup_title")
+        message = t("disable_pickup_message")
     } else {
         // ALLOKAY -> show nothing
         return null

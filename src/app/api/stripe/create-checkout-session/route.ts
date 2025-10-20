@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma"
 import { stripe, } from "@/lib/stripe"
 import { STRIPE_PLANS, isValidPlan } from "@/lib/stripe-plans"
 import { createClient } from "@/supabase/clients/server"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 
@@ -10,6 +11,7 @@ const createCheckoutSchema = z.object({
 })
 
 export async function POST(request: NextRequest) {
+    const t = await getTranslations("checkout_api.errors")
     try {
         // Parse and validate request body
         const body = await request.json()
@@ -22,7 +24,7 @@ export async function POST(request: NextRequest) {
         } = await supabase.auth.getUser()
 
         if (!user) {
-            return NextResponse.json({ error: "Authentication required" }, { status: 401 })
+            return NextResponse.json({ error: t("authentication_required") }, { status: 401 })
         }
 
         // Get user from database
@@ -31,7 +33,7 @@ export async function POST(request: NextRequest) {
         })
 
         if (!dbUser) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 })
+            return NextResponse.json({ error: t("user_not_found") }, { status: 404 })
         }
 
         // Check if user already has an active subscription
@@ -47,7 +49,7 @@ export async function POST(request: NextRequest) {
             if (currentPlan === plan) {
                 return NextResponse.json(
                     {
-                        error: `You already have an active ${plan} subscription. You can manage your subscription from the settings page.`,
+                        error: t("already_active_same_plan", { plan: plan }),
                     },
                     { status: 400 },
                 )
@@ -56,7 +58,7 @@ export async function POST(request: NextRequest) {
             // If user is trying to subscribe to a different plan
             return NextResponse.json(
                 {
-                    error: `You already have an active ${currentPlan} subscription. To switch to ${plan}, please cancel your current subscription first from the settings page, then subscribe to the new plan.`,
+                    error: t("already_active_different_plan", { plan: plan, currentPlan: currentPlan }),
                 },
                 { status: 400 },
             )
@@ -65,7 +67,7 @@ export async function POST(request: NextRequest) {
         // Check if plan exists and has a price ID
         const planData = STRIPE_PLANS[plan]
         if (!planData.priceId) {
-            return NextResponse.json({ error: "Invalid plan for checkout" }, { status: 400 })
+            return NextResponse.json({ error: t("invalid_plan_for_checkout") }, { status: 400 })
         }
 
         // Create or retrieve Stripe customer
@@ -118,9 +120,9 @@ export async function POST(request: NextRequest) {
         console.error("Checkout session creation error:", error)
 
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: "Invalid request data" }, { status: 400 })
+            return NextResponse.json({ error: t("invalid_request_data") }, { status: 400 })
         }
 
-        return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 })
+        return NextResponse.json({ error: t("failed_create_checkout_session") }, { status: 500 })
     }
 }

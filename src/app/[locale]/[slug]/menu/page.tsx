@@ -1,7 +1,7 @@
-import { notFound } from "next/navigation"
 import prisma from "@/lib/prisma"
-import { MenuClient } from "./_components/menu-client"
 import { ReviewsInfo } from "@/types"
+import { notFound } from "next/navigation"
+import { MenuClient } from "./_components/menu-client"
 
 interface MenuPageProps {
     params: Promise<{ slug: string }>
@@ -34,7 +34,6 @@ async function getRestaurantWithMenu(slug: string) {
 export default async function MenuPage({ params }: MenuPageProps) {
     const { slug } = await params
     const restaurant = await getRestaurantWithMenu(slug)
-
     if (!restaurant) {
         notFound()
     }

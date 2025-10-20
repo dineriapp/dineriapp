@@ -1,7 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import ky from "./ky"
-import { toast } from "sonner"
 import type { Event } from "@prisma/client"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
+import ky from "./ky"
+import { useTranslations } from "next-intl"
 
 export function useEvents(restaurantId: string | undefined) {
     return useQuery({
@@ -18,7 +19,7 @@ export function useEvents(restaurantId: string | undefined) {
 
 export function useCreateEvent(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
-
+    const t = useTranslations("events_api_client")
     return useMutation({
         mutationFn: async (variables: {
             title: string
@@ -26,7 +27,7 @@ export function useCreateEvent(restaurantId: string | undefined) {
             date: string
             ticket_url?: string
         }) => {
-            if (!restaurantId) throw new Error("Restaurant ID is required")
+            if (!restaurantId) throw new Error(t("errors.restaurant_id_required"))
 
             const response = await ky
                 .post("/api/events", {
@@ -65,10 +66,10 @@ export function useCreateEvent(restaurantId: string | undefined) {
             if (restaurantId && context?.previousEvents) {
                 queryClient.setQueryData(["events", restaurantId], context.previousEvents)
             }
-            toast.error("Failed to add event")
+            toast.error(t("errors.failed_to_add_event"))
         },
         onSuccess: () => {
-            toast.success("Event added successfully");
+            toast.success(t("success.event_added_successfully"));
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["events", restaurantId] })
@@ -84,6 +85,7 @@ export function useCreateEvent(restaurantId: string | undefined) {
 
 export function useUpdateEvent(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("events_api_client")
 
     return useMutation({
         mutationFn: async (variables: {
@@ -135,10 +137,10 @@ export function useUpdateEvent(restaurantId: string | undefined) {
             if (restaurantId && context?.previousEvents) {
                 queryClient.setQueryData(["events", restaurantId], context.previousEvents)
             }
-            toast.error("Failed to update event")
+            toast.error(t("errors.failed_to_update_event"))
         },
         onSuccess: () => {
-            toast.success("Event updated successfully")
+            toast.success(t("success.event_updated_successfully"))
         },
         onSettled: () => {
             if (restaurantId) {
@@ -150,6 +152,7 @@ export function useUpdateEvent(restaurantId: string | undefined) {
 
 export function useDeleteEvent(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("events_api_client")
 
     return useMutation({
         mutationFn: async (id: string) => {
@@ -174,10 +177,10 @@ export function useDeleteEvent(restaurantId: string | undefined) {
             if (restaurantId && context?.previousEvents) {
                 queryClient.setQueryData(["events", restaurantId], context.previousEvents)
             }
-            toast.error("Failed to delete event")
+            toast.error(t("errors.failed_to_delete_event"))
         },
         onSuccess: () => {
-            toast.success("Event deleted successfully")
+            toast.success(t("success.event_deleted_successfully"))
         },
         onSettled: () => {
             if (restaurantId) {
@@ -189,6 +192,7 @@ export function useDeleteEvent(restaurantId: string | undefined) {
 
 export function useReorderEvent(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("events_api_client")
 
     return useMutation({
         mutationFn: async ({ eventId, direction }: { eventId: string; direction: "up" | "down" }) => {
@@ -227,7 +231,7 @@ export function useReorderEvent(restaurantId: string | undefined) {
             if (restaurantId && context?.previousEvents) {
                 queryClient.setQueryData(["events", restaurantId], context.previousEvents)
             }
-            toast.error("Failed to reorder event")
+            toast.error(t("errors.failed_to_reorder_event"))
         },
         onSettled: () => {
             if (restaurantId) {

@@ -1,8 +1,11 @@
-import { type NextRequest, NextResponse } from "next/server"
-import prisma from "@/lib/prisma"
-import { createClient } from "@/supabase/clients/server"
+import prisma from "@/lib/prisma";
+import { createClient } from "@/supabase/clients/server";
+import { getTranslations } from "next-intl/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurants_apis.errors");
+
     try {
         const supabase = await createClient()
         const { id } = await params
@@ -12,7 +15,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         } = await supabase.auth.getUser()
 
         if (authError || !user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
         const restaurantId = id
@@ -26,7 +29,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         })
 
         if (!restaurant) {
-            return NextResponse.json({ error: "Restaurant not found" }, { status: 404 })
+            return NextResponse.json({ error: t("restaurants_not_found") }, { status: 404 })
         }
 
         // Get all links for this restaurant
@@ -45,6 +48,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         })
     } catch (error) {
         console.error("Error fetching restaurant links:", error)
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        return NextResponse.json({ error: t("internal_server_error") }, { status: 500 })
     }
 }

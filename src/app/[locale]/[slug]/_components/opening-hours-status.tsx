@@ -4,6 +4,7 @@ import { Clock } from "lucide-react"
 import { useEffect, useState } from "react"
 import { getRestaurantStatusWithClientView } from "@/hooks/isRestaurantOpenNow"
 import { OpeningHoursData } from "@/types"
+import { useTranslations } from "next-intl"
 
 
 interface OpeningHoursStatusProps {
@@ -25,6 +26,7 @@ export function OpeningHoursStatus({
     pop = false,
     onClick,
 }: OpeningHoursStatusProps) {
+    const t = useTranslations("opening_hours_status")
     const [status, setStatus] = useState<ReturnType<typeof getRestaurantStatusWithClientView> | null>(null)
     useEffect(() => {
         const clientTz = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -72,17 +74,21 @@ export function OpeningHoursStatus({
     const getStatusBgColor = () => `${getStatusColor()}20`
 
     const statusLabel = {
-        open: "Open",
-        closed: "Closed",
-        "closing-soon": "Closing Soon",
-        "opening-soon": "Opening Soon",
+        open: t("status.open"),
+        closed: t("status.closed"),
+        "closing-soon": t("status.closing_soon"),
+        "opening-soon": t("status.opening_soon"),
     }[statusType]
 
     const nextChange = status.isOpen
-        ? `Until ${status.closingTime}`
+        ? t("until", { time: status.closingTime })
         : status.timeUntilOpen
-            ? `Opens in ${status.timeUntilOpen}${status.nextOpeningDay ? ` (${status.nextOpeningDay})` : ""}`
-            : "Closed"
+            ?
+            status.nextOpeningDay ?
+                t("opens_in_with_day", { time: status.timeUntilOpen, day: status.nextOpeningDay })
+                :
+                t("opens_in", { time: status.timeUntilOpen })
+            : t("closed_fallback")
 
     return pop ? (
         <div className="flex items-center justify-center gap-2">

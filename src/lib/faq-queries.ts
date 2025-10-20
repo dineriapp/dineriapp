@@ -2,6 +2,7 @@ import type { Faq, FaqCategory } from "@prisma/client"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import ky from "./ky"
+import { useTranslations } from "next-intl"
 
 // Use Prisma types with relations
 export type FaqCategoryWithFaqs = FaqCategory & {
@@ -25,10 +26,10 @@ export function useFaqCategories(restaurantId: string | undefined) {
 
 export function useCreateFaqCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
-
+    const t = useTranslations("faq_api_client")
     return useMutation({
         mutationFn: async (data: { name: string; description?: string }) => {
-            if (!restaurantId) throw new Error("Restaurant ID is required")
+            if (!restaurantId) throw new Error(t("errors.restaurant_id_required"))
 
             const response = await ky
                 .post("/api/faq/categories", {
@@ -68,10 +69,10 @@ export function useCreateFaqCategory(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["faq-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to add FAQ category")
+            toast.error(t("errors.failed_to_add_faq_category"))
         },
         onSuccess: () => {
-            toast.success("FAQ category added successfully")
+            toast.success(t("success.faq_category_added_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
@@ -87,6 +88,7 @@ export function useCreateFaqCategory(restaurantId: string | undefined) {
 
 export function useUpdateFaqCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("faq_api_client")
 
     return useMutation({
         mutationFn: async ({ id, ...data }: { id: string; name: string; description?: string }) => {
@@ -116,10 +118,10 @@ export function useUpdateFaqCategory(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["faq-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to update FAQ category")
+            toast.error(t("errors.failed_to_update_faq_category"))
         },
         onSuccess: () => {
-            toast.success("FAQ category updated successfully")
+            toast.success(t("success.faq_category_updated_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
@@ -135,6 +137,7 @@ export function useUpdateFaqCategory(restaurantId: string | undefined) {
 
 export function useDeleteFaqCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("faq_api_client")
 
     return useMutation({
         mutationFn: async (id: string) => {
@@ -159,10 +162,10 @@ export function useDeleteFaqCategory(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["faq-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to delete FAQ category")
+            toast.error(t("errors.failed_to_delete_faq_category"))
         },
         onSuccess: () => {
-            toast.success("FAQ category deleted successfully")
+            toast.success(t("success.faq_category_deleted_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
@@ -178,6 +181,7 @@ export function useDeleteFaqCategory(restaurantId: string | undefined) {
 
 export function useReorderFaqCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("faq_api_client")
 
     return useMutation({
         mutationFn: async ({ categoryId, direction }: { categoryId: string; direction: "up" | "down" }) => {
@@ -216,7 +220,7 @@ export function useReorderFaqCategory(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["faq-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to reorder FAQ category")
+            toast.error(t("errors.failed_to_reorder_faq_category"))
         },
         onSuccess: () => {
             // Force refetch to ensure fresh data
@@ -234,6 +238,7 @@ export function useReorderFaqCategory(restaurantId: string | undefined) {
 
 export function useCreateFaq(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("faq_api_client")
 
     return useMutation({
         mutationFn: async (data: {
@@ -295,10 +300,10 @@ export function useCreateFaq(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["faq-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to add FAQ")
+            toast.error(t("errors.failed_to_add_faq"))
         },
         onSuccess: () => {
-            toast.success("FAQ added successfully")
+            toast.success(t("success.faq_added_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
@@ -314,6 +319,7 @@ export function useCreateFaq(restaurantId: string | undefined) {
 
 export function useUpdateFaq(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("faq_api_client")
 
     return useMutation({
         mutationFn: async ({
@@ -364,10 +370,10 @@ export function useUpdateFaq(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["faq-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to update FAQ")
+            toast.error(t("errors.failed_to_update_faq"))
         },
         onSuccess: () => {
-            toast.success("FAQ updated successfully")
+            toast.success(t("success.faq_updated_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
@@ -383,6 +389,7 @@ export function useUpdateFaq(restaurantId: string | undefined) {
 
 export function useDeleteFaq(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("faq_api_client")
 
     return useMutation({
         mutationFn: async (id: string) => {
@@ -411,10 +418,10 @@ export function useDeleteFaq(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["faq-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to delete FAQ")
+            toast.error(t("errors.failed_to_delete_faq"))
         },
         onSuccess: () => {
-            toast.success("FAQ deleted successfully")
+            toast.success(t("success.faq_deleted_successfully"))
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
@@ -430,6 +437,7 @@ export function useDeleteFaq(restaurantId: string | undefined) {
 
 export function useReorderFaq(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
+    const t = useTranslations("faq_api_client")
 
     return useMutation({
         mutationFn: async ({ faqId, direction }: { faqId: string; direction: "up" | "down" }) => {
@@ -473,7 +481,7 @@ export function useReorderFaq(restaurantId: string | undefined) {
             if (restaurantId && context?.previousCategories) {
                 queryClient.setQueryData(["faq-categories", restaurantId], context.previousCategories)
             }
-            toast.error("Failed to reorder FAQ")
+            toast.error(t("errors.failed_to_reorder_faq"))
         },
         onSuccess: () => {
             // Force refetch to ensure fresh data

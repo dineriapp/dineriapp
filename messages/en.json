@@ -2901,6 +2901,9 @@
       "page_url_taken": "This page URL is already taken. Please choose a different one.",
       "failed_update_restaurant": "Failed to update restaurant",
       "failed_fetch_restaurant": "Failed to fetch restaurant",
+      "failed_fetch_orders": "Failed to fetch orders",
+      "failed_export_orders": "Failed to export orders",
+      "failed_fetch_orders_stats": "Failed to fetch order statistics",
       "internal_server_error": "Internal server error",
       "invalid_email": "Please enter a valid email address",
       "delivery_fee_min": "Delivery fee cannot be negative",
@@ -2920,27 +2923,431 @@
       "tax_update_success": "Tax percentage updated successfully",
       "restaurant_styles_update_success": "Restaurant styles updated successfully",
       "restaurant_update_success": "Restaurant updated successfully"
+    }
+  },
+  "reviews_api": {
+    "errors": {
+      "missing_place_id": "Missing placeId parameter",
+      "invalid_google_api_response": "Invalid response from Google API",
+      "server_error": "Server error"
+    }
+  },
+  "stats_api": {
+    "errors": {
+      "unauthorized": "Unauthorized",
+      "missing_restaurant_id": "Restaurant ID is required",
+      "failed_fetch_stats": "Failed to fetch stats"
+    }
+  },
+  "subscription_api": {
+    "errors": {
+      "authentication_required": "Authentication required",
+      "user_not_found": "User not found",
+      "failed_fetch_subscription": "Failed to fetch subscription"
+    }
+  },
+  "stripe_webhook_api": {
+    "errors": {
+      "no_signature_provided": "No signature provided",
+      "webhook_secret_not_configured": "Webhook secret not configured",
+      "invalid_signature": "Invalid signature",
+      "webhook_handler_failed": "Webhook handler failed"
+    }
+  },
+  "customer_portal_api": {
+    "errors": {
+      "authentication_required": "Authentication required",
+      "no_subscription_found": "No subscription found",
+      "failed_create_portal_session": "Failed to create portal session"
+    }
+  },
+  "checkout_api": {
+    "errors": {
+      "authentication_required": "Authentication required",
+      "user_not_found": "User not found",
+      "already_active_same_plan": "You already have an active { plan } subscription. You can manage your subscription from the settings page.",
+      "already_active_different_plan": "You already have an active { currentPlan } subscription. To switch to { plan }, please cancel your current subscription first from the settings page, then subscribe to the new plan.",
+      "invalid_plan_for_checkout": "Invalid plan for checkout",
+      "invalid_request_data": "Invalid request data",
+      "failed_create_checkout_session": "Failed to create checkout session"
+    }
+  },
+  "restaurant_webhook_api": {
+    "errors": {
+      "restaurant_id_missing": "Restaurant ID missing in URL",
+      "webhook_secret_not_found": "Webhook secret not found for restaurant",
+      "no_signature": "No signature",
+      "invalid_signature": "Invalid signature",
+      "webhook_handler_failed": "Webhook handler failed"
     },
-    "schema": {
-      "update_stripe": {
-        "public_key_required": "Public key is required",
-        "invalid_public_key_format": "Invalid public key format",
-        "secret_key_required": "Secret key is required",
-        "invalid_secret_key_format": "Invalid secret key format"
-      },
-      "update_tax": {
-        "tax_negative": "Tax percentage cannot be negative",
-        "tax_exceed_100": "Tax percentage cannot exceed 100"
-      },
-      "update_restaurant": {
-        "name_required": "Restaurant name is required",
-        "name_max": "Restaurant name must be less than 100 characters",
-        "slug_min": "Slug must be at least 3 characters",
-        "slug_max": "Slug must be less than 50 characters",
-        "slug_pattern": "Slug can only contain lowercase letters, numbers, and hyphens",
-        "bio_max": "Bio must be less than 200 characters",
-        "logo_url_invalid": "Logo URL must be a valid URL"
-      }
+    "info": {
+      "not_a_payment_event": "Not a payment event"
+    }
+  },
+  "events_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant ID is required",
+      "failed_to_add_event": "Failed to add event",
+      "failed_to_update_event": "Failed to update event",
+      "failed_to_delete_event": "Failed to delete event",
+      "failed_to_reorder_event": "Failed to reorder event"
+    },
+    "success": {
+      "event_added_successfully": "Event added successfully",
+      "event_updated_successfully": "Event updated successfully",
+      "event_deleted_successfully": "Event deleted successfully"
+    }
+  },
+  "faq_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant ID is required",
+      "failed_to_add_faq_category": "Failed to add FAQ category",
+      "failed_to_update_faq_category": "Failed to update FAQ category",
+      "failed_to_delete_faq_category": "Failed to delete FAQ category",
+      "failed_to_reorder_faq_category": "Failed to reorder FAQ category",
+      "failed_to_add_faq": "Failed to add FAQ",
+      "failed_to_update_faq": "Failed to update FAQ",
+      "failed_to_delete_faq": "Failed to delete FAQ",
+      "failed_to_reorder_faq": "Failed to reorder FAQ"
+    },
+    "success": {
+      "faq_category_added_successfully": "FAQ category added successfully",
+      "faq_category_updated_successfully": "FAQ category updated successfully",
+      "faq_category_deleted_successfully": "FAQ category deleted successfully",
+      "faq_added_successfully": "FAQ added successfully",
+      "faq_updated_successfully": "FAQ updated successfully",
+      "faq_deleted_successfully": "FAQ deleted successfully"
+    }
+  },
+  "links_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant ID is required",
+      "failed_to_add_link": "Failed to add link",
+      "failed_to_update_link": "Failed to update link",
+      "failed_to_delete_link": "Failed to delete link",
+      "failed_to_delete_links": "Failed to delete links",
+      "failed_to_reorder_link": "Failed to reorder link"
+    },
+    "success": {
+      "link_added_successfully": "Link added successfully",
+      "link_updated_successfully": "Link updated successfully",
+      "link_deleted_successfully": "Link deleted successfully",
+      "links_deleted_successfully": "Links deleted successfully"
+    }
+  },
+  "menu_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant ID is required",
+      "failed_to_add_category": "Failed to add category",
+      "failed_to_update_category": "Failed to update category",
+      "failed_to_delete_category": "Failed to delete category",
+      "failed_to_reorder_category": "Failed to reorder category",
+      "failed_to_add_menu_item": "Failed to add menu item",
+      "failed_to_update_menu_item": "Failed to update menu item",
+      "failed_to_delete_menu_item": "Failed to delete menu item",
+      "failed_to_reorder_menu_item": "Failed to reorder menu item"
+    },
+    "success": {
+      "category_added_successfully": "Category added successfully",
+      "category_updated_successfully": "Category updated successfully",
+      "category_deleted_successfully": "Category deleted successfully",
+      "menu_item_added_successfully": "Menu item added successfully",
+      "menu_item_updated_successfully": "Menu item updated successfully",
+      "menu_item_deleted_successfully": "Menu item deleted successfully"
+    }
+  },
+  "orders_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant ID is required",
+      "failed_to_fetch_orders": "Failed to fetch orders",
+      "failed_to_fetch_order_stats": "Failed to fetch order stats",
+      "failed_to_update_order_status": "Failed to update order status",
+      "failed_to_refresh_orders": "Failed to refresh orders",
+      "failed_to_export_orders": "Failed to export orders"
+    },
+    "success": {
+      "order_status_updated": "Order marked as { status }",
+      "orders_refreshed": "Orders refreshed",
+      "orders_exported_successfully": "Orders exported successfully"
+    }
+  },
+  "qr_code_api_client": {
+    "errors": {
+      "restaurant_id_required": "Restaurant ID is required",
+      "failed_to_fetch_qr_codes": "Failed to fetch QR codes",
+      "failed_to_fetch_qr_code": "Failed to fetch QR code",
+      "failed_to_fetch_qr_code_stats": "Failed to fetch QR code stats",
+      "failed_to_create_qr_code": "Failed to create QR code",
+      "failed_to_update_qr_code": "Failed to update QR code",
+      "failed_to_delete_qr_code": "Failed to delete QR code"
+    },
+    "success": {
+      "qr_code_created_successfully": "QR code created successfully",
+      "qr_code_updated_successfully": "QR code updated successfully",
+      "qr_code_deleted_successfully": "QR code deleted successfully"
+    }
+  },
+  "restaurant_not_found_page": {
+    "title": "Restaurant Not Found",
+    "description": "We couldn't find a restaurant at this address.",
+    "return_home": "Return to Home"
+  },
+  "opening_hours_status": {
+    "status": {
+      "open": "Open",
+      "closed": "Closed",
+      "closing_soon": "Closing Soon",
+      "opening_soon": "Opening Soon"
+    },
+    "until": "Until { time }",
+    "opens_in": "Opens in { time }",
+    "opens_in_with_day": "Opens in { time } ({ day })",
+    "closed_fallback": "Closed"
+  },
+  "slug_page": {
+    "reserve_table": "Reserve Table – €10",
+    "menu": "Menu",
+    "events": "Events",
+    "faq": "FAQ",
+    "no_links_added": "No links added yet",
+    "powered_by": "Powered by",
+    "welcome_popup": {
+      "welcome_message": "Welcome to { restaurantName }!",
+      "default_message": "Welcome! We're excited to have you visit us.",
+      "event_today": "Today",
+      "event_tomorrow": "Tomorrow",
+      "event_in_days": "In { days } days",
+      "event_ticket_button": "Get Event Tickets",
+      "explore_button": "Explore",
+      "dont_show_again": "Don't show this again",
+      "reviews_singular": "{ count } review",
+      "reviews_plural": "{ count } reviews"
+    }
+  },
+  "opening_hours_dialog": {
+    "title": "Opening Hours",
+    "open_now": "Open Now",
+    "closed_now": "Closed Now",
+    "operating_hours_text": "{ restaurantName } operating hours",
+    "timezone_label": "Timezone :- { restaurentTimeZone }",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "today_label": "(Today)",
+    "closed_label": "Closed",
+    "hours_notice": "Hours may vary on holidays. Please call ahead to confirm."
+  },
+  "faq_dialog": {
+    "title": "Frequently Asked Questions",
+    "description": "Find answers to common questions",
+    "no_faqs_title": "No FAQs Available",
+    "no_faqs_description": "Check back later for frequently asked questions",
+    "search_placeholder": "Search FAQs...",
+    "popular_questions": "Popular Questions",
+    "no_results_title": "No results found",
+    "no_results_description": "Try adjusting your search"
+  },
+  "events_dialog": {
+    "title": "Upcoming Events",
+    "description_singular": "{ count } upcoming event",
+    "description_plural": "{ count } upcoming events",
+    "get_tickets_button": "Get Tickets"
+  },
+  "menu_dialog": {
+    "title": "Menu",
+    "description": "Browse our delicious menu items organized by category",
+    "all_items_tab": "All Items",
+    "view_all_button": "View All",
+    "view_full_menu_button": "View Full Menu & Order Online",
+    "category_items_count_singular": "{ count } item",
+    "category_items_count_plural": "{ count } items",
+    "no_results_title": "No results found",
+    "no_results_message": "We couldn't find any items matching \"{ searchQuery }\".",
+    "no_items_all_title": "No menu items available",
+    "no_items_all_message": "This restaurant hasn't added any menu items yet.",
+    "no_items_category_title": "No items in this category",
+    "no_items_category_message": "This category doesn't have any quick menu items yet.",
+    "menu_items": {
+      "section_title_all": "All Items",
+      "section_title_category": "{ categoryName }",
+      "items_available_singular": "{ count } item available",
+      "items_available_plural": "{ count } items available"
+    },
+    "menu_item_card": {
+      "allergens_more": "+{ count } more"
+    }
+  },
+  "restaurant_status_alert": {
+    "disable_both_title": "Online Orders Disabled",
+    "disable_both_message": "This restaurant has temporarily disabled all online orders.",
+    "disable_delivery_title": "Delivery Unavailable",
+    "disable_delivery_message": "This restaurant is not accepting delivery orders right now. Please choose pickup instead.",
+    "disable_pickup_title": "Pickup Unavailable",
+    "disable_pickup_message": "This restaurant is not accepting pickup orders right now. Please choose delivery instead."
+  },
+  "menu_page": {
+    "placeholder": "Search in { restaurantName }..."
+  },
+  "restaurant_customizer": {
+    "button_customize": "Customise",
+    "title_customize_styles": "Customize Styles",
+    "background_image_url_label": "Background Image URL",
+    "background_image_preview": "Image Preview  :-",
+    "uploading": "Uploading...",
+    "header_section_title": "Header",
+    "header_background": "Header Background",
+    "header_text": "Header Text",
+    "header_cart_button_bg": "Cart Button Background",
+    "header_cart_button_border": "Cart Button Border",
+    "header_cart_button_count_bg": "Cart Button Count Badge Background",
+    "header_cart_button_count_border": "Cart Button Count Badge Border",
+    "overall_section_title": "Overall",
+    "overall_text_color": "Text Color",
+    "overall_bg_color": "Background Color",
+    "overall_info_icons_color": "Info Icons Color",
+    "category_tabs_section_title": "Category Tabs",
+    "tabs_active_bg": "Active Tab Background",
+    "tabs_default_bg": "Default Tab Background",
+    "tabs_active_text": "Active Tab Text",
+    "tabs_default_text": "Default Tab Text",
+    "cards_section_title": "Cards",
+    "cards_bg": "Card Background",
+    "cards_text": "Card Text",
+    "cards_badge_bg": "Badge Background",
+    "cards_badge_text": "Badge Text",
+    "button_save_changes": "Save Changes",
+    "button_saving": "Saving...",
+    "toast_success": "Styles saved successfully!",
+    "toast_error": "Failed to save styles"
+  },
+  "category_buttons": {
+    "section_title": "Menu Categories",
+    "section_subtitle": "Browse our menu by category",
+    "all_items": "All Items",
+    "showing_label": "Showing:",
+    "items_count": "items"
+  },
+
+  "menu_items_menu_page": {
+    "no_results_title": "No results found",
+    "no_results_message": "We couldn't find any items matching \"{ searchQuery }\".",
+    "no_items_all_title": "No menu items available",
+    "no_items_all_message": "This restaurant hasn't added any menu items yet.",
+    "no_items_category_title": "No items in this category",
+    "no_items_category_message": "This category doesn't have any menu items yet.",
+    "section_title_all": "All Items",
+    "section_title_category": "{ categoryName }",
+    "items_available_singular": "{ count } item available",
+    "items_available_plural": "{ count } items available"
+  },
+  "menu_item_card_menu_page": {
+    "add_to_cart_success_title": "Added to cart",
+    "add_to_cart_success_description": "Item and selected addons have been added. You cannot change addons later.",
+    "restaurant_closed_title": "Restaurant is closed",
+    "restaurant_closed_description": "Please check back later.",
+    "restaurant_closed_next_opening": "Opens { day } at { time }",
+    "allergens_more": "+{ count } more"
+  },
+  "addon_selector_dialog_menu_page": {
+    "dialog_title": "Customize Your { itemName }",
+    "dialog_subtitle": "Choose from our premium addons below",
+    "addon_price_label": "€{ price }",
+    "cancel_button": "Cancel",
+    "confirm_button": "Add to Cart"
+  },
+  "cart_drawer": {
+    "header": {
+      "checkout": "Checkout",
+      "your_order": "Your Order",
+      "from_label": "From :-",
+      "clear_all": "Clear All"
+    },
+    "empty_cart": {
+      "title": "Your cart is empty",
+      "subtitle": "Add some delicious items from the menu!",
+      "continue_shopping_button": "Continue Shopping"
+    },
+    "guest_order_notice": {
+      "text": "You're placing a guest order. You'll receive order updates via email and can track your order using the order number."
+    },
+    "order_summary": {
+      "title": "Order Summary",
+      "items_singular": "{ count } item",
+      "items_plural": "{ count } items",
+      "tax_label": "Tax ({ taxPercentage }%)",
+      "delivery_fee_label": "Delivery Fee",
+      "total_label": "Total"
+    },
+    "checkout_form": {
+      "contact_information_label": "Contact Information *",
+      "full_name_label": "Full Name *",
+      "full_name_placeholder": "Your full name",
+      "email_label": "Email Address *",
+      "email_placeholder": "your@email.com",
+      "phone_label": "Phone Number *",
+      "phone_placeholder": "(555) 123-4567",
+      "order_type_label": "Order Type *",
+      "pickup_label": "Pickup",
+      "delivery_label": "Delivery (+€{ deliveryFee })",
+      "delivery_address_label": "Delivery Address",
+      "delivery_address_placeholder": "Enter your delivery address",
+      "delivery_notes_label": "Delivery Notes (Optional)",
+      "delivery_notes_placeholder": "Apartment number, gate code, special delivery instructions...",
+      "special_instructions_label": "Special Instructions (Optional)",
+      "special_instructions_placeholder": "Any special requests, dietary restrictions, or cooking preferences...",
+      "preferred_time_label": "Preferred delivery or pickup time (Optional)",
+      "note": "This is a preferred time and is not final. We’ll do our best to deliver around this time."
+    },
+    "cart_footer": {
+      "subtotal_label": "Subtotal",
+      "tax_label": "Tax ({ taxPercentage }%)",
+      "total_label": "Total",
+      "proceed_to_checkout_button": "Proceed to Checkout",
+      "back_to_cart_button": "Back to Cart",
+      "pay_button": "Pay €{ total }",
+      "processing_button": "Processing..."
+    },
+    "buttons": {
+      "proceed_checkout": "Proceed to Checkout",
+      "back_cart": "Back to Cart",
+      "pay_amount": "Pay €{ total }",
+      "processing": "Processing...",
+      "continue_shopping": "Continue Shopping",
+      "remove_item": "Remove"
+    },
+    "toasts": {
+      "cart_empty": "Your cart is empty",
+      "validation_error": "Please fill in all required fields correctly",
+      "restaurant_closed_title": "The restaurant is currently closed.",
+      "restaurant_closed_description_with_day": "Opens on { nextOpeningDay } at { openingTime }",
+      "restaurant_closed_description_with_time": "Opens at { openingTime }",
+      "restaurant_closed_description_fallback": "Please check opening hours.",
+      "restaurant_disabled_title": "This restaurant has currently disabled online orders.",
+      "delivery_disabled": "Delivery is currently disabled.",
+      "pickup_disabled": "Pickup is currently disabled.",
+      "restaurant_unavailable_title": "Restaurant Unavailable",
+      "restaurant_unavailable_description": "This restaurant is not currently able to handle online orders.",
+      "checkout_failed_generic": "Failed to proceed to checkout"
+    },
+    "address_messages": {
+      "autocomplete_unavailable": "Address autocomplete unavailable. You can still enter your address manually."
+    },
+    "errors": {
+      "name_required": "Name is required",
+      "email_required": "Email is required",
+      "email_invalid": "Please enter a valid email address",
+      "phone_required": "Phone number is required",
+      "phone_invalid": "Please enter a valid phone number",
+      "address_incomplete": "Please enter a complete delivery address",
+      "address_invalid": "The entered address is not valid.",
+      "generic_error": "Something went wrong. Please try again.",
+      "api_missing_keys": "Restaurant or payment configuration is missing.",
+      "checkout_no_url": "No checkout URL received",
+      "failed_checkout_session": "Failed to create checkout session"
     }
   }
 }

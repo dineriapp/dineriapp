@@ -6,6 +6,7 @@ import { StylesDataType } from "@/types"
 import type { MenuCategory, MenuItem, Restaurant } from "@prisma/client"
 import "keen-slider/keen-slider.min.css"
 import { useKeenSlider } from "keen-slider/react"
+import { useTranslations } from "next-intl"
 
 type CategoryWithItems = MenuCategory & {
     items: MenuItem[]
@@ -21,7 +22,7 @@ interface CategoryButtonsProps {
 
 export function CategoryButtons({ categories, selectedCategory, stylesData, onCategorySelect }: CategoryButtonsProps) {
     const totalItems = categories.reduce((sum, category) => sum + category.items.length, 0)
-
+    const t = useTranslations("category_buttons")
     const [sliderRef] = useKeenSlider<HTMLDivElement>({
         mode: "free",
         slides: {
@@ -36,10 +37,10 @@ export function CategoryButtons({ categories, selectedCategory, stylesData, onCa
                 {/* Section Header */}
                 <div className="mb-5">
                     <h2 className="text-xl font-semibold" style={{ color: stylesData.textColor }}>
-                        Menu Categories
+                        {t("section_title")}
                     </h2>
                     <p className="text-sm opacity-80" style={{ color: stylesData.textColor }}>
-                        Browse our menu by category
+                        {t("section_subtitle")}
                     </p>
                 </div>
 
@@ -62,7 +63,9 @@ export function CategoryButtons({ categories, selectedCategory, stylesData, onCa
                                 )}
                             >
                                 <span className="flex items-center gap-2">
-                                    <span>All Items</span>
+                                    <span>
+                                        {t("all_items")}
+                                    </span>
                                     <span
                                         className="px-2 py-0.5 rounded-full text-xs font-semibold"
                                         style={{
@@ -116,12 +119,14 @@ export function CategoryButtons({ categories, selectedCategory, stylesData, onCa
                 {selectedCategory !== "all" && (
                     <div className="mt-3">
                         <div className="flex items-center gap-2 text-sm">
-                            <span style={{ color: stylesData.textColor }}>Showing:</span>
+                            <span style={{ color: stylesData.textColor }}>
+                                {t("showing_label")}
+                            </span>
                             <span className="font-medium" style={{ color: stylesData.textColor }}>
                                 {categories.find((cat) => cat.id === selectedCategory)?.name}
                             </span>
                             <span className="opacity-70" style={{ color: stylesData.textColor }}>
-                                ({categories.find((cat) => cat.id === selectedCategory)?.items.length} items)
+                                ({categories.find((cat) => cat.id === selectedCategory)?.items.length} {t("items_count")})
                             </span>
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 import { Order, OrderItem } from "@prisma/client"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 
 export type OrderWithItems = Order & {
@@ -22,16 +23,17 @@ interface OrderStats {
 
 // Orders queries
 export function useOrders(restaurantId?: string) {
+    const t = useTranslations("orders_api_client")
     return useQuery({
         queryKey: ["orders", restaurantId],
         queryFn: async () => {
-            if (!restaurantId) throw new Error("Restaurant ID is required")
+            if (!restaurantId) throw new Error(t("errors.restaurant_id_required"))
 
             const response = await fetch(`/api/restaurants/${restaurantId}/orders`)
             const data = await response.json()
 
             if (!data.success) {
-                throw new Error(data.error || "Failed to fetch orders")
+                throw new Error(data.error || t("errors.failed_to_fetch_orders"))
             }
 
             return data.data as OrderWithItems[]
@@ -43,16 +45,18 @@ export function useOrders(restaurantId?: string) {
 }
 
 export function useOrderStats(restaurantId?: string) {
+    const t = useTranslations("orders_api_client")
+
     return useQuery({
         queryKey: ["order-stats", restaurantId],
         queryFn: async () => {
-            if (!restaurantId) throw new Error("Restaurant ID is required")
+            if (!restaurantId) throw new Error(t("errors.restaurant_id_required"))
 
             const response = await fetch(`/api/restaurants/${restaurantId}/orders/stats`)
             const data = await response.json()
 
             if (!data.success) {
-                throw new Error(data.error || "Failed to fetch order stats")
+                throw new Error(data.error || t("errors.failed_to_fetch_order_stats"))
             }
 
             return data.data as OrderStats
@@ -66,6 +70,7 @@ export function useOrderStats(restaurantId?: string) {
 // Order mutations
 export function useUpdateOrderStatus(restaurantId?: string) {
     const queryClient = useQueryClient()
+    const t = useTranslations("orders_api_client")
 
     return useMutation({
         mutationFn: async ({ orderId, status }: { orderId: string; status: string }) => {
@@ -80,7 +85,7 @@ export function useUpdateOrderStatus(restaurantId?: string) {
             const data = await response.json()
 
             if (!data.success) {
-                throw new Error(data.error || "Failed to update order status")
+                throw new Error(data.error || t("errors.failed_to_update_order_status"))
             }
 
             return data.data
@@ -110,7 +115,7 @@ export function useUpdateOrderStatus(restaurantId?: string) {
             toast.error(error.message)
         },
         onSuccess: (data, { status }) => {
-            toast.success(`Order marked as ${status}`)
+            toast.success(t("success.order_status_updated", { status: status }))
             // Invalidate and refetch both orders and stats
             queryClient.invalidateQueries({ queryKey: ["orders", restaurantId] })
             queryClient.invalidateQueries({ queryKey: ["order-stats", restaurantId] })
@@ -120,6 +125,7 @@ export function useUpdateOrderStatus(restaurantId?: string) {
 
 export function useRefreshOrders(restaurantId?: string) {
     const queryClient = useQueryClient()
+    const t = useTranslations("orders_api_client")
 
     return useMutation({
         mutationFn: async () => {
@@ -128,16 +134,18 @@ export function useRefreshOrders(restaurantId?: string) {
             await queryClient.invalidateQueries({ queryKey: ["order-stats", restaurantId] })
         },
         onSuccess: () => {
-            toast.success("Orders refreshed")
+            toast.success(t("success.orders_refreshed"))
         },
         onError: () => {
-            toast.error("Failed to refresh orders")
+            toast.error(t("errors.failed_to_refresh_orders"))
         },
     })
 }
 
 // Export order data
 export function useExportOrders(restaurantId?: string) {
+    const t = useTranslations("orders_api_client")
+
     return useMutation({
         mutationFn: async (filters?: {
             status?: string
@@ -157,7 +165,7 @@ export function useExportOrders(restaurantId?: string) {
             const response = await fetch(`/api/restaurants/${restaurantId}/orders/export?${params}`)
 
             if (!response.ok) {
-                throw new Error("Failed to export orders")
+                throw new Error(t("errors.failed_to_export_orders"))
             }
 
             // Create download link
@@ -172,7 +180,7 @@ export function useExportOrders(restaurantId?: string) {
             document.body.removeChild(a)
         },
         onSuccess: () => {
-            toast.success("Orders exported successfully")
+            toast.success(t("success.orders_exported_successfully"))
         },
         onError: (error: Error) => {
             toast.error(error.message)

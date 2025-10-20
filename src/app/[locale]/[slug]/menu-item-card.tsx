@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { MenuItem, Restaurant } from "@prisma/client";
 import { isAfter, isBefore, parse } from "date-fns";
+import { useTranslations } from "next-intl";
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -19,6 +20,7 @@ type OpeningHours = {
 };
 
 export function isRestaurantOpenNow(openingHours: OpeningHours): boolean {
+
   const daysOfWeek = [
     "sunday",
     "monday",
@@ -46,9 +48,9 @@ export function MenuItemCard({
   item,
   restaurant,
 }: MenuItemCardProps) {
+  const m = useTranslations("menu_dialog.menu_item_card")
 
   return (
-
     <Card
       style={{
         backgroundColor: restaurant.cardsBG,
@@ -119,7 +121,7 @@ export function MenuItemCard({
                   variant="secondary"
                   className="text-xs"
                 >
-                  +{item.allergens.length - 3} more
+                  {m("allergens_more", { count: item.allergens.length - 3 })}
                 </Badge>
               )}
             </div>

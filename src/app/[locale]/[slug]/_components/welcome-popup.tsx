@@ -6,6 +6,7 @@ import { Calendar, ExternalLink, MapPin, Phone, Star, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { OpeningHoursStatus } from "./opening-hours-status"
+import { useTranslations } from "next-intl"
 
 interface WelcomePopupProps {
     restaurant: RestaurantWithRelations
@@ -25,7 +26,7 @@ interface WelcomePopupProps {
 
 export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, actionsShow = true, RatingInfo, upcomingEvents, welcomePopupShowInfo }: WelcomePopupProps) {
     const [currentEventIndex, setCurrentEventIndex] = useState(0)
-
+    const t = useTranslations("slug_page.welcome_popup")
     // Auto-rotate through events
     useEffect(() => {
         if (eventsShow) {
@@ -87,11 +88,11 @@ export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, a
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
         if (diffDays === 0) {
-            return "Today"
+            return t("event_today")
         } else if (diffDays === 1) {
-            return "Tomorrow"
+            return t("event_tomorrow")
         } else if (diffDays <= 7) {
-            return `In ${diffDays} days`
+            return t("event_in_days", { days: diffDays })
         } else {
             return eventDate.toLocaleDateString("en-US", {
                 month: "short",
@@ -163,7 +164,7 @@ export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, a
                                 className="mb-6"
                             >
                                 <h2 className="mb-2 text-2xl font-bold" style={{ color: textColor }}>
-                                    Welcome to {restaurant.name}!
+                                    {t("welcome_message", { restaurantName: restaurant.name })}
                                 </h2>
 
                                 {/* Event Announcement or Welcome Message */}
@@ -208,7 +209,7 @@ export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, a
                                     <p className="text-sm leading-relaxed opacity-90" style={{ color: textColor }}>
                                         {restaurant.welcome_popup_message ||
                                             restaurant.bio ||
-                                            "Welcome! We're excited to have you visit us."}
+                                            t("default_message")}
                                     </p>
                                 )}
                             </motion.div>
@@ -233,7 +234,14 @@ export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, a
                                                 color: restaurant.headings_text_color || "#000000"
                                             }}
                                             className="opacity-80">
-                                            ({RatingInfo?.user_ratings_total || 0} {RatingInfo?.user_ratings_total === 1 ? "review" : "reviews"})
+                                            (
+                                            {
+                                                RatingInfo?.user_ratings_total <= 1
+                                                    ?
+                                                    t("reviews_singular", { count: RatingInfo?.user_ratings_total || 0 })
+                                                    :
+                                                    t("reviews_plural", { count: RatingInfo?.user_ratings_total || 0 })
+                                            })
                                         </span>
                                     </div>
                                 )}
@@ -297,7 +305,9 @@ export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, a
                                             className="mb-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 font-medium transition-all hover:scale-105"
                                             style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
                                         >
-                                            <span>Get Event Tickets</span>
+                                            <span>
+                                                {t("event_ticket_button")}
+                                            </span>
                                             <ExternalLink className="h-4 w-4" />
                                         </a>
                                     )}
@@ -309,7 +319,7 @@ export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, a
                                             className="w-full rounded-xl py-3 font-medium transition-all hover:scale-105"
                                             style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
                                         >
-                                            Explore
+                                            {t("explore_button")}
                                         </Button>
                                     )}
 
@@ -318,7 +328,7 @@ export function WelcomePopup({ restaurant, isOpen, eventsShow = true, onClose, a
                                         className="text-sm opacity-75 transition-opacity hover:opacity-100"
                                         style={{ color: textColor }}
                                     >
-                                        Don&apos;t show this again
+                                        {t("dont_show_again")}
                                     </button>
                                 </motion.div>
                             }

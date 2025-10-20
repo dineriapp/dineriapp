@@ -1,14 +1,17 @@
 import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 import prisma from "@/lib/prisma"
 import { stripe } from "@/lib/stripe"
+import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 import type Stripe from "stripe"
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const t = await getTranslations("restaurant_webhook_api")
+
     const { id: restaurantId } = await params
 
     if (!restaurantId) {
-        return NextResponse.json({ error: "Restaurant ID missing in URL" }, { status: 400 })
+        return NextResponse.json({ error: t("errors.restaurant_id_missing") }, { status: 400 })
     }
 
     // Fetch the webhook secret from DB
@@ -18,7 +21,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     })
 
     if (!restaurant || !restaurant.stripe_webhook_secret_encrypted) {
-        return NextResponse.json({ error: "Webhook secret not found for restaurant" }, { status: 400 })
+        return NextResponse.json({ error: t("errors.webhook_secret_not_found") }, { status: 400 })
     }
 
     const webhookSecret = decrypt_key(restaurant.stripe_webhook_secret_encrypted)
@@ -29,7 +32,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     if (!signature) {
         console.error("No Stripe signature found")
-        return NextResponse.json({ error: "No signature" }, { status: 400 })
+        return NextResponse.json({ error: t("errors.no_signature") }, { status: 400 })
     }
 
     let event: Stripe.Event
@@ -38,7 +41,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
     } catch (error) {
         console.error("Webhook signature verification failed:", error)
-        return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
+        return NextResponse.json({ error: t("errors.invalid_signature") }, { status: 400 })
     }
 
     // Check if this is a payment-related event by looking at metadata
@@ -50,14 +53,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (event.type === "checkout.session.completed") {
         const session = event.data.object as Stripe.Checkout.Session
         if (!isPaymentEvent(session.metadata)) {
-            return NextResponse.json({ received: true, message: "Not a payment event" })
+            return NextResponse.json({ received: true, message: t("info.not_a_payment_event") })
         }
     }
 
     // For other payment-related events, check metadata
     if (event.data.object && "metadata" in event.data.object) {
         if (!isPaymentEvent((event.data.object as any).metadata)) {
-            return NextResponse.json({ received: true, message: "Not a payment event" })
+            return NextResponse.json({ received: true, message: t("info.not_a_payment_event") })
         }
     }
 
@@ -84,7 +87,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         return NextResponse.json({ received: true })
     } catch (error) {
         console.error(`Webhook handler error for ${event.type}:`, error)
-        return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 })
+        return NextResponse.json({ error: t("errors.webhook_handler_failed") }, { status: 500 })
     }
 }
 

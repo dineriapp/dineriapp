@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { FaqCategory, Faq } from "@prisma/client"
+import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useTranslations } from "next-intl"
 
 type FAQCategoryWithFaqs = FaqCategory & {
     faqs: Faq[]
@@ -21,7 +23,7 @@ export function FAQSection({ faqCategories, className = "", }: FAQSectionProps) 
     const [searchTerm, setSearchTerm] = useState("")
     const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null)
     const [viewedFAQs, setViewedFAQs] = useState<Set<string>>(new Set())
-
+    const t = useTranslations("faq_dialog")
     const handleFAQClick = async (faqId: string) => {
         const isCurrentlyExpanded = expandedFAQ === faqId
         const isFirstTimeViewing = !viewedFAQs.has(faqId)
@@ -69,128 +71,151 @@ export function FAQSection({ faqCategories, className = "", }: FAQSectionProps) 
         return (
             <div className={`py-8 text-center ${className}`}>
                 <HelpCircle className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                <h3 className="mb-2 text-lg font-semibold">No FAQs Available</h3>
-                <p className="text-muted-foreground">Check back later for frequently asked questions</p>
+                <h3 className="mb-2 text-lg font-semibold">
+                    {t("no_faqs_title")}
+                </h3>
+                <p className="text-muted-foreground">
+                    {t("no_faqs_description")}
+                </p>
             </div>
         )
     }
 
     return (
-        <div className={`space-y-3 sm:space-y-4 ${className}`}>
-            {/* Search */}
-            <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <style>
+        <>
+            <DialogHeader>
+                <DialogTitle className="flex text-start items-center gap-2">
+                    <HelpCircle />
+                    <span >
+                        {t("title")}
+                    </span>
+                </DialogTitle>
+                <DialogDescription className="text-start" >
+                    {t("description")}
+                </DialogDescription>
+            </DialogHeader>
+            <div className="py-0">
+                <div className={`space-y-3 sm:space-y-4 ${className}`}>
+                    {/* Search */}
+                    <div className="relative">
+                        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <style>
 
-                </style>
-                <Input
-                    placeholder="Search FAQs..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 search-placeholder"
-                />
-            </div>
+                        </style>
+                        <Input
+                            placeholder={t("search_placeholder")}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-10 search-placeholder"
+                        />
+                    </div>
 
-            {/* Featured FAQs */}
-            {featuredFAQs.length > 0 && !searchTerm && (
-                <Card
+                    {/* Featured FAQs */}
+                    {featuredFAQs.length > 0 && !searchTerm && (
+                        <Card
 
-                >
-                    <CardHeader className="px-4 sm:px-4">
-                        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                            <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                            Popular Questions
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2 sm:space-y-3 !py-0 px-4 sm:px-4">
-                        {featuredFAQs.slice(0, 3).map((faq, index) => (
-                            <motion.div key={`${faq.id}-${index}`} className="overflow-hidden rounded-lg border" >
-                                <button
-                                    onClick={() => handleFAQClick(faq.id)}
-                                    className="flex w-full items-center justify-between px-3 sm:px-4 py-3 sm:py-4 text-left transition-colors"
-                                >
-                                    <span className="font-medium sm:text-base text-sm" >{faq.question}</span>
-                                    <ChevronDown
-                                        className={`h-4 w-4 transition-transform ${expandedFAQ === faq.id ? "rotate-180" : ""}`}
-
-                                    />
-                                </button>
-                                <AnimatePresence>
-                                    {expandedFAQ === faq.id && (
-                                        <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: "auto", opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.2 }}
-                                            className="overflow-hidden"
+                        >
+                            <CardHeader className="px-4 sm:px-4">
+                                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                                    <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                                    {t("popular_questions")}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-2 sm:space-y-3 !py-0 px-4 sm:px-4">
+                                {featuredFAQs.slice(0, 3).map((faq, index) => (
+                                    <motion.div key={`${faq.id}-${index}`} className="overflow-hidden rounded-lg border" >
+                                        <button
+                                            onClick={() => handleFAQClick(faq.id)}
+                                            className="flex w-full items-center justify-between px-3 sm:px-4 py-3 sm:py-4 text-left transition-colors"
                                         >
-                                            <div className="p-4 pt-0 sm:text-base text-sm text-muted-foreground" >{faq.answer}</div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </motion.div>
-                        ))}
-                    </CardContent>
-                </Card>
-            )}
-
-            {/* FAQ Categories */}
-            <div className="space-y-6">
-                {filteredCategories.map((category) => (
-                    <Card
-
-                        key={category.id}>
-                        <CardHeader className="gap-1 !py-0 px-4 sm:px-4">
-                            <CardTitle
-
-                                className="text-base sm:text-lg">{category.name}</CardTitle>
-                            {category.description && <p
-
-                                className="text-xs sm:text-sm text-muted-foreground">{category.description}</p>}
-                        </CardHeader>
-                        <CardContent className="space-y-3 !py-0 px-4 sm:px-4">
-                            {category.faqs.map((faq) => (
-                                <motion.div key={faq.id} className="overflow-hidden  rounded-lg border" >
-                                    <button
-                                        onClick={() => handleFAQClick(faq.id)}
-                                        className="flex w-full items-center relative justify-between px-3 sm:px-4 py-3 sm:py-4 text-left transition-colors "
-                                    >
-                                        <div className="flex sm:flex-row flex-col-reverse  items-start sm:items-center gap-1 sm:gap-2">
                                             <span className="font-medium sm:text-base text-sm" >{faq.question}</span>
-                                            {faq.is_featured && <Star className="h-3 sm:h-4 w-3 sm:w-4 fill-yellow-400 text-yellow-400" />}
-                                        </div>
-                                        <ChevronDown
-                                            className={`h-4 w-4 transition-transform ${expandedFAQ === faq.id ? "rotate-180" : ""}`}
-                                        />
-                                    </button>
-                                    <AnimatePresence>
-                                        {expandedFAQ === faq.id && (
-                                            <motion.div
-                                                initial={{ height: 0, opacity: 0 }}
-                                                animate={{ height: "auto", opacity: 1 }}
-                                                exit={{ height: 0, opacity: 0 }}
-                                                transition={{ duration: 0.2 }}
-                                                className="overflow-hidden"
-                                            >
-                                                <div className="p-4 pt-0 leading-relaxed sm:text-base text-sm text-muted-foreground"
-                                                >{faq.answer}</div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </motion.div>
-                            ))}
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
+                                            <ChevronDown
+                                                className={`h-4 w-4 transition-transform ${expandedFAQ === faq.id ? "rotate-180" : ""}`}
 
-            {searchTerm && filteredCategories.length === 0 && (
-                <div className="py-8 text-center">
-                    <Search className="mx-auto mb-2 h-12 w-12 " />
-                    <h3 className="mb-0 text-lg font-semibold">No results found</h3>
-                    <p className="text-muted-foreground">Try adjusting your search</p>
+                                            />
+                                        </button>
+                                        <AnimatePresence>
+                                            {expandedFAQ === faq.id && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: "auto", opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <div className="p-4 pt-0 sm:text-base text-sm text-muted-foreground" >{faq.answer}</div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </motion.div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    )}
+
+                    {/* FAQ Categories */}
+                    <div className="space-y-6">
+                        {filteredCategories.map((category) => (
+                            <Card
+
+                                key={category.id}>
+                                <CardHeader className="gap-1 !py-0 px-4 sm:px-4">
+                                    <CardTitle
+
+                                        className="text-base sm:text-lg">{category.name}</CardTitle>
+                                    {category.description && <p
+
+                                        className="text-xs sm:text-sm text-muted-foreground">{category.description}</p>}
+                                </CardHeader>
+                                <CardContent className="space-y-3 !py-0 px-4 sm:px-4">
+                                    {category.faqs.map((faq) => (
+                                        <motion.div key={faq.id} className="overflow-hidden  rounded-lg border" >
+                                            <button
+                                                onClick={() => handleFAQClick(faq.id)}
+                                                className="flex w-full items-center relative justify-between px-3 sm:px-4 py-3 sm:py-4 text-left transition-colors "
+                                            >
+                                                <div className="flex sm:flex-row flex-col-reverse  items-start sm:items-center gap-1 sm:gap-2">
+                                                    <span className="font-medium sm:text-base text-sm" >{faq.question}</span>
+                                                    {faq.is_featured && <Star className="h-3 sm:h-4 w-3 sm:w-4 fill-yellow-400 text-yellow-400" />}
+                                                </div>
+                                                <ChevronDown
+                                                    className={`h-4 w-4 transition-transform ${expandedFAQ === faq.id ? "rotate-180" : ""}`}
+                                                />
+                                            </button>
+                                            <AnimatePresence>
+                                                {expandedFAQ === faq.id && (
+                                                    <motion.div
+                                                        initial={{ height: 0, opacity: 0 }}
+                                                        animate={{ height: "auto", opacity: 1 }}
+                                                        exit={{ height: 0, opacity: 0 }}
+                                                        transition={{ duration: 0.2 }}
+                                                        className="overflow-hidden"
+                                                    >
+                                                        <div className="p-4 pt-0 leading-relaxed sm:text-base text-sm text-muted-foreground"
+                                                        >{faq.answer}</div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </motion.div>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+
+                    {searchTerm && filteredCategories.length === 0 && (
+                        <div className="py-8 text-center">
+                            <Search className="mx-auto mb-2 h-12 w-12 " />
+                            <h3 className="mb-0 text-lg font-semibold">
+                                {t("no_results_title")}
+                            </h3>
+                            <p className="text-muted-foreground">
+                                {t("no_results_description")}
+                            </p>
+                        </div>
+                    )}
                 </div>
-            )}
-        </div>
+            </div>
+        </>
     )
 }

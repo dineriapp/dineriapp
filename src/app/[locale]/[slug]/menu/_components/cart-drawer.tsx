@@ -18,6 +18,7 @@ import { useCartStore, type CartItem } from "@/stores/cart-store"
 import { OpeningHoursData } from "@/types"
 import { Restaurant } from "@prisma/client"
 import { AlertCircle, CreditCard, Loader2, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -36,7 +37,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
     const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false)
     const [preferredISO, setPreferredISO] = useState<string>("");
     const businessStatus = normalizeBusinessStatus(restaurant?.status);
-
+    const t = useTranslations("cart_drawer")
     const handleChangeTime = (next: PreferredDeliveryTimeChange) => {
         setPreferredISO(next.iso);
         // You can also stash next.label / next.timeZone for UI/analytics
@@ -85,7 +86,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                 .then(() => setGoogleMapsLoaded(true))
                 .catch((error) => {
                     console.error("Failed to load Google Maps:", error)
-                    toast.error("Address autocomplete unavailable. You can still enter your address manually.")
+                    toast.error(t("address_messages.autocomplete_unavailable"))
                 })
         }
     }, [googleMapsLoaded])
@@ -100,11 +101,11 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
     const safeSetOrderType = (val: "pickup" | "delivery") => {
         if (val === "delivery" && !isDeliveryAllowed) {
-            toast.error("Delivery is currently disabled.");
+            toast.error(t("toasts.delivery_disabled"));
             return;
         }
         if (val === "pickup" && !isPickupAllowed) {
-            toast.error("Pickup is currently disabled. ");
+            toast.error(t("toasts.pickup_disabled"));
             return;
         }
         setOrderType(val);
@@ -123,24 +124,24 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
         const errors: Record<string, string> = {}
 
         if (!customerInfo.name.trim()) {
-            errors.name = "Name is required"
+            errors.name = t("errors.name_required")
         }
 
         if (!customerInfo.email.trim()) {
-            errors.email = "Email is required"
+            errors.email = t("errors.email_required")
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerInfo.email)) {
-            errors.email = "Please enter a valid email address"
+            errors.email = t("errors.email_invalid")
         }
 
         if (!customerInfo.phone.trim()) {
-            errors.phone = "Phone number is required"
+            errors.phone = t("errors.phone_required")
         } else if (!/^[+]?[1-9][\d]{0,15}$/.test(customerInfo.phone.replace(/[\s\-$$$$]/g, ""))) {
-            errors.phone = "Please enter a valid phone number"
+            errors.phone = t("errors.phone_invalid")
         }
 
         if (orderType === "delivery") {
             if (!isAddressValid) {
-                errors.address = "Please enter a complete delivery address"
+                errors.address = t("errors.address_incomplete")
             }
         }
 
@@ -150,12 +151,12 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
     const handleProceedToCheckout = async () => {
         if (items.length === 0) {
-            toast.error("Your cart is empty")
+            toast.error(t("toasts.cart_empty"))
             return
         }
 
         if (!validateForm()) {
-            toast.error("Please fill in all required fields correctly")
+            toast.error(t("toasts.validation_error"))
             return
         }
 
@@ -191,24 +192,28 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
             const data = await response.json()
 
+            if (response.status === 404) {
+                throw new Error("Restaurant or Stripe key not found")
+            }
+
             if (!response.ok) {
-                throw new Error(data.error || "Failed to create checkout session")
+                throw new Error(data.error || t("errors.failed_checkout_session"))
             }
 
             if (data.url) {
                 window.location.href = data.url
             } else {
-                throw new Error("No checkout URL received")
+                throw new Error(t("errors.checkout_no_url"))
             }
         } catch (error: any) {
             console.error("Checkout error:", error)
             if (error.message === "Restaurant or Stripe key not found") {
-                toast.error("Restaurant Unavailable", {
-                    description: "This restaurant is not currently able to handle online orders.",
+                toast.error(t("toasts.restaurant_unavailable_title"), {
+                    description: t("toasts.restaurant_unavailable_description"),
                 });
                 return;
             }
-            toast.error(error instanceof Error ? error.message : "Failed to proceed to checkout")
+            toast.error(error instanceof Error ? error.message : t("toasts.checkout_failed_generic"))
         } finally {
             setIsProcessing(false)
         }
@@ -264,11 +269,11 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                     <SheetTitle
 
                         className="flex items-center justify-between">
-                        {showCheckout ? "Checkout" : "Your Order"}
+                        {showCheckout ? t("header.checkout") : t("header.your_order")}
                     </SheetTitle>
                     <SheetDescription
 
-                    ><span>From :- </span> <span className="font-semibold">{restaurantName}</span></SheetDescription>
+                    ><span>{t("header.from_label")} </span> <span className="font-semibold">{restaurantName}</span></SheetDescription>
                     {!showCheckout && items.length > 0 && (
                         <Button
                             variant="ghost"
@@ -278,7 +283,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                             className=" absolute bottom-2 right-2 hover:bg-transparent cursor-pointer"
                         >
                             <Trash2 className="h-4 w-4 mr-1" />
-                            Clear All
+                            {t("header.clear_all")}
                         </Button>
                     )}
                 </SheetHeader>
@@ -294,14 +299,18 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                     className="h-16 w-16 text-gray-400 mb-4" />
                                 <h3
 
-                                    className="text-lg font-medium  mb-2">Your cart is empty</h3>
+                                    className="text-lg font-medium  mb-2">
+                                    {t("empty_cart.title")}
+                                </h3>
                                 <p
 
-                                    className="opacity-80 mb-4">Add some delicious items from the menu!</p>
+                                    className="opacity-80 mb-4">
+                                    {t("empty_cart.subtitle")}
+                                </p>
                                 <Button
 
                                     onClick={onClose} variant="outline" className="hover:bg-transparent cursor-pointer border-none">
-                                    Continue Shopping
+                                    {t("empty_cart.continue_shopping_button")}
                                 </Button>
                             </div>
                         ) : (
@@ -332,8 +341,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                 <AlertDescription
 
                                 >
-                                    You&apos;re placing a guest order. You&apos;ll receive order updates via email and can track your order using
-                                    the order number.
+                                    {t("guest_order_notice.text")}
                                 </AlertDescription>
                             </Alert>
 
@@ -341,25 +349,37 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                             <div
 
                                 className="px-3 py-3 rounded-lg">
-                                <h3 className="font-medium mb-2">Order Summary</h3>
+                                <h3 className="font-medium mb-2">
+                                    {t("order_summary.title")}
+                                </h3>
                                 <div className="space-y-2 text-sm">
                                     <div className="flex justify-between">
-                                        <span>{items.length} items</span>
+                                        <span>
+                                            {t("order_summary.items_plural", { count: items.length })}
+                                        </span>
                                         <span>€{subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span>Tax ({restaurant.tax_percentage}%)</span>
+                                        <span>
+                                            {t("tax_label.title", {
+                                                taxPercentage: restaurant.tax_percentage
+                                            })}
+                                        </span>
                                         <span>€{taxAmount.toFixed(2)}</span>
                                     </div>
                                     {orderType === "delivery" && (
                                         <div className="flex justify-between">
-                                            <span>Delivery Fee</span>
+                                            <span>
+                                                {t("order_summary.delivery_fee_label")}
+                                            </span>
                                             <span>€{deliveryFee.toFixed(2)}</span>
                                         </div>
                                     )}
                                     <div
                                         className="flex justify-between font-semibold border-t pt-1">
-                                        <span>Total</span>
+                                        <span>
+                                            {t("order_summary.total_label")}
+                                        </span>
                                         <span>€{total.toFixed(2)}</span>
                                     </div>
                                 </div>
@@ -369,10 +389,14 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                             <div
 
                                 className="space-y-4 p-3 rounded-md shadow-sm">
-                                <h3 className="font-medium">Contact Information *</h3>
+                                <h3 className="font-medium">
+                                    {t("checkout_form.contact_information_label")}
+                                </h3>
                                 <div className="grid grid-cols-1 gap-4">
                                     <div className="space-y-2">
-                                        <Label htmlFor="name">Full Name *</Label>
+                                        <Label htmlFor="name">
+                                            {t("checkout_form.full_name_label")}
+                                        </Label>
                                         <Input
                                             id="name"
                                             value={customerInfo.name}
@@ -383,7 +407,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                                 }
                                             }}
 
-                                            placeholder="Your full name"
+                                            placeholder={t("checkout_form.full_name_placeholder")}
                                             className={formErrors.name ? "border-red-500" : ""}
                                             autoComplete="name"
                                         />
@@ -392,7 +416,9 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                             className="text-sm text-red-500 mt-1">{formErrors.name}</p>}
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="email">Email Address *</Label>
+                                        <Label htmlFor="email">
+                                            {t("checkout_form.email_label")}
+                                        </Label>
                                         <Input
                                             id="email"
                                             type="email"
@@ -404,7 +430,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                                 }
                                             }}
 
-                                            placeholder="your@email.com"
+                                            placeholder={t("checkout_form.email_placeholder")}
                                             className={formErrors.email ? "border-red-500" : ""}
                                             autoComplete="email"
                                         />
@@ -413,7 +439,9 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                             className="text-sm text-red-500 mt-1">{formErrors.email}</p>}
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="phone">Phone Number *</Label>
+                                        <Label htmlFor="phone">
+                                            {t("checkout_form.phone_label")}
+                                        </Label>
                                         <Input
                                             id="phone"
                                             type="tel"
@@ -425,7 +453,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                                 }
                                             }}
 
-                                            placeholder="(555) 123-4567"
+                                            placeholder={t("checkout_form.phone_placeholder")}
                                             className={formErrors.phone ? "border-red-500" : ""}
                                             autoComplete="tel"
                                         />
@@ -440,19 +468,25 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                             <div
 
                                 className="space-y-4">
-                                <h3 className="font-medium">Order Type *</h3>
+                                <h3 className="font-medium">
+                                    {t("checkout_form.order_type_label")}
+                                </h3>
                                 <RadioGroup value={orderType} onValueChange={(v: "pickup" | "delivery") => safeSetOrderType(v)}>
                                     <div className="flex items-center space-x-2">
                                         <RadioGroupItem
 
                                             value="pickup" id="pickup" />
-                                        <Label htmlFor="pickup">Pickup</Label>
+                                        <Label htmlFor="pickup">
+                                            {t("checkout_form.pickup_label")}
+                                        </Label>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <RadioGroupItem
 
                                             value="delivery" id="delivery" />
-                                        <Label htmlFor="delivery">Delivery (+€{restaurant.delivery_fee.toFixed(2)})</Label>
+                                        <Label htmlFor="delivery">
+                                            {t("checkout_form.delivery_label", { deliveryFee: restaurant.delivery_fee.toFixed(2) })}
+                                        </Label>
                                     </div>
                                 </RadioGroup>
 
@@ -469,21 +503,23 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                             }}
                                             onValidationChange={setIsAddressValid}
                                             required
-                                            label="Delivery Address"
-                                            placeholder="Enter your delivery address"
+                                            label={t("checkout_form.delivery_address_label")}
+                                            placeholder={t("checkout_form.delivery_address_placeholder")}
                                             showCurrentLocation={true}
                                             className={formErrors.address ? "border-red-500" : ""}
                                         />
                                         {formErrors.address && <p className="text-sm text-red-500 mt-1">{formErrors.address}</p>}
 
                                         <div className="space-y-3">
-                                            <Label htmlFor="delivery-notes">Delivery Notes (Optional)</Label>
+                                            <Label htmlFor="delivery-notes">
+                                                {t("checkout_form.delivery_notes_label")}
+                                            </Label>
                                             <Textarea
                                                 id="delivery-notes"
 
                                                 value={deliveryNotes}
                                                 onChange={(e) => setDeliveryNotes(e.target.value)}
-                                                placeholder="Apartment number, gate code, special delivery instructions..."
+                                                placeholder={t("checkout_form.delivery_notes_placeholder")}
                                                 rows={2}
                                             />
                                         </div>
@@ -495,7 +531,9 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                             <div className="space-y-3 mt-6"
 
                             >
-                                <Label htmlFor="instructions">Special Instructions (Optional)</Label>
+                                <Label htmlFor="instructions">
+                                    {t("checkout_form.special_instructions_label")}
+                                </Label>
                                 <style>
                                     {`
       .placehodler-placeholder::placeholder {
@@ -509,22 +547,23 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                     value={specialInstructions}
 
                                     onChange={(e) => setSpecialInstructions(e.target.value)}
-                                    placeholder="Any special requests, dietary restrictions, or cooking preferences..."
+                                    placeholder={t("checkout_form.special_instructions_placeholder")}
                                     rows={3}
                                 />
                             </div>
-                            <p>
+                            {/* <p>
                                 {preferredISO}
-                            </p>
+                            </p> */}
                             <div className="mt-5"
 
                             >
                                 <PreferredDeliveryTimeSelect
                                     value={preferredISO}
-                                    label="Preferred delivery or pickup time (Optional)"
+                                    label={t("checkout_form.preferred_time_label")}
                                     onChange={handleChangeTime}
                                     minutesAhead={120}
                                     stepMinutes={5}
+                                    note={t("checkout_form.note")}
                                     timeZone={restaurant.timezone || "Europe/Rome"} // <- optionally override
                                 />
                             </div>
@@ -543,17 +582,23 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
 
                                     className="space-y-2">
                                     <div className="flex justify-between text-sm">
-                                        <span>Subtotal</span>
+                                        <span>
+                                            {t("cart_footer.subtotal_label")}
+                                        </span>
                                         <span>€{subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between text-sm">
-                                        <span>Tax ({restaurant.tax_percentage}%)</span>
+                                        <span>
+                                            {t("cart_footer.tax_label", { taxPercentage: restaurant.tax_percentage })}
+                                        </span>
                                         <span>€{taxAmount.toFixed(2)}</span>
                                     </div>
                                     <div
 
                                         className="flex justify-between font-semibold text-lg border-t pt-2">
-                                        <span>Total</span>
+                                        <span>
+                                            {t("cart_footer.total_label")}
+                                        </span>
                                         <span>€{(subtotal + taxAmount).toFixed(2)}</span>
                                     </div>
                                 </div>
@@ -562,43 +607,36 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                     className="w-full cursor-pointer border-none" size="lg" onClick={() => {
 
                                         if (!status.isOpen) {
-                                            toast.error("The restaurant is currently closed.", {
-                                                description: status.nextOpeningDay
-                                                    ? `Opens on ${status.nextOpeningDay} at ${status.openingTime}`
-                                                    : status.openingTime
-                                                        ? `Opens at ${status.openingTime}`
-                                                        : "Please check opening hours.",
-                                                duration: 5000,
-                                            })
+                                            toast.error(t("toasts.restaurant_closed_title"))
                                             return
                                         }
                                         if (restaurant?.status === "DISABLE_BOTH") {
-                                            toast.error("This restaurant has currently disabled online orders.");
+                                            toast.error(t("toasts.restaurant_disabled_title"));
                                             return
                                         }
                                         setShowCheckout(true)
                                     }
                                     }>
-                                    Proceed to Checkout
+                                    {t("buttons.proceed_checkout")}
                                 </Button>
                             </>
                         ) : (
                             <div className="flex gap-2">
                                 <Button
                                     variant="outline" onClick={() => setShowCheckout(false)} className="flex-1 cursor-pointer border">
-                                    Back to Cart
+                                    {t("buttons.back_cart")}
                                 </Button>
                                 <Button
                                     onClick={handleProceedToCheckout} disabled={isProcessing} className="flex-1 cursor-pointer border-none">
                                     {isProcessing ? (
                                         <>
                                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                            Processing...
+                                            {t("buttons.processing")}
                                         </>
                                     ) : (
                                         <>
                                             <CreditCard className="h-4 w-4 mr-2" />
-                                            Pay €{total.toFixed(2)}
+                                            {t("buttons.pay_amount", { total: total.toFixed(2) })}
                                         </>
                                     )}
                                 </Button>
