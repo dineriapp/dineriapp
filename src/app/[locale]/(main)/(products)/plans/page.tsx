@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { getStripePlans, StripePlan } from "@/lib/stripe-plans"; // adjust path if needed
 import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";;
 
 export default function PlansPage() {
     const locale = useLocale()

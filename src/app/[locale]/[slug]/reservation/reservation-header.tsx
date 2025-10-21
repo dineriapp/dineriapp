@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import type { Restaurant } from "@prisma/client";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";;
 
 interface ReservationHeaderProps {
     restaurant: Restaurant;

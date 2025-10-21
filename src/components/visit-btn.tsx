@@ -1,8 +1,8 @@
 "use client"
 import { useRestaurantStore } from '@/stores/restaurant-store'
-import Link from 'next/link'
 import { Button } from './ui/button'
 import { Globe2 } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 
 const VisitBtn = () => {
     const { selectedRestaurant } = useRestaurantStore()

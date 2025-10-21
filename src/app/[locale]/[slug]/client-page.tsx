@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 import { motion } from "motion/react"
 import { useTranslations } from "next-intl"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation"
 import type React from "react"
 import { useEffect, useRef, useState } from "react"

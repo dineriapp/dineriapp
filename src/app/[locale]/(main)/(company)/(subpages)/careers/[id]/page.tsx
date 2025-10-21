@@ -2,7 +2,7 @@
 
 
 import { ArrowLeft, Building2, Clock, MapPin } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";;
 import { use } from "react";
 
 import JobListings from "@/app/[locale]/Data/job-data";

@@ -7,7 +7,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";;
 import { AppSidebar } from "./_components/app-sidebar";
 import LocaleSwitcher from '@/components/locale-switcher';
 

@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores/auth-store'
 import { Copy, QrCode } from 'lucide-react'
 import { motion } from "motion/react"
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { toast } from 'sonner'
 
 const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant: boolean }) => {

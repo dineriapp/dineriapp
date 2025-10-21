@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";;
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MobileNav } from "./mobile-nav";

@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ArrowLeft, Mail, Shield, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
 import { toast } from "sonner"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { supabase } from "@/supabase/clients/client"
 import { useTranslations } from "next-intl"
 

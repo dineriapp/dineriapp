@@ -32,7 +32,7 @@ import {
   TrendingUp
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";;
 import { useEffect, useMemo, useState } from "react";
 
 export default function OrdersPage() {

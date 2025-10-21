@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { getStripePlans, STRIPE_PLANS } from "@/lib//stripe-plans";
 import { toast } from "sonner";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";;
 import { useLocale, useTranslations } from "next-intl";
 import { Locale } from "@/i18n/routing";
 

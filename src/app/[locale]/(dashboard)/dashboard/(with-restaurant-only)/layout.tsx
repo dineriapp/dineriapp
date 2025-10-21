@@ -8,7 +8,7 @@ import { createClient } from "@/supabase/clients/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation"
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 

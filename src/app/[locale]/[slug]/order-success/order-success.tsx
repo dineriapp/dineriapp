@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getOrderDetails } from "./get-order"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button"
 import { CheckCircle, Clock, Mail, MapPin, Navigation, Phone, Receipt } from "lucide-react"
 import { Badge } from "@/components/ui/badge"

@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation";
 
 const HowItWorks = () => {
     const t = useTranslations("Home.HowItWorks");

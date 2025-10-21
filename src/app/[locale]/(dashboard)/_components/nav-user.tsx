@@ -16,9 +16,8 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/c
 import { User } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import Link from "next/link"
 import { useTranslations } from "next-intl"
-
+import { Link } from "@/i18n/navigation"
 export function NavUser({ data }: { data: { user: User } }) {
     const { isMobile } = useSidebar()
     const router = useRouter()

@@ -15,7 +15,7 @@ import { Restaurant } from '@prisma/client'
 import { Battery, ExternalLink, MoreVertical, Signal, Wifi } from 'lucide-react'
 import { motion } from "motion/react"
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useState } from 'react'
 
 const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Restaurant }) => {
