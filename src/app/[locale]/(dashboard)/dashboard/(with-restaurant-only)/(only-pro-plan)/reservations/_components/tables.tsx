@@ -148,7 +148,7 @@ export default function TablesPage() {
     }
 
     return (
-        <div className="space-y-6 p-6">
+        <div className="space-y-6">
             {/* --- Stats --- */}
             <div className="grid grid-cols-4 gap-4">
                 <StatCard
@@ -243,7 +243,7 @@ export default function TablesPage() {
             </div>
 
             {/* --- Table --- */}
-            <div className="border rounded-lg overflow-hidden bg-white">
+            <div className="border rounded-lg overflow-hidden p-4 bg-white">
                 <UITable>
                     <TableHeader>
                         <TableRow>

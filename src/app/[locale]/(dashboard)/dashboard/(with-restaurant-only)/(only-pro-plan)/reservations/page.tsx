@@ -2,6 +2,7 @@ import Reservations from './_components/reservations'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BarChart2, Calendar, Clock, DollarSign, Map, Settings, Users } from "lucide-react"
+import TablesPage from './_components/tables'
 
 const ReservationsPage = () => {
     return (
@@ -70,10 +71,7 @@ const ReservationsPage = () => {
                 </TabsContent>
 
                 <TabsContent value="tables" className='!pt-4'>
-                    <div className="p-4 rounded-lg border">
-                        <h2 className="text-lg font-semibold mb-2">Tables</h2>
-                        <p>Set up and manage your restaurant tables.</p>
-                    </div>
+                    <TablesPage />
                 </TabsContent>
 
                 <TabsContent value="areas" className='!pt-4'>
