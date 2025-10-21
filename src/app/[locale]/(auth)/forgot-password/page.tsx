@@ -8,13 +8,14 @@ import { Label } from "@/components/ui/label"
 import { AlertCircle, CheckCircle, Loader2, Mail } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 
 export default function ForgotPasswordPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [error, setError] = useState("")
     const [email, setEmail] = useState("")
-
+    const t = useTranslations("forgot_password_page")
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
@@ -25,7 +26,7 @@ export default function ForgotPasswordPage() {
             await new Promise((resolve) => setTimeout(resolve, 1500))
             setIsSubmitted(true)
         } catch {
-            setError("Something went wrong. Please try again.")
+            setError(t("error_generic"))
         } finally {
             setIsLoading(false)
         }
@@ -34,23 +35,29 @@ export default function ForgotPasswordPage() {
     return (
         <>
             <div className="mb-4 mt-3">
-                <h1 className="text-3xl font-bold tracking-tight text-slate-900">Reset your password</h1>
-                <p className="mt-2 text-slate-600">Enter your email address and we&apos;ll send you a link to reset your password.</p>
+                <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+                    {t("title")}
+                </h1>
+                <p className="mt-2 text-slate-600">
+                    {t("description")}
+                </p>
             </div>
             {isSubmitted ? (
                 <div className="rounded-lg bg-teal-50 p-6 text-center">
                     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
                         <CheckCircle className="h-6 w-6 text-teal-600" />
                     </div>
-                    <h3 className="mb-2 text-lg font-medium text-teal-800">Check your email</h3>
+                    <h3 className="mb-2 text-lg font-medium text-teal-800">
+                        {t("success_title")}
+                    </h3>
                     <p className="mb-6 text-teal-700">
-                        We&apos;ve sent a password reset link to <strong>{email}</strong>
+                        {t("success_message", { email })}
                     </p>
                     <div className="space-y-4">
                         <p className="text-sm text-slate-600">
-                            Didn&apos;t receive the email? Check your spam folder or{" "}
+                            {t("resend_instruction")}
                             <button onClick={() => setIsSubmitted(false)} className="font-medium text-teal-600 hover:underline">
-                                try again
+                                {t("resend_button")}
                             </button>
                         </p>
                         <Link href="/auth/login">
@@ -58,7 +65,7 @@ export default function ForgotPasswordPage() {
                                 variant="outline"
                                 className="w-full border-teal-200 text-teal-700 hover:bg-teal-50 hover:text-teal-800"
                             >
-                                Back to login
+                                {t("back_to_login_button")}
                             </Button>
                         </Link>
                     </div>
@@ -74,12 +81,14 @@ export default function ForgotPasswordPage() {
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email">
+                                {t("email_label")}
+                            </Label>
                             <div className="relative flex items-center justify-center">
                                 <Input
                                     id="email"
                                     type="email"
-                                    placeholder="you@restaurant.com"
+                                    placeholder={t("email_placeholder")}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="pl-10 h-[44px]"
@@ -97,18 +106,19 @@ export default function ForgotPasswordPage() {
                         >
                             {isLoading ? (
                                 <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending reset link...
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    {t("sending_reset_link")}
                                 </>
                             ) : (
-                                "Send reset link"
+                                t("send_reset_link")
                             )}
                         </Button>
                     </form>
 
                     <div className="mt-6 text-center text-sm">
-                        Remember your password?{" "}
-                        <Link href="/auth/login" className="font-medium text-teal-600 hover:underline">
-                            Back to login
+                        {t("remember_password")}
+                        <Link href="/login" className="font-medium text-teal-600 hover:underline">
+                            {t("back_to_login_link")}
                         </Link>
                     </div>
                 </>

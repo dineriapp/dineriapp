@@ -1,15 +1,4 @@
 {
-  "LocaleSwitcher": {
-    "label": "Taal wijzigen",
-    "locales": {
-      "en": "🇺🇸 Engels",
-      "es": "🇪🇸 Spaans",
-      "fr": "🇫🇷 Frans",
-      "de": "🇩🇪 Duits",
-      "it": "🇮🇹 Italiaans",
-      "nl": "🇳🇱 Nederlands"
-    }
-  },
   "TopBar": {
     "message": "Tijd om klikken om te zetten in klanten.",
     "setup": "Instellen",
@@ -3345,5 +3334,79 @@
       "checkout_no_url": "Geen afreken-URL ontvangen",
       "failed_checkout_session": "Afrekeningssessie kon niet worden gemaakt"
     }
+  },
+  "login_page": {
+    "welcome_back": "Welkom terug",
+    "description": "Log in op je dineri.app-account om de online aanwezigheid van je restaurant te beheren.",
+    "invalid_email": "Ongeldig e-mailadres",
+    "password_min_length": "Het wachtwoord moet minstens 8 tekens bevatten",
+    "email_label": "E-mailadres",
+    "email_placeholder": "jij@restaurant.com",
+    "password_label": "Wachtwoord",
+    "password_placeholder": "••••••••",
+    "remember_me": "Onthoud mij 30 dagen",
+    "forgot_password": "Wachtwoord vergeten?",
+    "logging_in": "Inloggen...",
+    "login": "Inloggen",
+    "dont_have_account": "Heb je nog geen account?",
+    "signup": "Aanmelden"
+  },
+  "signup_page": {
+    "create_account": "Maak je account aan",
+    "description": "Meld je aan bij dineri.app om de online aanwezigheid van je restaurant op te bouwen.",
+    "invalid_email": "Ongeldig e-mailadres",
+    "password_min_length": "Het wachtwoord moet minstens 8 tekens bevatten",
+    "confirm_password_min_length": "Het bevestigingswachtwoord moet minstens 8 tekens bevatten",
+    "passwords_do_not_match": "Wachtwoorden komen niet overeen",
+    "agree_required": "Je moet akkoord gaan met de Privacyverklaring en de Algemene Voorwaarden",
+    "email_label": "E-mailadres",
+    "email_placeholder": "jij@restaurant.com",
+    "password_label": "Wachtwoord",
+    "password_placeholder": "••••••••",
+    "confirm_password_label": "Bevestig wachtwoord",
+    "confirm_password_placeholder": "••••••••",
+    "agree_text": "Door op Doorgaan te klikken, ga je akkoord met de privacyverklaring en algemene voorwaarden van Dineri.app.",
+    "creating_account": "Account aanmaken...",
+    "continue": "Doorgaan",
+    "already_have_account": "Heb je al een account?",
+    "login": "Inloggen"
+  },
+  "forgot_password_page": {
+    "title": "Reset je wachtwoord",
+    "description": "Voer je e-mailadres in en we sturen je een link om je wachtwoord te resetten.",
+    "error_generic": "Er is iets misgegaan. Probeer het opnieuw.",
+    "success_title": "Controleer je e-mail",
+    "success_message": "We hebben een link gestuurd om je wachtwoord te resetten naar { email }",
+    "resend_instruction": "Geen e-mail ontvangen? Controleer je spamfolder of",
+    "resend_button": "probeer opnieuw",
+    "back_to_login_button": "Terug naar inloggen",
+    "email_label": "E-mailadres",
+    "email_placeholder": "jij@restaurant.com",
+    "sending_reset_link": "Resetlink wordt verzonden...",
+    "send_reset_link": "Resetlink verzenden",
+    "remember_password": "Wachtwoord weer gevonden?",
+    "back_to_login_link": "Terug naar inloggen"
+  },
+  "order_success_page": {
+    "order_not_found_title": "Bestelling niet gevonden",
+    "order_not_found_message": "We konden je bestelling niet vinden. Controleer je e-mail voor de bestelgegevens.",
+    "back_to_restaurant": "Terug naar restaurant",
+    "order_confirmed_title": "Bestelling bevestigd!",
+    "order_confirmed_message": "Bedankt voor je bestelling. We hebben een bevestigingsmail gestuurd naar { email }",
+    "order_number_label": "Bestelnummer",
+    "order_status_label": "Bestelstatus",
+    "estimated_ready_time": "Geschatte gereedheidstijd",
+    "notify_when_ready": "We laten het je weten wanneer het klaar is",
+    "delivery_address": "Bezorgadres",
+    "notes_label": "Notities:",
+    "gps_coordinates": "GPS-coördinaten",
+    "order_details_label": "Bestelgegevens",
+    "quantity_label": "Aantal:",
+    "subtotal_label": "Subtotaal",
+    "tax_label": "Belasting",
+    "delivery_fee_label": "Bezorgkosten",
+    "total_label": "Totaal",
+    "special_instructions_label": "Speciale instructies",
+    "order_again": "Opnieuw bestellen"
   }
 }

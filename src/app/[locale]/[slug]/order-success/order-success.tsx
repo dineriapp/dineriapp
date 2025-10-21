@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { CheckCircle, Clock, Mail, MapPin, Navigation, Phone, Receipt } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { getTranslations } from "next-intl/server"
 
 export default async function OrderSuccessContent({
     sessionId,
@@ -15,18 +16,22 @@ export default async function OrderSuccessContent({
     restaurantSlug: string
 }) {
     const order = await getOrderDetails(sessionId || "", orderNumber || "")
-
+    const t = await getTranslations("order_success_page")
     if (!order) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
                 <Card className="w-full max-w-md">
                     <CardContent className="p-6 text-center">
-                        <h1 className="text-xl font-semibold text-gray-900 mb-2">Order Not Found</h1>
+                        <h1 className="text-xl font-semibold text-gray-900 mb-2">
+                            {t("order_not_found_title")}
+                        </h1>
                         <p className="text-gray-600 mb-4">
-                            We couldn&apos;t find your order. Please check your email for order details.
+                            {t("order_not_found_message")}
                         </p>
                         <Link href={`/${restaurantSlug}`}>
-                            <Button>Back to Restaurant</Button>
+                            <Button>
+                                {t("back_to_restaurant")}
+                            </Button>
                         </Link>
                     </CardContent>
                 </Card>
@@ -76,20 +81,23 @@ export default async function OrderSuccessContent({
 
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-4">
-            <div className="max-w-2xl mx-auto space-y-6">
+            <div className="max-w-2xl mx-auto space-y-4">
                 {/* Success Header */}
                 <Card>
                     <CardContent className="p-6 text-center">
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <CheckCircle className="h-8 w-8 text-green-600" />
                         </div>
-                        <h1 className="text-2xl font-bold text-gray-900 mb-2">Order Confirmed!</h1>
+                        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                            {t("order_confirmed_title")}
+                        </h1>
                         <p className="text-gray-600 mb-4">
-                            Thank you for your order. We&apos;ve sent a confirmation email to{" "}
-                            <span className="font-medium">{order.customer_email}</span>
+                            {t("order_confirmed_message", { email: order.customer_email || "" })}
                         </p>
                         <div className="bg-gray-50 rounded-lg p-4">
-                            <p className="text-sm text-gray-600">Order Number</p>
+                            <p className="text-sm text-gray-600">
+                                {t("order_number_label")}
+                            </p>
                             <p className="text-lg font-mono font-semibold">{order.order_number}</p>
                         </div>
                     </CardContent>
@@ -99,7 +107,7 @@ export default async function OrderSuccessContent({
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center justify-between">
-                            Order Status
+                            {t("order_status_label")}
                             <Badge className={`${getStatusColor(order.status)} flex items-center gap-1`}>
                                 {getStatusIcon(order.status)}
                                 {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
@@ -110,11 +118,13 @@ export default async function OrderSuccessContent({
                         <div className="flex items-center gap-3">
                             <Clock className="h-5 w-5 text-gray-400" />
                             <div>
-                                <p className="font-medium">Estimated Ready Time</p>
+                                <p className="font-medium">
+                                    {t("estimated_ready_time")}
+                                </p>
                                 <p className="text-sm text-gray-600">
                                     {order.estimated_ready_time
                                         ? new Date(order.estimated_ready_time).toLocaleString()
-                                        : "We'll notify you when ready"}
+                                        : t("notify_when_ready")}
                                 </p>
                             </div>
                         </div>
@@ -124,11 +134,15 @@ export default async function OrderSuccessContent({
                                 <div className="flex items-start gap-3">
                                     <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
                                     <div className="flex-1">
-                                        <p className="font-medium">Delivery Address</p>
+                                        <p className="font-medium">
+                                            {t("delivery_address")}
+                                        </p>
                                         <p className="text-sm text-gray-600">{formatAddress(order)}</p>
                                         {order.notes && (
                                             <p className="text-sm text-gray-500 mt-1">
-                                                <span className="font-medium">Notes:</span> {order.notes}
+                                                <span className="font-medium">
+                                                    {t("notes_label")}
+                                                </span> {order.notes}
                                             </p>
                                         )}
                                     </div>
@@ -138,7 +152,9 @@ export default async function OrderSuccessContent({
                                     <div className="flex items-center gap-3">
                                         <Navigation className="h-5 w-5 text-gray-400" />
                                         <div>
-                                            <p className="font-medium">GPS Coordinates</p>
+                                            <p className="font-medium">
+                                                {t("gps_coordinates")}
+                                            </p>
                                             <p className="text-sm text-gray-600">
                                                 {order.latitude.toFixed(6)}, {order.longitude.toFixed(6)}
                                             </p>
@@ -182,7 +198,7 @@ export default async function OrderSuccessContent({
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Receipt className="h-5 w-5" />
-                            Order Details
+                            {t("order_details_label")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -216,7 +232,9 @@ export default async function OrderSuccessContent({
                                             </div>
                                         )}
 
-                                        <p className="text-xs text-gray-500 mt-2">Quantity: {item.quantity}</p>
+                                        <p className="text-xs text-gray-500 mt-2">
+                                            {t("quantity_label")}
+                                            {item.quantity}</p>
                                     </div>
 
                                     <div className="text-right min-w-[70px]">
@@ -234,21 +252,29 @@ export default async function OrderSuccessContent({
 
                             <div className="border-t pt-4 space-y-2">
                                 <div className="flex justify-between text-sm">
-                                    <span>Subtotal</span>
+                                    <span>
+                                        {t("subtotal_label")}
+                                    </span>
                                     <span>€{order.subtotal.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span>Tax</span>
+                                    <span>
+                                        {t("tax_label")}
+                                    </span>
                                     <span>€{order.tax_amount.toFixed(2)}</span>
                                 </div>
                                 {order.delivery_fee > 0 && (
                                     <div className="flex justify-between text-sm">
-                                        <span>Delivery Fee</span>
+                                        <span>
+                                            {t("delivery_fee_label")}
+                                        </span>
                                         <span>€{order.delivery_fee.toFixed(2)}</span>
                                     </div>
                                 )}
                                 <div className="flex justify-between font-semibold text-lg border-t pt-2">
-                                    <span>Total</span>
+                                    <span>
+                                        {t("total_label")}
+                                    </span>
                                     <span>€{order.total_amount.toFixed(2)}</span>
                                 </div>
                             </div>
@@ -260,7 +286,9 @@ export default async function OrderSuccessContent({
                 {order.special_instructions && (
                     <Card>
                         <CardHeader>
-                            <CardTitle>Special Instructions</CardTitle>
+                            <CardTitle>
+                                {t("special_instructions_label")}
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p className="text-gray-700">{order.special_instructions}</p>
@@ -272,11 +300,13 @@ export default async function OrderSuccessContent({
                 <div className="flex gap-4">
                     <Link href={`/${restaurantSlug}`} className="flex-1">
                         <Button variant="outline" className="w-full bg-transparent">
-                            Back to Restaurant
+                            {t("back_to_restaurant")}
                         </Button>
                     </Link>
                     <Link href={`/${restaurantSlug}/menu`} className="flex-1">
-                        <Button className="w-full">Order Again</Button>
+                        <Button className="w-full">
+                            {t("order_again")}
+                        </Button>
                     </Link>
                 </div>
             </div>

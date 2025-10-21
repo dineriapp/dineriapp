@@ -6,25 +6,30 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AlertCircle, Loader2, Lock, Mail } from "lucide-react"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { login } from "@/actions/auth"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
-const loginSchema = z.object({
-    email: z.string().email({ message: "Invalid email address" }),
-    password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-    rememberMe: z.boolean().optional(),
-})
 
-type LoginFormData = z.infer<typeof loginSchema>
+
 
 export default function LoginPage() {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [error, setError] = useState("")
+    const t = useTranslations("login_page")
+
+    const loginSchema = z.object({
+        email: z.string().email({ message: t("invalid_email") }),
+        password: z.string().min(8, { message: t("password_min_length") }),
+        rememberMe: z.boolean().optional(),
+    })
+
+    type LoginFormData = z.infer<typeof loginSchema>
 
     const {
         register,
@@ -61,8 +66,12 @@ export default function LoginPage() {
     return (
         <>
             <div className="mb-4">
-                <h1 className="text-2xl font-bold tracking-tight text-slate-900">Welcome back</h1>
-                <p className="mt-2 text-sm text-slate-600">Log in to your dineri.app account to manage your restaurant&apos;s online presence.</p>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+                    {t("welcome_back")}
+                </h1>
+                <p className="mt-2 text-sm text-slate-600">
+                    {t("description")}
+                </p>
             </div>
             {error && (
                 <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600">
@@ -73,12 +82,14 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
                 <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">
+                        {t("email_label")}
+                    </Label>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="email"
                             type="email"
-                            placeholder="you@restaurant.com"
+                            placeholder={t("email_placeholder")}
                             className="pl-10 h-[44px]"
                             disabled={isPending}
                             {...register("email")}
@@ -90,16 +101,18 @@ export default function LoginPage() {
 
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                        <Label htmlFor="password">Password</Label>
-                        {/* <Link href="/auth/forgot-password" className="text-xs text-teal-600 hover:underline">
-                            Forgot password?
-                        </Link> */}
+                        <Label htmlFor="password">
+                            {t("password_label")}
+                        </Label>
+                        <Link href="/forgot-password" className="text-xs text-teal-600 hover:underline">
+                            {t("forgot_password")}
+                        </Link>
                     </div>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="password"
                             type="password"
-                            placeholder="••••••••"
+                            placeholder={t("password_placeholder")}
                             className="pl-10 h-[44px]"
                             disabled={isPending}
                             {...register("password")}
@@ -117,7 +130,7 @@ export default function LoginPage() {
                         disabled={isPending}
                     />
                     <Label htmlFor="rememberMe" className="text-sm font-normal">
-                        Remember me for 30 days
+                        {t("remember_me")}
                     </Label>
                 </div>
 
@@ -128,10 +141,11 @@ export default function LoginPage() {
                 >
                     {isPending ? (
                         <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            {t("logging_in")}
                         </>
                     ) : (
-                        "Log in"
+                        t("login")
                     )}
                 </Button>
             </form>
@@ -151,9 +165,9 @@ export default function LoginPage() {
             </div> */}
 
             <div className="mt-6 text-center text-sm">
-                Don&apos;t have an account?{" "}
+                {t("dont_have_account")}
                 <Link href="/signup" className="font-medium text-teal-600 hover:underline">
-                    Sign up
+                    {t("signup")}
                 </Link>
             </div>
 

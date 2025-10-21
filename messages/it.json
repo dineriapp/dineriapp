@@ -1,15 +1,4 @@
 {
-  "LocaleSwitcher": {
-    "label": "Cambia lingua",
-    "locales": {
-      "en": "🇺🇸 Inglese",
-      "es": "🇪🇸 Spagnolo",
-      "fr": "🇫🇷 Francese",
-      "de": "🇩🇪 Tedesco",
-      "it": "🇮🇹 Italiano",
-      "nl": "🇳🇱 Olandese"
-    }
-  },
   "TopBar": {
     "message": "È ora di trasformare i clic in clienti.",
     "setup": "Configura",
@@ -3345,5 +3334,79 @@
       "checkout_no_url": "Nessun URL di pagamento ricevuto",
       "failed_checkout_session": "Impossibile creare la sessione di pagamento"
     }
+  },
+  "login_page": {
+    "welcome_back": "Bentornato",
+    "description": "Accedi al tuo account dineri.app per gestire la presenza online del tuo ristorante.",
+    "invalid_email": "Indirizzo email non valido",
+    "password_min_length": "La password deve contenere almeno 8 caratteri",
+    "email_label": "Email",
+    "email_placeholder": "tu@restaurant.com",
+    "password_label": "Password",
+    "password_placeholder": "••••••••",
+    "remember_me": "Ricordami per 30 giorni",
+    "forgot_password": "Password dimenticata?",
+    "logging_in": "Accesso in corso...",
+    "login": "Accedi",
+    "dont_have_account": "Non hai un account?",
+    "signup": "Registrati"
+  },
+  "signup_page": {
+    "create_account": "Crea il tuo account",
+    "description": "Iscriviti a dineri.app per iniziare a costruire la presenza online del tuo ristorante.",
+    "invalid_email": "Indirizzo email non valido",
+    "password_min_length": "La password deve contenere almeno 8 caratteri",
+    "confirm_password_min_length": "La conferma della password deve contenere almeno 8 caratteri",
+    "passwords_do_not_match": "Le password non corrispondono",
+    "agree_required": "Devi accettare l'Informativa sulla privacy e i Termini e Condizioni",
+    "email_label": "Email",
+    "email_placeholder": "tu@restaurant.com",
+    "password_label": "Password",
+    "password_placeholder": "••••••••",
+    "confirm_password_label": "Conferma password",
+    "confirm_password_placeholder": "••••••••",
+    "agree_text": "Facendo clic su Continua, accetti l'Informativa sulla privacy e i Termini e Condizioni di Dineri.app.",
+    "creating_account": "Creazione dell'account...",
+    "continue": "Continua",
+    "already_have_account": "Hai già un account?",
+    "login": "Accedi"
+  },
+  "forgot_password_page": {
+    "title": "Reimposta la tua password",
+    "description": "Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la password.",
+    "error_generic": "Si è verificato un errore. Riprova.",
+    "success_title": "Controlla la tua email",
+    "success_message": "Abbiamo inviato un link per reimpostare la password a { email }",
+    "resend_instruction": "Non hai ricevuto l'email? Controlla la cartella spam oppure",
+    "resend_button": "riprova",
+    "back_to_login_button": "Torna al login",
+    "email_label": "Email",
+    "email_placeholder": "tu@restaurant.com",
+    "sending_reset_link": "Invio del link per la reimpostazione...",
+    "send_reset_link": "Invia link per la reimpostazione",
+    "remember_password": "Ti sei ricordato la password?",
+    "back_to_login_link": "Torna al login"
+  },
+  "order_success_page": {
+    "order_not_found_title": "Ordine non trovato",
+    "order_not_found_message": "Non siamo riusciti a trovare il tuo ordine. Controlla la tua email per i dettagli dell'ordine.",
+    "back_to_restaurant": "Torna al ristorante",
+    "order_confirmed_title": "Ordine confermato!",
+    "order_confirmed_message": "Grazie per il tuo ordine. Abbiamo inviato un'e-mail di conferma a { email }",
+    "order_number_label": "Numero d'ordine",
+    "order_status_label": "Stato dell'ordine",
+    "estimated_ready_time": "Orario stimato di preparazione",
+    "notify_when_ready": "Ti avviseremo quando sarà pronto",
+    "delivery_address": "Indirizzo di consegna",
+    "notes_label": "Note:",
+    "gps_coordinates": "Coordinate GPS",
+    "order_details_label": "Dettagli dell'ordine",
+    "quantity_label": "Quantità:",
+    "subtotal_label": "Subtotale",
+    "tax_label": "Tasse",
+    "delivery_fee_label": "Costo di consegna",
+    "total_label": "Totale",
+    "special_instructions_label": "Istruzioni speciali",
+    "order_again": "Ordina di nuovo"
   }
 }

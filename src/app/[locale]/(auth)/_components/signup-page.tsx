@@ -6,32 +6,37 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AlertCircle, Loader2, Lock, Mail } from "lucide-react"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { signup } from "@/actions/auth"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
-const SignupSchema = z.object({
-    email: z.string().email({ message: "Invalid email address" }),
-    password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-    confirmPassword: z.string().min(8, { message: "Confirm Password must be at least 8 characters" }),
-    agree: z.boolean().refine((val) => val === true, {
-        message: "You must agree to the Privacy Notice and T&Cs",
-    }),
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-});
 
-type SignupFormData = z.infer<typeof SignupSchema>
+
 
 export default function SignupPage() {
     const router = useRouter()
+    const t = useTranslations("signup_page")
     const [isPending, startTransition] = useTransition()
     const [error, setError] = useState("")
+
+    const SignupSchema = z.object({
+        email: z.string().email({ message: t("invalid_email") }),
+        password: z.string().min(8, { message: t("password_min_length") }),
+        confirmPassword: z.string().min(8, { message: t("confirm_password_min_length") }),
+        agree: z.boolean().refine((val) => val === true, {
+            message: t("agree_required"),
+        }),
+    }).refine((data) => data.password === data.confirmPassword, {
+        message: t("passwords_do_not_match"),
+        path: ["confirmPassword"],
+    });
+
+    type SignupFormData = z.infer<typeof SignupSchema>
 
     const {
         register,
@@ -68,8 +73,12 @@ export default function SignupPage() {
         <
             >
             <div className="mb-4">
-                <h1 className="text-2xl font-bold tracking-tight text-slate-900">Create your account</h1>
-                <p className="mt-2 text-sm text-slate-600">Sign up for dineri.app to start building your restaurant&apos;s online presence.</p>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+                    {t("create_account")}
+                </h1>
+                <p className="mt-2 text-sm text-slate-600">
+                    {t("description")}
+                </p>
             </div>
             {error && (
                 <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600">
@@ -81,12 +90,14 @@ export default function SignupPage() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
 
                 <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">
+                        {t("email_label")}
+                    </Label>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="email"
                             type="email"
-                            placeholder="you@restaurant.com"
+                            placeholder={t("email_placeholder")}
                             className="pl-10 h-[44px]"
                             disabled={isPending}
                             {...register("email")}
@@ -98,12 +109,14 @@ export default function SignupPage() {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">
+                        {t("password_label")}
+                    </Label>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="password"
                             type="password"
-                            placeholder="••••••••"
+                            placeholder={t("password_placeholder")}
                             className="pl-10 h-[44px]"
                             disabled={isPending}
                             {...register("password")}
@@ -114,12 +127,14 @@ export default function SignupPage() {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Label htmlFor="confirmPassword">
+                        {t("confirm_password_label")}
+                    </Label>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="confirmPassword"
                             type="password"
-                            placeholder="••••••••"
+                            placeholder={t("confirm_password_placeholder")}
                             className="pl-10 h-[44px]"
                             autoComplete="new-password"
                             disabled={isPending}
@@ -140,7 +155,7 @@ export default function SignupPage() {
                         disabled={isPending}
                     />
                     <Label htmlFor="agree" className="text-xs font-normal">
-                        By clicking Continue, you agree toDineri.app privacy notice and T&amp;Cs.
+                        {t("agree_text")}
                     </Label>
                 </div>
                 {errors.agree && (
@@ -154,33 +169,20 @@ export default function SignupPage() {
                 >
                     {isPending ? (
                         <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account...
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            {t("creating_account")}
                         </>
                     ) : (
-                        "Continue"
+                        t("continue")
                     )}
                 </Button>
             </form>
-            {/* <>
-            <div className="relative my-5">
-                <div className="absolute inset-0 flex items-center">
-                    <Separator className="w-full" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2 text-slate-500">Or continue with</span>
-                </div>
-            </div>
 
-            <div className="grid grid-cols-1 gap-3">
-                <SocialButton provider="google" />
-                <SocialButton provider="facebook" />
-            </div>
-</> */}
 
             <div className="mt-6 text-center text-sm">
-                Already have an account?{" "}
+                {t("already_have_account")}
                 <Link href="/login" className="font-medium text-teal-600 hover:underline">
-                    Log in
+                    {t("login")}
                 </Link>
             </div>
         </>

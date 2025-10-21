@@ -1,10 +1,11 @@
-import { useTranslations } from 'next-intl';
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+import { Locale } from '@/i18n/routing';
+import { getLocale, getTranslations } from 'next-intl/server';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const Hero = () => {
-    const t = useTranslations("Home.Hero");
+const Hero = async () => {
+    const t = await getTranslations("Home.Hero");
+    const locale = await getLocale() as Locale;
 
     return (
         <div className='w-full bg-[#FFFFFF] max-w-[1920px] mx-auto pt-[140px] sm:pt-[170px] 900:pt-[220px] lg:pt-[286px] 900:pb-[140px] lg:pb-[232px] xl:gap-0 gap-5 flex items-center justify-center flex-col relative px-5'>
@@ -26,7 +27,10 @@ const Hero = () => {
                     </Link>
                 </div>
             </div>
-            <Image src={"/hero-img-66.webp"} alt='hero-mobile.png' width={750} height={700} className='w-full max-w-[450px] lg:max-w-[600px] xl:ml-0 ml-auto xl:max-w-[706px] 900:absolute bottom-0 right-0' />
+            <Image
+                src={`/hero-${locale}.webp`}
+                alt='hero-mobile.png'
+                width={750} height={700} className='w-full max-w-[450px] lg:max-w-[600px] xl:ml-0 ml-auto xl:max-w-[706px] 900:absolute bottom-0 right-0' />
         </div>
     )
 }

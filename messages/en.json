@@ -1,14 +1,4 @@
 {
-  "LocaleSwitcher": {
-    "locales": {
-      "en": "🇺🇸 English",
-      "es": "🇪🇸 Spanish",
-      "fr": "🇫🇷 French",
-      "de": "🇩🇪 German",
-      "it": "🇮🇹 Italian",
-      "nl": "🇳🇱 Dutch"
-    }
-  },
   "TopBar": {
     "message": "Time to convert clicks into customers.",
     "setup": "Set up",
@@ -3349,5 +3339,79 @@
       "checkout_no_url": "No checkout URL received",
       "failed_checkout_session": "Failed to create checkout session"
     }
+  },
+  "login_page": {
+    "welcome_back": "Welcome back",
+    "description": "Log in to your dineri.app account to manage your restaurant's online presence.",
+    "invalid_email": "Invalid email address",
+    "password_min_length": "Password must be at least 8 characters",
+    "email_label": "Email",
+    "email_placeholder": "you@restaurant.com",
+    "password_label": "Password",
+    "password_placeholder": "••••••••",
+    "remember_me": "Remember me for 30 days",
+    "forgot_password": "Forgot password?",
+    "logging_in": "Logging in...",
+    "login": "Log in",
+    "dont_have_account": "Don't have an account?",
+    "signup": "Sign up"
+  },
+  "signup_page": {
+    "create_account": "Create your account",
+    "description": "Sign up for dineri.app to start building your restaurant's online presence.",
+    "invalid_email": "Invalid email address",
+    "password_min_length": "Password must be at least 8 characters",
+    "confirm_password_min_length": "Confirm Password must be at least 8 characters",
+    "passwords_do_not_match": "Passwords do not match",
+    "agree_required": "You must agree to the Privacy Notice and T&Cs",
+    "email_label": "Email",
+    "email_placeholder": "you@restaurant.com",
+    "password_label": "Password",
+    "password_placeholder": "••••••••",
+    "confirm_password_label": "Confirm Password",
+    "confirm_password_placeholder": "••••••••",
+    "agree_text": "By clicking Continue, you agree to Dineri.app privacy notice and T&Cs.",
+    "creating_account": "Creating account...",
+    "continue": "Continue",
+    "already_have_account": "Already have an account?",
+    "login": "Log in"
+  },
+  "forgot_password_page": {
+    "title": "Reset your password",
+    "description": "Enter your email address and we'll send you a link to reset your password.",
+    "error_generic": "Something went wrong. Please try again.",
+    "success_title": "Check your email",
+    "success_message": "We've sent a password reset link to { email }",
+    "resend_instruction": "Didn't receive the email? Check your spam folder or",
+    "resend_button": "try again",
+    "back_to_login_button": "Back to login",
+    "email_label": "Email",
+    "email_placeholder": "you@restaurant.com",
+    "sending_reset_link": "Sending reset link...",
+    "send_reset_link": "Send reset link",
+    "remember_password": "Remember your password?",
+    "back_to_login_link": "Back to login"
+  },
+  "order_success_page": {
+    "order_not_found_title": "Order Not Found",
+    "order_not_found_message": "We couldn't find your order. Please check your email for order details.",
+    "back_to_restaurant": "Back to Restaurant",
+    "order_confirmed_title": "Order Confirmed!",
+    "order_confirmed_message": "Thank you for your order. We've sent a confirmation email to { email }",
+    "order_number_label": "Order Number",
+    "order_status_label": "Order Status",
+    "estimated_ready_time": "Estimated Ready Time",
+    "notify_when_ready": "We'll notify you when ready",
+    "delivery_address": "Delivery Address",
+    "notes_label": "Notes:",
+    "gps_coordinates": "GPS Coordinates",
+    "order_details_label": "Order Details",
+    "quantity_label": "Quantity:",
+    "subtotal_label": "Subtotal",
+    "tax_label": "Tax",
+    "delivery_fee_label": "Delivery Fee",
+    "total_label": "Total",
+    "special_instructions_label": "Special Instructions",
+    "order_again": "Order Again"
   }
 }

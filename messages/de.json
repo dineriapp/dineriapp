@@ -1,15 +1,4 @@
 {
-  "LocaleSwitcher": {
-    "label": "Sprache ändern",
-    "locales": {
-      "en": "🇺🇸 Englisch",
-      "es": "🇪🇸 Spanisch",
-      "fr": "🇫🇷 Französisch",
-      "de": "🇩🇪 Deutsch",
-      "it": "🇮🇹 Italienisch",
-      "nl": "🇳🇱 Niederländisch"
-    }
-  },
   "TopBar": {
     "message": "Zeit, Klicks in Kunden zu verwandeln.",
     "setup": "Einrichten",
@@ -3344,5 +3333,79 @@
       "checkout_no_url": "Keine Checkout-URL erhalten",
       "failed_checkout_session": "Checkout-Sitzung konnte nicht erstellt werden"
     }
+  },
+  "login_page": {
+    "welcome_back": "Willkommen zurück",
+    "description": "Melden Sie sich bei Ihrem dineri.app-Konto an, um die Online-Präsenz Ihres Restaurants zu verwalten.",
+    "invalid_email": "Ungültige E-Mail-Adresse",
+    "password_min_length": "Das Passwort muss mindestens 8 Zeichen lang sein",
+    "email_label": "E-Mail",
+    "email_placeholder": "sie@restaurant.com",
+    "password_label": "Passwort",
+    "password_placeholder": "••••••••",
+    "remember_me": "30 Tage angemeldet bleiben",
+    "forgot_password": "Passwort vergessen?",
+    "logging_in": "Wird eingeloggt...",
+    "login": "Anmelden",
+    "dont_have_account": "Sie haben noch kein Konto?",
+    "signup": "Registrieren"
+  },
+  "signup_page": {
+    "create_account": "Erstellen Sie Ihr Konto",
+    "description": "Melden Sie sich bei dineri.app an, um die Online-Präsenz Ihres Restaurants aufzubauen.",
+    "invalid_email": "Ungültige E-Mail-Adresse",
+    "password_min_length": "Das Passwort muss mindestens 8 Zeichen lang sein",
+    "confirm_password_min_length": "Das Bestätigungspasswort muss mindestens 8 Zeichen lang sein",
+    "passwords_do_not_match": "Passwörter stimmen nicht überein",
+    "agree_required": "Sie müssen der Datenschutzerklärung und den AGB zustimmen",
+    "email_label": "E-Mail",
+    "email_placeholder": "sie@restaurant.com",
+    "password_label": "Passwort",
+    "password_placeholder": "••••••••",
+    "confirm_password_label": "Passwort bestätigen",
+    "confirm_password_placeholder": "••••••••",
+    "agree_text": "Durch Klicken auf „Weiter“ stimmen Sie der Datenschutzerklärung und den AGB von Dineri.app zu.",
+    "creating_account": "Konto wird erstellt...",
+    "continue": "Weiter",
+    "already_have_account": "Sie haben bereits ein Konto?",
+    "login": "Anmelden"
+  },
+  "forgot_password_page": {
+    "title": "Setzen Sie Ihr Passwort zurück",
+    "description": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+    "error_generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "success_title": "Überprüfen Sie Ihre E-Mails",
+    "success_message": "Wir haben einen Link zum Zurücksetzen des Passworts an { email } gesendet",
+    "resend_instruction": "E-Mail nicht erhalten? Überprüfen Sie Ihren Spam-Ordner oder",
+    "resend_button": "erneut versuchen",
+    "back_to_login_button": "Zurück zur Anmeldung",
+    "email_label": "E-Mail",
+    "email_placeholder": "sie@restaurant.com",
+    "sending_reset_link": "Link zum Zurücksetzen wird gesendet...",
+    "send_reset_link": "Link zum Zurücksetzen senden",
+    "remember_password": "Passwort wieder eingefallen?",
+    "back_to_login_link": "Zurück zur Anmeldung"
+  },
+  "order_success_page": {
+    "order_not_found_title": "Bestellung nicht gefunden",
+    "order_not_found_message": "Wir konnten Ihre Bestellung nicht finden. Bitte überprüfen Sie Ihre E-Mails auf Bestelldetails.",
+    "back_to_restaurant": "Zurück zum Restaurant",
+    "order_confirmed_title": "Bestellung bestätigt!",
+    "order_confirmed_message": "Vielen Dank für Ihre Bestellung. Wir haben eine Bestätigungs-E-Mail an { email } gesendet",
+    "order_number_label": "Bestellnummer",
+    "order_status_label": "Bestellstatus",
+    "estimated_ready_time": "Voraussichtliche Fertigstellungszeit",
+    "notify_when_ready": "Wir benachrichtigen Sie, wenn es fertig ist",
+    "delivery_address": "Lieferadresse",
+    "notes_label": "Notizen:",
+    "gps_coordinates": "GPS-Koordinaten",
+    "order_details_label": "Bestelldetails",
+    "quantity_label": "Menge:",
+    "subtotal_label": "Zwischensumme",
+    "tax_label": "Steuer",
+    "delivery_fee_label": "Liefergebühr",
+    "total_label": "Gesamt",
+    "special_instructions_label": "Besondere Anweisungen",
+    "order_again": "Erneut bestellen"
   }
 }

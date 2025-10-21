@@ -1,16 +1,18 @@
+import { Locale } from "@/i18n/routing";
+import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 
-const Understand = () => {
-    const t = useTranslations("Home.Understand");
+const Understand = async () => {
+    const t = await getTranslations("Home.Understand");
+    const locale = await getLocale() as Locale;
 
     return (
         <div className="w-full px-5 flex items-center justify-center bg-[white] py-12 sm:py-[100px] lg:py-[170px]">
             <div className="w-full mx-auto max-w-[1165px] flex lg:flex-row flex-col items-start lg:items-center justify-between gap-6 xl:gap-[157px]">
                 <div className="w-full max-w-[455px]">
                     <Image
-                        src={"/left-side-every.png"}
-                        alt="left-side-every.png"
+                        src={`/understand-${locale}.webp`}
+                        alt={`understand-${locale}.png`}
                         width={500}
                         height={500}
                         className="w-full max-w-[455px] aspect-square"
