@@ -532,17 +532,17 @@ model Payment {
   updatedAt     DateTime                 @updatedAt
 }
 
-enum ReservationStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-}
-
 enum ReservationPaymentStatus {
   PENDING
   PAID
   FAILED
   REFUNDED
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
 }
 
 enum ReservationSource {

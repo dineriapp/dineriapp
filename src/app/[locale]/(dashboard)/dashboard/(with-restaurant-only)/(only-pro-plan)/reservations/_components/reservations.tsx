@@ -115,7 +115,7 @@ export default function ReservationsPage() {
         const isPositive = trendValue >= 0
         return (
             <Card className="bg-white border">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                     <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
                         {icon} {title}
                     </CardTitle>
@@ -140,6 +140,10 @@ export default function ReservationsPage() {
 
     return (
         <div className="space-y-6">
+            <div>
+                <h2 className="text-2xl font-bold text-slate-900">Reservations</h2>
+                <p className="text-slate-600 mt-1">Manage all your restaurant bookings</p>
+            </div>
             {/* --- Stats --- */}
             <div className="grid grid-cols-4 gap-4">
                 <StatCard

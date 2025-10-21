@@ -1,17 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-    Table as UITable,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
     Dialog,
     DialogContent,
@@ -20,57 +11,57 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
 import {
-    PlusCircle,
-    CheckCircle,
-    XCircle,
-    Users,
-    Pencil,
-    Eye,
-    Trash2,
-    ArrowUpRight,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import {
     ArrowDownRight,
+    ArrowUpRight,
+    PlusCircle,
+    ToggleLeft,
+    ToggleRight,
+    Trash2,
+    Users,
 } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react"
 
 // 🧾 Dummy table data
 const dummyTables = [
-    {
-        id: "1",
-        tableNumber: "T1",
-        capacity: 2,
-        location: "Patio",
-        status: "ACTIVE",
-    },
-    {
-        id: "2",
-        tableNumber: "T2",
-        capacity: 4,
-        location: "Main Hall",
-        status: "ACTIVE",
-    },
-    {
-        id: "3",
-        tableNumber: "T3",
-        capacity: 6,
-        location: "Bar",
-        status: "INACTIVE",
-    },
+    { id: "1", tableNumber: "A4", capacity: 6, location: "Patio", status: "INACTIVE" },
+    { id: "2", tableNumber: "A45", capacity: 5, location: "Main Hall", status: "ACTIVE" },
+    { id: "3", tableNumber: "B12", capacity: 4, location: "Bar", status: "ACTIVE" },
+    { id: "4", tableNumber: "C9", capacity: 2, location: "Lounge", status: "INACTIVE" },
+    { id: "5", tableNumber: "D7", capacity: 8, location: "Terrace", status: "ACTIVE" },
+    { id: "6", tableNumber: "E3", capacity: 2, location: "Patio", status: "ACTIVE" },
+    { id: "7", tableNumber: "F1", capacity: 6, location: "Private Room", status: "INACTIVE" },
+    { id: "8", tableNumber: "G10", capacity: 4, location: "Main Hall", status: "ACTIVE" },
+    { id: "9", tableNumber: "H5", capacity: 5, location: "Bar", status: "INACTIVE" },
+    { id: "10", tableNumber: "I8", capacity: 3, location: "Lounge", status: "ACTIVE" },
+    { id: "11", tableNumber: "J2", capacity: 7, location: "Terrace", status: "INACTIVE" },
+    { id: "12", tableNumber: "K11", capacity: 4, location: "Patio", status: "ACTIVE" },
+    { id: "13", tableNumber: "L6", capacity: 6, location: "Main Hall", status: "ACTIVE" },
+    { id: "14", tableNumber: "M15", capacity: 10, location: "Private Room", status: "INACTIVE" },
 ]
 
 type TableStatus = "ACTIVE" | "INACTIVE"
 
-export default function TablesPage() {
+export default function TablesGridPage() {
     const [tables, setTables] = useState(dummyTables)
+    const [statusFilter, setStatusFilter] = useState("ALL")
     const [search, setSearch] = useState("")
+    const [dialogOpen, setDialogOpen] = useState(false)
+
     const [newTable, setNewTable] = useState({
         tableNumber: "",
         capacity: "",
         location: "",
         status: "ACTIVE",
     })
-    const [dialogOpen, setDialogOpen] = useState(false)
 
     // 📊 Stats
     const totalTables = tables.length
@@ -81,14 +72,27 @@ export default function TablesPage() {
     const trend = {
         total: 5,
         active: 10,
-        inactive: -3,
+        inactive: -2,
         capacity: 8,
     }
 
-    const filtered = tables.filter((t) =>
-        t.tableNumber.toLowerCase().includes(search.toLowerCase()) ||
-        t.location.toLowerCase().includes(search.toLowerCase())
-    )
+    const filteredTables = tables.filter((t) => {
+        const matchStatus = statusFilter === "ALL" || t.status === statusFilter
+        const matchSearch =
+            t.tableNumber.toLowerCase().includes(search.toLowerCase()) ||
+            t.location.toLowerCase().includes(search.toLowerCase())
+        return matchStatus && matchSearch
+    })
+
+    const toggleStatus = (id: string) => {
+        setTables((prev) =>
+            prev.map((t) =>
+                t.id === id
+                    ? { ...t, status: t.status === "ACTIVE" ? "INACTIVE" : "ACTIVE" }
+                    : t
+            )
+        )
+    }
 
     const handleAddTable = () => {
         const newId = (Math.random() * 100000).toFixed(0)
@@ -123,7 +127,7 @@ export default function TablesPage() {
     }) => {
         const isPositive = trendValue >= 0
         return (
-            <Card className="bg-white border">
+            <Card className="bg-white border shadow-sm">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                     <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
                         {icon} {title}
@@ -149,6 +153,10 @@ export default function TablesPage() {
 
     return (
         <div className="space-y-6">
+            <div>
+                <h2 className="text-2xl font-bold text-slate-900">Tables</h2>
+                <p className="text-slate-600 mt-1">Manage your restaurant tables and floor plan</p>
+            </div>
             {/* --- Stats --- */}
             <div className="grid grid-cols-4 gap-4">
                 <StatCard
@@ -160,13 +168,13 @@ export default function TablesPage() {
                 <StatCard
                     title="Active"
                     value={totalActive}
-                    icon={<CheckCircle className="h-5 w-5 text-gray-400" />}
+                    icon={<ToggleRight className="h-5 w-5 text-gray-400" />}
                     trendValue={trend.active}
                 />
                 <StatCard
                     title="Inactive"
                     value={totalInactive}
-                    icon={<XCircle className="h-5 w-5 text-gray-400" />}
+                    icon={<ToggleLeft className="h-5 w-5 text-gray-400" />}
                     trendValue={trend.inactive}
                 />
                 <StatCard
@@ -177,20 +185,31 @@ export default function TablesPage() {
                 />
             </div>
 
-            {/* --- Filters & Add --- */}
+            {/* --- Filters --- */}
             <div className="flex justify-between items-center gap-4">
-                <Input
-                    placeholder="Search by table number or location"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-[300px] bg-white"
-                />
+                <div className="flex gap-2">
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                        <SelectTrigger className="w-[150px] !bg-white">
+                            <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="ALL">All</SelectItem>
+                            <SelectItem value="ACTIVE">Active</SelectItem>
+                            <SelectItem value="INACTIVE">Inactive</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <Input
+                        placeholder="Search table number or location"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-[250px] !bg-white"
+                    />
+                </div>
 
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogTrigger asChild>
-                        <Button className="bg-black text-white hover:bg-gray-800 flex items-center gap-2">
-                            <PlusCircle className="h-4 w-4" />
-                            Add Table
+                        <Button className="bg-main-green text-white hover:bg-main-green/80 cursor-pointer">
+                            <PlusCircle className="h-4 w-4" /> Add Table
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-white">
@@ -201,24 +220,18 @@ export default function TablesPage() {
                             <Input
                                 placeholder="Table Number"
                                 value={newTable.tableNumber}
-                                onChange={(e) =>
-                                    setNewTable({ ...newTable, tableNumber: e.target.value })
-                                }
+                                onChange={(e) => setNewTable({ ...newTable, tableNumber: e.target.value })}
                             />
                             <Input
                                 placeholder="Capacity"
                                 type="number"
                                 value={newTable.capacity}
-                                onChange={(e) =>
-                                    setNewTable({ ...newTable, capacity: e.target.value })
-                                }
+                                onChange={(e) => setNewTable({ ...newTable, capacity: e.target.value })}
                             />
                             <Input
                                 placeholder="Location"
                                 value={newTable.location}
-                                onChange={(e) =>
-                                    setNewTable({ ...newTable, location: e.target.value })
-                                }
+                                onChange={(e) => setNewTable({ ...newTable, location: e.target.value })}
                             />
                             <Select
                                 value={newTable.status}
@@ -242,59 +255,53 @@ export default function TablesPage() {
                 </Dialog>
             </div>
 
-            {/* --- Table --- */}
-            <div className="border rounded-lg overflow-hidden p-4 bg-white">
-                <UITable>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Table #</TableHead>
-                            <TableHead>Capacity</TableHead>
-                            <TableHead>Location</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {filtered.map((t) => (
-                            <TableRow key={t.id}>
-                                <TableCell>{t.tableNumber}</TableCell>
-                                <TableCell>{t.capacity}</TableCell>
-                                <TableCell>{t.location}</TableCell>
-                                <TableCell>
-                                    <Badge
-                                        variant={
-                                            t.status === "ACTIVE" ? "default" : "secondary"
-                                        }
-                                    >
-                                        {t.status}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="flex gap-2">
-                                    <Button size="sm" variant="outline" className="flex items-center gap-1">
-                                        <Eye className="h-4 w-4" /> View
-                                    </Button>
-                                    <Button size="sm" variant="outline" className="flex items-center gap-1">
-                                        <Pencil className="h-4 w-4" /> Edit
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        variant="destructive"
-                                        className="flex items-center gap-1"
-                                        onClick={() => handleDelete(t.id)}
-                                    >
-                                        <Trash2 className="h-4 w-4" /> Delete
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </UITable>
-                {filtered.length === 0 && (
-                    <div className="p-6 text-center text-sm text-gray-500">
-                        No tables found.
-                    </div>
-                )}
+            {/* --- Grid Cards --- */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {filteredTables.map((table) => (
+                    <Card key={table.id} className="bg-white border gap-1 shadow-sm relative">
+                        <div className="absolute top-5 right-5 cursor-pointer">
+                            <Trash2
+                                onClick={() => handleDelete(table.id)}
+                                className="h-4 w-4 text-red-400 hover:text-red-500 transition"
+                            />
+                        </div>
+                        <CardHeader className="pb-2 flex justify-between items-start">
+                            <div className="flex items-start flex-col gap-1">
+                                <CardTitle className="text-xl font-bold">{table.tableNumber}</CardTitle>
+                                <p className="text-sm text-gray-500">Seats {table.capacity}</p>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="flex flex-col gap-3">
+                            <Badge variant="outline" className="bg-amber-100 text-amber-700 w-fit">
+                                Unassigned
+                            </Badge>
+
+                            <Button
+                                onClick={() => toggleStatus(table.id)}
+                                variant="outline"
+                                className={`flex items-center justify-center gap-2 ${table.status === "ACTIVE" ? "border-green-500 text-green-600" : "border-gray-300 text-gray-500"
+                                    }`}
+                            >
+                                {table.status === "ACTIVE" ? (
+                                    <>
+                                        <ToggleRight className="h-4 w-4 text-green-500" /> Active
+                                    </>
+                                ) : (
+                                    <>
+                                        <ToggleLeft className="h-4 w-4 text-gray-400" /> Inactive
+                                    </>
+                                )}
+                            </Button>
+                        </CardContent>
+                    </Card>
+                ))}
             </div>
+
+            {filteredTables.length === 0 && (
+                <div className="p-6 text-center text-sm text-gray-500">
+                    No tables found.
+                </div>
+            )}
         </div>
     )
 }
