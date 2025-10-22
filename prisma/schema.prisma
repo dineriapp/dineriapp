@@ -206,6 +206,7 @@ model Restaurant {
   qrCodes         qr_codes[]
   Order           Order[]
   tables          Table[]
+  Area            Area[]
 
   @@map("restaurants")
 }
@@ -493,15 +494,14 @@ model Table {
   id            String               @id @default(uuid()) @db.Uuid
   tableNumber   String               @unique
   capacity      Int
-  location      String
+  area          Area                 @relation(fields: [areaId], references: [id])
+  areaId        String               @db.Uuid
   status        TableStatus
   reservations  TableOnReservation[]
   createdAt     DateTime             @default(now())
   updatedAt     DateTime             @updatedAt
   restaurant    Restaurant           @relation(fields: [restaurant_id], references: [id])
   restaurant_id String               @db.Uuid
-
-  @@index([location])
 }
 
 enum TableStatus {
@@ -530,6 +530,17 @@ model Payment {
   paidAt        DateTime?
   createdAt     DateTime                 @default(now())
   updatedAt     DateTime                 @updatedAt
+}
+
+model Area {
+  id            String     @id @default(uuid()) @db.Uuid
+  name          String
+  active        Boolean    @default(true)
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant_id String     @db.Uuid
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  Table         Table[]
 }
 
 enum ReservationPaymentStatus {

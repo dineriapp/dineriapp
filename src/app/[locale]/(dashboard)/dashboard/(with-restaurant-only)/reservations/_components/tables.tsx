@@ -1,65 +1,38 @@
 "use client"
 
+import type React from "react"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import {
-    ArrowDownRight,
-    ArrowUpRight,
-    PlusCircle,
-    ToggleLeft,
-    ToggleRight,
-    Trash2,
-    Users,
-} from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ArrowDownRight, ArrowUpRight, PlusCircle, ToggleLeft, ToggleRight, Trash2, Users } from "lucide-react"
 import { useState } from "react"
-
-// 🧾 Dummy table data
-const dummyTables = [
-    { id: "1", tableNumber: "A4", capacity: 6, location: "Patio", status: "INACTIVE" },
-    { id: "2", tableNumber: "A45", capacity: 5, location: "Main Hall", status: "ACTIVE" },
-    { id: "3", tableNumber: "B12", capacity: 4, location: "Bar", status: "ACTIVE" },
-    { id: "4", tableNumber: "C9", capacity: 2, location: "Lounge", status: "INACTIVE" },
-    { id: "5", tableNumber: "D7", capacity: 8, location: "Terrace", status: "ACTIVE" },
-    { id: "6", tableNumber: "E3", capacity: 2, location: "Patio", status: "ACTIVE" },
-    { id: "7", tableNumber: "F1", capacity: 6, location: "Private Room", status: "INACTIVE" },
-    { id: "8", tableNumber: "G10", capacity: 4, location: "Main Hall", status: "ACTIVE" },
-    { id: "9", tableNumber: "H5", capacity: 5, location: "Bar", status: "INACTIVE" },
-    { id: "10", tableNumber: "I8", capacity: 3, location: "Lounge", status: "ACTIVE" },
-    { id: "11", tableNumber: "J2", capacity: 7, location: "Terrace", status: "INACTIVE" },
-    { id: "12", tableNumber: "K11", capacity: 4, location: "Patio", status: "ACTIVE" },
-    { id: "13", tableNumber: "L6", capacity: 6, location: "Main Hall", status: "ACTIVE" },
-    { id: "14", tableNumber: "M15", capacity: 10, location: "Private Room", status: "INACTIVE" },
-]
-
-type TableStatus = "ACTIVE" | "INACTIVE"
+import { useRestaurantStore } from "@/stores/restaurant-store"
+import type { CreateTableInput } from "@/lib/types"
+import { useCreateTable, useDeleteTable, useTables, useUpdateTable } from "@/lib/table-queries"
+import { useAreas } from "@/lib/area-queries"
+import LoadingUI from "@/components/loading-ui"
+import { Label } from "@/components/ui/label"
 
 export default function TablesGridPage() {
-    const [tables, setTables] = useState(dummyTables)
+    const { selectedRestaurant: restaurant } = useRestaurantStore()
     const [statusFilter, setStatusFilter] = useState("ALL")
     const [search, setSearch] = useState("")
     const [dialogOpen, setDialogOpen] = useState(false)
 
-    const [newTable, setNewTable] = useState({
+    const { data: tables = [], isLoading, error } = useTables(restaurant?.id)
+    const { data: areas = [] } = useAreas(restaurant?.id)
+    const createTableMutation = useCreateTable(restaurant?.id)
+    const updateTableMutation = useUpdateTable()
+    const deleteTableMutation = useDeleteTable()
+
+    const [newTable, setNewTable] = useState<CreateTableInput>({
         tableNumber: "",
-        capacity: "",
-        location: "",
+        capacity: 0,
+        areaId: "",
         status: "ACTIVE",
     })
 
@@ -80,38 +53,36 @@ export default function TablesGridPage() {
         const matchStatus = statusFilter === "ALL" || t.status === statusFilter
         const matchSearch =
             t.tableNumber.toLowerCase().includes(search.toLowerCase()) ||
-            t.location.toLowerCase().includes(search.toLowerCase())
+            t.area.name.toLowerCase().includes(search.toLowerCase())
         return matchStatus && matchSearch
     })
 
-    const toggleStatus = (id: string) => {
-        setTables((prev) =>
-            prev.map((t) =>
-                t.id === id
-                    ? { ...t, status: t.status === "ACTIVE" ? "INACTIVE" : "ACTIVE" }
-                    : t
-            )
-        )
+    const toggleStatus = (tableId: string, currentStatus: string) => {
+        const newStatus = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE"
+        updateTableMutation.mutate({
+            tableId,
+            data: { status: newStatus as "ACTIVE" | "INACTIVE" },
+        })
     }
 
     const handleAddTable = () => {
-        const newId = (Math.random() * 100000).toFixed(0)
-        setTables([
-            ...tables,
-            {
-                id: newId,
-                tableNumber: newTable.tableNumber,
-                capacity: Number(newTable.capacity),
-                location: newTable.location,
-                status: newTable.status as TableStatus,
+        if (!newTable.tableNumber || !newTable.areaId || newTable.capacity <= 0) {
+            alert("Please fill in all fields")
+            return
+        }
+
+        createTableMutation.mutate(newTable, {
+            onSuccess: () => {
+                setDialogOpen(false)
+                setNewTable({ tableNumber: "", capacity: 0, areaId: "", status: "ACTIVE" })
             },
-        ])
-        setDialogOpen(false)
-        setNewTable({ tableNumber: "", capacity: "", location: "", status: "ACTIVE" })
+        })
     }
 
-    const handleDelete = (id: string) => {
-        setTables(tables.filter((t) => t.id !== id))
+    const handleDelete = (tableId: string) => {
+        if (confirm("Are you sure you want to delete this table?")) {
+            deleteTableMutation.mutate(tableId)
+        }
     }
 
     const StatCard = ({
@@ -132,15 +103,8 @@ export default function TablesGridPage() {
                     <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
                         {icon} {title}
                     </CardTitle>
-                    <span
-                        className={`flex items-center text-xs font-semibold ${isPositive ? "text-green-600" : "text-red-600"
-                            }`}
-                    >
-                        {isPositive ? (
-                            <ArrowUpRight className="h-4 w-4 mr-1" />
-                        ) : (
-                            <ArrowDownRight className="h-4 w-4 mr-1" />
-                        )}
+                    <span className={`flex items-center text-xs font-semibold ${isPositive ? "text-green-600" : "text-red-600"}`}>
+                        {isPositive ? <ArrowUpRight className="h-4 w-4 mr-1" /> : <ArrowDownRight className="h-4 w-4 mr-1" />}
                         {Math.abs(trendValue)}%
                     </span>
                 </CardHeader>
@@ -148,6 +112,27 @@ export default function TablesGridPage() {
                     <p className="text-2xl font-bold">{value}</p>
                 </CardContent>
             </Card>
+        )
+    }
+
+    if (!restaurant) {
+        return <LoadingUI text="Loading..." />
+    }
+
+    if (isLoading) {
+        return <LoadingUI text="Loading tables..." />
+    }
+
+
+    if (error) {
+        return (
+            <div className="space-y-6">
+                <div>
+                    <h2 className="text-2xl font-bold text-slate-900">Tables</h2>
+                    <p className="text-slate-600 mt-1">Manage your restaurant tables and floor plan</p>
+                </div>
+                <div className="text-center text-red-500">Error loading tables: {error.message}</div>
+            </div>
         )
     }
 
@@ -199,7 +184,7 @@ export default function TablesGridPage() {
                         </SelectContent>
                     </Select>
                     <Input
-                        placeholder="Search table number or location"
+                        placeholder="Search table number or area"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="w-[250px] !bg-white"
@@ -217,38 +202,62 @@ export default function TablesGridPage() {
                             <DialogTitle>Add New Table</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4">
-                            <Input
-                                placeholder="Table Number"
-                                value={newTable.tableNumber}
-                                onChange={(e) => setNewTable({ ...newTable, tableNumber: e.target.value })}
-                            />
-                            <Input
-                                placeholder="Capacity"
-                                type="number"
-                                value={newTable.capacity}
-                                onChange={(e) => setNewTable({ ...newTable, capacity: e.target.value })}
-                            />
-                            <Input
-                                placeholder="Location"
-                                value={newTable.location}
-                                onChange={(e) => setNewTable({ ...newTable, location: e.target.value })}
-                            />
-                            <Select
-                                value={newTable.status}
-                                onValueChange={(val) => setNewTable({ ...newTable, status: val })}
-                            >
-                                <SelectTrigger className="bg-white">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="ACTIVE">Active</SelectItem>
-                                    <SelectItem value="INACTIVE">Inactive</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <div className="space-y-2">
+                                <Label>Table Number</Label>
+                                <Input
+                                    placeholder="Table Number"
+                                    value={newTable.tableNumber}
+                                    onChange={(e) => setNewTable({ ...newTable, tableNumber: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Capacity</Label>
+                                <Input
+                                    placeholder="Capacity"
+                                    type="number"
+                                    value={newTable.capacity}
+                                    onChange={(e) => setNewTable({ ...newTable, capacity: Number(e.target.value) })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Area</Label>
+                                <Select value={newTable.areaId} onValueChange={(val) => setNewTable({ ...newTable, areaId: val })}>
+                                    <SelectTrigger className=" w-full">
+                                        <SelectValue placeholder="Select Area" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {areas.map((area) => (
+                                            <SelectItem key={area.id} value={area.id}>
+                                                {area.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Capacity</Label>
+                                <Select
+                                    value={newTable.status}
+                                    onValueChange={(val) => setNewTable({ ...newTable, status: val as "ACTIVE" | "INACTIVE" })}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="ACTIVE">Active</SelectItem>
+                                        <SelectItem value="INACTIVE">Inactive</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
                         </div>
                         <DialogFooter>
-                            <Button onClick={handleAddTable} className="bg-green-600 text-white hover:bg-green-700">
-                                Save
+                            <Button
+                                onClick={handleAddTable}
+                                disabled={createTableMutation.isPending}
+                                className="bg-green-600 text-white hover:bg-green-700"
+                            >
+                                {createTableMutation.isPending ? "Saving..." : "Save"}
                             </Button>
                         </DialogFooter>
                     </DialogContent>
@@ -273,11 +282,12 @@ export default function TablesGridPage() {
                         </CardHeader>
                         <CardContent className="flex flex-col gap-3">
                             <Badge variant="outline" className="bg-amber-100 text-amber-700 w-fit">
-                                Unassigned
+                                {table.area.name}
                             </Badge>
 
                             <Button
-                                onClick={() => toggleStatus(table.id)}
+                                onClick={() => toggleStatus(table.id, table.status)}
+                                disabled={updateTableMutation.isPending}
                                 variant="outline"
                                 className={`flex items-center justify-center gap-2 ${table.status === "ACTIVE" ? "border-green-500 text-green-600" : "border-gray-300 text-gray-500"
                                     }`}
@@ -297,11 +307,7 @@ export default function TablesGridPage() {
                 ))}
             </div>
 
-            {filteredTables.length === 0 && (
-                <div className="p-6 text-center text-sm text-gray-500">
-                    No tables found.
-                </div>
-            )}
+            {filteredTables.length === 0 && <div className="p-6 text-center text-sm text-gray-500">No tables found.</div>}
         </div>
     )
 }

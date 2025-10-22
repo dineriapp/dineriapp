@@ -1,4 +1,4 @@
-import { GradientDirection } from "@prisma/client";
+import { Area, GradientDirection, Table } from "@prisma/client";
 
 export interface Restaurant {
     id: string;
@@ -155,4 +155,54 @@ export interface Template {
     description: string
     preview: AppearanceFormData
     category: string
+}
+
+export interface CreateAreaInput {
+    name: string
+    active?: boolean
+}
+
+export interface UpdateAreaInput {
+    name?: string
+    active?: boolean
+}
+
+export interface AreaResponse {
+    success: boolean
+    data?: Area
+    error?: string
+}
+
+export interface AreasListResponse {
+    success: boolean
+    data?: Area[]
+    error?: string
+}
+
+
+
+export interface CreateTableInput {
+    tableNumber: string
+    capacity: number
+    areaId: string
+    status?: "ACTIVE" | "INACTIVE"
+}
+
+export interface UpdateTableInput {
+    tableNumber?: string
+    capacity?: number
+    areaId?: string
+    status?: "ACTIVE" | "INACTIVE"
+}
+
+export interface TableResponse {
+    success: boolean
+    data?: Table
+    error?: string
+}
+
+export interface TablesListResponse {
+    success: boolean
+    data?: (Table & { area: Area })[]
+    error?: string
 }
