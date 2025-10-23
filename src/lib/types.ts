@@ -1,4 +1,4 @@
-import { Area, GradientDirection, Table } from "@prisma/client";
+import { Area, GradientDirection, Prisma, Table } from "@prisma/client";
 
 export interface Restaurant {
     id: string;
@@ -204,5 +204,84 @@ export interface TableResponse {
 export interface TablesListResponse {
     success: boolean
     data?: (Table & { area: Area })[]
+    error?: string
+}
+
+
+export interface CreateReservationInput {
+    name: string
+    email: string
+    phone: string
+    date: Date
+    fromTime: string
+    endTime: string
+    partySize: number
+    preferredArea: string
+    specialRequest: string
+    status: "PENDING" | "CONFIRMED" | "CANCELLED"
+    source: "ONLINE" | "PHONE" | "WALK_IN" | "PARTNER"
+    tableIds?: string[]
+    payment?: {
+        paidAmount: number
+        totalAmount: number
+        currency: string
+        paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED"
+        method: string
+    }
+    timezone?: string
+}
+
+export interface UpdateReservationInput {
+    name?: string
+    email?: string
+    phone?: string
+    date?: Date
+    fromTime?: string
+    endTime?: string
+    partySize?: number
+    preferredArea?: string
+    specialRequest?: string
+    status?: "PENDING" | "CONFIRMED" | "CANCELLED"
+    tableIds?: string[]
+    payment?: {
+        paidAmount?: number
+        totalAmount?: number
+        currency?: string
+        paymentStatus?: "PENDING" | "PAID" | "FAILED" | "REFUNDED"
+        method?: string
+    }
+}
+
+export type ReservationUp = Prisma.ReservationGetPayload<{
+    include: {
+        payment: true;
+        tableLinks: {
+            include: { table: true };
+        };
+    };
+}>;
+
+
+export interface ReservationResponse {
+    success: boolean
+    data?: ReservationUp
+    error?: string
+}
+
+export interface ReservationsListResponse {
+    success: boolean
+    data?: ReservationUp[]
+    error?: string
+}
+
+export interface ReservationStatsResponse {
+    success: boolean
+    data?: {
+        total: number
+        confirmed: number
+        pending: number
+        cancelled: number
+        checkedIn: number
+    }
     error?: string
 }

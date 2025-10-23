@@ -417,14 +417,14 @@ export function AppSidebar({
                   const isActive = pathname === item.href;
                   const isLocked =
                     !isPremium &&
-                    (item.label === "Analytics" || item.label === "QR Codes");
+                    (item.href === "/dashboard/stats" || item.href === "/dashboard/reservations" || item.href === "/dashboard/qr-codes");
 
                   const handleClick = (e: React.MouseEvent) => {
                     if (isLocked) {
                       e.preventDefault();
-                      openPopup(
-                        t("locked_feature")
-                      );
+                      // openPopup(
+                      //   t("locked_feature")
+                      // );
                     }
                   };
 
