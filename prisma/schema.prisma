@@ -196,20 +196,34 @@ model Restaurant {
   cardsBadgesBg        String @default("#F5F5F5")
   cardsBadgesTextColor String @default("black")
 
-  events          Event[]
-  faqCategories   FaqCategory[]
-  links           Link[]
-  menuCategories  MenuCategory[]
-  reviews         Review[]
-  user            User             @relation(fields: [user_id], references: [id])
-  restaurantViews RestaurantView[]
-  qrCodes         qr_codes[]
-  Order           Order[]
-  tables          Table[]
-  Area            Area[]
-  Reservation     Reservation[]
+  events               Event[]
+  faqCategories        FaqCategory[]
+  links                Link[]
+  menuCategories       MenuCategory[]
+  reviews              Review[]
+  user                 User                 @relation(fields: [user_id], references: [id])
+  restaurantViews      RestaurantView[]
+  qrCodes              qr_codes[]
+  Order                Order[]
+  tables               Table[]
+  Area                 Area[]
+  Reservation          Reservation[]
+  // reservation settings
+  reservation_settings ReservationSettings?
 
   @@map("restaurants")
+}
+
+model ReservationSettings {
+  id            String     @id @default(cuid())
+  restaurant_id String     @unique @db.Uuid
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+
+  // 👇 all your settings stored here
+  settings Json @default("{}")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model RestaurantView {

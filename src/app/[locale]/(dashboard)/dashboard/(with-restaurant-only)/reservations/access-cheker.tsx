@@ -4,6 +4,7 @@ import { User as PrismaUserType, } from "@prisma/client";
 import ReservationsPage from "./page-client";
 import { Link } from "@/i18n/navigation";
 import UpgradeBtn from "@/components/upgrade-btn";
+import LoadingUI from "@/components/loading-ui";
 
 interface AccessCheckerProps {
     prismaUser: PrismaUserType;
@@ -22,6 +23,10 @@ export default function AccessChecker({ prismaUser }: AccessCheckerProps) {
 
     if (isAuthorized) {
         return <ReservationsPage />;
+    }
+
+    if (!restaurant) {
+        return <LoadingUI text="Loading..." />
     }
 
     return (

@@ -1,132 +1,169 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Switch } from "@/components/ui/switch"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { UnsavedChangesPanel } from "@/components/pages/dashboard/unsaved-cahnges-penal";
+import UnsavedChangesUi from "@/components/unsaved-changes-ui";
+import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import DepositSystem from "./settings/deposit-system";
+import { NotificationSettingsComponent } from "./settings/notification-settings";
+import TimeSlotOverrides from "./settings/time-slot-overrides";
+import { SettingsState } from "./settings/types";
+import RestaurantSettingsManager from "./settings/restaurent-settings";
+import { useRestaurantStore } from "@/stores/restaurant-store";
+import { useReservationSettings, useSaveReservationSettings } from "@/lib/reservation-settings-queries";
+import LoadingUI from "@/components/loading-ui";
+import { toast } from "sonner";
+
+const default_data: SettingsState = {
+    overrides_settings: {
+        overrides_enabled: false,
+        overrides: [],
+    },
+    restaurantSettings: {
+        booking_interval_minutes: 30,
+        use_tiered_duration: false,
+        default_reservation_duration_minutes: 120,
+        small_party_duration: 90,
+        medium_party_duration: 120,
+        large_party_duration: 150,
+        enable_table_combinations: false,
+        enable_overbooking: false,
+        overbooking_percentage: 0,
+        enable_turn_time_buffer: false,
+        turn_time_buffer_minutes: 15,
+        enable_variable_duration: false,
+        duration_per_guest_minutes: 30,
+        min_reservation_duration_minutes: 60,
+        max_reservation_duration_minutes: 180,
+    },
+    notification_settings: {
+        notifications_enabled: false,
+        email_confirmation_enabled: true,
+        email_24h_reminder_enabled: true,
+        email_cancellation_enabled: true,
+        sms_2h_reminder_enabled: false,
+        reminder_time_24h: "10:00:00",
+        email_from_name: "",
+        email_reply_to: "",
+        email_confirmation_subject: "Your reservation at {{restaurant_name}}",
+        email_confirmation_body: `Hi {{guest_name}},\n\nThis confirms your reservation for {{party_size}} on {{date}} at {{time}}.\n\nWe look forward to seeing you!\n\nNeed to cancel? Visit your confirmation link.\n\n{{restaurant_name}}\n{{restaurant_contact}}`,
+        email_reminder_subject: "Reminder: Your reservation tomorrow at {{restaurant_name}}",
+        email_reminder_body: `Hi {{guest_name}},\n\nThis is a friendly reminder about your reservation tomorrow:\n\nParty size: {{party_size}}\nDate: {{date}}\nTime: {{time}}\n\nWe look forward to seeing you!\n\n{{restaurant_name}}\n{{restaurant_contact}}`,
+        sms_reminder_template:
+            "Reminder: Your reservation at {{restaurant_name}} today at {{time}} for {{party_size}}. Reply CANCEL to cancel.",
+        resend_api_key: "",
+        test_mode: true,
+    },
+    deposit_settings: {
+        depositSystemEnabled: false,
+        depositType: "per-person",
+        depositAmount: "10",
+        depositCurrency: "EUR (€)",
+        dynamicRules: [],
+        cancellationPolicies: [],
+    },
+}
 
 export default function SettingsPage() {
-    const [settings, setSettings] = useState({
-        reservationsEnabled: true,
-        tableManagementEnabled: true,
-        areaManagementEnabled: true,
-        emailReminders: false,
-        notifications: true,
-    })
+    const { selectedRestaurant: restaurant } = useRestaurantStore()
+    const restaurantId = restaurant?.id
 
-    const handleToggle = (key: keyof typeof settings) => {
-        setSettings((prev) => ({ ...prev, [key]: !prev[key] }))
-    }
+    const { data: initialSettings, isLoading: isLoadingInitialData } = useReservationSettings(restaurantId!);
+    const saveMutation = useSaveReservationSettings(restaurantId!);
 
-    const handleSave = () => {
-        // In real app, send to API
-        console.log("✅ Saved settings:", settings)
+    const [settings, setSettings] = useState<SettingsState>(default_data);
+
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // 🔸 Generic updater helper
+    const updateSettingsSection = <K extends keyof SettingsState>(
+        section: K,
+        value: SettingsState[K]
+    ) => {
+        if (!settings) return;
+        const updated = { ...settings, [section]: value };
+        setSettings(updated);
+        setHasChanges(JSON.stringify(updated) !== JSON.stringify(initialSettings));
+    };
+
+    const resetForm = () => {
+        if (initialSettings) {
+            setSettings(initialSettings);
+            setHasChanges(false);
+        }
+    };
+
+    const saveSettings = async () => {
+        try {
+            if (!restaurantId || !settings) return;
+            await saveMutation.mutateAsync(settings);
+            toast.success("Settings saved successfully!", {
+                description: "Your reservation settings have been updated.",
+                duration: 3000,
+            });
+            setHasChanges(false);
+        } catch (error) {
+            console.error("Failed to save settings:", error);
+            toast.error("Failed to save settings", {
+                description: "Please try again.",
+                duration: 4000,
+            });
+        }
+    };
+
+    // 🔸 Sync state with fetched settings
+    useEffect(() => {
+        if (initialSettings) {
+            // if it's empty object {}, fallback to your default_data
+            if (Object.keys(initialSettings).length === 0) {
+                setSettings(default_data);
+            } else {
+                setSettings(initialSettings);
+            }
+        }
+    }, [initialSettings]);
+
+
+    if (isLoadingInitialData || !settings || !restaurant) {
+        return <LoadingUI text="Loading settings...." />;
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 min-h-screen">
             <div>
-                <h2 className="text-2xl font-bold text-slate-900">Settings</h2>
+                <h2 className="text-2xl font-bold text-slate-900">Reservation Settings</h2>
                 <p className="text-slate-600 mt-1">
                     Control and configure key features of your restaurant system
                 </p>
             </div>
-
-            {/* ⚡ Features */}
-            <Card className="bg-white border shadow-sm">
-                <CardHeader>
-                    <CardTitle className="text-lg font-semibold">Features</CardTitle>
-                    <CardDescription>
-                        Enable or disable features according to your needs
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-5">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="font-medium text-slate-800">Reservations</p>
-                            <p className="text-sm text-slate-500">
-                                Allow customers to make table reservations
-                            </p>
-                        </div>
-                        <Switch
-                            checked={settings.reservationsEnabled}
-                            onCheckedChange={() => handleToggle("reservationsEnabled")}
-                        />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="font-medium text-slate-800">Table Management</p>
-                            <p className="text-sm text-slate-500">
-                                Manage tables and their status (Active/Inactive)
-                            </p>
-                        </div>
-                        <Switch
-                            checked={settings.tableManagementEnabled}
-                            onCheckedChange={() => handleToggle("tableManagementEnabled")}
-                        />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="font-medium text-slate-800">Area Management</p>
-                            <p className="text-sm text-slate-500">
-                                Organize tables into areas (Patio, Rooftop, etc.)
-                            </p>
-                        </div>
-                        <Switch
-                            checked={settings.areaManagementEnabled}
-                            onCheckedChange={() => handleToggle("areaManagementEnabled")}
-                        />
-                    </div>
-                </CardContent>
-            </Card>
-
-            {/* ✉️ Notifications */}
-            <Card className="bg-white border shadow-sm">
-                <CardHeader>
-                    <CardTitle className="text-lg font-semibold">Notifications</CardTitle>
-                    <CardDescription>
-                        Stay connected with your customers and staff
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-5">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="font-medium text-slate-800">Email Reminders</p>
-                            <p className="text-sm text-slate-500">
-                                Send reminder emails before reservations
-                            </p>
-                        </div>
-                        <Switch
-                            checked={settings.emailReminders}
-                            onCheckedChange={() => handleToggle("emailReminders")}
-                        />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="font-medium text-slate-800">Notifications</p>
-                            <p className="text-sm text-slate-500">
-                                Enable app and email notifications
-                            </p>
-                        </div>
-                        <Switch
-                            checked={settings.notifications}
-                            onCheckedChange={() => handleToggle("notifications")}
-                        />
-                    </div>
-                </CardContent>
-            </Card>
-
-            <div className="flex justify-end">
-                <Button
-                    onClick={handleSave}
-                    className="bg-green-600 text-white hover:bg-green-700"
-                >
-                    Save Changes
-                </Button>
+            <div className="space-y-3">
+                <DepositSystem
+                    value={settings.deposit_settings}
+                    onChange={(val) => updateSettingsSection("deposit_settings", val)}
+                />
+                <NotificationSettingsComponent
+                    settings={settings.notification_settings}
+                    updateSettingsSection={updateSettingsSection}
+                />
+                <TimeSlotOverrides
+                    settings={settings.overrides_settings}
+                    updateSettingsSection={updateSettingsSection}
+                />
+                <RestaurantSettingsManager
+                    settings={settings.restaurantSettings}
+                    updateSettingsSection={updateSettingsSection}
+                />
             </div>
+            {/* changes detection penal  */}
+            <UnsavedChangesPanel
+                hasChanges={hasChanges}
+                saving={saveMutation.isPending}
+                resetForm={resetForm}
+                saveSettings={saveSettings}
+                UnsavedChangesUi={UnsavedChangesUi}
+                ResetChangesBtnClasses={ResetChangesBtnClasses}
+                SaveChangesBtnClasses={SaveChangesBtnClasses}
+            />
         </div>
-    )
+    );
 }
