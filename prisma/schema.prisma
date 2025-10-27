@@ -584,8 +584,3 @@ enum ReservationSource {
   WALK_IN
   PARTNER
 }
-
-//
-// Payment flow means if 10 dollar online how to calculate total ?? 
-// Admin will assign tables and make reservation confirm right ???
-//
