@@ -11,6 +11,8 @@ import { FaqCategoryActions } from "@/components/pages/dashboard/faq/faq-categor
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Locale } from "@/i18n/routing"
+import { useSession } from "@/lib/auth/auth-client"
 import {
     useCreateFaq,
     useCreateFaqCategory,
@@ -22,23 +24,22 @@ import {
     useUpdateFaq,
     useUpdateFaqCategory,
 } from "@/lib/faq-queries"
+import { faq_container_animation, faq_item_animation, FAQ_TEMPLATES } from "@/lib/reuseable-data"
 import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
-import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { Eye, HelpCircle, Search, Star } from "lucide-react"
 import { motion } from "motion/react"
-import { useMemo, useState } from "react"
 import { useLocale, useTranslations } from "next-intl"
-import { Locale } from "@/i18n/routing"
-import { faq_container_animation, faq_item_animation, FAQ_TEMPLATES } from "@/lib/reuseable-data"
+import { useMemo, useState } from "react"
 
 // Animation variants
 
 
 export default function FAQPage() {
     const { restaurants, selectedRestaurant } = useRestaurantStore()
-    const { prismaUser } = useUserStore()
+    const { data: session } = useSession();
+
     const t = useTranslations("faqs")
     const locale = useLocale() as Locale
     const openPopup = useUpgradePopupStore(state => state.open)
@@ -245,7 +246,7 @@ export default function FAQPage() {
 
 
     const isFaqCategoryLimitReached = isLimitReached({
-        userPlan: prismaUser?.subscription_plan as SubscriptionPlan,
+        userPlan: session?.user?.subscription_plan as SubscriptionPlan,
         resourceType: "faq_categories",
         currentCount: categories.length,
     });
@@ -273,7 +274,7 @@ export default function FAQPage() {
                     </div>
 
                     <FaqCategoryActions
-                        prismaUser={prismaUser}
+                        prismaUser={session?.user}
                         STRIPE_PLANS={STRIPE_PLANS}
                         categories={categories}
                         restaurantId={restaurantId}
@@ -368,7 +369,7 @@ export default function FAQPage() {
                 <FaqCategories
                     filteredCategories={filteredCategories}
                     categories={categories}
-                    prismaUser={prismaUser}
+                    prismaUser={session?.user}
                     STRIPE_PLANS={STRIPE_PLANS}
                     container={faq_container_animation}
                     item={faq_item_animation}

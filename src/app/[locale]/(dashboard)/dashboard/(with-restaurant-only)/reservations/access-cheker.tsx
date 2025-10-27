@@ -1,23 +1,19 @@
 "use client"
-import { useRestaurantStore } from "@/stores/restaurant-store";
-import { User as PrismaUserType, } from "@prisma/client";
-import ReservationsPage from "./page-client";
-import { Link } from "@/i18n/navigation";
-import UpgradeBtn from "@/components/upgrade-btn";
 import LoadingUI from "@/components/loading-ui";
+import UpgradeBtn from "@/components/upgrade-btn";
+import { Link } from "@/i18n/navigation";
+import { useSession } from "@/lib/auth/auth-client";
+import { useRestaurantStore } from "@/stores/restaurant-store";
+import ReservationsPage from "./page-client";
 
-interface AccessCheckerProps {
-    prismaUser: PrismaUserType;
-}
-
-export default function AccessChecker({ prismaUser }: AccessCheckerProps) {
+export default function AccessChecker() {
     const { selectedRestaurant: restaurant } = useRestaurantStore();
-
+    const { data: session } = useSession()
     const hasStripeKeys = Boolean(
         restaurant?.stripe_public_key_encrypted && restaurant?.stripe_secret_key_encrypted
     );
 
-    const isProPlan = prismaUser?.subscription_plan !== "basic";
+    const isProPlan = session?.user?.subscription_plan !== "basic";
 
     const isAuthorized = hasStripeKeys && isProPlan;
 

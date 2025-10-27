@@ -1,7 +1,7 @@
-import { authenticateAndAuthorize } from "@/lib/auth-utils"
-import prisma from "@/lib/prisma"
-import { getTranslations } from "next-intl/server"
-import { type NextRequest, NextResponse } from "next/server"
+import { authenticateAndAuthorize } from "@/lib/auth-utils";
+import prisma from "@/lib/prisma";
+import { getTranslations } from "next-intl/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

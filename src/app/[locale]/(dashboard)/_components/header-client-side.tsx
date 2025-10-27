@@ -1,6 +1,5 @@
 "use client"
 
-import { signout } from "@/actions/auth"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -11,7 +10,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useSyncRestaurants } from "@/hooks/useSyncRestaurants"
-import { useUserStore } from "@/stores/auth-store"
+import { Link } from "@/i18n/navigation"
+import { signOut } from "@/lib/auth/auth-client"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { User as prismaUserType } from "@prisma/client"
@@ -34,7 +34,6 @@ import {
     UtensilsCrossed
 } from "lucide-react"
 import Image from "next/image"
-import { Link } from "@/i18n/navigation"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -76,7 +75,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
     const { restaurants, selectedRestaurant, setSelectedRestaurant } = useRestaurantStore()
     const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
     const navRef = useRef<HTMLDivElement>(null)
-    const { setSupabaseUser, setPrismaUser } = useUserStore()
+
     const { fetchAndSet } = useSyncRestaurants();
 
     const openPopup = useUpgradePopupStore(state => state.open)
@@ -89,12 +88,6 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
     useEffect(() => {
         fetchAndSet();
     }, []);
-
-    // Hydrate store with server data
-    useEffect(() => {
-        setSupabaseUser(user)
-        setPrismaUser(prismaUser)
-    }, [user, prismaUser, setSupabaseUser, setPrismaUser])
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -113,7 +106,7 @@ export function DashboardHeaderClientSide({ user, prismaUser }: { user: any, pri
         toast("Signed out successfully", {
             description: "You have been logged out of your account.",
         })
-        await signout()
+        await signOut()
         router.push("/")
     }
 

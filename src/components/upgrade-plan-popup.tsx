@@ -16,9 +16,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { useAuthCheck } from "@/hooks/use-auth-check";
+import { useSession } from "@/lib/auth/auth-client";
 import { STRIPE_PLANS, StripePlan } from "@/lib/stripe-plans";
-import { useUserStore } from "@/stores/auth-store";
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store";
 import { CheckIcon, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -29,11 +28,10 @@ export const UpgradePopup = () => {
   const { isOpen, message, close } = useUpgradePopupStore();
   const [loading, setLoading] = useState<StripePlan | null>(null);
   const router = useRouter();
-  const isAuthenticated = useAuthCheck();
-  const { prismaUser } = useUserStore();
+  const { data: session } = useSession();
 
   const handleSubscribe = async (plan: StripePlan) => {
-    if (!isAuthenticated) {
+    if (!session?.user) {
       router.push("/login");
       return;
     }
@@ -95,7 +93,7 @@ export const UpgradePopup = () => {
           <div className="px-6 py-3 max-h-[60dvh] sm:max-h-[70dvh] overflow-auto">
             <div
               className={
-                prismaUser?.subscription_plan === "pro"
+                session?.user?.subscription_plan === "pro"
                   ? "grid grid-cols-1 md:grid-cols-1 gap-6"
                   : "grid grid-cols-1 md:grid-cols-2 gap-6"
               }
@@ -106,7 +104,7 @@ export const UpgradePopup = () => {
                 const isPopular = planKey === "pro";
                 const isLoading = loading === planKey;
                 if (
-                  prismaUser?.subscription_plan === "pro" &&
+                  session?.user?.subscription_plan === "pro" &&
                   (key as StripePlan) === "pro"
                 )
                   return null;

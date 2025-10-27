@@ -1,5 +1,5 @@
+import { checkAuth } from "@/lib/auth/utils"
 import prisma from "@/lib/prisma"
-import { createClient } from "@/supabase/clients/server"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
@@ -12,10 +12,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const t = await getTranslations("orders_apis")
     try {
         const { id } = await params
-        const supabase = await createClient()
-        const { data: { user } } = await supabase.auth.getUser()
 
-        if (!user) {
+        const session = await checkAuth()
+
+
+        if (!session?.user) {
             return NextResponse.json({ error: t("error_unauthorized") }, { status: 401 })
         }
 
@@ -38,7 +39,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             return NextResponse.json({ error: t("error_order_not_found") }, { status: 404 })
         }
 
-        if (order.restaurant.user_id !== user.id) {
+        if (order.restaurant.user_id !== session?.user.id) {
             return NextResponse.json({ error: t("error_unauthorized") }, { status: 403 })
         }
 

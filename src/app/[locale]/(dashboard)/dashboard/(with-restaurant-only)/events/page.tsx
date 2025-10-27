@@ -16,10 +16,10 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useSession } from "@/lib/auth/auth-client"
 import { useCreateEvent, useDeleteEvent, useEvents, useReorderEvent, useUpdateEvent } from "@/lib/event-queries"
 import { container4 } from "@/lib/reuseable-data"
 import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
-import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import type { Event, SubscriptionPlan } from "@prisma/client"
@@ -32,7 +32,7 @@ import { useState } from "react"
 export default function EventsPage() {
     const { selectedRestaurant } = useRestaurantStore()
     const restaurantId = selectedRestaurant?.id
-    const { prismaUser } = useUserStore()
+    const { data: session } = useSession();
     const openPopup = useUpgradePopupStore(state => state.open)
     const t = useTranslations("events")
     const { data: events = [], isLoading } = useEvents(restaurantId)
@@ -141,12 +141,12 @@ export default function EventsPage() {
     }
 
     const isEventsLimitReached = isLimitReached({
-        userPlan: prismaUser?.subscription_plan as SubscriptionPlan,
+        userPlan: session?.user?.subscription_plan as SubscriptionPlan,
         resourceType: "events",
         currentCount: events.length,
     });
 
-    const plan = prismaUser?.subscription_plan ?? "basic"
+    const plan = session?.user?.subscription_plan ?? "basic"
 
 
     return (

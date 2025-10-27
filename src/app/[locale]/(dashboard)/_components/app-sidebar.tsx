@@ -38,19 +38,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Link, usePathname } from "@/i18n/navigation";
+import { Locale } from "@/i18n/routing";
+import { useSession } from "@/lib/auth/auth-client";
 import { useRestaurants } from "@/lib/restaurents-queries";
-import { useUserStore } from "@/stores/auth-store";
 import { useRestaurantStore } from "@/stores/restaurant-store";
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store";
-import { User as prismaUserType, User } from "@prisma/client";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { NavUser } from "./nav-user";
-import { Locale } from "@/i18n/routing";
-import { useLocale, useTranslations } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
 
 const navigationGroups = {
   en: [
@@ -253,15 +252,11 @@ const navigationGroups = {
   ],
 };
 
-export function AppSidebar({
-  user,
-  prismaUser,
-}: {
-  user: any;
-  prismaUser: prismaUserType;
-}) {
+export function AppSidebar() {
   const locale: Locale = useLocale() as Locale
   const t = useTranslations("DashboardSidebar")
+  const { data: session } = useSession();
+
   const {
     restaurants,
     initializeRestaurants,
@@ -279,17 +274,10 @@ export function AppSidebar({
   const router = useRouter();
   const pathname = usePathname()
   const openPopup = useUpgradePopupStore((state) => state.open);
-  const { setSupabaseUser, setPrismaUser } = useUserStore();
-
-  // Hydrate store with server data
-  useEffect(() => {
-    setSupabaseUser(user);
-    setPrismaUser(prismaUser);
-  }, [user, prismaUser, setSupabaseUser, setPrismaUser]);
 
   const hasMultiAccess =
-    prismaUser?.subscription_plan === "enterprise" ? true : false;
-  const isPremium = prismaUser?.subscription_plan === "basic" ? false : true;
+    session?.user?.subscription_plan === "enterprise" ? true : false;
+  const isPremium = session?.user?.subscription_plan === "basic" ? false : true;
 
   return (
     <Sidebar className="!pt-0 rounded-tl-[14px] !font-poppins rounded-bl-[14px] overflow-hidden">
@@ -472,7 +460,7 @@ export function AppSidebar({
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser data={{ user: user as User }} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

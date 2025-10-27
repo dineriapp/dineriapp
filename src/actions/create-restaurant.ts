@@ -1,13 +1,12 @@
 "use server";
 
+import { auth } from "@/lib/auth/auth";
 import prisma from "@/lib/prisma";
-import { createClient } from "@/supabase/clients/server";
 import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-
-
 
 export async function createRestaurant(formData: FormData) {
     const t = await getTranslations('create_restaurant_actions');
@@ -22,10 +21,11 @@ export async function createRestaurant(formData: FormData) {
         bio: z.string().max(200).optional(),
     });
 
-    const supabase = await createClient()
-    const { data } = await supabase.auth.getUser();
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
 
-    if (!data.user) {
+    if (!session?.user) {
         return { error: t("not_authenticated") };
     }
 
@@ -43,7 +43,6 @@ export async function createRestaurant(formData: FormData) {
 
     const { name, slug, bio } = parsedData.data;
 
-    // Check if slug is already taken
     const existingRestaurant = await prisma.restaurant.findUnique({
         where: { slug },
     });
@@ -52,31 +51,14 @@ export async function createRestaurant(formData: FormData) {
         return { error: t("slug_taken") };
     }
 
-    // Fetch user
-    const prismaUser = await prisma.user.findFirst({
-        where: {
-            id: data.user.id
-        },
-        select: {
-            subscription_plan: true,
-            email: true
-        }
-    });
-
-    if (!prismaUser) {
-        return { error: t("user_not_found") };
-    }
-
-    // Count how many restaurants the user already has
     const restaurantCount = await prisma.restaurant.count({
         where: {
-            user_id: data.user.id,
+            user_id: session.user.id,
         },
     });
 
-    // Enforce plan restriction: only 1 restaurant for basic plan
     if (
-        prismaUser.subscription_plan === "basic" &&
+        session.user.subscription_plan === "basic" &&
         restaurantCount >= 1
     ) {
         return {
@@ -84,14 +66,13 @@ export async function createRestaurant(formData: FormData) {
         };
     }
 
-    // Create new restaurant
     await prisma.restaurant.create({
         data: {
             name,
-            email: prismaUser.email,
+            email: session.user.email,
             slug,
             bio: bio || "",
-            user_id: data.user.id,
+            user_id: session.user.id,
         },
     });
 

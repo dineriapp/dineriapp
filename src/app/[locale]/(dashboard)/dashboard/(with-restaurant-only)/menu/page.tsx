@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { useSession } from "@/lib/auth/auth-client"
 import {
     useCreateCategory,
     useCreateItem,
@@ -34,19 +35,19 @@ import {
     useUpdateItem,
 } from "@/lib/menu-queries"
 import { container3 } from "@/lib/reuseable-data"
-import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
-import { useUserStore } from "@/stores/auth-store"
+import { getStripePlans, isLimitReached } from "@/lib/stripe-plans"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { MenuCategory, MenuItem, SubscriptionPlan } from "@prisma/client"
 import { ArrowDown, ArrowUp, Check, Edit, Plus, Search, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
+import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
-import { useTranslations } from "next-intl"
 
 export default function MenuPage() {
     const { restaurants, selectedRestaurant } = useRestaurantStore()
-    const { prismaUser } = useUserStore()
+    const { data: session } = useSession();
+    const locale = useLocale()
     const openPopup = useUpgradePopupStore(state => state.open)
     const t = useTranslations("MenuPage")
     const [searchTerm, setSearchTerm] = useState("")
@@ -266,7 +267,7 @@ export default function MenuPage() {
     }
 
     const isCategoryLimitReached = isLimitReached({
-        userPlan: prismaUser?.subscription_plan as SubscriptionPlan,
+        userPlan: session?.user?.subscription_plan as SubscriptionPlan,
         resourceType: "menu_categories",
         currentCount: categories.length,
     });
@@ -322,9 +323,9 @@ export default function MenuPage() {
                                     <Button
                                         size="lg"
                                         onClick={() => {
-                                            const plan = prismaUser?.subscription_plan ?? "basic"
-                                            const planName = STRIPE_PLANS[plan].name
-                                            const limit = STRIPE_PLANS[plan].limits?.menuCategories
+                                            const plan = session?.user?.subscription_plan ?? "basic"
+                                            const planName = getStripePlans(locale)[plan].name
+                                            const limit = getStripePlans(locale)[plan].limits?.menuCategories
                                             openPopup(t("categoryLimitMessage", {
                                                 limit: limit || "",
                                                 planName: planName
@@ -449,11 +450,11 @@ export default function MenuPage() {
                                             category.items && category.items.length > 0 && <Button
                                                 variant="outline"
                                                 onClick={() => {
-                                                    const plan = prismaUser?.subscription_plan ?? "basic";
-                                                    const limit = STRIPE_PLANS[plan].limits?.menuItemsPerCategory;
+                                                    const plan = session?.user?.subscription_plan ?? "basic";
+                                                    const limit = getStripePlans(locale)[plan].limits?.menuItemsPerCategory;
 
                                                     if (limit !== undefined && category.items.length >= limit) {
-                                                        const planName = STRIPE_PLANS[plan].name;
+                                                        const planName = getStripePlans(locale)[plan].name;
                                                         openPopup(t("itemLimitMessage", {
                                                             limit: limit,
                                                             planName: planName

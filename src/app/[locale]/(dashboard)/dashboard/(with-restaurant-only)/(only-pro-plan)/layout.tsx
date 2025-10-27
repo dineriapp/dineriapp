@@ -1,6 +1,6 @@
 "use server"
-import prisma from "@/lib/prisma";
-import { createClient } from "@/supabase/clients/server";
+import { auth } from "@/lib/auth/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function WithProPlanLayout({
@@ -8,24 +8,12 @@ export default async function WithProPlanLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const supabase = await createClient();
-    const {
-        data: { user },
-        error: userError,
-    } = await supabase.auth.getUser()
-
-    if (userError || !user) {
-        redirect('/login')
-    }
-
-    const prismaUser = await prisma.user.findFirst({
-        where: {
-            id: user.id
-        }
+    const session = await auth.api.getSession({
+        headers: await headers()
     })
 
-    if (!prismaUser) redirect("/dashbaord")
-    if (prismaUser.subscription_plan === "basic") redirect("/dashbaord")
+    if (!session?.user) redirect("/dashbaord")
+    if (session.user.subscription_plan === "basic") redirect("/dashbaord")
 
     return (
         children

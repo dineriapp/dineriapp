@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { supabase, uploadImage } from "@/supabase/clients/client"
-import { Session } from "@supabase/supabase-js"
+import { useSession } from "@/lib/auth/auth-client"
+import { uploadImage } from "@/supabase/clients/client"
 import { Loader2, Settings } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
@@ -32,7 +32,7 @@ interface RestaurantCustomizerProps {
 
 export default function RestaurantCustomizer({ stylesData, customBgUrl, updateStylesData, restaurentOwnerID, restaurentID }: RestaurantCustomizerProps) {
     const t = useTranslations("restaurant_customizer")
-    const [session, setSession] = useState<Session | null>(null);
+    const { data: session } = useSession()
     const [isSaving, setIsSaving] = useState(false)
     const [initialStylesData, setInitialStylesData] = useState<any>(null)
     const [uploading, setUploading] = useState(false)
@@ -42,14 +42,7 @@ export default function RestaurantCustomizer({ stylesData, customBgUrl, updateSt
         }
     }, [stylesData, initialStylesData])
 
-    useEffect(() => {
-        const getSession = async () => {
-            const { data } = await supabase.auth.getSession();
-            setSession(data.session);
-        };
 
-        getSession();
-    }, [supabase]);
 
     if (!session?.user || session?.user?.id !== restaurentOwnerID) {
         return null

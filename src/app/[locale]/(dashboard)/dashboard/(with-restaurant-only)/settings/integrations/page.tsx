@@ -6,8 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import UnsavedChangesUi from "@/components/unsaved-changes-ui"
+import { useSession } from "@/lib/auth/auth-client"
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
-import { useUserStore } from "@/stores/auth-store"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { Globe2, Lock } from "lucide-react"
@@ -21,9 +21,10 @@ interface IntegrationFormData {
 
 export default function IntegrationsPage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
-    const { prismaUser } = useUserStore()
+    const { data: session } = useSession();
+
     const openPopup = useUpgradePopupStore(state => state.open)
-    const isBasicPlan = prismaUser?.subscription_plan === "basic"
+    const isBasicPlan = session?.user?.subscription_plan === "basic"
     const t = useTranslations("Settings.integrations");
 
     const [formData, setFormData] = useState<IntegrationFormData>({

@@ -1,19 +1,20 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { updateQRCodeSchema } from "@/lib/qr-validations"
-import { QRCodeGenerator } from "@/lib/qr-generator"
+import { checkAuth } from "@/lib/auth/utils"
 import prisma from "@/lib/prisma"
-import { z } from "zod"
-import { createClient } from "@/supabase/clients/server"
+import { QRCodeGenerator } from "@/lib/qr-generator"
+import { updateQRCodeSchema } from "@/lib/qr-validations"
 import { getTranslations } from "next-intl/server"
+import { type NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const t = await getTranslations("qr_code_apis.error")
 
     try {
         const { id } = await params
-        const supabase = await createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+
+        const session = await checkAuth()
+
+        if (!session?.user) {
             return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         }
 
         // Verify user owns the restaurant
-        if (qrCode.restaurant.user_id !== user.id) {
+        if (qrCode.restaurant.user_id !== session.user.id) {
             return NextResponse.json({ error: t("unauthorized") }, { status: 403 })
         }
 
@@ -61,9 +62,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
         const { id } = await params
 
-        const supabase = await createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+        const session = await checkAuth()
+
+        if (!session?.user) {
             return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
@@ -88,7 +89,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         }
 
         // Verify user owns the restaurant
-        if (qrCode.restaurant.user_id !== user.id) {
+        if (qrCode.restaurant.user_id !== session.user.id) {
             return NextResponse.json({ error: t("unauthorized") }, { status: 403 })
         }
 
@@ -157,9 +158,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     try {
         const { id } = await params
-        const supabase = await createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+        const session = await checkAuth()
+        if (!session?.user) {
             return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
@@ -180,7 +180,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         }
 
         // Verify user owns the restaurant
-        if (qrCode.restaurant.user_id !== user.id) {
+        if (qrCode.restaurant.user_id !== session.user.id) {
             return NextResponse.json({ error: t("unauthorized") }, { status: 403 })
         }
 

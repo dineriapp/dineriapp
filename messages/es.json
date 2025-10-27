@@ -2491,9 +2491,16 @@
   },
   "NavUser": {
     "toastSignedOut": "Cierre de sesión exitoso",
-    "toastDescription": "Has cerrado sesión en tu cuenta.",
+    "toastDescription": "Has cerrado la sesión de tu cuenta.",
     "changeEmail": "Cambiar correo electrónico",
-    "logOut": "Cerrar sesión"
+    "logOut": "Cerrar sesión",
+    "emailVerified": "Correo verificado",
+    "yes": "Sí",
+    "no": "No",
+    "role": "Rol",
+    "plan": "Plan",
+    "status": "Estado",
+    "joined": "Se unió"
   },
   "EmailChangePage": {
     "backToSettings": "Volver a la configuración",
@@ -3338,58 +3345,6 @@
       "checkout_no_url": "No se recibió URL de pago",
       "failed_checkout_session": "No se pudo crear la sesión de pago"
     }
-  },
-  "login_page": {
-    "welcome_back": "Bienvenido de nuevo",
-    "description": "Inicia sesión en tu cuenta de dineri.app para gestionar la presencia en línea de tu restaurante.",
-    "invalid_email": "Dirección de correo electrónico no válida",
-    "password_min_length": "La contraseña debe tener al menos 8 caracteres",
-    "email_label": "Correo electrónico",
-    "email_placeholder": "tu@restaurant.com",
-    "password_label": "Contraseña",
-    "password_placeholder": "••••••••",
-    "remember_me": "Recuérdame durante 30 días",
-    "forgot_password": "¿Olvidaste tu contraseña?",
-    "logging_in": "Iniciando sesión...",
-    "login": "Iniciar sesión",
-    "dont_have_account": "¿No tienes una cuenta?",
-    "signup": "Regístrate"
-  },
-  "signup_page": {
-    "create_account": "Crea tu cuenta",
-    "description": "Regístrate en dineri.app para empezar a construir la presencia en línea de tu restaurante.",
-    "invalid_email": "Dirección de correo electrónico no válida",
-    "password_min_length": "La contraseña debe tener al menos 8 caracteres",
-    "confirm_password_min_length": "La confirmación de la contraseña debe tener al menos 8 caracteres",
-    "passwords_do_not_match": "Las contraseñas no coinciden",
-    "agree_required": "Debes aceptar el Aviso de Privacidad y los Términos y Condiciones",
-    "email_label": "Correo electrónico",
-    "email_placeholder": "tu@restaurant.com",
-    "password_label": "Contraseña",
-    "password_placeholder": "••••••••",
-    "confirm_password_label": "Confirmar contraseña",
-    "confirm_password_placeholder": "••••••••",
-    "agree_text": "Al hacer clic en Continuar, aceptas el aviso de privacidad y los Términos y Condiciones de Dineri.app.",
-    "creating_account": "Creando cuenta...",
-    "continue": "Continuar",
-    "already_have_account": "¿Ya tienes una cuenta?",
-    "login": "Iniciar sesión"
-  },
-  "forgot_password_page": {
-    "title": "Restablece tu contraseña",
-    "description": "Ingresa tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
-    "error_generic": "Algo salió mal. Por favor, inténtalo de nuevo.",
-    "success_title": "Revisa tu correo",
-    "success_message": "Hemos enviado un enlace para restablecer la contraseña a { email }",
-    "resend_instruction": "¿No recibiste el correo? Revisa tu carpeta de spam o",
-    "resend_button": "intenta de nuevo",
-    "back_to_login_button": "Volver al inicio de sesión",
-    "email_label": "Correo electrónico",
-    "email_placeholder": "tu@restaurant.com",
-    "sending_reset_link": "Enviando enlace de restablecimiento...",
-    "send_reset_link": "Enviar enlace de restablecimiento",
-    "remember_password": "¿Recordaste tu contraseña?",
-    "back_to_login_link": "Volver al inicio de sesión"
   },
   "order_success_page": {
     "order_not_found_title": "Pedido no encontrado",

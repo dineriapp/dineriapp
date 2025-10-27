@@ -6,11 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import UnsavedChangesUi from "@/components/unsaved-changes-ui"
+import { Link } from "@/i18n/navigation"
+import { changePassword } from "@/lib/auth/auth-client"
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
-import { supabase } from "@/supabase/clients/client"
 import { Eye, EyeOff } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { Link } from "@/i18n/navigation";
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -86,25 +86,17 @@ export default function ChangePasswordPage() {
         try {
             setSaving(true)
 
-            // First, verify the current password by attempting to sign in
-            const { error: signInError } = await supabase.auth.signInWithPassword({
-                email: (await supabase.auth.getUser()).data.user?.email || "",
-                password: formData.currentPassword,
-            })
+            // ✅ Better Auth: change password
 
-            if (signInError) {
-                setErrors({ currentPassword: t("form.errors.currentPassword_incorrect") })
-                toast.error(t("form.errors.currentPassword_incorrect"))
-                return
-            }
+            const { error } = await changePassword(
+                {
+                    currentPassword: formData.currentPassword,
+                    newPassword: formData.newPassword
+                }
+            )
 
-            // Update the password
-            const { error: updateError } = await supabase.auth.updateUser({
-                password: formData.newPassword,
-            })
-
-            if (updateError) {
-                throw updateError
+            if (error) {
+                throw error
             }
 
             toast.success(t("toasts.change_success_title"), {
@@ -131,36 +123,6 @@ export default function ChangePasswordPage() {
             description: t("toasts.form_reset_description"),
         })
     }
-
-    // const handleForgotPassword = async () => {
-    //     try {
-    //         const {
-    //             data: { user },
-    //         } = await supabase.auth.getUser()
-
-    //         if (!user?.email) {
-    //             toast.error("Unable to send reset email")
-    //             return
-    //         }
-
-    //         const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-    //             redirectTo: `${window.location.origin}/forgot-password`,
-    //         })
-
-    //         if (error) {
-    //             throw error
-    //         }
-
-    //         toast.success("Password reset email sent", {
-    //             description: "Check your email for password reset instructions",
-    //         })
-    //     } catch (error: any) {
-    //         console.error("Password reset error:", error)
-    //         toast.error("Failed to send reset email", {
-    //             description: error.message || "Please try again later",
-    //         })
-    //     }
-    // }
 
     const getPasswordStrength = (password: string): { strength: number; label: string; color: string } => {
         if (password.length === 0) return { strength: 0, label: "", color: "" }

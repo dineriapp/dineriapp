@@ -1,90 +1,59 @@
 import prisma from "@/lib/prisma";
-import { createClient } from "@/supabase/clients/server";
-import type { Restaurant, User } from "@prisma/client";
-import { User as SupabaseUser } from '@supabase/supabase-js';
+import type { Restaurant } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
+import { checkAuth } from "./auth/utils";
 import { getStripePlans, StripePlan } from "./stripe-plans";
 
-export interface AuthResult {
-    user: User
+interface AuthResult {
+    user: {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        email: string;
+        emailVerified: boolean;
+        name: string;
+        image?: string | null | undefined;
+        phone: string;
+        subscription_status: "active" | "inactive" | "past_due";
+        subscription_plan: "basic" | "pro" | "enterprise";
+        subscription_current_period_end: Date;
+        role: "USER" | "ADMIN";
+        stripe_customer_id: string;
+        stripe_subscription_id: string;
+        subscription_current_period_start: Date;
+    },
     restaurant: Restaurant
 }
 
-export interface AuthResponse {
+interface AuthResponse {
     data?: AuthResult
     error?: string
     status?: number
 }
-export interface GetCurrentUserResponse {
-    data?: { user: SupabaseUser, prismaUser: User }
-    error?: string
-    status?: number
-}
 
-export interface LimitCheckResponse {
+interface LimitCheckResponse {
     data?: { allowed: boolean }
     error?: string
     status?: number
 }
 
-export async function getCurrentUser(): Promise<GetCurrentUserResponse> {
-    const t = await getTranslations("auth_and_subscription_messages")
-    try {
-        const supabase = await createClient()
-        const { data } = await supabase.auth.getUser()
-
-        if (!data.user) {
-            return {
-                error: t("user_not_found"),
-                status: 404
-            }
-        }
-
-        const prismaUser = await prisma.user.findFirst({
-            where: {
-                supabase_id: data.user.id,
-            },
-        })
-
-        if (!prismaUser) {
-            return {
-                error: t("user_not_found"),
-                status: 404
-            }
-        }
-
-        return { data: { prismaUser: prismaUser, user: data.user } }
-    } catch (error) {
-        console.error("Get current user error:", error)
-        return {
-            error: t("user_not_found"),
-            status: 404
-        }
-    }
-}
 
 export async function authenticateAndAuthorize(restaurantId: string): Promise<AuthResponse> {
     const t = await getTranslations("auth_and_subscription_messages")
 
     try {
-        const supabase = await createClient()
-        const { data } = await supabase.auth.getUser()
+        const session = await checkAuth()
 
-        if (!data.user) {
+        if (!session) {
             return {
                 error: t("not_authenticated"),
                 status: 401
             }
         }
 
-        const prismaUser = await prisma.user.findFirst({
-            where: {
-                supabase_id: data.user.id,
-            },
-        })
 
-        if (!prismaUser) {
+        if (!session?.user) {
             return {
                 error: t("user_not_found"),
                 status: 404
@@ -95,7 +64,7 @@ export async function authenticateAndAuthorize(restaurantId: string): Promise<Au
             where: { id: restaurantId },
         })
 
-        if (!restaurant || restaurant.user_id !== prismaUser.id) {
+        if (!restaurant || restaurant.user_id !== session.user.id) {
             return {
                 error: t("unauthorized_restaurant"),
                 status: 403
@@ -103,7 +72,7 @@ export async function authenticateAndAuthorize(restaurantId: string): Promise<Au
         }
 
         return {
-            data: { user: prismaUser, restaurant }
+            data: { user: session.user, restaurant }
         }
     } catch (error) {
         console.error("Authentication error:", error)

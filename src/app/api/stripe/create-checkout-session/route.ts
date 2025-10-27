@@ -1,7 +1,7 @@
+import { checkAuth } from "@/lib/auth/utils"
 import prisma from "@/lib/prisma"
 import { stripe, } from "@/lib/stripe"
-import { STRIPE_PLANS, isValidPlan } from "@/lib/stripe-plans"
-import { createClient } from "@/supabase/clients/server"
+import { getStripePlans, isValidPlan } from "@/lib/stripe-plans"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
@@ -18,32 +18,24 @@ export async function POST(request: NextRequest) {
         const { plan } = createCheckoutSchema.parse(body)
 
         // Authenticate user
-        const supabase = await createClient()
-        const {
-            data: { user },
-        } = await supabase.auth.getUser()
+        const user_session = await checkAuth()
 
-        if (!user) {
+        if (!user_session) {
             return NextResponse.json({ error: t("authentication_required") }, { status: 401 })
         }
 
-        // Get user from database
-        const dbUser = await prisma.user.findFirst({
-            where: { supabase_id: user.id },
-        })
-
-        if (!dbUser) {
+        if (!user_session.user) {
             return NextResponse.json({ error: t("user_not_found") }, { status: 404 })
         }
 
         // Check if user already has an active subscription
         const hasActiveSubscription =
-            dbUser.subscription_status === "active" &&
-            dbUser.stripe_subscription_id &&
-            (!dbUser.subscription_current_period_end || new Date() < new Date(dbUser.subscription_current_period_end))
+            user_session.user.subscription_status === "active" &&
+            user_session.user.stripe_subscription_id &&
+            (!user_session.user.subscription_current_period_end || new Date() < new Date(user_session.user.subscription_current_period_end))
 
         if (hasActiveSubscription) {
-            const currentPlan = dbUser.subscription_plan || "basic"
+            const currentPlan = user_session.user.subscription_plan || "basic"
 
             // If user is trying to subscribe to the same plan they already have
             if (currentPlan === plan) {
@@ -65,26 +57,26 @@ export async function POST(request: NextRequest) {
         }
 
         // Check if plan exists and has a price ID
-        const planData = STRIPE_PLANS[plan]
+        const planData = getStripePlans("en")[plan]
         if (!planData.priceId) {
             return NextResponse.json({ error: t("invalid_plan_for_checkout") }, { status: 400 })
         }
 
         // Create or retrieve Stripe customer
-        let customerId = dbUser.stripe_customer_id
+        let customerId = user_session.user.stripe_customer_id
 
         if (!customerId) {
             const customer = await stripe.customers.create({
-                email: user.email,
+                email: user_session.user.email,
                 metadata: {
-                    user_id: dbUser.id,
+                    user_id: user_session.user.id,
                 },
             })
             customerId = customer.id
 
             // Update user with customer ID
             await prisma.user.update({
-                where: { id: dbUser.id },
+                where: { id: user_session.user.id },
                 data: { stripe_customer_id: customerId },
             })
         }
@@ -103,13 +95,13 @@ export async function POST(request: NextRequest) {
             success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?success=true`,
             cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/pricing?canceled=true`,
             metadata: {
-                user_id: dbUser.id,
+                user_id: user_session.user.id,
                 plan: plan,
             },
             subscription_data: {
                 metadata: {
                     type: "subscription",
-                    user_id: dbUser.id,
+                    user_id: user_session.user.id,
                     plan: plan,
                 },
             },

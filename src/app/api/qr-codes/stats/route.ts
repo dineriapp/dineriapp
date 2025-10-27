@@ -1,15 +1,14 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { checkAuth } from "@/lib/auth/utils"
 import prisma from "@/lib/prisma"
-import { createClient } from "@/supabase/clients/server"
 import { getTranslations } from "next-intl/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
     const t = await getTranslations("qr_code_apis.error")
 
     try {
-        const supabase = await createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+        const session = await checkAuth()
+        if (!session?.user) {
             return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
@@ -26,7 +25,7 @@ export async function GET(request: NextRequest) {
             select: { user_id: true },
         })
 
-        if (!restaurant || restaurant.user_id !== user.id) {
+        if (!restaurant || restaurant.user_id !== session.user.id) {
             return NextResponse.json({ error: t("restaurant_not_found") }, { status: 404 })
         }
 

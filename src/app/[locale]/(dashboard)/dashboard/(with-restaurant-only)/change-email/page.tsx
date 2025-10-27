@@ -2,62 +2,42 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ArrowLeft, Mail, Shield, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
-import { toast } from "sonner"
 import { Link } from "@/i18n/navigation"
-import { supabase } from "@/supabase/clients/client"
+import { changeEmail, useSession } from "@/lib/auth/auth-client"
+import { useMutation } from "@tanstack/react-query"
+import { AlertCircle, ArrowLeft, CheckCircle, Loader2, Mail, Shield } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
 interface EmailChangeRequest {
     newEmail: string
-    password: string
 }
 
 export default function EmailChangePage() {
     const router = useRouter()
     const [newEmail, setNewEmail] = useState("")
-    const [password, setPassword] = useState("")
     const [confirmationSent, setConfirmationSent] = useState(false)
     const t = useTranslations("EmailChangePage")
     // Get current user
-    const { data: user, isLoading: userLoading } = useQuery({
-        queryKey: ["current-user"],
-        queryFn: async () => {
-            const { data, error } = await supabase.auth.getUser()
-            if (error) throw error
-            return data.user
-        },
-    })
+    const { data: session, isPending } = useSession()
 
     // Email change mutation
     const emailChangeMutation = useMutation({
-        mutationFn: async ({ newEmail, password }: EmailChangeRequest) => {
+        mutationFn: async ({ newEmail }: EmailChangeRequest) => {
 
-            // First verify the current password
-            const { error: signInError } = await supabase.auth.signInWithPassword({
-                email: user?.email || "",
-                password: password,
+            const response = await changeEmail({
+                newEmail: newEmail
             })
 
-            if (signInError) {
-                throw new Error(t("toastPasswordIncorrect"))
-            }
-
-            // Request email change
-            const { error } = await supabase.auth.updateUser({
-                email: newEmail,
-            })
-
-            if (error) {
-                throw error
+            if (response.error) {
+                throw response.error.message
             }
 
             return { success: true }
@@ -74,12 +54,12 @@ export default function EmailChangePage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
 
-        if (!newEmail || !password) {
+        if (!newEmail) {
             toast.error(t("toastFillAll"))
             return
         }
 
-        if (newEmail === user?.email) {
+        if (newEmail === session?.user?.email) {
             toast.error(t("toastDifferentEmail"))
             return
         }
@@ -91,11 +71,11 @@ export default function EmailChangePage() {
             return
         }
 
-        emailChangeMutation.mutate({ newEmail, password })
+        emailChangeMutation.mutate({ newEmail })
     }
 
 
-    if (userLoading) {
+    if (isPending) {
         return (
             <div className="container max-w-2xl mx-auto py-8">
                 <div className="flex items-center justify-center py-12">
@@ -105,7 +85,7 @@ export default function EmailChangePage() {
         )
     }
 
-    if (!user) {
+    if (!session) {
         router.push("/login")
         return null
     }
@@ -140,7 +120,7 @@ export default function EmailChangePage() {
                             <Mail className="h-4 w-4" />
                             <AlertDescription>
                                 <strong>
-                                    {t("currentEmail")}</strong> {user.email}
+                                    {t("currentEmail")}</strong> {session.user.email}
                                 <br />
                                 <strong>{t("newEmail")}</strong> {newEmail}
                             </AlertDescription>
@@ -205,7 +185,7 @@ export default function EmailChangePage() {
                             <Label htmlFor="current-email">
                                 {t("currentEmail")}
                             </Label>
-                            <Input id="current-email" type="email" value={user.email || ""} disabled className="bg-muted" />
+                            <Input id="current-email" type="email" value={session.user.email || ""} disabled className="bg-muted" />
                         </div>
 
                         <div className="space-y-2">
@@ -220,21 +200,6 @@ export default function EmailChangePage() {
                                 onChange={(e) => setNewEmail(e.target.value)}
                                 required
                             />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="password">
-                                {t("passwordLabel")}
-                            </Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder={t("passwordPlaceholder")}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                            <p className="text-xs text-muted-foreground">{t("passwordHelp")}</p>
                         </div>
 
                         <Alert>

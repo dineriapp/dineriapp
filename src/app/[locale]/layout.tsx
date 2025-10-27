@@ -92,7 +92,7 @@ export default async function RootLayout({
       <body
         // className={`${inter.className} antialiased`}
         // className={`${inter.variable} ${roboto.variable} ${lora.variable} ${poppins.variable} ${openSans.variable} ${merriweather.variable} ${montserrat.variable} ${playfairDisplay.variable} antialiased`}
-        className={`antialiased`}
+        className={`antialiased light`}
       >
         <NextIntlClientProvider>
           <ThemeProvider

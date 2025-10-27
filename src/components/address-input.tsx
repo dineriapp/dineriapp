@@ -1,14 +1,14 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { MapPin, Loader2, Navigation } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
-import type { google } from "google-maps"
 import { Restaurant } from "@prisma/client"
+import { Loader2, MapPin, Navigation } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
+
 
 export interface AddressData {
     street: string
@@ -191,25 +191,27 @@ export function AddressInput({
 
                 // Reverse geocode to get address
                 if (window.google) {
-                    const geocoder = new window.google.maps.Geocoder()
-                    geocoder.geocode({ location: { lat: latitude, lng: longitude } }, (results: google.maps.places.PlaceResult[], status: google.maps.places.PlacesServiceStatus) => {
-                        setIsGettingLocation(false)
-                        if (status === "OK" && results && results[0]) {
-                            const addressData = parseAddressComponents({
-                                formatted_address: results[0].formatted_address,
-                                geometry: {
-                                    location: {
-                                        lat: () => latitude,
-                                        lng: () => longitude,
-                                    },
-                                },
-                                address_components: results[0].address_components,
-                            } as google.maps.places.PlaceResult)
-                            onChange(addressData)
-                            setQuery(addressData.formattedAddress)
+                    const geocoder = new window.google.maps.Geocoder();
+
+                    geocoder.geocode(
+                        { location: { lat: latitude, lng: longitude } },
+                        // @ts-expect-error due to types 
+                        (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
+                            setIsGettingLocation(false);
+                            if (status === "OK" && results && results[0]) {
+                                const addressData = parseAddressComponents({
+                                    formatted_address: results[0].formatted_address,
+                                    geometry: results[0].geometry,
+                                    address_components: results[0].address_components,
+                                } as google.maps.places.PlaceResult);
+
+                                onChange(addressData);
+                                setQuery(addressData.formattedAddress);
+                            }
                         }
-                    })
+                    );
                 }
+
             },
             (error) => {
                 setIsGettingLocation(false)

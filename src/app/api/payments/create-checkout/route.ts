@@ -1,6 +1,6 @@
+import { checkAuth } from "@/lib/auth/utils"
 import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 import prisma from "@/lib/prisma"
-import { createClient } from "@/supabase/clients/server"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
@@ -110,16 +110,11 @@ export async function POST(request: NextRequest) {
         let userId: string | null = null
         if (!isGuest) {
             try {
-                const supabase = await createClient()
-                const {
-                    data: { user },
-                } = await supabase.auth.getUser()
-                if (user) {
-                    const dbUser = await prisma.user.findUnique({
-                        where: { supabase_id: user.id },
-                        select: { id: true },
-                    })
-                    userId = dbUser?.id || null
+
+                const session = await checkAuth()
+
+                if (session?.user) {
+                    userId = session?.user?.id || null
                 }
             } catch (error) {
                 console.log(error)

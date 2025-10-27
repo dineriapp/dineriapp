@@ -1,22 +1,18 @@
-import { type NextRequest, NextResponse } from "next/server"
-import prisma from "@/lib/prisma"
-import { createClient } from "@/supabase/clients/server"
+import { checkAuth } from "@/lib/auth/utils";
+import prisma from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const t = await getTranslations("restaurants_apis.errors");
 
     try {
-        const supabase = await createClient()
 
         const { id } = await params
 
-        const {
-            data: { user },
-            error: authError,
-        } = await supabase.auth.getUser()
+        const session = await checkAuth()
 
-        if (authError || !user) {
+        if (!session || !session.user) {
             return NextResponse.json({ error: t("unauthorized") }, { status: 401 })
         }
 
@@ -68,7 +64,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         const existingRestaurant = await prisma.restaurant.findFirst({
             where: {
                 id: restaurantId,
-                user_id: user.id,
+                user_id: session.user.id,
             },
         })
 

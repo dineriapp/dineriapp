@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useSession } from "@/lib/auth/auth-client"
 import { getLucideIconBySlug, type IconSlug } from "@/lib/get-icons"
 import {
     useBulkDeleteLinks,
@@ -28,20 +29,20 @@ import {
     useReorderLink,
     useUpdateLink,
 } from "@/lib/link-queries"
-import { isLimitReached, STRIPE_PLANS } from "@/lib/stripe-plans"
-import { useUserStore } from "@/stores/auth-store"
+import { getStripePlans, isLimitReached } from "@/lib/stripe-plans"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { SubscriptionPlan } from "@prisma/client"
 import { ArrowDown, ArrowUp, Edit, Loader2, Plus, Trash2 } from "lucide-react"
 import { motion } from "motion/react"
+import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
-import { useTranslations } from "next-intl"
 
 
 export default function LinksPage() {
     const { restaurants, selectedRestaurant } = useRestaurantStore()
-    const { prismaUser } = useUserStore()
+    const { data: session } = useSession();
+    const locale = useLocale()
     const openPopup = useUpgradePopupStore(state => state.open)
     const t = useTranslations("LinksPage")
     const [newTitle, setNewTitle] = useState("")
@@ -147,7 +148,7 @@ export default function LinksPage() {
     }
 
     const isLinkLimitReached = isLimitReached({
-        userPlan: prismaUser?.subscription_plan as SubscriptionPlan,
+        userPlan: session?.user?.subscription_plan as SubscriptionPlan,
         resourceType: "links",
         currentCount: links.length,
     });
@@ -239,9 +240,9 @@ export default function LinksPage() {
                                     <Button
                                         size="lg"
                                         onClick={() => {
-                                            const plan = prismaUser?.subscription_plan ?? "basic"
-                                            const planName = STRIPE_PLANS[plan].name
-                                            const limit = STRIPE_PLANS[plan].limits?.links
+                                            const plan = session?.user?.subscription_plan ?? "basic"
+                                            const planName = getStripePlans(locale)[plan].name
+                                            const limit = getStripePlans(locale)[plan].limits?.links
 
                                             openPopup(t("limitReachedMessage", {
                                                 limit: limit || "",

@@ -16,8 +16,6 @@ import { z } from "zod";
 
 // Reuse the same schema for client-side validation
 
-
-
 export default function CreateRestaurantPage() {
   const router = useRouter();
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);

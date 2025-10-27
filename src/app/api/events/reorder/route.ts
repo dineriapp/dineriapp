@@ -1,6 +1,6 @@
+import { checkAuth } from "@/lib/auth/utils"
 import prisma from "@/lib/prisma"
 import { getReorderEventSchema } from "@/lib/validations"
-import { createClient } from "@/supabase/clients/server"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
@@ -8,10 +8,9 @@ export async function PUT(request: NextRequest) {
     const t = await getTranslations("event_api_messages")
 
     try {
-        const supabase = await createClient()
-        const { data } = await supabase.auth.getUser()
+        const session = await checkAuth()
 
-        if (!data.user) {
+        if (!session?.user) {
             return NextResponse.json({ error: t("not_authenticated") }, { status: 401 })
         }
 
@@ -29,7 +28,7 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: t("event_not_found") }, { status: 404 })
         }
 
-        if (event.restaurant.user_id !== data.user.id) {
+        if (event.restaurant.user_id !== session.user.id) {
             return NextResponse.json({ error: t("unauthorized_event") }, { status: 403 })
         }
 

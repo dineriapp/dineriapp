@@ -1,5 +1,4 @@
-import prisma from "@/lib/prisma"
-import { createClient } from "@/supabase/clients/server"
+import { checkAuth } from "@/lib/auth/utils"
 import { getTranslations } from "next-intl/server"
 import { NextResponse } from "next/server"
 
@@ -7,34 +6,21 @@ export async function GET() {
     const t = await getTranslations("subscription_api")
     try {
 
-        const supabase = await createClient()
-        const {
-            data: { user },
-        } = await supabase.auth.getUser()
+        const user_session = await checkAuth()
 
-        if (!user) {
+        if (!user_session) {
             return NextResponse.json({ error: t("errors.authentication_required") }, { status: 401 })
         }
 
-        const dbUser = await prisma.user.findFirst({
-            where: { supabase_id: user.id },
-            select: {
-                subscription_plan: true,
-                subscription_status: true,
-                subscription_current_period_end: true,
-                stripe_customer_id: true,
-            },
-        })
-
-        if (!dbUser) {
+        if (!user_session?.user) {
             return NextResponse.json({ error: t("errors.user_not_found") }, { status: 404 })
         }
 
         return NextResponse.json({
-            plan: dbUser.subscription_plan || "basic",
-            status: dbUser.subscription_status || "active",
-            current_period_end: dbUser.subscription_current_period_end,
-            stripe_customer_id: dbUser.stripe_customer_id,
+            plan: user_session?.user.subscription_plan || "basic",
+            status: user_session?.user.subscription_status || "active",
+            current_period_end: user_session?.user.subscription_current_period_end,
+            stripe_customer_id: user_session?.user.stripe_customer_id,
         })
     } catch (error) {
         console.error("Subscription fetch error:", error)

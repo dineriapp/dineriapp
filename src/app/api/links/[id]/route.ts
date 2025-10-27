@@ -1,7 +1,7 @@
 import { authenticateAndAuthorize } from "@/lib/auth-utils"
+import { checkAuth } from "@/lib/auth/utils"
 import prisma from "@/lib/prisma"
 import { formatUrl, getUpdateLinkSchema } from "@/lib/validations"
-import { createClient } from "@/supabase/clients/server"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 
@@ -57,10 +57,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     try {
         const { id } = await params
 
-        const supabase = await createClient()
-        const { data } = await supabase.auth.getUser()
+        const session = await checkAuth()
 
-        if (!data.user) {
+
+        if (!session?.user) {
             return NextResponse.json({ error: t("not_authenticated") }, { status: 401 })
         }
 
@@ -70,7 +70,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
             include: { restaurant: true },
         })
 
-        if (!existingLink || existingLink.restaurant.user_id !== data.user.id) {
+        if (!existingLink || existingLink.restaurant.user_id !== session.user.id) {
             return NextResponse.json({ error: t("unauthorized") }, { status: 403 })
         }
 

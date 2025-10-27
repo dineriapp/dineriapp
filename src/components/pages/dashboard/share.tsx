@@ -1,16 +1,16 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { useUserStore } from '@/stores/auth-store'
+import { Link } from '@/i18n/navigation'
+import { useSession } from '@/lib/auth/auth-client'
 import { Copy, QrCode } from 'lucide-react'
 import { motion } from "motion/react"
 import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
 import { toast } from 'sonner'
 
 const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant: boolean }) => {
 
-    const { prismaUser } = useUserStore();
+    const { data: session } = useSession();
 
     const t = useTranslations("dashboard.share")
 
@@ -58,7 +58,7 @@ const Share = ({ slug, selectedRestaurant }: { slug: string, selectedRestaurant:
                 </p>
             </CardContent>
             {
-                prismaUser?.subscription_plan !== "basic" &&
+                session?.user?.subscription_plan !== "basic" &&
                 <CardFooter className="border-t border-slate-100 pt-4">
                     <Button
                         className="w-full justify-center bg-[#002147] hover:bg-main-hover/80 h-12 rounded-full cursor-pointer"
