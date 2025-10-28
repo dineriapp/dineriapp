@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from '@/i18n/navigation';
+import { cn } from '@/lib/utils';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
 import { LanguagesIcon } from 'lucide-react';
@@ -10,11 +11,15 @@ import { ReactNode, useTransition } from 'react';
 type Props = {
     children: ReactNode;
     defaultValue: string;
+    SizeClassName?: string;
+    IconSizeClassName?: string;
 };
 
 export default function LocaleSwitcherSelect({
     children,
     defaultValue,
+    SizeClassName,
+    IconSizeClassName
 }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
@@ -39,12 +44,13 @@ export default function LocaleSwitcherSelect({
                 <Select.Root defaultValue={defaultValue} onValueChange={onSelectChange}>
                     <Select.Trigger
                         className={clsx(
-                            'p-3 cursor-pointer transition-colors rounded-full hover:bg-slate-100',
-                            isPending && 'pointer-events-none opacity-60'
+                            ' cursor-pointer transition-colors flex items-center justify-center rounded-full bg-main-green hover:bg-main-green/80',
+                            isPending && 'pointer-events-none opacity-60',
+                            SizeClassName
                         )}
                     >
                         <Select.Icon>
-                            <LanguagesIcon className="h-6 w-6 text-slate-600 transition-colors group-hover:text-slate-900" />
+                            <LanguagesIcon className={cn(" text-white transition-colors group-hover:text-slate-900", IconSizeClassName)} />
                         </Select.Icon>
                     </Select.Trigger>
                     <Select.Portal>

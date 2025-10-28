@@ -65,10 +65,13 @@ export default async function WithResttaurantLayout({
                                         />
                                     </Link>
                                 </div>
-                                <div className="flex items-center justify-between gap-2 md:flex-row flex-row-reverse md:w-full">
+                                <div className="flex items-center justify-between gap-1 md:flex-row flex-row-reverse md:w-full">
                                     <SidebarTrigger />
-                                    <div className="flex items-center gap-2">
-                                        <LocaleSwitcher />
+                                    <div className="flex items-center gap-1">
+                                        <LocaleSwitcher
+                                            SizeClassName="!size-10"
+                                            IconSizeClassName="!size-[20px]"
+                                        />
                                         {!isPremium && (
                                             <UpgradeBtn />
                                         )}

@@ -76,7 +76,7 @@ export const UpgradePopup = () => {
   return (
     <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent className="sm:max-w-2xl p-0 border-0 bg-transparent">
-        <Card className="bg-white dark:bg-gray-900 gap-2 rounded-xl shadow-2xl overflow-hidden">
+        <Card className="bg-white  gap-2 rounded-xl shadow-2xl overflow-hidden">
           <DialogHeader className="px-6 pb-0 pt-0">
             <div className="flex justify-between items-center">
               <DialogTitle className="text-2xl font-bold text-main-blue">
@@ -85,7 +85,7 @@ export const UpgradePopup = () => {
             </div>
           </DialogHeader>
           <div className="px-6 pb-2">
-            <p className="text-gray-600 dark:text-gray-300">{message}</p>
+            <p className="text-gray-600 ">{message}</p>
           </div>
 
           <Separator />
@@ -111,7 +111,7 @@ export const UpgradePopup = () => {
                 return (
                   <Card
                     key={key}
-                    className="border border-gray-200 gap-0 dark:border-gray-700 hover:shadow-lg transition-shadow"
+                    className="border border-gray-200 gap-0 hover:shadow-lg transition-shadow"
                   >
                     <CardHeader className="pb-4">
                       <div className="flex justify-between items-start">
@@ -181,7 +181,7 @@ export const UpgradePopup = () => {
               <Button
                 variant="link"
                 onClick={close}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="text-gray-500 hover:text-gray-700 "
               >
                 May be later
               </Button>

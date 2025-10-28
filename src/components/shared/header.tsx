@@ -1,18 +1,23 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
+import { useSession } from "@/lib/auth/auth-client";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";;
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MobileNav } from "./mobile-nav";
 import LocaleSwitcher from "../locale-switcher";
+import { MobileNav } from "./mobile-nav";
+import { UserDropDown } from "./user-drop-down";
+;
 
 export function Header() {
   const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname()
   const locale = useLocale()
+  const { data: session } = useSession()
   const t = useTranslations("Header");
+
   useEffect(() => {
     console.log(window.scrollY);
     const handleScroll = () => {
@@ -25,6 +30,10 @@ export function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+
+
+
 
   return (
     <header
@@ -78,21 +87,39 @@ export function Header() {
             </Link>
           </div>
 
-          <div className="hidden items-center gap-[14px] justify-center xl:flex">
-            <LocaleSwitcher />
-            <Link href="/login">
-              <Button
-                variant="ghost"
-                className=" border border-[#0909094D] text-[#090909] font-poppins transition-all font-[500] cursor-pointer text-lg hover:text-slate-800 px-[40px] h-[52px] rounded-full"
-              >
-                {t("login")}
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button className="bg-[#002147] hover:bg-main-hover/80 font-poppins font-[600] text-lg text-[#FFFFFF] cursor-pointer h-[52px] px-[40px] transition-all rounded-full">
-                {t("signup")}
-              </Button>
-            </Link>
+          <div className="hidden items-center gap-2 justify-center xl:flex">
+            <LocaleSwitcher
+              SizeClassName="!size-[52px] !bg-transparent"
+              IconSizeClassName="size-[25px] !text-black"
+            />
+            <>
+              {
+                !session
+                  ?
+                  (
+                    <>
+                      <Link href="/login">
+                        <Button
+                          variant="ghost"
+                          className=" border border-[#0909094D] text-[#090909] font-poppins transition-all font-[500] cursor-pointer text-lg hover:text-slate-800 px-[40px] h-[52px] rounded-full"
+                        >
+                          {t("login")}
+                        </Button>
+                      </Link>
+                      <Link href="/signup">
+                        <Button className="bg-[#002147] hover:bg-main-hover/80 font-poppins font-[600] text-lg text-[#FFFFFF] cursor-pointer h-[52px] px-[40px] transition-all rounded-full">
+                          {t("signup")}
+                        </Button>
+                      </Link>
+                    </>
+                  )
+                  :
+                  <>
+                    <UserDropDown className="!size-[52px]" SizeClassName="!size-[52px]" />
+                  </>
+              }
+            </>
+
           </div>
           <MobileNav />
         </div>
@@ -100,3 +127,5 @@ export function Header() {
     </header>
   );
 }
+
+

@@ -1,8 +1,10 @@
 {
   "TopBar": {
     "message": "È ora di trasformare i clic in clienti.",
-    "setup": "Configura",
-    "cta": "e inizia in pochi minuti!"
+    "setup": "Configurare",
+    "cta": "e inizia in pochi minuti!",
+    "loggedInMessage": "Bentornato! Pronto a far crescere la tua attività?",
+    "goToDashboard": "Vai alla dashboard"
   },
   "Header": {
     "home": "Home",

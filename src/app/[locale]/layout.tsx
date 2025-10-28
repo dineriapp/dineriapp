@@ -92,13 +92,15 @@ export default async function RootLayout({
       <body
         // className={`${inter.className} antialiased`}
         // className={`${inter.variable} ${roboto.variable} ${lora.variable} ${poppins.variable} ${openSans.variable} ${merriweather.variable} ${montserrat.variable} ${playfairDisplay.variable} antialiased`}
-        className={`antialiased light`}
+        className={`antialiased`}
       >
         <NextIntlClientProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="light"
+            forcedTheme="light"      // 👈 This forces light theme always
+            enableSystem={false}     // 👈 Ignore system dark mode
             disableTransitionOnChange
+            themes={["light"]}
           >
             <ReactQueryProvider>
               {children}

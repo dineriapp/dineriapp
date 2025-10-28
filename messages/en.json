@@ -2,7 +2,9 @@
   "TopBar": {
     "message": "Time to convert clicks into customers.",
     "setup": "Set up",
-    "cta": "and start within a few minutes!"
+    "cta": "and start within a few minutes!",
+    "loggedInMessage": "Welcome back! Ready to boost your growth?",
+    "goToDashboard": "Go to Dashboard"
   },
   "Header": {
     "home": "Home",

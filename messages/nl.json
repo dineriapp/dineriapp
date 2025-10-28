@@ -2,7 +2,9 @@
   "TopBar": {
     "message": "Tijd om klikken om te zetten in klanten.",
     "setup": "Instellen",
-    "cta": "en binnen enkele minuten starten!"
+    "cta": "en begin binnen enkele minuten!",
+    "loggedInMessage": "Welkom terug! Klaar om je groei te stimuleren?",
+    "goToDashboard": "Ga naar dashboard"
   },
   "Header": {
     "home": "Home",

@@ -272,7 +272,7 @@ model Restaurant {
   links                Link[]
   menuCategories       MenuCategory[]
   reviews              Review[]
-  user                 User                 @relation(fields: [user_id], references: [id])
+  user                 User                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
   restaurantViews      RestaurantView[]
   qrCodes              qr_codes[]
   Order                Order[]
@@ -288,7 +288,7 @@ model Restaurant {
 model ReservationSettings {
   id            String     @id @default(cuid())
   restaurant_id String     @unique @db.Uuid
-  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
 
   // 👇 all your settings stored here
   settings Json @default("{}")
@@ -303,7 +303,7 @@ model RestaurantView {
   user_agent String?
   createdAt  DateTime @default(now()) @map("created_at")
 
-  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
   restaurant_id String     @db.Uuid
 
   @@map("restaurant_views")
@@ -320,7 +320,7 @@ model Event {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
-  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
 
   @@map("events")
 }
@@ -335,7 +335,7 @@ model FaqCategory {
   updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
   faqs       Faq[]
-  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
 
   @@map("faq_categories")
 }
@@ -351,7 +351,7 @@ model Faq {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  category FaqCategory @relation(fields: [category_id], references: [id])
+  category FaqCategory @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@map("faqs")
 }
@@ -367,7 +367,7 @@ model Link {
   createdAt     DateTime @default(now()) @map("created_at")
 
   views      LinkView[]
-  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
   qrCodes    qr_codes[]
 
   @@map("links")
@@ -380,7 +380,7 @@ model LinkView {
   user_agent String?
   createdAt  DateTime @default(now()) @map("created_at")
 
-  link Link @relation(fields: [link_id], references: [id])
+  link Link @relation(fields: [link_id], references: [id], onDelete: Cascade)
 
   @@map("link_views")
 }
@@ -396,7 +396,7 @@ model MenuCategory {
   updatedAt          DateTime @default(now()) @updatedAt @map("updated_at")
 
   items      MenuItem[]
-  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
 
   @@map("menu_categories")
 }
@@ -416,7 +416,7 @@ model MenuItem {
   createdAt          DateTime @default(now()) @map("created_at")
   updatedAt          DateTime @default(now()) @updatedAt @map("updated_at")
 
-  category  MenuCategory @relation(fields: [category_id], references: [id])
+  category  MenuCategory @relation(fields: [category_id], references: [id], onDelete: Cascade)
   OrderItem OrderItem[]
   addons    Json?        @default("[]")
 
@@ -433,7 +433,7 @@ model Review {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
-  restaurant Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
 
   @@map("reviews")
 }
@@ -452,7 +452,7 @@ model qr_codes {
   type            qr_code_type
   target_url      String          @db.Text
   link_id         String?         @db.Uuid
-  link            Link?           @relation(fields: [link_id], references: [id], onDelete: SetNull)
+  link            Link?           @relation(fields: [link_id], references: [id], onDelete: Cascade)
   custom_url      String?         @db.Text
   size            Int             @default(300)
   color           String          @default("#000000") @db.VarChar
@@ -522,8 +522,8 @@ model Order {
   createdAt             DateTime      @default(now()) @map("created_at")
   updatedAt             DateTime      @default(now()) @updatedAt @map("updated_at")
 
-  user       User?       @relation(fields: [user_id], references: [id])
-  restaurant Restaurant  @relation(fields: [restaurant_id], references: [id])
+  user       User?       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  restaurant Restaurant  @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
   items      OrderItem[]
 
   @@map("orders")
@@ -542,7 +542,7 @@ model OrderItem {
   allergens        String[]
   addons           Json?     @default("[]")
   order            Order     @relation(fields: [order_id], references: [id], onDelete: Cascade)
-  menuItem         MenuItem? @relation(fields: [menu_item_id], references: [id])
+  menuItem         MenuItem? @relation(fields: [menu_item_id], references: [id], onDelete: Cascade)
 
   @@map("order_items")
 }
@@ -574,7 +574,7 @@ model Reservation {
   checkedInAt    DateTime?
   cancelledAt    DateTime?
   timezone       String?
-  restaurant     Restaurant           @relation(fields: [restaurant_id], references: [id])
+  restaurant     Restaurant           @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
   restaurant_id  String               @db.Uuid
 
   @@index([date, fromTime, endTime, day, month, year])
@@ -584,13 +584,13 @@ model Table {
   id            String               @id @default(uuid()) @db.Uuid
   tableNumber   String               @unique
   capacity      Int
-  area          Area                 @relation(fields: [areaId], references: [id])
+  area          Area                 @relation(fields: [areaId], references: [id], onDelete: Cascade)
   areaId        String               @db.Uuid
   status        TableStatus
   reservations  TableOnReservation[]
   createdAt     DateTime             @default(now())
   updatedAt     DateTime             @updatedAt
-  restaurant    Restaurant           @relation(fields: [restaurant_id], references: [id])
+  restaurant    Restaurant           @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
   restaurant_id String               @db.Uuid
 }
 
@@ -605,14 +605,14 @@ model TableOnReservation {
   tableId       String      @db.Uuid // ✅ match Table.id
   assignedBy    String? // optional, e.g. staff ID or name
   assignedAt    DateTime? // when it was assigned
-  reservation   Reservation @relation(fields: [reservationId], references: [id])
-  table         Table       @relation(fields: [tableId], references: [id])
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  table         Table       @relation(fields: [tableId], references: [id], onDelete: Cascade)
 }
 
 model Payment {
   id            String                   @id @default(uuid()) @db.Uuid
   reservationId String?                  @unique @db.Uuid // ✅ match Reservation.id
-  reservation   Reservation?             @relation(fields: [reservationId], references: [id])
+  reservation   Reservation?             @relation(fields: [reservationId], references: [id], onDelete: Cascade)
   paidAmount    Decimal                  @db.Decimal(10, 2)
   totalAmount   Decimal                  @db.Decimal(10, 2)
   currency      String                   @default("EUR")
@@ -629,7 +629,7 @@ model Area {
   id            String     @id @default(uuid()) @db.Uuid
   name          String
   active        Boolean    @default(true)
-  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
   restaurant_id String     @db.Uuid
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt

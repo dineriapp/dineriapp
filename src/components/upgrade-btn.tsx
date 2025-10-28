@@ -13,10 +13,10 @@ const UpgradeBtn = () => {
             onClick={() => {
                 openPopup("Upgrade to Pro or Enterprise to unlock premium features and tools.");
             }}
-            className=" max-md:!aspect-square !h-[38px] bg-main-green cursor-pointer rounded-full !px-5 text-white  flex items-center gap-2 shadow-sm hover:shadow transition-all"
+            className=" max-md:!aspect-square max-sm:!size-[40px] !h-[40px] bg-main-green cursor-pointer rounded-full !px-4 text-white  flex items-center gap-2 shadow-sm hover:shadow transition-all"
         >
             <Crown className="h-4 w-4" />
-            <span className="font-medium md:flex hidden">Upgrade</span>
+            <span className="font-medium sm:flex hidden">Upgrade</span>
         </Button>
     )
 }

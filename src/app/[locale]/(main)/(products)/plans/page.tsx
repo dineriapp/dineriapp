@@ -9,16 +9,18 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Link } from "@/i18n/navigation";
+import { useSession } from "@/lib/auth/auth-client";
 import { getStripePlans, StripePlan } from "@/lib/stripe-plans"; // adjust path if needed
 import { useLocale, useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";;
+;
 
 export default function PlansPage() {
     const locale = useLocale()
     const t = useTranslations("PlansPage")
     const planKeys: StripePlan[] = ["basic", "pro", "enterprise"];
     const plans = getStripePlans(locale);
-
+    const { data: session } = useSession();
     return (
         <div className="min-h-screen bg-[white] flex flex-col">
             {/* Header */}
@@ -37,15 +39,31 @@ export default function PlansPage() {
                     {planKeys.map((key) => {
                         const plan = plans[key];
                         const isHighlighted = key === "pro";
-
                         return (
                             <Card
                                 key={plan.name}
-                                className={`flex flex-col bg-[#EBE3CC] rounded-2xl border transition ${isHighlighted
+                                className={`flex flex-col bg-[#EBE3CC] overflow-hidden relative rounded-2xl border transition ${isHighlighted
                                     ? "border-[#2ECC71] shadow-2xl scale-105"
                                     : "border-gray-200 shadow-md"
                                     } hover:shadow-xl`}
                             >
+                                {session?.user && (
+                                    <>
+                                        {key === session?.user.subscription_plan && (
+                                            <div className="absolute top-0 right-0 bg-green-500 text-white text-base font-semibold px-4 py-2 rounded-bl-lg shadow-md">
+                                                {{
+                                                    en: 'Current Plan',
+                                                    de: 'Aktueller Plan',
+                                                    es: 'Plan actual',
+                                                    fr: 'Forfait actuel',
+                                                    nl: 'Huidig plan',
+                                                    it: 'Piano attuale'
+                                                }[locale] || 'Current Plan'}
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+
                                 <CardHeader>
                                     {isHighlighted && (
                                         <p className="text-sm font-semibold text-[#002147] uppercase tracking-wide">
@@ -64,6 +82,7 @@ export default function PlansPage() {
                                     )}
                                     <CardTitle className="text-3xl font-bold mt-2">
                                         {plan.name}
+
                                     </CardTitle>
                                     <CardDescription className="mt-2 text-gray-600">
                                         {plan.description}
