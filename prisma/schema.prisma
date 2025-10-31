@@ -1,13 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  // output        = "../src/generated/prisma"
-  // binaryTargets = ["native", "rhel-openssl-3.0.x"] // important!
 }
 
 datasource db {
@@ -282,6 +274,9 @@ model Restaurant {
   // reservation settings
   reservation_settings ReservationSettings?
 
+  @@index([user_id])
+  @@index([slug])
+  @@index([createdAt])
   @@map("restaurants")
 }
 
@@ -547,51 +542,124 @@ model OrderItem {
   @@map("order_items")
 }
 
-// Reservation
-model Reservation {
-  id             String               @id @default(uuid()) @db.Uuid
-  name           String
-  email          String
-  phone          String?
-  date           DateTime
-  day            Int
-  month          Int
-  year           Int
-  fromTime       String
-  endTime        String
-  partySize      Int
-  preferredArea  String
-  specialRequest String
-  reminderAt     DateTime?
-  reminderSent   Boolean              @default(false)
-  payment        Payment?
-  status         ReservationStatus    @default(PENDING)
-  source         ReservationSource    @default(ONLINE)
-  tableLinks     TableOnReservation[]
-  createdAt      DateTime             @default(now())
-  updatedAt      DateTime             @updatedAt
-  confirmedAt    DateTime?
-  checkedInAt    DateTime?
-  cancelledAt    DateTime?
-  timezone       String?
-  restaurant     Restaurant           @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
-  restaurant_id  String               @db.Uuid
+// Reservation Tables 
+model Area {
+  id            String  @id @default(uuid()) @db.Uuid
+  name          String
+  description   String?
+  active        Boolean @default(true)
+  restaurant_id String  @db.Uuid
+  sort_order    Int     @default(0)
 
-  @@index([date, fromTime, endTime, day, month, year])
+  // Relations
+  restaurant Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
+  tables     Table[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([restaurant_id])
+  @@index([active])
+  @@map("areas")
 }
 
 model Table {
-  id            String               @id @default(uuid()) @db.Uuid
-  tableNumber   String               @unique
-  capacity      Int
-  area          Area                 @relation(fields: [areaId], references: [id], onDelete: Cascade)
-  areaId        String               @db.Uuid
-  status        TableStatus
-  reservations  TableOnReservation[]
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
-  restaurant    Restaurant           @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
-  restaurant_id String               @db.Uuid
+  id             String      @id @default(uuid()) @db.Uuid
+  restaurant_id  String      @db.Uuid
+  area_id        String      @db.Uuid
+  table_number   String
+  name           String? // Optional display name
+  capacity       Int
+  min_party_size Int         @default(1)
+  max_party_size Int         @default(8)
+  status         TableStatus @default(ACTIVE)
+  sort_order     Int         @default(0)
+  metadata       Json? // Additional table properties
+
+  // Relations
+  restaurant         Restaurant         @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
+  area               Area               @relation(fields: [area_id], references: [id], onDelete: Cascade)
+  table_reservations TableReservation[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([restaurant_id, table_number])
+  @@index([restaurant_id])
+  @@index([area_id])
+  @@index([status])
+  @@index([capacity])
+  @@index([min_party_size, max_party_size])
+  @@map("tables")
+}
+
+model Reservation {
+  id            String @id @default(uuid()) @db.Uuid
+  restaurant_id String @db.Uuid
+
+  // Customer information
+  customer_name  String
+  customer_email String
+  customer_phone String?
+
+  // Reservation timing - ONLY arrival time stored
+  arrival_time               DateTime
+  estimated_duration_minutes Int? // Calculated from settings
+
+  // Reservation details
+  party_size       Int
+  special_requests String?
+  preferred_area   String?
+
+  // Status tracking
+  status ReservationStatus @default(PENDING)
+  source ReservationSource @default(ONLINE)
+
+  // Timestamps for lifecycle tracking
+  confirmed_at DateTime?
+  seated_at    DateTime?
+  completed_at DateTime?
+  cancelled_at DateTime?
+  no_show_at   DateTime?
+
+  // Relations
+  restaurant         Restaurant         @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
+  payment            Payment?
+  table_reservations TableReservation[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Critical indexes for performance
+  @@index([restaurant_id, arrival_time])
+  @@index([arrival_time])
+  @@index([status])
+  @@index([customer_email])
+  @@index([restaurant_id, status, arrival_time])
+  @@index([arrival_time, status])
+  @@index([createdAt])
+  @@map("reservations")
+}
+
+model TableReservation {
+  id             String   @id @default(uuid()) @db.Uuid
+  reservation_id String   @db.Uuid
+  table_id       String   @db.Uuid
+  assigned_by    String? // Staff ID or name
+  assigned_at    DateTime @default(now())
+
+  // Relations
+  reservation Reservation @relation(fields: [reservation_id], references: [id], onDelete: Cascade)
+  table       Table       @relation(fields: [table_id], references: [id], onDelete: Cascade)
+
+  @@unique([reservation_id, table_id])
+  @@index([reservation_id])
+  @@index([table_id])
+  @@index([assigned_at])
+  @@map("table_reservations")
 }
 
 enum TableStatus {
@@ -599,41 +667,33 @@ enum TableStatus {
   INACTIVE
 }
 
-model TableOnReservation {
-  id            String      @id @default(uuid()) @db.Uuid
-  reservationId String      @db.Uuid // ✅ match Reservation.id
-  tableId       String      @db.Uuid // ✅ match Table.id
-  assignedBy    String? // optional, e.g. staff ID or name
-  assignedAt    DateTime? // when it was assigned
-  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
-  table         Table       @relation(fields: [tableId], references: [id], onDelete: Cascade)
-}
-
 model Payment {
-  id            String                   @id @default(uuid()) @db.Uuid
-  reservationId String?                  @unique @db.Uuid // ✅ match Reservation.id
-  reservation   Reservation?             @relation(fields: [reservationId], references: [id], onDelete: Cascade)
-  paidAmount    Decimal                  @db.Decimal(10, 2)
-  totalAmount   Decimal                  @db.Decimal(10, 2)
-  currency      String                   @default("EUR")
-  paymentStatus ReservationPaymentStatus @default(PENDING)
-  transactionId String?
-  refundId      String?
-  method        String?
-  paidAt        DateTime?
-  createdAt     DateTime                 @default(now())
-  updatedAt     DateTime                 @updatedAt
-}
+  id             String                   @id @default(uuid()) @db.Uuid
+  reservation_id String                   @unique @db.Uuid
+  amount         Decimal                  @db.Decimal(10, 2)
+  currency       String                   @default("EUR")
+  payment_method String? // card, cash, etc.
+  transaction_id String? // For online payments
+  refund_id      String? // For refunds
+  status         ReservationPaymentStatus @default(PENDING)
+  paid_at        DateTime?
+  refunded_at    DateTime?
 
-model Area {
-  id            String     @id @default(uuid()) @db.Uuid
-  name          String
-  active        Boolean    @default(true)
-  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
-  restaurant_id String     @db.Uuid
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  Table         Table[]
+  // Deposit information
+  deposit_amount     Decimal? @db.Decimal(10, 2)
+  deposit_percentage Float? // Percentage of total
+
+  // Relations
+  reservation Reservation @relation(fields: [reservation_id], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([paid_at])
+  @@index([transaction_id])
+  @@map("payments")
 }
 
 enum ReservationPaymentStatus {
@@ -646,7 +706,10 @@ enum ReservationPaymentStatus {
 enum ReservationStatus {
   PENDING
   CONFIRMED
+  SEATED
+  COMPLETED
   CANCELLED
+  NO_SHOW
 }
 
 enum ReservationSource {
@@ -655,3 +718,15 @@ enum ReservationSource {
   WALK_IN
   PARTNER
 }
+
+// -- Today's reservations by restaurant
+// WHERE restaurant_id = ? AND DATE(arrival_time) = CURRENT_DATE
+
+// -- Date range queries with status
+// WHERE restaurant_id = ? AND arrival_time BETWEEN ? AND ? AND status IN (?)
+
+// -- Capacity checking for time slots  
+// WHERE restaurant_id = ? AND arrival_time BETWEEN ? AND ?
+
+// -- Table matching for party sizes
+// WHERE min_party_size <= ? AND max_party_size >= ? AND capacity >= ?

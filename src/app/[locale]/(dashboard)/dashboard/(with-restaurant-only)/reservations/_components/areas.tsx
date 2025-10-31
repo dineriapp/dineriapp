@@ -10,11 +10,12 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+import { useAreas, useCreateArea, useDeleteArea, useUpdateArea } from "@/lib/area-queries"
 import { useRestaurantStore } from "@/stores/restaurant-store"
+import { Area } from "@prisma/client"
 import { ArrowDownRight, ArrowUpRight, MapPin, Pencil, PlusCircle, ToggleLeft, ToggleRight, Trash2 } from "lucide-react"
 import { useState } from "react"
-import { Area } from "@prisma/client"
-import { useAreas, useCreateArea, useDeleteArea, useUpdateArea } from "@/lib/area-queries"
 
 export default function AreasPage() {
     const [search, setSearch] = useState("")
@@ -114,7 +115,7 @@ export default function AreasPage() {
     }) => {
         const isPositive = trendValue >= 0
         return (
-            <Card className="bg-white border shadow-sm">
+            <Card className="bg-white border shadow-sm gap-2">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                     <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
                         {icon} {title}
@@ -141,7 +142,7 @@ export default function AreasPage() {
 
     if (error) {
         return (
-            <div className="space-y-6">
+            <div className="space-y-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900">Areas</h2>
                     <p className="text-slate-600 mt-1">Organize your restaurant into different areas</p>
@@ -152,7 +153,7 @@ export default function AreasPage() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             <div>
                 <h2 className="text-2xl font-bold text-slate-900">Areas</h2>
                 <p className="text-slate-600 mt-1">Organize your restaurant into different areas</p>
@@ -237,44 +238,66 @@ export default function AreasPage() {
             {/* Grid Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {filteredAreas.map((area) => (
-                    <Card key={area.id} className="bg-white gap-1 border shadow-sm relative">
-                        <div className="absolute top-5 right-5 flex gap-2">
+                    <Card
+                        key={area.id}
+                        className="relative gap-0 overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-[2px] pb-4 pt-4"
+                    >
+                        {/* Accent bar on top (status color) */}
+                        <div
+                            className={`absolute top-0 left-0 w-full h-1 ${area.active ? "bg-green-500" : "bg-red-400"
+                                }`}
+                        />
+
+                        {/* Action Icons */}
+                        <div className="absolute top-4 right-4 flex items-center gap-3">
                             <Pencil
                                 onClick={() => {
                                     setEditArea(area)
                                     setEditDialogOpen(true)
                                 }}
-                                className="h-4 w-4 text-gray-400 hover:text-blue-500 cursor-pointer"
+                                className="h-4 w-4 text-gray-400 hover:text-blue-500 cursor-pointer transition-colors"
                             />
                             <Trash2
                                 onClick={() => handleDelete(area.id)}
-                                className="h-4 w-4 text-gray-400 hover:text-red-500 cursor-pointer"
+                                className="h-4 w-4 text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
                             />
                         </div>
-                        <CardHeader className="pb-2 flex justify-between items-start">
-                            <div className="flex flex-col items-start gap-1">
-                                <CardTitle className="text-base font-semibold">{area.name}</CardTitle>
-                            </div>
+
+                        {/* Header */}
+                        <CardHeader className="!py-2 !px-4">
+                            <CardTitle className="text-lg font-semibold text-gray-800">{area.name}</CardTitle>
                         </CardHeader>
-                        <CardContent className="flex justify-between items-center">
+
+                        {/* Body */}
+                        <CardContent className="flex items-center justify-between border border-gray-100 bg-gray-50 rounded-xl px-2 py-2 mx-4 mt-2">
                             <Badge
                                 variant="outline"
-                                className={`w-fit px-2 ${area.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
+                                className={`text-sm font-semibold px-3 py-1 rounded-lg shadow-sm ${area.active
+                                    ? "bg-green-50 text-green-700 border-green-200"
+                                    : "bg-red-50 text-red-700 border-red-200"
+                                    }`}
                             >
                                 {area.active ? "Active" : "Inactive"}
                             </Badge>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => toggleStatus(area.id)}
+
+                            <Switch
+                                checked={area.active}
+                                onCheckedChange={() => toggleStatus(area.id)}
                                 disabled={updateAreaMutation.isPending}
-                                className="text-xs"
-                            >
-                                Toggle
-                            </Button>
+                                className="scale-110 data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-gray-300 transition-transform duration-300"
+                            />
                         </CardContent>
+
+                        {/* Footer (optional info) */}
+                        <div className="px-4 pt-2 text-xs text-gray-400 border-t border-gray-100 mt-3">
+                            Last updated:{" "}
+                            <span className="text-gray-600 font-medium">
+                                {new Date(area.updatedAt).toLocaleDateString()}
+                            </span>
+                        </div>
                     </Card>
                 ))}
+
             </div>
 
             {filteredAreas.length === 0 && <div className="p-6 text-center text-sm text-gray-500">No areas found.</div>}

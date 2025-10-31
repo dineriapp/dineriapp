@@ -1,4 +1,4 @@
-import { Area, GradientDirection, Prisma, Table } from "@prisma/client";
+import { Area, GradientDirection, Payment, Prisma, Reservation, Table } from "@prisma/client";
 
 export interface Restaurant {
     id: string;
@@ -255,22 +255,25 @@ export interface UpdateReservationInput {
 export type ReservationUp = Prisma.ReservationGetPayload<{
     include: {
         payment: true;
-        tableLinks: {
+        table_reservations: {
             include: { table: true };
         };
     };
 }>;
 
-
-export interface ReservationResponse {
-    success: boolean
-    data?: ReservationUp
-    error?: string
-}
-
 export interface ReservationsListResponse {
     success: boolean
     data?: ReservationUp[]
+    error?: string
+}
+
+export type ReservationPayment = (Payment & {
+    reservation: Pick<Reservation, "customer_name" | "customer_email" | "status">
+})
+
+export interface ReservationsPaymentsListResponse {
+    success: boolean
+    data?: ReservationPayment[]
     error?: string
 }
 

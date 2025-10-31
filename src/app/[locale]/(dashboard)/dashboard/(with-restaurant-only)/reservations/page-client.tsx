@@ -1,79 +1,81 @@
-import Reservations from './_components/reservations'
+"use client"
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, DollarSign, Map, Settings, Users } from "lucide-react"
-import AreasPage from './_components/areas'
-import TablesPage from './_components/tables'
-import SettingsPage from './_components/settings'
-import PaymentsPage from './_components/payments'
+import { Calendar, DollarSign, Map, Plus, Settings, Users } from "lucide-react"
+import { useState } from "react"
+
+import AreasPage from "./_components/areas"
+import PaymentsPage from "./_components/payments"
+import Reservations from "./_components/reservations/reservations"
+import SettingsPage from "./_components/settings"
+import TablesPage from "./_components/tables"
 
 const ReservationsPage = () => {
+    const [activeTab, setActiveTab] = useState("reservations")
+
+    const tabs = [
+        {
+            key: "reservations", label: "Reservations", icon: <Calendar className="w-4 h-4" />,
+        },
+        { key: "tables", label: "Tables", icon: <Users className="w-4 h-4" />, },
+        { key: "areas", label: "Areas", icon: <Map className="w-4 h-4" />, },
+        { key: "settings", label: "Settings", icon: <Settings className="w-4 h-4" />, },
+        { key: "payments", label: "Payments", icon: <DollarSign className="w-4 h-4" />, },
+    ]
+
+    const renderContent = () => {
+        switch (activeTab) {
+            case "reservations":
+                return <Reservations />
+            case "tables":
+                return <TablesPage />
+            case "areas":
+                return <AreasPage />
+            case "payments":
+                return <PaymentsPage />
+            case "settings":
+                return <SettingsPage />
+            default:
+                return <Reservations />
+        }
+    }
+
     return (
-        <main className="max-w-[1200px] mx-auto px-4 py-8">
-            <Tabs defaultValue="reservations" className="w-full">
-                <TabsList className="bg-transparent flex gap-2 p-0">
-                    <TabsTrigger
-                        value="reservations"
-                        className="data-[state=active]:!bg-[#0f172a] !h-10 transition-all data-[state=active]:!text-white px-4 rounded-lg flex items-center gap-2 cursor-pointer bg-white"
-                    >
-                        <Calendar className="h-4 w-4" />
-                        Reservations
-                    </TabsTrigger>
+        <main className="w-full flex items-start justify-start h-[calc(100dvh-63px)] bg-gray-50">
+            {/* Sidebar */}
+            <aside className="w-[230px] h-full bg-white border-r shadow-sm flex flex-col">
+                {/* New Reservation Button */}
+                <div className="p-3 border-b">
+                    <button className="w-full flex items-center justify-center gap-2 cursor-pointer bg-main-green text-white py-2.5 rounded-lg text-sm font-medium hover:bg-main-green/70 transition">
+                        <Plus className="w-4 h-4" />
+                        New Reservation
+                    </button>
+                </div>
 
-                    <TabsTrigger
-                        value="tables"
-                        className="data-[state=active]:!bg-[#0f172a] transition-all !h-10 data-[state=active]:!text-white px-4 rounded-lg flex items-center gap-2 cursor-pointer bg-white"
-                    >
-                        <Users className="h-4 w-4" />
-                        Tables
-                    </TabsTrigger>
+                {/* Menu Sections */}
+                <nav className="flex-1 flex-col flex overflow-y-auto p-3 gap-0.5">
+                    {tabs.map((tab) => (
+                        <>
+                            <button
+                                key={tab.key}
+                                onClick={() => setActiveTab(tab.key)}
+                                className={`flex items-center cursor-pointer justify-between w-full px-4 py-2.5 rounded-md text-sm font-medium transition-all
+                      ${activeTab === tab.key
+                                        ? "bg-main-green text-white shadow-sm"
+                                        : "text-gray-700 hover:bg-gray-100"
+                                    }`}
+                            >
+                                <span className="flex items-center gap-2">
+                                    {tab.icon}
+                                    {tab.label}
+                                </span>
+                            </button>
+                        </>
+                    ))}
+                </nav>
+            </aside>
 
-                    <TabsTrigger
-                        value="areas"
-                        className="data-[state=active]:!bg-[#0f172a] transition-all !h-10 data-[state=active]:!text-white px-4 rounded-lg flex items-center gap-2 cursor-pointer bg-white"
-                    >
-                        <Map className="h-4 w-4" />
-                        Areas
-                    </TabsTrigger>
-
-                    <TabsTrigger
-                        value="payments"
-                        className="data-[state=active]:!bg-[#0f172a] transition-all !h-10 data-[state=active]:!text-white px-4 rounded-lg flex items-center gap-2 cursor-pointer bg-white"
-                    >
-                        <DollarSign className="h-4 w-4" />
-                        Payments
-                    </TabsTrigger>
-
-                    <TabsTrigger
-                        value="settings"
-                        className="data-[state=active]:!bg-[#0f172a] transition-all !h-10 data-[state=active]:!text-white px-4 rounded-lg flex items-center gap-2 cursor-pointer bg-white"
-                    >
-                        <Settings className="h-4 w-4" />
-                        Settings
-                    </TabsTrigger>
-                </TabsList>
-                {/* --- Tabs Content --- */}
-                <TabsContent value="reservations" className='!pt-4'>
-                    <Reservations />
-                </TabsContent>
-
-                <TabsContent value="tables" className='!pt-4'>
-                    <TablesPage />
-                </TabsContent>
-
-                <TabsContent value="areas" className='!pt-4'>
-                    <AreasPage />
-                </TabsContent>
-
-                <TabsContent value="payments" className='!pt-4'>
-                    <PaymentsPage />
-                </TabsContent>
-
-                <TabsContent value="settings" className='!pt-4'>
-                    <SettingsPage />
-                </TabsContent>
-            </Tabs>
-
+            {/* Main Content */}
+            <section className="flex-1 h-full overflow-y-auto p-6">{renderContent()}</section>
         </main>
     )
 }

@@ -2,20 +2,21 @@
 
 import type React from "react"
 
+import LoadingUI from "@/components/loading-ui"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+import { useAreas } from "@/lib/area-queries"
+import { useCreateTable, useDeleteTable, useTables, useUpdateTable } from "@/lib/table-queries"
+import type { CreateTableInput } from "@/lib/types"
+import { useRestaurantStore } from "@/stores/restaurant-store"
 import { ArrowDownRight, ArrowUpRight, PlusCircle, ToggleLeft, ToggleRight, Trash2, Users } from "lucide-react"
 import { useState } from "react"
-import { useRestaurantStore } from "@/stores/restaurant-store"
-import type { CreateTableInput } from "@/lib/types"
-import { useCreateTable, useDeleteTable, useTables, useUpdateTable } from "@/lib/table-queries"
-import { useAreas } from "@/lib/area-queries"
-import LoadingUI from "@/components/loading-ui"
-import { Label } from "@/components/ui/label"
 
 export default function TablesGridPage() {
     const { selectedRestaurant: restaurant } = useRestaurantStore()
@@ -52,7 +53,7 @@ export default function TablesGridPage() {
     const filteredTables = tables.filter((t) => {
         const matchStatus = statusFilter === "ALL" || t.status === statusFilter
         const matchSearch =
-            t.tableNumber.toLowerCase().includes(search.toLowerCase()) ||
+            t.table_number.toLowerCase().includes(search.toLowerCase()) ||
             t.area.name.toLowerCase().includes(search.toLowerCase())
         return matchStatus && matchSearch
     })
@@ -126,7 +127,7 @@ export default function TablesGridPage() {
 
     if (error) {
         return (
-            <div className="space-y-6">
+            <div className="space-y-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900">Tables</h2>
                     <p className="text-slate-600 mt-1">Manage your restaurant tables and floor plan</p>
@@ -137,7 +138,7 @@ export default function TablesGridPage() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             <div>
                 <h2 className="text-2xl font-bold text-slate-900">Tables</h2>
                 <p className="text-slate-600 mt-1">Manage your restaurant tables and floor plan</p>
@@ -267,44 +268,85 @@ export default function TablesGridPage() {
             {/* --- Grid Cards --- */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {filteredTables.map((table) => (
-                    <Card key={table.id} className="bg-white border gap-1 shadow-sm relative">
-                        <div className="absolute top-5 right-5 cursor-pointer">
-                            <Trash2
-                                onClick={() => handleDelete(table.id)}
-                                className="h-4 w-4 text-red-400 hover:text-red-500 transition"
-                            />
-                        </div>
-                        <CardHeader className="pb-2 flex justify-between items-start">
-                            <div className="flex items-start flex-col gap-1">
-                                <CardTitle className="text-xl font-bold">{table.tableNumber}</CardTitle>
-                                <p className="text-sm text-gray-500">Seats {table.capacity}</p>
+                    <Card
+                        key={table.id}
+                        className="relative gap-0 pb-4 pt-4 overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-[2px]"
+                    >
+                        {/* Accent bar on top (status color) */}
+                        <div
+                            className={`absolute top-0 left-0 w-full h-1 ${table.status === "ACTIVE" ? "bg-green-500" : "bg-red-400"
+                                }`}
+                        />
+
+                        {/* Delete Icon */}
+                        <button
+                            onClick={() => handleDelete(table.id)}
+                            className="absolute top-4 right-4 text-gray-400 cursor-pointer hover:text-red-500 transition-colors"
+                            aria-label="Delete table"
+                        >
+                            <Trash2 className="h-4 w-4" />
+                        </button>
+
+                        {/* Header */}
+                        <CardHeader className="!yp-2 !px-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex flex-col gap-1">
+                                    <CardTitle className="text-lg font-semibold text-gray-800">
+                                        Table {table.table_number}
+                                    </CardTitle>
+                                    <p className="text-sm text-gray-500">
+                                        Capacity:{" "}
+                                        <span className="text-gray-700 font-medium">
+                                            {table.capacity} Seats
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
                         </CardHeader>
-                        <CardContent className="flex flex-col gap-3">
-                            <Badge variant="outline" className="bg-amber-100 text-amber-700 w-fit">
-                                {table.area.name}
-                            </Badge>
 
-                            <Button
-                                onClick={() => toggleStatus(table.id, table.status)}
-                                disabled={updateTableMutation.isPending}
-                                variant="outline"
-                                className={`flex items-center justify-center gap-2 ${table.status === "ACTIVE" ? "border-green-500 text-green-600" : "border-gray-300 text-gray-500"
-                                    }`}
-                            >
-                                {table.status === "ACTIVE" ? (
-                                    <>
-                                        <ToggleRight className="h-4 w-4 text-green-500" /> Active
-                                    </>
-                                ) : (
-                                    <>
-                                        <ToggleLeft className="h-4 w-4 text-gray-400" /> Inactive
-                                    </>
-                                )}
-                            </Button>
+                        {/* Body */}
+                        <CardContent className="flex flex-col gap-4 !py-2 px-4">
+                            {/* Area Badge */}
+                            <div>
+                                <Badge
+                                    variant="outline"
+                                    className="bg-gradient-to-r from-amber-50 to-amber-100 text-amber-700 border border-amber-200 font-medium rounded-md px-3 py-1 shadow-sm"
+                                >
+                                    {table.area.name}
+                                </Badge>
+                            </div>
+
+                            {/* Status & Switch */}
+                            <div className="flex items-center justify-between border border-gray-100 bg-gray-50 rounded-xl p-2">
+                                <Badge
+                                    variant="outline"
+                                    className={`text-sm font-semibold px-3 py-1 rounded-lg shadow-sm ${table.status === "ACTIVE"
+                                        ? "bg-green-50 text-green-700 border-green-200"
+                                        : "bg-red-50 text-red-700 border-red-200"
+                                        }`}
+                                >
+                                    {table.status === "ACTIVE" ? "Active" : "Inactive"}
+                                </Badge>
+
+                                <Switch
+                                    checked={table.status === "ACTIVE"}
+                                    onCheckedChange={() => toggleStatus(table.id, table.status)}
+                                    disabled={updateTableMutation.isPending}
+                                    className="scale-110 data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-gray-300 transition-transform duration-300"
+                                />
+                            </div>
                         </CardContent>
+
+                        {/* Footer (optional info) */}
+                        <div className="px-4 pt-2 text-xs text-gray-400 border-t border-gray-100">
+                            Last updated:{" "}
+                            <span className="text-gray-600 font-medium">
+                                {new Date(table.updatedAt).toLocaleDateString()}
+                            </span>
+                        </div>
                     </Card>
                 ))}
+
             </div>
 
             {filteredTables.length === 0 && <div className="p-6 text-center text-sm text-gray-500">No tables found.</div>}

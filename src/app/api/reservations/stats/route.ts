@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
             prisma.reservation.count({ where: { status: "CONFIRMED" } }),
             prisma.reservation.count({ where: { status: "PENDING" } }),
             prisma.reservation.count({ where: { status: "CANCELLED" } }),
-            prisma.reservation.count({ where: { checkedInAt: { not: null } } }),
+            prisma.reservation.count({ where: { seated_at: { not: null } } }),
         ])
 
         return NextResponse.json<ReservationStatsResponse>({

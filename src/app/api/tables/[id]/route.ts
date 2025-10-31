@@ -12,9 +12,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         const table = await prisma.table.update({
             where: { id },
             data: {
-                ...(tableNumber !== undefined && { tableNumber }),
+                ...(tableNumber !== undefined && { table_number: tableNumber }),
                 ...(capacity !== undefined && { capacity }),
-                ...(areaId !== undefined && { areaId }),
+                ...(areaId !== undefined && { area_id: areaId }),
                 ...(status !== undefined && { status }),
             },
             include: { area: true },

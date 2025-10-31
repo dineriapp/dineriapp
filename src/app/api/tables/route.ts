@@ -45,9 +45,9 @@ export async function POST(request: NextRequest) {
 
         const table = await prisma.table.create({
             data: {
-                tableNumber,
+                table_number: tableNumber,
                 capacity,
-                areaId,
+                area_id: areaId,
                 status,
                 restaurant_id,
             },

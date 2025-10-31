@@ -117,3 +117,16 @@ export const getStatusAction = (
 export const SaveChangesBtnClasses = "bg-main-green cursor-pointer rounded-full shadow-lg !px-5 font-poppins !h-[44px] transition-all duration-200 hover:bg-emerald-700 hover:shadow-xl disabled:opacity-50"
 export const ResetChangesBtnClasses = "shadow-lg cursor-pointer transition-all duration-200 !px-5 font-poppins !h-[44px] rounded-full bg-white hover:shadow-xl disabled:opacity-50"
 
+export const formatDateTime = (date?: string | Date | null, tz?: string) => {
+  if (!date) return ""
+  return new Date(date).toLocaleString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: tz || "Asia/Karachi",
+  })
+}
+
