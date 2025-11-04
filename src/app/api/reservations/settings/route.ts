@@ -16,8 +16,8 @@ export async function POST(req: Request) {
         const result = await prisma.reservationSettings.upsert({
             where: { restaurant_id: restaurantId },
             create: {
-                restaurant_id: restaurantId,
                 settings,
+                restaurant: { connect: { id: restaurantId } }, // ✅ Explicit link to restaurant
             },
             update: {
                 settings,

@@ -65,7 +65,7 @@ const default_data: SettingsState = {
 }
 
 export default function SettingsPage() {
-    const { selectedRestaurant: restaurant } = useRestaurantStore()
+    const { selectedRestaurant: restaurant, updateSelectedRestaurant } = useRestaurantStore()
     const restaurantId = restaurant?.id
 
     const { data: initialSettings, isLoading: isLoadingInitialData } = useReservationSettings(restaurantId!);
@@ -101,6 +101,9 @@ export default function SettingsPage() {
                 description: "Your reservation settings have been updated.",
                 duration: 3000,
             });
+
+            updateSelectedRestaurant({ ...restaurant, reservation_settings: { settings } });
+
             setHasChanges(false);
         } catch (error) {
             console.error("Failed to save settings:", error);
@@ -129,7 +132,7 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="space-y-6 min-h-screen">
+        <div className="space-y-4 min-h-screen">
             <div>
                 <h2 className="text-2xl font-bold text-slate-900">Reservation Settings</h2>
                 <p className="text-slate-600 mt-1">

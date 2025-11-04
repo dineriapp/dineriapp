@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
         const tables = await prisma.table.findMany({
             where: { restaurant_id: restaurantId },
             include: { area: true },
-            orderBy: { createdAt: "desc" },
+            // orderBy: { createdAt: "desc" },
         })
 
         return NextResponse.json<TablesListResponse>({

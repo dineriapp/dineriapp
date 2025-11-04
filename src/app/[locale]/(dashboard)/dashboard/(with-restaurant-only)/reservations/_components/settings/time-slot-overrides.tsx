@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { CalendarIcon, Plus, Trash2, X } from "lucide-react";
@@ -124,26 +125,55 @@ export default function TimeSlotOverrides({ settings, updateSettingsSection }: T
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="start">Start Time</Label>
-                                    <Input
-                                        type="time"
-                                        id="start"
+                                    <Select
                                         value={form.startTime}
-                                        onChange={(e) =>
-                                            setForm({ ...form, startTime: e.target.value })
-                                        }
-                                    />
+                                        onValueChange={(value) => setForm({ ...form, startTime: value })}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select time" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {Array.from({ length: 24 * 2 }, (_, i) => {
+                                                const hour = Math.floor(i / 2);
+                                                const minute = i % 2 === 0 ? "00" : "30";
+                                                const ampm = hour >= 12 ? "PM" : "AM";
+                                                const formattedHour = ((hour % 12) || 12).toString().padStart(2, "0");
+                                                const label = `${formattedHour}:${minute} ${ampm}`;
+                                                return (
+                                                    <SelectItem key={label} value={label}>
+                                                        {label}
+                                                    </SelectItem>
+                                                );
+                                            })}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="end">End Time</Label>
-                                    <Input
-                                        type="time"
-                                        id="end"
+                                <div className="flex gap-2 flex-col">
+                                    <Label htmlFor="start">End Time</Label>
+                                    <Select
                                         value={form.endTime}
-                                        onChange={(e) =>
-                                            setForm({ ...form, endTime: e.target.value })
-                                        }
-                                    />
+                                        onValueChange={(value) => setForm({ ...form, endTime: value })}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select time" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {Array.from({ length: 24 * 2 }, (_, i) => {
+                                                const hour = Math.floor(i / 2);
+                                                const minute = i % 2 === 0 ? "00" : "30";
+                                                const ampm = hour >= 12 ? "PM" : "AM";
+                                                const formattedHour = ((hour % 12) || 12).toString().padStart(2, "0");
+                                                const label = `${formattedHour}:${minute} ${ampm}`;
+                                                return (
+                                                    <SelectItem key={label} value={label}>
+                                                        {label}
+                                                    </SelectItem>
+                                                );
+                                            })}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
+
                             </div>
 
                             <div className="space-y-2">

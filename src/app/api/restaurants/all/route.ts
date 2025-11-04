@@ -22,12 +22,14 @@ export async function GET() {
                 _count: {
                     select: { restaurantViews: true, links: true, faqCategories: true, menuCategories: true, events: true },
                 },
+                reservation_settings: true
             },
         });
 
         if (restaurants.length > 0) {
             return NextResponse.json({ restaurants, error: "" }, { status: 200 });
         } else {
+
             return NextResponse.json({ restaurants: [], error: t("restaurants_not_found") }, { status: 404 });
         }
     } catch (error) {

@@ -1,3 +1,4 @@
+import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
 import type { Event, Faq, FaqCategory, MenuCategory, MenuItem, Link as PrismaLink, User } from "@prisma/client";
 import { Restaurant } from "@prisma/client";
 
@@ -9,6 +10,7 @@ export type RestaurantWithCount = Restaurant & {
         menuCategories: number
         events: number
     };
+    reservation_settings: { settings: SettingsState }
 };
 
 

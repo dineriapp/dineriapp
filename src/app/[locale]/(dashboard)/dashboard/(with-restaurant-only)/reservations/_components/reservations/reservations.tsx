@@ -25,6 +25,7 @@ import {
 import { useState } from "react"
 import { DateRange } from "react-day-picker"
 import { FcTimeline } from "react-icons/fc"
+import NewReservationForm from "./new-reservation-form"
 import { ReservationCard } from "./reservation-card"
 
 export default function ReservationsPage() {
@@ -65,11 +66,17 @@ export default function ReservationsPage() {
 
     return (
         <div className="space-y-4">
-            <div>
-                <h2 className="text-2xl font-bold text-slate-900">Reservations</h2>
-                <p className="text-slate-600 mt-1">
-                    Manage all customer reservations efficiently.
-                </p>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h2 className="text-2xl font-bold text-slate-900">Reservations</h2>
+                    <p className="text-slate-600 mt-1">
+                        Manage all customer reservations efficiently.
+                    </p>
+                </div>
+                {
+                    restaurant &&
+                    <NewReservationForm restaurant={restaurant} />
+                }
             </div>
 
             {/* Stats Section */}

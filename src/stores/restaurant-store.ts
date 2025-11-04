@@ -19,6 +19,7 @@ export const useRestaurantStore = create<RestaurantState>()(
             selectedRestaurant: null,
             setRestaurants: (restaurants) => set({ restaurants }),
             setSelectedRestaurant: (restaurant, options = { refresh: false }) => {
+                console.log({ restaurant });
                 set({ selectedRestaurant: restaurant })
                 localStorage.setItem("selected-restaurant-id", restaurant.id);
                 // Force a full page reload

@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, DollarSign, Map, Plus, Settings, Users } from "lucide-react"
+import { Calendar, DollarSign, Map, Settings, Users } from "lucide-react"
 import { useState } from "react"
 
 import AreasPage from "./_components/areas"
@@ -13,13 +13,11 @@ const ReservationsPage = () => {
     const [activeTab, setActiveTab] = useState("reservations")
 
     const tabs = [
-        {
-            key: "reservations", label: "Reservations", icon: <Calendar className="w-4 h-4" />,
-        },
-        { key: "tables", label: "Tables", icon: <Users className="w-4 h-4" />, },
-        { key: "areas", label: "Areas", icon: <Map className="w-4 h-4" />, },
-        { key: "settings", label: "Settings", icon: <Settings className="w-4 h-4" />, },
-        { key: "payments", label: "Payments", icon: <DollarSign className="w-4 h-4" />, },
+        { key: "reservations", label: "Reservations", icon: <Calendar className="w-4 h-4" /> },
+        { key: "tables", label: "Tables", icon: <Users className="w-4 h-4" /> },
+        { key: "areas", label: "Areas", icon: <Map className="w-4 h-4" /> },
+        { key: "payments", label: "Payments", icon: <DollarSign className="w-4 h-4" /> },
+        { key: "settings", label: "Settings", icon: <Settings className="w-4 h-4" /> },
     ]
 
     const renderContent = () => {
@@ -39,44 +37,37 @@ const ReservationsPage = () => {
         }
     }
 
-    return (
-        <main className="w-full flex items-start justify-start h-[calc(100dvh-63px)] bg-gray-50">
-            {/* Sidebar */}
-            <aside className="w-[230px] h-full bg-white border-r shadow-sm flex flex-col">
-                {/* New Reservation Button */}
-                <div className="p-3 border-b">
-                    <button className="w-full flex items-center justify-center gap-2 cursor-pointer bg-main-green text-white py-2.5 rounded-lg text-sm font-medium hover:bg-main-green/70 transition">
-                        <Plus className="w-4 h-4" />
-                        New Reservation
-                    </button>
-                </div>
 
-                {/* Menu Sections */}
-                <nav className="flex-1 flex-col flex overflow-y-auto p-3 gap-0.5">
+    return (
+        <>
+            <main className="w-full flex flex-col bg-gray-50 min-h-screen">
+                {/* Header  */}
+                <div className="flex items-center justify-between bg-white border-b px-6 py-4 shadow-sm">
+                    <h1 className="text-lg font-semibold text-gray-800">Reservations Dashboard</h1>
+
+                </div>
+                {/* Top Tabs */}
+                <nav className="flex bg-white border-b shadow-sm overflow-x-auto">
                     {tabs.map((tab) => (
-                        <>
-                            <button
-                                key={tab.key}
-                                onClick={() => setActiveTab(tab.key)}
-                                className={`flex items-center cursor-pointer justify-between w-full px-4 py-2.5 rounded-md text-sm font-medium transition-all
-                      ${activeTab === tab.key
-                                        ? "bg-main-green text-white shadow-sm"
-                                        : "text-gray-700 hover:bg-gray-100"
-                                    }`}
-                            >
-                                <span className="flex items-center gap-2">
-                                    {tab.icon}
-                                    {tab.label}
-                                </span>
-                            </button>
-                        </>
+                        <button
+                            key={tab.key}
+                            onClick={() => setActiveTab(tab.key)}
+                            className={`flex items-center gap-2 px-6 py-3 cursor-pointer text-sm font-medium transition-all whitespace-nowrap 
+              ${activeTab === tab.key
+                                    ? "border-b-2 border-main-green text-main-green bg-gray-50"
+                                    : "text-gray-600 hover:text-main-green"
+                                }`}
+                        >
+                            {tab.icon}
+                            {tab.label}
+                        </button>
                     ))}
                 </nav>
-            </aside>
 
-            {/* Main Content */}
-            <section className="flex-1 h-full overflow-y-auto p-6">{renderContent()}</section>
-        </main>
+                {/* Main Content */}
+                <section className="flex-1 p-6">{renderContent()}</section>
+            </main>
+        </>
     )
 }
 

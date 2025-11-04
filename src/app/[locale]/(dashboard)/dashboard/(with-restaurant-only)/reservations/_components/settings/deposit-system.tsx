@@ -123,19 +123,53 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                     <>
                         <div className="flex flex-col space-y-2 w-full col-span-2">
                             <Label>Start Time</Label>
-                            <Input
-                                type="time"
-                                value={rule.startTime || ""}
-                                onChange={(e) => updateRule(rule.id, "startTime", e.target.value)}
-                            />
+                            <Select
+                                value={rule.startTime}
+                                onValueChange={(value) => updateRule(rule.id, "startTime", value)}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select time" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Array.from({ length: 24 * 2 }, (_, i) => {
+                                        const hour = Math.floor(i / 2);
+                                        const minute = i % 2 === 0 ? "00" : "30";
+                                        const ampm = hour >= 12 ? "PM" : "AM";
+                                        const formattedHour = ((hour % 12) || 12).toString().padStart(2, "0");
+                                        const label = `${formattedHour}:${minute} ${ampm}`;
+                                        return (
+                                            <SelectItem key={label} value={label}>
+                                                {label}
+                                            </SelectItem>
+                                        );
+                                    })}
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div className="flex flex-col space-y-2 w-full col-span-2">
                             <Label>End Time</Label>
-                            <Input
-                                type="time"
-                                value={rule.endTime || ""}
-                                onChange={(e) => updateRule(rule.id, "endTime", e.target.value)}
-                            />
+                            <Select
+                                value={rule.endTime}
+                                onValueChange={(value) => updateRule(rule.id, "endTime", value)}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select time" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Array.from({ length: 24 * 2 }, (_, i) => {
+                                        const hour = Math.floor(i / 2);
+                                        const minute = i % 2 === 0 ? "00" : "30";
+                                        const ampm = hour >= 12 ? "PM" : "AM";
+                                        const formattedHour = ((hour % 12) || 12).toString().padStart(2, "0");
+                                        const label = `${formattedHour}:${minute} ${ampm}`;
+                                        return (
+                                            <SelectItem key={label} value={label}>
+                                                {label}
+                                            </SelectItem>
+                                        );
+                                    })}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </>
                 );
