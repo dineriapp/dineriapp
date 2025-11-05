@@ -18,7 +18,7 @@ export class CapacityService {
         return tables.reduce((total, table) => total + table.capacity, 0);
     }
 
-    // Check capacity for a specific time slot
+    // Improved capacity check with proper time range handling
     async checkCapacity(
         restaurantId: string,
         arrivalTime: Date,
@@ -29,93 +29,74 @@ export class CapacityService {
         currentCapacity: number;
         maxCapacity: number;
         availableCapacity: number;
+        overlappingReservations: number;
     }> {
-
-        // Calculate max capacity dynamically from tables
         const maxCapacity = await this.calculateTotalCapacity(restaurantId);
-
-        // Get overlapping reservations
         const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
 
-        const overlappingReservations = await prisma.reservation.findMany({
+        // Get ALL reservations that could potentially overlap
+        const potentialReservations = await prisma.reservation.findMany({
             where: {
                 restaurant_id: restaurantId,
                 status: {
                     in: ['PENDING', 'CONFIRMED', 'SEATED']
                 },
-                OR: [
-                    {
-                        // Reservation starts during our reservation
-                        arrival_time: {
-                            gte: arrivalTime,
-                            lt: endTime
-                        }
-                    },
-                    {
-                        // Reservation ends during our reservation
-                        AND: [
-                            {
-                                arrival_time: {
-                                    lt: arrivalTime
-                                }
-                            },
-                            {
-                                estimated_duration_minutes: {
-                                    not: null
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        // Reservation spans our entire reservation
-                        AND: [
-                            {
-                                arrival_time: {
-                                    lte: arrivalTime
-                                }
-                            },
-                            {
-                                estimated_duration_minutes: {
-                                    not: null
-                                }
-                            }
-                        ]
-                    }
-                ]
+                // Get reservations that start within a reasonable window
+                // (assuming no reservation lasts more than 4 hours)
+                arrival_time: {
+                    gte: new Date(arrivalTime.getTime() - 4 * 60 * 60000), // 4 hours before
+                    lte: new Date(arrivalTime.getTime() + 4 * 60 * 60000)  // 4 hours after
+                }
             },
             select: {
                 party_size: true,
                 estimated_duration_minutes: true,
-                arrival_time: true
+                arrival_time: true,
+                status: true
             }
         });
 
-        // Calculate total capacity used during the overlapping period
         let currentCapacity = 0;
-        for (const reservation of overlappingReservations) {
-            const reservationEndTime = new Date(
-                new Date(reservation.arrival_time).getTime() +
-                (reservation.estimated_duration_minutes || 60) * 60000
+        let overlappingCount = 0;
+
+        for (const reservation of potentialReservations) {
+            const reservationStart = new Date(reservation.arrival_time);
+            const reservationEnd = new Date(
+                reservationStart.getTime() +
+                (reservation.estimated_duration_minutes || 120) * 60000
             );
 
-            // Check if reservations overlap
-            if (arrivalTime < reservationEndTime && endTime > new Date(reservation.arrival_time)) {
+            // Check if the reservations overlap in time
+            if (this.doTimeRangesOverlap(
+                { start: arrivalTime, end: endTime },
+                { start: reservationStart, end: reservationEnd }
+            )) {
                 currentCapacity += reservation.party_size;
+                overlappingCount++;
             }
         }
 
-        const availableCapacity = maxCapacity - currentCapacity;
+        const availableCapacity = Math.max(0, maxCapacity - currentCapacity);
         const available = (currentCapacity + partySize) <= maxCapacity;
 
         return {
             available,
             currentCapacity,
             maxCapacity,
-            availableCapacity
+            availableCapacity,
+            overlappingReservations: overlappingCount
         };
     }
 
-    // Find available tables for a time slot considering business rules
+    // Helper to check if two time ranges overlap
+    private doTimeRangesOverlap(
+        range1: { start: Date; end: Date },
+        range2: { start: Date; end: Date }
+    ): boolean {
+        return range1.start < range2.end && range1.end > range2.start;
+    }
+
+    // Improved available tables search with better business logic
     async findAvailableTables(
         restaurantId: string,
         arrivalTime: Date,
@@ -124,81 +105,57 @@ export class CapacityService {
         preferredArea?: string
     ) {
         const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
+        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
 
-        // Get occupied table IDs during the requested time
-        const occupiedTableIds = await this.getOccupiedTableIds(
-            restaurantId,
-            arrivalTime,
-            endTime
-        );
-
-        // Build base conditions
-        const baseConditions: any = {
+        // Build query conditions
+        const whereConditions: Prisma.TableWhereInput = {
             restaurant_id: restaurantId,
             status: 'ACTIVE',
-            id: {
-                notIn: occupiedTableIds
-            },
-            // CRITICAL: Check both physical capacity AND business rules
-            capacity: {
-                gte: partySize // Must physically fit
-            },
-            min_party_size: {
-                lte: partySize // Party must meet minimum requirement
-            },
-            max_party_size: {
-                gte: partySize // Party must not exceed maximum
-            }
+            id: { notIn: occupiedTableIds },
+            capacity: { gte: partySize },
+            min_party_size: { lte: partySize },
+            max_party_size: { gte: partySize }
         };
 
-        // Add area preference if specified
+        // Handle area preference
         if (preferredArea) {
-            baseConditions.area = {
-                name: preferredArea
-            };
+            whereConditions.area = { name: preferredArea };
         }
 
-        // Find available tables that can accommodate the party
         const availableTables = await prisma.table.findMany({
-            where: baseConditions,
+            where: whereConditions,
             include: {
                 area: true
             },
             orderBy: [
-                { capacity: 'asc' }, // Prefer smallest table that fits
+                // Prefer tables that fit the party size perfectly
+                { capacity: 'asc' },
+                // Then by area preference
+                { area: { sort_order: 'asc' } },
+                // Then by table order
                 { sort_order: 'asc' }
             ]
         });
 
         return availableTables;
     }
-
-    // Smart table assignment that considers business rules and preferences
+    // Smart table assignment with fallback logic
     async findBestTable(
         restaurantId: string,
+        arrivalTime: Date,
+        estimatedDuration: number,
         partySize: number,
         preferredArea?: string
     ) {
-        const baseConditions: Prisma.TableWhereInput = {
-            restaurant_id: restaurantId,
-            status: 'ACTIVE',
-            capacity: { gte: partySize },
-            min_party_size: { lte: partySize },
-            max_party_size: { gte: partySize }
-        };
-
-        // Try preferred area first
+        // First try exact match in preferred area
         if (preferredArea) {
-            const preferredTables = await prisma.table.findMany({
-                where: {
-                    ...baseConditions,
-                    area: {
-                        name: preferredArea
-                    }
-                },
-                include: { area: true },
-                orderBy: [{ capacity: 'asc' }] // Prefer best fit
-            });
+            const preferredTables = await this.findAvailableTables(
+                restaurantId,
+                arrivalTime,
+                estimatedDuration,
+                partySize,
+                preferredArea
+            );
 
             if (preferredTables.length > 0) {
                 return preferredTables[0];
@@ -206,86 +163,256 @@ export class CapacityService {
         }
 
         // Fallback to any available table
-        const fallbackTables = await prisma.table.findMany({
-            where: baseConditions,
-            include: { area: true },
-            orderBy: [{ capacity: 'asc' }] // Prefer best fit
-        });
+        const fallbackTables = await this.findAvailableTables(
+            restaurantId,
+            arrivalTime,
+            estimatedDuration,
+            partySize
+        );
 
         return fallbackTables[0] || null;
     }
-
-    // Check if we can accommodate a party by combining tables
+    // Enhanced table combination finder
     async findTableCombinations(
+        restaurantId: string,
+        partySize: number,
+        arrivalTime: Date,
+        estimatedDuration: number,
+        maxCombinationSize: number = 10
+    ) {
+        const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
+        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
+
+        console.log('=== FIXED COMBINATION FINDER ===');
+        console.log('Party size:', partySize);
+        console.log('Occupied tables:', occupiedTableIds.length);
+
+        // Get available tables sorted by capacity DESCENDING (largest first)
+        const availableTables = await prisma.table.findMany({
+            where: {
+                restaurant_id: restaurantId,
+                status: 'ACTIVE',
+                id: { notIn: occupiedTableIds }
+            },
+            include: {
+                area: true
+            },
+            orderBy: [
+                { capacity: 'desc' } // CRITICAL: Largest tables first
+            ]
+        });
+
+        console.log('Available tables (sorted by capacity DESC):', availableTables.map(t => ({
+            table: t.table_number,
+            capacity: t.capacity,
+            area: t.area.name
+        })));
+
+        const totalAvailableCapacity = availableTables.reduce((sum, table) => sum + table.capacity, 0);
+        console.log('Total available capacity:', totalAvailableCapacity);
+
+        // SIMPLE GREEDY ALGORITHM: Take largest tables until we meet capacity
+        const selectedTables = [];
+        let currentCapacity = 0;
+
+        for (const table of availableTables) {
+            if (currentCapacity >= partySize) break;
+            if (selectedTables.length >= maxCombinationSize) break;
+
+            selectedTables.push(table);
+            currentCapacity += table.capacity;
+
+            console.log(`Added ${table.table_number} (${table.capacity}), total: ${currentCapacity}`);
+        }
+
+        if (currentCapacity >= partySize) {
+            console.log('✅ COMBINATION FOUND:', {
+                tables: selectedTables.map(t => t.table_number),
+                totalCapacity: currentCapacity,
+                tableCount: selectedTables.length
+            });
+
+            return [{
+                tables: selectedTables,
+                totalCapacity: currentCapacity,
+                area: selectedTables.map(t => t.area.name).join(', '),
+                efficiency: currentCapacity - partySize,
+                combinationType: 'greedy',
+                tableCount: selectedTables.length
+            }];
+        }
+
+        console.log('❌ NO COMBINATION FOUND');
+        console.log('Max achievable capacity:', currentCapacity);
+        return [];
+    }
+    // DEBUG VERSION - WILL DEFINITELY FIND COMBINATION IF CAPACITY EXISTS
+    async findTableCombinationsDebug(
         restaurantId: string,
         partySize: number,
         arrivalTime: Date,
         estimatedDuration: number
     ) {
         const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
-        const occupiedTableIds = await this.getOccupiedTableIds(
-            restaurantId,
-            arrivalTime,
-            endTime
-        );
+        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
 
-        const availableTables = await prisma.table.findMany({
+        console.log('=== DEBUG COMBINATION FINDER ===');
+        console.log('Target party size:', partySize);
+
+        // Get ALL available tables without any filtering
+        const allTables = await prisma.table.findMany({
             where: {
                 restaurant_id: restaurantId,
-                status: 'ACTIVE',
-                id: {
-                    notIn: occupiedTableIds
-                }
+                status: 'ACTIVE'
             },
-            include: { area: true },
-            orderBy: [{ capacity: 'desc' }] // Start with largest tables
+            include: {
+                area: true
+            }
         });
 
-        // Simple combination logic - in production you'd want more sophisticated
-        const combinations = [];
+        console.log('ALL tables in restaurant:', allTables.map(t => ({
+            table: t.table_number,
+            capacity: t.capacity,
+            occupied: occupiedTableIds.includes(t.id)
+        })));
 
-        // Try to find single table first
-        const singleTable = availableTables.find(table => table.capacity >= partySize);
-        if (singleTable) {
-            combinations.push([singleTable]);
-        }
+        const availableTables = allTables.filter(table => !occupiedTableIds.includes(table.id));
 
-        // Find combinations of 2 tables
-        for (let i = 0; i < availableTables.length; i++) {
-            for (let j = i + 1; j < availableTables.length; j++) {
-                const table1 = availableTables[i];
-                const table2 = availableTables[j];
+        // MANUALLY sort by capacity descending
+        availableTables.sort((a, b) => b.capacity - a.capacity);
 
-                // Check if tables are in the same area (for practical seating)
-                if (table1.area_id === table2.area_id) {
-                    const combinedCapacity = table1.capacity + table2.capacity;
-                    if (combinedCapacity >= partySize) {
-                        combinations.push([table1, table2]);
-                    }
-                }
+        console.log('AVAILABLE tables (manually sorted):', availableTables.map(t => ({
+            table: t.table_number,
+            capacity: t.capacity,
+            area: t.area.name
+        })));
+
+        const capacities = availableTables.map(t => t.capacity);
+        console.log('Available capacities:', capacities);
+
+        const totalAvailableCapacity = capacities.reduce((sum, cap) => sum + cap, 0);
+        console.log('Total available capacity:', totalAvailableCapacity);
+
+        // SIMPLE SOLUTION: Use tables until we reach capacity
+        const selectedTables = [];
+        let currentCapacity = 0;
+
+        for (const table of availableTables) {
+            selectedTables.push(table);
+            currentCapacity += table.capacity;
+
+            if (currentCapacity >= partySize) {
+                break;
+            }
+
+            // Safety limit - don't use more than 10 tables
+            if (selectedTables.length >= 10) {
+                break;
             }
         }
 
-        // Sort combinations by how close they are to the required capacity (most efficient first)
-        combinations.sort((a, b) => {
-            const capacityA = a.reduce((sum, table) => sum + table.capacity, 0);
-            const capacityB = b.reduce((sum, table) => sum + table.capacity, 0);
-
-            const diffA = Math.abs(capacityA - partySize);
-            const diffB = Math.abs(capacityB - partySize);
-
-            return diffA - diffB;
+        console.log('Final selection:', {
+            tables: selectedTables.map(t => t.table_number),
+            capacities: selectedTables.map(t => t.capacity),
+            totalCapacity: currentCapacity,
+            tableCount: selectedTables.length
         });
 
-        return combinations;
+        if (currentCapacity >= partySize) {
+            console.log('🎉 SUCCESS: Combination found!');
+            return [{
+                tables: selectedTables,
+                totalCapacity: currentCapacity,
+                area: selectedTables.map(t => t.area.name).join(', '),
+                efficiency: currentCapacity - partySize,
+                combinationType: 'debug',
+                tableCount: selectedTables.length
+            }];
+        } else {
+            console.log('💥 FAILED: Cannot reach required capacity');
+            console.log('Available capacity:', currentCapacity, 'Needed:', partySize);
+            return [];
+        }
     }
+    // Add this emergency debug method to your CapacityService
+    async debugTableAvailability(
+        restaurantId: string,
+        arrivalTime: Date,
+        estimatedDuration: number
+    ) {
+        const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
+        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
 
-    // Get table occupancy for a time period
-    async getTableOccupancy(
+        console.log('=== EMERGENCY TABLE DEBUG ===');
+        console.log('Arrival:', arrivalTime);
+        console.log('End:', endTime);
+        console.log('Occupied table IDs:', occupiedTableIds);
+
+        const allTables = await prisma.table.findMany({
+            where: {
+                restaurant_id: restaurantId,
+                status: 'ACTIVE'
+            },
+            include: {
+                area: true,
+                table_reservations: {
+                    where: {
+                        reservation: {
+                            arrival_time: {
+                                gte: new Date(arrivalTime.getTime() - 4 * 60 * 60000),
+                                lte: new Date(arrivalTime.getTime() + 4 * 60 * 60000)
+                            },
+                            status: {
+                                in: ['PENDING', 'CONFIRMED', 'SEATED']
+                            }
+                        }
+                    },
+                    include: {
+                        reservation: {
+                            select: {
+                                arrival_time: true,
+                                estimated_duration_minutes: true,
+                                party_size: true
+                            }
+                        }
+                    }
+                }
+            },
+            orderBy: { capacity: 'desc' }
+        });
+
+        console.log('=== ALL TABLES STATUS ===');
+        allTables.forEach(table => {
+            const isOccupied = occupiedTableIds.includes(table.id);
+            const reservations = table.table_reservations;
+
+            console.log(`Table ${table.table_number} (${table.capacity} people):`, {
+                occupied: isOccupied,
+                area: table.area.name,
+                reservations: reservations.map(r => ({
+                    time: r.reservation.arrival_time,
+                    duration: r.reservation.estimated_duration_minutes,
+                    party: r.reservation.party_size
+                }))
+            });
+        });
+
+        const availableTables = allTables.filter(table => !occupiedTableIds.includes(table.id));
+        console.log('=== AVAILABLE TABLES SUMMARY ===');
+        console.log('Total tables:', allTables.length);
+        console.log('Available tables:', availableTables.length);
+        console.log('Available capacities:', availableTables.map(t => t.capacity));
+        console.log('Total available capacity:', availableTables.reduce((sum, t) => sum + t.capacity, 0));
+    }
+    // Add this to your CapacityService class
+    private async getOccupiedTableIds(
         restaurantId: string,
         startTime: Date,
         endTime: Date
-    ) {
+    ): Promise<string[]> {
+        console.log('=== GET OCCUPIED TABLE IDs DEBUG ===');
+        console.log('Time range:', startTime, 'to', endTime);
+
         const occupiedReservations = await prisma.tableReservation.findMany({
             where: {
                 reservation: {
@@ -293,249 +420,95 @@ export class CapacityService {
                     status: {
                         in: ['PENDING', 'CONFIRMED', 'SEATED']
                     },
-                    OR: [
-                        {
-                            arrival_time: {
-                                gte: startTime,
-                                lt: endTime
-                            }
-                        },
-                        {
-                            AND: [
-                                {
-                                    arrival_time: {
-                                        lt: startTime
-                                    }
-                                },
-                                {
-                                    estimated_duration_minutes: {
-                                        not: null
-                                    }
-                                }
-                            ]
-                        }
-                    ]
+                    arrival_time: {
+                        gte: new Date(startTime.getTime() - 4 * 60 * 60000),
+                        lte: new Date(startTime.getTime() + 4 * 60 * 60000)
+                    }
                 }
             },
             include: {
-                table: true,
                 reservation: {
                     select: {
                         arrival_time: true,
                         estimated_duration_minutes: true,
                         party_size: true
                     }
+                },
+                table: {
+                    select: {
+                        table_number: true,
+                        capacity: true
+                    }
                 }
             }
         });
 
-        return occupiedReservations;
-    }
+        console.log('All potential table reservations:', occupiedReservations.map(tr => ({
+            table: tr.table.table_number,
+            capacity: tr.table.capacity,
+            reservationTime: tr.reservation.arrival_time,
+            duration: tr.reservation.estimated_duration_minutes,
+            partySize: tr.reservation.party_size
+        })));
 
-    // Get available time slots for a specific date
-    async getAvailableTimeSlots(
-        restaurantId: string,
-        date: Date,
-        partySize: number,
-        duration: number = 120
-    ) {
-        const restaurant = await prisma.restaurant.findUnique({
-            where: { id: restaurantId },
-            include: {
-                reservation_settings: true
-            }
-        });
+        const occupiedTableIds: string[] = [];
 
-        if (!restaurant || !restaurant.reservation_settings) {
-            throw new Error('Restaurant or settings not found');
-        }
-
-        const settings = restaurant.reservation_settings.settings as any;
-        const openingHours = settings.opening_hours || {};
-
-        const dayName = this.getDayName(date);
-        const daySchedule = openingHours[dayName];
-
-        if (!daySchedule || daySchedule.closed) {
-            return []; // No available slots if closed
-        }
-
-        const bookingInterval = settings.restaurantSettings?.booking_interval_minutes || 30;
-        const openTime = this.parseTime(daySchedule.open);
-        const closeTime = this.parseTime(daySchedule.close);
-
-        const availableSlots = [];
-        const openMinutes = openTime.hours * 60 + openTime.minutes;
-        const closeMinutes = closeTime.hours * 60 + closeTime.minutes;
-
-        for (let minutes = openMinutes; minutes <= closeMinutes - duration; minutes += bookingInterval) {
-            const hours = Math.floor(minutes / 60);
-            const mins = minutes % 60;
-
-            const slotTime = new Date(date);
-            slotTime.setHours(hours, mins, 0, 0);
-
-            // Check capacity for this time slot
-            const capacityCheck = await this.checkCapacity(
-                restaurantId,
-                slotTime,
-                duration,
-                partySize
+        for (const tr of occupiedReservations) {
+            const reservationStart = new Date(tr.reservation.arrival_time);
+            const reservationEnd = new Date(
+                reservationStart.getTime() +
+                (tr.reservation.estimated_duration_minutes || 120) * 60000
             );
 
-            if (capacityCheck.available) {
-                // Format display time
-                const period = hours >= 12 ? 'PM' : 'AM';
-                const displayHours = hours % 12 || 12;
-                const displayTime = `${displayHours}:${mins.toString().padStart(2, '0')} ${period}`;
+            const overlaps = this.doTimeRangesOverlap(
+                { start: startTime, end: endTime },
+                { start: reservationStart, end: reservationEnd }
+            );
 
-                availableSlots.push({
-                    time: `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`,
-                    display: displayTime,
-                    available: true,
-                    availableCapacity: capacityCheck.availableCapacity
-                });
+            console.log(`Table ${tr.table.table_number}:`, {
+                reservation: `${reservationStart.toISOString()} to ${reservationEnd.toISOString()}`,
+                requested: `${startTime.toISOString()} to ${endTime.toISOString()}`,
+                overlaps: overlaps
+            });
+
+            if (overlaps) {
+                occupiedTableIds.push(tr.table_id);
             }
         }
 
-        return availableSlots;
+        console.log('Final occupied table IDs:', occupiedTableIds);
+        return [...new Set(occupiedTableIds)]; // Remove duplicates
     }
-
-    // Helper method to get occupied table IDs for a time period
-    private async getOccupiedTableIds(
-        restaurantId: string,
-        startTime: Date,
-        endTime: Date
-    ): Promise<string[]> {
-        const occupiedReservations = await prisma.tableReservation.findMany({
-            where: {
-                reservation: {
-                    restaurant_id: restaurantId,
-                    status: {
-                        in: ['PENDING', 'CONFIRMED', 'SEATED']
-                    },
-                    OR: [
-                        {
-                            arrival_time: {
-                                gte: startTime,
-                                lt: endTime
-                            }
-                        },
-                        {
-                            AND: [
-                                {
-                                    arrival_time: {
-                                        lt: startTime
-                                    }
-                                },
-                                {
-                                    estimated_duration_minutes: {
-                                        not: null
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            },
-            select: {
-                table_id: true
-            }
-        });
-
-        return occupiedReservations.map(r => r.table_id);
-    }
-
-    // Helper method to get day name
-    private getDayName(date: Date): string {
-        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-        return days[date.getDay()];
-    }
-
-    // Helper method to parse time string
-    private parseTime(timeStr: string): { hours: number, minutes: number } {
-        if (!timeStr) return { hours: 0, minutes: 0 };
-
-        const [time, period] = timeStr.split(' ');
-        const [hoursStr, minutesStr] = time.split(':');
-
-        let hours = parseInt(hoursStr);
-        const minutes = parseInt(minutesStr);
-
-        if (period === 'PM' && hours < 12) hours += 12;
-        if (period === 'AM' && hours === 12) hours = 0;
-
-        return { hours, minutes };
-    }
-
-    // Get restaurant utilization statistics
-    async getRestaurantUtilization(restaurantId: string, date: Date) {
-        const startOfDay = new Date(date);
-        startOfDay.setHours(0, 0, 0, 0);
-
-        const endOfDay = new Date(date);
-        endOfDay.setHours(23, 59, 59, 999);
-
-        const reservations = await prisma.reservation.findMany({
-            where: {
-                restaurant_id: restaurantId,
-                arrival_time: {
-                    gte: startOfDay,
-                    lte: endOfDay
-                },
-                status: {
-                    in: ['PENDING', 'CONFIRMED', 'SEATED']
-                }
-            },
-            select: {
-                arrival_time: true,
-                estimated_duration_minutes: true,
-                party_size: true,
-                status: true
-            },
-            orderBy: {
-                arrival_time: 'asc'
-            }
-        });
-
+    // Get capacity timeline for the day
+    async getDailyCapacityTimeline(restaurantId: string, date: Date) {
+        const timeline = [];
         const totalCapacity = await this.calculateTotalCapacity(restaurantId);
 
-        // Calculate hourly utilization
-        const hourlyUtilization: { [hour: string]: number } = {};
+        // Check capacity every 2 hours
+        for (let hour = 8; hour <= 22; hour += 2) {
+            const checkTime = new Date(date);
+            checkTime.setHours(hour, 0, 0, 0);
 
-        for (let hour = 0; hour < 24; hour++) {
-            const hourStart = new Date(date);
-            hourStart.setHours(hour, 0, 0, 0);
+            const capacityCheck = await this.checkCapacity(
+                restaurantId,
+                checkTime,
+                120, // 2-hour reservation
+                2    // Check for minimum party size
+            );
 
-            const hourEnd = new Date(date);
-            hourEnd.setHours(hour, 59, 59, 999);
+            const period = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
 
-            let hourCapacity = 0;
-
-            for (const reservation of reservations) {
-                const reservationStart = new Date(reservation.arrival_time);
-                const reservationEnd = new Date(reservation.arrival_time.getTime() + (reservation.estimated_duration_minutes || 120) * 60000);
-
-                // Check if reservation overlaps with this hour
-                if (reservationStart <= hourEnd && reservationEnd >= hourStart) {
-                    hourCapacity += reservation.party_size;
-                }
-            }
-
-            const utilizationPercent = totalCapacity > 0 ? (hourCapacity / totalCapacity) * 100 : 0;
-            hourlyUtilization[`${hour}:00`] = Math.min(utilizationPercent, 100);
+            timeline.push({
+                time: `${displayHour}:00 ${period}`,
+                hour: `${hour.toString().padStart(2, '0')}:00`,
+                available: capacityCheck.available,
+                currentCapacity: capacityCheck.currentCapacity,
+                availableCapacity: capacityCheck.availableCapacity,
+                utilization: Math.round((capacityCheck.currentCapacity / totalCapacity) * 100)
+            });
         }
 
-        return {
-            date,
-            totalReservations: reservations.length,
-            totalCapacity,
-            estimatedTotalGuests: reservations.reduce((sum, r) => sum + r.party_size, 0),
-            hourlyUtilization,
-            peakHours: Object.entries(hourlyUtilization)
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                .filter(([v, utilization]) => utilization > 70)
-                .map(([hour]) => hour)
-        };
+        return timeline;
     }
 }

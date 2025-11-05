@@ -1,7 +1,7 @@
 "use client"
 
 import type { ReservationPayment, ReservationsListResponse, ReservationsPaymentsListResponse, ReservationStatsResponse, ReservationUp } from "@/lib/types"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import kyInstance from "./ky"
 
 const RESERVATIONS_QUERY_KEY = "reservations"
@@ -15,6 +15,16 @@ export const reservationsApi = {
             .json<ReservationsListResponse>()
         if (!response.success) throw new Error(response.error || "Failed to fetch reservations")
         return response.data || []
+    },
+    //  Delete reservation
+    deleteReservation: async (reservationId: string): Promise<{ success: boolean }> => {
+        const response = await kyInstance
+            .delete(`/api/reservations?id=${reservationId}`)
+            .json<{ success: boolean; error?: string }>();
+
+        if (!response.success)
+            throw new Error(response.error || "Failed to delete reservation");
+        return { success: true };
     },
     getReservationPayments: async (restaurantId: string): Promise<ReservationPayment[]> => {
         const response = await kyInstance
@@ -66,4 +76,18 @@ export function useReservationStats(restaurantId: string | undefined) {
         enabled: !!restaurantId,
         staleTime: 1000 * 60 * 2, // 2 minutes
     })
+}
+
+//  Delete reservation mutation
+export function useDeleteReservation() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (reservationId: string) =>
+            reservationsApi.deleteReservation(reservationId),
+        onSuccess: () => {
+            // Invalidate cache to refetch updated list
+            queryClient.invalidateQueries({ queryKey: [RESERVATIONS_QUERY_KEY] });
+        },
+    });
 }

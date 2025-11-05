@@ -17,12 +17,6 @@ export interface RestaurantSettings {
     enable_table_combinations: boolean;
     enable_overbooking: boolean;
     overbooking_percentage: number;
-    enable_turn_time_buffer: boolean;
-    turn_time_buffer_minutes: number;
-    enable_variable_duration: boolean;
-    duration_per_guest_minutes: number;
-    min_reservation_duration_minutes: number;
-    max_reservation_duration_minutes: number;
 }
 
 export interface NotificationSettings {

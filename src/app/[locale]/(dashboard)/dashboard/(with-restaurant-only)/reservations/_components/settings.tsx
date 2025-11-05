@@ -1,18 +1,18 @@
 "use client";
 
+import LoadingUI from "@/components/loading-ui";
 import { UnsavedChangesPanel } from "@/components/pages/dashboard/unsaved-cahnges-penal";
 import UnsavedChangesUi from "@/components/unsaved-changes-ui";
+import { useReservationSettings, useSaveReservationSettings } from "@/lib/reservation-settings-queries";
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils";
+import { useRestaurantStore } from "@/stores/restaurant-store";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import DepositSystem from "./settings/deposit-system";
 import { NotificationSettingsComponent } from "./settings/notification-settings";
+import RestaurantSettingsManager from "./settings/restaurent-settings";
 import TimeSlotOverrides from "./settings/time-slot-overrides";
 import { SettingsState } from "./settings/types";
-import RestaurantSettingsManager from "./settings/restaurent-settings";
-import { useRestaurantStore } from "@/stores/restaurant-store";
-import { useReservationSettings, useSaveReservationSettings } from "@/lib/reservation-settings-queries";
-import LoadingUI from "@/components/loading-ui";
-import { toast } from "sonner";
 
 const default_data: SettingsState = {
     overrides_settings: {
@@ -29,12 +29,6 @@ const default_data: SettingsState = {
         enable_table_combinations: false,
         enable_overbooking: false,
         overbooking_percentage: 0,
-        enable_turn_time_buffer: false,
-        turn_time_buffer_minutes: 15,
-        enable_variable_duration: false,
-        duration_per_guest_minutes: 30,
-        min_reservation_duration_minutes: 60,
-        max_reservation_duration_minutes: 180,
     },
     notification_settings: {
         notifications_enabled: false,

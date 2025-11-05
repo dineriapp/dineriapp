@@ -25,7 +25,7 @@ import {
 } from "lucide-react"
 
 
-export function ReservationCard({ reservation, restaurant }: { reservation: ReservationUp, restaurant: Restaurant }) {
+export function ReservationCard({ reservation, restaurant, handleDelete }: { reservation: ReservationUp, restaurant: Restaurant, handleDelete: (id: string) => void }) {
     const timeZone = restaurant?.timezone || "Asia/Karachi"
 
     return (
@@ -177,7 +177,8 @@ export function ReservationCard({ reservation, restaurant }: { reservation: Rese
                     <Button
                         size="sm"
                         variant="destructive"
-                        className="gap-2"
+                        className="gap-2 cursor-pointer"
+                        onClick={() => handleDelete(reservation.id)}
                     >
                         <Trash2 className="w-4 h-4" />
                         Delete
