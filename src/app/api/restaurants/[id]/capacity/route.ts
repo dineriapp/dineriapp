@@ -98,9 +98,14 @@ async function getReservationFeasibilityCheck(
 
     // Get restaurant timezone
     const restaurantTimezone = restaurant.timezone || 'Europe/London';
+    console.log('Restaurant timezone:', restaurantTimezone);
 
-    // 2. Check opening hours (same logic) - WITH TIMEZONE
-    const openingHoursCheck = await checkOpeningHours(restaurant, time, restaurantTimezone);
+    // Convert the provided date/time to restaurant's timezone for validation
+    const timeInRestaurantTZ = convertToRestaurantTimezone(time, restaurantTimezone);
+    console.log('Time in restaurant timezone:', timeInRestaurantTZ.toString());
+
+    // 2. Check opening hours (same logic) - WITH PROPER TIMEZONE
+    const openingHoursCheck = await checkOpeningHours(restaurant, timeInRestaurantTZ, restaurantTimezone);
     if (!openingHoursCheck.isOpen) {
         return {
             canCreateReservation: false,
@@ -109,8 +114,8 @@ async function getReservationFeasibilityCheck(
         };
     }
 
-    // 3. Check time overrides (same logic) - WITH TIMEZONE
-    const overrideCheck = await checkTimeOverrides(restaurant, time, restaurantTimezone);
+    // 3. Check time overrides (same logic) - WITH PROPER TIMEZONE
+    const overrideCheck = await checkTimeOverrides(restaurant, timeInRestaurantTZ);
     if (overrideCheck.isBlocked) {
         return {
             canCreateReservation: false,
@@ -119,10 +124,10 @@ async function getReservationFeasibilityCheck(
         };
     }
 
-    // 4. Check capacity (same logic)
+    // 4. Check capacity (same logic) - use original time for capacity checks (these are time-agnostic)
     const capacityCheck = await capacityService.checkCapacity(
         restaurantId,
-        time,
+        time, // Use original time for capacity checks
         estimatedDuration,
         partySize
     );
@@ -151,7 +156,7 @@ async function getReservationFeasibilityCheck(
     const singleTable = await findBestTableByCapacityOnly(
         capacityService,
         restaurantId,
-        time,
+        time, // Use original time for table availability
         estimatedDuration,
         partySize
     );
@@ -169,7 +174,7 @@ async function getReservationFeasibilityCheck(
         const combinations = await findOptimalTableCombinationsByCapacity(
             capacityService,
             restaurantId,
-            time,
+            time, // Use original time for table availability
             estimatedDuration,
             partySize
         );
@@ -241,6 +246,13 @@ async function getReservationFeasibilityCheck(
             }
         }
     };
+}
+
+// NEW: Convert time to restaurant's timezone
+function convertToRestaurantTimezone(time: Date, timezone: string): Date {
+    // Create a new date with the same UTC time but interpreted in restaurant's timezone
+    const localTimeString = time.toLocaleString("en-US", { timeZone: timezone });
+    return new Date(localTimeString);
 }
 
 // NEW: Find single table using ONLY capacity (ignore min/max party size)
@@ -348,17 +360,20 @@ async function findOptimalTableCombinationsByCapacity(
     });
 }
 
-// UPDATED: Check opening hours with timezone support
+// UPDATED: Check opening hours with proper timezone support
 async function checkOpeningHours(restaurant: any, arrivalTime: Date, timezone: string) {
     const openingHours = restaurant.opening_hours || {};
 
-    // Convert arrival time to restaurant's timezone
-    const arrivalTimeInRestaurantTZ = new Date(
-        arrivalTime.toLocaleString("en-US", { timeZone: timezone })
-    );
-
-    const dayName = getDayName(arrivalTimeInRestaurantTZ);
+    // arrivalTime is already in restaurant's timezone
+    const dayName = getDayName(arrivalTime);
     const daySchedule = openingHours[dayName];
+
+    console.log('Opening hours check:', {
+        dayName,
+        daySchedule,
+        arrivalTime: arrivalTime.toString(),
+        timezone
+    });
 
     if (!daySchedule || daySchedule.closed) {
         return {
@@ -378,15 +393,21 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date, timezone: s
     }
 
     // Create date objects in restaurant's timezone for comparison
-    const arrivalDate = new Date(arrivalTimeInRestaurantTZ);
+    const arrivalDate = new Date(arrivalTime);
     const openDateTime = new Date(arrivalDate);
     openDateTime.setHours(openTime.hours, openTime.minutes, 0, 0);
 
     const closeDateTime = new Date(arrivalDate);
     closeDateTime.setHours(closeTime.hours, closeTime.minutes, 0, 0);
 
+    console.log('Time comparison:', {
+        openTime: openDateTime.toString(),
+        closeTime: closeDateTime.toString(),
+        arrivalTime: arrivalTime.toString()
+    });
+
     // Check if arrival time is within opening hours in restaurant's timezone
-    if (arrivalTimeInRestaurantTZ < openDateTime || arrivalTimeInRestaurantTZ > closeDateTime) {
+    if (arrivalTime < openDateTime || arrivalTime > closeDateTime) {
         return {
             isOpen: false,
             error: `Restaurant is open from ${daySchedule.open} to ${daySchedule.close} on ${dayName}.`
@@ -396,8 +417,8 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date, timezone: s
     return { isOpen: true };
 }
 
-// UPDATED: Check time overrides with timezone support
-async function checkTimeOverrides(restaurant: any, arrivalTime: Date, timezone: string) {
+// UPDATED: Check time overrides with proper timezone support
+async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
     const settings = restaurant.reservation_settings?.settings as any;
     const overridesSettings = settings?.overrides_settings || {
         overrides_enabled: false,
@@ -408,14 +429,10 @@ async function checkTimeOverrides(restaurant: any, arrivalTime: Date, timezone: 
         return { isBlocked: false };
     }
 
-    // Convert arrival time to restaurant's timezone for date comparison
-    const arrivalTimeInRestaurantTZ = new Date(
-        arrivalTime.toLocaleString("en-US", { timeZone: timezone })
-    );
+    // arrivalTime is already in restaurant's timezone
+    const arrivalDateStr = arrivalTime.toISOString().split('T')[0];
 
-    const arrivalDateStr = arrivalTimeInRestaurantTZ.toISOString().split('T')[0];
-
-    // Use the original arrival time for minute calculation (time is absolute)
+    // Use the arrival time (already in restaurant timezone) for minute calculation
     const arrivalMinutes = timeToMinutes(
         arrivalTime.toLocaleTimeString('en-US', {
             hour: '2-digit',
@@ -423,6 +440,12 @@ async function checkTimeOverrides(restaurant: any, arrivalTime: Date, timezone: 
             hour12: true
         })
     );
+
+    console.log('Time override check:', {
+        arrivalDateStr,
+        arrivalMinutes,
+        overrides: overridesSettings.overrides
+    });
 
     for (const override of overridesSettings.overrides) {
         if (override.date === arrivalDateStr && override.blocked) {
