@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Table } from "@prisma/client";
 import prisma from "./prisma";
 
 export class CapacityService {
@@ -96,7 +96,7 @@ export class CapacityService {
         return range1.start < range2.end && range1.end > range2.start;
     }
 
-    // Improved available tables search with better business logic
+    // Improved available tables search - FIXED VERSION
     async findAvailableTables(
         restaurantId: string,
         arrivalTime: Date,
@@ -107,14 +107,12 @@ export class CapacityService {
         const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
         const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
 
-        // Build query conditions
+        // Build query conditions - REMOVED min_party_size and max_party_size constraints
         const whereConditions: Prisma.TableWhereInput = {
             restaurant_id: restaurantId,
             status: 'ACTIVE',
             id: { notIn: occupiedTableIds },
-            capacity: { gte: partySize },
-            min_party_size: { lte: partySize },
-            max_party_size: { gte: partySize }
+            capacity: { gte: partySize } // ONLY check capacity
         };
 
         // Handle area preference
@@ -172,7 +170,7 @@ export class CapacityService {
 
         return fallbackTables[0] || null;
     }
-    // Enhanced table combination finder
+    // Enhanced table combination finder - FIXED VERSION
     async findTableCombinations(
         restaurantId: string,
         partySize: number,
@@ -183,11 +181,11 @@ export class CapacityService {
         const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
         const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
 
-        console.log('=== FIXED COMBINATION FINDER ===');
+        console.log('=== OPTIMIZED COMBINATION FINDER ===');
         console.log('Party size:', partySize);
         console.log('Occupied tables:', occupiedTableIds.length);
 
-        // Get available tables sorted by capacity DESCENDING (largest first)
+        // Get available tables sorted by capacity ASCENDING (smallest first)
         const availableTables = await prisma.table.findMany({
             where: {
                 restaurant_id: restaurantId,
@@ -198,11 +196,11 @@ export class CapacityService {
                 area: true
             },
             orderBy: [
-                { capacity: 'desc' } // CRITICAL: Largest tables first
+                { capacity: 'asc' } // CRITICAL: Smallest tables first for better combinations
             ]
         });
 
-        console.log('Available tables (sorted by capacity DESC):', availableTables.map(t => ({
+        console.log('Available tables (sorted by capacity ASC):', availableTables.map(t => ({
             table: t.table_number,
             capacity: t.capacity,
             area: t.area.name
@@ -211,40 +209,158 @@ export class CapacityService {
         const totalAvailableCapacity = availableTables.reduce((sum, table) => sum + table.capacity, 0);
         console.log('Total available capacity:', totalAvailableCapacity);
 
-        // SIMPLE GREEDY ALGORITHM: Take largest tables until we meet capacity
-        const selectedTables = [];
-        let currentCapacity = 0;
-
-        for (const table of availableTables) {
-            if (currentCapacity >= partySize) break;
-            if (selectedTables.length >= maxCombinationSize) break;
-
-            selectedTables.push(table);
-            currentCapacity += table.capacity;
-
-            console.log(`Added ${table.table_number} (${table.capacity}), total: ${currentCapacity}`);
+        if (totalAvailableCapacity < partySize) {
+            console.log('❌ INSUFFICIENT TOTAL CAPACITY');
+            return [];
         }
 
-        if (currentCapacity >= partySize) {
-            console.log('✅ COMBINATION FOUND:', {
-                tables: selectedTables.map(t => t.table_number),
-                totalCapacity: currentCapacity,
-                tableCount: selectedTables.length
-            });
+        // Find ALL possible combinations using backtracking
+        const allCombinations = this.findAllCombinations(availableTables, partySize, maxCombinationSize);
 
-            return [{
-                tables: selectedTables,
-                totalCapacity: currentCapacity,
-                area: selectedTables.map(t => t.area.name).join(', '),
-                efficiency: currentCapacity - partySize,
-                combinationType: 'greedy',
-                tableCount: selectedTables.length
-            }];
+        console.log('All possible combinations found:', allCombinations.length);
+
+        if (allCombinations.length === 0) {
+            console.log('❌ NO VALID COMBINATIONS FOUND');
+            return [];
         }
 
-        console.log('❌ NO COMBINATION FOUND');
-        console.log('Max achievable capacity:', currentCapacity);
-        return [];
+        // Find the optimal combination (minimum wasted capacity, then fewest tables)
+        const optimalCombination = this.findOptimalCombination(allCombinations);
+
+        console.log('✅ OPTIMAL COMBINATION:', {
+            tables: optimalCombination.tables.map(t => `${t.table_number} (${t.capacity})`),
+            totalCapacity: optimalCombination.totalCapacity,
+            wastedCapacity: optimalCombination.wastedCapacity,
+            tableCount: optimalCombination.tables.length
+        });
+
+        return [optimalCombination];
+    }
+
+    // NEW: Find all possible combinations using backtracking
+    private findAllCombinations(
+        availableTables: Table[],
+        partySize: number,
+        maxCombinationSize: number
+    ): { tables: Table[]; totalCapacity: number; wastedCapacity: number }[] {
+        const combinations: { tables: Table[]; totalCapacity: number; wastedCapacity: number }[] = [];
+
+        function backtrack(start: number, currentTables: Table[], currentCapacity: number) {
+            // If we've met or exceeded the required capacity, save this combination
+            if (currentCapacity >= partySize) {
+                const wastedCapacity = currentCapacity - partySize;
+                combinations.push({
+                    tables: [...currentTables],
+                    totalCapacity: currentCapacity,
+                    wastedCapacity: wastedCapacity
+                });
+            }
+
+            // Stop if we've reached max combination size or no more tables
+            if (currentTables.length >= maxCombinationSize || start >= availableTables.length) {
+                return;
+            }
+
+            // Try including each remaining table
+            for (let i = start; i < availableTables.length; i++) {
+                const table = availableTables[i];
+                currentTables.push(table);
+                backtrack(i + 1, currentTables, currentCapacity + table.capacity);
+                currentTables.pop();
+            }
+        }
+
+        backtrack(0, [], 0);
+        return combinations;
+    }
+
+    // NEW: Find the optimal combination (minimum waste, then fewest tables)
+    private findOptimalCombination(
+        combinations: { tables: Table[]; totalCapacity: number; wastedCapacity: number }[],
+    ) {
+        if (combinations.length === 0) {
+            throw new Error('No combinations provided');
+        }
+
+        let optimalCombination = combinations[0];
+
+        for (const combination of combinations) {
+            // Prefer combinations with less wasted capacity
+            if (combination.wastedCapacity < optimalCombination.wastedCapacity) {
+                optimalCombination = combination;
+            }
+            // If same wasted capacity, prefer fewer tables
+            else if (combination.wastedCapacity === optimalCombination.wastedCapacity &&
+                combination.tables.length < optimalCombination.tables.length) {
+                optimalCombination = combination;
+            }
+            // If same wasted capacity and table count, prefer smaller total capacity
+            else if (combination.wastedCapacity === optimalCombination.wastedCapacity &&
+                combination.tables.length === optimalCombination.tables.length &&
+                combination.totalCapacity < optimalCombination.totalCapacity) {
+                optimalCombination = combination;
+            }
+        }
+
+        return optimalCombination;
+    }
+    // Add this method to your CapacityService class
+    async findTableCombinationsOptimized(
+        restaurantId: string,
+        partySize: number,
+        arrivalTime: Date,
+        duration: number,
+        maxCombinations: number = 20
+    ): Promise<{ tables: Table[]; totalCapacity: number }[]> {
+
+        const endTime = new Date(arrivalTime.getTime() + duration * 60000);
+        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
+
+        const availableTables = await prisma.table.findMany({
+            where: {
+                restaurant_id: restaurantId,
+                status: 'ACTIVE',
+                id: { notIn: occupiedTableIds }
+            },
+            orderBy: {
+                capacity: 'asc' // Start with smaller tables
+            }
+        });
+
+        const combinations: { tables: Table[]; totalCapacity: number }[] = [];
+
+        // Use a backtracking approach to find all valid combinations
+        function findCombinations(startIndex: number, currentTables: Table[], currentCapacity: number) {
+            if (currentCapacity >= partySize) {
+                combinations.push({
+                    tables: [...currentTables],
+                    totalCapacity: currentCapacity
+                });
+                return;
+            }
+
+            if (combinations.length >= maxCombinations) return;
+
+            for (let i = startIndex; i < availableTables.length; i++) {
+                const table = availableTables[i];
+                currentTables.push(table);
+                findCombinations(i + 1, currentTables, currentCapacity + table.capacity);
+                currentTables.pop();
+            }
+        }
+
+        findCombinations(0, [], 0);
+
+        // Sort by efficiency (minimal wasted capacity, then fewer tables)
+        return combinations.sort((a, b) => {
+            const wastedA = a.totalCapacity - partySize;
+            const wastedB = b.totalCapacity - partySize;
+
+            if (wastedA !== wastedB) {
+                return wastedA - wastedB; // Less wasted capacity first
+            }
+            return a.tables.length - b.tables.length; // Fewer tables first
+        });
     }
     // DEBUG VERSION - WILL DEFINITELY FIND COMBINATION IF CAPACITY EXISTS
     async findTableCombinationsDebug(

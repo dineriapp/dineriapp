@@ -1,6 +1,5 @@
 import { CapacityService } from '@/lib/capacity-service';
 import prisma from '@/lib/prisma';
-import { Table } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -15,8 +14,11 @@ export async function GET(
         const timeParam = searchParams.get('time');
         const partySizeParam = searchParams.get('partySize');
 
-        if (!dateParam) {
-            return NextResponse.json({ error: 'Date parameter is required' }, { status: 400 });
+        // All parameters are required
+        if (!dateParam || !timeParam || !partySizeParam) {
+            return NextResponse.json({
+                error: 'Date, time, and partySize parameters are required'
+            }, { status: 400 });
         }
 
         const restaurantId = resolvedParams.id;
@@ -26,44 +28,28 @@ export async function GET(
             return NextResponse.json({ error: 'Invalid date format' }, { status: 400 });
         }
 
-        // Parse time if provided
-        let time: Date | null = null;
-        let partySize: number | undefined;
-
-        if (timeParam) {
-            time = parseTimeString(timeParam, date);
-            if (!time) {
-                return NextResponse.json({ error: 'Invalid time format. Use HH:MM AM/PM format' }, { status: 400 });
-            }
+        // Parse time
+        const time = parseTimeString(timeParam, date);
+        if (!time) {
+            return NextResponse.json({ error: 'Invalid time format. Use HH:MM AM/PM format' }, { status: 400 });
         }
 
-        if (partySizeParam) {
-            partySize = parseInt(partySizeParam);
-            if (isNaN(partySize) || partySize <= 0) {
-                return NextResponse.json({ error: 'Invalid party size' }, { status: 400 });
-            }
+        // Parse party size
+        const partySize = parseInt(partySizeParam);
+        if (isNaN(partySize) || partySize <= 0) {
+            return NextResponse.json({ error: 'Invalid party size' }, { status: 400 });
         }
 
         const capacityService = new CapacityService();
 
-        // Choose the appropriate query based on parameters
-        let capacityData;
-        if (time && partySize) {
-            // Use the SAME LOGIC as reservation creation
-            capacityData = await getReservationFeasibilityCheck(
-                capacityService,
-                restaurantId,
-                date,
-                time,
-                partySize
-            );
-        } else if (time) {
-            // Time-specific capacity overview
-            capacityData = await getTimeSlotCapacityOverview(capacityService, restaurantId, date, time);
-        } else {
-            // Date-only overview
-            capacityData = await getDailyCapacityOverview(restaurantId, date);
-        }
+        // Always use reservation feasibility check
+        const capacityData = await getReservationFeasibilityCheck(
+            capacityService,
+            restaurantId,
+            date,
+            time,
+            partySize
+        );
 
         return NextResponse.json({
             success: true,
@@ -154,13 +140,13 @@ async function getReservationFeasibilityCheck(
     const settings = restaurant.reservation_settings?.settings as any;
     const enableTableCombinations = settings?.restaurantSettings?.enable_table_combinations || false;
 
-    // 6. Try to find available tables (SAME LOGIC as reservation creation)
+    // 6. Try to find available tables (OPTIMIZED LOGIC - IGNORE min/max party size)
     let assignedTables: any = [];
     let tableMethod = 'none';
-    let tableCombination = null;
 
-    // First try single table
-    const singleTable = await capacityService.findBestTable(
+    // First try single table (IGNORE min/max constraints)
+    const singleTable = await findBestTableByCapacityOnly(
+        capacityService,
         restaurantId,
         time,
         estimatedDuration,
@@ -170,43 +156,42 @@ async function getReservationFeasibilityCheck(
     if (singleTable) {
         assignedTables = [singleTable];
         tableMethod = 'single';
-        console.log('Single table available:', singleTable.table_number);
+        console.log('Single table available:', singleTable.table_number, 'capacity:', singleTable.capacity);
     }
-    // If no single table and combinations are enabled, try combinations
+    // If no single table and combinations are enabled, try combinations with optimized selection
     else if (enableTableCombinations) {
-        console.log('Looking for table combinations...');
+        console.log('Looking for table combinations using capacity-only approach...');
 
-        // Try the debug version first to see exactly what's happening
-        let combinations = await capacityService.findTableCombinationsDebug(
+        // Get all available tables and find optimal combinations
+        const combinations = await findOptimalTableCombinationsByCapacity(
+            capacityService,
             restaurantId,
-            partySize,
             time,
-            estimatedDuration
+            estimatedDuration,
+            partySize
         );
 
-        console.log('Debug combinations found:', combinations.length);
-
-        // If debug version fails, try the fixed version
-        if (combinations.length === 0) {
-            combinations = await capacityService.findTableCombinations(
-                restaurantId,
-                partySize,
-                time,
-                estimatedDuration,
-                10
-            );
-            console.log('Fixed combinations found:', combinations.length);
-        }
+        console.log('Capacity-based combinations found:', combinations.length);
 
         if (combinations.length > 0) {
-            tableCombination = combinations[0];
-            assignedTables = tableCombination.tables;
+            // Select the combination with minimum wasted capacity
+            const bestCombination = combinations[0];
+            assignedTables = bestCombination.tables;
             tableMethod = 'combination';
-            console.log('Table combination found:', assignedTables.map((t: Table) => t.table_number));
+
+            const totalCapacity = assignedTables.reduce((sum: number, table: any) => sum + table.capacity, 0);
+            const wastedCapacity = totalCapacity - partySize;
+
+            console.log('Optimal table combination found:', {
+                tables: assignedTables.map((t: any) => `${t.table_number} (cap: ${t.capacity})`),
+                totalCapacity,
+                partySize,
+                wastedCapacity
+            });
         }
     }
 
-    // Final decision (SAME LOGIC as reservation creation)
+    // Final decision
     const canCreateReservation = assignedTables.length > 0;
 
     if (!canCreateReservation) {
@@ -222,8 +207,9 @@ async function getReservationFeasibilityCheck(
     }
 
     // Calculate deposit (same logic as reservation creation)
-    const depositCalculation = calculateDepositOnServer(settings, time, partySize);
-    const depositAmount = depositCalculation.amount;
+
+    const totalTableCapacity = assignedTables.reduce((sum: number, table: any) => sum + table.capacity, 0);
+    const wastedCapacity = totalTableCapacity - partySize;
 
     return {
         canCreateReservation: true,
@@ -235,18 +221,14 @@ async function getReservationFeasibilityCheck(
                 tableNumber: table.table_number,
                 name: table.name,
                 capacity: table.capacity,
-                area: table.area?.name || 'Unknown',
-                minPartySize: table.min_party_size,
-                maxPartySize: table.max_party_size
+                area: table.area?.name || 'Unknown'
+                // REMOVED: minPartySize and maxPartySize since we're not using them
             })),
             tableMethod,
             tableCount: assignedTables.length,
-            totalTableCapacity: assignedTables.reduce((sum: number, table: any) => sum + table.capacity, 0),
-            deposit: {
-                amount: depositAmount,
-                currency: settings?.deposit_settings?.depositCurrency || 'EUR',
-                required: depositAmount > 0
-            },
+            totalTableCapacity,
+            wastedCapacity,
+            efficiency: Math.round((partySize / totalTableCapacity) * 100),
             capacity: {
                 total: capacityCheck.maxCapacity,
                 available: capacityCheck.availableCapacity,
@@ -259,6 +241,111 @@ async function getReservationFeasibilityCheck(
             }
         }
     };
+}
+
+// NEW: Find single table using ONLY capacity (ignore min/max party size)
+async function findBestTableByCapacityOnly(
+    capacityService: CapacityService,
+    restaurantId: string,
+    time: Date,
+    estimatedDuration: number,
+    partySize: number
+) {
+    const endTime = new Date(time.getTime() + estimatedDuration * 60000);
+    const occupiedTableIds = await capacityService['getOccupiedTableIds'](restaurantId, time, endTime);
+
+    const availableTables = await prisma.table.findMany({
+        where: {
+            restaurant_id: restaurantId,
+            status: 'ACTIVE',
+            id: { notIn: occupiedTableIds },
+            // ONLY check capacity, ignore min_party_size and max_party_size
+            capacity: { gte: partySize }
+        },
+        orderBy: [
+            // Prefer tables with capacity closest to party size (minimize waste)
+            { capacity: 'asc' },
+            // Secondary: prefer smaller tables if same capacity difference
+            { id: 'asc' }
+        ]
+    });
+
+    return availableTables[0] || null;
+}
+
+// NEW: Find optimal table combinations using ONLY capacity
+async function findOptimalTableCombinationsByCapacity(
+    capacityService: CapacityService,
+    restaurantId: string,
+    time: Date,
+    estimatedDuration: number,
+    partySize: number
+): Promise<{ tables: any[]; totalCapacity: number; wastedCapacity: number }[]> {
+    const endTime = new Date(time.getTime() + estimatedDuration * 60000);
+    const occupiedTableIds = await capacityService['getOccupiedTableIds'](restaurantId, time, endTime);
+
+    // Get all available tables (ignore min/max party size constraints)
+    const availableTables = await prisma.table.findMany({
+        where: {
+            restaurant_id: restaurantId,
+            status: 'ACTIVE',
+            id: { notIn: occupiedTableIds }
+        },
+        orderBy: {
+            capacity: 'asc' // Start with smaller tables for better combinations
+        }
+    });
+
+    console.log('Available tables for combinations:', availableTables.map(t => `${t.table_number} (cap: ${t.capacity})`));
+
+    // Find all possible combinations that meet the capacity requirement
+    const combinations: { tables: any[]; totalCapacity: number; wastedCapacity: number }[] = [];
+
+    // Use a recursive function to find combinations
+    function findCombinations(startIndex: number, currentCombination: any[], currentCapacity: number) {
+        // If we've met or exceeded the required capacity, save this combination
+        if (currentCapacity >= partySize) {
+            const wastedCapacity = currentCapacity - partySize;
+            combinations.push({
+                tables: [...currentCombination],
+                totalCapacity: currentCapacity,
+                wastedCapacity: wastedCapacity
+            });
+            // Continue searching but don't add more tables to this path
+            return;
+        }
+
+        // Try adding each remaining table
+        for (let i = startIndex; i < availableTables.length; i++) {
+            const table = availableTables[i];
+            currentCombination.push(table);
+            findCombinations(i + 1, currentCombination, currentCapacity + table.capacity);
+            currentCombination.pop();
+        }
+    }
+
+    // Start with empty combination
+    findCombinations(0, [], 0);
+
+    console.log('All possible combinations:', combinations.map(comb => ({
+        tables: comb.tables.map((t: any) => `${t.table_number} (${t.capacity})`),
+        totalCapacity: comb.totalCapacity,
+        wastedCapacity: comb.wastedCapacity
+    })));
+
+    // Sort combinations by:
+    // 1. Minimum wasted capacity (most efficient)
+    // 2. Fewest number of tables (simpler setup)
+    // 3. Smaller total capacity (if same waste and table count)
+    return combinations.sort((a, b) => {
+        if (a.wastedCapacity !== b.wastedCapacity) {
+            return a.wastedCapacity - b.wastedCapacity; // Less waste first
+        }
+        if (a.tables.length !== b.tables.length) {
+            return a.tables.length - b.tables.length; // Fewer tables first
+        }
+        return a.totalCapacity - b.totalCapacity; // Smaller total capacity first
+    });
 }
 
 // Same helper functions as in reservation creation
@@ -338,106 +425,6 @@ async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
     return { isBlocked: false };
 }
 
-// Same deposit calculation as reservation creation
-function calculateDepositOnServer(
-    settings: any,
-    arrivalTime: Date,
-    partySize: number
-): { amount: number; appliedRule?: any } {
-
-    if (!settings?.deposit_settings?.depositSystemEnabled) {
-        return { amount: 0 };
-    }
-
-    const baseDepositAmount = parseFloat(settings.deposit_settings.depositAmount || '0');
-    const dynamicRules = settings.deposit_settings.dynamicRules || [];
-
-    // Filter applicable rules based on current selection
-    const applicableRules: any[] = [];
-
-    dynamicRules.forEach((rule: any) => {
-        let isApplicable = false;
-
-        switch (rule.ruleType) {
-            case 'special-date':
-                if (rule.date) {
-                    const ruleDate = new Date(rule.date);
-                    isApplicable = ruleDate.toDateString() === arrivalTime.toDateString();
-                }
-                break;
-
-            case 'time-slot':
-                if (rule.startTime && rule.endTime) {
-                    const timeToMinutes = (timeStr: string) => {
-                        const [time, period] = timeStr.split(' ');
-                        const [hours, minutes] = time.split(':').map(Number);
-                        let totalMinutes = hours % 12 * 60 + minutes;
-                        if (period === 'PM') totalMinutes += 12 * 60;
-                        return totalMinutes;
-                    };
-
-                    const arrivalMinutes = timeToMinutes(
-                        arrivalTime.toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: true
-                        })
-                    );
-                    const startMinutes = timeToMinutes(rule.startTime);
-                    const endMinutes = timeToMinutes(rule.endTime);
-
-                    isApplicable = arrivalMinutes >= startMinutes && arrivalMinutes <= endMinutes;
-                }
-                break;
-
-            case 'party-size':
-                if (rule.minPartySize && rule.maxPartySize) {
-                    const min = parseInt(rule.minPartySize);
-                    const max = parseInt(rule.maxPartySize);
-                    isApplicable = partySize >= min && partySize <= max;
-                }
-                break;
-
-            case 'day-of-week':
-                if (rule.days) {
-                    const dayOfWeek = arrivalTime.getDay();
-                    const ruleDays = rule.days.split(',').map((d: string) => parseInt(d.trim()));
-                    isApplicable = ruleDays.includes(dayOfWeek);
-                }
-                break;
-        }
-
-        if (isApplicable) {
-            applicableRules.push(rule);
-        }
-    });
-
-    // Sort by priority (highest first) and pick the highest priority rule
-    applicableRules.sort((a, b) => parseInt(b.priority) - parseInt(a.priority));
-
-    let finalAmount = 0;
-    let appliedRule: any = undefined;
-
-    if (applicableRules.length > 0) {
-        appliedRule = applicableRules[0];
-        const ruleAmount = parseFloat(appliedRule.amount || '0');
-
-        if (appliedRule.depositType === 'per-person') {
-            finalAmount = ruleAmount * partySize;
-        } else {
-            finalAmount = ruleAmount;
-        }
-    } else {
-        if (settings.deposit_settings.depositType === 'per-person') {
-            finalAmount = baseDepositAmount * partySize;
-        } else {
-            finalAmount = baseDepositAmount;
-        }
-    }
-
-    return { amount: finalAmount, appliedRule };
-}
-
 // Same helper functions as reservation creation
 function getDayName(date: Date): string {
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -471,212 +458,6 @@ function timeToMinutes(timeStr: string): number {
     return totalMinutes;
 }
 
-// Keep the existing functions for time slot overview and daily overview
-async function getTimeSlotCapacityOverview(
-    capacityService: CapacityService,
-    restaurantId: string,
-    date: Date,
-    time: Date
-) {
-    const estimatedDuration = 120;
-
-    const capacityCheck = await capacityService.checkCapacity(
-        restaurantId,
-        time,
-        estimatedDuration,
-        2
-    );
-
-    const availableTables = await getAvailableTablesByCapacity(capacityService, restaurantId, time, estimatedDuration);
-
-    return {
-        date: date.toISOString().split('T')[0],
-        time: time.toTimeString().split(' ')[0],
-        capacity: {
-            total: capacityCheck.maxCapacity,
-            available: capacityCheck.availableCapacity,
-            utilized: capacityCheck.currentCapacity,
-            utilizationPercentage: Math.round((capacityCheck.currentCapacity / capacityCheck.maxCapacity) * 100)
-        },
-        tableAvailability: {
-            byCapacity: availableTables,
-            totalAvailable: availableTables.reduce((sum, range) => sum + range.count, 0)
-        },
-        summary: {
-            status: capacityCheck.available ? 'GOOD_AVAILABILITY' : 'LIMITED_AVAILABILITY',
-            recommendedPartySizes: getRecommendedPartySizes(availableTables),
-            peakHour: isPeakHour(time)
-        }
-    };
-}
-
-async function getDailyCapacityOverview(restaurantId: string, date: Date) {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
-
-    const result = await prisma.$queryRaw`
-    WITH capacity AS (
-      SELECT COALESCE(SUM(capacity), 0) as total_capacity
-      FROM tables 
-      WHERE restaurant_id = ${restaurantId}::uuid 
-      AND status = 'ACTIVE'
-    ),
-    reservation_stats AS (
-      SELECT 
-        COUNT(*) as total_reservations,
-        COALESCE(SUM(party_size), 0) as total_guests,
-        COUNT(CASE WHEN status = 'PENDING' THEN 1 END) as pending_count,
-        COUNT(CASE WHEN status = 'CONFIRMED' THEN 1 END) as confirmed_count,
-        COUNT(CASE WHEN status = 'SEATED' THEN 1 END) as seated_count,
-        COUNT(CASE WHEN status = 'COMPLETED' THEN 1 END) as completed_count,
-        COUNT(CASE WHEN status = 'CANCELLED' THEN 1 END) as cancelled_count,
-        COALESCE(SUM(CASE WHEN status = 'PENDING' THEN party_size ELSE 0 END), 0) as pending_guests,
-        COALESCE(SUM(CASE WHEN status = 'CONFIRMED' THEN party_size ELSE 0 END), 0) as confirmed_guests,
-        COALESCE(SUM(CASE WHEN status = 'SEATED' THEN party_size ELSE 0 END), 0) as seated_guests
-      FROM reservations 
-      WHERE restaurant_id = ${restaurantId}::uuid 
-      AND arrival_time >= ${startOfDay}
-      AND arrival_time <= ${endOfDay}
-    )
-    SELECT 
-      c.total_capacity::integer as total_capacity,
-      rs.total_reservations::integer as total_reservations,
-      rs.total_guests::integer as total_guests,
-      rs.pending_count::integer as pending_count,
-      rs.confirmed_count::integer as confirmed_count,
-      rs.seated_count::integer as seated_count,
-      rs.completed_count::integer as completed_count,
-      rs.cancelled_count::integer as cancelled_count,
-      rs.pending_guests::integer as pending_guests,
-      rs.confirmed_guests::integer as confirmed_guests,
-      rs.seated_guests::integer as seated_guests,
-      CASE 
-        WHEN c.total_capacity > 0 THEN 
-          ROUND((rs.total_guests / c.total_capacity) * 100)
-        ELSE 0 
-      END::integer as utilization_percentage,
-      CASE 
-        WHEN rs.total_reservations > 0 THEN 
-          ROUND(rs.total_guests / rs.total_reservations)
-        ELSE 0 
-      END::integer as average_party_size
-    FROM capacity c, reservation_stats rs
-  `;
-
-    const data = (result as any[])[0];
-
-    const safeNumber = (value: any): number => {
-        if (value === null || value === undefined) return 0;
-        return Number(value);
-    };
-
-    const totalCapacity = safeNumber(data.total_capacity);
-    const totalGuests = safeNumber(data.total_guests);
-    const utilizationPercentage = safeNumber(data.utilization_percentage);
-
-    const availableCapacity = Math.max(0, totalCapacity - totalGuests);
-
-    return {
-        date: date.toISOString().split('T')[0],
-        capacity: {
-            total: totalCapacity,
-            available: availableCapacity,
-            utilized: totalGuests,
-            utilizationPercentage
-        },
-        reservations: {
-            total: safeNumber(data.total_reservations),
-            byStatus: {
-                pending: safeNumber(data.pending_count),
-                confirmed: safeNumber(data.confirmed_count),
-                seated: safeNumber(data.seated_count),
-                completed: safeNumber(data.completed_count),
-                cancelled: safeNumber(data.cancelled_count)
-            },
-            guests: {
-                total: totalGuests,
-                pending: safeNumber(data.pending_guests),
-                confirmed: safeNumber(data.confirmed_guests),
-                seated: safeNumber(data.seated_guests),
-                averagePartySize: safeNumber(data.average_party_size)
-            }
-        },
-        summary: {
-            isFullyBooked: utilizationPercentage >= 90,
-            hasAvailability: utilizationPercentage < 80,
-            bookingIntensity: getBookingIntensity(utilizationPercentage),
-            recommendation: getBookingRecommendation(utilizationPercentage)
-        }
-    };
-}
-
-// Helper functions
-async function getAvailableTablesByCapacity(
-    capacityService: CapacityService,
-    restaurantId: string,
-    time: Date,
-    estimatedDuration: number
-) {
-    const endTime = new Date(time.getTime() + estimatedDuration * 60000);
-    const occupiedTableIds = await capacityService['getOccupiedTableIds'](restaurantId, time, endTime);
-
-    const availableTables = await prisma.table.findMany({
-        where: {
-            restaurant_id: restaurantId,
-            status: 'ACTIVE',
-            id: { notIn: occupiedTableIds }
-        },
-        select: {
-            capacity: true
-        }
-    });
-
-    const ranges = [
-        { range: '2-4', min: 2, max: 4, count: 0 },
-        { range: '5-8', min: 5, max: 8, count: 0 },
-        { range: '9-12', min: 9, max: 12, count: 0 },
-        { range: '13+', min: 13, max: 999, count: 0 }
-    ];
-
-    availableTables.forEach(table => {
-        for (const range of ranges) {
-            if (table.capacity >= range.min && table.capacity <= range.max) {
-                range.count++;
-                break;
-            }
-        }
-    });
-
-    return ranges;
-}
-
-function getRecommendedPartySizes(availableTables: any[]): string[] {
-    const recommendations = [];
-
-    if (availableTables.find(r => r.range === '2-4')?.count > 0) {
-        recommendations.push('2-4 people');
-    }
-    if (availableTables.find(r => r.range === '5-8')?.count > 0) {
-        recommendations.push('5-8 people');
-    }
-    if (availableTables.find(r => r.range === '9-12')?.count > 0) {
-        recommendations.push('9-12 people');
-    }
-    if (availableTables.find(r => r.range === '13+')?.count > 0) {
-        recommendations.push('13+ people');
-    }
-
-    return recommendations.length > 0 ? recommendations : ['No tables available'];
-}
-
-function isPeakHour(time: Date): boolean {
-    const hour = time.getHours();
-    return (hour >= 12 && hour <= 14) || (hour >= 18 && hour <= 21);
-}
-
 function parseTimeString(timeStr: string, baseDate: Date): Date | null {
     try {
         const time12HourMatch = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)$/i);
@@ -706,24 +487,5 @@ function parseTimeString(timeStr: string, baseDate: Date): Date | null {
         return null;
     } catch {
         return null;
-    }
-}
-
-function getBookingIntensity(utilization: number): 'LOW' | 'MEDIUM' | 'HIGH' | 'FULL' {
-    if (utilization >= 90) return 'FULL';
-    if (utilization >= 70) return 'HIGH';
-    if (utilization >= 40) return 'MEDIUM';
-    return 'LOW';
-}
-
-function getBookingRecommendation(utilization: number): string {
-    if (utilization >= 90) {
-        return 'Fully booked - consider waitlist only';
-    } else if (utilization >= 70) {
-        return 'High demand - limited availability remaining';
-    } else if (utilization >= 40) {
-        return 'Moderate availability - good time for bookings';
-    } else {
-        return 'Plenty of availability - encourage reservations';
     }
 }

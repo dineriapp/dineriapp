@@ -232,46 +232,61 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
     // In createReservationWithValidation, replace the table combination section:
 
     // If no single table found and table combinations are enabled, look for combinations
+    // If no single table found and table combinations are enabled, look for combinations
     if (!bestTable && enableTableCombinations) {
-        console.log('Looking for table combinations...');
+        console.log('Looking for table combinations with OPTIMIZED capacity selection...');
 
-        // First try the debug version to see exactly what's happening
-        let combinations = await capacityService.findTableCombinationsDebug(
+        // Use the new optimized combination finder that minimizes wasted capacity
+        let combinations = await capacityService.findTableCombinationsOptimized(
             data.restaurantId,
             data.party_size,
             arrivalTime,
-            estimatedDuration
+            estimatedDuration,
+            20 // Get more combinations to find the optimal one
         );
 
-        console.log('Debug combinations found:', combinations.length);
+        console.log('Optimized combinations found:', combinations.length);
 
-        // If debug version fails, there's a fundamental issue
+        // If the optimized method doesn't find combinations, try the debug version as fallback
         if (combinations.length === 0) {
-            console.log('=== CRITICAL: Debug combination finder also failed ===');
-            console.log('This means there is a fundamental issue with table availability');
-
-            // Last resort: try the fixed version
-            combinations = await capacityService.findTableCombinations(
+            console.log('Trying debug combination finder as fallback...');
+            combinations = await capacityService.findTableCombinationsDebug(
                 data.restaurantId,
                 data.party_size,
                 arrivalTime,
-                estimatedDuration,
-                10
+                estimatedDuration
             );
-            console.log('Fixed combinations found:', combinations.length);
+            console.log('Debug combinations found:', combinations.length);
         }
 
         if (combinations.length > 0) {
+            // Select the first combination (already optimized for minimum wasted capacity)
             tableCombination = combinations[0];
             assignedTables = tableCombination.tables;
-            console.log('🎉 FINAL SUCCESS: Selected combination with tables:', assignedTables.map((t: Table) => t.table_number));
-            console.log('Total capacity:', tableCombination.totalCapacity);
+
+            const totalCapacity = assignedTables.reduce((sum: number, table: any) => sum + table.capacity, 0);
+            const wastedCapacity = totalCapacity - data.party_size;
+
+            console.log('🎉 OPTIMAL COMBINATION SELECTED:', {
+                tables: assignedTables.map((t: Table) => `${t.table_number} (cap: ${t.capacity})`),
+                totalCapacity,
+                partySize: data.party_size,
+                wastedCapacity,
+                efficiency: Math.round((data.party_size / totalCapacity) * 100) + '%'
+            });
         } else {
-            console.log('💥 ULTIMATE FAILURE: No combination found despite available capacity');
+            console.log('💥 No combinations found despite available capacity');
         }
     } else if (bestTable) {
         assignedTables = [bestTable];
-        console.log('Using single table:', bestTable.table_number);
+        const wastedCapacity = bestTable.capacity - data.party_size;
+        console.log('Using single table:', {
+            table: bestTable.table_number,
+            capacity: bestTable.capacity,
+            partySize: data.party_size,
+            wastedCapacity,
+            efficiency: Math.round((data.party_size / bestTable.capacity) * 100) + '%'
+        });
     }
 
     // If still no tables available (single or combination)
@@ -288,7 +303,7 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
 
     // ... rest of your function (deposit calculation, transaction, etc.)
     // 7. Calculate deposit on server side
-    const depositCalculation = calculateDepositOnServer(settings, arrivalTime, data.party_size);
+    const depositCalculation = calculateDepositOnServer(settings, arrivalTime, data.party_size, restaurant.timezone || "'Europe/London'");
     const depositAmount = depositCalculation.amount;
     const appliedRule = depositCalculation.appliedRule;
 
@@ -358,7 +373,8 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
 function calculateDepositOnServer(
     settings: any,
     arrivalTime: Date,
-    partySize: number
+    partySize: number,
+    timezone: string
 ): { amount: number; appliedRule?: DynamicRule } {
 
     if (!settings?.deposit_settings?.depositSystemEnabled) {
@@ -382,23 +398,22 @@ function calculateDepositOnServer(
                 }
                 break;
 
+            // In calculateDepositOnServer function, update time-based rules:
             case 'time-slot':
                 if (rule.startTime && rule.endTime) {
-                    const timeToMinutes = (timeStr: string) => {
-                        const [time, period] = timeStr.split(' ');
-                        const [hours, minutes] = time.split(':').map(Number);
-                        let totalMinutes = hours % 12 * 60 + minutes;
-                        if (period === 'PM') totalMinutes += 12 * 60;
-                        return totalMinutes;
-                    };
+                    const restaurantTimezone = timezone || 'Europe/London';
+                    const arrivalTimeInRestaurantTZ = new Date(
+                        arrivalTime.toLocaleString("en-US", { timeZone: restaurantTimezone })
+                    );
 
                     const arrivalMinutes = timeToMinutes(
-                        arrivalTime.toLocaleTimeString('en-US', {
+                        arrivalTimeInRestaurantTZ.toLocaleTimeString('en-US', {
                             hour: '2-digit',
                             minute: '2-digit',
                             hour12: true
                         })
                     );
+
                     const startMinutes = timeToMinutes(rule.startTime);
                     const endMinutes = timeToMinutes(rule.endTime);
 
@@ -458,7 +473,14 @@ function calculateDepositOnServer(
 
 async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
     const openingHours = restaurant.opening_hours || {};
-    const dayName = getDayName(arrivalTime);
+    const restaurantTimezone = restaurant.timezone || 'Europe/London';
+
+    // Convert arrival time to restaurant's timezone
+    const arrivalTimeInRestaurantTZ = new Date(
+        arrivalTime.toLocaleString("en-US", { timeZone: restaurantTimezone })
+    );
+
+    const dayName = getDayName(arrivalTimeInRestaurantTZ);
     const daySchedule = openingHours[dayName];
 
     if (!daySchedule || daySchedule.closed) {
@@ -468,7 +490,7 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
         };
     }
 
-    // Parse opening and closing times
+    // Parse opening and closing times in restaurant's timezone
     const openTime = parseTime(daySchedule.open);
     const closeTime = parseTime(daySchedule.close);
 
@@ -479,16 +501,16 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
         };
     }
 
-    // Create date objects for comparison
-    const arrivalDate = new Date(arrivalTime);
+    // Create date objects in restaurant's timezone for comparison
+    const arrivalDate = new Date(arrivalTimeInRestaurantTZ);
     const openDateTime = new Date(arrivalDate);
     openDateTime.setHours(openTime.hours, openTime.minutes, 0, 0);
 
     const closeDateTime = new Date(arrivalDate);
     closeDateTime.setHours(closeTime.hours, closeTime.minutes, 0, 0);
 
-    // Check if arrival time is within opening hours
-    if (arrivalTime < openDateTime || arrivalTime > closeDateTime) {
+    // Check if arrival time is within opening hours in restaurant's timezone
+    if (arrivalTimeInRestaurantTZ < openDateTime || arrivalTimeInRestaurantTZ > closeDateTime) {
         return {
             isOpen: false,
             error: `Restaurant is open from ${daySchedule.open} to ${daySchedule.close} on ${dayName}.`
@@ -498,6 +520,13 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
     return { isOpen: true };
 }
 
+// Update the getDayName function to be more reliable
+function getDayName(date: Date): string {
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    return days[date.getDay()];
+}
+
+// Update checkTimeOverrides function to use restaurant timezone
 async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
     const settings = restaurant.reservation_settings?.settings as any;
     const overridesSettings = settings?.overrides_settings || {
@@ -509,7 +538,16 @@ async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
         return { isBlocked: false };
     }
 
-    const arrivalDateStr = arrivalTime.toISOString().split('T')[0];
+    const restaurantTimezone = restaurant.timezone || 'Europe/London';
+
+    // Convert arrival time to restaurant's timezone for date comparison
+    const arrivalTimeInRestaurantTZ = new Date(
+        arrivalTime.toLocaleString("en-US", { timeZone: restaurantTimezone })
+    );
+
+    const arrivalDateStr = arrivalTimeInRestaurantTZ.toISOString().split('T')[0];
+
+    // Use the original arrival time for minute calculation (time is absolute)
     const arrivalMinutes = timeToMinutes(
         arrivalTime.toLocaleTimeString('en-US', {
             hour: '2-digit',
@@ -533,12 +571,6 @@ async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
     }
 
     return { isBlocked: false };
-}
-
-// Helper functions
-function getDayName(date: Date): string {
-    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    return days[date.getDay()];
 }
 
 function parseTime(timeStr: string): { hours: number; minutes: number } | null {
