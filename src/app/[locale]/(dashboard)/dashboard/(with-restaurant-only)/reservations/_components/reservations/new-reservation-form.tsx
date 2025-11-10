@@ -20,6 +20,7 @@ import { useEffect, useMemo, useState } from "react";
 import { DynamicRule, OverridesSettings, SettingsState, TimeSlotOverride } from "../settings/types";
 import DailyCapacityWidget from "./daily-capacity-widget";
 import { toast } from "sonner";
+import { getUTCFromLocalDateTime } from "@/lib/date-utils";
 
 // Format time slots for dropdown (30-min intervals)
 const fmt = new Intl.DateTimeFormat("en-US", {
@@ -300,26 +301,13 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
         }
 
         try {
-            // Combine date and time
-            const [time, period] = selectedTime.split(' ');
-            const [h, m] = time.split(':').map(Number);
-            let hours = h;
-            const minutes = m;
-
-            // Convert to 24-hour format
-            if (period === 'PM' && hours < 12) hours += 12;
-            if (period === 'AM' && hours === 12) hours = 0;
-
-            const arrivalTime = new Date(date);
-            arrivalTime.setHours(hours, minutes, 0, 0);
-
             // IMPORTANT: Don't send deposit calculation from frontend
             const reservationData = {
                 restaurantId: restaurant.id,
                 customer_name: name,
                 customer_email: email,
                 customer_phone: phone,
-                arrival_time: arrivalTime.toISOString(),
+                arrival_time: getUTCFromLocalDateTime(date.toISOString().split("T")[0], selectedTime, restaurant.timezone || "Europe/Rome"),
                 party_size: parseInt(partySize, 10),
                 special_requests: notes,
                 preferred_area: area !== "none" ? area : undefined,
@@ -362,25 +350,40 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
 
     return (
         <div className="flex items-center justify-center flex-col w-full">
-            <div className="w-full max-w-7xl space-y-4">
+            <div className="w-full space-y-4">
                 <div className="">
                     <h2 className="text-2xl font-bold text-slate-900">Add Reservation</h2>
                     <p className="text-slate-600 mt-1">
                         Create and manage a new customer reservation quickly and easily.
                     </p>
                 </div>
-
                 <Card className="p-5">
                     <form onSubmit={handleSubmit} className="">
                         {/* Error Message */}
                         {error && (
-                            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                            <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
                                 <div className="flex items-center gap-2 text-red-700">
                                     <AlertCircle className="h-4 w-4" />
                                     <span className="text-sm font-medium">{error}</span>
                                 </div>
                             </div>
                         )}
+                        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-xl">
+                            <div className="flex items-start gap-3">
+                                <div className="flex-shrink-0 text-green-600">
+                                    <Clock className="h-5 w-5 mt-0.5" />
+                                </div>
+                                <div>
+                                    <p className="text-base font-semibold text-green-800">
+                                        {restaurant?.timezone}
+                                    </p>
+                                    <p className="text-xs text-green-700 mt-0.5">
+                                        All dates and times are displayed according to {restaurant?.timezone} timezone for accuracy.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
 
                         {/* Date / Time / Party Size */}
                         <div className="grid gap-x-4 gap-y-0.5 sm:grid-cols-2">
@@ -589,7 +592,7 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                         {
                             date && selectedTime &&
                             <div className="w-full col-span-2 mt-2">
-                                <DailyCapacityWidget restaurantId={restaurant.id} selectedDate={date} selectedTime={selectedTime} partySize={Number(partySize)} />
+                                <DailyCapacityWidget restaurantId={restaurant.id} date={getUTCFromLocalDateTime(date.toISOString().split("T")[0], selectedTime, restaurant.timezone || "Europe/Rome")} partySize={Number(partySize)} />
                             </div>
                         }
 

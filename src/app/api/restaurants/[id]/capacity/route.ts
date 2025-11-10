@@ -10,14 +10,13 @@ export async function GET(
         const resolvedParams = await params;
 
         const { searchParams } = new URL(request.url);
-        const dateParam = searchParams.get('date');
-        const timeParam = searchParams.get('time');
+        const dateParam = searchParams.get('date'); // "2025-11-13T05:00:00.000Z" - already in restaurant timezone as UTC
         const partySizeParam = searchParams.get('partySize');
 
         // All parameters are required
-        if (!dateParam || !timeParam || !partySizeParam) {
+        if (!dateParam || !partySizeParam) {
             return NextResponse.json({
-                error: 'Date, time, and partySize parameters are required'
+                error: 'Date and partySize parameters are required'
             }, { status: 400 });
         }
 
@@ -28,12 +27,6 @@ export async function GET(
             return NextResponse.json({ error: 'Invalid date format' }, { status: 400 });
         }
 
-        // Parse time
-        const time = parseTimeString(timeParam, date);
-        if (!time) {
-            return NextResponse.json({ error: 'Invalid time format. Use HH:MM AM/PM format' }, { status: 400 });
-        }
-
         // Parse party size
         const partySize = parseInt(partySizeParam);
         if (isNaN(partySize) || partySize <= 0) {
@@ -42,12 +35,11 @@ export async function GET(
 
         const capacityService = new CapacityService();
 
-        // Always use reservation feasibility check
+        // Use the date directly since it already contains the full datetime
         const capacityData = await getReservationFeasibilityCheck(
             capacityService,
             restaurantId,
             date,
-            time,
             partySize
         );
 
@@ -56,8 +48,7 @@ export async function GET(
             data: capacityData
         });
 
-    } catch (error) {
-        console.error('Capacity API error:', error);
+    } catch {
         return NextResponse.json(
             { error: 'Failed to fetch capacity data' },
             { status: 500 }
@@ -65,18 +56,15 @@ export async function GET(
     }
 }
 
-// EXACT SAME LOGIC AS RESERVATION CREATION - MIRRORED
+// UPDATED: Removed separate time parameter since date already contains datetime
 async function getReservationFeasibilityCheck(
     capacityService: CapacityService,
     restaurantId: string,
-    date: Date,
-    time: Date,
+    date: Date, // This now contains the full datetime
     partySize: number
 ) {
-    console.log('=== CAPACITY API: Reservation Feasibility Check ===');
+
     console.log('Date:', date.toISOString().split('T')[0]);
-    console.log('Time:', time.toTimeString().split(' ')[0]);
-    console.log('Party Size:', partySize);
 
     const estimatedDuration = 120; // Default 2-hour duration
 
@@ -98,14 +86,12 @@ async function getReservationFeasibilityCheck(
 
     // Get restaurant timezone
     const restaurantTimezone = restaurant.timezone || 'Europe/London';
-    console.log('Restaurant timezone:', restaurantTimezone);
 
-    // Convert the provided date/time to restaurant's timezone for validation
-    const timeInRestaurantTZ = convertToRestaurantTimezone(time, restaurantTimezone);
-    console.log('Time in restaurant timezone:', timeInRestaurantTZ.toString());
+    // Convert the provided datetime to restaurant's timezone for validation
+    const timeInRestaurantTZ = convertToRestaurantTimezone(date, restaurantTimezone);
 
     // 2. Check opening hours (same logic) - WITH PROPER TIMEZONE
-    const openingHoursCheck = await checkOpeningHours(restaurant, timeInRestaurantTZ, restaurantTimezone);
+    const openingHoursCheck = await checkOpeningHours(restaurant, timeInRestaurantTZ);
     if (!openingHoursCheck.isOpen) {
         return {
             canCreateReservation: false,
@@ -124,10 +110,10 @@ async function getReservationFeasibilityCheck(
         };
     }
 
-    // 4. Check capacity (same logic) - use original time for capacity checks (these are time-agnostic)
+    // 4. Check capacity (same logic) - use original datetime for capacity checks
     const capacityCheck = await capacityService.checkCapacity(
         restaurantId,
-        time, // Use original time for capacity checks
+        date, // Use the original datetime for capacity checks
         estimatedDuration,
         partySize
     );
@@ -156,7 +142,7 @@ async function getReservationFeasibilityCheck(
     const singleTable = await findBestTableByCapacityOnly(
         capacityService,
         restaurantId,
-        time, // Use original time for table availability
+        date, // Use the original datetime for table availability
         estimatedDuration,
         partySize
     );
@@ -164,38 +150,24 @@ async function getReservationFeasibilityCheck(
     if (singleTable) {
         assignedTables = [singleTable];
         tableMethod = 'single';
-        console.log('Single table available:', singleTable.table_number, 'capacity:', singleTable.capacity);
     }
     // If no single table and combinations are enabled, try combinations with optimized selection
     else if (enableTableCombinations) {
-        console.log('Looking for table combinations using capacity-only approach...');
 
         // Get all available tables and find optimal combinations
         const combinations = await findOptimalTableCombinationsByCapacity(
             capacityService,
             restaurantId,
-            time, // Use original time for table availability
+            date, // Use the original datetime for table availability
             estimatedDuration,
             partySize
         );
-
-        console.log('Capacity-based combinations found:', combinations.length);
 
         if (combinations.length > 0) {
             // Select the combination with minimum wasted capacity
             const bestCombination = combinations[0];
             assignedTables = bestCombination.tables;
             tableMethod = 'combination';
-
-            const totalCapacity = assignedTables.reduce((sum: number, table: any) => sum + table.capacity, 0);
-            const wastedCapacity = totalCapacity - partySize;
-
-            console.log('Optimal table combination found:', {
-                tables: assignedTables.map((t: any) => `${t.table_number} (cap: ${t.capacity})`),
-                totalCapacity,
-                partySize,
-                wastedCapacity
-            });
         }
     }
 
@@ -248,23 +220,23 @@ async function getReservationFeasibilityCheck(
     };
 }
 
-// NEW: Convert time to restaurant's timezone
-function convertToRestaurantTimezone(time: Date, timezone: string): Date {
+// Convert datetime to restaurant's timezone
+function convertToRestaurantTimezone(datetime: Date, timezone: string): Date {
     // Create a new date with the same UTC time but interpreted in restaurant's timezone
-    const localTimeString = time.toLocaleString("en-US", { timeZone: timezone });
+    const localTimeString = datetime.toLocaleString("en-US", { timeZone: timezone });
     return new Date(localTimeString);
 }
 
-// NEW: Find single table using ONLY capacity (ignore min/max party size)
+// Find single table using ONLY capacity (ignore min/max party size)
 async function findBestTableByCapacityOnly(
     capacityService: CapacityService,
     restaurantId: string,
-    time: Date,
+    datetime: Date, // Full datetime
     estimatedDuration: number,
     partySize: number
 ) {
-    const endTime = new Date(time.getTime() + estimatedDuration * 60000);
-    const occupiedTableIds = await capacityService['getOccupiedTableIds'](restaurantId, time, endTime);
+    const endTime = new Date(datetime.getTime() + estimatedDuration * 60000);
+    const occupiedTableIds = await capacityService['getOccupiedTableIds'](restaurantId, datetime, endTime);
 
     const availableTables = await prisma.table.findMany({
         where: {
@@ -285,16 +257,16 @@ async function findBestTableByCapacityOnly(
     return availableTables[0] || null;
 }
 
-// NEW: Find optimal table combinations using ONLY capacity
+// Find optimal table combinations using ONLY capacity
 async function findOptimalTableCombinationsByCapacity(
     capacityService: CapacityService,
     restaurantId: string,
-    time: Date,
+    datetime: Date, // Full datetime
     estimatedDuration: number,
     partySize: number
 ): Promise<{ tables: any[]; totalCapacity: number; wastedCapacity: number }[]> {
-    const endTime = new Date(time.getTime() + estimatedDuration * 60000);
-    const occupiedTableIds = await capacityService['getOccupiedTableIds'](restaurantId, time, endTime);
+    const endTime = new Date(datetime.getTime() + estimatedDuration * 60000);
+    const occupiedTableIds = await capacityService['getOccupiedTableIds'](restaurantId, datetime, endTime);
 
     // Get all available tables (ignore min/max party size constraints)
     const availableTables = await prisma.table.findMany({
@@ -307,8 +279,6 @@ async function findOptimalTableCombinationsByCapacity(
             capacity: 'asc' // Start with smaller tables for better combinations
         }
     });
-
-    console.log('Available tables for combinations:', availableTables.map(t => `${t.table_number} (cap: ${t.capacity})`));
 
     // Find all possible combinations that meet the capacity requirement
     const combinations: { tables: any[]; totalCapacity: number; wastedCapacity: number }[] = [];
@@ -339,12 +309,6 @@ async function findOptimalTableCombinationsByCapacity(
     // Start with empty combination
     findCombinations(0, [], 0);
 
-    console.log('All possible combinations:', combinations.map(comb => ({
-        tables: comb.tables.map((t: any) => `${t.table_number} (${t.capacity})`),
-        totalCapacity: comb.totalCapacity,
-        wastedCapacity: comb.wastedCapacity
-    })));
-
     // Sort combinations by:
     // 1. Minimum wasted capacity (most efficient)
     // 2. Fewest number of tables (simpler setup)
@@ -360,20 +324,13 @@ async function findOptimalTableCombinationsByCapacity(
     });
 }
 
-// UPDATED: Check opening hours with proper timezone support
-async function checkOpeningHours(restaurant: any, arrivalTime: Date, timezone: string) {
+// Check opening hours with proper timezone support
+async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
     const openingHours = restaurant.opening_hours || {};
 
     // arrivalTime is already in restaurant's timezone
     const dayName = getDayName(arrivalTime);
     const daySchedule = openingHours[dayName];
-
-    console.log('Opening hours check:', {
-        dayName,
-        daySchedule,
-        arrivalTime: arrivalTime.toString(),
-        timezone
-    });
 
     if (!daySchedule || daySchedule.closed) {
         return {
@@ -400,12 +357,6 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date, timezone: s
     const closeDateTime = new Date(arrivalDate);
     closeDateTime.setHours(closeTime.hours, closeTime.minutes, 0, 0);
 
-    console.log('Time comparison:', {
-        openTime: openDateTime.toString(),
-        closeTime: closeDateTime.toString(),
-        arrivalTime: arrivalTime.toString()
-    });
-
     // Check if arrival time is within opening hours in restaurant's timezone
     if (arrivalTime < openDateTime || arrivalTime > closeDateTime) {
         return {
@@ -417,7 +368,7 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date, timezone: s
     return { isOpen: true };
 }
 
-// UPDATED: Check time overrides with proper timezone support
+// Check time overrides with proper timezone support
 async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
     const settings = restaurant.reservation_settings?.settings as any;
     const overridesSettings = settings?.overrides_settings || {
@@ -441,12 +392,6 @@ async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
         })
     );
 
-    console.log('Time override check:', {
-        arrivalDateStr,
-        arrivalMinutes,
-        overrides: overridesSettings.overrides
-    });
-
     for (const override of overridesSettings.overrides) {
         if (override.date === arrivalDateStr && override.blocked) {
             const startMinutes = timeToMinutes(override.startTime);
@@ -464,7 +409,7 @@ async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
     return { isBlocked: false };
 }
 
-// Same helper functions as reservation creation
+// Helper functions
 function getDayName(date: Date): string {
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return days[date.getDay()];
@@ -495,36 +440,4 @@ function timeToMinutes(timeStr: string): number {
     let totalMinutes = hours % 12 * 60 + minutes;
     if (period === 'PM') totalMinutes += 12 * 60;
     return totalMinutes;
-}
-
-function parseTimeString(timeStr: string, baseDate: Date): Date | null {
-    try {
-        const time12HourMatch = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)$/i);
-        if (time12HourMatch) {
-            let hours = parseInt(time12HourMatch[1]);
-            const minutes = parseInt(time12HourMatch[2]);
-            const period = time12HourMatch[3].toUpperCase();
-
-            if (period === 'PM' && hours < 12) hours += 12;
-            if (period === 'AM' && hours === 12) hours = 0;
-
-            const result = new Date(baseDate);
-            result.setHours(hours, minutes, 0, 0);
-            return result;
-        }
-
-        const time24HourMatch = timeStr.match(/^(\d{1,2}):(\d{2})$/);
-        if (time24HourMatch) {
-            const hours = parseInt(time24HourMatch[1]);
-            const minutes = parseInt(time24HourMatch[2]);
-
-            const result = new Date(baseDate);
-            result.setHours(hours, minutes, 0, 0);
-            return result;
-        }
-
-        return null;
-    } catch {
-        return null;
-    }
 }

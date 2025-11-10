@@ -2,10 +2,8 @@ import { DynamicRule } from '@/app/[locale]/(dashboard)/dashboard/(with-restaura
 import { CapacityService } from '@/lib/capacity-service';
 import prisma from "@/lib/prisma";
 import type { ReservationsListResponse } from "@/lib/types";
-import { Table } from '@prisma/client';
 import { type NextRequest, NextResponse } from "next/server";
 
-// GET /api/reservations?restaurantId=xxx
 export async function GET(request: NextRequest) {
     try {
         const restaurantId = request.nextUrl.searchParams.get("restaurantId")
@@ -18,9 +16,6 @@ export async function GET(request: NextRequest) {
         }
 
         const reservations = await prisma.reservation.findMany({
-            where: {
-                // Filter by restaurant through tableLinks if needed, or add restaurant_id to Reservation model
-            },
             include: {
                 payment: true,
                 table_reservations: {
@@ -56,7 +51,6 @@ interface CreateReservationRequest {
     special_requests?: string;
     preferred_area?: string;
     payment_method: 'card' | 'cash';
-    // Removed deposit_amount and applied_deposit_rule from frontend
 }
 
 export async function POST(request: NextRequest) {
@@ -64,15 +58,12 @@ export async function POST(request: NextRequest) {
 
         const body: CreateReservationRequest = await request.json();
 
-        // Validate required fields
         const validationError = validateReservationRequest(body);
         if (validationError) {
             return NextResponse.json({ error: validationError }, { status: 400 });
         }
 
-        // Create reservation with all validations including server-side deposit calculation
         const result: any = await createReservationWithValidation(body);
-        console.log(result)
         if (!result.success) {
             return NextResponse.json({ error: result.error }, { status: 400 });
         }
@@ -84,8 +75,7 @@ export async function POST(request: NextRequest) {
             message: 'Reservation created successfully'
         });
 
-    } catch (error) {
-        console.error('Reservation creation error:', error);
+    } catch {
         return NextResponse.json(
             { error: 'Failed to create reservation' },
             { status: 500 }
@@ -120,12 +110,9 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
     const capacityService = new CapacityService();
     const arrivalTime = new Date(data.arrival_time);
 
-    console.log('=== RESERVATION DEBUG START ===');
-    console.log('Party size:', data.party_size);
     console.log('Arrival time:', arrivalTime);
-    console.log('Restaurant ID:', data.restaurantId);
 
-    // 1. Get restaurant and settings
+    // Get restaurant and settings
     const restaurant = await prisma.restaurant.findUnique({
         where: { id: data.restaurantId },
         include: {
@@ -138,49 +125,28 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
     });
 
     if (!restaurant) {
-        console.log('Restaurant not found');
         return { success: false, error: 'Restaurant not found' };
     }
 
-
-
-    console.log('Total tables:', restaurant.tables.length);
-    console.log('Tables with capacities:', restaurant.tables.map(t => ({
-        id: t.id,
-        capacity: t.capacity,
-        min: t.min_party_size,
-        max: t.max_party_size,
-        area: t.area.name
-    })));
-
-    // 2. Check opening hours
+    // Check opening hours
     const openingHoursCheck = await checkOpeningHours(restaurant, arrivalTime);
     if (!openingHoursCheck.isOpen) {
-        console.log('Opening hours check failed:', openingHoursCheck.error);
         return { success: false, error: openingHoursCheck.error };
     }
 
-    // 3. Check time overrides
+    // Check time overrides
     const overrideCheck = await checkTimeOverrides(restaurant, arrivalTime);
     if (overrideCheck.isBlocked) {
-        console.log('Time override check failed:', overrideCheck.error);
         return { success: false, error: overrideCheck.error };
     }
 
-    // 4. Check capacity
+    // Check capacity
     const capacityCheck = await capacityService.checkCapacity(
         data.restaurantId,
         arrivalTime,
         120,
         data.party_size
     );
-
-    console.log('Capacity check:', {
-        available: capacityCheck.available,
-        currentCapacity: capacityCheck.currentCapacity,
-        maxCapacity: capacityCheck.maxCapacity,
-        availableCapacity: capacityCheck.availableCapacity
-    });
 
     if (!capacityCheck.available) {
         return {
@@ -189,23 +155,13 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
         };
     }
 
-    // 5. Get restaurant settings
+    // Get restaurant settings
     const settings = restaurant.reservation_settings?.settings as any;
     const enableTableCombinations = settings?.restaurantSettings?.enable_table_combinations || false;
     const estimatedDuration = settings?.restaurantSettings?.default_reservation_duration_minutes || 120;
 
-    console.log('Table combinations enabled:', enableTableCombinations);
 
-    // Add this at the beginning of createReservationWithValidation, after getting the restaurant:
-    const data231 = await capacityService.debugTableAvailability(
-        data.restaurantId,
-        arrivalTime,
-        estimatedDuration
-    );
-
-    console.log('Table availability debug data:', data231);
-
-    // 6. Find available table(s)
+    // Find available table(s)
     let assignedTables: any = [];
     let bestTable = null;
     let tableCombination = null;
@@ -219,24 +175,8 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
         data.preferred_area
     );
 
-    console.log('Single table found:', bestTable ? {
-        id: bestTable.id,
-        capacity: bestTable.capacity,
-        min: bestTable.min_party_size,
-        max: bestTable.max_party_size
-    } : 'No single table found');
-
-    // If no single table found and table combinations are enabled, look for combinations
-    // In createReservationWithValidation, replace the table combination section:
-
-    // In createReservationWithValidation, replace the table combination section:
-
-    // If no single table found and table combinations are enabled, look for combinations
-    // If no single table found and table combinations are enabled, look for combinations
     if (!bestTable && enableTableCombinations) {
-        console.log('Looking for table combinations with OPTIMIZED capacity selection...');
 
-        // Use the new optimized combination finder that minimizes wasted capacity
         let combinations = await capacityService.findTableCombinationsOptimized(
             data.restaurantId,
             data.party_size,
@@ -245,69 +185,38 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
             20 // Get more combinations to find the optimal one
         );
 
-        console.log('Optimized combinations found:', combinations.length);
-
-        // If the optimized method doesn't find combinations, try the debug version as fallback
         if (combinations.length === 0) {
-            console.log('Trying debug combination finder as fallback...');
             combinations = await capacityService.findTableCombinationsDebug(
                 data.restaurantId,
                 data.party_size,
                 arrivalTime,
                 estimatedDuration
             );
-            console.log('Debug combinations found:', combinations.length);
         }
 
         if (combinations.length > 0) {
             // Select the first combination (already optimized for minimum wasted capacity)
             tableCombination = combinations[0];
             assignedTables = tableCombination.tables;
-
-            const totalCapacity = assignedTables.reduce((sum: number, table: any) => sum + table.capacity, 0);
-            const wastedCapacity = totalCapacity - data.party_size;
-
-            console.log('🎉 OPTIMAL COMBINATION SELECTED:', {
-                tables: assignedTables.map((t: Table) => `${t.table_number} (cap: ${t.capacity})`),
-                totalCapacity,
-                partySize: data.party_size,
-                wastedCapacity,
-                efficiency: Math.round((data.party_size / totalCapacity) * 100) + '%'
-            });
-        } else {
-            console.log('💥 No combinations found despite available capacity');
         }
     } else if (bestTable) {
         assignedTables = [bestTable];
-        const wastedCapacity = bestTable.capacity - data.party_size;
-        console.log('Using single table:', {
-            table: bestTable.table_number,
-            capacity: bestTable.capacity,
-            partySize: data.party_size,
-            wastedCapacity,
-            efficiency: Math.round((data.party_size / bestTable.capacity) * 100) + '%'
-        });
     }
 
     // If still no tables available (single or combination)
     if (assignedTables.length === 0) {
-        console.log('No tables assigned - returning error');
         return {
             success: false,
             error: 'No suitable tables available for the selected time and party size.'
         };
     }
 
-    console.log('Final assigned tables:', assignedTables.map((t: Table) => t.id));
-    console.log('=== RESERVATION DEBUG END ===');
-
-    // ... rest of your function (deposit calculation, transaction, etc.)
-    // 7. Calculate deposit on server side
+    // Calculate deposit on server side
     const depositCalculation = calculateDepositOnServer(settings, arrivalTime, data.party_size, restaurant.timezone || "'Europe/London'");
     const depositAmount = depositCalculation.amount;
     const appliedRule = depositCalculation.appliedRule;
 
-    // 8. Create reservation with transaction
+    // Create reservation with transaction
     return await prisma.$transaction(async (tx) => {
         // Create the reservation
         const reservation = await tx.reservation.create({
@@ -621,8 +530,7 @@ export async function DELETE(request: NextRequest) {
             success: true,
             message: "Reservation deleted successfully",
         });
-    } catch (error) {
-        console.error("[Reservations DELETE]", error);
+    } catch {
         return NextResponse.json(
             { success: false, error: "Failed to delete reservation" },
             { status: 500 }

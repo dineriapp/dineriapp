@@ -37,27 +37,25 @@ interface ProductionCapacityData {
 
 interface DailyCapacityWidgetProps {
     restaurantId: string;
-    selectedDate: Date;
-    selectedTime: string; // Now required
+    date: string,
     partySize: number; // Now required
 }
 
 const DailyCapacityWidget = ({
     restaurantId,
-    selectedDate,
-    selectedTime,
     partySize,
+    date
 }: DailyCapacityWidgetProps) => {
     const [capacityData, setCapacityData] = useState<ProductionCapacityData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchCapacityData = async (date: string, time: string, partySize: number) => {
+    const fetchCapacityData = async (date: string, partySize: number) => {
         setLoading(true);
         setError(null);
 
         try {
-            const url = `/api/restaurants/${restaurantId}/capacity?date=${date}&time=${encodeURIComponent(time)}&partySize=${partySize}`;
+            const url = `/api/restaurants/${restaurantId}/capacity?date=${date}&partySize=${partySize}`;
 
             const response = await fetch(url);
 
@@ -80,9 +78,8 @@ const DailyCapacityWidget = ({
     };
 
     useEffect(() => {
-        const dateString = selectedDate.toISOString().split('T')[0];
-        fetchCapacityData(dateString, selectedTime, partySize);
-    }, [selectedDate, selectedTime, partySize, restaurantId]);
+        fetchCapacityData(date, partySize);
+    }, [date, partySize, restaurantId]);
 
     const getStatusColor = (status: boolean) => {
         return status ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
@@ -130,7 +127,6 @@ const DailyCapacityWidget = ({
                         Reservation Feasibility Check
                     </h2>
                     <p className="text-xs text-gray-500">
-                        {selectedDate.toLocaleDateString()} at {selectedTime}
                         {partySize && ` • ${partySize} guests`}
                     </p>
                 </div>
