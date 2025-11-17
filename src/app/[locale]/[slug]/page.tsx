@@ -56,6 +56,7 @@ export default async function RestaurantPage({ params }: PageProps) {
                 links: {
                     orderBy: { sort_order: "asc" },
                 },
+                reservation_settings: true,
                 menuCategories: {
                     include: {
                         items: {

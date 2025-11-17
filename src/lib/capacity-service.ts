@@ -41,12 +41,6 @@ export class CapacityService {
                 status: {
                     in: ['PENDING', 'CONFIRMED', 'SEATED']
                 },
-                // Get reservations that start within a reasonable window
-                // (assuming no reservation lasts more than 4 hours)
-                arrival_time: {
-                    gte: new Date(arrivalTime.getTime() - 4 * 60 * 60000), // 4 hours before
-                    lte: new Date(arrivalTime.getTime() + 4 * 60 * 60000)  // 4 hours after
-                }
             },
             select: {
                 party_size: true,
@@ -63,7 +57,10 @@ export class CapacityService {
             const reservationStart = new Date(reservation.arrival_time);
             const reservationEnd = new Date(
                 reservationStart.getTime() +
-                (reservation.estimated_duration_minutes || 120) * 60000
+                (120) * 60000
+                // (reservation.estimated_duration_minutes || 120) * 60000
+                // -------fixxxxxxxx
+
             );
 
             // Check if the reservations overlap in time
@@ -105,7 +102,7 @@ export class CapacityService {
         preferredArea?: string
     ) {
         const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
-        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
+        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime, estimatedDuration);
 
         // Build query conditions - REMOVED min_party_size and max_party_size constraints
         const whereConditions: Prisma.TableWhereInput = {
@@ -179,7 +176,7 @@ export class CapacityService {
         maxCombinationSize: number = 10
     ) {
         const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
-        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
+        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime, estimatedDuration);
 
         // Get available tables sorted by capacity ASCENDING (smallest first)
         const availableTables = await prisma.table.findMany({
@@ -292,7 +289,7 @@ export class CapacityService {
     ): Promise<{ tables: Table[]; totalCapacity: number }[]> {
 
         const endTime = new Date(arrivalTime.getTime() + duration * 60000);
-        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
+        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime, duration);
 
         const availableTables = await prisma.table.findMany({
             where: {
@@ -348,7 +345,7 @@ export class CapacityService {
         estimatedDuration: number
     ) {
         const endTime = new Date(arrivalTime.getTime() + estimatedDuration * 60000);
-        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime);
+        const occupiedTableIds = await this.getOccupiedTableIds(restaurantId, arrivalTime, endTime, estimatedDuration);
 
         // Get ALL available tables without any filtering
         const allTables = await prisma.table.findMany({
@@ -400,7 +397,8 @@ export class CapacityService {
     private async getOccupiedTableIds(
         restaurantId: string,
         startTime: Date,
-        endTime: Date
+        endTime: Date,
+        estimatedDuration: number
     ): Promise<string[]> {
         const occupiedReservations = await prisma.tableReservation.findMany({
             where: {
@@ -409,10 +407,6 @@ export class CapacityService {
                     status: {
                         in: ['PENDING', 'CONFIRMED', 'SEATED']
                     },
-                    arrival_time: {
-                        gte: new Date(startTime.getTime() - 4 * 60 * 60000),
-                        lte: new Date(startTime.getTime() + 4 * 60 * 60000)
-                    }
                 }
             },
             include: {
@@ -438,7 +432,7 @@ export class CapacityService {
             const reservationStart = new Date(tr.reservation.arrival_time);
             const reservationEnd = new Date(
                 reservationStart.getTime() +
-                (tr.reservation.estimated_duration_minutes || 120) * 60000
+                (estimatedDuration) * 60000
             );
 
             const overlaps = this.doTimeRangesOverlap(

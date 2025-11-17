@@ -13,6 +13,7 @@ import { NotificationSettingsComponent } from "./settings/notification-settings"
 import RestaurantSettingsManager from "./settings/restaurent-settings";
 import TimeSlotOverrides from "./settings/time-slot-overrides";
 import { SettingsState } from "./settings/types";
+import ReservationControlSettings from "./settings/reservation-control";
 
 const default_data: SettingsState = {
     overrides_settings: {
@@ -20,7 +21,6 @@ const default_data: SettingsState = {
         overrides: [],
     },
     restaurantSettings: {
-        booking_interval_minutes: 30,
         use_tiered_duration: false,
         default_reservation_duration_minutes: 120,
         small_party_duration: 90,
@@ -29,6 +29,9 @@ const default_data: SettingsState = {
         enable_table_combinations: false,
         enable_overbooking: false,
         overbooking_percentage: 0,
+        pause_new_reservations: false,
+        emergency_closure: false,
+        custom_message_for_customers: "",
     },
     notification_settings: {
         notifications_enabled: false,
@@ -134,6 +137,11 @@ export default function SettingsPage() {
                 </p>
             </div>
             <div className="space-y-3">
+                {/* NEW SECTION */}
+                <ReservationControlSettings
+                    settings={settings.restaurantSettings}
+                    updateSettingsSection={updateSettingsSection}
+                />
                 <DepositSystem
                     value={settings.deposit_settings}
                     onChange={(val) => updateSettingsSection("deposit_settings", val)}

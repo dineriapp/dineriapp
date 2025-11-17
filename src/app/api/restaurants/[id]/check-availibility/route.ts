@@ -140,7 +140,6 @@ async function getReservationFeasibilityCheck(
 
     // 6. Try to find available tables (OPTIMIZED LOGIC - IGNORE min/max party size)
     let assignedTables: any = [];
-    let tableMethod = 'none';
 
     // First try single table (IGNORE min/max constraints)
     const singleTable = await findBestTableByCapacityOnly(
@@ -153,7 +152,6 @@ async function getReservationFeasibilityCheck(
 
     if (singleTable) {
         assignedTables = [singleTable];
-        tableMethod = 'single';
     }
     // If no single table and combinations are enabled, try combinations with optimized selection
     else if (enableTableCombinations) {
@@ -171,7 +169,6 @@ async function getReservationFeasibilityCheck(
             // Select the combination with minimum wasted capacity
             const bestCombination = combinations[0];
             assignedTables = bestCombination.tables;
-            tableMethod = 'combination';
         }
     }
 
@@ -182,45 +179,12 @@ async function getReservationFeasibilityCheck(
         return {
             canCreateReservation: false,
             reason: 'No suitable tables available for the selected time and party size.',
-            details: {
-                type: 'table_availability',
-                tableCombinationsEnabled: enableTableCombinations,
-                availableCapacity: capacityCheck.availableCapacity
-            }
         };
     }
-
-    const totalTableCapacity = assignedTables.reduce((sum: number, table: any) => sum + table.capacity, 0);
-    const wastedCapacity = totalTableCapacity - partySize;
 
     return {
         canCreateReservation: true,
         reason: 'Reservation can be created successfully',
-        details: {
-            type: 'available',
-            tables: assignedTables.map((table: any) => ({
-                id: table.id,
-                tableNumber: table.table_number,
-                name: table.name,
-                capacity: table.capacity,
-                area: table.area?.name || 'Unknown'
-            })),
-            tableMethod,
-            tableCount: assignedTables.length,
-            totalTableCapacity,
-            wastedCapacity,
-            efficiency: Math.round((partySize / totalTableCapacity) * 100),
-            capacity: {
-                total: capacityCheck.maxCapacity,
-                available: capacityCheck.availableCapacity,
-                utilized: capacityCheck.currentCapacity,
-                utilizationPercentage: Math.round((capacityCheck.currentCapacity / capacityCheck.maxCapacity) * 100)
-            },
-            settings: {
-                tableCombinationsEnabled: enableTableCombinations,
-                estimatedDuration
-            }
-        }
     };
 }
 

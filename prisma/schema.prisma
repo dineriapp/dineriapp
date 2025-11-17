@@ -273,6 +273,7 @@ model Restaurant {
   Reservation          Reservation[]
   // reservation settings
   reservation_settings ReservationSettings?
+  reservationQuery     ReservationQuery[]
 
   @@index([user_id])
   @@index([slug])
@@ -290,6 +291,26 @@ model ReservationSettings {
   updatedAt DateTime @updatedAt
 
   @@map("reservation_settings")
+}
+
+model ReservationQuery {
+  id          String   @id @default(cuid())
+  date        DateTime
+  time        String
+  name        String
+  email       String
+  message     String
+  phoneNumber String?
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
+  restaurant_id String     @db.Uuid
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([restaurant_id])
 }
 
 model RestaurantView {
@@ -668,16 +689,18 @@ enum TableStatus {
 }
 
 model Payment {
-  id             String                   @id @default(uuid()) @db.Uuid
-  reservation_id String                   @unique @db.Uuid
-  amount         Decimal                  @db.Decimal(10, 2)
-  currency       String                   @default("EUR")
-  payment_method String? // card, cash, etc.
-  transaction_id String? // For online payments
-  refund_id      String? // For refunds
-  status         ReservationPaymentStatus @default(PENDING)
-  paid_at        DateTime?
-  refunded_at    DateTime?
+  id                       String                   @id @default(uuid()) @db.Uuid
+  reservation_id           String                   @unique @db.Uuid
+  amount                   Decimal                  @db.Decimal(10, 2)
+  currency                 String                   @default("EUR")
+  payment_method           String? // card, cash, etc.
+  transaction_id           String? // For online payments
+  stripe_payment_intent_id String? // For online payments
+  stripe_session_id        String? // For online payments
+  refund_id                String? // For refunds
+  status                   ReservationPaymentStatus @default(PENDING)
+  paid_at                  DateTime?
+  refunded_at              DateTime?
 
   // Deposit information
   deposit_amount     Decimal? @db.Decimal(10, 2)

@@ -1,10 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import type { Restaurant } from "@prisma/client";
-import { ArrowLeft, CalendarDays } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";;
+import { ReservationDialog } from "./_components/reservation-query-dialog";
+;
 
 interface ReservationHeaderProps {
     restaurant: Restaurant;
@@ -91,8 +93,11 @@ export function ReservationHeader({
                             className="relative cursor-pointer"
                             size="sm"
                         >
-                            <CalendarDays className="h-4 w-4" />
-                            My Reservations
+                            <ReservationDialog restaurantId={restaurant.id} timezone={restaurant.timezone || ""}>
+                                <button className="w-full leading-[1] h-full cursor-pointer">
+                                    Drop Query
+                                </button>
+                            </ReservationDialog>
                         </Button>
                     </div>
                 </div>

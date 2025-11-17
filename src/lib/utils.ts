@@ -3,6 +3,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { OrderStatusActions } from "./reuseable-data";
 import { Locale } from "@/i18n/routing";
+import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -130,3 +131,94 @@ export const formatDateTime = (date?: string | Date | null, tz?: string) => {
   })
 }
 
+export function getEstimatedDuration(
+  settings: SettingsState | undefined,
+  partySize: number
+) {
+  if (!settings) return 120; // fallback
+
+  const config = settings.restaurantSettings ?? settings;
+
+  // If tiered durations OFF → use default
+  if (!config.use_tiered_duration) {
+    return config.default_reservation_duration_minutes || 120;
+  }
+
+  // TIERED LOGIC
+  if (partySize <= 2) {
+    return config.small_party_duration || config.default_reservation_duration_minutes || 120;
+  }
+
+  if (partySize <= 4) {
+    return config.medium_party_duration || config.default_reservation_duration_minutes || 120;
+  }
+
+  return config.large_party_duration || config.default_reservation_duration_minutes || 120;
+}
+
+import { differenceInDays } from "date-fns";
+
+export function getReservationStatus(date: Date): string {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const selectedDate = new Date(date);
+  selectedDate.setHours(0, 0, 0, 0);
+
+  const daysUntil = differenceInDays(selectedDate, today);
+
+  if (daysUntil <= 2) {
+    return "important";
+  } else if (daysUntil <= 7) {
+    return "upcoming";
+  } else {
+    return "followup";
+  }
+}
+
+export function getQueryStatusColor(status: string): string {
+  switch (status) {
+    case "important":
+      return "bg-rose-100 border-rose-200 text-rose-800 dark:bg-rose-900/20 dark:border-rose-800 dark:text-rose-200";
+
+    case "upcoming":
+      return "bg-sky-100 border-sky-200 text-sky-800 dark:bg-sky-900/20 dark:border-sky-800 dark:text-sky-200";
+
+    case "followup":
+      return "bg-violet-100 border-violet-200 text-violet-800 dark:bg-violet-900/20 dark:border-violet-800 dark:text-violet-200";
+
+    default:
+      return "bg-slate-100 border-slate-200 text-slate-800 dark:bg-slate-900/20 dark:border-slate-800 dark:text-slate-200";
+  }
+}
+
+
+export function getStatusLabel(status: string): string {
+  switch (status) {
+    case "important":
+      return "Important";
+    case "upcoming":
+      return "Upcoming";
+    case "followup":
+      return "Follow Up";
+    default:
+      return "Pending";
+  }
+}
+
+export function generateTimeslots() {
+  const slots: string[] = [];
+  const intervals = ["00", "15", "30", "45"];
+
+  for (let hour = 1; hour <= 12; hour++) {
+    for (const m of intervals) {
+      slots.push(`${hour.toString().padStart(2, "0")}:${m} AM`);
+      slots.push(`${hour.toString().padStart(2, "0")}:${m} PM`);
+    }
+  }
+
+  return slots;
+}
+
+export function normalizeBaseUrl(url: string) {
+  return url.endsWith("/") ? url.slice(0, -1) : url;
+}

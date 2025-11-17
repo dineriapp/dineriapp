@@ -21,6 +21,7 @@ import { DynamicRule, OverridesSettings, SettingsState, TimeSlotOverride } from 
 import DailyCapacityWidget from "./daily-capacity-widget";
 import { toast } from "sonner";
 import { getUTCFromLocalDateTime } from "@/lib/date-utils";
+import ReservationStatusBanner from "./reservation-status-banner";
 
 // Format time slots for dropdown (30-min intervals)
 const fmt = new Intl.DateTimeFormat("en-US", {
@@ -347,6 +348,13 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
     };
 
     if (!restaurant || isLoading) return <LoadingUI text="Loading..." />;
+    if (
+        settings?.restaurantSettings?.pause_new_reservations ||
+        settings?.restaurantSettings?.emergency_closure
+    ) {
+        return <ReservationStatusBanner settings={settings} />;
+    }
+
 
     return (
         <div className="flex items-center justify-center flex-col w-full">

@@ -13,7 +13,6 @@ export type RestaurantWithCount = Restaurant & {
     reservation_settings: { settings: SettingsState }
 };
 
-
 export type GetRestaurantsResponse = {
     restaurants: RestaurantWithCount[];
     error: string;

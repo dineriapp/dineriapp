@@ -305,3 +305,23 @@ export const taxPercentageSchema = z.object({
         .max(100, "Tax percentage cannot exceed 100")
         .transform((n) => Math.round(n * 100) / 100), // round to 2 decimals
 });
+
+export const reservationSchema = z.object({
+    restaurantId: z.string().uuid("Please select a valid restaurant"),
+    date: z.string().refine((val) => {
+        const selectedDate = new Date(val);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return selectedDate >= today;
+    }, "Date must be today or in the future"),
+    time: z
+        .string()
+        .regex(/^(0[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/, "Time must be in HH:MM AM/PM format"),
+    name: z.string().min(2, "Name must be at least 2 characters").max(100),
+    email: z.string().email("Please enter a valid email"),
+    arival_time: z.string().optional().or(z.literal("")),
+    message: z.string().min(10, "Message must be at least 10 characters").max(1000),
+    phoneNumber: z.string().regex(/^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/, "Please enter a valid phone number").optional().or(z.literal("")),
+});
+
+export type ReservationFormData = z.infer<typeof reservationSchema>;

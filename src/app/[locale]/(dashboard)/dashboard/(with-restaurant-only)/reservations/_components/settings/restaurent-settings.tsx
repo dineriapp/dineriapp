@@ -21,44 +21,6 @@ export default function RestaurantSettingsManager({
 
     return (
         <div className="space-y-3">
-            {/* Booking Interval */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Basic Settings</CardTitle>
-                    <CardDescription>Set your booking intervals and default durations</CardDescription>
-                </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label>Booking Interval (minutes)</Label>
-                        <Input
-                            type="number"
-                            value={settings.booking_interval_minutes}
-                            onChange={(e) =>
-                                updateSettingsSection("restaurantSettings", {
-                                    ...settings,
-                                    booking_interval_minutes: parseInt(e.target.value) || 30
-                                })
-                            }
-                        />
-                        <p className="text-xs text-slate-500">Time between booking slots</p>
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Default Reservation Duration (minutes)</Label>
-                        <Input
-                            type="number"
-                            value={settings.default_reservation_duration_minutes}
-                            onChange={(e) =>
-                                updateSettingsSection("restaurantSettings", {
-                                    ...settings,
-                                    default_reservation_duration_minutes: parseInt(e.target.value) || 120
-                                })
-                            }
-                        />
-                        <p className="text-xs text-slate-500">Default table reservation duration</p>
-                    </div>
-                </CardContent>
-            </Card>
-
             {/* Reservation Duration */}
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">

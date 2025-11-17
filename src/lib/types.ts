@@ -288,3 +288,8 @@ export interface ReservationStatsResponse {
     }
     error?: string
 }
+
+export interface ProductionCapacityData {
+    canCreateReservation: boolean;
+    reason: string;
+}

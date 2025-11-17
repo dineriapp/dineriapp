@@ -8,12 +8,16 @@ export interface TimeSlotOverride {
 }
 
 export interface RestaurantSettings {
-    booking_interval_minutes: number;
+    pause_new_reservations: boolean;
+    emergency_closure: boolean;
+    custom_message_for_customers: string;
+
     default_reservation_duration_minutes: number;
     small_party_duration: number;
     medium_party_duration: number;
     large_party_duration: number;
     use_tiered_duration: boolean;
+
     enable_table_combinations: boolean;
     enable_overbooking: boolean;
     overbooking_percentage: number;

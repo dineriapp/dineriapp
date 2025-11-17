@@ -57,7 +57,9 @@ const DailyCapacityWidget = ({
         try {
             const url = `/api/restaurants/${restaurantId}/capacity?date=${date}&partySize=${partySize}`;
 
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                cache: "no-store"
+            });
 
             if (!response.ok) {
                 throw new Error('Failed to fetch capacity data');

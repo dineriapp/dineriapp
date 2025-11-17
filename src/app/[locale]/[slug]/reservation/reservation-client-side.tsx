@@ -1,19 +1,29 @@
-"use client"
-import { Restaurant } from '@prisma/client';
-import BookingInterface from './_components/booking-interface';
-import { ReservationHeader } from './reservation-header';
+"use client";
+
+import { Restaurant } from "@prisma/client";
+import BookingInterface from "./_components/booking-interface";
+import { ReservationHeader } from "./reservation-header";
+import { SettingsState } from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
+import ReservationStatusBanner from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/reservations/reservation-status-banner";
 
 interface ReservationClientProps {
-    restaurant: Restaurant;
+    restaurant: Restaurant & { reservation_settings: { settings: SettingsState } };
 }
 
 const ReservationClientSide = ({ restaurant }: ReservationClientProps) => {
+    const settings = restaurant?.reservation_settings?.settings;
+    const rs = settings?.restaurantSettings;
+
+    // 🔥 if ANY is true → block booking interface
+    const bookingDisabled =
+        rs?.pause_new_reservations === true ||
+        rs?.emergency_closure === true;
+
     return (
         <div
-            style={{
-                backgroundColor: restaurant.bgColor
-            }}
-            className='w-full min-h-screen'>
+            style={{ backgroundColor: restaurant.bgColor }}
+            className="w-full min-h-screen"
+        >
             <ReservationHeader
                 restaurant={restaurant}
                 stylesData={{
@@ -23,12 +33,22 @@ const ReservationClientSide = ({ restaurant }: ReservationClientProps) => {
                     headerText: restaurant.headerText,
                 }}
             />
-            <BookingInterface restaurant={restaurant} />
-            {/* <pre className='grid overflow-x-auto w-full'>
-                {JSON.stringify(restaurant, null, 2)}
-            </pre> */}
-        </div>
-    )
-}
 
-export default ReservationClientSide
+            {/* 🔥 Status Banner (always show if paused/closed/message) */}
+            {settings && bookingDisabled && (
+                <div className="px-5 max-w-7xl mx-auto py-6">
+                    <ReservationStatusBanner settings={settings} />
+                </div>
+            )}
+
+            {/* 🔥 Only show booking interface when NOT paused/closed */}
+            {!bookingDisabled && (
+                <div className="w-full px-5">
+                    <BookingInterface restaurant={restaurant} />
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default ReservationClientSide;

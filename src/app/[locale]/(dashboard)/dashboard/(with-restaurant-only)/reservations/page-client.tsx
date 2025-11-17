@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, DollarSign, Map, Plus, Settings, Users } from "lucide-react"
+import { Calendar, DollarSign, Map, MessageSquare, Plus, Settings, Users } from "lucide-react"
 import { useState } from "react"
 
 import AreasPage from "./_components/areas"
@@ -9,6 +9,7 @@ import NewReservationPage from "./_components/reservations/new-reservation-page"
 import Reservations from "./_components/reservations/reservations"
 import SettingsPage from "./_components/settings"
 import TablesPage from "./_components/tables"
+import QuereisPage from "./_components/queries/queries-page"
 
 const ReservationsPage = () => {
     const [activeTab, setActiveTab] = useState("reservations")
@@ -20,6 +21,7 @@ const ReservationsPage = () => {
         { key: "areas", label: "Areas", icon: <Map className="w-4 h-4" /> },
         { key: "payments", label: "Payments", icon: <DollarSign className="w-4 h-4" /> },
         { key: "settings", label: "Settings", icon: <Settings className="w-4 h-4" /> },
+        { key: "queries", label: "Queries", icon: <MessageSquare className="w-4 h-4" /> },
     ]
 
     const renderContent = () => {
@@ -36,6 +38,8 @@ const ReservationsPage = () => {
                 return <SettingsPage />
             case "add-new":
                 return <NewReservationPage />
+            case "queries":
+                return <QuereisPage />
             default:
                 return <Reservations />
         }
