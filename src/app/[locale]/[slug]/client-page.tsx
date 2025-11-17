@@ -183,6 +183,10 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
     const filteredMenuItems = getFilteredMenuItems()
 
+    const bookingDisabled =
+        restaurant?.reservation_settings?.settings?.restaurantSettings?.pause_new_reservations === true ||
+        restaurant?.reservation_settings?.settings?.restaurantSettings?.emergency_closure === true;
+
     return (
         <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
             <div
@@ -320,8 +324,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                 <motion.div variants={container} initial="hidden" animate="show" className="flex-grow flex flex-col"
                     style={{ rowGap: `${restaurant.buttons_gap_in_px}px` }}
                 >
-                    {restaurant?.reservation_settings?.settings?.restaurantSettings?.pause_new_reservations ||
-                        restaurant?.reservation_settings?.settings?.restaurantSettings?.emergency_closure &&
+                    {!bookingDisabled &&
                         <motion.a
                             variants={item}
                             href={`/${restaurant.slug}/reservation`}
@@ -366,7 +369,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                         restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
                                 }}
                             >
-                                {t("reserve_table")}
+                                {t("reserve_table")}{restaurant.reservation_settings?.settings?.deposit_settings?.depositSystemEnabled ? `${restaurant.reservation_settings?.settings?.deposit_settings?.depositAmount}${restaurant.reservation_settings?.settings?.deposit_settings?.depositCurrency}` : "NO"}
                             </span>
                             {
                                 restaurant?.button_icons_show
