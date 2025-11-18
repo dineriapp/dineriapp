@@ -9,9 +9,16 @@ const RESERVATION_STATS_QUERY_KEY = "reservation-stats"
 
 export const reservationsApi = {
     // Get all reservations for a restaurant
-    getReservations: async (restaurantId: string): Promise<ReservationUp[]> => {
+    getReservations: async (params: { restaurantId?: string; date?: string; from?: string; to?: string }): Promise<ReservationUp[]> => {
+        const queryParams = new URLSearchParams();
+
+        if (params.restaurantId) queryParams.append('restaurantId', params.restaurantId);
+        if (params.date) queryParams.append('date', params.date);
+        if (params.from) queryParams.append('from', params.from);
+        if (params.to) queryParams.append('to', params.to);
+
         const response = await kyInstance
-            .get(`/api/reservations?restaurantId=${restaurantId}`)
+            .get(`/api/reservations?${queryParams}`)
             .json<ReservationsListResponse>()
         if (!response.success) throw new Error(response.error || "Failed to fetch reservations")
         return response.data || []
@@ -52,14 +59,24 @@ export const reservationsApi = {
     },
 }
 
-export function useReservations(restaurantId: string | undefined) {
+export function useReservations(
+    params: {
+        restaurantId: string | undefined;
+        date?: string;
+        from?: string;
+        to?: string;
+    },
+    enabled: boolean = true
+) {
     return useQuery({
-        queryKey: [RESERVATIONS_QUERY_KEY, restaurantId],
-        queryFn: () => reservationsApi.getReservations(restaurantId!),
-        enabled: !!restaurantId,
-        staleTime: 1000 * 60 * 2, // 2 minutes
+        queryKey: [RESERVATIONS_QUERY_KEY, params],
+        queryFn: () => reservationsApi.getReservations(params),
+        enabled: !!params.restaurantId && enabled,
+        // staleTime: 1000 * 60 * 2, // 2 minutes
+        staleTime: 0,
     })
 }
+
 export function useReservationsPayments(restaurantId: string | undefined) {
     return useQuery({
         queryKey: ["payments", RESERVATIONS_QUERY_KEY, restaurantId],

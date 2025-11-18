@@ -1,21 +1,23 @@
 "use client"
 
-import { Calendar, DollarSign, Map, MessageSquare, Plus, Settings, Users } from "lucide-react"
+import { Calendar, DollarSign, LayoutDashboard, Map, MessageSquare, Plus, Settings, Users } from "lucide-react"
 import { useState } from "react"
 
 import AreasPage from "./_components/areas"
+import OverviewPage from "./_components/overview/overview-page"
 import PaymentsPage from "./_components/payments"
+import QuereisPage from "./_components/queries/queries-page"
 import NewReservationPage from "./_components/reservations/new-reservation-page"
 import Reservations from "./_components/reservations/reservations"
 import SettingsPage from "./_components/settings"
 import TablesPage from "./_components/tables"
-import QuereisPage from "./_components/queries/queries-page"
 
 const ReservationsPage = () => {
     const [activeTab, setActiveTab] = useState("reservations")
 
     const tabs = [
         { key: "add-new", label: "Add New", icon: <Plus className="w-4 h-4" /> },
+        { key: "overview", label: "Overview", icon: <LayoutDashboard className="w-4 h-4" /> },
         { key: "reservations", label: "Reservations", icon: <Calendar className="w-4 h-4" /> },
         { key: "tables", label: "Tables", icon: <Users className="w-4 h-4" /> },
         { key: "areas", label: "Areas", icon: <Map className="w-4 h-4" /> },
@@ -28,6 +30,8 @@ const ReservationsPage = () => {
         switch (activeTab) {
             case "reservations":
                 return <Reservations />
+            case "overview":
+                return <OverviewPage />
             case "tables":
                 return <TablesPage />
             case "areas":

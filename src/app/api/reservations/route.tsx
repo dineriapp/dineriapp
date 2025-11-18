@@ -3,20 +3,62 @@ import { CapacityService } from '@/lib/capacity-service';
 import prisma from "@/lib/prisma";
 import type { ReservationsListResponse } from "@/lib/types";
 import { getEstimatedDuration } from '@/lib/utils';
+import { Prisma } from '@prisma/client';
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     try {
-        const restaurantId = request.nextUrl.searchParams.get("restaurantId")
+        const searchParams = request.nextUrl.searchParams;
+        const restaurantId = searchParams.get("restaurantId");
+        const date = searchParams.get("date");
+        const from = searchParams.get("from");
+        const to = searchParams.get("to");
 
         if (!restaurantId) {
             return NextResponse.json<ReservationsListResponse>(
                 { success: false, error: "restaurantId is required" },
                 { status: 400 },
-            )
+            );
         }
 
+        // Build the where clause for date filtering
+        const whereClause: Prisma.ReservationWhereInput = {
+            restaurant_id: restaurantId,
+        };
+
+        // If single date is provided
+        if (date && !from && !to) {
+            const targetDate = new Date(date);
+            const nextDate = new Date(targetDate);
+            nextDate.setDate(nextDate.getDate() + 1);
+
+            whereClause.arrival_time = {
+                gte: targetDate,
+                lt: nextDate,
+            };
+        }
+        // If date range is provided
+        else if (from && to) {
+            const startDate = new Date(from);
+            const endDate = new Date(to);
+            endDate.setDate(endDate.getDate() + 1); // Include the entire end date
+
+            whereClause.arrival_time = {
+                gte: startDate,
+                lt: endDate,
+            };
+        }
+        // If only one of from/to is provided (invalid case)
+        else if ((from && !to) || (!from && to)) {
+            return NextResponse.json<ReservationsListResponse>(
+                { success: false, error: "Both 'from' and 'to' dates are required for date range" },
+                { status: 400 },
+            );
+        }
+        // If no date filters, return all reservations for the restaurant
+
         const reservations = await prisma.reservation.findMany({
+            where: whereClause,
             include: {
                 payment: true,
                 table_reservations: {
@@ -26,18 +68,18 @@ export async function GET(request: NextRequest) {
                 },
             },
             orderBy: { createdAt: "desc" },
-        })
+        });
 
         return NextResponse.json<ReservationsListResponse>({
             success: true,
             data: reservations,
-        })
+        });
     } catch (error) {
-        console.error("[Reservations GET]", error)
+        console.error("[Reservations GET]", error);
         return NextResponse.json<ReservationsListResponse>(
             { success: false, error: "Failed to fetch reservations" },
             { status: 500 },
-        )
+        );
     }
 }
 

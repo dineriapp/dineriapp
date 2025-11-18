@@ -1,13 +1,12 @@
 "use client"
 
-import LoadingUI from "@/components/loading-ui"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useDeleteReservation, useReservations, useReservationStats } from "@/lib/reservation-queries"
+import { useDeleteReservation, useReservations } from "@/lib/reservation-queries"
 import { cn } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { Restaurant } from "@prisma/client"
@@ -15,23 +14,40 @@ import { format } from "date-fns"
 
 import {
     CalendarIcon,
-    CheckCircle2,
-    Clock,
-    List,
-    LogIn,
-    Users2,
-    XCircle
+    List
 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DateRange } from "react-day-picker"
 import { FcTimeline } from "react-icons/fc"
 import { toast } from "sonner"
 import { ReservationCard } from "./reservation-card"
 
+const ReservationCardSkeleton = () => (
+    <Card className="rounded-xl border border-border/60 bg-white animate-pulse">
+        <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+                <div className="space-y-2 flex-1">
+                    <div className="h-5 bg-muted rounded w-1/3"></div>
+                    <div className="h-4 bg-muted rounded w-1/4"></div>
+                </div>
+                <div className="space-y-2">
+                    <div className="h-6 bg-muted rounded w-20"></div>
+                    <div className="h-4 bg-muted rounded w-16"></div>
+                </div>
+            </div>
+            <div className="flex gap-4 mt-4">
+                <div className="h-4 bg-muted rounded w-24"></div>
+                <div className="h-4 bg-muted rounded w-24"></div>
+                <div className="h-4 bg-muted rounded w-24"></div>
+            </div>
+        </CardContent>
+    </Card>
+);
+
 export default function ReservationsPage() {
     const [search, setSearch] = useState("")
     const [statusFilter, setStatusFilter] = useState<string>("ALL")
-    const [dateFilter, setDateFilter] = useState("TODAY")
+    const [dateFilter, setDateFilter] = useState("ALL")
     const [customDate, setCustomDate] = useState<Date | undefined>(new Date())
     const [range, setRange] = useState<DateRange | undefined>(undefined)
     const [view, setView] = useState<"list" | "timeline">("list")
@@ -52,8 +68,61 @@ export default function ReservationsPage() {
     const { selectedRestaurant: restaurant } = useRestaurantStore()
     const restaurantId = restaurant?.id
 
-    const { data: reservations = [], isLoading } = useReservations(restaurantId)
-    const { data: stats } = useReservationStats(restaurantId)
+    // Build query parameters based on date filter selection
+    const getQueryParams = () => {
+        const params: any = { restaurantId };
+
+        // Helper function to format date as YYYY-MM-DD in local timezone
+        const formatLocalDate = (date: Date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        switch (dateFilter) {
+            case "TODAY":
+                params.date = formatLocalDate(new Date());
+                break;
+            case "CUSTOM":
+                if (customDate) {
+                    params.date = formatLocalDate(customDate);
+                }
+                break;
+            case "RANGE":
+                // Only add range parameters if both from and to dates are selected
+                if (range?.from && range?.to) {
+                    params.from = formatLocalDate(range.from);
+                    params.to = formatLocalDate(range.to);
+                }
+                break;
+            case "ALL":
+                // No date parameters - will return all reservations
+                break;
+        }
+        return params;
+    };
+
+    // Determine if we should fetch data based on current filter state
+    const shouldFetchData = () => {
+        if (!restaurantId) return false;
+
+        switch (dateFilter) {
+            case "CUSTOM":
+                return !!customDate;
+            case "RANGE":
+                return !!(range?.from && range?.to);
+            case "TODAY":
+            case "ALL":
+            default:
+                return true;
+        }
+    };
+
+    const queryParams = getQueryParams();
+    const shouldFetch = shouldFetchData();
+
+    const { data: reservations = [], isLoading: reservationsLoading } = useReservations(queryParams, shouldFetch);
 
     const filteredReservations = reservations.filter((res) => {
         const matchesSearch =
@@ -66,11 +135,20 @@ export default function ReservationsPage() {
         return matchesSearch && matchesStatus
     })
 
-
-    if (isLoading) return <LoadingUI text="Loading..." />
-
-    const cardBase =
-        "rounded-xl border !gap-3 border-border/60 bg-white backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200"
+    // Reset custom date and range when switching between date filters
+    useEffect(() => {
+        if (dateFilter === "TODAY") {
+            setCustomDate(new Date());
+            setRange(undefined);
+        } else if (dateFilter === "CUSTOM") {
+            setRange(undefined);
+        } else if (dateFilter === "RANGE") {
+            setCustomDate(undefined);
+        } else if (dateFilter === "ALL") {
+            setCustomDate(undefined);
+            setRange(undefined);
+        }
+    }, [dateFilter]);
 
     return (
         <>
@@ -84,70 +162,7 @@ export default function ReservationsPage() {
                     </div>
                 </div>
 
-                {/* Stats Section */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                    <Card className={cn(cardBase, "col-span-2")}>
-                        <CardHeader className="pb-1 flex items-center justify-between">
-                            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                <Users2 className="w-4 h-4 text-primary/80 text-sm" />
-                                Total Reservations
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-foreground">{stats?.total || 0}</div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className={cardBase}>
-                        <CardHeader className="pb-1 flex items-center justify-between">
-                            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-green-500" />
-                                Confirmed
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-green-600">{stats?.confirmed || 0}</div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className={cardBase}>
-                        <CardHeader className="pb-1 flex items-center justify-between">
-                            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                <Clock className="w-4 h-4 text-yellow-500" />
-                                Pending
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-yellow-600">{stats?.pending || 0}</div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className={cardBase}>
-                        <CardHeader className="pb-1 flex items-center justify-between">
-                            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                <XCircle className="w-4 h-4 text-red-500" />
-                                Cancelled
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-red-600">{stats?.cancelled || 0}</div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className={cardBase}>
-                        <CardHeader className="pb-1 flex items-center justify-between">
-                            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                <LogIn className="w-4 h-4 text-blue-500" />
-                                Checked In
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-blue-600">{stats?.checkedIn || 0}</div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Filters and Add Button */}
+                {/* Filters and Add Button - Always visible and interactive */}
                 <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
                     <div className="flex gap-2 w-full md:w-auto">
                         <Input
@@ -178,6 +193,7 @@ export default function ReservationsPage() {
                                 <SelectValue placeholder="Filter by date" />
                             </SelectTrigger>
                             <SelectContent>
+                                <SelectItem value="ALL">All Dates</SelectItem>
                                 <SelectItem value="TODAY">Today</SelectItem>
                                 <SelectItem value="CUSTOM">Custom Date</SelectItem>
                                 <SelectItem value="RANGE">Date Range</SelectItem>
@@ -192,7 +208,9 @@ export default function ReservationsPage() {
                                         className="w-44 justify-start text-left font-normal"
                                     >
                                         <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
-                                        {customDate ? format(customDate, "PPP") : "Pick a date"}
+                                        <span className="truncate">
+                                            {customDate ? format(customDate, "PPP") : "Pick a date"}
+                                        </span>
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0" align="start">
@@ -251,19 +269,31 @@ export default function ReservationsPage() {
                             </Button>
                         ))}
                     </div>
-
                 </div>
 
                 {/* Reservations List */}
                 <div className="space-y-3">
-                    {filteredReservations.length === 0 ? (
+                    {reservationsLoading ? (
+                        // Show skeleton loading for reservations
+                        <>
+                            {Array.from({ length: 2 }).map((_, index) => (
+                                <ReservationCardSkeleton key={index} />
+                            ))}
+                        </>
+                    ) : filteredReservations.length === 0 ? (
                         <Card>
-                            <CardContent className="pt-6 text-center text-muted-foreground">No reservations found</CardContent>
+                            <CardContent className="p-6 text-center text-muted-foreground">
+                                No reservations found
+                            </CardContent>
                         </Card>
                     ) : (
                         filteredReservations.map((reservation) => (
                             <div key={reservation.id} className={isDeleting ? "opacity-50 pointer-events-none" : ""}>
-                                <ReservationCard reservation={reservation} restaurant={restaurant as Restaurant} handleDelete={handleDelete} />
+                                <ReservationCard
+                                    reservation={reservation}
+                                    restaurant={restaurant as Restaurant}
+                                    handleDelete={handleDelete}
+                                />
                             </div>
                         ))
                     )}
@@ -272,7 +302,3 @@ export default function ReservationsPage() {
         </>
     )
 }
-
-
-
-
