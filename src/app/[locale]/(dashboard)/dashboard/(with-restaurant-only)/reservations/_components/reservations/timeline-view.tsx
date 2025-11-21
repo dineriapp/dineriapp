@@ -90,7 +90,7 @@ export function ReservationTimeline({ reservations, selectedDate, isLoading }: R
                     </div>
                     <div className="w-full relative">
                         {/* Timeline Container */}
-                        {orientation === 'horizontal' ? <HorizontalTimeline reservations={reservations} timezone={selectedRestaurant?.timezone || "Europe/Rome"} /> : <VerticalTimeline />}
+                        {orientation === 'horizontal' ? <HorizontalTimeline reservations={reservations} timezone={selectedRestaurant?.timezone || "Europe/Rome"} /> : <VerticalTimeline reservations={reservations} timezone={selectedRestaurant?.timezone || "Europe/Rome"} />}
                     </div>
                 </div>
             </CardContent>

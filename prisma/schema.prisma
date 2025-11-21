@@ -741,15 +741,3 @@ enum ReservationSource {
   WALK_IN
   PARTNER
 }
-
-// -- Today's reservations by restaurant
-// WHERE restaurant_id = ? AND DATE(arrival_time) = CURRENT_DATE
-
-// -- Date range queries with status
-// WHERE restaurant_id = ? AND arrival_time BETWEEN ? AND ? AND status IN (?)
-
-// -- Capacity checking for time slots  
-// WHERE restaurant_id = ? AND arrival_time BETWEEN ? AND ?
-
-// -- Table matching for party sizes
-// WHERE min_party_size <= ? AND max_party_size >= ? AND capacity >= ?

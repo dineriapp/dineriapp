@@ -1,7 +1,7 @@
 "use client";
 import { ReservationUp } from '@/lib/types';
 import { Check, Clock, UserCircle, WalletMinimal } from 'lucide-react';
-import { useMemo } from 'react';
+import { useMemo, useRef, useState, useCallback } from 'react';
 
 const HOUR_WIDTH = 400; // Increased for better visibility
 const TABLE_LABEL_WIDTH = 200; // Increased for better visibility
@@ -41,6 +41,11 @@ const HorizontalTimeline = ({
     reservations: ReservationUp[];
     timezone: string
 }) => {
+    const timelineRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+
     // Generate time slots for 24 hours in 30-minute intervals using the specified timezone
     const timeSlots = useMemo(() => {
         const fmt = createTimeFormatter(timezone);
@@ -80,11 +85,20 @@ const HorizontalTimeline = ({
     const displayFormatter = useMemo(() => createTimeFormatter(timezone), [timezone]);
 
     // Get unique tables from reservations
-    const tables = Array.from(new Set(
-        reservations.flatMap(res =>
-            res.table_reservations.map(tr => tr.table)
-        )
-    ));
+    const tables = useMemo(() => {
+        const map = new Map<string, ReservationUp["table_reservations"][number]["table"]>();
+
+        reservations.forEach(res => {
+            res.table_reservations.forEach(tr => {
+                if (!map.has(tr.table.id)) {
+                    map.set(tr.table.id, tr.table);
+                }
+            });
+        });
+
+        return Array.from(map.values());
+    }, [reservations]);
+
 
     // Group reservations by table
     const reservationsByTable = tables.reduce((acc, table) => {
@@ -94,9 +108,53 @@ const HorizontalTimeline = ({
         return acc;
     }, {} as Record<string, ReservationUp[]>);
 
+    // Drag scroll handlers
+    const handleMouseDown = useCallback((e: React.MouseEvent) => {
+        if (!timelineRef.current) return;
+
+        setIsDragging(true);
+        setStartX(e.pageX - timelineRef.current.offsetLeft);
+        setScrollLeft(timelineRef.current.scrollLeft);
+
+        // Change cursor to grabbing
+        timelineRef.current.style.cursor = 'grabbing';
+        timelineRef.current.style.userSelect = 'none';
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+        if (isDragging && timelineRef.current) {
+            timelineRef.current.style.cursor = 'grab';
+        }
+        setIsDragging(false);
+    }, [isDragging]);
+
+    const handleMouseUp = useCallback(() => {
+        if (timelineRef.current) {
+            timelineRef.current.style.cursor = 'grab';
+            timelineRef.current.style.userSelect = 'auto';
+        }
+        setIsDragging(false);
+    }, []);
+
+    const handleMouseMove = useCallback((e: React.MouseEvent) => {
+        if (!isDragging || !timelineRef.current) return;
+
+        e.preventDefault();
+        const x = e.pageX - timelineRef.current.offsetLeft;
+        const walk = (x - startX) * 2; // Scroll multiplier
+        timelineRef.current.scrollLeft = scrollLeft - walk;
+    }, [isDragging, startX, scrollLeft]);
+
     return (
         <>
-            <div className="relative overflow-x-auto overflow-y-auto h-auto border border-slate-200 rounded-lg shadow-sm">
+            <div
+                ref={timelineRef}
+                className="relative overflow-x-auto overflow-y-auto h-auto border border-slate-200 rounded-lg shadow-sm cursor-grab active:cursor-grabbing"
+                onMouseDown={handleMouseDown}
+                onMouseLeave={handleMouseLeave}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+            >
                 <div style={{ minWidth: `${TABLE_LABEL_WIDTH + HOUR_WIDTH * totalHours}px` }} >
                     {/* Header with time labels */}
                     <div className="flex border-b-2 border-slate-300 bg-slate-50 sticky top-0 z-20 shadow-sm">
@@ -128,7 +186,7 @@ const HorizontalTimeline = ({
                                 {/* Table name column - sticky */}
                                 <div
                                     style={{ width: `${TABLE_LABEL_WIDTH}px` }}
-                                    className="border-r border-slate-200 px-4 py-3 flex items-center sticky left-0 z-10 bg-white border-y shadow-r">
+                                    className="border-r border-slate-200 px-4 py-3 flex items-center sticky left-0 z-10 bg-white shadow-r">
                                     <div className="flex flex-col">
                                         <div className="font-semibold text-sm text-slate-900 flex items-center gap-2">
                                             <div className={`w-3 h-3 rounded-full ${table.status === 'ACTIVE' ? 'bg-green-500' : 'bg-gray-400'}`} />
@@ -266,7 +324,7 @@ ${reservation.preferred_area ? `Preferred Area: ${reservation.preferred_area}` :
                 </div>
             </div>
             {/* Legend */}
-            <div className=" mt-3 bg-white border-t border-slate-200 px-4 py-2 flex items-center gap-6 text-xs">
+            <div className=" mt-3 bg-white border-t border-slate-200 py-2 flex items-center gap-6 text-xs">
                 <div className="font-semibold text-slate-700">Legend:</div>
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-blue-500 rounded"></div>
