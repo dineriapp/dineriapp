@@ -293,3 +293,19 @@ export interface ProductionCapacityData {
     canCreateReservation: boolean;
     reason: string;
 }
+
+export interface ReservationCounts {
+    pending_reservations: number;
+    cancelled_reservations: number;
+    completed_reservations: number;
+    confirmed_reservations: number;
+    no_show_reservations: number;
+    seated_reservations: number;
+}
+
+export interface AnalyticsStatusBreakdownResponse {
+    success: boolean;
+    data: {
+        status_breakdown: ReservationCounts;
+    };
+}

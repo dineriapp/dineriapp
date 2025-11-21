@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useDeleteReservation, useReservations } from "@/lib/reservation-queries"
+import { useDeleteReservation, useReservations, useUpdateReservationStatus } from "@/lib/reservation-queries"
 import { cn } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { Restaurant } from "@prisma/client"
@@ -53,6 +53,7 @@ export default function ReservationsPage() {
     const [range, setRange] = useState<DateRange | undefined>(undefined)
     const [view, setView] = useState<"list" | "timeline">("list")
     const { mutate: deleteReservation, isPending: isDeleting } = useDeleteReservation();
+    const { mutate: UpdateStatus, isPending: isUpdating } = useUpdateReservationStatus();
 
     const handleDelete = (id: string) => {
         deleteReservation(id, {
@@ -305,9 +306,10 @@ export default function ReservationsPage() {
                                     </Card>
                                 ) : (
                                     filteredReservations.map((reservation) => (
-                                        <div key={reservation.id} className={isDeleting ? "opacity-50 pointer-events-none" : ""}>
+                                        <div key={reservation.id} className={isDeleting || isUpdating ? "opacity-50 pointer-events-none" : ""}>
                                             <ReservationCard
                                                 reservation={reservation}
+                                                UpdateStatus={UpdateStatus}
                                                 restaurant={restaurant as Restaurant}
                                                 handleDelete={handleDelete}
                                             />

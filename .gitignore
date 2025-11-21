@@ -20,7 +20,8 @@
 settings.json
 # production
 /build
-
+draft.tsx
+/draft.tsx
 # misc
 .DS_Store
 *.pem

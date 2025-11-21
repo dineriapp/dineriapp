@@ -3,16 +3,15 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
 import { ReservationUp } from "@/lib/types"
 import { formatDateTime } from "@/lib/utils"
 import { getPaymentStatusBadge, getReservationStatusIcon } from "@/lib/utils-jsx"
-import { Restaurant } from "@prisma/client"
-
+import { ReservationStatus, Restaurant } from "@prisma/client"
 import {
     CheckCircle2,
     CheckSquare,
     Clock,
-    Edit,
     EuroIcon,
     EyeOff,
     FilePlus2,
@@ -24,8 +23,22 @@ import {
     XCircle
 } from "lucide-react"
 
+const STATUS_COLORS: Record<string, string> = {
+    PENDING: "bg-yellow-100 text-yellow-800 border-yellow-300",
+    CONFIRMED: "bg-green-100 text-green-800 border-green-300",
+    SEATED: "bg-blue-100 text-blue-800 border-blue-300",
+    COMPLETED: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    CANCELLED: "bg-red-100 text-red-800 border-red-300",
+    NO_SHOW: "bg-gray-200 text-gray-700 border-gray-300",
+};
 
-export function ReservationCard({ reservation, restaurant, handleDelete }: { reservation: ReservationUp, restaurant: Restaurant, handleDelete: (id: string) => void }) {
+
+export function ReservationCard({ reservation, UpdateStatus, restaurant, handleDelete }: {
+    reservation: ReservationUp, UpdateStatus: (args: {
+        reservationId: string;
+        status: ReservationStatus;
+    }) => void; restaurant: Restaurant, handleDelete: (id: string) => void
+}) {
     const timeZone = restaurant?.timezone || "Asia/Karachi"
 
     return (
@@ -166,14 +179,28 @@ export function ReservationCard({ reservation, restaurant, handleDelete }: { res
 
                 {/* --- Action Buttons --- */}
                 <div className="flex flex-wrap gap-2 border-t border-border/30">
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        className="gap-2 border-border/60 bg-background/70 hover:bg-background/90"
+                    <Select
+                        defaultValue={reservation.status}
+                        onValueChange={(value) => {
+                            UpdateStatus(
+                                { reservationId: reservation.id, status: value as ReservationStatus },
+
+                            );
+                        }}
                     >
-                        <Edit className="w-4 h-4" />
-                        Edit
-                    </Button>
+                        <SelectTrigger className={`w-fit cursor-pointer ${STATUS_COLORS[reservation.status]}`}>
+                            <span className="capitalize">{reservation.status.toLowerCase()}</span>
+                        </SelectTrigger>
+
+                        <SelectContent>
+                            <SelectItem value="PENDING">Pending</SelectItem>
+                            <SelectItem value="CONFIRMED">Confirmed</SelectItem>
+                            <SelectItem value="SEATED">Seated</SelectItem>
+                            <SelectItem value="COMPLETED">Completed</SelectItem>
+                            <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                            <SelectItem value="NO_SHOW">No Show</SelectItem>
+                        </SelectContent>
+                    </Select>
                     <Button
                         size="sm"
                         variant="destructive"

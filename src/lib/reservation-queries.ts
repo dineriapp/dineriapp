@@ -1,11 +1,11 @@
 "use client"
 
-import type { ReservationPayment, ReservationsListResponse, ReservationsPaymentsListResponse, ReservationStatsResponse, ReservationUp } from "@/lib/types"
+import type { AnalyticsStatusBreakdownResponse, ReservationPayment, ReservationsListResponse, ReservationsPaymentsListResponse, ReservationUp } from "@/lib/types"
+import { ReservationStatus } from "@prisma/client"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import kyInstance from "./ky"
 
 const RESERVATIONS_QUERY_KEY = "reservations"
-const RESERVATION_STATS_QUERY_KEY = "reservation-stats"
 
 export const reservationsApi = {
     // Get all reservations for a restaurant
@@ -40,22 +40,65 @@ export const reservationsApi = {
         if (!response.success) throw new Error(response.error || "Failed to fetch reservations")
         return response.data || []
     },
+    fetchReservationAnalyticsStatusBreakdown: async (restaurantId: string | undefined, date?: string): Promise<AnalyticsStatusBreakdownResponse> => {
+        const params = new URLSearchParams({
+            ...(date && { date }),
+            ...(restaurantId && { restaurantId }),
+        });
 
-    // Get reservation stats
-    getReservationStats: async (
-        restaurantId: string,
-    ): Promise<{
-        total: number
-        confirmed: number
-        pending: number
-        cancelled: number
-        checkedIn: number
-    }> => {
-        const response = await kyInstance
-            .get(`/api/reservations/stats?restaurantId=${restaurantId}`)
-            .json<ReservationStatsResponse>()
-        if (!response.success) throw new Error(response.error || "Failed to fetch stats")
-        return response.data || { total: 0, confirmed: 0, pending: 0, cancelled: 0, checkedIn: 0 }
+        const response = await fetch(`/api/reservations/analytics/status-breakdown?${params}`);
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch analytics');
+        }
+
+        return response.json();
+    },
+    fetchReservationAnalyticsMainStats: async (
+        restaurantId: string | undefined,
+        date?: string
+    ): Promise<any> => {
+        const params = new URLSearchParams({
+            ...(date && { date }),
+            ...(restaurantId && { restaurantId }),
+        });
+
+        const response = await fetch(`/api/reservations/analytics/main-stats?${params}`);
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch main stats analytics");
+        }
+
+        return response.json();
+    },
+    fetchReservationAnalyticsDayCapacity: async (
+        restaurantId: string | undefined,
+        date?: string
+    ): Promise<any> => {
+        const params = new URLSearchParams({
+            ...(date && { date }),
+            ...(restaurantId && { restaurantId }),
+        });
+
+        const response = await fetch(`/api/reservations/analytics/day-capacity?${params}`);
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch day capacity analytics");
+        }
+
+        return response.json();
+    },
+    updateReservationStatus: async (reservationId: string, status: ReservationStatus) => {
+        const res = await fetch("/api/reservations/update", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reservationId, status }),
+        });
+
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error);
+
+        return data.data;
     },
 }
 
@@ -86,14 +129,6 @@ export function useReservationsPayments(restaurantId: string | undefined) {
     })
 }
 
-export function useReservationStats(restaurantId: string | undefined) {
-    return useQuery({
-        queryKey: [RESERVATION_STATS_QUERY_KEY, restaurantId],
-        queryFn: () => reservationsApi.getReservationStats(restaurantId!),
-        enabled: !!restaurantId,
-        staleTime: 1000 * 60 * 2, // 2 minutes
-    })
-}
 
 //  Delete reservation mutation
 export function useDeleteReservation() {
@@ -105,6 +140,89 @@ export function useDeleteReservation() {
         onSuccess: () => {
             // Invalidate cache to refetch updated list
             queryClient.invalidateQueries({ queryKey: [RESERVATIONS_QUERY_KEY] });
+        },
+    });
+}
+
+export const useReservationAnalyticsStatusBreakdown = (restaurantId: string | undefined, date?: string) => {
+    return useQuery({
+        queryKey: ['reservation-analytics', restaurantId, date],
+        queryFn: () =>
+            reservationsApi.fetchReservationAnalyticsStatusBreakdown(restaurantId, date),
+        enabled: Boolean(restaurantId && date),
+        staleTime: 0,
+    });
+};
+
+export const useReservationAnalyticsMainStats = (
+    restaurantId: string | undefined,
+    date?: string
+) => {
+    return useQuery({
+        queryKey: ['reservation-analytics-main', restaurantId, date],
+        queryFn: () =>
+            reservationsApi.fetchReservationAnalyticsMainStats(restaurantId, date),
+        enabled: Boolean(restaurantId && date),
+        staleTime: 0,
+    });
+};
+
+export const useReservationAnalyticsDayCapacity = (
+    restaurantId: string | undefined,
+    date?: string
+) => {
+    return useQuery({
+        queryKey: ['reservation-analytics-day-capacity', restaurantId, date],
+        queryFn: () =>
+            reservationsApi.fetchReservationAnalyticsDayCapacity(restaurantId, date),
+        enabled: Boolean(restaurantId && date),
+        staleTime: 0,
+    });
+};
+
+export function useUpdateReservationStatus() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({
+            reservationId,
+            status,
+        }: {
+            reservationId: string;
+            status: ReservationStatus;
+        }) => reservationsApi.updateReservationStatus(reservationId, status),
+
+        onSuccess: (updatedReservation) => {
+            // Update ALL reservations queries
+            queryClient.setQueriesData(
+                { queryKey: [RESERVATIONS_QUERY_KEY] },
+                (oldData: any) => {
+                    if (!oldData) return oldData;
+
+                    // When data is list of reservations (array)
+                    if (Array.isArray(oldData)) {
+                        return oldData.map((r) =>
+                            r.id === updatedReservation.id
+                                ? { ...r, status: updatedReservation.status }
+                                : r
+                        );
+                    }
+
+                    // When data is { data: [...] }
+                    if (oldData?.data) {
+                        return {
+                            ...oldData,
+                            data: oldData.data.map((r: any) =>
+                                r.id === updatedReservation.id
+                                    ? { ...r, status: updatedReservation.status }
+                                    : r
+                            ),
+                        };
+                    }
+
+                    return oldData;
+                }
+            );
         },
     });
 }
