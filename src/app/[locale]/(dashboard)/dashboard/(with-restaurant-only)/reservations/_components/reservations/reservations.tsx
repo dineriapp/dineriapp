@@ -21,6 +21,7 @@ import { DateRange } from "react-day-picker"
 import { FcTimeline } from "react-icons/fc"
 import { toast } from "sonner"
 import { ReservationCard } from "./reservation-card"
+import { ReservationTimeline } from "./timeline-view"
 
 const ReservationCardSkeleton = () => (
     <Card className="rounded-xl border border-border/60 bg-white animate-pulse">
@@ -270,33 +271,52 @@ export default function ReservationsPage() {
                         ))}
                     </div>
                 </div>
-
                 {/* Reservations List */}
                 <div className="space-y-3">
-                    {reservationsLoading ? (
-                        // Show skeleton loading for reservations
-                        <>
-                            {Array.from({ length: 2 }).map((_, index) => (
-                                <ReservationCardSkeleton key={index} />
-                            ))}
-                        </>
-                    ) : filteredReservations.length === 0 ? (
-                        <Card>
-                            <CardContent className="p-6 text-center text-muted-foreground">
-                                No reservations found
-                            </CardContent>
-                        </Card>
-                    ) : (
-                        filteredReservations.map((reservation) => (
-                            <div key={reservation.id} className={isDeleting ? "opacity-50 pointer-events-none" : ""}>
-                                <ReservationCard
-                                    reservation={reservation}
-                                    restaurant={restaurant as Restaurant}
-                                    handleDelete={handleDelete}
+                    {
+                        view === "timeline" ?
+                            <>
+                                <ReservationTimeline
+                                    reservations={filteredReservations}
+                                    selectedDate={
+                                        dateFilter === "CUSTOM"
+                                            ? customDate
+                                            : dateFilter === "TODAY"
+                                                ? new Date()
+                                                : undefined
+                                    }
+                                    isLoading={reservationsLoading}
                                 />
-                            </div>
-                        ))
-                    )}
+                            </>
+                            :
+                            <>
+                                {reservationsLoading ? (
+                                    // Show skeleton loading for reservations
+                                    <>
+                                        {Array.from({ length: 2 }).map((_, index) => (
+                                            <ReservationCardSkeleton key={index} />
+                                        ))}
+                                    </>
+                                ) : filteredReservations.length === 0 ? (
+                                    <Card>
+                                        <CardContent className="p-6 text-center text-muted-foreground">
+                                            No reservations found
+                                        </CardContent>
+                                    </Card>
+                                ) : (
+                                    filteredReservations.map((reservation) => (
+                                        <div key={reservation.id} className={isDeleting ? "opacity-50 pointer-events-none" : ""}>
+                                            <ReservationCard
+                                                reservation={reservation}
+                                                restaurant={restaurant as Restaurant}
+                                                handleDelete={handleDelete}
+                                            />
+                                        </div>
+                                    ))
+                                )}
+                            </>
+                    }
+
                 </div>
             </div>
         </>
