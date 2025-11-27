@@ -117,37 +117,43 @@ export default function ReservationPoliciesDialog({
                         </div>
                     ) : (
                         <>
-                            <PolicyPreviewCard
+                            {get("cancellation")!.enabled && <PolicyPreviewCard
                                 title="Cancellation Policy"
                                 icon="⛔"
                                 description="Define your cancellation rules and timeframes."
                                 enabled={get("cancellation")!.enabled}
                                 html={get("cancellation")!.html}
-                            />
-
-                            <PolicyPreviewCard
-                                title="Deposit Policy"
-                                icon="💰"
-                                description="Explain deposit requirements."
-                                enabled={get("deposit")!.enabled}
-                                html={get("deposit")!.html}
-                            />
-
-                            <PolicyPreviewCard
-                                title="Dining Policy"
-                                icon="🍽️"
-                                description="Set rules for dining experience."
-                                enabled={get("dining")!.enabled}
-                                html={get("dining")!.html}
-                            />
-
-                            <PolicyPreviewCard
-                                title="No-Show Policy"
-                                icon="⚠️"
-                                description="Define consequences for missed reservations."
-                                enabled={get("no_show")!.enabled}
-                                html={get("no_show")!.html}
-                            />
+                            />}
+                            {
+                                get("deposit")!.enabled &&
+                                <PolicyPreviewCard
+                                    title="Deposit Policy"
+                                    icon="💰"
+                                    description="Explain deposit requirements."
+                                    enabled={get("deposit")!.enabled}
+                                    html={get("deposit")!.html}
+                                />
+                            }
+                            {
+                                get("dining")!.enabled &&
+                                <PolicyPreviewCard
+                                    title="Dining Policy"
+                                    icon="🍽️"
+                                    description="Set rules for dining experience."
+                                    enabled={get("dining")!.enabled}
+                                    html={get("dining")!.html}
+                                />
+                            }
+                            {
+                                get("no_show")!.enabled &&
+                                <PolicyPreviewCard
+                                    title="No-Show Policy"
+                                    icon="⚠️"
+                                    description="Define consequences for missed reservations."
+                                    enabled={get("no_show")!.enabled}
+                                    html={get("no_show")!.html}
+                                />
+                            }
                         </>
                     )}
                 </div>
