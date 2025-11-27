@@ -1,13 +1,13 @@
 "use client";
 
-import { Restaurant } from "@prisma/client";
+import { ReservationPolicy, Restaurant } from "@prisma/client";
 import BookingInterface from "./_components/booking-interface";
 import { ReservationHeader } from "./reservation-header";
 import { SettingsState } from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
 import ReservationStatusBanner from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/reservations/reservation-status-banner";
 
 interface ReservationClientProps {
-    restaurant: Restaurant & { reservation_settings: { settings: SettingsState } };
+    restaurant: Restaurant & { reservation_settings: { settings: SettingsState }, Reservation_policy: ReservationPolicy | null };
 }
 
 const ReservationClientSide = ({ restaurant }: ReservationClientProps) => {

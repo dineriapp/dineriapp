@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, DollarSign, LayoutDashboard, Map, MessageSquare, Plus, Settings, Users } from "lucide-react"
+import { Calendar, DollarSign, LayoutDashboard, Map, MessageSquare, Notebook, Plus, Settings, Users } from "lucide-react"
 import { useState } from "react"
 
 import AreasPage from "./_components/areas"
@@ -11,6 +11,7 @@ import NewReservationPage from "./_components/reservations/new-reservation-page"
 import Reservations from "./_components/reservations/reservations"
 import SettingsPage from "./_components/settings"
 import TablesPage from "./_components/tables"
+import PoliciesTab from "./_components/policies/policies-tab"
 
 const ReservationsPage = () => {
     const [activeTab, setActiveTab] = useState("reservations")
@@ -22,8 +23,9 @@ const ReservationsPage = () => {
         { key: "tables", label: "Tables", icon: <Users className="w-4 h-4" /> },
         { key: "areas", label: "Areas", icon: <Map className="w-4 h-4" /> },
         { key: "payments", label: "Payments", icon: <DollarSign className="w-4 h-4" /> },
-        { key: "settings", label: "Settings", icon: <Settings className="w-4 h-4" /> },
         { key: "queries", label: "Queries", icon: <MessageSquare className="w-4 h-4" /> },
+        { key: "policies", label: "Policies", icon: <Notebook className="w-4 h-4" /> },
+        { key: "settings", label: "Settings", icon: <Settings className="w-4 h-4" /> },
     ]
 
     const renderContent = () => {
@@ -44,6 +46,8 @@ const ReservationsPage = () => {
                 return <NewReservationPage />
             case "queries":
                 return <QuereisPage />
+            case "policies":
+                return <PoliciesTab />
             default:
                 return <Reservations />
         }

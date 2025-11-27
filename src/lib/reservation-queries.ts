@@ -1,11 +1,14 @@
 "use client"
 
-import type { AnalyticsStatusBreakdownResponse, ReservationPayment, ReservationsListResponse, ReservationsPaymentsListResponse, ReservationUp } from "@/lib/types"
-import { ReservationStatus } from "@prisma/client"
+import type { AnalyticsStatusBreakdownResponse, ReservationPayment, ReservationPolicyResponse, ReservationPolicyType, ReservationsListResponse, ReservationsPaymentsListResponse, ReservationUp } from "@/lib/types"
+import { ReservationPolicy, ReservationStatus } from "@prisma/client"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import kyInstance from "./ky"
 
 const RESERVATIONS_QUERY_KEY = "reservations"
+
+
+
 
 export const reservationsApi = {
     // Get all reservations for a restaurant
@@ -100,7 +103,32 @@ export const reservationsApi = {
 
         return data.data;
     },
-}
+    getReservationPolicies: async (
+        restaurantId: string
+    ): Promise<ReservationPolicy | null> => {
+        const res = await kyInstance.get(
+            `/api/reservations/policies?restaurantId=${restaurantId}`,
+            { throwHttpErrors: false }
+        );
+
+        if (res.status === 404) {
+            // ✅ Not an error for UI: means restaurant hasn't created policies yet
+            return null;
+        }
+
+        if (!res.ok) {
+            const body = await res.json<{
+                success: boolean;
+                data?: ReservationPolicy;
+                error?: string;
+            }>().catch(() => null);
+            throw new Error(body?.error || "Failed to fetch reservation policies");
+        }
+
+        const body = await res.json<{ success: true; data: ReservationPolicy }>();
+        return body.data;
+    },
+};
 
 export function useReservations(
     params: {
@@ -223,6 +251,50 @@ export function useUpdateReservationStatus() {
                     return oldData;
                 }
             );
+        },
+    });
+}
+
+export function useReservationPolicies(restaurantId: string | undefined) {
+    return useQuery({
+        queryKey: ["reservation-policies", restaurantId],
+        queryFn: () => reservationsApi.getReservationPolicies(restaurantId!),
+        enabled: !!restaurantId,
+        staleTime: 0,
+    });
+}
+
+async function upsertReservationPolicy(
+    payload: {
+        restaurantId: string; // uuid
+        type: ReservationPolicyType;
+        text: string; // html string
+        enabled: boolean;
+    }
+): Promise<ReservationPolicy> {
+    const res = await kyInstance.put("/api/reservations/policies", { json: payload });
+
+    const body = await res.json<ReservationPolicyResponse>();
+
+    if (!body.success) {
+        // keep server error shape (zod flatten or string) available to UI
+        throw new Error(typeof body.error === "string" ? body.error : "Failed to update policy");
+    }
+
+    return body.data;
+}
+
+export function useUpdateReservationPolicy() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: upsertReservationPolicy,
+        onSuccess: (updatedPolicy, vars) => {
+            // Keep GET cache in sync
+            queryClient.setQueryData(["reservation-policies", vars.restaurantId], updatedPolicy);
+
+            // Or if you prefer refetch:
+            queryClient.invalidateQueries({ queryKey: ["reservation-policies", vars.restaurantId] });
         },
     });
 }

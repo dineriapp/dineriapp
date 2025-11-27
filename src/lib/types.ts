@@ -1,4 +1,4 @@
-import { Area, GradientDirection, Payment, Prisma, Reservation, Table } from "@prisma/client";
+import { Area, GradientDirection, Payment, Prisma, Reservation, ReservationPolicy, Table } from "@prisma/client";
 
 export interface Restaurant {
     id: string;
@@ -309,3 +309,17 @@ export interface AnalyticsStatusBreakdownResponse {
         status_breakdown: ReservationCounts;
     };
 }
+
+
+export type ReservationPolicyType = "cancellation" | "deposit" | "dining" | "no_show";
+
+export type UpdateReservationPolicyInput = {
+    restaurantId: string;
+    type: ReservationPolicyType;
+    text: string;      // HTML string (your textarea will hold HTML)
+    enabled: boolean;
+};
+
+export type ReservationPolicyResponse =
+    | { success: true; data: ReservationPolicy }
+    | { success: false; error: unknown };

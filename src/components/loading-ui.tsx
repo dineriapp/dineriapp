@@ -1,8 +1,9 @@
+import { cn } from '@/lib/utils'
 import React from 'react'
 
-const LoadingUI = ({ text }: { text: string }) => {
+const LoadingUI = ({ text, className }: { text: string, className?: string }) => {
     return (
-        <div className="max-w-[1200px] mx-auto px-4 py-16 flex justify-center">
+        <div className={cn("max-w-[1200px] mx-auto px-4 py-16 flex justify-center", className)}>
             <div className="flex items-center space-x-2 text-slate-500">
                 <svg
                     className="animate-spin h-5 w-5 text-teal-600"

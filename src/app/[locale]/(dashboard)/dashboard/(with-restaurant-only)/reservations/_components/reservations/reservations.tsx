@@ -260,9 +260,9 @@ export default function ReservationsPage() {
                                 size="sm"
                                 onClick={() => setView(key as any)}
                                 className={cn(
-                                    "flex items-center gap-2 px-3 py-2 rounded-md transition-all",
+                                    "flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-all",
                                     view === key
-                                        ? "bg-primary text-white shadow-sm hover:bg-primary/90"
+                                        ? "bg-primary text-white hover:text-white shadow-sm hover:bg-primary/90"
                                         : "text-muted-foreground hover:bg-muted/70"
                                 )}
                             >

@@ -274,11 +274,37 @@ model Restaurant {
   // reservation settings
   reservation_settings ReservationSettings?
   reservationQuery     ReservationQuery[]
+  Reservation_policy   ReservationPolicy?
 
   @@index([user_id])
   @@index([slug])
   @@index([createdAt])
   @@map("restaurants")
+}
+
+model ReservationPolicy {
+  id String @id @default(cuid())
+
+  restaurant_id String     @unique @db.Uuid
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
+
+  // --- FOUR POLICY FIELDS WITH HTML DEFAULTS ---
+  cancellation_policy  String  @default("<p>No cancellation policy added yet.</p>") @db.Text
+  cancellation_enabled Boolean @default(true)
+
+  deposit_policy  String  @default("<p>No deposit policy added yet.</p>") @db.Text
+  deposit_enabled Boolean @default(true)
+
+  dining_policy  String  @default("<p>No dining policy added yet.</p>") @db.Text
+  dining_enabled Boolean @default(true)
+
+  no_show_policy  String  @default("<p>No show policy added yet.</p>") @db.Text
+  no_show_enabled Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reservation_policy")
 }
 
 model ReservationSettings {

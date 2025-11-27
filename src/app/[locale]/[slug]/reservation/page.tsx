@@ -12,7 +12,8 @@ async function getRestaurant(slug: string) {
         const restaurant = await prisma.restaurant.findUnique({
             where: { slug },
             include: {
-                reservation_settings: true
+                reservation_settings: true,
+                Reservation_policy: true
             },
         })
 
@@ -43,7 +44,8 @@ export default async function MenuPage({ params }: MenuPageProps) {
                         reservation_settings: {
                             ...restaurant.reservation_settings,
                             settings
-                        }
+                        },
+                        Reservation_policy: restaurant.Reservation_policy
                     }
                 }
             />

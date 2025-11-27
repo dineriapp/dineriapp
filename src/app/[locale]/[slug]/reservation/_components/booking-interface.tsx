@@ -18,10 +18,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAreas } from "@/lib/area-queries";
 import { getUTCFromLocalDateTime } from "@/lib/date-utils";
 import { OpeningHoursData } from "@/types";
-import { Restaurant } from "@prisma/client";
+import { ReservationPolicy, Restaurant } from "@prisma/client";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import DailyCapacityWidget from "./daily-capacity-widget";
+import ReservationPoliciesDialog from "./reservation-policies-dialog";
 import { ReservationDialog } from "./reservation-query-dialog";
 
 // Format time slots for dropdown (30-min intervals)
@@ -38,7 +39,7 @@ const timeSlots = Array.from({ length: 48 }, (_, i) => {
     return { value: str, label: str };
 });
 
-const BookingInterface = ({ restaurant }: { restaurant: Restaurant & { reservation_settings: { settings: SettingsState } } }) => {
+const BookingInterface = ({ restaurant }: { restaurant: Restaurant & { reservation_settings: { settings: SettingsState }, Reservation_policy: ReservationPolicy | null } }) => {
     const { data: areas = [], isLoading } = useAreas(restaurant?.id);
 
     const settings = restaurant?.reservation_settings?.settings as SettingsState | undefined;
@@ -637,6 +638,26 @@ const BookingInterface = ({ restaurant }: { restaurant: Restaurant & { reservati
                                                     rows={3}
                                                     className="w-full"
                                                 />
+                                            </div>
+                                            <div className="space-y-2 sm:col-span-2">
+                                                {/* Checkbox row */}
+                                                <label className="flex items-start gap-2 text-sm text-slate-700">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="mt-1 h-4 w-4 rounded border-slate-300"
+                                                    />
+                                                    <span>
+                                                        I agree to the reservation policies.{" "}
+                                                    </span>
+                                                </label>
+
+                                                {/* Button under checkbox */}
+                                                {restaurant?.Reservation_policy && (
+                                                    <ReservationPoliciesDialog policies={restaurant.Reservation_policy}>
+                                                        <span className="text-blue-500 underline cursor-pointer">{""}Click here to view policies
+                                                        </span>
+                                                    </ReservationPoliciesDialog>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
