@@ -20,6 +20,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Plus, X } from "lucide-react";
 import { CancellationPolicy, DepositSystemSettings, DepositType, DynamicRule, RuleType } from "./types";
+import { useTranslations } from "next-intl";
 
 interface DepositSystemProps {
     value: DepositSystemSettings;
@@ -27,6 +28,24 @@ interface DepositSystemProps {
 }
 
 export default function DepositSystem({ value, onChange }: DepositSystemProps) {
+
+    const t = useTranslations("SettingsPage.depositSystem")
+
+    //  simple sanitizers
+    const sanitizeNonNegative = (val: string) => {
+        if (val === "") return "";
+        const num = Number(val);
+        if (isNaN(num) || num < 0) return "0";
+        return num.toString();
+    };
+
+    const sanitizePercentage = (val: string) => {
+        if (val === "") return "";
+        const num = Number(val);
+        if (isNaN(num) || num < 0) return "0";
+        if (num > 100) return "100";
+        return num.toString();
+    };
 
     // ===================== Helpers =====================
     const updateDepositSystem = <K extends keyof DepositSystemSettings>(
@@ -109,11 +128,13 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
             case "day-of-week":
                 return (
                     <div className="flex flex-col space-y-2 w-full col-span-4">
-                        <Label>Days (0=Sun, 6=Sat)</Label>
+                        <Label>
+                            {t("ruleDaysLabel")}
+                        </Label>
                         <Input
                             value={rule.days || ""}
                             onChange={(e) => updateRule(rule.id, "days", e.target.value)}
-                            placeholder="e.g. 5,6"
+                            placeholder={t("ruleDaysPlaceholder")}
                         />
                     </div>
                 );
@@ -122,13 +143,15 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                 return (
                     <>
                         <div className="flex flex-col space-y-2 w-full col-span-2">
-                            <Label>Start Time</Label>
+                            <Label>
+                                {t("ruleStartTimeLabel")}
+                            </Label>
                             <Select
                                 value={rule.startTime}
                                 onValueChange={(value) => updateRule(rule.id, "startTime", value)}
                             >
                                 <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select time" />
+                                    <SelectValue placeholder={t("ruleSelectTimePlaceholder")} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {Array.from({ length: 24 * 2 }, (_, i) => {
@@ -147,13 +170,15 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                             </Select>
                         </div>
                         <div className="flex flex-col space-y-2 w-full col-span-2">
-                            <Label>End Time</Label>
+                            <Label>
+                                {t("ruleEndTimeLabel")}
+                            </Label>
                             <Select
                                 value={rule.endTime}
                                 onValueChange={(value) => updateRule(rule.id, "endTime", value)}
                             >
                                 <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select time" />
+                                    <SelectValue placeholder={t("ruleSelectTimePlaceholder")} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {Array.from({ length: 24 * 2 }, (_, i) => {
@@ -178,22 +203,36 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                 return (
                     <>
                         <div className="flex flex-col space-y-2 w-full col-span-2">
-                            <Label>Min Party Size</Label>
+                            <Label>
+                                {t("ruleMinPartySizeLabel")}
+                            </Label>
                             <Input
                                 type="number"
+                                min={0}
                                 value={rule.minPartySize || ""}
                                 onChange={(e) =>
-                                    updateRule(rule.id, "minPartySize", e.target.value)
+                                    updateRule(
+                                        rule.id,
+                                        "minPartySize",
+                                        sanitizeNonNegative(e.target.value)
+                                    )
                                 }
                             />
                         </div>
                         <div className="flex flex-col space-y-2 w-full col-span-2">
-                            <Label>Max Party Size</Label>
+                            <Label>
+                                {t("ruleMaxPartySizeLabel")}
+                            </Label>
                             <Input
                                 type="number"
+                                min={0}
                                 value={rule.maxPartySize || ""}
                                 onChange={(e) =>
-                                    updateRule(rule.id, "maxPartySize", e.target.value)
+                                    updateRule(
+                                        rule.id,
+                                        "maxPartySize",
+                                        sanitizeNonNegative(e.target.value)
+                                    )
                                 }
                             />
                         </div>
@@ -203,7 +242,9 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
             case "special-date":
                 return (
                     <div className="flex flex-col space-y-2 w-full col-span-4">
-                        <Label>Date</Label>
+                        <Label>
+                            {t("ruleDateLabel")}
+                        </Label>
                         <Input
                             type="date"
                             value={rule.date || ""}
@@ -220,8 +261,10 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>
-                        <CardTitle>Enable Deposit System</CardTitle>
-                        <CardDescription>Require deposits for reservations</CardDescription>
+                        <CardTitle>{t("enableDepositSystemTitle")}</CardTitle>
+                        <CardDescription>
+                            {t("enableDepositSystemDescription")}
+                        </CardDescription>
                     </div>
                     <Switch
                         checked={value.depositSystemEnabled}
@@ -235,7 +278,9 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                     <CardContent className="grid gap-6 md:grid-cols-3">
                         {/* Type */}
                         <div className="flex flex-col space-y-2 w-full">
-                            <Label>Default Deposit Type</Label>
+                            <Label>
+                                {t("defaultDepositTypeLabel")}
+                            </Label>
                             <Select
                                 value={value.depositType}
                                 onValueChange={(val: DepositType) =>
@@ -246,27 +291,39 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="per-person">Per Person</SelectItem>
-                                    <SelectItem value="flat-rate">Flat Rate</SelectItem>
+                                    <SelectItem value="per-person">
+                                        {t("defaultDepositTypePerPerson")}
+                                    </SelectItem>
+                                    <SelectItem value="flat-rate">
+                                        {t("defaultDepositTypeFlatRate")}
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
                         {/* Amount */}
                         <div className="flex flex-col space-y-2 w-full">
-                            <Label>Default Amount (EUR)</Label>
+                            <Label>
+                                {t("defaultAmountLabel")}
+                            </Label>
                             <Input
                                 type="number"
+                                min={0}
                                 value={value.depositAmount}
                                 onChange={(e) =>
-                                    updateDepositSystem("depositAmount", e.target.value)
+                                    updateDepositSystem(
+                                        "depositAmount",
+                                        sanitizeNonNegative(e.target.value)
+                                    )
                                 }
                             />
                         </div>
 
                         {/* Currency */}
                         <div className="flex flex-col space-y-2 w-full">
-                            <Label>Currency</Label>
+                            <Label>
+                                {t("currencyLabel")}
+                            </Label>
                             <Select
                                 value={value.depositCurrency}
                                 onValueChange={(val) =>
@@ -277,9 +334,15 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="EUR (€)">EUR (€)</SelectItem>
-                                    <SelectItem value="USD ($)">USD ($)</SelectItem>
-                                    <SelectItem value="GBP (£)">GBP (£)</SelectItem>
+                                    <SelectItem value="EUR (€)">
+                                        {t("currencyEur")}
+                                    </SelectItem>
+                                    <SelectItem value="USD ($)">
+                                        {t("currencyUsd")}
+                                    </SelectItem>
+                                    <SelectItem value="GBP (£)">
+                                        {t("currencyGbp")}
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -292,13 +355,16 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                 <Card>
                     <CardHeader className="flex flex-row justify-between items-center">
                         <div>
-                            <CardTitle>Dynamic Deposit Rules</CardTitle>
+                            <CardTitle>
+                                {t("dynamicRulesTitle")}
+                            </CardTitle>
                             <CardDescription>
-                                Set different deposits based on conditions
+                                {t("dynamicRulesDescription")}
                             </CardDescription>
                         </div>
                         <Button onClick={addRule}>
-                            <Plus className="h-4 w-4" /> Add Rule
+                            <Plus className="h-4 w-4" />
+                            {t("dynamicRulesAddRuleButton")}
                         </Button>
                     </CardHeader>
                     {value.dynamicRules?.length > 0 &&
@@ -310,7 +376,9 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                                 >
                                     {/* Rule Type */}
                                     <div className="flex flex-col space-y-2 w-full">
-                                        <Label>Rule Type</Label>
+                                        <Label>
+                                            {t("ruleTypeLabel")}
+                                        </Label>
                                         <Select
                                             value={rule.ruleType}
                                             onValueChange={(val: RuleType) =>
@@ -321,17 +389,27 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="day-of-week">Day of Week</SelectItem>
-                                                <SelectItem value="time-slot">Time Slot</SelectItem>
-                                                <SelectItem value="party-size">Party Size</SelectItem>
-                                                <SelectItem value="special-date">Special Date</SelectItem>
+                                                <SelectItem value="day-of-week">
+                                                    {t("ruleTypeDayOfWeek")}
+                                                </SelectItem>
+                                                <SelectItem value="time-slot">
+                                                    {t("ruleTypeTimeSlot")}
+                                                </SelectItem>
+                                                <SelectItem value="party-size">
+                                                    {t("ruleTypePartySize")}
+                                                </SelectItem>
+                                                <SelectItem value="special-date">
+                                                    {t("ruleTypeSpecialDate")}
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
 
                                     {/* Deposit Type */}
                                     <div className="flex flex-col space-y-2 w-full">
-                                        <Label>Deposit Type</Label>
+                                        <Label>
+                                            {t("ruleDepositTypeLabel")}
+                                        </Label>
                                         <Select
                                             value={rule.depositType}
                                             onValueChange={(val: DepositType) =>
@@ -342,32 +420,50 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="per-person">Per Person</SelectItem>
-                                                <SelectItem value="flat-rate">Flat Rate</SelectItem>
+                                                <SelectItem value="per-person">
+                                                    {t("ruleDepositTypePerPerson")}
+                                                </SelectItem>
+                                                <SelectItem value="flat-rate">
+                                                    {t("ruleDepositTypeFlatRate")}
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
 
                                     {/* Amount */}
                                     <div className="flex flex-col space-y-2 w-full">
-                                        <Label>Amount (EUR)</Label>
+                                        <Label>
+                                            {t("ruleAmountLabel")}
+                                        </Label>
                                         <Input
                                             type="number"
+                                            min={0}
                                             value={rule.amount}
                                             onChange={(e) =>
-                                                updateRule(rule.id, "amount", e.target.value)
+                                                updateRule(
+                                                    rule.id,
+                                                    "amount",
+                                                    sanitizeNonNegative(e.target.value)
+                                                )
                                             }
                                         />
                                     </div>
 
                                     {/* Priority */}
                                     <div className="flex flex-col space-y-2 w-full">
-                                        <Label>Priority</Label>
+                                        <Label>
+                                            {t("rulePriorityLabel")}
+                                        </Label>
                                         <Input
                                             type="number"
+                                            min={0}
                                             value={rule.priority}
                                             onChange={(e) =>
-                                                updateRule(rule.id, "priority", e.target.value)
+                                                updateRule(
+                                                    rule.id,
+                                                    "priority",
+                                                    sanitizeNonNegative(e.target.value)
+                                                )
                                             }
                                         />
                                     </div>
@@ -393,13 +489,16 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                 <Card>
                     <CardHeader className="flex flex-row justify-between items-center">
                         <div>
-                            <CardTitle>Cancellation Policies</CardTitle>
+                            <CardTitle>
+                                {t("cancellationPoliciesTitle")}
+                            </CardTitle>
                             <CardDescription>
-                                Define refund rules based on cancellation timing
+                                {t("cancellationPoliciesDescription")}
                             </CardDescription>
                         </div>
                         <Button onClick={addPolicy}>
-                            <Plus className="h-4 w-4" /> Add Policy
+                            <Plus className="h-4 w-4" />
+                            {t("cancellationPoliciesAddPolicyButton")}
                         </Button>
                     </CardHeader>
                     {
@@ -411,29 +510,46 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                                     className="flex items-start justify-between gap-4 border p-4 rounded-md bg-muted/10 relative"
                                 >
                                     <div className="flex flex-col w-full col-span-4 space-y-2">
-                                        <Label>Hours Before</Label>
+                                        <Label>
+                                            {t("policyHoursBeforeLabel")}
+                                        </Label>
                                         <Input
                                             type="number"
+                                            min={0}
                                             value={policy.hoursBefore}
                                             onChange={(e) =>
-                                                updatePolicy(policy.id, "hoursBefore", e.target.value)
+                                                updatePolicy(
+                                                    policy.id,
+                                                    "hoursBefore",
+                                                    sanitizeNonNegative(e.target.value)
+                                                )
                                             }
                                         />
                                     </div>
 
                                     <div className="flex flex-col w-full space-y-2 col-span-4">
-                                        <Label>Refund %</Label>
+                                        <Label>
+                                            {t("policyRefundPercentageLabel")}
+                                        </Label>
                                         <Input
                                             type="number"
+                                            min={0}
+                                            max={100}
                                             value={policy.refundPercentage}
                                             onChange={(e) =>
-                                                updatePolicy(policy.id, "refundPercentage", e.target.value)
+                                                updatePolicy(
+                                                    policy.id,
+                                                    "refundPercentage",
+                                                    sanitizePercentage(e.target.value)
+                                                )
                                             }
                                         />
                                     </div>
 
                                     <div className="flex w-full flex-col space-y-2 col-span-1">
-                                        <Label>Active</Label>
+                                        <Label>
+                                            {t("policyActiveLabel")}
+                                        </Label>
                                         <Switch
                                             checked={policy.active}
                                             onCheckedChange={(val) =>

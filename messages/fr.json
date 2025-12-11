@@ -3368,5 +3368,189 @@
     "total_label": "Total",
     "special_instructions_label": "Instructions spéciales",
     "order_again": "Commander à nouveau"
+  },
+  "SettingsPage": {
+    "main": {
+      "title": "Paramètres de réservation",
+      "subtitle": "Contrôlez et configurez les principales fonctionnalités de votre système de restaurant",
+      "loadingText": "Chargement des paramètres...",
+      "toast": {
+        "saveSuccessTitle": "Paramètres enregistrés avec succès !",
+        "saveSuccessDescription": "Vos paramètres de réservation ont été mis à jour.",
+        "saveErrorTitle": "Échec de l’enregistrement des paramètres",
+        "saveErrorDescription": "Veuillez réessayer."
+      }
+    },
+    "ReservationControls": {
+      "title": "Contrôle des Réservations",
+      "description": "Gérer la disponibilité des réservations",
+      "pauseReservations": {
+        "title": "Suspendre les Nouvelles Réservations",
+        "subtitle": "Arrêter temporairement d'accepter de nouvelles réservations",
+        "buttonPause": "Suspendre",
+        "buttonResume": "Reprendre"
+      },
+      "emergencyClosure": {
+        "title": "Fermeture d'Urgence",
+        "subtitle": "Annuler les réservations du jour et stopper toutes les réservations",
+        "buttonActivate": "Activer",
+        "buttonDeactivate": "Désactiver"
+      },
+      "customMessage": {
+        "label": "Message Personnalisé pour les Clients",
+        "placeholder": "Message optionnel affiché lorsque les réservations sont suspendues ou fermées"
+      }
+    },
+    "depositSystem": {
+      "enableDepositSystemTitle": "Activer le système de dépôt",
+      "enableDepositSystemDescription": "Exiger des dépôts pour les réservations",
+
+      "defaultDepositTypeLabel": "Type de dépôt par défaut",
+      "defaultDepositTypePerPerson": "Par personne",
+      "defaultDepositTypeFlatRate": "Forfait",
+
+      "defaultAmountLabel": "Montant par défaut (EUR)",
+      "currencyLabel": "Devise",
+      "currencyEur": "EUR (€)",
+      "currencyUsd": "USD ($)",
+      "currencyGbp": "GBP (£)",
+
+      "dynamicRulesTitle": "Règles de dépôt dynamiques",
+      "dynamicRulesDescription": "Définir des dépôts différents selon les conditions",
+      "dynamicRulesAddRuleButton": "Ajouter une règle",
+
+      "ruleTypeLabel": "Type de règle",
+      "ruleTypeDayOfWeek": "Jour de la semaine",
+      "ruleTypeTimeSlot": "Plage horaire",
+      "ruleTypePartySize": "Taille du groupe",
+      "ruleTypeSpecialDate": "Date spéciale",
+
+      "ruleDepositTypeLabel": "Type de dépôt",
+      "ruleDepositTypePerPerson": "Par personne",
+      "ruleDepositTypeFlatRate": "Forfait",
+
+      "ruleAmountLabel": "Montant (EUR)",
+      "rulePriorityLabel": "Priorité",
+
+      "ruleDaysLabel": "Jours (0=Dim, 6=Sam)",
+      "ruleDaysPlaceholder": "ex. : 5,6",
+
+      "ruleStartTimeLabel": "Heure de début",
+      "ruleEndTimeLabel": "Heure de fin",
+      "ruleSelectTimePlaceholder": "Sélectionner l’heure",
+
+      "ruleMinPartySizeLabel": "Taille minimale du groupe",
+      "ruleMaxPartySizeLabel": "Taille maximale du groupe",
+
+      "ruleDateLabel": "Date",
+
+      "cancellationPoliciesTitle": "Politiques d’annulation",
+      "cancellationPoliciesDescription": "Définir les règles de remboursement selon le délai d’annulation",
+      "cancellationPoliciesAddPolicyButton": "Ajouter une politique",
+
+      "policyHoursBeforeLabel": "Heures avant",
+      "policyRefundPercentageLabel": "Remboursement %",
+      "policyActiveLabel": "Actif"
+    },
+    "timeSlotOverrides": {
+      "title": "Dérogations de créneaux horaires",
+      "description": "Permettre de bloquer manuellement certains créneaux horaires",
+
+      "addOverrideButton": "Ajouter une dérogation",
+
+      "formDateLabel": "Date",
+      "formStartTimeLabel": "Heure de début",
+      "formEndTimeLabel": "Heure de fin",
+      "formSelectTimePlaceholder": "Sélectionner l’heure",
+
+      "formReasonLabel": "Raison",
+      "formReasonPlaceholder": "Événement privé, maintenance, etc.",
+
+      "formBlockTimeSlotLabel": "Bloquer le créneau horaire",
+      "formCreateOverrideButton": "Créer une dérogation",
+
+      "listBlockedLabel": "Bloqué",
+      "listSpecialHoursLabel": "Horaires spéciaux"
+    },
+    "restaurantSettings": {
+      "reservationDurationTitle": "Durée de réservation",
+      "reservationDurationDescription": "Configurer la méthode de calcul de la durée de réservation",
+
+      "standardDurationLabel": "Durée standard (minutes)",
+      "standardDurationNote": "Même durée pour toutes les tailles de groupe",
+
+      "smallPartyDurationLabel": "Petits groupes (1–2)",
+      "mediumPartyDurationLabel": "Groupes moyens (3–4)",
+      "largePartyDurationLabel": "Grands groupes (5+)",
+
+      "tableCombinationsTitle": "Combinaisons de tables",
+      "tableCombinationsDescription": "Permettre de combiner plusieurs tables pour des groupes plus grands",
+
+      "overbookingTitle": "Surbooking",
+      "overbookingDescription": "Accepter plus de réservations que la capacité",
+
+      "overbookingPercentageLabel": "Pourcentage de surbooking",
+      "overbookingPercentageNote": "Pourcentage au-delà de la capacité pouvant être accepté"
+    }
+  },
+  "reservationPoliciesPage": {
+    "pageTitle": "Politiques du Restaurant",
+
+    "cancellationPolicyTitle": "Politique d’Annulation",
+    "cancellationPolicyDescription": "Définissez vos règles et délais d’annulation.",
+
+    "depositPolicyTitle": "Politique de Dépôt",
+    "depositPolicyDescription": "Expliquez les exigences relatives au dépôt.",
+
+    "diningPolicyTitle": "Politique de Salle",
+    "diningPolicyDescription": "Définissez les règles pour l’expérience de restauration.",
+
+    "noShowPolicyTitle": "Politique de Non- Présentation",
+    "noShowPolicyDescription": "Définissez les conséquences pour les réservations manquées.",
+
+    "policyEditorPlaceholder": "Saisissez la politique ici",
+
+    "saveButtonSaving": "Enregistrement...",
+    "saveButtonDirty": "Enregistrer la Politique",
+    "saveButtonSaved": "Enregistré",
+
+    "loadingText": "Chargement des politiques....",
+    "errorLoading": "Échec du chargement des politiques."
+  },
+  "reservationQueriesPage": {
+    "pageTitle": "Demandes de Réservation",
+    "pageDescription": "Gérez toutes les demandes de réservation reçues pour votre restaurant",
+
+    "searchPlaceholder": "Rechercher par nom ou e-mail...",
+
+    "loadingText": "Chargement...",
+    "loadingSpinnerAriaLabel": "Chargement des demandes de réservation",
+
+    "errorTitle": "Erreur de chargement",
+    "errorDescription": "Impossible de charger les demandes de réservation.",
+    "errorFetchQueries": "Échec du chargement des demandes de réservation",
+
+    "emptyTitle": "Aucune demande",
+    "emptyDescription": "Il n’y a actuellement aucune demande de réservation.",
+
+    "filterAll": "Toutes",
+    "filterImportant": "Important",
+    "filterUpcoming": "À venir",
+    "filterFollowup": "Suivi",
+
+    "filterAllWithCount": "Toutes",
+    "filterImportantWithCount": "Important",
+    "filterUpcomingWithCount": "À venir",
+    "filterFollowupWithCount": "Suivi",
+
+    "filterEmptyTitle": "Aucune demande",
+    "filterEmptyDescription": "Aucune demande de réservation trouvée.",
+
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette demande de réservation ?",
+    "deleteSuccess": "Demande de réservation supprimée avec succès",
+    "deleteError": "Échec de la suppression de la demande de réservation",
+
+    "apiErrorDelete": "Échec de la suppression de la demande de réservation",
+    "apiErrorGeneric": "Une erreur inattendue s’est produite. Veuillez réessayer."
   }
 }

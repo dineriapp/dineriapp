@@ -3369,5 +3369,189 @@
     "total_label": "Total",
     "special_instructions_label": "Instrucciones especiales",
     "order_again": "Pedir de nuevo"
+  },
+  "SettingsPage": {
+    "main": {
+      "title": "Configuración de reservas",
+      "subtitle": "Controle y configure las funciones clave de su sistema de restaurante",
+      "loadingText": "Cargando configuración...",
+      "toast": {
+        "saveSuccessTitle": "¡Configuración guardada correctamente!",
+        "saveSuccessDescription": "La configuración de sus reservas se ha actualizado.",
+        "saveErrorTitle": "Error al guardar la configuración",
+        "saveErrorDescription": "Por favor, inténtelo de nuevo."
+      }
+    },
+    "ReservationControls": {
+      "title": "Controles de Reservas",
+      "description": "Gestione la disponibilidad de reservas",
+      "pauseReservations": {
+        "title": "Pausar Nuevas Reservas",
+        "subtitle": "Detener temporalmente la aceptación de nuevas reservas",
+        "buttonPause": "Pausar",
+        "buttonResume": "Reanudar"
+      },
+      "emergencyClosure": {
+        "title": "Cierre de Emergencia",
+        "subtitle": "Cancelar las reservas de hoy y detener todas las reservas",
+        "buttonActivate": "Activar",
+        "buttonDeactivate": "Desactivar"
+      },
+      "customMessage": {
+        "label": "Mensaje Personalizado para los Clientes",
+        "placeholder": "Mensaje opcional que se muestra cuando las reservas están pausadas o cerradas"
+      }
+    },
+    "depositSystem": {
+      "enableDepositSystemTitle": "Habilitar sistema de depósito",
+      "enableDepositSystemDescription": "Requerir depósitos para reservas",
+
+      "defaultDepositTypeLabel": "Tipo de depósito predeterminado",
+      "defaultDepositTypePerPerson": "Por persona",
+      "defaultDepositTypeFlatRate": "Tarifa fija",
+
+      "defaultAmountLabel": "Monto predeterminado (EUR)",
+      "currencyLabel": "Moneda",
+      "currencyEur": "EUR (€)",
+      "currencyUsd": "USD ($)",
+      "currencyGbp": "GBP (£)",
+
+      "dynamicRulesTitle": "Reglas dinámicas de depósito",
+      "dynamicRulesDescription": "Definir distintos depósitos según condiciones",
+      "dynamicRulesAddRuleButton": "Agregar regla",
+
+      "ruleTypeLabel": "Tipo de regla",
+      "ruleTypeDayOfWeek": "Día de la semana",
+      "ruleTypeTimeSlot": "Franja horaria",
+      "ruleTypePartySize": "Tamaño del grupo",
+      "ruleTypeSpecialDate": "Fecha especial",
+
+      "ruleDepositTypeLabel": "Tipo de depósito",
+      "ruleDepositTypePerPerson": "Por persona",
+      "ruleDepositTypeFlatRate": "Tarifa fija",
+
+      "ruleAmountLabel": "Monto (EUR)",
+      "rulePriorityLabel": "Prioridad",
+
+      "ruleDaysLabel": "Días (0=Dom, 6=Sáb)",
+      "ruleDaysPlaceholder": "ej.: 5,6",
+
+      "ruleStartTimeLabel": "Hora de inicio",
+      "ruleEndTimeLabel": "Hora de fin",
+      "ruleSelectTimePlaceholder": "Seleccionar hora",
+
+      "ruleMinPartySizeLabel": "Tamaño mínimo del grupo",
+      "ruleMaxPartySizeLabel": "Tamaño máximo del grupo",
+
+      "ruleDateLabel": "Fecha",
+
+      "cancellationPoliciesTitle": "Políticas de cancelación",
+      "cancellationPoliciesDescription": "Definir reglas de reembolso según el momento de cancelación",
+      "cancellationPoliciesAddPolicyButton": "Agregar política",
+
+      "policyHoursBeforeLabel": "Horas antes",
+      "policyRefundPercentageLabel": "Reembolso %",
+      "policyActiveLabel": "Activo"
+    },
+    "timeSlotOverrides": {
+      "title": "Reemplazos de franjas horarias",
+      "description": "Permitir bloquear manualmente franjas horarias específicas",
+
+      "addOverrideButton": "Agregar reemplazo",
+
+      "formDateLabel": "Fecha",
+      "formStartTimeLabel": "Hora de inicio",
+      "formEndTimeLabel": "Hora de fin",
+      "formSelectTimePlaceholder": "Seleccionar hora",
+
+      "formReasonLabel": "Motivo",
+      "formReasonPlaceholder": "Evento privado, mantenimiento, etc.",
+
+      "formBlockTimeSlotLabel": "Bloquear franja horaria",
+      "formCreateOverrideButton": "Crear reemplazo",
+
+      "listBlockedLabel": "Bloqueado",
+      "listSpecialHoursLabel": "Horario especial"
+    },
+    "restaurantSettings": {
+      "reservationDurationTitle": "Duración de la reserva",
+      "reservationDurationDescription": "Configura cómo calcular la duración de la reserva",
+
+      "standardDurationLabel": "Duración estándar (minutos)",
+      "standardDurationNote": "La misma duración para todos los tamaños de grupo",
+
+      "smallPartyDurationLabel": "Grupos pequeños (1–2)",
+      "mediumPartyDurationLabel": "Grupos medianos (3–4)",
+      "largePartyDurationLabel": "Grupos grandes (5+)",
+
+      "tableCombinationsTitle": "Combinación de mesas",
+      "tableCombinationsDescription": "Permitir unir varias mesas para grupos más grandes",
+
+      "overbookingTitle": "Sobreventa",
+      "overbookingDescription": "Aceptar más reservas de las que permite la capacidad",
+
+      "overbookingPercentageLabel": "Porcentaje de sobreventa",
+      "overbookingPercentageNote": "Porcentaje por encima de la capacidad que se aceptará"
+    }
+  },
+  "reservationPoliciesPage": {
+    "pageTitle": "Políticas del Restaurante",
+
+    "cancellationPolicyTitle": "Política de Cancelación",
+    "cancellationPolicyDescription": "Define tus reglas y plazos de cancelación.",
+
+    "depositPolicyTitle": "Política de Depósito",
+    "depositPolicyDescription": "Explica los requisitos de depósito.",
+
+    "diningPolicyTitle": "Política de Comedor",
+    "diningPolicyDescription": "Establece reglas para la experiencia de comedor.",
+
+    "noShowPolicyTitle": "Política de No Presentación",
+    "noShowPolicyDescription": "Define las consecuencias por reservas no asistidas.",
+
+    "policyEditorPlaceholder": "Escribe la política aquí",
+
+    "saveButtonSaving": "Guardando...",
+    "saveButtonDirty": "Guardar Política",
+    "saveButtonSaved": "Guardado",
+
+    "loadingText": "Cargando políticas....",
+    "errorLoading": "Error al cargar las políticas."
+  },
+  "reservationQueriesPage": {
+    "pageTitle": "Consultas de Reservas",
+    "pageDescription": "Gestiona todas las consultas de reserva que llegan a tu restaurante",
+
+    "searchPlaceholder": "Buscar por nombre o correo electrónico...",
+
+    "loadingText": "Cargando...",
+    "loadingSpinnerAriaLabel": "Cargando consultas de reservas",
+
+    "errorTitle": "Error al cargar",
+    "errorDescription": "No se pudieron cargar las consultas de reservas.",
+    "errorFetchQueries": "Error al obtener las consultas de reservas",
+
+    "emptyTitle": "Sin consultas",
+    "emptyDescription": "No hay consultas de reservas en este momento.",
+
+    "filterAll": "Todas",
+    "filterImportant": "Importante",
+    "filterUpcoming": "Próximas",
+    "filterFollowup": "Seguimiento",
+
+    "filterAllWithCount": "Todas",
+    "filterImportantWithCount": "Importante",
+    "filterUpcomingWithCount": "Próximas",
+    "filterFollowupWithCount": "Seguimiento",
+
+    "filterEmptyTitle": "Sin consultas",
+    "filterEmptyDescription": "No se encontraron consultas de reservas.",
+
+    "deleteConfirm": "¿Estás seguro de que deseas eliminar esta consulta de reserva?",
+    "deleteSuccess": "Consulta de reserva eliminada correctamente",
+    "deleteError": "No se pudo eliminar la consulta de reserva",
+
+    "apiErrorDelete": "No se pudo eliminar la consulta de reserva",
+    "apiErrorGeneric": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo."
   }
 }

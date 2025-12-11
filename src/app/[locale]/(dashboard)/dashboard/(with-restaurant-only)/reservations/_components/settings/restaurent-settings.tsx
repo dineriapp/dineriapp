@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { RestaurantSettings } from "./types";
+import { useTranslations } from "next-intl";
 
 interface RestaurantSettingsManagerProps {
     settings: RestaurantSettings;
@@ -18,6 +19,7 @@ export default function RestaurantSettingsManager({
     settings,
     updateSettingsSection
 }: RestaurantSettingsManagerProps) {
+    const t = useTranslations("SettingsPage.restaurantSettings")
 
     return (
         <div className="space-y-3">
@@ -25,8 +27,12 @@ export default function RestaurantSettingsManager({
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>
-                        <CardTitle>Reservation Duration</CardTitle>
-                        <CardDescription>Configure how to calculate reservation duration</CardDescription>
+                        <CardTitle>
+                            {t("reservationDurationTitle")}
+                        </CardTitle>
+                        <CardDescription>
+                            {t("reservationDurationDescription")}
+                        </CardDescription>
                     </div>
                     <Switch
                         checked={settings.use_tiered_duration}
@@ -41,7 +47,9 @@ export default function RestaurantSettingsManager({
                 <CardContent>
                     {!settings.use_tiered_duration ? (
                         <div className="space-y-2">
-                            <Label>Standard Duration (minutes)</Label>
+                            <Label>
+                                {t("standardDurationLabel")}
+                            </Label>
                             <Input
                                 type="number"
                                 value={settings.default_reservation_duration_minutes}
@@ -52,12 +60,16 @@ export default function RestaurantSettingsManager({
                                     })
                                 }
                             />
-                            <p className="text-xs text-slate-500">Same duration for all party sizes</p>
+                            <p className="text-xs text-slate-500">
+                                {t("standardDurationNote")}
+                            </p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="space-y-2">
-                                <Label>Small Parties (1–2)</Label>
+                                <Label>
+                                    {t("smallPartyDurationLabel")}
+                                </Label>
                                 <Input
                                     type="number"
                                     value={settings.small_party_duration}
@@ -70,7 +82,9 @@ export default function RestaurantSettingsManager({
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Medium Parties (3–4)</Label>
+                                <Label>
+                                    {t("mediumPartyDurationLabel")}
+                                </Label>
                                 <Input
                                     type="number"
                                     value={settings.medium_party_duration}
@@ -83,7 +97,9 @@ export default function RestaurantSettingsManager({
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Large Parties (5+)</Label>
+                                <Label>
+                                    {t("largePartyDurationLabel")}
+                                </Label>
                                 <Input
                                     type="number"
                                     value={settings.large_party_duration}
@@ -104,8 +120,12 @@ export default function RestaurantSettingsManager({
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>
-                        <CardTitle>Table Combinations</CardTitle>
-                        <CardDescription>Allow joining multiple tables for larger parties</CardDescription>
+                        <CardTitle>
+                            {t("tableCombinationsTitle")}
+                        </CardTitle>
+                        <CardDescription>
+                            {t("tableCombinationsDescription")}
+                        </CardDescription>
                     </div>
                     <Switch
                         checked={settings.enable_table_combinations}
@@ -123,8 +143,12 @@ export default function RestaurantSettingsManager({
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>
-                        <CardTitle>Overbooking</CardTitle>
-                        <CardDescription>Accept more reservations than capacity</CardDescription>
+                        <CardTitle>
+                            {t("overbookingTitle")}
+                        </CardTitle>
+                        <CardDescription>
+                            {t("overbookingDescription")}
+                        </CardDescription>
                     </div>
                     <Switch
                         checked={settings.enable_overbooking}
@@ -139,7 +163,9 @@ export default function RestaurantSettingsManager({
                 {settings.enable_overbooking && (
                     <CardContent>
                         <div className="space-y-2">
-                            <Label>Overbooking Percentage</Label>
+                            <Label>
+                                {t("overbookingPercentageLabel")}
+                            </Label>
                             <Input
                                 type="number"
                                 value={settings.overbooking_percentage}
@@ -150,7 +176,9 @@ export default function RestaurantSettingsManager({
                                     })
                                 }
                             />
-                            <p className="text-xs text-slate-500">Percentage over capacity to accept</p>
+                            <p className="text-xs text-slate-500">
+                                {t("overbookingPercentageNote")}
+                            </p>
                         </div>
                     </CardContent>
                 )}

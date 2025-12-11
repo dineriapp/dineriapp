@@ -6,7 +6,7 @@ import ReservationQueriesPage from './client'
 const QuereisPage = () => {
   const { selectedRestaurant: restaurant } = useRestaurantStore()
 
-  if (!restaurant) return <LoadingUI text="Loading..." />
+  if (!restaurant) return <LoadingUI text="" />
 
   return (
     <ReservationQueriesPage restaurantId={restaurant.id} />

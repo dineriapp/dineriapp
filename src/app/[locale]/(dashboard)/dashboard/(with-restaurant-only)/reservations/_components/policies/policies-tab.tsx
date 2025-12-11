@@ -9,6 +9,7 @@ import {
 import { ReservationPolicyType } from "@/lib/types";
 import { useRestaurantStore } from "@/stores/restaurant-store";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm, type UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
@@ -44,8 +45,8 @@ const PolicyCard: React.FC<PolicyCardProps> = ({
         watch,
         formState: { errors, isDirty },
     } = form;
-
     const enabled = watch("enabled");
+    const t = useTranslations("reservationPoliciesPage")
 
     return (
         <div className="border rounded-lg p-5 bg-white shadow-sm w-full">
@@ -95,17 +96,18 @@ const PolicyCard: React.FC<PolicyCardProps> = ({
                     className={`mt-3 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 
             disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                    {loading ? "Saving..." : isDirty ? "Save Policy" : "Saved"}
+                    {loading ? t("saveButtonSaving") : isDirty ? t("saveButtonDirty") : t("saveButtonSaved")}
                 </button>
             </form>
         </div>
     );
 };
 
-const DEFAULT_HTML = "Enter policy here";
 
 export default function PoliciesTab() {
     const initializedRef = useRef(false);
+    const t = useTranslations("reservationPoliciesPage")
+    const DEFAULT_HTML = t("policyEditorPlaceholder");
 
     const { selectedRestaurant: restaurant } = useRestaurantStore();
     const restaurantId = restaurant?.id;
@@ -183,7 +185,7 @@ export default function PoliciesTab() {
     if (!canRender) {
         return (
             <div className="flex items-center justify-center">
-                <LoadingUI text="Loading policies...." className="" />
+                <LoadingUI text={t("loadingText")} className="" />
             </div>
         );
     }
@@ -191,7 +193,7 @@ export default function PoliciesTab() {
     if (isError) {
         return (
             <div className="flex items-center justify-center text-red-600">
-                Failed to load policies.
+                {t("errorLoading")}
             </div>
         );
     }
@@ -244,40 +246,42 @@ export default function PoliciesTab() {
 
     return (
         <div className="min-h-screen">
-            <h1 className="text-2xl font-bold mb-6 text-center">Restaurant Policies</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">
+                {t("pageTitle")}
+            </h1>
 
             <div className="space-y-5">
                 <PolicyCard
-                    title="Cancellation Policy"
+                    title={t("cancellationPolicyTitle")}
                     icon="⛔"
-                    description="Define your cancellation rules and timeframes."
+                    description={t("cancellationPolicyDescription")}
                     form={cancellationForm}
                     loading={savingType === "cancellation"}
                     onSubmit={(data) => savePolicy("cancellation", data, "Cancellation Policy")}
                 />
 
                 <PolicyCard
-                    title="Deposit Policy"
+                    title={t("depositPolicyTitle")}
                     icon="💰"
-                    description="Explain deposit requirements."
+                    description={t("depositPolicyDescription")}
                     form={depositForm}
                     loading={savingType === "deposit"}
                     onSubmit={(data) => savePolicy("deposit", data, "Deposit Policy")}
                 />
 
                 <PolicyCard
-                    title="Dining Policy"
+                    title={t("diningPolicyTitle")}
                     icon="🍽️"
-                    description="Set rules for dining experience."
+                    description={t("diningPolicyDescription")}
                     form={diningForm}
                     loading={savingType === "dining"}
                     onSubmit={(data) => savePolicy("dining", data, "Dining Policy")}
                 />
 
                 <PolicyCard
-                    title="No-Show Policy"
+                    title={t("noShowPolicyTitle")}
                     icon="⚠️"
-                    description="Define consequences for missed reservations."
+                    description={t("noShowPolicyDescription")}
                     form={noShowForm}
                     loading={savingType === "no_show"}
                     onSubmit={(data) => savePolicy("no_show", data, "No-Show Policy")}

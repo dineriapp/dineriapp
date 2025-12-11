@@ -3365,5 +3365,189 @@
     "total_label": "Totaal",
     "special_instructions_label": "Speciale instructies",
     "order_again": "Opnieuw bestellen"
+  },
+  "SettingsPage": {
+    "main": {
+      "title": "Reserveringsinstellingen",
+      "subtitle": "Beheer en configureer de belangrijkste functies van uw restaurantsysteem",
+      "loadingText": "Instellingen worden geladen...",
+      "toast": {
+        "saveSuccessTitle": "Instellingen succesvol opgeslagen!",
+        "saveSuccessDescription": "Uw reserveringsinstellingen zijn bijgewerkt.",
+        "saveErrorTitle": "Instellingen opslaan mislukt",
+        "saveErrorDescription": "Probeer het alstublieft opnieuw."
+      }
+    },
+    "ReservationControls": {
+      "title": "Reserveringsbeheer",
+      "description": "Beheer de beschikbaarheid van reserveringen",
+      "pauseReservations": {
+        "title": "Nieuwe Reserveringen Pauzeren",
+        "subtitle": "Tijdelijk stoppen met het accepteren van nieuwe reserveringen",
+        "buttonPause": "Pauzeren",
+        "buttonResume": "Hervatten"
+      },
+      "emergencyClosure": {
+        "title": "Noodsluiting",
+        "subtitle": "Annuleer de reserveringen van vandaag en stop alle boekingen",
+        "buttonActivate": "Activeren",
+        "buttonDeactivate": "Deactiveren"
+      },
+      "customMessage": {
+        "label": "Aangepast Bericht voor Klanten",
+        "placeholder": "Optioneel bericht dat wordt weergegeven wanneer reserveringen zijn gepauzeerd of gesloten"
+      }
+    },
+    "depositSystem": {
+      "enableDepositSystemTitle": "Aanbetalingssysteem inschakelen",
+      "enableDepositSystemDescription": "Aanbetalingen vereisen voor reserveringen",
+
+      "defaultDepositTypeLabel": "Standaard aanbetalingstype",
+      "defaultDepositTypePerPerson": "Per persoon",
+      "defaultDepositTypeFlatRate": "Vast bedrag",
+
+      "defaultAmountLabel": "Standaardbedrag (EUR)",
+      "currencyLabel": "Valuta",
+      "currencyEur": "EUR (€)",
+      "currencyUsd": "USD ($)",
+      "currencyGbp": "GBP (£)",
+
+      "dynamicRulesTitle": "Dynamische aanbetalingsregels",
+      "dynamicRulesDescription": "Verschillende aanbetalingen instellen op basis van voorwaarden",
+      "dynamicRulesAddRuleButton": "Regel toevoegen",
+
+      "ruleTypeLabel": "Regeltype",
+      "ruleTypeDayOfWeek": "Dag van de week",
+      "ruleTypeTimeSlot": "Tijdslot",
+      "ruleTypePartySize": "Groepsgrootte",
+      "ruleTypeSpecialDate": "Speciale datum",
+
+      "ruleDepositTypeLabel": "Aanbetalingstype",
+      "ruleDepositTypePerPerson": "Per persoon",
+      "ruleDepositTypeFlatRate": "Vast bedrag",
+
+      "ruleAmountLabel": "Bedrag (EUR)",
+      "rulePriorityLabel": "Prioriteit",
+
+      "ruleDaysLabel": "Dagen (0=Zo, 6=Za)",
+      "ruleDaysPlaceholder": "bijv. 5,6",
+
+      "ruleStartTimeLabel": "Starttijd",
+      "ruleEndTimeLabel": "Eindtijd",
+      "ruleSelectTimePlaceholder": "Selecteer tijd",
+
+      "ruleMinPartySizeLabel": "Minimale groepsgrootte",
+      "ruleMaxPartySizeLabel": "Maximale groepsgrootte",
+
+      "ruleDateLabel": "Datum",
+
+      "cancellationPoliciesTitle": "Annuleringsbeleid",
+      "cancellationPoliciesDescription": "Definieer restitutieregels op basis van annuleringsmoment",
+      "cancellationPoliciesAddPolicyButton": "Beleid toevoegen",
+
+      "policyHoursBeforeLabel": "Uren van tevoren",
+      "policyRefundPercentageLabel": "Restitutie %",
+      "policyActiveLabel": "Actief"
+    },
+    "timeSlotOverrides": {
+      "title": "Tijdslot-overrides",
+      "description": "Sta toe om specifieke tijdsloten handmatig te blokkeren",
+
+      "addOverrideButton": "Override toevoegen",
+
+      "formDateLabel": "Datum",
+      "formStartTimeLabel": "Starttijd",
+      "formEndTimeLabel": "Eindtijd",
+      "formSelectTimePlaceholder": "Selecteer tijd",
+
+      "formReasonLabel": "Reden",
+      "formReasonPlaceholder": "Privé-evenement, onderhoud, enz.",
+
+      "formBlockTimeSlotLabel": "Tijdslot blokkeren",
+      "formCreateOverrideButton": "Override maken",
+
+      "listBlockedLabel": "Geblokkeerd",
+      "listSpecialHoursLabel": "Speciale uren"
+    },
+    "restaurantSettings": {
+      "reservationDurationTitle": "Reserveringsduur",
+      "reservationDurationDescription": "Configureren hoe de reserveringsduur wordt berekend",
+
+      "standardDurationLabel": "Standaardduur (minuten)",
+      "standardDurationNote": "Dezelfde duur voor alle groepsgroottes",
+
+      "smallPartyDurationLabel": "Kleine groepen (1–2)",
+      "mediumPartyDurationLabel": "Middelgrote groepen (3–4)",
+      "largePartyDurationLabel": "Grote groepen (5+)",
+
+      "tableCombinationsTitle": "Tafelcombinaties",
+      "tableCombinationsDescription": "Sta toe om meerdere tafels samen te voegen voor grotere groepen",
+
+      "overbookingTitle": "Overboeking",
+      "overbookingDescription": "Meer reserveringen accepteren dan de capaciteit toestaat",
+
+      "overbookingPercentageLabel": "Overboekingspercentage",
+      "overbookingPercentageNote": "Percentage boven de capaciteit dat geaccepteerd wordt"
+    }
+  },
+  "reservationPoliciesPage": {
+    "pageTitle": "Restaurantbeleid",
+
+    "cancellationPolicyTitle": "Annuleringsbeleid",
+    "cancellationPolicyDescription": "Stel uw annuleringsregels en termijnen vast.",
+
+    "depositPolicyTitle": "Aanbetalingsbeleid",
+    "depositPolicyDescription": "Leg de vereisten voor aanbetalingen uit.",
+
+    "diningPolicyTitle": "Dinerenbeleid",
+    "diningPolicyDescription": "Stel regels op voor de dinerervaring.",
+
+    "noShowPolicyTitle": "No-Show Beleid",
+    "noShowPolicyDescription": "Bepaal de gevolgen voor gemiste reserveringen.",
+
+    "policyEditorPlaceholder": "Voer hier het beleid in",
+
+    "saveButtonSaving": "Bezig met opslaan...",
+    "saveButtonDirty": "Beleid opslaan",
+    "saveButtonSaved": "Opgeslagen",
+
+    "loadingText": "Beleid laden....",
+    "errorLoading": "Beleid laden mislukt."
+  },
+  "reservationQueriesPage": {
+    "pageTitle": "Reserveringsaanvragen",
+    "pageDescription": "Beheer alle binnenkomende reserveringsaanvragen voor uw restaurant",
+
+    "searchPlaceholder": "Zoek op naam of e-mail...",
+
+    "loadingText": "Bezig met laden...",
+    "loadingSpinnerAriaLabel": "Reserveringsaanvragen laden",
+
+    "errorTitle": "Fout bij laden",
+    "errorDescription": "Kon reserveringsaanvragen niet laden.",
+    "errorFetchQueries": "Fout bij het ophalen van reserveringsaanvragen",
+
+    "emptyTitle": "Geen aanvragen",
+    "emptyDescription": "Er zijn momenteel geen reserveringsaanvragen.",
+
+    "filterAll": "Alle",
+    "filterImportant": "Belangrijk",
+    "filterUpcoming": "Aankomend",
+    "filterFollowup": "Opvolgen",
+
+    "filterAllWithCount": "Alle",
+    "filterImportantWithCount": "Belangrijk",
+    "filterUpcomingWithCount": "Aankomend",
+    "filterFollowupWithCount": "Opvolgen",
+
+    "filterEmptyTitle": "Geen aanvragen",
+    "filterEmptyDescription": "Geen reserveringsaanvragen gevonden.",
+
+    "deleteConfirm": "Weet u zeker dat u deze reserveringsaanvraag wilt verwijderen?",
+    "deleteSuccess": "Reserveringsaanvraag succesvol verwijderd",
+    "deleteError": "Verwijderen van reserveringsaanvraag mislukt",
+
+    "apiErrorDelete": "Verwijderen van reserveringsaanvraag mislukt",
+    "apiErrorGeneric": "Er is een onverwachte fout opgetreden. Probeer het opnieuw."
   }
 }

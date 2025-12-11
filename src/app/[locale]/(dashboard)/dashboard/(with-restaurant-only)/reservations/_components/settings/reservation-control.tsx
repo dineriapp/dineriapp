@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { RestaurantSettings } from "./types";
 import { Pause, Power, XCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface Props {
     settings: RestaurantSettings;
@@ -21,14 +22,20 @@ interface Props {
 }
 
 export default function ReservationControls({ settings, updateSettingsSection }: Props) {
+    const t = useTranslations("SettingsPage.ReservationControls")
+
     return (
         <Card className="border border-slate-200 gap-0 shadow-sm rounded-xl">
             <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
                     <Power className="h-5 w-5 text-slate-700" />
                     <div className="">
-                        <CardTitle>Reservation Controls</CardTitle>
-                        <CardDescription>CManage reservation availability</CardDescription>
+                        <CardTitle>
+                            {t("title")}
+                        </CardTitle>
+                        <CardDescription>
+                            {t("description")}
+                        </CardDescription>
                     </div>
                 </div>
 
@@ -41,8 +48,12 @@ export default function ReservationControls({ settings, updateSettingsSection }:
                     <div className="flex items-start gap-3">
                         <Pause className="h-5 w-5 text-slate-600 mt-1" />
                         <div>
-                            <h3 className="font-semibold text-slate-800">Pause New Reservations</h3>
-                            <p className="text-sm text-slate-500">Temporarily stop accepting new bookings</p>
+                            <h3 className="font-semibold text-slate-800">
+                                {t("pauseReservations.title")}
+                            </h3>
+                            <p className="text-sm text-slate-500">
+                                {t("pauseReservations.subtitle")}
+                            </p>
                         </div>
                     </div>
 
@@ -56,7 +67,11 @@ export default function ReservationControls({ settings, updateSettingsSection }:
                             })
                         }
                     >
-                        {settings.pause_new_reservations ? "Resume" : "Pause"}
+                        {settings.pause_new_reservations ?
+                            t("pauseReservations.buttonResume")
+                            :
+                            t("pauseReservations.buttonPause")
+                        }
                     </Button>
                 </div>
 
@@ -65,9 +80,11 @@ export default function ReservationControls({ settings, updateSettingsSection }:
                     <div className="flex items-start gap-3">
                         <XCircle className="h-5 w-5 text-red-600 mt-1" />
                         <div>
-                            <h3 className="font-semibold text-slate-800">Emergency Closure</h3>
+                            <h3 className="font-semibold text-slate-800">
+                                {t("emergencyClosure.title")}
+                            </h3>
                             <p className="text-sm text-slate-500">
-                                Cancel today&apos;s reservations and stop all bookings
+                                {t("emergencyClosure.subtitle")}
                             </p>
                         </div>
                     </div>
@@ -82,7 +99,11 @@ export default function ReservationControls({ settings, updateSettingsSection }:
                             })
                         }
                     >
-                        {settings.emergency_closure ? "Deactivate" : "Activate"}
+                        {settings.emergency_closure ?
+                            t("emergencyClosure.buttonDeactivate")
+                            :
+                            t("emergencyClosure.buttonActivate")
+                        }
                     </Button>
                 </div>
 
@@ -91,11 +112,11 @@ export default function ReservationControls({ settings, updateSettingsSection }:
                 {/* Custom message */}
                 <div className="space-y-2">
                     <label className="text-sm font-medium text-slate-700">
-                        Custom Message for Customers
+                        {t("customMessage.label")}
                     </label>
                     <Textarea
                         className="min-h-[120px] text-sm"
-                        placeholder="Optional message displayed when reservations are paused or closed"
+                        placeholder={t("customMessage.placeholder")}
                         value={settings.custom_message_for_customers}
                         onChange={(e) =>
                             updateSettingsSection("restaurantSettings", {

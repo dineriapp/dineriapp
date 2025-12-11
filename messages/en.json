@@ -3370,5 +3370,189 @@
     "total_label": "Total",
     "special_instructions_label": "Special Instructions",
     "order_again": "Order Again"
+  },
+  "SettingsPage": {
+    "main": {
+      "title": "Reservation Settings",
+      "subtitle": "Control and configure key features of your restaurant system",
+      "loadingText": "Loading settings...",
+      "toast": {
+        "saveSuccessTitle": "Settings saved successfully!",
+        "saveSuccessDescription": "Your reservation settings have been updated.",
+        "saveErrorTitle": "Failed to save settings",
+        "saveErrorDescription": "Please try again."
+      }
+    },
+    "ReservationControls": {
+      "title": "Reservation Controls",
+      "description": "Manage reservation availability",
+      "pauseReservations": {
+        "title": "Pause New Reservations",
+        "subtitle": "Temporarily stop accepting new bookings",
+        "buttonPause": "Pause",
+        "buttonResume": "Resume"
+      },
+      "emergencyClosure": {
+        "title": "Emergency Closure",
+        "subtitle": "Cancel today's reservations and stop all bookings",
+        "buttonActivate": "Activate",
+        "buttonDeactivate": "Deactivate"
+      },
+      "customMessage": {
+        "label": "Custom Message for Customers",
+        "placeholder": "Optional message displayed when reservations are paused or closed"
+      }
+    },
+    "depositSystem": {
+      "enableDepositSystemTitle": "Enable Deposit System",
+      "enableDepositSystemDescription": "Require deposits for reservations",
+
+      "defaultDepositTypeLabel": "Default Deposit Type",
+      "defaultDepositTypePerPerson": "Per Person",
+      "defaultDepositTypeFlatRate": "Flat Rate",
+
+      "defaultAmountLabel": "Default Amount (EUR)",
+      "currencyLabel": "Currency",
+      "currencyEur": "EUR (€)",
+      "currencyUsd": "USD ($)",
+      "currencyGbp": "GBP (£)",
+
+      "dynamicRulesTitle": "Dynamic Deposit Rules",
+      "dynamicRulesDescription": "Set different deposits based on conditions",
+      "dynamicRulesAddRuleButton": "Add Rule",
+
+      "ruleTypeLabel": "Rule Type",
+      "ruleTypeDayOfWeek": "Day of Week",
+      "ruleTypeTimeSlot": "Time Slot",
+      "ruleTypePartySize": "Party Size",
+      "ruleTypeSpecialDate": "Special Date",
+
+      "ruleDepositTypeLabel": "Deposit Type",
+      "ruleDepositTypePerPerson": "Per Person",
+      "ruleDepositTypeFlatRate": "Flat Rate",
+
+      "ruleAmountLabel": "Amount (EUR)",
+      "rulePriorityLabel": "Priority",
+
+      "ruleDaysLabel": "Days (0=Sun, 6=Sat)",
+      "ruleDaysPlaceholder": "e.g. 5,6",
+
+      "ruleStartTimeLabel": "Start Time",
+      "ruleEndTimeLabel": "End Time",
+      "ruleSelectTimePlaceholder": "Select time",
+
+      "ruleMinPartySizeLabel": "Min Party Size",
+      "ruleMaxPartySizeLabel": "Max Party Size",
+
+      "ruleDateLabel": "Date",
+
+      "cancellationPoliciesTitle": "Cancellation Policies",
+      "cancellationPoliciesDescription": "Define refund rules based on cancellation timing",
+      "cancellationPoliciesAddPolicyButton": "Add Policy",
+
+      "policyHoursBeforeLabel": "Hours Before",
+      "policyRefundPercentageLabel": "Refund %",
+      "policyActiveLabel": "Active"
+    },
+    "timeSlotOverrides": {
+      "title": "Time Slot Overrides",
+      "description": "Allow blocking specific time slots manually",
+
+      "addOverrideButton": "Add Override",
+
+      "formDateLabel": "Date",
+      "formStartTimeLabel": "Start Time",
+      "formEndTimeLabel": "End Time",
+      "formSelectTimePlaceholder": "Select time",
+
+      "formReasonLabel": "Reason",
+      "formReasonPlaceholder": "Private event, maintenance, etc.",
+
+      "formBlockTimeSlotLabel": "Block Time Slot",
+      "formCreateOverrideButton": "Create Override",
+
+      "listBlockedLabel": "Blocked",
+      "listSpecialHoursLabel": "Special hours"
+    },
+    "restaurantSettings": {
+      "reservationDurationTitle": "Reservation Duration",
+      "reservationDurationDescription": "Configure how to calculate reservation duration",
+
+      "standardDurationLabel": "Standard Duration (minutes)",
+      "standardDurationNote": "Same duration for all party sizes",
+
+      "smallPartyDurationLabel": "Small Parties (1–2)",
+      "mediumPartyDurationLabel": "Medium Parties (3–4)",
+      "largePartyDurationLabel": "Large Parties (5+)",
+
+      "tableCombinationsTitle": "Table Combinations",
+      "tableCombinationsDescription": "Allow joining multiple tables for larger parties",
+
+      "overbookingTitle": "Overbooking",
+      "overbookingDescription": "Accept more reservations than capacity",
+
+      "overbookingPercentageLabel": "Overbooking Percentage",
+      "overbookingPercentageNote": "Percentage over capacity to accept"
+    }
+  },
+  "reservationPoliciesPage": {
+    "pageTitle": "Restaurant Policies",
+
+    "cancellationPolicyTitle": "Cancellation Policy",
+    "cancellationPolicyDescription": "Define your cancellation rules and timeframes.",
+
+    "depositPolicyTitle": "Deposit Policy",
+    "depositPolicyDescription": "Explain deposit requirements.",
+
+    "diningPolicyTitle": "Dining Policy",
+    "diningPolicyDescription": "Set rules for dining experience.",
+
+    "noShowPolicyTitle": "No-Show Policy",
+    "noShowPolicyDescription": "Define consequences for missed reservations.",
+
+    "policyEditorPlaceholder": "Enter policy here",
+
+    "saveButtonSaving": "Saving...",
+    "saveButtonDirty": "Save Policy",
+    "saveButtonSaved": "Saved",
+
+    "loadingText": "Loading policies....",
+    "errorLoading": "Failed to load policies."
+  },
+  "reservationQueriesPage": {
+    "pageTitle": "Reservation Queries",
+    "pageDescription": "Manage all incoming reservation queries for your restaurant",
+
+    "searchPlaceholder": "Search by name or email...",
+
+    "loadingText": "Loading...",
+    "loadingSpinnerAriaLabel": "Loading reservation queries",
+
+    "errorTitle": "Error Loading",
+    "errorDescription": "Could not load reservation queries.",
+    "errorFetchQueries": "Failed to fetch reservation queries",
+
+    "emptyTitle": "No Queries",
+    "emptyDescription": "There are no reservation queries at the moment.",
+
+    "filterAll": "All",
+    "filterImportant": "Important",
+    "filterUpcoming": "Upcoming",
+    "filterFollowup": "Follow Up",
+
+    "filterAllWithCount": "All",
+    "filterImportantWithCount": "Important",
+    "filterUpcomingWithCount": "Upcoming",
+    "filterFollowupWithCount": "Follow Up",
+
+    "filterEmptyTitle": "No Queries",
+    "filterEmptyDescription": "No reservation queries found.",
+
+    "deleteConfirm": "Are you sure you want to delete this reservation query?",
+    "deleteSuccess": "Reservation query deleted successfully",
+    "deleteError": "Failed to delete reservation query",
+
+    "apiErrorDelete": "Failed to delete reservation query",
+    "apiErrorGeneric": "An unexpected error occurred. Please try again."
   }
 }

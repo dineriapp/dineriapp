@@ -17,6 +17,7 @@ import { CalendarIcon, Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { OverridesSettings, TimeSlotOverride } from "./types";
+import { useTranslations } from "next-intl";
 
 interface TimeSlotOverridesProps {
     settings: OverridesSettings;
@@ -24,6 +25,7 @@ interface TimeSlotOverridesProps {
 }
 
 export default function TimeSlotOverrides({ settings, updateSettingsSection }: TimeSlotOverridesProps) {
+    const t = useTranslations("SettingsPage.timeSlotOverrides")
 
     const [form, setForm] = useState({
         date: "",
@@ -67,9 +69,11 @@ export default function TimeSlotOverrides({ settings, updateSettingsSection }: T
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                    <CardTitle>Time Slot Overrides</CardTitle>
+                    <CardTitle>
+                        {t("title")}
+                    </CardTitle>
                     <CardDescription>
-                        Allow blocking specific time slots manually
+                        {t("description")}
                     </CardDescription>
                 </div>
                 <div className="flex items-center justify-center gap-4">
@@ -83,7 +87,7 @@ export default function TimeSlotOverrides({ settings, updateSettingsSection }: T
                                 className="flex items-center gap-2"
                             >
                                 <Plus size={16} />
-                                Add Override
+                                {t("addOverrideButton")}
                             </Button>
                         </div>
                     }
@@ -113,7 +117,9 @@ export default function TimeSlotOverrides({ settings, updateSettingsSection }: T
                             </button>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="date">Date</Label>
+                                    <Label htmlFor="date">
+                                        {t("formDateLabel")}
+                                    </Label>
                                     <Input
                                         type="date"
                                         id="date"
@@ -124,13 +130,15 @@ export default function TimeSlotOverrides({ settings, updateSettingsSection }: T
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="start">Start Time</Label>
+                                    <Label htmlFor="start">
+                                        {t("formStartTimeLabel")}
+                                    </Label>
                                     <Select
                                         value={form.startTime}
                                         onValueChange={(value) => setForm({ ...form, startTime: value })}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select time" />
+                                            <SelectValue placeholder={t("formSelectTimePlaceholder")} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {Array.from({ length: 24 * 2 }, (_, i) => {
@@ -149,13 +157,15 @@ export default function TimeSlotOverrides({ settings, updateSettingsSection }: T
                                     </Select>
                                 </div>
                                 <div className="flex gap-2 flex-col">
-                                    <Label htmlFor="start">End Time</Label>
+                                    <Label htmlFor="start">
+                                        {t("formEndTimeLabel")}
+                                    </Label>
                                     <Select
                                         value={form.endTime}
                                         onValueChange={(value) => setForm({ ...form, endTime: value })}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select time" />
+                                            <SelectValue placeholder={t("formSelectTimePlaceholder")} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {Array.from({ length: 24 * 2 }, (_, i) => {
@@ -177,10 +187,12 @@ export default function TimeSlotOverrides({ settings, updateSettingsSection }: T
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="reason">Reason</Label>
+                                <Label htmlFor="reason">
+                                    {t("formReasonLabel")}
+                                </Label>
                                 <Textarea
                                     id="reason"
-                                    placeholder="Private event, maintenance, etc."
+                                    placeholder={t("formReasonPlaceholder")}
                                     value={form.reason}
                                     onChange={(e) =>
                                         setForm({ ...form, reason: e.target.value })
@@ -196,14 +208,16 @@ export default function TimeSlotOverrides({ settings, updateSettingsSection }: T
                                         setForm({ ...form, blocked: val })
                                     }
                                 />
-                                <Label htmlFor="block">Block Time Slot</Label>
+                                <Label htmlFor="block">
+                                    {t("formBlockTimeSlotLabel")}
+                                </Label>
                             </div>
 
                             <Button
                                 className="w-full"
                                 onClick={handleAddOverride}
                             >
-                                Create Override
+                                {t("formCreateOverrideButton")}
                             </Button>
                         </div>
                     )}
@@ -243,7 +257,7 @@ export default function TimeSlotOverrides({ settings, updateSettingsSection }: T
                                                     <div className="text-sm text-slate-500 mt-1">{override.reason}</div>
                                                 )}
                                                 <div className="text-xs text-slate-500 mt-1">
-                                                    {override.blocked ? 'Blocked' : 'Special hours'}
+                                                    {override.blocked ? t("listBlockedLabel") : t("listSpecialHoursLabel")}
                                                 </div>
                                             </div>
                                         </div>

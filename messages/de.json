@@ -3364,5 +3364,189 @@
     "total_label": "Gesamt",
     "special_instructions_label": "Besondere Anweisungen",
     "order_again": "Erneut bestellen"
+  },
+  "SettingsPage": {
+    "main": {
+      "title": "Reservierungseinstellungen",
+      "subtitle": "Steuern und konfigurieren Sie die wichtigsten Funktionen Ihres Restaurantsystems",
+      "loadingText": "Einstellungen werden geladen...",
+      "toast": {
+        "saveSuccessTitle": "Einstellungen erfolgreich gespeichert!",
+        "saveSuccessDescription": "Ihre Reservierungseinstellungen wurden aktualisiert.",
+        "saveErrorTitle": "Einstellungen konnten nicht gespeichert werden",
+        "saveErrorDescription": "Bitte versuchen Sie es erneut."
+      }
+    },
+    "ReservationControls": {
+      "title": "Reservierungssteuerung",
+      "description": "Verwalten Sie die Verfügbarkeit von Reservierungen",
+      "pauseReservations": {
+        "title": "Neue Reservierungen pausieren",
+        "subtitle": "Vorübergehend keine neuen Buchungen annehmen",
+        "buttonPause": "Pausieren",
+        "buttonResume": "Fortsetzen"
+      },
+      "emergencyClosure": {
+        "title": "Notfallschließung",
+        "subtitle": "Heutige Reservierungen stornieren und alle Buchungen stoppen",
+        "buttonActivate": "Aktivieren",
+        "buttonDeactivate": "Deaktivieren"
+      },
+      "customMessage": {
+        "label": "Benutzerdefinierte Nachricht für Kunden",
+        "placeholder": "Optionale Nachricht, die angezeigt wird, wenn Reservierungen pausiert oder geschlossen sind"
+      }
+    },
+    "depositSystem": {
+      "enableDepositSystemTitle": "Einzahlungs­system aktivieren",
+      "enableDepositSystemDescription": "Anzahlungen für Reservierungen erforderlich machen",
+
+      "defaultDepositTypeLabel": "Standard-Einzahlungsart",
+      "defaultDepositTypePerPerson": "Pro Person",
+      "defaultDepositTypeFlatRate": "Pauschalbetrag",
+
+      "defaultAmountLabel": "Standardbetrag (EUR)",
+      "currencyLabel": "Währung",
+      "currencyEur": "EUR (€)",
+      "currencyUsd": "USD ($)",
+      "currencyGbp": "GBP (£)",
+
+      "dynamicRulesTitle": "Dynamische Einzahlungsregeln",
+      "dynamicRulesDescription": "Unterschiedliche Anzahlungen basierend auf Bedingungen festlegen",
+      "dynamicRulesAddRuleButton": "Regel hinzufügen",
+
+      "ruleTypeLabel": "Regeltyp",
+      "ruleTypeDayOfWeek": "Wochentag",
+      "ruleTypeTimeSlot": "Zeitfenster",
+      "ruleTypePartySize": "Gruppengröße",
+      "ruleTypeSpecialDate": "Spezialdatum",
+
+      "ruleDepositTypeLabel": "Einzahlungsart",
+      "ruleDepositTypePerPerson": "Pro Person",
+      "ruleDepositTypeFlatRate": "Pauschalbetrag",
+
+      "ruleAmountLabel": "Betrag (EUR)",
+      "rulePriorityLabel": "Priorität",
+
+      "ruleDaysLabel": "Tage (0=So, 6=Sa)",
+      "ruleDaysPlaceholder": "z. B. 5,6",
+
+      "ruleStartTimeLabel": "Startzeit",
+      "ruleEndTimeLabel": "Endzeit",
+      "ruleSelectTimePlaceholder": "Zeit auswählen",
+
+      "ruleMinPartySizeLabel": "Min. Gruppengröße",
+      "ruleMaxPartySizeLabel": "Max. Gruppengröße",
+
+      "ruleDateLabel": "Datum",
+
+      "cancellationPoliciesTitle": "Stornierungsrichtlinien",
+      "cancellationPoliciesDescription": "Rückerstattungsregeln basierend auf Stornierungszeitpunkt festlegen",
+      "cancellationPoliciesAddPolicyButton": "Richtlinie hinzufügen",
+
+      "policyHoursBeforeLabel": "Stunden vorher",
+      "policyRefundPercentageLabel": "Rückerstattung %",
+      "policyActiveLabel": "Aktiv"
+    },
+    "timeSlotOverrides": {
+      "title": "Zeitslot-Overrides",
+      "description": "Manuelles Sperren bestimmter Zeitfenster ermöglichen",
+
+      "addOverrideButton": "Override hinzufügen",
+
+      "formDateLabel": "Datum",
+      "formStartTimeLabel": "Startzeit",
+      "formEndTimeLabel": "Endzeit",
+      "formSelectTimePlaceholder": "Zeit auswählen",
+
+      "formReasonLabel": "Grund",
+      "formReasonPlaceholder": "Private Veranstaltung, Wartung usw.",
+
+      "formBlockTimeSlotLabel": "Zeitfenster blockieren",
+      "formCreateOverrideButton": "Override erstellen",
+
+      "listBlockedLabel": "Blockiert",
+      "listSpecialHoursLabel": "Sonderzeiten"
+    },
+    "restaurantSettings": {
+      "reservationDurationTitle": "Reservierungsdauer",
+      "reservationDurationDescription": "Konfigurieren Sie, wie die Reservierungsdauer berechnet wird",
+
+      "standardDurationLabel": "Standarddauer (Minuten)",
+      "standardDurationNote": "Gleiche Dauer für alle Gruppengrößen",
+
+      "smallPartyDurationLabel": "Kleine Gruppen (1–2)",
+      "mediumPartyDurationLabel": "Mittlere Gruppen (3–4)",
+      "largePartyDurationLabel": "Große Gruppen (5+)",
+
+      "tableCombinationsTitle": "Tischkombinationen",
+      "tableCombinationsDescription": "Erlaubt das Zusammenstellen mehrerer Tische für größere Gruppen",
+
+      "overbookingTitle": "Überbuchung",
+      "overbookingDescription": "Mehr Reservierungen als Kapazität akzeptieren",
+
+      "overbookingPercentageLabel": "Überbuchungsprozentsatz",
+      "overbookingPercentageNote": "Prozentsatz über der Kapazität, der akzeptiert wird"
+    }
+  },
+  "reservationPoliciesPage": {
+    "pageTitle": "Restaurant-Richtlinien",
+
+    "cancellationPolicyTitle": "Stornierungsrichtlinie",
+    "cancellationPolicyDescription": "Definieren Sie Ihre Stornierungsregeln und Zeitrahmen.",
+
+    "depositPolicyTitle": "Anzahlungsrichtlinie",
+    "depositPolicyDescription": "Erklären Sie die Anforderungen für Anzahlungen.",
+
+    "diningPolicyTitle": "Speiserichtlinie",
+    "diningPolicyDescription": "Legen Sie Regeln für das Restauranterlebnis fest.",
+
+    "noShowPolicyTitle": "No-Show-Richtlinie",
+    "noShowPolicyDescription": "Definieren Sie die Konsequenzen für nicht wahrgenommene Reservierungen.",
+
+    "policyEditorPlaceholder": "Richtlinie hier eingeben",
+
+    "saveButtonSaving": "Speichern...",
+    "saveButtonDirty": "Richtlinie speichern",
+    "saveButtonSaved": "Gespeichert",
+
+    "loadingText": "Richtlinien werden geladen....",
+    "errorLoading": "Fehler beim Laden der Richtlinien."
+  },
+  "reservationQueriesPage": {
+    "pageTitle": "Reservierungsanfragen",
+    "pageDescription": "Verwalten Sie alle eingehenden Reservierungsanfragen für Ihr Restaurant",
+
+    "searchPlaceholder": "Nach Name oder E-Mail suchen...",
+
+    "loadingText": "Wird geladen...",
+    "loadingSpinnerAriaLabel": "Reservierungsanfragen werden geladen",
+
+    "errorTitle": "Fehler beim Laden",
+    "errorDescription": "Reservierungsanfragen konnten nicht geladen werden.",
+    "errorFetchQueries": "Fehler beim Abrufen der Reservierungsanfragen",
+
+    "emptyTitle": "Keine Anfragen",
+    "emptyDescription": "Derzeit liegen keine Reservierungsanfragen vor.",
+
+    "filterAll": "Alle",
+    "filterImportant": "Wichtig",
+    "filterUpcoming": "Bevorstehend",
+    "filterFollowup": "Nachverfolgen",
+
+    "filterAllWithCount": "Alle",
+    "filterImportantWithCount": "Wichtig",
+    "filterUpcomingWithCount": "Bevorstehend",
+    "filterFollowupWithCount": "Nachverfolgen",
+
+    "filterEmptyTitle": "Keine Anfragen",
+    "filterEmptyDescription": "Keine Reservierungsanfragen gefunden.",
+
+    "deleteConfirm": "Möchten Sie diese Reservierungsanfrage wirklich löschen?",
+    "deleteSuccess": "Reservierungsanfrage erfolgreich gelöscht",
+    "deleteError": "Fehler beim Löschen der Reservierungsanfrage",
+
+    "apiErrorDelete": "Fehler beim Löschen der Reservierungsanfrage",
+    "apiErrorGeneric": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
   }
 }

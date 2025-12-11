@@ -9,31 +9,34 @@ import { Input } from "@/components/ui/input";
 import { Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 interface AdminReservationQueriesPageProps {
     restaurantId: string;
 }
 
 
-async function fetchReservationQueries(restaurantId: string): Promise<ReservationQuery[]> {
-    const res = await fetch(`/api/reservations/query?restaurantId=${restaurantId}`);
-    if (!res.ok) throw new Error("Failed to fetch reservation queries");
-    return res.json();
-}
-
-async function deleteReservationQuery(id: string): Promise<{ success: boolean }> {
-    const res = await fetch(`/api/reservations/query/${id}`, { method: "DELETE" });
-    if (!res.ok) throw new Error("Failed to delete reservation query");
-    return res.json();
-}
 
 export default function ReservationQueriesPage({
     restaurantId,
 }: AdminReservationQueriesPageProps) {
     const queryClient = useQueryClient();
-
+    const t = useTranslations("reservationQueriesPage")
     const [activeFilter, setActiveFilter] = useState<"all" | "important" | "upcoming" | "followup">("all");
     const [searchTerm, setSearchTerm] = useState("");
+
+    async function fetchReservationQueries(restaurantId: string): Promise<ReservationQuery[]> {
+        const res = await fetch(`/api/reservations/query?restaurantId=${restaurantId}`);
+        if (!res.ok) throw new Error(t("errorFetchQueries"));
+        return res.json();
+    }
+
+    async function deleteReservationQuery(id: string): Promise<{ success: boolean }> {
+        const res = await fetch(`/api/reservations/query/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error(t("deleteError"));
+        return res.json();
+    }
+
 
     const {
         data: queries = [],
@@ -47,16 +50,16 @@ export default function ReservationQueriesPage({
     const deleteMutation = useMutation({
         mutationFn: (id: string) => deleteReservationQuery(id),
         onSuccess: () => {
-            toast("Reservation query deleted successfully");
+            toast(t("deleteSuccess"));
             queryClient.invalidateQueries({ queryKey: ["reservation-queries", restaurantId] });
         },
         onError: () => {
-            toast("Failed to delete reservation query");
+            toast(t("deleteError"));
         },
     });
 
     function handleDelete(id: string) {
-        if (!window.confirm("Are you sure you want to delete this reservation query?")) return;
+        if (!window.confirm(t("deleteConfirm"))) return;
         deleteMutation.mutate(id);
     }
 
@@ -91,9 +94,9 @@ export default function ReservationQueriesPage({
         return (
             <Alert>
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error Loading</AlertTitle>
+                <AlertTitle>{t("errorTitle")}</AlertTitle>
                 <AlertDescription>
-                    Could not load reservation queries.
+                    {t("errorDescription")}
                 </AlertDescription>
             </Alert>
         );
@@ -106,9 +109,11 @@ export default function ReservationQueriesPage({
             <div className="w-full space-y-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900">Reservation Queries</h2>
+                        <h2 className="text-2xl font-bold text-slate-900">
+                            {t("pageTitle")}
+                        </h2>
                         <p className="text-slate-600 mt-1">
-                            Manage all incoming reservation queries for your restaurant
+                            {t("pageDescription")}
                         </p>
                     </div>
                 </div>
@@ -117,7 +122,7 @@ export default function ReservationQueriesPage({
                 <div className="w-full max-w-sm">
                     <Input
                         type="text"
-                        placeholder="Search by name or email..."
+                        placeholder={t("searchPlaceholder")}
                         className="w-full bg-white"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -128,9 +133,11 @@ export default function ReservationQueriesPage({
                 {isEmpty ? (
                     <Alert>
                         <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>No Queries</AlertTitle>
+                        <AlertTitle>
+                            {t("filterEmptyTitle")}
+                        </AlertTitle>
                         <AlertDescription>
-                            There are no reservation queries at the moment.
+                            {t("emptyDescription")}
                         </AlertDescription>
                     </Alert>
                 ) : (
@@ -147,7 +154,7 @@ export default function ReservationQueriesPage({
                                         : "bg-white text-slate-600 border-slate-300 hover:bg-slate-100"}
                 `}
                             >
-                                All ({queries.length})
+                                {t("filterAll")} ({queries.length})
                             </button>
 
                             <button
@@ -159,7 +166,7 @@ export default function ReservationQueriesPage({
                                         : "bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100"}
                 `}
                             >
-                                Important ({queries.filter(q => q.status === "important").length})
+                                {t("filterImportantWithCount")}  ({queries.filter(q => q.status === "important").length})
                             </button>
 
                             <button
@@ -171,7 +178,7 @@ export default function ReservationQueriesPage({
                                         : "bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100"}
                 `}
                             >
-                                Upcoming ({queries.filter(q => q.status === "upcoming").length})
+                                {t("filterUpcomingWithCount")}  ({queries.filter(q => q.status === "upcoming").length})
                             </button>
 
                             <button
@@ -183,7 +190,7 @@ export default function ReservationQueriesPage({
                                         : "bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100"}
                 `}
                             >
-                                Follow Up ({queries.filter(q => q.status === "followup").length})
+                                {t("filterFollowupWithCount")}  ({queries.filter(q => q.status === "followup").length})
                             </button>
                         </div>
 
@@ -200,9 +207,11 @@ export default function ReservationQueriesPage({
                             ) : (
                                 <Alert className="md:col-span-2 lg:col-span-3">
                                     <AlertCircle className="h-4 w-4" />
-                                    <AlertTitle>No Queries</AlertTitle>
+                                    <AlertTitle>
+                                        {t("filterEmptyTitle")}
+                                    </AlertTitle>
                                     <AlertDescription>
-                                        No reservation queries found for &quot;{activeFilter}&quot; filter.
+                                        {t("filterEmptyDescription")}
                                     </AlertDescription>
                                 </Alert>
                             )}

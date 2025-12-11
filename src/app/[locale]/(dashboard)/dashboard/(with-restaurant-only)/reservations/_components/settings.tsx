@@ -14,6 +14,7 @@ import RestaurantSettingsManager from "./settings/restaurent-settings";
 import TimeSlotOverrides from "./settings/time-slot-overrides";
 import { SettingsState } from "./settings/types";
 import ReservationControlSettings from "./settings/reservation-control";
+import { useTranslations } from "next-intl";
 
 const default_data: SettingsState = {
     overrides_settings: {
@@ -64,6 +65,7 @@ const default_data: SettingsState = {
 export default function SettingsPage() {
     const { selectedRestaurant: restaurant, updateSelectedRestaurant } = useRestaurantStore()
     const restaurantId = restaurant?.id
+    const t = useTranslations("SettingsPage.main")
 
     const { data: initialSettings, isLoading: isLoadingInitialData } = useReservationSettings(restaurantId!);
     const saveMutation = useSaveReservationSettings(restaurantId!);
@@ -94,8 +96,8 @@ export default function SettingsPage() {
         try {
             if (!restaurantId || !settings) return;
             await saveMutation.mutateAsync(settings);
-            toast.success("Settings saved successfully!", {
-                description: "Your reservation settings have been updated.",
+            toast.success(t("toast.saveSuccessTitle"), {
+                description: t("toast.saveSuccessDescription"),
                 duration: 3000,
             });
 
@@ -104,8 +106,8 @@ export default function SettingsPage() {
             setHasChanges(false);
         } catch (error) {
             console.error("Failed to save settings:", error);
-            toast.error("Failed to save settings", {
-                description: "Please try again.",
+            toast.error(t("toast.saveErrorTitle"), {
+                description: t("toast.saveErrorDescription"),
                 duration: 4000,
             });
         }
@@ -125,15 +127,17 @@ export default function SettingsPage() {
 
 
     if (isLoadingInitialData || !settings || !restaurant) {
-        return <LoadingUI text="Loading settings...." />;
+        return <LoadingUI text={t("loadingText")} />;
     }
 
     return (
         <div className="space-y-4 min-h-screen">
             <div>
-                <h2 className="text-2xl font-bold text-slate-900">Reservation Settings</h2>
+                <h2 className="text-2xl font-bold text-slate-900">
+                    {t("title")}
+                </h2>
                 <p className="text-slate-600 mt-1">
-                    Control and configure key features of your restaurant system
+                    {t("subtitle")}
                 </p>
             </div>
             <div className="space-y-3">
