@@ -3552,5 +3552,173 @@
 
     "apiErrorDelete": "Échec de la suppression de la demande de réservation",
     "apiErrorGeneric": "Une erreur inattendue s’est produite. Veuillez réessayer."
+  },
+  "reservationPaymentsPage": {
+    "pageTitle": "Paiements & revenus",
+    "pageDescription": "Consultez les transactions de paiement et suivez les revenus de votre restaurant",
+
+    "loadingText": "Chargement des paiements...",
+
+    "errorTitle": "Impossible de charger les paiements",
+    "tryAgainButton": "Réessayer",
+
+    "stats": {
+      "thisMonth": "Ce mois-ci",
+      "lastMonth": "Le mois dernier",
+      "paidTransactions": "Transactions payées",
+      "pendingFailed": "En attente/Échouées",
+      "vsLastMonth": "vs le mois dernier",
+      "totalSuffix": "au total",
+      "refundedSuffix": "remboursées"
+    },
+
+    "filters": {
+      "searchPlaceholder": "Rechercher par ID, transaction ou réservation",
+      "searchAriaLabel": "Rechercher des paiements",
+      "statusPlaceholder": "Filtrer par statut",
+
+      "allStatus": "Tous les statuts",
+      "paid": "Payé",
+      "pending": "En attente",
+      "failed": "Échoué",
+      "refunded": "Remboursé",
+
+      "refreshButton": "Actualiser",
+      "exportCsvButton": "Exporter CSV"
+    },
+
+    "table": {
+      "transactionsTitle": "Transactions",
+      "paymentId": "ID de paiement",
+      "reservationId": "ID de réservation",
+      "amount": "Montant",
+      "status": "Statut",
+      "method": "Méthode",
+      "paidAt": "Payé le",
+      "transactionId": "ID de transaction"
+    },
+
+    "emptyStates": {
+      "noPaymentsFound": "Aucune transaction de paiement trouvée.",
+      "noMatches": "Aucune transaction ne correspond à vos filtres."
+    },
+
+    "csv": {
+      "headers": {
+        "id": "ID",
+        "reservationId": "ID de réservation",
+        "amount": "Montant",
+        "currency": "Devise",
+        "status": "Statut",
+        "paymentMethod": "Moyen de paiement",
+        "paidAt": "Payé le",
+        "transactionId": "ID de transaction"
+      }
+    }
+  },
+  "reservationAreasPage": {
+    "pageTitle": "Zones",
+    "pageDescription": "Organisez votre restaurant en différentes zones",
+
+    "loadingText": "Chargement...",
+    "loadingAreasText": "Chargement des zones...",
+
+    "errorLoadingTitle": "Erreur lors du chargement des zones",
+    "errorLoadingMessagePrefix": "Erreur lors du chargement des zones :",
+
+    "stats": {
+      "totalAreas": "Zones au total",
+      "activeAreas": "Zones actives",
+      "inactiveAreas": "Zones inactives"
+    },
+
+    "search": {
+      "placeholder": "Rechercher le nom de la zone"
+    },
+
+    "actions": {
+      "addAreaButton": "Ajouter une zone",
+      "addNewAreaTitle": "Ajouter une nouvelle zone",
+      "editAreaTitle": "Modifier la zone",
+      "areaNameLabel": "Nom de la zone",
+      "areaNamePlaceholder": "Nom de la zone",
+      "statusLabel": "Statut",
+      "statusPlaceholder": "Sélectionner un statut",
+      "active": "Active",
+      "inactive": "Inactive",
+
+      "saveButton": "Enregistrer",
+      "savingButton": "Enregistrement...",
+      "saveChangesButton": "Enregistrer les modifications"
+    },
+
+    "card": {
+      "lastUpdatedLabel": "Dernière mise à jour :"
+    },
+
+    "emptyState": {
+      "noAreasFound": "Aucune zone trouvée."
+    }
+  },
+  "reservationTablesPage": {
+    "title": "Tables",
+    "subtitle": "Gérez les tables et le plan de salle de votre restaurant",
+    "loading": {
+      "generic": "Chargement...",
+      "tables": "Chargement des tables..."
+    },
+    "error": {
+      "loadingTables": "Erreur lors du chargement des tables : {{message}}"
+    },
+    "stats": {
+      "totalTables": "Nombre total de tables",
+      "active": "Actives",
+      "inactive": "Inactives",
+      "totalCapacity": "Capacité totale"
+    },
+    "filters": {
+      "statusPlaceholder": "Statut",
+      "searchPlaceholder": "Rechercher par numéro de table ou zone",
+      "statusOptions": {
+        "all": "Toutes",
+        "active": "Actives",
+        "inactive": "Inactives"
+      }
+    },
+    "dialog": {
+      "addTableButton": "Ajouter une table",
+      "title": "Ajouter une nouvelle table",
+      "fields": {
+        "tableNumberLabel": "Numéro de table",
+        "tableNumberPlaceholder": "Numéro de table",
+        "capacityLabel": "Capacité",
+        "capacityPlaceholder": "Capacité",
+        "areaLabel": "Zone",
+        "areaPlaceholder": "Sélectionner une zone",
+        "statusLabel": "Statut",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "save": "Enregistrer",
+      "saving": "Enregistrement..."
+    },
+    "grid": {
+      "tableTitle": "Table",
+      "capacityLineLabel": "Capacité :",
+      "capacitySeats": "Places",
+      "active": "Active",
+      "inactive": "Inactive",
+      "lastUpdatedLabel": "Dernière mise à jour :",
+      "noTablesFound": "Aucune table trouvée."
+    },
+    "actions": {
+      "deleteTableAriaLabel": "Supprimer la table"
+    },
+    "confirm": {
+      "deleteTable": "Êtes-vous sûr de vouloir supprimer cette table ?"
+    },
+    "alerts": {
+      "fillAllFields": "Veuillez remplir tous les champs"
+    }
   }
 }

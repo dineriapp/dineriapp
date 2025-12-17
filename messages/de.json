@@ -3548,5 +3548,173 @@
 
     "apiErrorDelete": "Fehler beim Löschen der Reservierungsanfrage",
     "apiErrorGeneric": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+  },
+  "reservationPaymentsPage": {
+    "pageTitle": "Zahlungen & Umsatz",
+    "pageDescription": "Zahlungsvorgänge ansehen und den Umsatz Ihres Restaurants verfolgen",
+
+    "loadingText": "Zahlungen werden geladen...",
+
+    "errorTitle": "Zahlungen konnten nicht geladen werden",
+    "tryAgainButton": "Erneut versuchen",
+
+    "stats": {
+      "thisMonth": "Diesen Monat",
+      "lastMonth": "Letzten Monat",
+      "paidTransactions": "Bezahlte Transaktionen",
+      "pendingFailed": "Ausstehend/Fehlgeschlagen",
+      "vsLastMonth": "im Vergleich zum letzten Monat",
+      "totalSuffix": "gesamt",
+      "refundedSuffix": "erstattet"
+    },
+
+    "filters": {
+      "searchPlaceholder": "Suche nach ID, Transaktion oder Reservierung",
+      "searchAriaLabel": "Zahlungen suchen",
+      "statusPlaceholder": "Nach Status filtern",
+
+      "allStatus": "Alle Status",
+      "paid": "Bezahlt",
+      "pending": "Ausstehend",
+      "failed": "Fehlgeschlagen",
+      "refunded": "Erstattet",
+
+      "refreshButton": "Aktualisieren",
+      "exportCsvButton": "CSV exportieren"
+    },
+
+    "table": {
+      "transactionsTitle": "Transaktionen",
+      "paymentId": "Zahlungs-ID",
+      "reservationId": "Reservierungs-ID",
+      "amount": "Betrag",
+      "status": "Status",
+      "method": "Methode",
+      "paidAt": "Bezahlt am",
+      "transactionId": "Transaktions-ID"
+    },
+
+    "emptyStates": {
+      "noPaymentsFound": "Keine Zahlungstransaktionen gefunden.",
+      "noMatches": "Keine Transaktionen entsprechen Ihren Filtern."
+    },
+
+    "csv": {
+      "headers": {
+        "id": "ID",
+        "reservationId": "Reservierungs-ID",
+        "amount": "Betrag",
+        "currency": "Währung",
+        "status": "Status",
+        "paymentMethod": "Zahlungsmethode",
+        "paidAt": "Bezahlt am",
+        "transactionId": "Transaktions-ID"
+      }
+    }
+  },
+  "reservationAreasPage": {
+    "pageTitle": "Bereiche",
+    "pageDescription": "Organisieren Sie Ihr Restaurant in verschiedene Bereiche",
+
+    "loadingText": "Wird geladen...",
+    "loadingAreasText": "Bereiche werden geladen...",
+
+    "errorLoadingTitle": "Fehler beim Laden der Bereiche",
+    "errorLoadingMessagePrefix": "Fehler beim Laden der Bereiche:",
+
+    "stats": {
+      "totalAreas": "Bereiche insgesamt",
+      "activeAreas": "Aktive Bereiche",
+      "inactiveAreas": "Inaktive Bereiche"
+    },
+
+    "search": {
+      "placeholder": "Bereichsname suchen"
+    },
+
+    "actions": {
+      "addAreaButton": "Bereich hinzufügen",
+      "addNewAreaTitle": "Neuen Bereich hinzufügen",
+      "editAreaTitle": "Bereich bearbeiten",
+      "areaNameLabel": "Bereichsname",
+      "areaNamePlaceholder": "Bereichsname",
+      "statusLabel": "Status",
+      "statusPlaceholder": "Status auswählen",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+
+      "saveButton": "Speichern",
+      "savingButton": "Wird gespeichert...",
+      "saveChangesButton": "Änderungen speichern"
+    },
+
+    "card": {
+      "lastUpdatedLabel": "Zuletzt aktualisiert:"
+    },
+
+    "emptyState": {
+      "noAreasFound": "Keine Bereiche gefunden."
+    }
+  },
+  "reservationTablesPage": {
+    "title": "Tische",
+    "subtitle": "Verwalten Sie die Tische und den Grundriss Ihres Restaurants",
+    "loading": {
+      "generic": "Wird geladen...",
+      "tables": "Tische werden geladen..."
+    },
+    "error": {
+      "loadingTables": "Fehler beim Laden der Tische: {{message}}"
+    },
+    "stats": {
+      "totalTables": "Tische insgesamt",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "totalCapacity": "Gesamtkapazität"
+    },
+    "filters": {
+      "statusPlaceholder": "Status",
+      "searchPlaceholder": "Tischnummer oder Bereich suchen",
+      "statusOptions": {
+        "all": "Alle",
+        "active": "Aktiv",
+        "inactive": "Inaktiv"
+      }
+    },
+    "dialog": {
+      "addTableButton": "Tisch hinzufügen",
+      "title": "Neuen Tisch hinzufügen",
+      "fields": {
+        "tableNumberLabel": "Tischnummer",
+        "tableNumberPlaceholder": "Tischnummer",
+        "capacityLabel": "Kapazität",
+        "capacityPlaceholder": "Kapazität",
+        "areaLabel": "Bereich",
+        "areaPlaceholder": "Bereich auswählen",
+        "statusLabel": "Status",
+        "active": "Aktiv",
+        "inactive": "Inaktiv"
+      },
+      "save": "Speichern",
+      "saving": "Wird gespeichert..."
+    },
+    "grid": {
+      "tableTitle": "Tisch",
+      "capacityLineLabel": "Kapazität:",
+      "capacitySeats": "Sitze",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "lastUpdatedLabel": "Zuletzt aktualisiert:",
+      "noTablesFound": "Keine Tische gefunden."
+    },
+    "actions": {
+      "deleteTableAriaLabel": "Tisch löschen"
+    },
+    "confirm": {
+      "deleteTable": "Möchten Sie diesen Tisch wirklich löschen?"
+    },
+    "alerts": {
+      "fillAllFields": "Bitte füllen Sie alle Felder aus"
+    }
   }
 }

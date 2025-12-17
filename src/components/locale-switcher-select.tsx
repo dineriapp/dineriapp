@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
 import { LanguagesIcon } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { ReactNode, useTransition } from 'react';
 
 type Props = {
@@ -24,15 +24,14 @@ export default function LocaleSwitcherSelect({
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const pathname = usePathname();
-    const params = useParams();
+    const searchParams = useSearchParams();
 
     function onSelectChange(nextLocale: string) {
         startTransition(() => {
+            const query = searchParams.toString();
             router.replace(
-                // @ts-expect-error -- TypeScript will validate that only known `params`
-                // are used in combination with a given `pathname`. Since the two will
-                // always match for the current route, we can skip runtime checks.
-                { pathname, params },
+                // keep existing query string
+                query ? `${pathname}?${query}` : pathname,
                 { locale: nextLocale }
             );
         });

@@ -3554,5 +3554,182 @@
 
     "apiErrorDelete": "Failed to delete reservation query",
     "apiErrorGeneric": "An unexpected error occurred. Please try again."
+  },
+  "reservationPaymentsPage": {
+    "pageTitle": "Payments & Revenue",
+    "pageDescription": "View payment transactions and track your restaurant revenue",
+
+    "loadingText": "Loading payments...",
+
+    "errorTitle": "Failed to load payments",
+    "tryAgainButton": "Try Again",
+
+    "stats": {
+      "thisMonth": "This Month",
+      "lastMonth": "Last Month",
+      "paidTransactions": "Paid Transactions",
+      "pendingFailed": "Pending/Failed",
+      "vsLastMonth": "vs last month",
+      "totalSuffix": "total",
+      "refundedSuffix": "refunded"
+    },
+
+    "filters": {
+      "searchPlaceholder": "Search by ID, transaction, or reservation",
+      "searchAriaLabel": "Search payments",
+      "statusPlaceholder": "Filter by status",
+
+      "allStatus": "All Status",
+      "paid": "Paid",
+      "pending": "Pending",
+      "failed": "Failed",
+      "refunded": "Refunded",
+
+      "refreshButton": "Refresh",
+      "exportCsvButton": "Export CSV"
+    },
+
+    "table": {
+      "transactionsTitle": "Transactions",
+      "paymentId": "Payment ID",
+      "reservationId": "Reservation ID",
+      "amount": "Amount",
+      "status": "Status",
+      "method": "Method",
+      "paidAt": "Paid At",
+      "transactionId": "Transaction ID"
+    },
+
+    "emptyStates": {
+      "noPaymentsFound": "No payment transactions found.",
+      "noMatches": "No transactions match your filters."
+    },
+
+    "csv": {
+      "headers": {
+        "id": "ID",
+        "reservationId": "Reservation ID",
+        "amount": "Amount",
+        "currency": "Currency",
+        "status": "Status",
+        "paymentMethod": "Payment Method",
+        "paidAt": "Paid At",
+        "transactionId": "Transaction ID"
+      }
+    }
+  },
+  "reservationAreasPage": {
+    "pageTitle": "Areas",
+    "pageDescription": "Organize your restaurant into different areas",
+
+    "loadingText": "Loading...",
+    "loadingAreasText": "Loading areas...",
+
+    "errorLoadingTitle": "Error loading Areas",
+    "errorLoadingMessagePrefix": "Error loading Areas:",
+
+    "stats": {
+      "totalAreas": "Total Areas",
+      "activeAreas": "Active Areas",
+      "inactiveAreas": "Inactive Areas"
+    },
+
+    "search": {
+      "placeholder": "Search area name"
+    },
+
+    "actions": {
+      "addAreaButton": "Add Area",
+      "addNewAreaTitle": "Add New Area",
+      "editAreaTitle": "Edit Area",
+      "areaNameLabel": "Area Name",
+      "areaNamePlaceholder": "Area Name",
+      "statusLabel": "Status",
+      "statusPlaceholder": "Select status",
+      "active": "Active",
+      "inactive": "Inactive",
+
+      "saveButton": "Save",
+      "savingButton": "Saving...",
+      "saveChangesButton": "Save Changes"
+    },
+
+    "card": {
+      "lastUpdatedLabel": "Last updated:"
+    },
+
+    "emptyState": {
+      "noAreasFound": "No areas found."
+    }
+  },
+  "reservationTablesPage": {
+    "title": "Tables",
+    "subtitle": "Manage your restaurant tables and floor plan",
+
+    "loading": {
+      "generic": "Loading...",
+      "tables": "Loading tables..."
+    },
+
+    "error": {
+      "loadingTables": "Error loading tables: {{message}}"
+    },
+
+    "stats": {
+      "totalTables": "Total Tables",
+      "active": "Active",
+      "inactive": "Inactive",
+      "totalCapacity": "Total Capacity"
+    },
+
+    "filters": {
+      "statusPlaceholder": "Status",
+      "searchPlaceholder": "Search table number or area",
+      "statusOptions": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    },
+
+    "dialog": {
+      "addTableButton": "Add Table",
+      "title": "Add New Table",
+      "fields": {
+        "tableNumberLabel": "Table Number",
+        "tableNumberPlaceholder": "Table Number",
+        "capacityLabel": "Capacity",
+        "capacityPlaceholder": "Capacity",
+        "areaLabel": "Area",
+        "areaPlaceholder": "Select Area",
+        "statusLabel": "Capacity",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "save": "Save",
+      "saving": "Saving..."
+    },
+
+    "grid": {
+      "tableTitle": "Table",
+      "capacityLineLabel": "Capacity:",
+      "capacitySeats": "Seats",
+      "active": "Active",
+      "inactive": "Inactive",
+      "lastUpdatedLabel": "Last updated:",
+      "noTablesFound": "No tables found."
+    },
+
+    "actions": {
+      "deleteTableAriaLabel": "Delete table"
+    },
+
+    "confirm": {
+      "deleteTable": "Are you sure you want to delete this table?"
+    },
+
+    "alerts": {
+      "fillAllFields": "Please fill in all fields"
+    }
   }
 }

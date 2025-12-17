@@ -16,6 +16,7 @@ import { useRestaurantStore } from "@/stores/restaurant-store"
 import { Area } from "@prisma/client"
 import { ArrowDownRight, ArrowUpRight, MapPin, Pencil, PlusCircle, ToggleLeft, ToggleRight, Trash2 } from "lucide-react"
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 
 export default function AreasPage() {
     const [search, setSearch] = useState("")
@@ -23,7 +24,7 @@ export default function AreasPage() {
     const [editDialogOpen, setEditDialogOpen] = useState(false)
     const { selectedRestaurant: restaurant } = useRestaurantStore()
     const restaurantId = restaurant?.id
-
+    const t = useTranslations("reservationAreasPage")
     const { data: areas = [], isLoading, error } = useAreas(restaurantId)
     const createAreaMutation = useCreateArea(restaurantId)
     const updateAreaMutation = useUpdateArea()
@@ -133,21 +134,28 @@ export default function AreasPage() {
     }
 
     if (!restaurant) {
-        return <LoadingUI text="Loading..." />
+        return <LoadingUI text={t("loadingText")} />
     }
 
     if (isLoading) {
-        return <LoadingUI text="Loading areas..." />
+        return <LoadingUI text={t("loadingAreasText")} />
     }
 
     if (error) {
         return (
             <div className="space-y-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-900">Areas</h2>
-                    <p className="text-slate-600 mt-1">Organize your restaurant into different areas</p>
+                    <h2 className="text-2xl font-bold text-slate-900">
+                        {t("pageTitle")}
+                    </h2>
+                    <p className="text-slate-600 mt-1">
+                        {t("pageDescription")}
+                    </p>
                 </div>
-                <div className="text-center text-red-500">Error loading Areas: {error.message}</div>
+                <div className="text-center text-red-500">
+                    {t("errorLoadingMessagePrefix")}
+                    {error.message}
+                </div>
             </div>
         )
     }
@@ -155,26 +163,30 @@ export default function AreasPage() {
     return (
         <div className="space-y-4">
             <div>
-                <h2 className="text-2xl font-bold text-slate-900">Areas</h2>
-                <p className="text-slate-600 mt-1">Organize your restaurant into different areas</p>
+                <h2 className="text-2xl font-bold text-slate-900">
+                    {t("pageTitle")}
+                </h2>
+                <p className="text-slate-600 mt-1">
+                    {t("pageDescription")}
+                </p>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4">
                 <StatCard
-                    title="Total Areas"
+                    title={t("stats.totalAreas")}
                     value={totalAreas}
                     icon={<MapPin className="h-5 w-5 text-gray-400" />}
                     trendValue={trend.total}
                 />
                 <StatCard
-                    title="Active Areas"
+                    title={t("stats.activeAreas")}
                     value={totalActive}
                     icon={<ToggleRight className="h-5 w-5 text-gray-400" />}
                     trendValue={trend.active}
                 />
                 <StatCard
-                    title="Inactive Areas"
+                    title={t("stats.inactiveAreas")}
                     value={totalInactive}
                     icon={<ToggleLeft className="h-5 w-5 text-gray-400" />}
                     trendValue={trend.inactive}
@@ -184,7 +196,7 @@ export default function AreasPage() {
             {/* Filters + Add */}
             <div className="flex justify-between items-center gap-4">
                 <Input
-                    placeholder="Search area name"
+                    placeholder={t("search.placeholder")}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="w-[250px] bg-white"
@@ -193,31 +205,42 @@ export default function AreasPage() {
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-black text-white hover:bg-gray-800 flex items-center gap-2">
-                            <PlusCircle className="h-4 w-4" /> Add Area
+                            <PlusCircle className="h-4 w-4" />
+                            {t("actions.addAreaButton")}
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-white">
                         <DialogHeader>
-                            <DialogTitle>Add New Area</DialogTitle>
+                            <DialogTitle>
+                                {t("actions.addNewAreaTitle")}
+                            </DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <Label>Area Name</Label>
+                                <Label>
+                                    {t("actions.areaNameLabel")}
+                                </Label>
                                 <Input
-                                    placeholder="Area Name"
+                                    placeholder={t("actions.areaNamePlaceholder")}
                                     value={newArea.name}
                                     onChange={(e) => setNewArea({ ...newArea, name: e.target.value })}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Status</Label>
+                                <Label>
+                                    {t("actions.statusLabel")}
+                                </Label>
                                 <Select value={newArea.active} onValueChange={(val) => setNewArea({ ...newArea, active: val })}>
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select status" />
+                                        <SelectValue placeholder={t("actions.statusPlaceholder")} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="true">Active</SelectItem>
-                                        <SelectItem value="false">Inactive</SelectItem>
+                                        <SelectItem value="true">
+                                            {t("actions.active")}
+                                        </SelectItem>
+                                        <SelectItem value="false">
+                                            {t("actions.inactive")}
+                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -228,7 +251,7 @@ export default function AreasPage() {
                                 disabled={createAreaMutation.isPending}
                                 className="bg-green-600 text-white hover:bg-green-700"
                             >
-                                {createAreaMutation.isPending ? "Saving..." : "Save"}
+                                {createAreaMutation.isPending ? t("actions.savingButton") : t("actions.saveButton")}
                             </Button>
                         </DialogFooter>
                     </DialogContent>
@@ -277,7 +300,7 @@ export default function AreasPage() {
                                     : "bg-red-50 text-red-700 border-red-200"
                                     }`}
                             >
-                                {area.active ? "Active" : "Inactive"}
+                                {area.active ? t("actions.active") : t("actions.inactive")}
                             </Badge>
 
                             <Switch
@@ -290,7 +313,7 @@ export default function AreasPage() {
 
                         {/* Footer (optional info) */}
                         <div className="px-4 pt-2 text-xs text-gray-400 border-t border-gray-100 mt-3">
-                            Last updated:{" "}
+                            {t("card.lastUpdatedLabel")}{" "}
                             <span className="text-gray-600 font-medium">
                                 {new Date(area.updatedAt).toLocaleDateString()}
                             </span>
@@ -300,36 +323,46 @@ export default function AreasPage() {
 
             </div>
 
-            {filteredAreas.length === 0 && <div className="p-6 text-center text-sm text-gray-500">No areas found.</div>}
+            {filteredAreas.length === 0 && <div className="p-6 text-center text-sm text-gray-500">{t("emptyState.noAreasFound")}</div>}
 
             {/* Edit Dialog */}
             <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
                 <DialogContent className="bg-white">
                     <DialogHeader>
-                        <DialogTitle>Edit Area</DialogTitle>
+                        <DialogTitle>
+                            {t("actions.editAreaTitle")}
+                        </DialogTitle>
                     </DialogHeader>
                     {editArea && (
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <Label>Area Name</Label>
+                                <Label>
+                                    {t("actions.areaNameLabel")}
+                                </Label>
                                 <Input
-                                    placeholder="Area Name"
+                                    placeholder={t("actions.areaNamePlaceholder")}
                                     value={editArea.name}
                                     onChange={(e) => setEditArea({ ...editArea, name: e.target.value })}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Status</Label>
+                                <Label>
+                                    {t("actions.statusLabel")}
+                                </Label>
                                 <Select
                                     value={editArea.active ? "true" : "false"}
                                     onValueChange={(val) => setEditArea({ ...editArea, active: val === "true" })}
                                 >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select status" />
+                                        <SelectValue placeholder={t("actions.statusPlaceholder")} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="true">Active</SelectItem>
-                                        <SelectItem value="false">Inactive</SelectItem>
+                                        <SelectItem value="true">
+                                            {t("actions.active")}
+                                        </SelectItem>
+                                        <SelectItem value="false">
+                                            {t("actions.inactive")}
+                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -341,7 +374,7 @@ export default function AreasPage() {
                             disabled={updateAreaMutation.isPending}
                             className="bg-blue-600 text-white hover:bg-blue-700"
                         >
-                            {updateAreaMutation.isPending ? "Saving..." : "Save Changes"}
+                            {updateAreaMutation.isPending ? t("actions.savingButton") : t("actions.saveChangesButton")}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

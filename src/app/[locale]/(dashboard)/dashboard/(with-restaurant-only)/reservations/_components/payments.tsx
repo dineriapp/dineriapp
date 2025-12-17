@@ -35,6 +35,7 @@ import {
     ReceiptText,
     RefreshCcw,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 // 🪙 Helper: get current month stats
@@ -125,7 +126,7 @@ const StatCard = ({
 export default function PaymentsPage() {
     const [search, setSearch] = useState("")
     const [statusFilter, setStatusFilter] = useState("ALL")
-
+    const t = useTranslations("reservationPaymentsPage")
     const { selectedRestaurant: restaurant } = useRestaurantStore()
     const restaurantId = restaurant?.id
 
@@ -158,7 +159,7 @@ export default function PaymentsPage() {
 
     const handleExportCSV = () => {
         // Basic CSV export implementation
-        const headers = ['ID', 'Reservation ID', 'Amount', 'Currency', 'Status', 'Payment Method', 'Paid At', 'Transaction ID']
+        const headers = [t("csv.headers.id"), t("csv.headers.reservationId"), t("csv.headers.amount"), t("csv.headers.currency"), t("csv.headers.status"), t("csv.headers.paymentMethod"), t("csv.headers.paidAt"), t("csv.headers.transactionId")]
         const csvData = filteredPayments.map(p => [
             p.id,
             p.reservation_id,
@@ -191,16 +192,18 @@ export default function PaymentsPage() {
     }
 
     if (isLoading || !restaurant) {
-        return <LoadingUI text="Loading payments..." />
+        return <LoadingUI text={t("loadingText")} />
     }
 
     if (error) {
         return (
             <div className="flex items-center justify-center h-64">
                 <div className="text-center">
-                    <p className="text-red-600 mb-4">Failed to load payments</p>
+                    <p className="text-red-600 mb-4">
+                        {t("errorTitle")}
+                    </p>
                     <Button onClick={handleRefresh} variant="outline">
-                        Try Again
+                        {t("tryAgainButton")}
                     </Button>
                 </div>
             </div>
@@ -230,37 +233,39 @@ export default function PaymentsPage() {
     return (
         <div className="space-y-4">
             <div>
-                <h1 className="text-2xl font-bold text-slate-900">Payments & Revenue</h1>
+                <h1 className="text-2xl font-bold text-slate-900">
+                    {t("pageTitle")}
+                </h1>
                 <p className="text-slate-600 mt-1">
-                    View payment transactions and track your restaurant revenue
+                    {t("pageDescription")}
                 </p>
             </div>
 
             {/* 📊 Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
-                    title="This Month"
+                    title={t("stats.thisMonth")}
                     value={`€${stats.thisMonth.toFixed(2)}`}
                     icon={<DollarSign className="h-5 w-5 text-gray-400" />}
                     trend={growth}
-                    description="vs last month"
+                    description={t("stats.vsLastMonth")}
                 />
                 <StatCard
-                    title="Last Month "
+                    title={t("stats.lastMonth")}
                     value={`€${stats.lastMonth.toFixed(2)}`}
                     icon={<Banknote className="h-5 w-5 text-gray-400" />}
                 />
                 <StatCard
-                    title="Paid Transactions"
+                    title={t("stats.paidTransactions")}
                     value={stats.paid}
                     icon={<ReceiptText className="h-5 w-5 text-gray-400" />}
-                    description={`${stats.totalTransactions} total`}
+                    description={`${stats.totalTransactions} ${t("stats.totalSuffix")}`}
                 />
                 <StatCard
-                    title="Pending/Failed"
+                    title={t("stats.pendingFailed")}
                     value={`${stats.pending} / ${stats.failed}`}
                     icon={<Filter className="h-5 w-5 text-gray-400" />}
-                    description={`${stats.refunded} refunded`}
+                    description={`${stats.refunded} ${t("stats.refundedSuffix")}`}
                 />
             </div>
 
@@ -268,24 +273,34 @@ export default function PaymentsPage() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
                     <Input
-                        placeholder="Search by ID, transaction, or reservation"
+                        placeholder={t("filters.searchPlaceholder")}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="!bg-white w-full sm:w-[300px]"
-                        aria-label="Search payments"
+                        aria-label={t("filters.searchAriaLabel")}
                     />
 
                     <div className="flex items-center gap-3">
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
                             <SelectTrigger className="w-[180px] !bg-white">
-                                <SelectValue placeholder="Filter by status" />
+                                <SelectValue placeholder={t("filters.statusPlaceholder")} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="ALL">All Status</SelectItem>
-                                <SelectItem value="PAID">Paid</SelectItem>
-                                <SelectItem value="PENDING">Pending</SelectItem>
-                                <SelectItem value="FAILED">Failed</SelectItem>
-                                <SelectItem value="REFUNDED">Refunded</SelectItem>
+                                <SelectItem value="ALL">
+                                    {t("filters.allStatus")}
+                                </SelectItem>
+                                <SelectItem value="PAID">
+                                    {t("filters.paid")}
+                                </SelectItem>
+                                <SelectItem value="PENDING">
+                                    {t("filters.pending")}
+                                </SelectItem>
+                                <SelectItem value="FAILED">
+                                    {t("filters.failed")}
+                                </SelectItem>
+                                <SelectItem value="REFUNDED">
+                                    {t("filters.refunded")}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
 
@@ -296,7 +311,7 @@ export default function PaymentsPage() {
                             disabled={isLoading}
                         >
                             <RefreshCcw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-                            Refresh
+                            {t("filters.refreshButton")}
                         </Button>
                     </div>
                 </div>
@@ -306,7 +321,7 @@ export default function PaymentsPage() {
                     onClick={handleExportCSV}
                     disabled={filteredPayments.length === 0}
                 >
-                    <Download className="h-4 w-4" /> Export CSV
+                    <Download className="h-4 w-4" />  {t("filters.exportCsvButton")}
                 </Button>
             </div>
 
@@ -314,19 +329,33 @@ export default function PaymentsPage() {
             <div className="bg-white border rounded-md shadow-sm overflow-hidden">
                 <div className="p-4 border-b">
                     <h3 className="text-lg font-semibold">
-                        Transactions ({filteredPayments.length})
+                        {t("table.transactionsTitle")} ({filteredPayments.length})
                     </h3>
                 </div>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[120px]">Payment ID</TableHead>
-                            <TableHead className="w-[120px]">Reservation ID</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Method</TableHead>
-                            <TableHead>Paid At</TableHead>
-                            <TableHead>Transaction ID</TableHead>
+                            <TableHead className="w-[120px]">
+                                {t("table.paymentId")}
+                            </TableHead>
+                            <TableHead className="w-[120px]">
+                                {t("table.reservationId")}
+                            </TableHead>
+                            <TableHead>
+                                {t("table.amount")}
+                            </TableHead>
+                            <TableHead>
+                                {t("table.status")}
+                            </TableHead>
+                            <TableHead>
+                                {t("table.method")}
+                            </TableHead>
+                            <TableHead>
+                                {t("table.paidAt")}
+                            </TableHead>
+                            <TableHead>
+                                {t("table.transactionId")}
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -365,8 +394,8 @@ export default function PaymentsPage() {
                             <TableRow>
                                 <TableCell colSpan={7} className="text-center py-8 text-slate-500">
                                     {payments.length === 0 ?
-                                        "No payment transactions found." :
-                                        "No transactions match your filters."
+                                        t("emptyStates.noPaymentsFound") :
+                                        t("emptyStates.noMatches")
                                     }
                                 </TableCell>
                             </TableRow>

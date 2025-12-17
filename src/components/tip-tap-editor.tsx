@@ -20,7 +20,7 @@ const TipTapEditor = ({
     content: string
 }) => {
     const editor = useEditor({
-        autofocus: true,
+        autofocus: false,
         extensions: [
             StarterKit.configure({
                 // optionally remove marks you don't need to avoid conflicts

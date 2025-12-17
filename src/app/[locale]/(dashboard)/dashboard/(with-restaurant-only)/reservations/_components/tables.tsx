@@ -16,6 +16,7 @@ import { useCreateTable, useDeleteTable, useTables, useUpdateTable } from "@/lib
 import type { CreateTableInput } from "@/lib/types"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { ArrowDownRight, ArrowUpRight, PlusCircle, ToggleLeft, ToggleRight, Trash2, Users } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 export default function TablesGridPage() {
@@ -23,7 +24,7 @@ export default function TablesGridPage() {
     const [statusFilter, setStatusFilter] = useState("ALL")
     const [search, setSearch] = useState("")
     const [dialogOpen, setDialogOpen] = useState(false)
-
+    const t = useTranslations("reservationTablesPage")
     const { data: tables = [], isLoading, error } = useTables(restaurant?.id)
     const { data: areas = [] } = useAreas(restaurant?.id)
     const createTableMutation = useCreateTable(restaurant?.id)
@@ -68,7 +69,7 @@ export default function TablesGridPage() {
 
     const handleAddTable = () => {
         if (!newTable.tableNumber || !newTable.areaId || newTable.capacity <= 0) {
-            alert("Please fill in all fields")
+            alert(t("alerts.fillAllFields"))
             return
         }
 
@@ -81,7 +82,7 @@ export default function TablesGridPage() {
     }
 
     const handleDelete = (tableId: string) => {
-        if (confirm("Are you sure you want to delete this table?")) {
+        if (confirm(t("confirm"))) {
             deleteTableMutation.mutate(tableId)
         }
     }
@@ -117,11 +118,11 @@ export default function TablesGridPage() {
     }
 
     if (!restaurant) {
-        return <LoadingUI text="Loading..." />
+        return <LoadingUI text={t("loading.generic")} />
     }
 
     if (isLoading) {
-        return <LoadingUI text="Loading tables..." />
+        return <LoadingUI text={t("loading.tables")} />
     }
 
 
@@ -129,10 +130,14 @@ export default function TablesGridPage() {
         return (
             <div className="space-y-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-900">Tables</h2>
-                    <p className="text-slate-600 mt-1">Manage your restaurant tables and floor plan</p>
+                    <h2 className="text-2xl font-bold text-slate-900">
+                        {t("title")}
+                    </h2>
+                    <p className="text-slate-600 mt-1">
+                        {t("subtitle")}
+                    </p>
                 </div>
-                <div className="text-center text-red-500">Error loading tables: {error.message}</div>
+                <div className="text-center text-red-500">{t("error.loadingTables")} {error.message}</div>
             </div>
         )
     }
@@ -140,31 +145,35 @@ export default function TablesGridPage() {
     return (
         <div className="space-y-4">
             <div>
-                <h2 className="text-2xl font-bold text-slate-900">Tables</h2>
-                <p className="text-slate-600 mt-1">Manage your restaurant tables and floor plan</p>
+                <h2 className="text-2xl font-bold text-slate-900">
+                    {t("title")}
+                </h2>
+                <p className="text-slate-600 mt-1">
+                    {t("subtitle")}
+                </p>
             </div>
             {/* --- Stats --- */}
             <div className="grid grid-cols-4 gap-4">
                 <StatCard
-                    title="Total Tables"
+                    title={t("stats.totalTables")}
                     value={totalTables}
                     icon={<Users className="h-5 w-5 text-gray-400" />}
                     trendValue={trend.total}
                 />
                 <StatCard
-                    title="Active"
+                    title={t("stats.active")}
                     value={totalActive}
                     icon={<ToggleRight className="h-5 w-5 text-gray-400" />}
                     trendValue={trend.active}
                 />
                 <StatCard
-                    title="Inactive"
+                    title={t("stats.inactive")}
                     value={totalInactive}
                     icon={<ToggleLeft className="h-5 w-5 text-gray-400" />}
                     trendValue={trend.inactive}
                 />
                 <StatCard
-                    title="Total Capacity"
+                    title={t("stats.totalCapacity")}
                     value={totalCapacity}
                     icon={<PlusCircle className="h-5 w-5 text-gray-400" />}
                     trendValue={trend.capacity}
@@ -176,16 +185,22 @@ export default function TablesGridPage() {
                 <div className="flex gap-2">
                     <Select value={statusFilter} onValueChange={setStatusFilter}>
                         <SelectTrigger className="w-[150px] !bg-white">
-                            <SelectValue placeholder="Status" />
+                            <SelectValue placeholder={t("filters.statusPlaceholder")} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="ALL">All</SelectItem>
-                            <SelectItem value="ACTIVE">Active</SelectItem>
-                            <SelectItem value="INACTIVE">Inactive</SelectItem>
+                            <SelectItem value="ALL">
+                                {t("filters.statusOptions.all")}
+                            </SelectItem>
+                            <SelectItem value="ACTIVE">
+                                {t("filters.statusOptions.active")}
+                            </SelectItem>
+                            <SelectItem value="INACTIVE">
+                                {t("filters.statusOptions.inactive")}
+                            </SelectItem>
                         </SelectContent>
                     </Select>
                     <Input
-                        placeholder="Search table number or area"
+                        placeholder={t("filters.searchPlaceholder")}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="w-[250px] !bg-white"
@@ -195,36 +210,45 @@ export default function TablesGridPage() {
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-main-green text-white hover:bg-main-green/80 cursor-pointer">
-                            <PlusCircle className="h-4 w-4" /> Add Table
+                            <PlusCircle className="h-4 w-4" />
+                            {t("dialog.addTableButton")}
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-white">
                         <DialogHeader>
-                            <DialogTitle>Add New Table</DialogTitle>
+                            <DialogTitle>
+                                {t("dialog.title")}
+                            </DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <Label>Table Number</Label>
+                                <Label>
+                                    {t("dialog.fields.tableNumberLabel")}
+                                </Label>
                                 <Input
-                                    placeholder="Table Number"
+                                    placeholder={t("dialog.fields.tableNumberPlaceholder")}
                                     value={newTable.tableNumber}
                                     onChange={(e) => setNewTable({ ...newTable, tableNumber: e.target.value })}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Capacity</Label>
+                                <Label>
+                                    {t("dialog.fields.capacityLabel")}
+                                </Label>
                                 <Input
-                                    placeholder="Capacity"
+                                    placeholder={t("dialog.fields.capacityPlaceholder")}
                                     type="number"
                                     value={newTable.capacity}
                                     onChange={(e) => setNewTable({ ...newTable, capacity: Number(e.target.value) })}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Area</Label>
+                                <Label>
+                                    {t("dialog.fields.areaLabel")}
+                                </Label>
                                 <Select value={newTable.areaId} onValueChange={(val) => setNewTable({ ...newTable, areaId: val })}>
                                     <SelectTrigger className=" w-full">
-                                        <SelectValue placeholder="Select Area" />
+                                        <SelectValue placeholder={t("dialog.fields.areaPlaceholder")} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {areas.map((area) => (
@@ -236,7 +260,9 @@ export default function TablesGridPage() {
                                 </Select>
                             </div>
                             <div className="space-y-2">
-                                <Label>Capacity</Label>
+                                <Label>
+                                    {t("dialog.fields.statusLabel")}
+                                </Label>
                                 <Select
                                     value={newTable.status}
                                     onValueChange={(val) => setNewTable({ ...newTable, status: val as "ACTIVE" | "INACTIVE" })}
@@ -245,8 +271,12 @@ export default function TablesGridPage() {
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="ACTIVE">Active</SelectItem>
-                                        <SelectItem value="INACTIVE">Inactive</SelectItem>
+                                        <SelectItem value="ACTIVE">
+                                            {t("dialog.fields.active")}
+                                        </SelectItem>
+                                        <SelectItem value="INACTIVE">
+                                            {t("dialog.fields.inactive")}
+                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -258,7 +288,7 @@ export default function TablesGridPage() {
                                 disabled={createTableMutation.isPending}
                                 className="bg-green-600 text-white hover:bg-green-700"
                             >
-                                {createTableMutation.isPending ? "Saving..." : "Save"}
+                                {createTableMutation.isPending ? t("dialog.saving") : t("dialog.save")}
                             </Button>
                         </DialogFooter>
                     </DialogContent>
@@ -292,12 +322,12 @@ export default function TablesGridPage() {
                             <div className="flex items-center justify-between">
                                 <div className="flex flex-col gap-1">
                                     <CardTitle className="text-lg font-semibold text-gray-800">
-                                        Table {table.table_number}
+                                        {t("grid.tableTitle")} {table.table_number}
                                     </CardTitle>
                                     <p className="text-sm text-gray-500">
-                                        Capacity:{" "}
+                                        {t("grid.capacityLineLabel")} {" "}
                                         <span className="text-gray-700 font-medium">
-                                            {table.capacity} Seats
+                                            {table.capacity} {t("grid.capacitySeats")}
                                         </span>
                                     </p>
                                 </div>
@@ -325,7 +355,7 @@ export default function TablesGridPage() {
                                         : "bg-red-50 text-red-700 border-red-200"
                                         }`}
                                 >
-                                    {table.status === "ACTIVE" ? "Active" : "Inactive"}
+                                    {table.status === "ACTIVE" ? t("grid.active") : t("grid.inactive")}
                                 </Badge>
 
                                 <Switch
@@ -339,7 +369,7 @@ export default function TablesGridPage() {
 
                         {/* Footer (optional info) */}
                         <div className="px-4 pt-2 text-xs text-gray-400 border-t border-gray-100">
-                            Last updated:{" "}
+                            {t("grid.lastUpdatedLabel")} {" "}
                             <span className="text-gray-600 font-medium">
                                 {new Date(table.updatedAt).toLocaleDateString()}
                             </span>
@@ -349,7 +379,9 @@ export default function TablesGridPage() {
 
             </div>
 
-            {filteredTables.length === 0 && <div className="p-6 text-center text-sm text-gray-500">No tables found.</div>}
+            {filteredTables.length === 0 && <div className="p-6 text-center text-sm text-gray-500">
+                {t("grid.noTablesFound")}
+            </div>}
         </div>
     )
 }

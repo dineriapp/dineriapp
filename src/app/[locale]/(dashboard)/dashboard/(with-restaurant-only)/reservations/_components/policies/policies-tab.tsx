@@ -109,6 +109,14 @@ export default function PoliciesTab() {
     const t = useTranslations("reservationPoliciesPage")
     const DEFAULT_HTML = t("policyEditorPlaceholder");
 
+    useEffect(() => {
+        // run after paint to beat scroll restoration / focus jumps
+        const id = requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+        });
+        return () => cancelAnimationFrame(id);
+    }, []);
+
     const { selectedRestaurant: restaurant } = useRestaurantStore();
     const restaurantId = restaurant?.id;
 
@@ -178,7 +186,7 @@ export default function PoliciesTab() {
 
             initializedRef.current = true;
         }
-    }, [isLoading, policies, cancellationForm, depositForm, diningForm, noShowForm]);
+    }, [isLoading, policies, cancellationForm, depositForm, diningForm, noShowForm, DEFAULT_HTML]);
 
     const canRender = useMemo(() => !!restaurantId && !isLoading, [restaurantId, isLoading]);
 
@@ -243,6 +251,8 @@ export default function PoliciesTab() {
             setSavingType(null);
         }
     };
+
+
 
     return (
         <div className="min-h-screen">

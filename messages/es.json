@@ -3553,5 +3553,173 @@
 
     "apiErrorDelete": "No se pudo eliminar la consulta de reserva",
     "apiErrorGeneric": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo."
+  },
+  "reservationPaymentsPage": {
+    "pageTitle": "Pagos e ingresos",
+    "pageDescription": "Ver transacciones de pago y hacer seguimiento de los ingresos de tu restaurante",
+
+    "loadingText": "Cargando pagos...",
+
+    "errorTitle": "No se pudieron cargar los pagos",
+    "tryAgainButton": "Intentar de nuevo",
+
+    "stats": {
+      "thisMonth": "Este mes",
+      "lastMonth": "Mes pasado",
+      "paidTransactions": "Transacciones pagadas",
+      "pendingFailed": "Pendiente/Fallida",
+      "vsLastMonth": "vs. mes pasado",
+      "totalSuffix": "en total",
+      "refundedSuffix": "reembolsadas"
+    },
+
+    "filters": {
+      "searchPlaceholder": "Buscar por ID, transacción o reserva",
+      "searchAriaLabel": "Buscar pagos",
+      "statusPlaceholder": "Filtrar por estado",
+
+      "allStatus": "Todos los estados",
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "failed": "Fallido",
+      "refunded": "Reembolsado",
+
+      "refreshButton": "Actualizar",
+      "exportCsvButton": "Exportar CSV"
+    },
+
+    "table": {
+      "transactionsTitle": "Transacciones",
+      "paymentId": "ID de pago",
+      "reservationId": "ID de reserva",
+      "amount": "Importe",
+      "status": "Estado",
+      "method": "Método",
+      "paidAt": "Pagado el",
+      "transactionId": "ID de transacción"
+    },
+
+    "emptyStates": {
+      "noPaymentsFound": "No se encontraron transacciones de pago.",
+      "noMatches": "Ninguna transacción coincide con tus filtros."
+    },
+
+    "csv": {
+      "headers": {
+        "id": "ID",
+        "reservationId": "ID de reserva",
+        "amount": "Importe",
+        "currency": "Moneda",
+        "status": "Estado",
+        "paymentMethod": "Método de pago",
+        "paidAt": "Pagado el",
+        "transactionId": "ID de transacción"
+      }
+    }
+  },
+  "reservationAreasPage": {
+    "pageTitle": "Áreas",
+    "pageDescription": "Organiza tu restaurante en diferentes áreas",
+
+    "loadingText": "Cargando...",
+    "loadingAreasText": "Cargando áreas...",
+
+    "errorLoadingTitle": "Error al cargar las áreas",
+    "errorLoadingMessagePrefix": "Error al cargar las áreas:",
+
+    "stats": {
+      "totalAreas": "Áreas totales",
+      "activeAreas": "Áreas activas",
+      "inactiveAreas": "Áreas inactivas"
+    },
+
+    "search": {
+      "placeholder": "Buscar nombre del área"
+    },
+
+    "actions": {
+      "addAreaButton": "Añadir área",
+      "addNewAreaTitle": "Añadir nueva área",
+      "editAreaTitle": "Editar área",
+      "areaNameLabel": "Nombre del área",
+      "areaNamePlaceholder": "Nombre del área",
+      "statusLabel": "Estado",
+      "statusPlaceholder": "Seleccionar estado",
+      "active": "Activa",
+      "inactive": "Inactiva",
+
+      "saveButton": "Guardar",
+      "savingButton": "Guardando...",
+      "saveChangesButton": "Guardar cambios"
+    },
+
+    "card": {
+      "lastUpdatedLabel": "Última actualización:"
+    },
+
+    "emptyState": {
+      "noAreasFound": "No se encontraron áreas."
+    }
+  },
+  "reservationTablesPage": {
+    "title": "Mesas",
+    "subtitle": "Administra las mesas y el plano de tu restaurante",
+    "loading": {
+      "generic": "Cargando...",
+      "tables": "Cargando mesas..."
+    },
+    "error": {
+      "loadingTables": "Error al cargar las mesas: {{message}}"
+    },
+    "stats": {
+      "totalTables": "Total de mesas",
+      "active": "Activas",
+      "inactive": "Inactivas",
+      "totalCapacity": "Capacidad total"
+    },
+    "filters": {
+      "statusPlaceholder": "Estado",
+      "searchPlaceholder": "Buscar número de mesa o área",
+      "statusOptions": {
+        "all": "Todas",
+        "active": "Activas",
+        "inactive": "Inactivas"
+      }
+    },
+    "dialog": {
+      "addTableButton": "Agregar mesa",
+      "title": "Agregar nueva mesa",
+      "fields": {
+        "tableNumberLabel": "Número de mesa",
+        "tableNumberPlaceholder": "Número de mesa",
+        "capacityLabel": "Capacidad",
+        "capacityPlaceholder": "Capacidad",
+        "areaLabel": "Área",
+        "areaPlaceholder": "Seleccionar área",
+        "statusLabel": "Estado",
+        "active": "Activa",
+        "inactive": "Inactiva"
+      },
+      "save": "Guardar",
+      "saving": "Guardando..."
+    },
+    "grid": {
+      "tableTitle": "Mesa",
+      "capacityLineLabel": "Capacidad:",
+      "capacitySeats": "Asientos",
+      "active": "Activa",
+      "inactive": "Inactiva",
+      "lastUpdatedLabel": "Última actualización:",
+      "noTablesFound": "No se encontraron mesas."
+    },
+    "actions": {
+      "deleteTableAriaLabel": "Eliminar mesa"
+    },
+    "confirm": {
+      "deleteTable": "¿Seguro que quieres eliminar esta mesa?"
+    },
+    "alerts": {
+      "fillAllFields": "Por favor, completa todos los campos"
+    }
   }
 }

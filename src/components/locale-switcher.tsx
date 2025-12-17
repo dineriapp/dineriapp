@@ -1,7 +1,9 @@
+"use client"
 import { routing } from '@/i18n/routing';
 import * as Select from '@radix-ui/react-select';
 import { CheckIcon } from 'lucide-react';
 import { useLocale, } from 'next-intl';
+import { Suspense } from 'react';
 import LocaleSwitcherSelect from './locale-switcher-select';
 
 export default function LocaleSwitcher({ SizeClassName = "!size-10 lg:!size-12", IconSizeClassName = "size-[22px] lg:size-[26px]" }: { SizeClassName?: string, IconSizeClassName?: string }) {
@@ -15,7 +17,7 @@ export default function LocaleSwitcher({ SizeClassName = "!size-10 lg:!size-12",
         "nl": "🇳🇱 Dutch"
     }
     return (
-        <>
+        <Suspense fallback={null}>
             <LocaleSwitcherSelect defaultValue={locale} SizeClassName={SizeClassName} IconSizeClassName={IconSizeClassName}>
 
                 {routing.locales.map((item) => (
@@ -35,7 +37,7 @@ export default function LocaleSwitcher({ SizeClassName = "!size-10 lg:!size-12",
                     </Select.Item>
                 ))}
             </LocaleSwitcherSelect>
-        </>
+        </Suspense>
     );
 }
 

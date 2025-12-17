@@ -3549,5 +3549,173 @@
 
     "apiErrorDelete": "Verwijderen van reserveringsaanvraag mislukt",
     "apiErrorGeneric": "Er is een onverwachte fout opgetreden. Probeer het opnieuw."
+  },
+  "reservationPaymentsPage": {
+    "pageTitle": "Betalingen & omzet",
+    "pageDescription": "Bekijk betalingstransacties en volg de omzet van je restaurant",
+
+    "loadingText": "Betalingen laden...",
+
+    "errorTitle": "Betalingen konden niet worden geladen",
+    "tryAgainButton": "Opnieuw proberen",
+
+    "stats": {
+      "thisMonth": "Deze maand",
+      "lastMonth": "Vorige maand",
+      "paidTransactions": "Betaalde transacties",
+      "pendingFailed": "In behandeling/Mislukt",
+      "vsLastMonth": "t.o.v. vorige maand",
+      "totalSuffix": "totaal",
+      "refundedSuffix": "terugbetaald"
+    },
+
+    "filters": {
+      "searchPlaceholder": "Zoeken op ID, transactie of reservering",
+      "searchAriaLabel": "Betalingen zoeken",
+      "statusPlaceholder": "Filter op status",
+
+      "allStatus": "Alle statussen",
+      "paid": "Betaald",
+      "pending": "In behandeling",
+      "failed": "Mislukt",
+      "refunded": "Terugbetaald",
+
+      "refreshButton": "Vernieuwen",
+      "exportCsvButton": "CSV exporteren"
+    },
+
+    "table": {
+      "transactionsTitle": "Transacties",
+      "paymentId": "Betalings-ID",
+      "reservationId": "Reserverings-ID",
+      "amount": "Bedrag",
+      "status": "Status",
+      "method": "Methode",
+      "paidAt": "Betaald op",
+      "transactionId": "Transactie-ID"
+    },
+
+    "emptyStates": {
+      "noPaymentsFound": "Geen betalingstransacties gevonden.",
+      "noMatches": "Geen transacties komen overeen met je filters."
+    },
+
+    "csv": {
+      "headers": {
+        "id": "ID",
+        "reservationId": "Reserverings-ID",
+        "amount": "Bedrag",
+        "currency": "Valuta",
+        "status": "Status",
+        "paymentMethod": "Betaalmethode",
+        "paidAt": "Betaald op",
+        "transactionId": "Transactie-ID"
+      }
+    }
+  },
+
+  "reservationAreasPage": {
+    "pageTitle": "Zones",
+    "pageDescription": "Organiseer je restaurant in verschillende zones",
+
+    "loadingText": "Laden...",
+    "loadingAreasText": "Zones laden...",
+
+    "errorLoadingTitle": "Fout bij het laden van zones",
+    "errorLoadingMessagePrefix": "Fout bij het laden van zones:",
+
+    "stats": {
+      "totalAreas": "Totaal aantal zones",
+      "activeAreas": "Actieve zones",
+      "inactiveAreas": "Inactieve zones"
+    },
+
+    "search": {
+      "placeholder": "Zoek op zonenaam"
+    },
+
+    "actions": {
+      "addAreaButton": "Zone toevoegen",
+      "addNewAreaTitle": "Nieuwe zone toevoegen",
+      "editAreaTitle": "Zone bewerken",
+      "areaNameLabel": "Zonenaam",
+      "areaNamePlaceholder": "Zonenaam",
+      "statusLabel": "Status",
+      "statusPlaceholder": "Selecteer status",
+      "active": "Actief",
+      "inactive": "Inactief",
+      "saveButton": "Opslaan",
+      "savingButton": "Bezig met opslaan...",
+      "saveChangesButton": "Wijzigingen opslaan"
+    },
+
+    "card": {
+      "lastUpdatedLabel": "Laatst bijgewerkt:"
+    },
+
+    "emptyState": {
+      "noAreasFound": "Geen zones gevonden."
+    }
+  },
+  "reservationTablesPage": {
+    "title": "Tafels",
+    "subtitle": "Beheer de tafels en de plattegrond van je restaurant",
+    "loading": {
+      "generic": "Laden...",
+      "tables": "Tafels worden geladen..."
+    },
+    "error": {
+      "loadingTables": "Fout bij het laden van tafels: {{message}}"
+    },
+    "stats": {
+      "totalTables": "Totaal aantal tafels",
+      "active": "Actief",
+      "inactive": "Inactief",
+      "totalCapacity": "Totale capaciteit"
+    },
+    "filters": {
+      "statusPlaceholder": "Status",
+      "searchPlaceholder": "Zoek tafelnr. of ruimte",
+      "statusOptions": {
+        "all": "Alle",
+        "active": "Actief",
+        "inactive": "Inactief"
+      }
+    },
+    "dialog": {
+      "addTableButton": "Tafel toevoegen",
+      "title": "Nieuwe tafel toevoegen",
+      "fields": {
+        "tableNumberLabel": "Tafelnummer",
+        "tableNumberPlaceholder": "Tafelnummer",
+        "capacityLabel": "Capaciteit",
+        "capacityPlaceholder": "Capaciteit",
+        "areaLabel": "Ruimte",
+        "areaPlaceholder": "Selecteer ruimte",
+        "statusLabel": "Status",
+        "active": "Actief",
+        "inactive": "Inactief"
+      },
+      "save": "Opslaan",
+      "saving": "Opslaan..."
+    },
+    "grid": {
+      "tableTitle": "Tafel",
+      "capacityLineLabel": "Capaciteit:",
+      "capacitySeats": "Zitplaatsen",
+      "active": "Actief",
+      "inactive": "Inactief",
+      "lastUpdatedLabel": "Laatst bijgewerkt:",
+      "noTablesFound": "Geen tafels gevonden."
+    },
+    "actions": {
+      "deleteTableAriaLabel": "Tafel verwijderen"
+    },
+    "confirm": {
+      "deleteTable": "Weet je zeker dat je deze tafel wilt verwijderen?"
+    },
+    "alerts": {
+      "fillAllFields": "Vul alle velden in"
+    }
   }
 }
