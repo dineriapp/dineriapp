@@ -5,9 +5,11 @@ import { Link } from "@/i18n/navigation";
 import { useSession } from "@/lib/auth/auth-client";
 import { useRestaurantStore } from "@/stores/restaurant-store";
 import ReservationsPage from "./page-client";
+import { useTranslations } from "next-intl";
 
 export default function AccessChecker() {
     const { selectedRestaurant: restaurant } = useRestaurantStore();
+    const t = useTranslations("accessChecker")
     const { data: session } = useSession()
     const hasStripeKeys = Boolean(
         restaurant?.stripe_public_key_encrypted && restaurant?.stripe_secret_key_encrypted
@@ -22,7 +24,7 @@ export default function AccessChecker() {
     }
 
     if (!restaurant) {
-        return <LoadingUI text="Loading..." />
+        return <LoadingUI text={t("loading")} />
     }
 
     return (
@@ -33,16 +35,16 @@ export default function AccessChecker() {
                         ⚠️
                     </div>
                     <h2 className="text-lg font-semibold text-gray-800">
-                        Stripe Not Connected
+                        {t("stripe.title")}
                     </h2>
                     <p className="text-sm text-gray-600 mt-1">
-                        Your restaurant needs to connect Stripe to accept online payments for reservations.
+                        {t("stripe.description")}
                     </p>
                     <Link
                         href={"/dashboard/settings/stripe"}
                         className="mt-4 inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
                     >
-                        Connect Stripe
+                        {t("stripe.button")}
                     </Link>
                 </div>
             )}
@@ -53,10 +55,11 @@ export default function AccessChecker() {
                         🚀
                     </div>
                     <h2 className="text-lg font-semibold text-gray-800">
-                        Upgrade Required
+                        {t("upgrade.title")}
                     </h2>
                     <p className="text-sm text-gray-600 mt-1">
-                        You need to upgrade to the <span className="font-semibold">Pro Plan</span> to access the reservation system.
+                        {t("upgrade.description")}
+
                     </p>
                     <div className="mt-2">
                         <UpgradeBtn />

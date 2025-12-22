@@ -8,6 +8,7 @@ import { useState } from "react"
 import HorizontalTimeline from "./horizontal-timeline"
 import VerticalTimeline from "./vertical-timeline"
 import { useRestaurantStore } from "@/stores/restaurant-store"
+import { useTranslations } from "next-intl"
 type TimelineOrientation = 'horizontal' | 'vertical';
 
 interface ReservationTimelineProps {
@@ -18,12 +19,15 @@ interface ReservationTimelineProps {
 
 export function ReservationTimeline({ reservations, selectedDate, isLoading }: ReservationTimelineProps) {
     const [orientation, setOrientation] = useState<TimelineOrientation>('horizontal');
+    const t = useTranslations("reservationTimeline")
     const { selectedRestaurant } = useRestaurantStore()
     if (!selectedDate) {
         return (
             <Card className="rounded-xl border border-border/60 bg-white">
                 <CardContent className="p-6 text-center">
-                    <p className="text-muted-foreground">Please select a date to view the timeline</p>
+                    <p className="text-muted-foreground">
+                        {t("selectDatePrompt")}
+                    </p>
                 </CardContent>
             </Card>
         )
@@ -35,7 +39,7 @@ export function ReservationTimeline({ reservations, selectedDate, isLoading }: R
                 <CardContent className="p-6 text-center w-full flex items-center justify-center flex-col">
                     <Loader className="animate-spin" />
                     <p>
-                        Loading timeline..
+                        {t("loading")}
                     </p>
                 </CardContent>
             </Card>
@@ -47,7 +51,9 @@ export function ReservationTimeline({ reservations, selectedDate, isLoading }: R
         return (
             <Card className="rounded-xl border border-border/60 bg-white">
                 <CardContent className="p-6 text-center">
-                    <p className="text-muted-foreground">No reservations for {format(selectedDate, "EEEE, MMMM d, yyyy")}</p>
+                    <p className="text-muted-foreground">
+                        {t("noReservationsForDate", { date: format(selectedDate, "EEEE, MMMM d, yyyy") })}
+                    </p>
                 </CardContent>
             </Card>
         )
@@ -64,7 +70,9 @@ export function ReservationTimeline({ reservations, selectedDate, isLoading }: R
                                 <h3 className="font-semibold text-xl text-slate-900">
                                     {format(selectedDate, "EEEE, MMMM d, yyyy")}
                                 </h3>
-                                <p className="text-sm text-slate-600 mt-1">{reservations.length} reservation(s)</p>
+                                <p className="text-sm text-slate-600 mt-1">
+                                    {t("header.reservationsCount", { count: reservations.length })}
+                                </p>
                             </div>
                         </div>
                         <div className="flex rounded-md border border-slate-200 p-1 bg-gray-100 w-fit">
@@ -73,8 +81,12 @@ export function ReservationTimeline({ reservations, selectedDate, isLoading }: R
                                 className={`px-2 md:px-3 py-2 cursor-pointer flex items-center justify-center gap-2 rounded-sm text-xs font-medium transition-colors ${orientation === 'horizontal' ? 'bg-white text-black' : 'text-slate-700 hover:bg-slate-100'
                                     }`}
                             >
-                                <span className="hidden md:inline">Horizontal</span>
-                                <span className="md:hidden">H</span>
+                                <span className="hidden md:inline">
+                                    {t("orientation.horizontal")}
+                                </span>
+                                <span className="md:hidden">
+                                    {t("orientation.horizontalShort")}
+                                </span>
                                 <Columns className="h-4 w-4" />
                             </button>
                             <button
@@ -82,8 +94,12 @@ export function ReservationTimeline({ reservations, selectedDate, isLoading }: R
                                 className={`px-2 md:px-3 py-2 cursor-pointer flex items-center justify-center gap-2 rounded-sm text-xs font-medium transition-colors ${orientation === 'vertical' ? 'bg-white text-black' : 'text-slate-700 hover:bg-slate-100'
                                     }`}
                             >
-                                <span className="hidden md:inline">Vertical</span>
-                                <span className="md:hidden">V</span>
+                                <span className="hidden md:inline">
+                                    {t("orientation.vertical")}
+                                </span>
+                                <span className="md:hidden">
+                                    {t("orientation.verticalShort")}
+                                </span>
                                 <Rows className="h-4 w-4" />
                             </button>
                         </div>

@@ -1,7 +1,9 @@
 import { AlertTriangle, Ban, Info } from "lucide-react";
 import { SettingsState } from "../settings/types";
+import { useTranslations } from "next-intl";
 
 export default function ReservationStatusBanner({ settings }: { settings: SettingsState }) {
+    const t = useTranslations("reservationStatusBanner")
     const { restaurantSettings } = settings || {};
 
     if (!restaurantSettings) return null;
@@ -24,9 +26,11 @@ export default function ReservationStatusBanner({ settings }: { settings: Settin
                     <div className="flex items-start gap-3 border border-red-300 bg-red-50 text-red-700 px-4 py-3 rounded-lg">
                         <Ban className="h-5 w-5 mt-0.5" />
                         <div>
-                            <p className="font-semibold text-lg">Emergency Closure</p>
+                            <p className="font-semibold text-lg">
+                                {t("emergencyClosure.title")}
+                            </p>
                             <p className="text-sm">
-                                The restaurant is temporarily closed. Reservations cannot be made at this time.
+                                {t("emergencyClosure.description")}
                             </p>
                         </div>
                     </div>
@@ -36,9 +40,11 @@ export default function ReservationStatusBanner({ settings }: { settings: Settin
                     <div className="flex items-start gap-3 border border-yellow-300 bg-yellow-50 text-yellow-800 px-4 py-3 rounded-lg">
                         <AlertTriangle className="h-5 w-5 mt-0.5" />
                         <div>
-                            <p className="font-semibold text-lg">Reservations Paused</p>
+                            <p className="font-semibold text-lg">
+                                {t("reservationsPaused.title")}
+                            </p>
                             <p className="text-sm">
-                                We are currently not accepting new reservations.
+                                {t("reservationsPaused.description")}
                             </p>
                         </div>
                     </div>
@@ -48,7 +54,9 @@ export default function ReservationStatusBanner({ settings }: { settings: Settin
                     <div className="flex items-start gap-3 border border-blue-300 bg-blue-50 text-blue-700 px-4 py-3 rounded-lg">
                         <Info className="h-5 w-5 mt-0.5" />
                         <div>
-                            <p className="font-semibold text-lg">Notice</p>
+                            <p className="font-semibold text-lg">
+                                {t("notice.title")}
+                            </p>
                             <p className="text-sm whitespace-pre-line">
                                 {custom_message_for_customers}
                             </p>

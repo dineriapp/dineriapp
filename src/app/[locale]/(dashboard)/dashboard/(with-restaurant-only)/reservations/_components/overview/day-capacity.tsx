@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useReservationAnalyticsDayCapacity } from "@/lib/reservation-queries";
 import clsx from "clsx";
 import { Clock, Gauge } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const DayCapacity = ({
     restaurant_id,
@@ -12,6 +13,7 @@ const DayCapacity = ({
     restaurant_id: string | undefined;
     formatted_date: string;
 }) => {
+    const t = useTranslations("overviewPage.dayCapacity")
 
     const {
         data,
@@ -39,19 +41,21 @@ const DayCapacity = ({
 
             <h2 className="text-xl font-semibold mb-5 flex items-center gap-2">
                 <Gauge className="w-6 h-6 text-blue-600" />
-                Capacity
+                {t("title")}
             </h2>
 
             {/* ERROR STATE */}
             {isError && (
                 <div className="p-4 bg-red-50 border border-red-300 text-red-700 rounded-xl mb-4">
-                    <div className="font-medium">Failed to load capacity data.</div>
+                    <div className="font-medium">
+                        {t("error.title")}
+                    </div>
                     <div className="text-sm mt-1">{(error as any)?.message}</div>
                     <button
                         onClick={() => refetch()}
                         className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
                     >
-                        Retry
+                        {t("error.retry")}
                     </button>
                 </div>
             )}
@@ -84,7 +88,7 @@ const DayCapacity = ({
             {/* EMPTY STATE */}
             {!isInitialLoading && !isError && slots.length === 0 && (
                 <div className="p-6 text-center text-gray-500">
-                    No slots available for this date.
+                    {t("empty.noSlots")}
                 </div>
             )}
 
@@ -94,10 +98,18 @@ const DayCapacity = ({
 
                     {/* Header */}
                     <div className="grid grid-cols-4 gap-4 px-3 py-2 bg-gray-100 rounded-lg text-sm font-medium text-gray-600">
-                        <div>Time</div>
-                        <div>Used</div>
-                        <div>Total</div>
-                        <div>Max</div>
+                        <div>
+                            {t("table.time")}
+                        </div>
+                        <div>
+                            {t("table.used")}
+                        </div>
+                        <div>
+                            {t("table.total")}
+                        </div>
+                        <div>
+                            {t("table.max")}
+                        </div>
                     </div>
 
                     {/* Rows */}

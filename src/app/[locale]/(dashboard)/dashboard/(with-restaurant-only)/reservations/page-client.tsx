@@ -96,10 +96,6 @@ export default function ReservationsPage() {
 
     return (
         <main className="w-full flex flex-col bg-gray-50 min-h-screen">
-            <div className="flex items-center justify-between bg-white border-b px-6 py-4 shadow-sm">
-                <h1 className="text-lg font-semibold text-gray-800">Reservations Dashboard</h1>
-            </div>
-
             <nav className="flex bg-white border-b shadow-sm overflow-x-auto">
                 {tabs.map((tab) => (
                     <button

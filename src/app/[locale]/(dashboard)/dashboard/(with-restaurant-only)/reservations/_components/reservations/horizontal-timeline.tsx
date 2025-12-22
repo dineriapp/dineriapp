@@ -1,6 +1,7 @@
 "use client";
 import { ReservationUp } from '@/lib/types';
 import { Check, Clock, UserCircle, WalletMinimal } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useMemo, useRef, useState, useCallback } from 'react';
 
 const HOUR_WIDTH = 400; // Increased for better visibility
@@ -45,6 +46,7 @@ const HorizontalTimeline = ({
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+    const t = useTranslations("reservationTimeline.Timeline")
 
     // Generate time slots for 24 hours in 30-minute intervals using the specified timezone
     const timeSlots = useMemo(() => {
@@ -161,7 +163,7 @@ const HorizontalTimeline = ({
                         <div
                             style={{ width: `${TABLE_LABEL_WIDTH}px` }}
                             className="bg-slate-100 px-4 py-4 font-semibold text-slate-800 text-sm flex items-center">
-                            Table
+                            {t("tableHeader")}
                         </div>
                         {timeSlots.map((slot, index) => (
                             <div
@@ -230,14 +232,14 @@ const HorizontalTimeline = ({
                                                     minWidth: '90px'
                                                 }}
                                                 title={`
-Customer: ${reservation.customer_name}
-Email: ${reservation.customer_email}
-Time: ${displayFormatter.format(startTime)} - ${displayFormatter.format(endTime)}
-Party Size: ${reservation.party_size}
-Status: ${reservation.status}
-Duration: ${duration} minutes
-${reservation.special_requests ? `Special Requests: ${reservation.special_requests}` : ''}
-${reservation.preferred_area ? `Preferred Area: ${reservation.preferred_area}` : ''}
+${t("tooltip.customer")} ${reservation.customer_name}
+${t("tooltip.email")} ${reservation.customer_email}
+${t("tooltip.time")} ${displayFormatter.format(startTime)} - ${displayFormatter.format(endTime)}
+${t("tooltip.partySize")} ${reservation.party_size}
+${t("tooltip.status")} ${reservation.status}
+${t("tooltip.duration")} ${duration} ${t("tooltip.minutes")}
+${reservation.special_requests ? `${t("tooltip.specialRequests")} ${reservation.special_requests}` : ''}
+${reservation.preferred_area ? `${t("tooltip.preferredArea")} ${reservation.preferred_area}` : ''}
     `.trim()}
                                             >
                                                 <div className='flex items-start justify-between gap-2'>
@@ -272,19 +274,19 @@ ${reservation.preferred_area ? `Preferred Area: ${reservation.preferred_area}` :
                                                                     {reservation.payment.status === "PAID" ? (
                                                                         <>
                                                                             <Check className="size-3" />
-                                                                            Paid
+                                                                            {t("payment.paid")}
                                                                         </>
                                                                     ) : (
                                                                         <>
                                                                             <Clock className="size-3" />
-                                                                            Pending
+                                                                            {t("payment.pending")}
                                                                         </>
                                                                     )}
                                                                 </div>
                                                             ) : (
                                                                 <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-red-600/20 text-red-700">
                                                                     <WalletMinimal className="size-3" />
-                                                                    No Pay
+                                                                    {t("payment.noPay")}
                                                                 </div>
                                                             )}
                                                         </div>
@@ -325,26 +327,38 @@ ${reservation.preferred_area ? `Preferred Area: ${reservation.preferred_area}` :
             </div>
             {/* Legend */}
             <div className=" mt-3 bg-white border-t border-slate-200 py-2 flex items-center gap-6 text-xs">
-                <div className="font-semibold text-slate-700">Legend:</div>
+                <div className="font-semibold text-slate-700">
+                    {t("legend.title")}
+                </div>
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-blue-500 rounded"></div>
-                    <span>Confirmed</span>
+                    <span>
+                        {t("legend.confirmed")}
+                    </span>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-green-500 rounded"></div>
-                    <span>Seated</span>
+                    <span>
+                        {t("legend.seated")}
+                    </span>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-yellow-500 rounded"></div>
-                    <span>Pending</span>
+                    <span>
+                        {t("legend.pending")}
+                    </span>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-gray-400 rounded"></div>
-                    <span>Completed</span>
+                    <span>
+                        {t("legend.completed")}
+                    </span>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-red-400 rounded"></div>
-                    <span>Cancelled</span>
+                    <span>
+                        {t("legend.cancelled")}
+                    </span>
                 </div>
             </div>
         </>

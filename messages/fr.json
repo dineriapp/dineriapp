@@ -3720,5 +3720,279 @@
     "alerts": {
       "fillAllFields": "Veuillez remplir tous les champs"
     }
+  },
+  "reservationsPage": {
+    "title": "Réservations",
+    "subtitle": "Gérez toutes les réservations clients efficacement.",
+    "searchPlaceholder": "Rechercher par nom, e-mail ou téléphone...",
+    "statusFilterPlaceholder": "Filtrer par statut",
+    "dateFilterPlaceholder": "Filtrer par date",
+    "status": {
+      "all": "Tous les statuts",
+      "pending": "En attente",
+      "confirmed": "Confirmée",
+      "seated": "Installée",
+      "completed": "Terminée",
+      "cancelled": "Annulée",
+      "noShow": "Absent"
+    },
+    "date": {
+      "all": "Toutes les dates",
+      "today": "Aujourd’hui",
+      "custom": "Date personnalisée",
+      "range": "Plage de dates",
+      "pickDate": "Choisir une date",
+      "selectRange": "Sélectionner une plage de dates"
+    },
+    "view": {
+      "list": "Vue liste",
+      "timeline": "Chronologie"
+    },
+    "empty": {
+      "noReservations": "Aucune réservation trouvée"
+    },
+    "toast": {
+      "deleteSuccess": "Réservation supprimée avec succès !"
+    },
+    "reservationCard": {
+      "partyOf": "Groupe de { count }",
+      "timing": {
+        "arrivalTimeLabel": "Heure d’arrivée :",
+        "arrivalTimeHint": "Arrivée prévue du client",
+        "createdAtLabel": "Créée le :",
+        "createdAtHint": "Réservation créée",
+        "confirmedAtLabel": "Confirmée le :",
+        "confirmedAtHint": "Réservation confirmée",
+        "seatedAtLabel": "Installée le :",
+        "seatedAtHint": "Client installé",
+        "completedAtLabel": "Terminée le :",
+        "completedAtHint": "Réservation terminée",
+        "cancelledAtLabel": "Annulée le :",
+        "cancelledAtHint": "Réservation annulée",
+        "noShowAtLabel": "Absent le :",
+        "noShowAtHint": "Le client n’est pas venu"
+      },
+      "payment": {
+        "tablesLabel": "Tables :"
+      },
+      "specialRequest": {
+        "noteLabel": "Note :"
+      },
+      "actions": {
+        "delete": "Supprimer"
+      },
+      "status": {
+        "pending": "En attente",
+        "confirmed": "Confirmée",
+        "seated": "Installée",
+        "completed": "Terminée",
+        "cancelled": "Annulée",
+        "noShow": "Absent"
+      }
+    }
+  },
+  "reservationTimeline": {
+    "selectDatePrompt": "Veuillez sélectionner une date pour afficher la chronologie",
+    "loading": "Chargement de la chronologie..",
+    "noReservationsForDate": "Aucune réservation pour { date }",
+    "header": {
+      "reservationsCount": "{ count } réservation(s)"
+    },
+    "orientation": {
+      "horizontal": "Horizontal",
+      "horizontalShort": "H",
+      "vertical": "Vertical",
+      "verticalShort": "V"
+    },
+    "Timeline": {
+      "tableHeader": "Table",
+      "timeHeader": "Heure",
+      "tooltip": {
+        "customer": "Client :",
+        "email": "E-mail :",
+        "time": "Heure :",
+        "partySize": "Taille du groupe :",
+        "status": "Statut :",
+        "duration": "Durée :",
+        "minutes": "minutes",
+        "specialRequests": "Demandes spéciales :",
+        "preferredArea": "Zone préférée :"
+      },
+      "payment": {
+        "paid": "Payé",
+        "pending": "En attente",
+        "noPay": "Sans paiement"
+      },
+      "legend": {
+        "title": "Légende :",
+        "confirmed": "Confirmée",
+        "seated": "Installée",
+        "pending": "En attente",
+        "completed": "Terminée",
+        "cancelled": "Annulée"
+      }
+    }
+  },
+  "overviewPage": {
+    "loading": "Chargement...",
+    "title": "Aperçu des réservations",
+    "subtitle": "Obtenez un résumé rapide de votre activité de réservations.",
+    "mainStats": {
+      "cards": {
+        "total": {
+          "title": "Total"
+        },
+        "confirmed": {
+          "title": "Confirmées"
+        },
+        "covers": {
+          "title": "Couverts",
+          "footer": "Moy. { avg } par groupe"
+        },
+        "revenue": {
+          "title": "Revenus",
+          "footer": "Acomptes encaissés"
+        }
+      }
+    },
+    "dayCapacity": {
+      "title": "Capacité",
+      "error": {
+        "title": "Impossible de charger les données de capacité.",
+        "retry": "Réessayer"
+      },
+      "empty": {
+        "noSlots": "Aucun créneau disponible pour cette date."
+      },
+      "table": {
+        "time": "Heure",
+        "used": "Utilisé",
+        "total": "Total",
+        "max": "Max"
+      }
+    },
+    "statusBreakdown": {
+      "title": "Répartition par statut",
+      "loading": {
+        "title": "Répartition par statut"
+      },
+      "error": {
+        "message": "Impossible de charger la répartition par statut.",
+        "retry": "Réessayer"
+      },
+      "labels": {
+        "pending": "En attente",
+        "confirmed": "Confirmées",
+        "seated": "Installés",
+        "completed": "Terminées",
+        "cancelled": "Annulées",
+        "noShow": "Absents"
+      }
+    }
+  },
+  "update": {
+    "btn": "Mettre à niveau",
+    "text": "Passez à Pro ou Enterprise pour débloquer des fonctionnalités et outils premium."
+  },
+  "accessChecker": {
+    "loading": "Chargement...",
+
+    "stripe": {
+      "title": "Stripe non connecté",
+      "description": "Votre restaurant doit connecter Stripe pour accepter les paiements en ligne pour les réservations.",
+      "button": "Connecter Stripe"
+    },
+
+    "upgrade": {
+      "title": "Mise à niveau requise",
+      "description": "Vous devez passer au <span class='font-semibold'>Forfait Pro</span> pour accéder au système de réservation."
+    }
+  },
+  "reservationStatusBanner": {
+    "emergencyClosure": {
+      "title": "Fermeture d’urgence",
+      "description": "Le restaurant est temporairement fermé. Les réservations ne peuvent pas être effectuées pour le moment."
+    },
+    "reservationsPaused": {
+      "title": "Réservations suspendues",
+      "description": "Nous n’acceptons pas de nouvelles réservations pour le moment."
+    },
+    "notice": {
+      "title": "Information"
+    }
+  },
+  "dailyCapacityWidget": {
+    "loading": {
+      "errorTitle": "Erreur lors du chargement des données de capacité"
+    },
+
+    "header": {
+      "title": "Vérification de faisabilité de réservation",
+      "guestsSuffix": "{ count } invités",
+      "available": "Disponible",
+      "notAvailable": "Non disponible"
+    },
+
+    "decision": {
+      "title": "Décision"
+    },
+
+    "capacityOverview": {
+      "title": "Aperçu de la capacité",
+      "guestsCapacityLabel": "Clients / Capacité",
+      "utilizedLabel": "{ percent }% utilisé",
+      "availableCapacityLabel": "Capacité disponible",
+      "availableTablesLabel": "Tables disponibles",
+      "methodSuffix": "méthode { method }"
+    },
+
+    "capacityEfficiency": {
+      "title": "Efficacité de capacité",
+      "wastedCapacityLabel": "Capacité gaspillée",
+      "wastedCapacityHint": "Places supplémentaires non utilisées",
+      "efficiencyLabel": "Efficacité",
+      "efficiencyHint": "Taille du groupe vs capacité des tables",
+      "explanationLabel": "Explication :",
+      "singleTableExplanation": "Une table unique de capacité { capacity } pour { guests } invités",
+      "combinationExplanation": "Combinaison de tables de capacité totale { capacity } pour { guests } invités",
+      "combinationNote": "Remarque : l’utilisation de combinaisons de tables peut entraîner une capacité gaspillée"
+    },
+
+    "assignedTables": {
+      "title": "Tables attribuées ({ method })",
+      "seatsLabel": "places",
+      "totalTableCapacityLabel": "Capacité totale des tables :",
+      "totalGuestsLabel": "invités"
+    },
+
+    "failureDetails": {
+      "title": "Détails",
+
+      "capacity": {
+        "availableCapacity": "Capacité disponible : ",
+        "requiredCapacity": "Capacité requise : ",
+        "seats": "places"
+      },
+
+      "tableAvailability": {
+        "tableCombinationsEnabled": "Combinaisons de tables activées : ",
+        "yes": "Oui",
+        "no": "Non",
+        "availableCapacity": "Capacité disponible : ",
+        "seats": "places"
+      },
+
+      "openingHours": {
+        "closedMessage": "Le restaurant est fermé ou en dehors des horaires d’ouverture pour l’heure sélectionnée."
+      },
+
+      "timeOverride": {
+        "blockedMessage": "Ce créneau a été bloqué pour maintenance ou événements privés."
+      }
+    },
+
+    "capacityUtilization": {
+      "title": "Utilisation de la capacité"
+    }
   }
 }

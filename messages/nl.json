@@ -3717,5 +3717,279 @@
     "alerts": {
       "fillAllFields": "Vul alle velden in"
     }
+  },
+  "reservationsPage": {
+    "title": "Reserveringen",
+    "subtitle": "Beheer alle klantreserveringen efficiënt.",
+    "searchPlaceholder": "Zoek op naam, e-mail of telefoon...",
+    "statusFilterPlaceholder": "Filter op status",
+    "dateFilterPlaceholder": "Filter op datum",
+    "status": {
+      "all": "Alle statussen",
+      "pending": "In afwachting",
+      "confirmed": "Bevestigd",
+      "seated": "Geplaatst",
+      "completed": "Afgerond",
+      "cancelled": "Geannuleerd",
+      "noShow": "Niet gekomen"
+    },
+    "date": {
+      "all": "Alle datums",
+      "today": "Vandaag",
+      "custom": "Aangepaste datum",
+      "range": "Datumbereik",
+      "pickDate": "Kies een datum",
+      "selectRange": "Selecteer datumbereik"
+    },
+    "view": {
+      "list": "Lijstweergave",
+      "timeline": "Tijdlijn"
+    },
+    "empty": {
+      "noReservations": "Geen reserveringen gevonden"
+    },
+    "toast": {
+      "deleteSuccess": "Reservering succesvol verwijderd!"
+    },
+    "reservationCard": {
+      "partyOf": "Gezelschap van { count }",
+      "timing": {
+        "arrivalTimeLabel": "Aankomsttijd:",
+        "arrivalTimeHint": "Verwachte aankomst van de gast",
+        "createdAtLabel": "Aangemaakt op:",
+        "createdAtHint": "Reservering aangemaakt",
+        "confirmedAtLabel": "Bevestigd op:",
+        "confirmedAtHint": "Reservering bevestigd",
+        "seatedAtLabel": "Geplaatst op:",
+        "seatedAtHint": "Gast geplaatst",
+        "completedAtLabel": "Afgerond op:",
+        "completedAtHint": "Reservering afgerond",
+        "cancelledAtLabel": "Geannuleerd op:",
+        "cancelledAtHint": "Reservering geannuleerd",
+        "noShowAtLabel": "Niet gekomen op:",
+        "noShowAtHint": "Gast is niet gekomen"
+      },
+      "payment": {
+        "tablesLabel": "Tafels:"
+      },
+      "specialRequest": {
+        "noteLabel": "Opmerking:"
+      },
+      "actions": {
+        "delete": "Verwijderen"
+      },
+      "status": {
+        "pending": "In afwachting",
+        "confirmed": "Bevestigd",
+        "seated": "Geplaatst",
+        "completed": "Afgerond",
+        "cancelled": "Geannuleerd",
+        "noShow": "Niet gekomen"
+      }
+    }
+  },
+  "reservationTimeline": {
+    "selectDatePrompt": "Selecteer een datum om de tijdlijn te bekijken",
+    "loading": "Tijdlijn laden..",
+    "noReservationsForDate": "Geen reserveringen voor { date }",
+    "header": {
+      "reservationsCount": "{ count } reservering(en)"
+    },
+    "orientation": {
+      "horizontal": "Horizontaal",
+      "horizontalShort": "H",
+      "vertical": "Verticaal",
+      "verticalShort": "V"
+    },
+    "Timeline": {
+      "tableHeader": "Tafel",
+      "timeHeader": "Tijd",
+      "tooltip": {
+        "customer": "Klant:",
+        "email": "E-mail:",
+        "time": "Tijd:",
+        "partySize": "Groepsgrootte:",
+        "status": "Status:",
+        "duration": "Duur:",
+        "minutes": "minuten",
+        "specialRequests": "Speciale verzoeken:",
+        "preferredArea": "Voorkeursgebied:"
+      },
+      "payment": {
+        "paid": "Betaald",
+        "pending": "In afwachting",
+        "noPay": "Geen betaling"
+      },
+      "legend": {
+        "title": "Legenda:",
+        "confirmed": "Bevestigd",
+        "seated": "Geplaatst",
+        "pending": "In afwachting",
+        "completed": "Afgerond",
+        "cancelled": "Geannuleerd"
+      }
+    }
+  },
+  "overviewPage": {
+    "loading": "Laden...",
+    "title": "Overzicht Reserveringen",
+    "subtitle": "Krijg snel een samenvatting van je reserveringsactiviteit.",
+    "mainStats": {
+      "cards": {
+        "total": {
+          "title": "Totaal"
+        },
+        "confirmed": {
+          "title": "Bevestigd"
+        },
+        "covers": {
+          "title": "Gasten",
+          "footer": "Gem. { avg } per gezelschap"
+        },
+        "revenue": {
+          "title": "Omzet",
+          "footer": "Aanbetalingen geïnd"
+        }
+      }
+    },
+    "dayCapacity": {
+      "title": "Capaciteit",
+      "error": {
+        "title": "Kon capaciteitsgegevens niet laden.",
+        "retry": "Opnieuw proberen"
+      },
+      "empty": {
+        "noSlots": "Geen slots beschikbaar voor deze datum."
+      },
+      "table": {
+        "time": "Tijd",
+        "used": "Gebruikt",
+        "total": "Totaal",
+        "max": "Max"
+      }
+    },
+    "statusBreakdown": {
+      "title": "Statusoverzicht",
+      "loading": {
+        "title": "Statusoverzicht"
+      },
+      "error": {
+        "message": "Kon statusoverzicht niet laden.",
+        "retry": "Opnieuw proberen"
+      },
+      "labels": {
+        "pending": "In afwachting",
+        "confirmed": "Bevestigd",
+        "seated": "Geplaatst",
+        "completed": "Afgerond",
+        "cancelled": "Geannuleerd",
+        "noShow": "Niet gekomen"
+      }
+    }
+  },
+  "update": {
+    "btn": "Upgraden",
+    "text": "Upgrade naar Pro of Enterprise om premium functies en tools te ontgrendelen."
+  },
+  "accessChecker": {
+    "loading": "Laden...",
+
+    "stripe": {
+      "title": "Stripe niet gekoppeld",
+      "description": "Je restaurant moet Stripe koppelen om online betalingen voor reserveringen te accepteren.",
+      "button": "Stripe koppelen"
+    },
+
+    "upgrade": {
+      "title": "Upgrade vereist",
+      "description": "Je moet upgraden naar het <span class='font-semibold'>Pro-abonnement</span> om toegang te krijgen tot het reserveringssysteem."
+    }
+  },
+  "reservationStatusBanner": {
+    "emergencyClosure": {
+      "title": "Noodsluiting",
+      "description": "Het restaurant is tijdelijk gesloten. Reserveren is op dit moment niet mogelijk."
+    },
+    "reservationsPaused": {
+      "title": "Reserveringen gepauzeerd",
+      "description": "We accepteren momenteel geen nieuwe reserveringen."
+    },
+    "notice": {
+      "title": "Melding"
+    }
+  },
+  "dailyCapacityWidget": {
+    "loading": {
+      "errorTitle": "Fout bij het laden van capaciteitsgegevens"
+    },
+
+    "header": {
+      "title": "Controle op reserveringsmogelijkheid",
+      "guestsSuffix": "{ count } gasten",
+      "available": "Beschikbaar",
+      "notAvailable": "Niet beschikbaar"
+    },
+
+    "decision": {
+      "title": "Beslissing"
+    },
+
+    "capacityOverview": {
+      "title": "Capaciteitsoverzicht",
+      "guestsCapacityLabel": "Gasten / Capaciteit",
+      "utilizedLabel": "{ percent }% gebruikt",
+      "availableCapacityLabel": "Beschikbare capaciteit",
+      "availableTablesLabel": "Beschikbare tafels",
+      "methodSuffix": "{ method }-methode"
+    },
+
+    "capacityEfficiency": {
+      "title": "Capaciteitsefficiëntie",
+      "wastedCapacityLabel": "Verspilde capaciteit",
+      "wastedCapacityHint": "Extra stoelen niet gebruikt",
+      "efficiencyLabel": "Efficiëntie",
+      "efficiencyHint": "Groepsgrootte vs tafelcapaciteit",
+      "explanationLabel": "Uitleg:",
+      "singleTableExplanation": "Één tafel met capaciteit { capacity } voor { guests } gasten",
+      "combinationExplanation": "Tafelcombinatie met totale capaciteit { capacity } voor { guests } gasten",
+      "combinationNote": "Let op: het gebruik van tafelcombinaties kan leiden tot enige verspilde capaciteit"
+    },
+
+    "assignedTables": {
+      "title": "Toegewezen tafels ({ method })",
+      "seatsLabel": "stoelen",
+      "totalTableCapacityLabel": "Totale tafelcapaciteit:",
+      "totalGuestsLabel": "gasten"
+    },
+
+    "failureDetails": {
+      "title": "Details",
+
+      "capacity": {
+        "availableCapacity": "Beschikbare capaciteit: ",
+        "requiredCapacity": "Benodigde capaciteit: ",
+        "seats": "stoelen"
+      },
+
+      "tableAvailability": {
+        "tableCombinationsEnabled": "Tafelcombinaties ingeschakeld: ",
+        "yes": "Ja",
+        "no": "Nee",
+        "availableCapacity": "Beschikbare capaciteit: ",
+        "seats": "stoelen"
+      },
+
+      "openingHours": {
+        "closedMessage": "Het restaurant is gesloten of buiten de openingstijden voor het geselecteerde tijdstip."
+      },
+
+      "timeOverride": {
+        "blockedMessage": "Dit tijdslot is geblokkeerd voor onderhoud of privé-evenementen."
+      }
+    },
+
+    "capacityUtilization": {
+      "title": "Capaciteitsbenutting"
+    }
   }
 }

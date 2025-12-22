@@ -22,6 +22,7 @@ import { FcTimeline } from "react-icons/fc"
 import { toast } from "sonner"
 import { ReservationCard } from "./reservation-card"
 import { ReservationTimeline } from "./timeline-view"
+import { useTranslations } from "next-intl"
 
 const ReservationCardSkeleton = () => (
     <Card className="rounded-xl border border-border/60 bg-white animate-pulse">
@@ -46,6 +47,7 @@ const ReservationCardSkeleton = () => (
 );
 
 export default function ReservationsPage() {
+    const t = useTranslations("reservationsPage")
     const [search, setSearch] = useState("")
     const [statusFilter, setStatusFilter] = useState<string>("ALL")
     const [dateFilter, setDateFilter] = useState("ALL")
@@ -57,14 +59,14 @@ export default function ReservationsPage() {
 
     const handleDelete = (id: string) => {
         deleteReservation(id, {
-            onSuccess: () => toast.success("Reservation deleted successfully!"),
+            onSuccess: () => toast.success(t("toast.deleteSuccess")),
             onError: (error) => toast.error(error.message),
         });
     };
 
     const views = [
-        { key: "list", label: "List View", icon: <List className="w-4 h-4" /> },
-        { key: "timeline", label: "Timeline", icon: <FcTimeline className="w-4 h-4" /> },
+        { key: "list", label: t("view.list"), icon: <List className="w-4 h-4" /> },
+        { key: "timeline", label: t("view.timeline"), icon: <FcTimeline className="w-4 h-4" /> },
     ]
 
     const { selectedRestaurant: restaurant } = useRestaurantStore()
@@ -157,9 +159,11 @@ export default function ReservationsPage() {
             <div className="space-y-4 relative">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900">Reservations</h2>
+                        <h2 className="text-2xl font-bold text-slate-900">
+                            {t("title")}
+                        </h2>
                         <p className="text-slate-600 mt-1">
-                            Manage all customer reservations efficiently.
+                            {t("subtitle")}
                         </p>
                     </div>
                 </div>
@@ -168,7 +172,7 @@ export default function ReservationsPage() {
                 <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
                     <div className="flex gap-2 w-full md:w-auto">
                         <Input
-                            placeholder="Search by name, email, or phone..."
+                            placeholder={t("searchPlaceholder")}
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             className="flex-1 bg-white"
@@ -178,13 +182,27 @@ export default function ReservationsPage() {
                                 <SelectValue placeholder="Filter by status" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="ALL">All Status</SelectItem>
-                                <SelectItem value="PENDING">Pending</SelectItem>
-                                <SelectItem value="CONFIRMED">Confirmed</SelectItem>
-                                <SelectItem value="SEATED">Seated</SelectItem>
-                                <SelectItem value="COMPLETED">Completed</SelectItem>
-                                <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                                <SelectItem value="NO_SHOW">No show</SelectItem>
+                                <SelectItem value="ALL">
+                                    {t("status.all")}
+                                </SelectItem>
+                                <SelectItem value="PENDING">
+                                    {t("status.pending")}
+                                </SelectItem>
+                                <SelectItem value="CONFIRMED">
+                                    {t("status.confirmed")}
+                                </SelectItem>
+                                <SelectItem value="SEATED">
+                                    {t("status.seated")}
+                                </SelectItem>
+                                <SelectItem value="COMPLETED">
+                                    {t("status.completed")}
+                                </SelectItem>
+                                <SelectItem value="CANCELLED">
+                                    {t("status.cancelled")}
+                                </SelectItem>
+                                <SelectItem value="NO_SHOW">
+                                    {t("status.noShow")}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                         <Select
@@ -195,10 +213,18 @@ export default function ReservationsPage() {
                                 <SelectValue placeholder="Filter by date" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="ALL">All Dates</SelectItem>
-                                <SelectItem value="TODAY">Today</SelectItem>
-                                <SelectItem value="CUSTOM">Custom Date</SelectItem>
-                                <SelectItem value="RANGE">Date Range</SelectItem>
+                                <SelectItem value="ALL">
+                                    {t("date.all")}
+                                </SelectItem>
+                                <SelectItem value="TODAY">
+                                    {t("date.today")}
+                                </SelectItem>
+                                <SelectItem value="CUSTOM">
+                                    {t("date.custom")}
+                                </SelectItem>
+                                <SelectItem value="RANGE">
+                                    {t("date.range")}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                         {/* Custom Date Picker */}
@@ -211,7 +237,7 @@ export default function ReservationsPage() {
                                     >
                                         <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
                                         <span className="truncate">
-                                            {customDate ? format(customDate, "PPP") : "Pick a date"}
+                                            {customDate ? format(customDate, "PPP") : t("date.pickDate")}
                                         </span>
                                     </Button>
                                 </PopoverTrigger>
@@ -237,7 +263,7 @@ export default function ReservationsPage() {
                                         <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
                                         {range?.from && range?.to
                                             ? `${format(range.from, "LLL dd")} – ${format(range.to, "LLL dd, yyyy")}`
-                                            : "Select date range"}
+                                            : t("date.selectRange")}
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0" align="start">
@@ -301,7 +327,7 @@ export default function ReservationsPage() {
                                 ) : filteredReservations.length === 0 ? (
                                     <Card>
                                         <CardContent className="p-6 text-center text-muted-foreground">
-                                            No reservations found
+                                            {t("empty.noReservations")}
                                         </CardContent>
                                     </Card>
                                 ) : (

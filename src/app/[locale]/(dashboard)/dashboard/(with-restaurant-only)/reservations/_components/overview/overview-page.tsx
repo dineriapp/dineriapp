@@ -13,28 +13,31 @@ import { useState } from "react"
 import StatusBreakdown from "./status-breakdown"
 import MainStats from "./main-stats"
 import DayCapacity from "./day-capacity"
+import { useTranslations } from "next-intl"
 
 const OverviewPage = () => {
     const defaultDate = new Date("2025-11-22")
     const [date, setDate] = useState(defaultDate)
     const [open, setOpen] = useState(false)
     const { selectedRestaurant: restaurant } = useRestaurantStore()
-
+    const t = useTranslations("overviewPage")
     const restaurant_id = restaurant?.id
 
     const formatted_date = format(date, "yyyy-MM-dd");
 
     if (!restaurant) {
-        return <LoadingUI text="Loading..." />
+        return <LoadingUI text={t("loading")} />
     }
 
     return (
         <div className="space-y-4 relative">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-900">Reservations Overview</h2>
+                    <h2 className="text-2xl font-bold text-slate-900">
+                        {t("title")}
+                    </h2>
                     <p className="text-slate-600 mt-1">
-                        Get a quick summary of your reservations activity.
+                        {t("subtitle")}
                     </p>
                 </div>
 

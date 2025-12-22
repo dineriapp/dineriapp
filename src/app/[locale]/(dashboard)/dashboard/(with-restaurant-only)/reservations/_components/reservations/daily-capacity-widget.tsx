@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 interface ProductionCapacityData {
@@ -49,7 +50,7 @@ const DailyCapacityWidget = ({
     const [capacityData, setCapacityData] = useState<ProductionCapacityData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
+    const t = useTranslations("dailyCapacityWidget")
     const fetchCapacityData = async (date: string, partySize: number) => {
         setLoading(true);
         setError(null);
@@ -107,7 +108,9 @@ const DailyCapacityWidget = ({
         return (
             <div className="bg-white rounded-lg shadow p-6">
                 <div className="text-red-600 text-center">
-                    <p>Error loading capacity data</p>
+                    <p>
+                        {t("loading.errorTitle")}
+                    </p>
                     <p className="text-sm text-gray-500">{error}</p>
                 </div>
             </div>
@@ -126,22 +129,24 @@ const DailyCapacityWidget = ({
             <div className="flex items-center justify-between mb-3">
                 <div>
                     <h2 className="text-lg font-semibold text-gray-900">
-                        Reservation Feasibility Check
+                        {t("header.title")}
                     </h2>
                     <p className="text-xs text-gray-500">
-                        {partySize && ` • ${partySize} guests`}
+                        {partySize && t("header.guestsSuffix", { count: partySize })}
                     </p>
                 </div>
                 <div className="flex flex-col items-end gap-2">
                     <div className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(canCreateReservation)}`}>
-                        {canCreateReservation ? 'Available' : 'Not Available'}
+                        {canCreateReservation ? t("header.available") : t("header.notAvailable")}
                     </div>
                 </div>
             </div>
 
             {/* Decision Reason */}
             <div className="mb-3">
-                <h3 className="text-sm font-medium text-gray-900 mb-2">Decision</h3>
+                <h3 className="text-sm font-medium text-gray-900 mb-2">
+                    {t("decision.title")}
+                </h3>
                 <div className={`rounded-lg p-3 ${canCreateReservation ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
                     <p className={`text-sm ${canCreateReservation ? 'text-green-800' : 'text-red-800'}`}>
                         {reason}
@@ -155,17 +160,19 @@ const DailyCapacityWidget = ({
                     {/* Capacity Information */}
                     {details.capacity && (
                         <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">Capacity Overview</h3>
+                            <h3 className="text-sm font-medium text-gray-900 mb-3">
+                                {t("capacityOverview.title")}
+                            </h3>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <div className="bg-blue-50 rounded-lg p-4">
                                     <div className="text-2xl font-bold text-blue-900">
                                         {details.capacity.utilized}/{details.capacity.total}
                                     </div>
                                     <div className="text-sm text-blue-700">
-                                        Guests / Capacity
+                                        {t("capacityOverview.guestsCapacityLabel")}
                                     </div>
                                     <div className="text-xs text-blue-600 mt-1">
-                                        {details.capacity.utilizationPercentage}% utilized
+                                        {t("capacityOverview.utilizedLabel", { percent: details.capacity.utilizationPercentage })}
                                     </div>
                                 </div>
 
@@ -174,7 +181,7 @@ const DailyCapacityWidget = ({
                                         {details.capacity.available}
                                     </div>
                                     <div className="text-sm text-green-700">
-                                        Available Capacity
+                                        {t("capacityOverview.availableCapacityLabel")}
                                     </div>
                                 </div>
 
@@ -183,11 +190,11 @@ const DailyCapacityWidget = ({
                                         {details.tableCount || 0}
                                     </div>
                                     <div className="text-sm text-amber-700">
-                                        Available Tables
+                                        {t("capacityOverview.availableTablesLabel")}
                                     </div>
                                     {details.tableMethod && (
                                         <div className="text-xs text-amber-600 mt-1 capitalize">
-                                            {details.tableMethod} method
+                                            {t("capacityOverview.methodSuffix", { method: details.tableMethod })}
                                         </div>
                                     )}
                                 </div>
@@ -198,7 +205,9 @@ const DailyCapacityWidget = ({
                     {/* Wasted Capacity Display */}
                     {canCreateReservation && details?.wastedCapacity !== undefined && (
                         <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-2">Capacity Efficiency</h3>
+                            <h3 className="text-sm font-medium text-gray-900 mb-2">
+                                {t("capacityEfficiency.title")}
+                            </h3>
                             <div className="bg-gray-50 rounded-lg p-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="text-center">
@@ -206,10 +215,10 @@ const DailyCapacityWidget = ({
                                             {details.wastedCapacity}
                                         </div>
                                         <div className="text-sm text-gray-600">
-                                            Wasted Capacity
+                                            {t("capacityEfficiency.wastedCapacityLabel")}
                                         </div>
                                         <div className="text-xs text-gray-500 mt-1">
-                                            Extra seats not used
+                                            {t("capacityEfficiency.wastedCapacityHint")}
                                         </div>
                                     </div>
                                     <div className="text-center">
@@ -220,10 +229,10 @@ const DailyCapacityWidget = ({
                                             {details.efficiency}%
                                         </div>
                                         <div className="text-sm text-gray-600">
-                                            Efficiency
+                                            {t("capacityEfficiency.efficiencyLabel")}
                                         </div>
                                         <div className="text-xs text-gray-500 mt-1">
-                                            Party size vs table capacity
+                                            {t("capacityEfficiency.efficiencyHint")}
                                         </div>
                                     </div>
                                 </div>
@@ -232,13 +241,14 @@ const DailyCapacityWidget = ({
                                 <div className="mt-3 pt-3 border-t border-gray-200">
                                     <div className="text-xs text-gray-600">
                                         <strong>Explanation:</strong> {details.tableCount === 1 ?
-                                            `Single table with ${details.totalTableCapacity} capacity for ${partySize} guests` :
-                                            `Table combination with ${details.totalTableCapacity} total capacity for ${partySize} guests`
+                                            t("capacityEfficiency.singleTableExplanation", { capacity: `${details.totalTableCapacity}`, guests: partySize }) :
+
+                                            t("capacityEfficiency.combinationExplanation", { capacity: `${details.totalTableCapacity}`, guests: partySize })
                                         }
                                     </div>
                                     {details.tableMethod === 'combination' && (
                                         <div className="text-xs text-amber-600 mt-1">
-                                            <strong>Note:</strong> Using table combinations may result in some wasted capacity
+                                            {t("capacityEfficiency.combinationNote")}
                                         </div>
                                     )}
                                 </div>
@@ -250,7 +260,7 @@ const DailyCapacityWidget = ({
                     {details.tables && details.tables.length > 0 && (
                         <div>
                             <h3 className="text-sm font-medium text-gray-900 mb-3">
-                                Assigned Tables ({details.tableMethod})
+                                {t("assignedTables.title", { method: `${details.tableMethod}` })}
                             </h3>
                             <div className="bg-gray-50 rounded-lg p-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -265,9 +275,8 @@ const DailyCapacityWidget = ({
                                                 </div>
                                                 <div className="text-right">
                                                     <div className="font-medium text-gray-900">
-                                                        {table.capacity} seats
+                                                        {table.capacity} {t("assignedTables.seatsLabel")}
                                                     </div>
-                                                    {/* REMOVED: min/max party size display since it's not in API response */}
                                                 </div>
                                             </div>
                                         </div>
@@ -276,9 +285,11 @@ const DailyCapacityWidget = ({
                                 {details.totalTableCapacity && (
                                     <div className="mt-3 pt-3 border-t border-gray-200">
                                         <div className="flex justify-between text-sm">
-                                            <span className="text-gray-600">Total table capacity:</span>
+                                            <span className="text-gray-600">
+                                                {t("assignedTables.totalTableCapacityLabel")}
+                                            </span>
                                             <span className="font-semibold text-gray-900">
-                                                {details.totalTableCapacity} guests
+                                                {details.totalTableCapacity} {t("assignedTables.totalGuestsLabel")}
                                             </span>
                                         </div>
                                     </div>
@@ -290,28 +301,57 @@ const DailyCapacityWidget = ({
                     {/* Additional Details for Failure Cases */}
                     {!canCreateReservation && (
                         <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-2">Details</h3>
+                            <h3 className="text-sm font-medium text-gray-900 mb-2">
+                                {t("failureDetails.title")}
+                            </h3>
                             <div className="bg-gray-50 rounded-lg p-3">
                                 {details.type === 'capacity' && (
                                     <div className="text-sm text-gray-700">
-                                        <p>Available capacity: <strong>{details.availableCapacity}</strong> seats</p>
-                                        <p>Required capacity: <strong>{details.requiredCapacity}</strong> seats</p>
+                                        <p>
+                                            {t("failureDetails.capacity.availableCapacity")}
+                                            <strong>{details.availableCapacity}</strong>
+                                            {t("failureDetails.capacity.seats")}
+                                        </p>
+                                        <p>
+                                            {t("failureDetails.capacity.requiredCapacity")}
+                                            <strong>{details.requiredCapacity}</strong>
+                                            {t("failureDetails.capacity.seats")}
+                                        </p>
                                     </div>
                                 )}
                                 {details.type === 'table_availability' && (
                                     <div className="text-sm text-gray-700">
-                                        <p>Table combinations enabled: <strong>{details.tableCombinationsEnabled ? 'Yes' : 'No'}</strong></p>
-                                        <p>Available capacity: <strong>{details.availableCapacity}</strong> seats</p>
+                                        <p>
+                                            {t("failureDetails.tableAvailability.tableCombinationsEnabled")}
+                                            <strong>
+                                                {
+                                                    details.tableCombinationsEnabled
+                                                        ?
+                                                        t("failureDetails.tableAvailability.yes")
+                                                        :
+                                                        t("failureDetails.tableAvailability.no")
+                                                }
+                                            </strong>
+                                        </p>
+                                        <p>
+                                            {t("failureDetails.tableAvailability.availableCapacity")}
+                                            <strong>{details.availableCapacity}</strong>
+                                            {t("failureDetails.tableAvailability.seats")}
+                                        </p>
                                     </div>
                                 )}
                                 {details.type === 'opening_hours' && (
                                     <div className="text-sm text-gray-700">
-                                        <p>The restaurant is closed or outside of opening hours for the selected time.</p>
+                                        <p>
+                                            {t("failureDetails.openingHours.closedMessage")}
+                                        </p>
                                     </div>
                                 )}
                                 {details.type === 'time_override' && (
                                     <div className="text-sm text-gray-700">
-                                        <p>This time slot has been blocked for maintenance or private events.</p>
+                                        <p>
+                                            {t("failureDetails.timeOverride.blockedMessage")}
+                                        </p>
                                     </div>
                                 )}
                             </div>
@@ -324,7 +364,9 @@ const DailyCapacityWidget = ({
             {details?.capacity && (
                 <div className="my-3">
                     <div className="flex justify-between text-sm text-gray-600 mb-1">
-                        <span>Capacity Utilization</span>
+                        <span>
+                            {t("capacityUtilization.title")}
+                        </span>
                         <span>{details.capacity.utilizationPercentage}%</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">

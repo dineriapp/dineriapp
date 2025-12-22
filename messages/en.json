@@ -3731,5 +3731,304 @@
     "alerts": {
       "fillAllFields": "Please fill in all fields"
     }
+  },
+  "reservationsPage": {
+    "title": "Reservations",
+    "subtitle": "Manage all customer reservations efficiently.",
+    "searchPlaceholder": "Search by name, email, or phone...",
+    "statusFilterPlaceholder": "Filter by status",
+    "dateFilterPlaceholder": "Filter by date",
+
+    "status": {
+      "all": "All Status",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "seated": "Seated",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "noShow": "No show"
+    },
+
+    "date": {
+      "all": "All Dates",
+      "today": "Today",
+      "custom": "Custom Date",
+      "range": "Date Range",
+      "pickDate": "Pick a date",
+      "selectRange": "Select date range"
+    },
+
+    "view": {
+      "list": "List View",
+      "timeline": "Timeline"
+    },
+
+    "empty": {
+      "noReservations": "No reservations found"
+    },
+
+    "toast": {
+      "deleteSuccess": "Reservation deleted successfully!"
+    },
+    "reservationCard": {
+      "partyOf": "Party of { count }",
+
+      "timing": {
+        "arrivalTimeLabel": "Arrival Time:",
+        "arrivalTimeHint": "Guest expected arrival",
+
+        "createdAtLabel": "Created At:",
+        "createdAtHint": "Reservation created",
+
+        "confirmedAtLabel": "Confirmed At:",
+        "confirmedAtHint": "Reservation confirmed",
+
+        "seatedAtLabel": "Seated At:",
+        "seatedAtHint": "Guest seated",
+
+        "completedAtLabel": "Completed At:",
+        "completedAtHint": "Reservation completed",
+
+        "cancelledAtLabel": "Cancelled At:",
+        "cancelledAtHint": "Reservation cancelled",
+
+        "noShowAtLabel": "No-Show At:",
+        "noShowAtHint": "Guest did not arrive"
+      },
+
+      "payment": {
+        "tablesLabel": "Tables:"
+      },
+
+      "specialRequest": {
+        "noteLabel": "Note:"
+      },
+
+      "actions": {
+        "delete": "Delete"
+      },
+
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "seated": "Seated",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "noShow": "No Show"
+      }
+    }
+  },
+  "reservationTimeline": {
+    "selectDatePrompt": "Please select a date to view the timeline",
+    "loading": "Loading timeline..",
+    "noReservationsForDate": "No reservations for { date }",
+    "header": {
+      "reservationsCount": "{ count } reservation(s)"
+    },
+    "orientation": {
+      "horizontal": "Horizontal",
+      "horizontalShort": "H",
+      "vertical": "Vertical",
+      "verticalShort": "V"
+    },
+    "Timeline": {
+      "tableHeader": "Table",
+      "timeHeader": "Time",
+
+      "tooltip": {
+        "customer": "Customer:",
+        "email": "Email:",
+        "time": "Time:",
+        "partySize": "Party Size:",
+        "status": "Status:",
+        "duration": "Duration:",
+        "minutes": "minutes",
+        "specialRequests": "Special Requests:",
+        "preferredArea": "Preferred Area:"
+      },
+
+      "payment": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "noPay": "No Pay"
+      },
+
+      "legend": {
+        "title": "Legend:",
+        "confirmed": "Confirmed",
+        "seated": "Seated",
+        "pending": "Pending",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
+    }
+  },
+  "overviewPage": {
+    "loading": "Loading...",
+    "title": "Reservations Overview",
+    "subtitle": "Get a quick summary of your reservations activity.",
+    "mainStats": {
+      "cards": {
+        "total": {
+          "title": "Total"
+        },
+        "confirmed": {
+          "title": "Confirmed"
+        },
+        "covers": {
+          "title": "Covers",
+          "footer": "Avg { avg } per party"
+        },
+        "revenue": {
+          "title": "Revenue",
+          "footer": "Deposits collected"
+        }
+      }
+    },
+    "dayCapacity": {
+      "title": "Capacity",
+
+      "error": {
+        "title": "Failed to load capacity data.",
+        "retry": "Retry"
+      },
+
+      "empty": {
+        "noSlots": "No slots available for this date."
+      },
+
+      "table": {
+        "time": "Time",
+        "used": "Used",
+        "total": "Total",
+        "max": "Max"
+      }
+    },
+    "statusBreakdown": {
+      "title": "Status Breakdown",
+
+      "loading": {
+        "title": "Status Breakdown"
+      },
+
+      "error": {
+        "message": "Failed to load status breakdown.",
+        "retry": "Retry"
+      },
+
+      "labels": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "seated": "Seated",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "noShow": "No Show"
+      }
+    }
+  },
+  "update": {
+    "btn": "Upgrade",
+    "text": "Upgrade to Pro or Enterprise to unlock premium features and tools."
+  },
+  "accessChecker": {
+    "loading": "Loading...",
+
+    "stripe": {
+      "title": "Stripe Not Connected",
+      "description": "Your restaurant needs to connect Stripe to accept online payments for reservations.",
+      "button": "Connect Stripe"
+    },
+
+    "upgrade": {
+      "title": "Upgrade Required",
+      "description": "You need to upgrade to the <span class='font-semibold'>Pro Plan</span> to access the reservation system."
+    }
+  },
+  "reservationStatusBanner": {
+    "emergencyClosure": {
+      "title": "Emergency Closure",
+      "description": "The restaurant is temporarily closed. Reservations cannot be made at this time."
+    },
+    "reservationsPaused": {
+      "title": "Reservations Paused",
+      "description": "We are currently not accepting new reservations."
+    },
+    "notice": {
+      "title": "Notice"
+    }
+  },
+  "dailyCapacityWidget": {
+    "loading": {
+      "errorTitle": "Error loading capacity data"
+    },
+
+    "header": {
+      "title": "Reservation Feasibility Check",
+      "guestsSuffix": "{ count } guests",
+      "available": "Available",
+      "notAvailable": "Not Available"
+    },
+
+    "decision": {
+      "title": "Decision"
+    },
+
+    "capacityOverview": {
+      "title": "Capacity Overview",
+      "guestsCapacityLabel": "Guests / Capacity",
+      "utilizedLabel": "{ percent }% utilized",
+      "availableCapacityLabel": "Available Capacity",
+      "availableTablesLabel": "Available Tables",
+      "methodSuffix": "{ method } method"
+    },
+
+    "capacityEfficiency": {
+      "title": "Capacity Efficiency",
+      "wastedCapacityLabel": "Wasted Capacity",
+      "wastedCapacityHint": "Extra seats not used",
+      "efficiencyLabel": "Efficiency",
+      "efficiencyHint": "Party size vs table capacity",
+      "explanationLabel": "Explanation:",
+      "singleTableExplanation": "Single table with { capacity } capacity for { guests } guests",
+      "combinationExplanation": "Table combination with { capacity } total capacity for { guests } guests",
+      "combinationNote": "Note: Using table combinations may result in some wasted capacity"
+    },
+
+    "assignedTables": {
+      "title": "Assigned Tables ({ method })",
+      "seatsLabel": "seats",
+      "totalTableCapacityLabel": "Total table capacity:",
+      "totalGuestsLabel": "guests"
+    },
+
+    "failureDetails": {
+      "title": "Details",
+
+      "capacity": {
+        "availableCapacity": "Available capacity: ",
+        "requiredCapacity": "Required capacity: ",
+        "seats": "seats"
+      },
+
+      "tableAvailability": {
+        "tableCombinationsEnabled": "Table combinations enabled: ",
+        "yes": "Yes",
+        "no": "No",
+        "availableCapacity": "Available capacity: ",
+        "seats": "seats"
+      },
+
+      "openingHours": {
+        "closedMessage": "The restaurant is closed or outside of opening hours for the selected time."
+      },
+
+      "timeOverride": {
+        "blockedMessage": "This time slot has been blocked for maintenance or private events."
+      }
+    },
+
+    "capacityUtilization": {
+      "title": "Capacity Utilization"
+    }
   }
 }

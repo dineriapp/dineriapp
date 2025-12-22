@@ -9,6 +9,7 @@ import {
     Users,
     ListChecks
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function MainStats({
     restaurant_id,
@@ -21,6 +22,7 @@ export default function MainStats({
         restaurant_id,
         formatted_date
     );
+    const t = useTranslations("overviewPage.mainStats.cards")
 
     const stats = data?.data;
 
@@ -36,44 +38,44 @@ export default function MainStats({
             <StatCard
                 icon={<ListChecks className="w-7 h-7 opacity-95" />}
                 bg="from-indigo-500 to-indigo-600"
-                title="Total"
+                title={t("total.title")}
                 value={totalReservations}
                 loading={isLoading}
                 footerIcon={<CalendarDays className="w-4 h-4" />}
-                footerText={`${totalReservations} Total`}
+                footerText={`${totalReservations} ${t("total.title")}`}
             />
 
             {/* Confirmed Reservations */}
             <StatCard
                 icon={<CalendarDays className="w-7 h-7 opacity-95" />}
                 bg="from-blue-500 to-blue-600"
-                title="Confirmed"
+                title={t("confirmed.title")}
                 value={confirmedReservations}
                 loading={isLoading}
                 footerIcon={<Check className="w-4 h-4" />}
-                footerText={`${confirmedReservations} Confirmed`}
+                footerText={`${confirmedReservations} ${t("confirmed.title")}`}
             />
 
             {/* Covers */}
             <StatCard
                 icon={<Users className="w-7 h-7 opacity-95" />}
                 bg="from-green-500 to-green-600"
-                title="Covers"
+                title={t("covers.title")}
                 value={Math.round(totalReservations * avgPartySize)}
                 loading={isLoading}
                 footerIcon={<TrendingUp className="w-4 h-4" />}
-                footerText={`Avg ${avgPartySize.toFixed(1)} per party`}
+                footerText={`${t("covers.footer", { avg: avgPartySize.toFixed(1) })}`}
             />
 
             {/* Revenue */}
             <StatCard
                 icon={<DollarSign className="w-7 h-7 opacity-95" />}
                 bg="from-emerald-600 to-emerald-700"
-                title="Revenue"
+                title={t("revenue.title")}
                 value={`€${totalDeposit.toFixed(2)}`}
                 loading={isLoading}
                 footerIcon={<TrendingUp className="w-4 h-4" />}
-                footerText="Deposits collected"
+                footerText={t("revenue.footer")}
             />
         </div>
     );

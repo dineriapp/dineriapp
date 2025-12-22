@@ -22,6 +22,7 @@ import {
     Users,
     XCircle
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 const STATUS_COLORS: Record<string, string> = {
     PENDING: "bg-yellow-100 text-yellow-800 border-yellow-300",
@@ -39,6 +40,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
         status: ReservationStatus;
     }) => void; restaurant: Restaurant, handleDelete: (id: string) => void
 }) {
+    const t = useTranslations("reservationsPage.reservationCard")
     const timeZone = restaurant?.timezone || "Asia/Karachi"
 
     return (
@@ -60,7 +62,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                             )}
                             <span className="mx-1 text-border">•</span>
                             <Users className="w-4 h-4" />
-                            Party of {reservation.party_size}
+                            {t("partyOf", { count: reservation.party_size })}
                         </div>
                     </div>
 
@@ -82,7 +84,8 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                             <div className="flex items-center gap-2">
                                 <Clock className="w-4 h-4 text-blue-500" />
                                 <span>
-                                    Arrival Time: {formatDateTime(reservation.arrival_time, timeZone)} — Guest expected arrival
+                                    {t("timing.arrivalTimeLabel")} {formatDateTime(reservation.arrival_time, timeZone)}
+                                    — {t("timing.arrivalTimeHint")}
                                 </span>
                             </div>
                         )}
@@ -91,7 +94,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                             <div className="flex items-center gap-2">
                                 <FilePlus2 className="w-4 h-4 text-blue-500" />
                                 <span>
-                                    Created At: {formatDateTime(reservation.createdAt, timeZone)} — Reservation created
+                                    {t("timing.createdAtLabel")} {formatDateTime(reservation.createdAt, timeZone)} — {t("timing.createdAtHint")}
                                 </span>
                             </div>
                         )}
@@ -100,7 +103,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                             <div className="flex items-center gap-2">
                                 <CheckCircle2 className="w-4 h-4 text-green-500" />
                                 <span>
-                                    Confirmed At: {formatDateTime(reservation.confirmed_at, timeZone)} — Reservation confirmed
+                                    {t("timing.confirmedAtLabel")}  {formatDateTime(reservation.confirmed_at, timeZone)} —  {t("timing.confirmedAtHint")}
                                 </span>
                             </div>
                         )}
@@ -109,7 +112,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                             <div className="flex items-center gap-2">
                                 <UserCheck className="w-4 h-4 text-amber-500" />
                                 <span>
-                                    Seated At: {formatDateTime(reservation.seated_at, timeZone)} — Guest seated
+                                    {t("timing.seatedAtLabel")} {formatDateTime(reservation.seated_at, timeZone)} — {t("timing.seatedAtHint")}
                                 </span>
                             </div>
                         )}
@@ -118,7 +121,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                             <div className="flex items-center gap-2">
                                 <CheckSquare className="w-4 h-4 text-emerald-600" />
                                 <span>
-                                    Completed At: {formatDateTime(reservation.completed_at, timeZone)} — Reservation completed
+                                    {t("timing.completedAtLabel")} {formatDateTime(reservation.completed_at, timeZone)} — {t("timing.completedAtHint")}
                                 </span>
                             </div>
                         )}
@@ -127,7 +130,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                             <div className="flex items-center gap-2">
                                 <XCircle className="w-4 h-4 text-red-500" />
                                 <span>
-                                    Cancelled At: {formatDateTime(reservation.cancelled_at, timeZone)} — Reservation cancelled
+                                    {t("timing.cancelledAtLabel")} {formatDateTime(reservation.cancelled_at, timeZone)} — {t("timing.cancelledAtHint")}
                                 </span>
                             </div>
                         )}
@@ -136,7 +139,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                             <div className="flex items-center gap-2">
                                 <EyeOff className="w-4 h-4 text-gray-400" />
                                 <span>
-                                    No-Show At: {formatDateTime(reservation.no_show_at, timeZone)} — Guest did not arrive
+                                    {t("timing.noShowAtLabel")} {formatDateTime(reservation.no_show_at, timeZone)} — {t("timing.noShowAtHint")}
                                 </span>
                             </div>
                         )}
@@ -160,7 +163,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                         )}
                         {reservation.table_reservations?.length > 0 && (
                             <div className="border rounded-lg px-3 py-2 bg-background/60">
-                                <span className="text-muted-foreground">Tables: </span>
+                                <span className="text-muted-foreground">{t("payment.tablesLabel")} </span>
                                 <span className="font-medium text-foreground">
                                     {reservation.table_reservations.map((t: any) => t.table?.table_number).join(", ")}
                                 </span>
@@ -172,7 +175,9 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                 {/* --- Special Request --- */}
                 {reservation.special_requests && (
                     <div className="mt-2 p-2 bg-muted/50 rounded-lg text-sm border border-border/30">
-                        <span className="font-medium text-foreground">Note: </span>
+                        <span className="font-medium text-foreground">
+                            {t("specialRequest.noteLabel")}
+                        </span>
                         <span className="text-muted-foreground">{reservation.special_requests}</span>
                     </div>
                 )}
@@ -193,12 +198,24 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                         </SelectTrigger>
 
                         <SelectContent>
-                            <SelectItem value="PENDING">Pending</SelectItem>
-                            <SelectItem value="CONFIRMED">Confirmed</SelectItem>
-                            <SelectItem value="SEATED">Seated</SelectItem>
-                            <SelectItem value="COMPLETED">Completed</SelectItem>
-                            <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                            <SelectItem value="NO_SHOW">No Show</SelectItem>
+                            <SelectItem value="PENDING">
+                                {t("status.pending")}
+                            </SelectItem>
+                            <SelectItem value="CONFIRMED">
+                                {t("status.confirmed")}
+                            </SelectItem>
+                            <SelectItem value="SEATED">
+                                {t("status.seated")}
+                            </SelectItem>
+                            <SelectItem value="COMPLETED">
+                                {t("status.completed")}
+                            </SelectItem>
+                            <SelectItem value="CANCELLED">
+                                {t("status.cancelled")}
+                            </SelectItem>
+                            <SelectItem value="NO_SHOW">
+                                {t("status.noShow")}
+                            </SelectItem>
                         </SelectContent>
                     </Select>
                     <Button
@@ -208,7 +225,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                         onClick={() => handleDelete(reservation.id)}
                     >
                         <Trash2 className="w-4 h-4" />
-                        Delete
+                        {t("actions.delete")}
                     </Button>
                 </div>
             </CardContent>

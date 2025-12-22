@@ -12,6 +12,7 @@ import {
     UserX,
     XCircle
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 const StatusBreakdown = ({
     restaurant_id,
@@ -20,6 +21,7 @@ const StatusBreakdown = ({
     restaurant_id: string | undefined
     formatted_date: string
 }) => {
+    const t = useTranslations("overviewPage.statusBreakdown")
 
     const {
         data,
@@ -33,32 +35,32 @@ const StatusBreakdown = ({
 
     const statusConfig = {
         pending_reservations: {
-            label: "Pending",
+            label: t("labels.pending"),
             color: "bg-yellow-50 border-yellow-200 text-yellow-800",
             icon: Clock
         },
         confirmed_reservations: {
-            label: "Confirmed",
+            label: t("labels.confirmed"),
             color: "bg-blue-50 border-blue-200 text-blue-800",
             icon: CheckCircle
         },
         seated_reservations: {
-            label: "Seated",
+            label: t("labels.seated"),
             color: "bg-purple-50 border-purple-200 text-purple-800",
             icon: Users
         },
         completed_reservations: {
-            label: "Completed",
+            label: t("labels.completed"),
             color: "bg-green-50 border-green-200 text-green-800",
             icon: ThumbsUp
         },
         cancelled_reservations: {
-            label: "Cancelled",
+            label: t("labels.cancelled"),
             color: "bg-red-50 border-red-200 text-red-800",
             icon: XCircle
         },
         no_show_reservations: {
-            label: "No Show",
+            label: t("labels.noShow"),
             color: "bg-gray-50 border-gray-200 text-gray-800",
             icon: UserX
         }
@@ -72,7 +74,7 @@ const StatusBreakdown = ({
                 <CardHeader className="p-0">
                     <CardTitle className="flex items-center gap-2 text-lg">
                         <BarChart3 className="h-5 w-5" />
-                        Status Breakdown
+                        {t("title")}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -95,17 +97,17 @@ const StatusBreakdown = ({
                 <CardHeader className="p-0">
                     <CardTitle className="flex items-center gap-2 text-lg">
                         <BarChart3 className="h-5 w-5" />
-                        Status Breakdown
+                        {t("title")}
                     </CardTitle>
                 </CardHeader>
 
                 <CardContent className="flex flex-col items-center justify-center py-6 text-center">
                     <XCircle className="h-10 w-10 text-red-500 mb-2" />
                     <p className="text-sm text-red-600 mb-2">
-                        Failed to load status breakdown.
+                        {t("error.message")}
                     </p>
                     <Button variant="outline" onClick={() => refetch()}>
-                        Retry
+                        {t("error.retry")}
                     </Button>
                 </CardContent>
             </Card>
@@ -117,7 +119,7 @@ const StatusBreakdown = ({
             <CardHeader className="p-0">
                 <CardTitle className="flex items-center gap-2 text-lg">
                     <BarChart3 className="h-5 w-5" />
-                    Status Breakdown
+                    {t("title")}
                 </CardTitle>
             </CardHeader>
 
