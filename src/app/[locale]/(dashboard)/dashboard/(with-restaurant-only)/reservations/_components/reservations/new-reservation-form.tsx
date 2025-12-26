@@ -22,6 +22,7 @@ import DailyCapacityWidget from "./daily-capacity-widget";
 import { toast } from "sonner";
 import { getUTCFromLocalDateTime } from "@/lib/date-utils";
 import ReservationStatusBanner from "./reservation-status-banner";
+import { useTranslations } from "next-intl";
 
 // Format time slots for dropdown (30-min intervals)
 const fmt = new Intl.DateTimeFormat("en-US", {
@@ -40,7 +41,8 @@ const timeSlots = Array.from({ length: 48 }, (_, i) => {
 
 const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount }) => {
     const { data: areas = [], isLoading } = useAreas(restaurant?.id);
-
+    const t = useTranslations("dashbaordReservationForm")
+    const dr = useTranslations("depositRules")
     const settings = restaurant?.reservation_settings?.settings as SettingsState | undefined;
 
     const overrides_settings = useMemo<OverridesSettings>(() => {
@@ -289,14 +291,14 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
         setError(null);
 
         if (!date || !selectedTime) {
-            setError("Please select date and time");
+            setError(t("errors.selectDateAndTime"));
             setIsSubmitting(false);
             return;
         }
 
         // Check for time override before submitting
         if (isTimeBlocked) {
-            setError("This time slot is currently unavailable. Please select a different time.");
+            setError(t("errors.timeSlotUnavailable"));
             setIsSubmitting(false);
             return;
         }
@@ -328,26 +330,25 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
 
             if (result.success) {
                 toast.success(
-                    `Reservation created successfully!${result.deposit?.amount > 0
-                        ? ` Deposit: ${result.deposit.amount} ${settings?.deposit_settings?.depositCurrency || 'EUR'
-                        }`
+                    `${t("toast.createdSuccessPrefix")} ${result.deposit?.amount > 0
+                        ? ` ${t("toast.depositSuffix", { amount: result.deposit.amount, currency: settings?.deposit_settings?.depositCurrency || 'EUR' })}`
                         : ''
                     }`
                 );
                 // Close dialog or reset form
                 window.location.reload();
             } else {
-                setError(result.error || 'Failed to create reservation');
+                setError(result.error || t("errors.failedToCreate"));
             }
         } catch (error) {
             console.error('Reservation error:', error);
-            setError('Failed to create reservation. Please try again.');
+            setError(t("errors.failedToCreateTryAgain"));
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    if (!restaurant || isLoading) return <LoadingUI text="Loading..." />;
+    if (!restaurant || isLoading) return <LoadingUI text={t("loading")} />;
     if (
         settings?.restaurantSettings?.pause_new_reservations ||
         settings?.restaurantSettings?.emergency_closure
@@ -360,9 +361,11 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
         <div className="flex items-center justify-center flex-col w-full">
             <div className="w-full space-y-4">
                 <div className="">
-                    <h2 className="text-2xl font-bold text-slate-900">Add Reservation</h2>
+                    <h2 className="text-2xl font-bold text-slate-900">
+                        {t("title")}
+                    </h2>
                     <p className="text-slate-600 mt-1">
-                        Create and manage a new customer reservation quickly and easily.
+                        {t("subtitle")}
                     </p>
                 </div>
                 <Card className="p-5">
@@ -386,7 +389,7 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                         {restaurant?.timezone}
                                     </p>
                                     <p className="text-xs text-green-700 mt-0.5">
-                                        All dates and times are displayed according to {restaurant?.timezone} timezone for accuracy.
+                                        {t("timezoneCard.helper", { timezone: restaurant?.timezone || "" })}
                                     </p>
                                 </div>
                             </div>
@@ -399,7 +402,7 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                             <div className="flex flex-col">
                                 <Label className="flex items-center gap-2 mb-2">
                                     <Calendar className="h-4 w-4" />
-                                    Date
+                                    {t("fields.date.label")}
                                 </Label>
                                 <Input
                                     type="date"
@@ -416,12 +419,12 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                 {date && (
                                     openTimes.closed ? (
                                         <p className="text-red-500 text-xs mt-1">
-                                            Restaurant is closed on this day.
+                                            {t("fields.date.closedMessage")}
                                         </p>
                                     ) : (
                                         openTimes.open && openTimes.close && (
                                             <p className="text-green-600 text-xs mt-1">
-                                                Open from {openTimes.open} till {openTimes.close}
+                                                {t("fields.date.openFromTill", { open: openTimes.open, close: openTimes.close })}
                                             </p>
                                         )
                                     )
@@ -432,7 +435,7 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                             <div className="flex flex-col gap-2">
                                 <Label className="flex items-center gap-2">
                                     <Clock className="h-4 w-4" />
-                                    Time
+                                    {t("fields.time.label")}
                                 </Label>
                                 <Select
                                     value={selectedTime}
@@ -444,10 +447,10 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                         <SelectValue
                                             placeholder={
                                                 !date
-                                                    ? "Select date first"
+                                                    ? t("fields.time.placeholders.selectDateFirst")
                                                     : openTimes.closed
-                                                        ? "Closed"
-                                                        : "Select time"
+                                                        ? t("fields.time.placeholders.closed")
+                                                        : t("fields.time.placeholders.selectTime")
                                             }
                                         />
                                     </SelectTrigger>
@@ -466,15 +469,20 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                         <AlertCircle className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
                                         <div className="flex-1">
                                             <p className="text-red-700 text-xs font-medium">
-                                                This time slot is unavailable
+                                                {t("fields.time.overrideBlocked.title")}
                                             </p>
                                             <div className="text-red-600 text-xs">
                                                 <p>
-                                                    <strong>Blocked period:</strong> {activeOverride.startTime} to {activeOverride.endTime}
+                                                    <strong>
+                                                        {t("fields.time.overrideBlocked.blockedPeriod")}
+                                                    </strong> {activeOverride.startTime} to {activeOverride.endTime}
                                                 </p>
                                                 {activeOverride.reason && (
                                                     <p>
-                                                        <strong>Reason:</strong> {activeOverride.reason}
+                                                        <strong>
+                                                            Reason:
+                                                            {t("fields.time.overrideBlocked.reason")}
+                                                        </strong> {activeOverride.reason}
                                                     </p>
                                                 )}
                                             </div>
@@ -488,13 +496,19 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                         <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
                                         <div className="flex-1">
                                             <p className="text-amber-700 text-xs font-medium">
-                                                No available time slots
+                                                {t("fields.time.noAvailableTimes.title")}
                                             </p>
                                             <div className="text-amber-600 text-xs">
-                                                <p>All time slots are currently blocked for this date.</p>
+                                                <p>
+                                                    {t("fields.time.noAvailableTimes.allBlocked")}
+                                                </p>
                                                 {dateOverrides.length > 0 && (
                                                     <div className="mt-1">
-                                                        <p><strong>Blocked periods:</strong></p>
+                                                        <p>
+                                                            <strong>
+                                                                {t("fields.time.noAvailableTimes.blockedPeriodsTitle")}
+                                                            </strong>
+                                                        </p>
                                                         <ul className="list-disc list-inside">
                                                             {dateOverrides.map(override => (
                                                                 <li key={override.id}>
@@ -505,7 +519,9 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                                         </ul>
                                                     </div>
                                                 )}
-                                                <p className="mt-1">Please select a different date.</p>
+                                                <p className="mt-1">
+                                                    {t("fields.time.noAvailableTimes.selectDifferentDate")}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -522,7 +538,7 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                         </div>
                                         <div className="flex-1 space-y-2">
                                             <p className="text-sm font-medium text-blue-700">
-                                                Some time slots are currently blocked
+                                                {t("fields.time.dateOverridesInfo.title")}
                                             </p>
 
                                             <div className="space-y-2">
@@ -558,16 +574,21 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                         <div className="grid gap-4 sm:grid-cols-2 mt-4">
                             <div className="space-y-2">
                                 <Label className="flex items-center gap-2">
-                                    <Users className="h-4 w-4" /> Party Size
+                                    <Users className="h-4 w-4" />
+                                    {t("fields.partySize.label")}
                                 </Label>
                                 <Select value={partySize} onValueChange={setPartySize} required>
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select" />
+                                        <SelectValue placeholder={t("fields.partySize.placeholder")} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {Array.from({ length: 20 }).map((_, i) => (
                                             <SelectItem key={i + 1} value={String(i + 1)}>
-                                                {i + 1} {i === 0 ? 'person' : 'people'}
+                                                {i + 1} {i === 0 ?
+                                                    t("fields.partySize.person")
+                                                    :
+                                                    t("fields.partySize.people")
+                                                }
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -577,14 +598,16 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                             <div className="space-y-2">
                                 <Label className="flex items-center gap-2">
                                     <MapPin className="h-4 w-4" />
-                                    Preferred Area (optional)
+                                    {t("fields.preferredArea.label")}
                                 </Label>
                                 <Select value={area} onValueChange={setArea}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="No preference" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">No preference</SelectItem>
+                                        <SelectItem value="none">
+                                            {t("fields.preferredArea.placeholder")}
+                                        </SelectItem>
                                         {areas
                                             ?.filter((a) => a.active)
                                             .map((a) => (
@@ -609,7 +632,7 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                             <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                                 <div className="flex items-center justify-between">
                                     <span className="text-sm font-medium text-amber-800">
-                                        Deposit Required (Estimated)
+                                        {t("deposit.title")}
                                     </span>
                                     <span className="text-sm font-bold text-amber-900">
                                         {displayDepositAmount} {settings?.deposit_settings?.depositCurrency || 'EUR'}
@@ -617,19 +640,19 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                 </div>
                                 {displayAppliedRule && (
                                     <p className="text-xs text-amber-700 mt-1">
-                                        {getRuleDescription(displayAppliedRule)}
+                                        {getRuleDescription(displayAppliedRule, dr)}
                                     </p>
                                 )}
                                 {!displayAppliedRule && (
                                     <p className="text-xs text-amber-700 mt-1">
                                         {settings?.deposit_settings?.depositType === 'per-person'
-                                            ? `€${parseFloat(settings.deposit_settings.depositAmount || '0')} per person`
-                                            : 'Flat rate deposit'
+                                            ? `€${parseFloat(settings.deposit_settings.depositAmount || '0')} ${t("deposit.perPerson")}`
+                                            : t("deposit.flatRate")
                                         }
                                     </p>
                                 )}
                                 <p className="text-xs text-amber-600 mt-2 italic">
-                                    Final deposit amount will be calculated and confirmed by the server.
+                                    {t("deposit.finalNote")}
                                 </p>
                             </div>
                         )}
@@ -638,41 +661,51 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
 
                         {/* Customer Info */}
                         <div className="space-y-4">
-                            <h3 className="font-medium">Customer Information</h3>
+                            <h3 className="font-medium">
+                                {t("customerInfo.title")}
+                            </h3>
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div className="space-y-2">
-                                    <Label>Full Name *</Label>
+                                    <Label>
+                                        {t("customerInfo.fullName.label")}
+                                    </Label>
                                     <Input
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         required
-                                        placeholder="John Doe"
+                                        placeholder={t("customerInfo.fullName.placeholder")}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Email *</Label>
+                                    <Label>
+                                        {t("customerInfo.email.label")}
+                                    </Label>
                                     <Input
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
-                                        placeholder="john@example.com"
+                                        placeholder={t("customerInfo.email.placeholder")}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Phone</Label>
+                                    <Label>
+                                        {t("customerInfo.phone.label")}
+                                    </Label>
                                     <Input
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
-                                        placeholder="(555) 123-4567"
+                                        placeholder={t("customerInfo.phone.placeholder")}
                                     />
                                 </div>
                                 <div className="space-y-2 sm:col-span-2">
-                                    <Label>Special Requests</Label>
+                                    <Label>
+                                        {t("customerInfo.specialRequests.label")}
+                                    </Label>
                                     <Textarea
                                         value={notes}
                                         onChange={(e) => setNotes(e.target.value)}
-                                        placeholder="Allergies, preferences, celebrations, etc."
+                                        placeholder={t("customerInfo.specialRequests.placeholder")}
                                         rows={3}
                                     />
                                 </div>
@@ -683,7 +716,9 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
 
                         {/* Payment Method */}
                         <div className="space-y-4">
-                            <h3 className="font-medium">Payment Method</h3>
+                            <h3 className="font-medium">
+                                {t("paymentMethod.title")}
+                            </h3>
                             <div className="grid gap-3">
                                 {/* Card Payment */}
                                 <label className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition
@@ -698,8 +733,12 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                     />
                                     <CreditCard className="h-5 w-5 text-gray-600" />
                                     <div className="flex-1">
-                                        <div className="font-medium">Paid by Card</div>
-                                        <div className="text-sm text-gray-500">Customer paid using credit or debit card.</div>
+                                        <div className="font-medium">
+                                            {t("paymentMethod.card.title")}
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                            {t("paymentMethod.card.description")}
+                                        </div>
                                     </div>
                                 </label>
 
@@ -716,8 +755,12 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                     />
                                     <DollarSign className="h-5 w-5 text-gray-600" />
                                     <div className="flex-1">
-                                        <div className="font-medium">Paid by Cash</div>
-                                        <div className="text-sm text-gray-500">Customer paid in cash at the restaurant.</div>
+                                        <div className="font-medium">
+                                            {t("paymentMethod.cash.title")}
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                            {t("paymentMethod.cash.description")}
+                                        </div>
                                     </div>
                                 </label>
                             </div>
@@ -728,13 +771,18 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                 <>
                                     {settings?.deposit_settings?.cancellationPolicies?.length > 0 && (
                                         <div className="bg-gray-50 rounded-lg p-3 mt-3">
-                                            <h4 className="text-sm font-medium text-gray-700 mb-2">Cancellation Policy</h4>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-2">
+                                                {t("cancellationPolicy.title")}
+                                            </h4>
                                             <ul className="text-xs text-gray-600 space-y-1">
                                                 {settings.deposit_settings.cancellationPolicies
                                                     .filter((policy: any) => policy.active)
                                                     .map((policy: any) => (
                                                         <li key={policy.id}>
-                                                            Cancel within {policy.hoursBefore} hours for {policy.refundPercentage}% refund
+                                                            {t("cancellationPolicy.line", {
+                                                                hoursBefore: policy.hoursBefore,
+                                                                refundPercentage: policy.refundPercentage
+                                                            })}
                                                         </li>
                                                     ))}
                                             </ul>
@@ -750,7 +798,7 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                 type="button"
                                 className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
                             >
-                                Cancel
+                                {t("buttons.cancel")}
                             </button>
                             <button
                                 type="submit"
@@ -760,12 +808,12 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                 {isSubmitting ? (
                                     <span className="flex items-center">
                                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                        Creating...
+                                        {t("buttons.creating")}
                                     </span>
                                 ) : isTimeBlocked ? (
-                                    "Time Slot Blocked"
+                                    t("buttons.timeSlotBlocked")
                                 ) : (
-                                    `Create Reservation${displayDepositAmount > 0 && paymentMethod === 'card' ? ' & Pay Deposit' : ''}`
+                                    `${t("buttons.createReservation")}${displayDepositAmount > 0 && paymentMethod === 'card' ? ` ${t("buttons.PayDeposit")}` : ''}`
                                 )}
                             </button>
                         </div>
@@ -777,31 +825,56 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
     );
 };
 
-// Helper function to generate rule descriptions
-function getRuleDescription(rule: DynamicRule): string {
-    const amount = parseFloat(rule.amount);
+type TFunction = ReturnType<typeof useTranslations>;
 
-    switch (rule.ruleType) {
-        case 'special-date':
-            return `Special date rate: ${rule.depositType === 'per-person' ? `€${amount} per person` : `€${amount} flat rate`}`;
-
-        case 'time-slot':
-            return `Time slot rate (${rule.startTime}-${rule.endTime}): ${rule.depositType === 'per-person' ? `€${amount} per person` : `€${amount} flat rate`}`;
-
-        case 'party-size':
-            return `Party size rate (${rule.minPartySize}-${rule.maxPartySize} people): ${rule.depositType === 'per-person' ? `€${amount} per person` : `€${amount} flat rate`}`;
-
-        case 'day-of-week':
-            const daysMap: { [key: string]: string } = {
-                '0': 'Sunday', '1': 'Monday', '2': 'Tuesday', '3': 'Wednesday',
-                '4': 'Thursday', '5': 'Friday', '6': 'Saturday'
-            };
-            const dayNames = rule.days?.split(',').map(d => daysMap[d.trim()]).join(', ') || '';
-            return `${dayNames} rate: ${rule.depositType === 'per-person' ? `€${amount} per person` : `€${amount} flat rate`}`;
-
-        default:
-            return `${rule.depositType === 'per-person' ? `€${amount} per person` : `€${amount} flat rate`}`;
-    }
+function formatAmount(value: number): string {
+    return Number.isFinite(value) ? String(value) : "0";
 }
 
+export function getRuleDescription(rule: DynamicRule, t: TFunction): string {
+    const amountNum = parseFloat(rule.amount);
+    const amount = formatAmount(amountNum);
+
+    const rate =
+        rule.depositType === "per-person"
+            ? t("depositRules.rate.perPerson", { amount })
+            : t("depositRules.rate.flat", { amount });
+
+    switch (rule.ruleType) {
+        case "special-date":
+            return t("depositRules.descriptions.specialDate", { rate });
+
+        case "time-slot":
+            return t("depositRules.descriptions.timeSlot", {
+                startTime: rule.startTime ?? "",
+                endTime: rule.endTime ?? "",
+                rate
+            });
+
+        case "party-size":
+            return t("depositRules.descriptions.partySize", {
+                minPartySize: rule.minPartySize ?? "",
+                maxPartySize: rule.maxPartySize ?? "",
+                rate
+            });
+
+        case "day-of-week": {
+            const dayNames =
+                rule.days
+                    ?.split(",")
+                    .map((d) => d.trim())
+                    .filter(Boolean)
+                    .map((d) => t(`depositRules.days.${d}` as any))
+                    .join(", ") || "";
+
+            return t("depositRules.descriptions.dayOfWeek", {
+                days: dayNames,
+                rate
+            });
+        }
+
+        default:
+            return t("depositRules.descriptions.default", { rate });
+    }
+}
 export default NewReservationForm;

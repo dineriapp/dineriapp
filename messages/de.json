@@ -3990,5 +3990,132 @@
     "capacityUtilization": {
       "title": "Kapazitätsauslastung"
     }
+  },
+  "dashbaordReservationForm": {
+    "loading": "Wird geladen...",
+    "title": "Reservierung hinzufügen",
+    "subtitle": "Erstellen und verwalten Sie schnell und einfach eine neue Kundenreservierung.",
+    "timezoneCard": {
+      "helper": "Alle Daten und Uhrzeiten werden zur Genauigkeit in der Zeitzone { timezone } angezeigt."
+    },
+    "errors": {
+      "selectDateAndTime": "Bitte Datum und Uhrzeit auswählen",
+      "timeSlotUnavailable": "Dieses Zeitfenster ist derzeit nicht verfügbar. Bitte wählen Sie eine andere Zeit.",
+      "failedToCreate": "Reservierung konnte nicht erstellt werden",
+      "failedToCreateTryAgain": "Reservierung konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
+    },
+    "toast": {
+      "createdSuccessPrefix": "Reservierung erfolgreich erstellt!",
+      "depositSuffix": " Anzahlung: { amount } { currency }"
+    },
+    "fields": {
+      "date": {
+        "label": "Datum",
+        "closedMessage": "Das Restaurant ist an diesem Tag geschlossen.",
+        "openFromTill": "Geöffnet von { open } bis { close }"
+      },
+      "time": {
+        "label": "Uhrzeit",
+        "placeholders": {
+          "selectDateFirst": "Zuerst Datum auswählen",
+          "closed": "Geschlossen",
+          "selectTime": "Uhrzeit auswählen"
+        },
+        "overrideBlocked": {
+          "title": "Dieses Zeitfenster ist nicht verfügbar",
+          "blockedPeriod": "Gesperrter Zeitraum:",
+          "reason": "Grund:"
+        },
+        "noAvailableTimes": {
+          "title": "Keine verfügbaren Zeitfenster",
+          "allBlocked": "Alle Zeitfenster sind für dieses Datum derzeit gesperrt.",
+          "blockedPeriodsTitle": "Gesperrte Zeiträume:",
+          "selectDifferentDate": "Bitte wählen Sie ein anderes Datum."
+        },
+        "dateOverridesInfo": {
+          "title": "Einige Zeitfenster sind derzeit gesperrt"
+        }
+      },
+      "partySize": {
+        "label": "Personenanzahl",
+        "placeholder": "Auswählen",
+        "person": "Person",
+        "people": "Personen"
+      },
+      "preferredArea": {
+        "label": "Bevorzugter Bereich (optional)",
+        "placeholder": "Keine Präferenz",
+        "noPreference": "Keine Präferenz"
+      }
+    },
+    "deposit": {
+      "title": "Anzahlung erforderlich (geschätzt)",
+      "perPerson": "pro Person",
+      "flatRate": "Pauschale Anzahlung",
+      "finalNote": "Der endgültige Anzahlungsbetrag wird vom Server berechnet und bestätigt."
+    },
+    "customerInfo": {
+      "title": "Kundendaten",
+      "fullName": {
+        "label": "Vollständiger Name *",
+        "placeholder": "Max Mustermann"
+      },
+      "email": {
+        "label": "E-Mail *",
+        "placeholder": "max@example.com"
+      },
+      "phone": {
+        "label": "Telefon",
+        "placeholder": "(555) 123-4567"
+      },
+      "specialRequests": {
+        "label": "Besondere Wünsche",
+        "placeholder": "Allergien, Präferenzen, Feiern usw."
+      }
+    },
+    "paymentMethod": {
+      "title": "Zahlungsmethode",
+      "card": {
+        "title": "Per Karte bezahlt",
+        "description": "Kunde hat mit Kredit- oder Debitkarte bezahlt."
+      },
+      "cash": {
+        "title": "Bar bezahlt",
+        "description": "Kunde hat im Restaurant bar bezahlt."
+      }
+    },
+    "cancellationPolicy": {
+      "title": "Stornierungsbedingungen",
+      "line": "Stornierung innerhalb von { hoursBefore } Stunden für { refundPercentage }% Rückerstattung"
+    },
+    "buttons": {
+      "cancel": "Abbrechen",
+      "creating": "Wird erstellt...",
+      "timeSlotBlocked": "Zeitfenster gesperrt",
+      "createReservation": "Reservierung erstellen",
+      "PayDeposit": "& Anzahlung zahlen"
+    }
+  },
+  "depositRules": {
+    "rate": {
+      "perPerson": "€{ amount } pro Person",
+      "flat": "€{ amount } Pauschale"
+    },
+    "days": {
+      "0": "Sonntag",
+      "1": "Montag",
+      "2": "Dienstag",
+      "3": "Mittwoch",
+      "4": "Donnerstag",
+      "5": "Freitag",
+      "6": "Samstag"
+    },
+    "descriptions": {
+      "specialDate": "Sonderdatumsrate: { rate }",
+      "timeSlot": "Zeitfenster-Rate ({ startTime }-{ endTime }): { rate }",
+      "partySize": "Gruppengrößen-Rate ({ minPartySize }-{ maxPartySize } Personen): { rate }",
+      "dayOfWeek": "{ days }-Rate: { rate }",
+      "default": "{ rate }"
+    }
   }
 }

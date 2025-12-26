@@ -4030,5 +4030,132 @@
     "capacityUtilization": {
       "title": "Capacity Utilization"
     }
+  },
+  "dashbaordReservationForm": {
+    "loading": "Loading...",
+    "title": "Add Reservation",
+    "subtitle": "Create and manage a new customer reservation quickly and easily.",
+    "timezoneCard": {
+      "helper": "All dates and times are displayed according to { timezone } timezone for accuracy."
+    },
+    "errors": {
+      "selectDateAndTime": "Please select date and time",
+      "timeSlotUnavailable": "This time slot is currently unavailable. Please select a different time.",
+      "failedToCreate": "Failed to create reservation",
+      "failedToCreateTryAgain": "Failed to create reservation. Please try again."
+    },
+    "toast": {
+      "createdSuccessPrefix": "Reservation created successfully!",
+      "depositSuffix": " Deposit: { amount } { currency }"
+    },
+    "fields": {
+      "date": {
+        "label": "Date",
+        "closedMessage": "Restaurant is closed on this day.",
+        "openFromTill": "Open from { open } till { close }"
+      },
+      "time": {
+        "label": "Time",
+        "placeholders": {
+          "selectDateFirst": "Select date first",
+          "closed": "Closed",
+          "selectTime": "Select time"
+        },
+        "overrideBlocked": {
+          "title": "This time slot is unavailable",
+          "blockedPeriod": "Blocked period:",
+          "reason": "Reason:"
+        },
+        "noAvailableTimes": {
+          "title": "No available time slots",
+          "allBlocked": "All time slots are currently blocked for this date.",
+          "blockedPeriodsTitle": "Blocked periods:",
+          "selectDifferentDate": "Please select a different date."
+        },
+        "dateOverridesInfo": {
+          "title": "Some time slots are currently blocked"
+        }
+      },
+      "partySize": {
+        "label": "Party Size",
+        "placeholder": "Select",
+        "person": "person",
+        "people": "people"
+      },
+      "preferredArea": {
+        "label": "Preferred Area (optional)",
+        "placeholder": "No preference",
+        "noPreference": "No preference"
+      }
+    },
+    "deposit": {
+      "title": "Deposit Required (Estimated)",
+      "perPerson": "per person",
+      "flatRate": "Flat rate deposit",
+      "finalNote": "Final deposit amount will be calculated and confirmed by the server."
+    },
+    "customerInfo": {
+      "title": "Customer Information",
+      "fullName": {
+        "label": "Full Name *",
+        "placeholder": "John Doe"
+      },
+      "email": {
+        "label": "Email *",
+        "placeholder": "john@example.com"
+      },
+      "phone": {
+        "label": "Phone",
+        "placeholder": "(555) 123-4567"
+      },
+      "specialRequests": {
+        "label": "Special Requests",
+        "placeholder": "Allergies, preferences, celebrations, etc."
+      }
+    },
+    "paymentMethod": {
+      "title": "Payment Method",
+      "card": {
+        "title": "Paid by Card",
+        "description": "Customer paid using credit or debit card."
+      },
+      "cash": {
+        "title": "Paid by Cash",
+        "description": "Customer paid in cash at the restaurant."
+      }
+    },
+    "cancellationPolicy": {
+      "title": "Cancellation Policy",
+      "line": "Cancel within { hoursBefore } hours for { refundPercentage }% refund"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "creating": "Creating...",
+      "timeSlotBlocked": "Time Slot Blocked",
+      "createReservation": "Create Reservation",
+      "PayDeposit": "& Pay Deposit"
+    }
+  },
+  "depositRules": {
+    "rate": {
+      "perPerson": "€{ amount } per person",
+      "flat": "€{ amount } flat rate"
+    },
+    "days": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    },
+    "descriptions": {
+      "specialDate": "Special date rate: { rate }",
+      "timeSlot": "Time slot rate ({ startTime }-{ endTime }): { rate }",
+      "partySize": "Party size rate ({ minPartySize }-{ maxPartySize } people): { rate }",
+      "dayOfWeek": "{ days } rate: { rate }",
+      "default": "{ rate }"
+    }
   }
 }

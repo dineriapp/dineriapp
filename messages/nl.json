@@ -3991,5 +3991,132 @@
     "capacityUtilization": {
       "title": "Capaciteitsbenutting"
     }
+  },
+  "dashbaordReservationForm": {
+    "loading": "Laden...",
+    "title": "Reservering toevoegen",
+    "subtitle": "Maak en beheer snel en eenvoudig een nieuwe klantreservering.",
+    "timezoneCard": {
+      "helper": "Alle datums en tijden worden voor nauwkeurigheid weergegeven volgens de tijdzone { timezone }."
+    },
+    "errors": {
+      "selectDateAndTime": "Selecteer alstublieft datum en tijd",
+      "timeSlotUnavailable": "Dit tijdslot is momenteel niet beschikbaar. Selecteer een andere tijd.",
+      "failedToCreate": "Reservering aanmaken mislukt",
+      "failedToCreateTryAgain": "Reservering aanmaken mislukt. Probeer het opnieuw."
+    },
+    "toast": {
+      "createdSuccessPrefix": "Reservering succesvol aangemaakt!",
+      "depositSuffix": " Aanbetaling: { amount } { currency }"
+    },
+    "fields": {
+      "date": {
+        "label": "Datum",
+        "closedMessage": "Het restaurant is op deze dag gesloten.",
+        "openFromTill": "Open van { open } tot { close }"
+      },
+      "time": {
+        "label": "Tijd",
+        "placeholders": {
+          "selectDateFirst": "Selecteer eerst een datum",
+          "closed": "Gesloten",
+          "selectTime": "Selecteer een tijd"
+        },
+        "overrideBlocked": {
+          "title": "Dit tijdslot is niet beschikbaar",
+          "blockedPeriod": "Geblokkeerde periode:",
+          "reason": "Reden:"
+        },
+        "noAvailableTimes": {
+          "title": "Geen beschikbare tijdsloten",
+          "allBlocked": "Alle tijdsloten zijn momenteel geblokkeerd voor deze datum.",
+          "blockedPeriodsTitle": "Geblokkeerde periodes:",
+          "selectDifferentDate": "Selecteer een andere datum."
+        },
+        "dateOverridesInfo": {
+          "title": "Sommige tijdsloten zijn momenteel geblokkeerd"
+        }
+      },
+      "partySize": {
+        "label": "Groepsgrootte",
+        "placeholder": "Selecteren",
+        "person": "persoon",
+        "people": "personen"
+      },
+      "preferredArea": {
+        "label": "Voorkeursruimte (optioneel)",
+        "placeholder": "Geen voorkeur",
+        "noPreference": "Geen voorkeur"
+      }
+    },
+    "deposit": {
+      "title": "Aanbetaling vereist (geschat)",
+      "perPerson": "per persoon",
+      "flatRate": "Vaste aanbetaling",
+      "finalNote": "Het definitieve aanbetalingsbedrag wordt door de server berekend en bevestigd."
+    },
+    "customerInfo": {
+      "title": "Klantgegevens",
+      "fullName": {
+        "label": "Volledige naam *",
+        "placeholder": "Jan Jansen"
+      },
+      "email": {
+        "label": "E-mail *",
+        "placeholder": "jan@example.com"
+      },
+      "phone": {
+        "label": "Telefoon",
+        "placeholder": "(555) 123-4567"
+      },
+      "specialRequests": {
+        "label": "Speciale verzoeken",
+        "placeholder": "Allergieën, voorkeuren, vieringen, enz."
+      }
+    },
+    "paymentMethod": {
+      "title": "Betaalmethode",
+      "card": {
+        "title": "Betaald met kaart",
+        "description": "Klant betaalde met creditcard of debitcard."
+      },
+      "cash": {
+        "title": "Contant betaald",
+        "description": "Klant betaalde contant in het restaurant."
+      }
+    },
+    "cancellationPolicy": {
+      "title": "Annuleringsbeleid",
+      "line": "Annuleer binnen { hoursBefore } uur voor { refundPercentage }% restitutie"
+    },
+    "buttons": {
+      "cancel": "Annuleren",
+      "creating": "Aanmaken...",
+      "timeSlotBlocked": "Tijdslot geblokkeerd",
+      "createReservation": "Reservering aanmaken",
+      "PayDeposit": "& Aanbetaling betalen"
+    }
+  },
+  "depositRules": {
+    "rate": {
+      "perPerson": "€{ amount } per persoon",
+      "flat": "€{ amount } vast tarief"
+    },
+    "days": {
+      "0": "Zondag",
+      "1": "Maandag",
+      "2": "Dinsdag",
+      "3": "Woensdag",
+      "4": "Donderdag",
+      "5": "Vrijdag",
+      "6": "Zaterdag"
+    },
+    "descriptions": {
+      "specialDate": "Tarief voor speciale datum: { rate }",
+      "timeSlot": "Tijdslot-tarief ({ startTime }-{ endTime }): { rate }",
+      "partySize": "Groepsgrootte-tarief ({ minPartySize }-{ maxPartySize } personen): { rate }",
+      "dayOfWeek": "{ days }-tarief: { rate }",
+      "default": "{ rate }"
+    }
   }
 }

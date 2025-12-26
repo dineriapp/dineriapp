@@ -3994,5 +3994,132 @@
     "capacityUtilization": {
       "title": "Utilisation de la capacité"
     }
+  },
+  "dashbaordReservationForm": {
+    "loading": "Chargement...",
+    "title": "Ajouter une réservation",
+    "subtitle": "Créez et gérez rapidement et facilement une nouvelle réservation client.",
+    "timezoneCard": {
+      "helper": "Toutes les dates et heures sont affichées selon le fuseau horaire { timezone } pour plus de précision."
+    },
+    "errors": {
+      "selectDateAndTime": "Veuillez sélectionner la date et l’heure",
+      "timeSlotUnavailable": "Ce créneau horaire est indisponible actuellement. Veuillez en sélectionner un autre.",
+      "failedToCreate": "Échec de la création de la réservation",
+      "failedToCreateTryAgain": "Échec de la création de la réservation. Veuillez réessayer."
+    },
+    "toast": {
+      "createdSuccessPrefix": "Réservation créée avec succès !",
+      "depositSuffix": " Acompte : { amount } { currency }"
+    },
+    "fields": {
+      "date": {
+        "label": "Date",
+        "closedMessage": "Le restaurant est fermé ce jour-là.",
+        "openFromTill": "Ouvert de { open } à { close }"
+      },
+      "time": {
+        "label": "Heure",
+        "placeholders": {
+          "selectDateFirst": "Sélectionnez d’abord une date",
+          "closed": "Fermé",
+          "selectTime": "Sélectionnez une heure"
+        },
+        "overrideBlocked": {
+          "title": "Ce créneau horaire est indisponible",
+          "blockedPeriod": "Période bloquée :",
+          "reason": "Raison :"
+        },
+        "noAvailableTimes": {
+          "title": "Aucun créneau disponible",
+          "allBlocked": "Tous les créneaux sont actuellement bloqués pour cette date.",
+          "blockedPeriodsTitle": "Périodes bloquées :",
+          "selectDifferentDate": "Veuillez sélectionner une autre date."
+        },
+        "dateOverridesInfo": {
+          "title": "Certains créneaux sont actuellement bloqués"
+        }
+      },
+      "partySize": {
+        "label": "Nombre de personnes",
+        "placeholder": "Sélectionner",
+        "person": "personne",
+        "people": "personnes"
+      },
+      "preferredArea": {
+        "label": "Zone préférée (facultatif)",
+        "placeholder": "Aucune préférence",
+        "noPreference": "Aucune préférence"
+      }
+    },
+    "deposit": {
+      "title": "Acompte requis (estimé)",
+      "perPerson": "par personne",
+      "flatRate": "Acompte forfaitaire",
+      "finalNote": "Le montant final de l’acompte sera calculé et confirmé par le serveur."
+    },
+    "customerInfo": {
+      "title": "Informations client",
+      "fullName": {
+        "label": "Nom complet *",
+        "placeholder": "Jean Dupont"
+      },
+      "email": {
+        "label": "E-mail *",
+        "placeholder": "jean@example.com"
+      },
+      "phone": {
+        "label": "Téléphone",
+        "placeholder": "(555) 123-4567"
+      },
+      "specialRequests": {
+        "label": "Demandes spéciales",
+        "placeholder": "Allergies, préférences, célébrations, etc."
+      }
+    },
+    "paymentMethod": {
+      "title": "Mode de paiement",
+      "card": {
+        "title": "Payé par carte",
+        "description": "Le client a payé par carte de crédit ou de débit."
+      },
+      "cash": {
+        "title": "Payé en espèces",
+        "description": "Le client a payé en espèces au restaurant."
+      }
+    },
+    "cancellationPolicy": {
+      "title": "Politique d’annulation",
+      "line": "Annulation dans les { hoursBefore } heures pour { refundPercentage }% de remboursement"
+    },
+    "buttons": {
+      "cancel": "Annuler",
+      "creating": "Création...",
+      "timeSlotBlocked": "Créneau bloqué",
+      "createReservation": "Créer la réservation",
+      "PayDeposit": "& Payer l’acompte"
+    }
+  },
+  "depositRules": {
+    "rate": {
+      "perPerson": "€{ amount } par personne",
+      "flat": "€{ amount } forfait"
+    },
+    "days": {
+      "0": "Dimanche",
+      "1": "Lundi",
+      "2": "Mardi",
+      "3": "Mercredi",
+      "4": "Jeudi",
+      "5": "Vendredi",
+      "6": "Samedi"
+    },
+    "descriptions": {
+      "specialDate": "Tarif de date spéciale : { rate }",
+      "timeSlot": "Tarif de créneau horaire ({ startTime }-{ endTime }) : { rate }",
+      "partySize": "Tarif selon la taille du groupe ({ minPartySize }-{ maxPartySize } personnes) : { rate }",
+      "dayOfWeek": "Tarif { days } : { rate }",
+      "default": "{ rate }"
+    }
   }
 }

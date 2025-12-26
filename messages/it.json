@@ -3991,5 +3991,132 @@
     "capacityUtilization": {
       "title": "Utilizzo della capacità"
     }
+  },
+  "dashbaordReservationForm": {
+    "loading": "Caricamento...",
+    "title": "Aggiungi prenotazione",
+    "subtitle": "Crea e gestisci una nuova prenotazione cliente in modo rapido e semplice.",
+    "timezoneCard": {
+      "helper": "Tutte le date e gli orari vengono mostrati in base al fuso orario { timezone } per maggiore accuratezza."
+    },
+    "errors": {
+      "selectDateAndTime": "Seleziona data e ora",
+      "timeSlotUnavailable": "Questa fascia oraria non è disponibile al momento. Seleziona un altro orario.",
+      "failedToCreate": "Impossibile creare la prenotazione",
+      "failedToCreateTryAgain": "Impossibile creare la prenotazione. Riprova."
+    },
+    "toast": {
+      "createdSuccessPrefix": "Prenotazione creata con successo!",
+      "depositSuffix": " Deposito: { amount } { currency }"
+    },
+    "fields": {
+      "date": {
+        "label": "Data",
+        "closedMessage": "Il ristorante è chiuso in questo giorno.",
+        "openFromTill": "Aperto dalle { open } alle { close }"
+      },
+      "time": {
+        "label": "Ora",
+        "placeholders": {
+          "selectDateFirst": "Seleziona prima la data",
+          "closed": "Chiuso",
+          "selectTime": "Seleziona l'ora"
+        },
+        "overrideBlocked": {
+          "title": "Questa fascia oraria non è disponibile",
+          "blockedPeriod": "Periodo bloccato:",
+          "reason": "Motivo:"
+        },
+        "noAvailableTimes": {
+          "title": "Nessuna fascia oraria disponibile",
+          "allBlocked": "Tutte le fasce orarie sono attualmente bloccate per questa data.",
+          "blockedPeriodsTitle": "Periodi bloccati:",
+          "selectDifferentDate": "Seleziona una data diversa."
+        },
+        "dateOverridesInfo": {
+          "title": "Alcune fasce orarie sono attualmente bloccate"
+        }
+      },
+      "partySize": {
+        "label": "Numero di persone",
+        "placeholder": "Seleziona",
+        "person": "persona",
+        "people": "persone"
+      },
+      "preferredArea": {
+        "label": "Area preferita (opzionale)",
+        "placeholder": "Nessuna preferenza",
+        "noPreference": "Nessuna preferenza"
+      }
+    },
+    "deposit": {
+      "title": "Deposito richiesto (stimato)",
+      "perPerson": "per persona",
+      "flatRate": "Deposito a tariffa fissa",
+      "finalNote": "L'importo finale del deposito sarà calcolato e confermato dal server."
+    },
+    "customerInfo": {
+      "title": "Dati cliente",
+      "fullName": {
+        "label": "Nome completo *",
+        "placeholder": "Mario Rossi"
+      },
+      "email": {
+        "label": "Email *",
+        "placeholder": "mario@example.com"
+      },
+      "phone": {
+        "label": "Telefono",
+        "placeholder": "(555) 123-4567"
+      },
+      "specialRequests": {
+        "label": "Richieste speciali",
+        "placeholder": "Allergie, preferenze, celebrazioni, ecc."
+      }
+    },
+    "paymentMethod": {
+      "title": "Metodo di pagamento",
+      "card": {
+        "title": "Pagato con carta",
+        "description": "Il cliente ha pagato con carta di credito o di debito."
+      },
+      "cash": {
+        "title": "Pagato in contanti",
+        "description": "Il cliente ha pagato in contanti al ristorante."
+      }
+    },
+    "cancellationPolicy": {
+      "title": "Politica di cancellazione",
+      "line": "Cancella entro { hoursBefore } ore per { refundPercentage }% di rimborso"
+    },
+    "buttons": {
+      "cancel": "Annulla",
+      "creating": "Creazione...",
+      "timeSlotBlocked": "Fascia oraria bloccata",
+      "createReservation": "Crea prenotazione",
+      "PayDeposit": "& Paga deposito"
+    }
+  },
+  "depositRules": {
+    "rate": {
+      "perPerson": "€{ amount } per persona",
+      "flat": "€{ amount } tariffa fissa"
+    },
+    "days": {
+      "0": "Domenica",
+      "1": "Lunedì",
+      "2": "Martedì",
+      "3": "Mercoledì",
+      "4": "Giovedì",
+      "5": "Venerdì",
+      "6": "Sabato"
+    },
+    "descriptions": {
+      "specialDate": "Tariffa per data speciale: { rate }",
+      "timeSlot": "Tariffa fascia oraria ({ startTime }-{ endTime }): { rate }",
+      "partySize": "Tariffa per dimensione del gruppo ({ minPartySize }-{ maxPartySize } persone): { rate }",
+      "dayOfWeek": "Tariffa { days }: { rate }",
+      "default": "{ rate }"
+    }
   }
 }
