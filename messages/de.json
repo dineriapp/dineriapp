@@ -4117,5 +4117,208 @@
       "dayOfWeek": "{ days }-Rate: { rate }",
       "default": "{ rate }"
     }
-  }
+  },
+  "makeAReservation": {
+    "notFoundTitle": "Reservierung oder Restaurant nicht gefunden",
+    "reservationTitle": "{ restaurantName } – Reservierung",
+    "reservationDescription": "Reservierungen im { restaurantName }. { bio }",
+    "reservationHeader": {
+      "subtitle": "Reservierungen",
+      "dropQuery": "Anfrage löschen"
+    },
+    "loading": "Reservierung wird geladen …",
+    "booking": {
+      "loading": "Wird geladen …",
+      "checkingAvailability": "Verfügbarkeit wird geprüft …",
+      "makeReservation": "Eine Reservierung vornehmen",
+      "bookTableAt": "Buchen Sie Ihren Tisch im { restaurantName }",
+
+      "notFindingOptionTitle": "Finden Sie die gewünschte Zeit oder Option nicht?",
+      "notFindingOptionDesc": "Sie können uns Ihre bevorzugte Zeit oder Fragen senden.",
+      "dropReservationQuery": "Reservierungsanfrage löschen",
+
+      "requiredError": "Bitte füllen Sie alle Pflichtfelder aus",
+      "timeUnavailable": "Dieser Zeitraum ist derzeit nicht verfügbar. Bitte wählen Sie eine andere Zeit.",
+      "reservationFailed": "Reservierung konnte nicht erstellt werden",
+      "reservationRetry": "Reservierung konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+      "reservationSuccess": "Reservierung erfolgreich erstellt!",
+
+      "date": "Datum *",
+      "time": "Uhrzeit *",
+      "selectDateFirst": "Wählen Sie zuerst ein Datum",
+      "closed": "Geschlossen",
+      "selectTime": "Uhrzeit auswählen",
+      "restaurantClosed": "Das Restaurant ist an diesem Tag geschlossen.",
+      "openFrom": "Geöffnet von { open } bis { close }",
+      "timeSlotUnavailable": "Dieser Zeitraum ist nicht verfügbar",
+
+      "limitedAvailability": "Begrenzte Verfügbarkeit",
+      "limitedAvailabilityDesc": "Einige Zeiträume könnten an diesem Datum nicht verfügbar sein.",
+
+      "partySize": "Anzahl der Gäste *",
+      "selectPartySize": "Anzahl der Gäste auswählen",
+      "person": "Person",
+      "people": "Personen",
+
+      "preferredArea": "Bevorzugter Bereich",
+      "noPreference": "Keine Präferenz",
+
+      "fullName": "Vollständiger Name *",
+      "email": "E-Mail-Adresse *",
+      "phone": "Telefonnummer",
+      "specialRequests": "Besondere Anfragen",
+      "specialRequestsPlaceholder": "Allergien, diätetische Einschränkungen, Feiern usw.",
+
+      "agreePolicies": "Ich stimme den Reservierungsbedingungen zu.",
+      "viewPolicies": "Klicken Sie hier, um die Bedingungen einzusehen",
+
+      "reservationSummary": "Reservierungszusammenfassung",
+      "yourReservation": "Ihre Reservierung",
+      "date2": "Datum:",
+      "time2": "Uhrzeit:",
+      "guests": "Gäste:",
+      "preferredAreaLabel": "Bevorzugter Bereich:",
+      "depositRequired": "Anzahlung erforderlich:",
+      "depositNote": "Diese Anzahlung wird auf Ihre Endrechnung angerechnet und ist gemäß unserer Stornierungsbedingungen rückzahlbar.",
+
+      "cancellationPolicies": "Stornierungsbedingungen",
+      "cancelWithin": "Stornieren Sie innerhalb von { hours } Stunden für { percent } % Rückerstattung",
+
+      "processing": "Wird verarbeitet …",
+      "creatingReservation": "Reservierung wird erstellt …",
+      "timeSlotUnavailableBtn": "Zeitfenster nicht verfügbar",
+      "completeReservation": "Reservierung abschließen",
+      "payDeposit": "und Anzahlung bezahlen",
+
+      "helpText": "Müssen Sie Änderungen vornehmen? Kontaktieren Sie uns unter { phone }.",
+      "resturantdirectly": "das Restaurant direkt"
+    },
+    "dailyCapacity": {
+      "title": "Prüfung der Reservierungsmöglichkeit",
+      "guests": "• {partySize} Gäste",
+
+      "status": {
+        "available": "Verfügbar",
+        "notAvailable": "Nicht verfügbar"
+      },
+
+      "errors": {
+        "title": "Fehler beim Laden der Kapazitätsdaten",
+        "fetchFailed": "Kapazitätsdaten konnten nicht geladen werden",
+        "generic": "Ein Fehler ist aufgetreten"
+      }
+    },
+    "reservationPolicies": {
+      "title": "Restaurant-Richtlinien",
+      "description": "Diese Richtlinien werden Kunden während des Reservierungsvorgangs angezeigt.",
+
+      "empty": {
+        "title": "Keine Richtlinien gefunden",
+        "description": "Dieses Restaurant hat noch keine Reservierungsrichtlinien erstellt."
+      },
+
+      "policies": {
+        "cancellation": {
+          "title": "Stornierungsrichtlinie",
+          "description": "Legen Sie Ihre Stornierungsregeln und Fristen fest."
+        },
+        "deposit": {
+          "title": "Anzahlungsrichtlinie",
+          "description": "Erklären Sie die Anforderungen an Anzahlungen."
+        },
+        "dining": {
+          "title": "Speiserichtlinie",
+          "description": "Legen Sie Regeln für das gastronomische Erlebnis fest."
+        },
+        "noShow": {
+          "title": "No-Show-Richtlinie",
+          "description": "Legen Sie Konsequenzen für nicht wahrgenommene Reservierungen fest."
+        }
+      },
+
+      "close": "Schließen"
+    },
+    "reservationDialog": {
+      "title": "Reservierungsanfrage",
+      "description": "Geben Sie Ihre Details ein, um eine Reservierungsanfrage zu senden. Wir werden uns bald bei Ihnen melden.",
+
+      "fields": {
+        "date": {
+          "label": "Datum"
+        },
+        "time": {
+          "label": "Uhrzeit",
+          "placeholder": "Uhrzeit auswählen"
+        },
+        "name": {
+          "label": "Name",
+          "placeholder": "Ihr vollständiger Name"
+        },
+        "email": {
+          "label": "E-Mail",
+          "placeholder": "ihre@email.de"
+        },
+        "phone": {
+          "label": "Telefonnummer",
+          "placeholder": "+49 (123) 456-7890",
+          "optional": "Optional"
+        },
+        "message": {
+          "label": "Nachricht",
+          "placeholder": "Teilen Sie uns Ihre Reservierungswünsche mit …"
+        }
+      },
+
+      "buttons": {
+        "submit": "Anfrage senden",
+        "submitting": "Wird gesendet …"
+      },
+
+      "toast": {
+        "success": "Ihre Reservierungsanfrage wurde erfolgreich gesendet."
+      },
+
+      "errors": {
+        "submitFailed": "Reservierungsanfrage konnte nicht gesendet werden",
+        "generic": "Etwas ist schiefgelaufen"
+      }
+    }
+  },
+  "ReservationSuccess": {
+    "verificationFailed": {
+      "title": "Verifizierung fehlgeschlagen",
+      "description": "Ihre Zahlung konnte nicht verifiziert werden. Bitte kontaktieren Sie den Support."
+    },
+    "successHeader": {
+      "title": "Reservierung bestätigt!",
+      "description": "Ihr Tisch ist gebucht und bereit. Wir freuen uns auf Ihren Besuch!"
+    },
+    "infoCards": {
+      "date": "Datum",
+      "time": "Uhrzeit",
+      "guests": "Gäste",
+      "status": "Status"
+    },
+    "reservationDetails": {
+      "confirmationSent": "Bestätigung gesendet",
+      "sentTo": "Details wurden an {{email}} gesendet",
+      "depositPaid": "Anzahlung bezahlt",
+      "paymentDetails": "{{amount}} {{currency}} • {{paymentMethod}}"
+    },
+    "helpfulTips": {
+      "title": "Vor Ihrer Ankunft",
+      "items": [
+        "Erscheinen Sie 10–15 Minuten vor Ihrer Reservierung",
+        "Bringen Sie Ihren Ausweis zur Verifizierung mit",
+        "Kontaktieren Sie uns, falls Sie sich verspäten"
+      ]
+    },
+    "referenceInfo": {
+      "label": "Reservierungsnummer"
+    },
+    "actions": {
+      "backToHome": "Zurück zur Startseite"
+    }
+  },
+  "printPage": { "printButton": "Bestätigung drucken" }
 }
