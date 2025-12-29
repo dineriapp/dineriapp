@@ -4362,5 +4362,16 @@
   },
   "printPage": {
     "printButton": "Print Confirmation"
+  },
+  "reservationsTabs": {
+    "addNew": "Add New",
+    "overview": "Overview",
+    "reservations": "Reservations",
+    "tables": "Tables",
+    "areas": "Areas",
+    "payments": "Payments",
+    "queries": "Queries",
+    "policies": "Policies",
+    "settings": "Settings"
   }
 }

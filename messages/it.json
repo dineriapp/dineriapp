@@ -4323,5 +4323,16 @@
   },
   "printPage": {
     "printButton": "Stampa conferma"
+  },
+  "reservationsTabs": {
+    "addNew": "Aggiungi nuovo",
+    "overview": "Panoramica",
+    "reservations": "Prenotazioni",
+    "tables": "Tavoli",
+    "areas": "Aree",
+    "payments": "Pagamenti",
+    "queries": "Richieste",
+    "policies": "Politiche",
+    "settings": "Impostazioni"
   }
 }

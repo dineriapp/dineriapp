@@ -4327,5 +4327,16 @@
   },
   "printPage": {
     "printButton": "Imprimir confirmación"
+  },
+  "reservationsTabs": {
+    "addNew": "Añadir nuevo",
+    "overview": "Resumen",
+    "reservations": "Reservas",
+    "tables": "Mesas",
+    "areas": "Áreas",
+    "payments": "Pagos",
+    "queries": "Consultas",
+    "policies": "Políticas",
+    "settings": "Configuración"
   }
 }

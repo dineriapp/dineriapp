@@ -4320,5 +4320,16 @@
       "backToHome": "Zurück zur Startseite"
     }
   },
-  "printPage": { "printButton": "Bestätigung drucken" }
+  "printPage": { "printButton": "Bestätigung drucken" },
+  "reservationsTabs": {
+    "addNew": "Neu hinzufügen",
+    "overview": "Übersicht",
+    "reservations": "Reservierungen",
+    "tables": "Tische",
+    "areas": "Bereiche",
+    "payments": "Zahlungen",
+    "queries": "Anfragen",
+    "policies": "Richtlinien",
+    "settings": "Einstellungen"
+  }
 }

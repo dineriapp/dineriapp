@@ -4320,7 +4320,19 @@
     "actions": {
       "backToHome": "Terug naar home"
     }
-  }, "printPage": {
+  },
+  "printPage": {
     "printButton": "Bevestiging afdrukken"
+  },
+  "reservationsTabs": {
+    "addNew": "Nieuw toevoegen",
+    "overview": "Overzicht",
+    "reservations": "Reserveringen",
+    "tables": "Tafels",
+    "areas": "Gebieden",
+    "payments": "Betalingen",
+    "queries": "Vragen",
+    "policies": "Beleid",
+    "settings": "Instellingen"
   }
 }
