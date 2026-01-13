@@ -4189,221 +4189,221 @@
     "success": {
       "reservation_can_be_created": "Reservation can be created successfully",
       "reservation_created": "Reservation created successfully"
-    },
-    "makeAReservation": {
-      "notFoundTitle": "Reservation or Restaurant Not Found",
-      "reservationTitle": "{ restaurantName } - Reservation",
-      "reservationDescription": "Reservations at { restaurantName }. { bio }",
-      "reservationHeader": {
-        "subtitle": "Reservations",
-        "dropQuery": "Drop Query"
-      },
-      "loading": "Loading reservation...",
-      "booking": {
-        "loading": "Loading...",
-        "checkingAvailability": "Checking availability...",
-        "makeReservation": "Make a Reservation",
-        "bookTableAt": "Book your table at { restaurantName }",
-
-        "notFindingOptionTitle": "Not finding the time or option you're looking for?",
-        "notFindingOptionDesc": "You can send us your preferred time or any questions.",
-        "dropReservationQuery": "Drop Reservation Query",
-
-        "requiredError": "Please fill in all required fields",
-        "timeUnavailable": "This time slot is currently unavailable. Please select a different time.",
-        "reservationFailed": "Failed to create reservation",
-        "reservationRetry": "Failed to create reservation. Please try again.",
-        "reservationSuccess": "Reservation created successfully!",
-
-        "date": "Date *",
-        "time": "Time *",
-        "selectDateFirst": "Select date first",
-        "closed": "Closed",
-        "selectTime": "Select time",
-        "restaurantClosed": "Restaurant is closed on this day.",
-        "openFrom": "Open from { open } till { close }",
-        "timeSlotUnavailable": "This time slot is unavailable",
-
-        "limitedAvailability": "Limited Availability",
-        "limitedAvailabilityDesc": "Some time slots may not be available on this date.",
-
-        "partySize": "Party Size *",
-        "selectPartySize": "Select party size",
-        "person": "person",
-        "people": "people",
-
-        "preferredArea": "Preferred Area",
-        "noPreference": "No preference",
-
-        "fullName": "Full Name *",
-        "email": "Email Address *",
-        "phone": "Phone Number",
-        "specialRequests": "Special Requests",
-        "specialRequestsPlaceholder": "Allergies, dietary restrictions, celebrations, etc.",
-        "agreePolicies": "I agree to the reservation policies.",
-        "viewPolicies": "Click here to view policies",
-
-        "reservationSummary": "Reservation Summary",
-        "yourReservation": "Your Reservation",
-        "date2": "Date:",
-        "time2": "Time:",
-        "guests": "Guests:",
-        "preferredAreaLabel": "Preferred Area:",
-        "depositRequired": "Deposit Required:",
-        "depositNote": "This deposit will be applied to your final bill and is refundable according to our cancellation policy.",
-
-        "cancellationPolicies": "Cancellation Policies",
-        "cancelWithin": "Cancel within { hours } hours for { percent }% refund",
-
-        "processing": "Processing...",
-        "creatingReservation": "Creating Reservation...",
-        "timeSlotUnavailableBtn": "Time Slot Unavailable",
-        "completeReservation": "Complete Reservation",
-        "payDeposit": "& Pay Deposit",
-
-        "helpText": "Need to make changes? Contact us at { phone }.",
-        "resturantdirectly": "the restaurant directly"
-      },
-      "dailyCapacity": {
-        "title": "Reservation Feasibility Check",
-        "guests": "• {partySize} guests",
-
-        "status": {
-          "available": "Available",
-          "notAvailable": "Not Available"
-        },
-
-        "errors": {
-          "title": "Error loading capacity data",
-          "fetchFailed": "Failed to fetch capacity data",
-          "generic": "An error occurred"
-        }
-      },
-      "reservationPolicies": {
-        "title": "Restaurant Policies",
-        "description": "These policies are shown to customers during the reservation flow.",
-
-        "empty": {
-          "title": "No policies found",
-          "description": "This restaurant has not created reservation policies yet."
-        },
-
-        "policies": {
-          "cancellation": {
-            "title": "Cancellation Policy",
-            "description": "Define your cancellation rules and timeframes."
-          },
-          "deposit": {
-            "title": "Deposit Policy",
-            "description": "Explain deposit requirements."
-          },
-          "dining": {
-            "title": "Dining Policy",
-            "description": "Set rules for dining experience."
-          },
-          "noShow": {
-            "title": "No-Show Policy",
-            "description": "Define consequences for missed reservations."
-          }
-        },
-
-        "close": "Close"
-      },
-      "reservationDialog": {
-        "title": "Reservation Query",
-        "description": "Fill in your details to submit a reservation query. We'll get back to you soon.",
-
-        "fields": {
-          "date": {
-            "label": "Date"
-          },
-          "time": {
-            "label": "Time",
-            "placeholder": "Select time"
-          },
-          "name": {
-            "label": "Name",
-            "placeholder": "Your full name"
-          },
-          "email": {
-            "label": "Email",
-            "placeholder": "your@email.com"
-          },
-          "phone": {
-            "label": "Phone Number",
-            "placeholder": "+1 (555) 000-0000",
-            "optional": "Optional"
-          },
-          "message": {
-            "label": "Message",
-            "placeholder": "Tell us about your reservation needs..."
-          }
-        },
-
-        "buttons": {
-          "submit": "Submit Query",
-          "submitting": "Submitting..."
-        },
-
-        "toast": {
-          "success": "Your reservation query has been submitted successfully."
-        },
-
-        "errors": {
-          "submitFailed": "Failed to submit reservation query",
-          "generic": "Something went wrong"
-        }
-      }
-    },
-    "ReservationSuccess": {
-      "verificationFailed": {
-        "title": "Verification Failed",
-        "description": "We couldn't verify your payment. Please contact support."
-      },
-      "successHeader": {
-        "title": "Reservation Confirmed!",
-        "description": "Your table is booked and ready. We look forward to seeing you!"
-      },
-      "infoCards": {
-        "date": "Date",
-        "time": "Time",
-        "guests": "Guests",
-        "status": "Status"
-      },
-      "reservationDetails": {
-        "confirmationSent": "Confirmation Sent",
-        "sentTo": "Details sent to {{email}}",
-        "depositPaid": "Deposit Paid",
-        "paymentDetails": "{{amount}} {{currency}} • {{paymentMethod}}"
-      },
-      "helpfulTips": {
-        "title": "Before You Arrive",
-        "items": [
-          "Arrive 10-15 minutes before your reservation",
-          "Bring your ID for verification",
-          "Contact us if running late"
-        ]
-      },
-      "referenceInfo": {
-        "label": "Reservation Reference"
-      },
-      "actions": {
-        "backToHome": "Back to Home"
-      }
-    },
-    "printPage": {
-      "printButton": "Print Confirmation"
-    },
-    "reservationsTabs": {
-      "addNew": "Add New",
-      "overview": "Overview",
-      "reservations": "Reservations",
-      "tables": "Tables",
-      "areas": "Areas",
-      "payments": "Payments",
-      "queries": "Queries",
-      "policies": "Policies",
-      "settings": "Settings"
     }
+  },
+  "makeAReservation": {
+    "notFoundTitle": "Reservation or Restaurant Not Found",
+    "reservationTitle": "{ restaurantName } - Reservation",
+    "reservationDescription": "Reservations at { restaurantName }. { bio }",
+    "reservationHeader": {
+      "subtitle": "Reservations",
+      "dropQuery": "Drop Query"
+    },
+    "loading": "Loading reservation...",
+    "booking": {
+      "loading": "Loading...",
+      "checkingAvailability": "Checking availability...",
+      "makeReservation": "Make a Reservation",
+      "bookTableAt": "Book your table at { restaurantName }",
+
+      "notFindingOptionTitle": "Not finding the time or option you're looking for?",
+      "notFindingOptionDesc": "You can send us your preferred time or any questions.",
+      "dropReservationQuery": "Drop Reservation Query",
+
+      "requiredError": "Please fill in all required fields",
+      "timeUnavailable": "This time slot is currently unavailable. Please select a different time.",
+      "reservationFailed": "Failed to create reservation",
+      "reservationRetry": "Failed to create reservation. Please try again.",
+      "reservationSuccess": "Reservation created successfully!",
+
+      "date": "Date *",
+      "time": "Time *",
+      "selectDateFirst": "Select date first",
+      "closed": "Closed",
+      "selectTime": "Select time",
+      "restaurantClosed": "Restaurant is closed on this day.",
+      "openFrom": "Open from { open } till { close }",
+      "timeSlotUnavailable": "This time slot is unavailable",
+
+      "limitedAvailability": "Limited Availability",
+      "limitedAvailabilityDesc": "Some time slots may not be available on this date.",
+
+      "partySize": "Party Size *",
+      "selectPartySize": "Select party size",
+      "person": "person",
+      "people": "people",
+
+      "preferredArea": "Preferred Area",
+      "noPreference": "No preference",
+
+      "fullName": "Full Name *",
+      "email": "Email Address *",
+      "phone": "Phone Number",
+      "specialRequests": "Special Requests",
+      "specialRequestsPlaceholder": "Allergies, dietary restrictions, celebrations, etc.",
+      "agreePolicies": "I agree to the reservation policies.",
+      "viewPolicies": "Click here to view policies",
+
+      "reservationSummary": "Reservation Summary",
+      "yourReservation": "Your Reservation",
+      "date2": "Date:",
+      "time2": "Time:",
+      "guests": "Guests:",
+      "preferredAreaLabel": "Preferred Area:",
+      "depositRequired": "Deposit Required:",
+      "depositNote": "This deposit will be applied to your final bill and is refundable according to our cancellation policy.",
+
+      "cancellationPolicies": "Cancellation Policies",
+      "cancelWithin": "Cancel within { hours } hours for { percent }% refund",
+
+      "processing": "Processing...",
+      "creatingReservation": "Creating Reservation...",
+      "timeSlotUnavailableBtn": "Time Slot Unavailable",
+      "completeReservation": "Complete Reservation",
+      "payDeposit": "& Pay Deposit",
+
+      "helpText": "Need to make changes? Contact us at { phone }.",
+      "resturantdirectly": "the restaurant directly"
+    },
+    "dailyCapacity": {
+      "title": "Reservation Feasibility Check",
+      "guests": "• {partySize} guests",
+
+      "status": {
+        "available": "Available",
+        "notAvailable": "Not Available"
+      },
+
+      "errors": {
+        "title": "Error loading capacity data",
+        "fetchFailed": "Failed to fetch capacity data",
+        "generic": "An error occurred"
+      }
+    },
+    "reservationPolicies": {
+      "title": "Restaurant Policies",
+      "description": "These policies are shown to customers during the reservation flow.",
+
+      "empty": {
+        "title": "No policies found",
+        "description": "This restaurant has not created reservation policies yet."
+      },
+
+      "policies": {
+        "cancellation": {
+          "title": "Cancellation Policy",
+          "description": "Define your cancellation rules and timeframes."
+        },
+        "deposit": {
+          "title": "Deposit Policy",
+          "description": "Explain deposit requirements."
+        },
+        "dining": {
+          "title": "Dining Policy",
+          "description": "Set rules for dining experience."
+        },
+        "noShow": {
+          "title": "No-Show Policy",
+          "description": "Define consequences for missed reservations."
+        }
+      },
+
+      "close": "Close"
+    },
+    "reservationDialog": {
+      "title": "Reservation Query",
+      "description": "Fill in your details to submit a reservation query. We'll get back to you soon.",
+
+      "fields": {
+        "date": {
+          "label": "Date"
+        },
+        "time": {
+          "label": "Time",
+          "placeholder": "Select time"
+        },
+        "name": {
+          "label": "Name",
+          "placeholder": "Your full name"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "your@email.com"
+        },
+        "phone": {
+          "label": "Phone Number",
+          "placeholder": "+1 (555) 000-0000",
+          "optional": "Optional"
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Tell us about your reservation needs..."
+        }
+      },
+
+      "buttons": {
+        "submit": "Submit Query",
+        "submitting": "Submitting..."
+      },
+
+      "toast": {
+        "success": "Your reservation query has been submitted successfully."
+      },
+
+      "errors": {
+        "submitFailed": "Failed to submit reservation query",
+        "generic": "Something went wrong"
+      }
+    }
+  },
+  "ReservationSuccess": {
+    "verificationFailed": {
+      "title": "Verification Failed",
+      "description": "We couldn't verify your payment. Please contact support."
+    },
+    "successHeader": {
+      "title": "Reservation Confirmed!",
+      "description": "Your table is booked and ready. We look forward to seeing you!"
+    },
+    "infoCards": {
+      "date": "Date",
+      "time": "Time",
+      "guests": "Guests",
+      "status": "Status"
+    },
+    "reservationDetails": {
+      "confirmationSent": "Confirmation Sent",
+      "sentTo": "Details sent to {{email}}",
+      "depositPaid": "Deposit Paid",
+      "paymentDetails": "{{amount}} {{currency}} • {{paymentMethod}}"
+    },
+    "helpfulTips": {
+      "title": "Before You Arrive",
+      "items": [
+        "Arrive 10-15 minutes before your reservation",
+        "Bring your ID for verification",
+        "Contact us if running late"
+      ]
+    },
+    "referenceInfo": {
+      "label": "Reservation Reference"
+    },
+    "actions": {
+      "backToHome": "Back to Home"
+    }
+  },
+  "printPage": {
+    "printButton": "Print Confirmation"
+  },
+  "reservationsTabs": {
+    "addNew": "Add New",
+    "overview": "Overview",
+    "reservations": "Reservations",
+    "tables": "Tables",
+    "areas": "Areas",
+    "payments": "Payments",
+    "queries": "Queries",
+    "policies": "Policies",
+    "settings": "Settings"
   }
 }

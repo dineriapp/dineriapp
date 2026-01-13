@@ -4153,222 +4153,222 @@
     "success": {
       "reservation_can_be_created": "La réservation peut être créée avec succès",
       "reservation_created": "Réservation créée avec succès"
-    },
-    "makeAReservation": {
-      "notFoundTitle": "Réservation ou restaurant introuvable",
-      "reservationTitle": "{ restaurantName } - Réservation",
-      "reservationDescription": "Réservations au { restaurantName }. { bio }",
-      "reservationHeader": {
-        "subtitle": "Réservations",
-        "dropQuery": "Supprimer la requête"
-      },
-      "loading": "Chargement de la réservation…",
-      "booking": {
-        "loading": "Chargement…",
-        "checkingAvailability": "Vérification de la disponibilité…",
-        "makeReservation": "Faire une réservation",
-        "bookTableAt": "Réservez votre table au { restaurantName }",
-
-        "notFindingOptionTitle": "Vous ne trouvez pas l’horaire ou l’option souhaitée ?",
-        "notFindingOptionDesc": "Vous pouvez nous envoyer votre horaire préféré ou vos questions.",
-        "dropReservationQuery": "Supprimer la demande de réservation",
-
-        "requiredError": "Veuillez remplir tous les champs obligatoires",
-        "timeUnavailable": "Ce créneau horaire n’est actuellement pas disponible. Veuillez en choisir un autre.",
-        "reservationFailed": "Échec de la création de la réservation",
-        "reservationRetry": "Échec de la création de la réservation. Veuillez réessayer.",
-        "reservationSuccess": "Réservation créée avec succès !",
-
-        "date": "Date *",
-        "time": "Heure *",
-        "selectDateFirst": "Sélectionnez d’abord une date",
-        "closed": "Fermé",
-        "selectTime": "Sélectionner l’heure",
-        "restaurantClosed": "Le restaurant est fermé ce jour-là.",
-        "openFrom": "Ouvert de { open } à { close }",
-        "timeSlotUnavailable": "Ce créneau horaire n’est pas disponible",
-
-        "limitedAvailability": "Disponibilité limitée",
-        "limitedAvailabilityDesc": "Certains créneaux peuvent ne pas être disponibles à cette date.",
-
-        "partySize": "Nombre de personnes *",
-        "selectPartySize": "Sélectionnez le nombre de personnes",
-        "person": "personne",
-        "people": "personnes",
-
-        "preferredArea": "Zone préférée",
-        "noPreference": "Aucune préférence",
-
-        "fullName": "Nom complet *",
-        "email": "Adresse e-mail *",
-        "phone": "Numéro de téléphone",
-        "specialRequests": "Demandes spéciales",
-        "specialRequestsPlaceholder": "Allergies, restrictions alimentaires, célébrations, etc.",
-
-        "agreePolicies": "J’accepte les conditions de réservation.",
-        "viewPolicies": "Cliquez ici pour consulter les conditions",
-
-        "reservationSummary": "Récapitulatif de la réservation",
-        "yourReservation": "Votre réservation",
-        "date2": "Date :",
-        "time2": "Heure :",
-        "guests": "Invités :",
-        "preferredAreaLabel": "Zone préférée :",
-        "depositRequired": "Arrhes requises :",
-        "depositNote": "Ces arrhes seront déduites de votre facture finale et sont remboursables selon notre politique d’annulation.",
-
-        "cancellationPolicies": "Politiques d’annulation",
-        "cancelWithin": "Annulez dans les { hours } heures pour un remboursement de { percent } %",
-
-        "processing": "Traitement en cours…",
-        "creatingReservation": "Création de la réservation…",
-        "timeSlotUnavailableBtn": "Créneau horaire indisponible",
-        "completeReservation": "Finaliser la réservation",
-        "payDeposit": "et payer les arrhes",
-
-        "helpText": "Besoin d’apporter des modifications ? Contactez-nous au { phone }.",
-        "resturantdirectly": "le restaurant directement"
-      },
-      "dailyCapacity": {
-        "title": "Vérification de faisabilité de la réservation",
-        "guests": "• {partySize} invités",
-
-        "status": {
-          "available": "Disponible",
-          "notAvailable": "Indisponible"
-        },
-
-        "errors": {
-          "title": "Erreur lors du chargement des données de capacité",
-          "fetchFailed": "Échec du chargement des données de capacité",
-          "generic": "Une erreur s’est produite"
-        }
-      },
-      "reservationPolicies": {
-        "title": "Politiques du restaurant",
-        "description": "Ces politiques sont affichées aux clients pendant le processus de réservation.",
-
-        "empty": {
-          "title": "Aucune politique trouvée",
-          "description": "Ce restaurant n’a pas encore défini de politique de réservation."
-        },
-
-        "policies": {
-          "cancellation": {
-            "title": "Politique d’annulation",
-            "description": "Définissez vos règles et délais d’annulation."
-          },
-          "deposit": {
-            "title": "Politique d’arrhes",
-            "description": "Expliquez les conditions relatives aux arrhes."
-          },
-          "dining": {
-            "title": "Politique de restauration",
-            "description": "Établissez les règles pour l’expérience de repas."
-          },
-          "noShow": {
-            "title": "Politique en cas d’absence",
-            "description": "Définissez les conséquences en cas de non-présentation."
-          }
-        },
-
-        "close": "Fermer"
-      },
-      "reservationDialog": {
-        "title": "Demande de réservation",
-        "description": "Remplissez vos coordonnées pour envoyer une demande de réservation. Nous vous répondrons bientôt.",
-
-        "fields": {
-          "date": {
-            "label": "Date"
-          },
-          "time": {
-            "label": "Heure",
-            "placeholder": "Sélectionner l’heure"
-          },
-          "name": {
-            "label": "Nom",
-            "placeholder": "Votre nom complet"
-          },
-          "email": {
-            "label": "E-mail",
-            "placeholder": "votre@email.fr"
-          },
-          "phone": {
-            "label": "Numéro de téléphone",
-            "placeholder": "+33 (1) 23 45 67 89",
-            "optional": "Optionnel"
-          },
-          "message": {
-            "label": "Message",
-            "placeholder": "Dites-nous en plus sur vos besoins…"
-          }
-        },
-
-        "buttons": {
-          "submit": "Envoyer la demande",
-          "submitting": "Envoi en cours…"
-        },
-
-        "toast": {
-          "success": "Votre demande de réservation a été envoyée avec succès."
-        },
-
-        "errors": {
-          "submitFailed": "Échec de l’envoi de la demande de réservation",
-          "generic": "Une erreur s’est produite"
-        }
-      }
-    },
-    "ReservationSuccess": {
-      "verificationFailed": {
-        "title": "Échec de la vérification",
-        "description": "Nous n’avons pas pu vérifier votre paiement. Veuillez contacter le support."
-      },
-      "successHeader": {
-        "title": "Réservation confirmée !",
-        "description": "Votre table est réservée et prête. Nous avons hâte de vous accueillir !"
-      },
-      "infoCards": {
-        "date": "Date",
-        "time": "Heure",
-        "guests": "Invités",
-        "status": "Statut"
-      },
-      "reservationDetails": {
-        "confirmationSent": "Confirmation envoyée",
-        "sentTo": "Détails envoyés à {{email}}",
-        "depositPaid": "Acompte payé",
-        "paymentDetails": "{{amount}} {{currency}} • {{paymentMethod}}"
-      },
-      "helpfulTips": {
-        "title": "Avant votre arrivée",
-        "items": [
-          "Présentez-vous 10 à 15 minutes avant votre réservation",
-          "Apportez une pièce d’identité pour vérification",
-          "Contactez-nous en cas de retard"
-        ]
-      },
-      "referenceInfo": {
-        "label": "Référence de réservation"
-      },
-      "actions": {
-        "backToHome": "Retour à l’accueil"
-      }
-    },
-    "printPage": {
-      "printButton": "Imprimer la confirmation"
-    },
-    "reservationsTabs": {
-      "addNew": "Ajouter",
-      "overview": "Aperçu",
-      "reservations": "Réservations",
-      "tables": "Tables",
-      "areas": "Zones",
-      "payments": "Paiements",
-      "queries": "Demandes",
-      "policies": "Politiques",
-      "settings": "Paramètres"
     }
+  },
+  "makeAReservation": {
+    "notFoundTitle": "Réservation ou restaurant introuvable",
+    "reservationTitle": "{ restaurantName } - Réservation",
+    "reservationDescription": "Réservations au { restaurantName }. { bio }",
+    "reservationHeader": {
+      "subtitle": "Réservations",
+      "dropQuery": "Supprimer la requête"
+    },
+    "loading": "Chargement de la réservation…",
+    "booking": {
+      "loading": "Chargement…",
+      "checkingAvailability": "Vérification de la disponibilité…",
+      "makeReservation": "Faire une réservation",
+      "bookTableAt": "Réservez votre table au { restaurantName }",
+
+      "notFindingOptionTitle": "Vous ne trouvez pas l’horaire ou l’option souhaitée ?",
+      "notFindingOptionDesc": "Vous pouvez nous envoyer votre horaire préféré ou vos questions.",
+      "dropReservationQuery": "Supprimer la demande de réservation",
+
+      "requiredError": "Veuillez remplir tous les champs obligatoires",
+      "timeUnavailable": "Ce créneau horaire n’est actuellement pas disponible. Veuillez en choisir un autre.",
+      "reservationFailed": "Échec de la création de la réservation",
+      "reservationRetry": "Échec de la création de la réservation. Veuillez réessayer.",
+      "reservationSuccess": "Réservation créée avec succès !",
+
+      "date": "Date *",
+      "time": "Heure *",
+      "selectDateFirst": "Sélectionnez d’abord une date",
+      "closed": "Fermé",
+      "selectTime": "Sélectionner l’heure",
+      "restaurantClosed": "Le restaurant est fermé ce jour-là.",
+      "openFrom": "Ouvert de { open } à { close }",
+      "timeSlotUnavailable": "Ce créneau horaire n’est pas disponible",
+
+      "limitedAvailability": "Disponibilité limitée",
+      "limitedAvailabilityDesc": "Certains créneaux peuvent ne pas être disponibles à cette date.",
+
+      "partySize": "Nombre de personnes *",
+      "selectPartySize": "Sélectionnez le nombre de personnes",
+      "person": "personne",
+      "people": "personnes",
+
+      "preferredArea": "Zone préférée",
+      "noPreference": "Aucune préférence",
+
+      "fullName": "Nom complet *",
+      "email": "Adresse e-mail *",
+      "phone": "Numéro de téléphone",
+      "specialRequests": "Demandes spéciales",
+      "specialRequestsPlaceholder": "Allergies, restrictions alimentaires, célébrations, etc.",
+
+      "agreePolicies": "J’accepte les conditions de réservation.",
+      "viewPolicies": "Cliquez ici pour consulter les conditions",
+
+      "reservationSummary": "Récapitulatif de la réservation",
+      "yourReservation": "Votre réservation",
+      "date2": "Date :",
+      "time2": "Heure :",
+      "guests": "Invités :",
+      "preferredAreaLabel": "Zone préférée :",
+      "depositRequired": "Arrhes requises :",
+      "depositNote": "Ces arrhes seront déduites de votre facture finale et sont remboursables selon notre politique d’annulation.",
+
+      "cancellationPolicies": "Politiques d’annulation",
+      "cancelWithin": "Annulez dans les { hours } heures pour un remboursement de { percent } %",
+
+      "processing": "Traitement en cours…",
+      "creatingReservation": "Création de la réservation…",
+      "timeSlotUnavailableBtn": "Créneau horaire indisponible",
+      "completeReservation": "Finaliser la réservation",
+      "payDeposit": "et payer les arrhes",
+
+      "helpText": "Besoin d’apporter des modifications ? Contactez-nous au { phone }.",
+      "resturantdirectly": "le restaurant directement"
+    },
+    "dailyCapacity": {
+      "title": "Vérification de faisabilité de la réservation",
+      "guests": "• {partySize} invités",
+
+      "status": {
+        "available": "Disponible",
+        "notAvailable": "Indisponible"
+      },
+
+      "errors": {
+        "title": "Erreur lors du chargement des données de capacité",
+        "fetchFailed": "Échec du chargement des données de capacité",
+        "generic": "Une erreur s’est produite"
+      }
+    },
+    "reservationPolicies": {
+      "title": "Politiques du restaurant",
+      "description": "Ces politiques sont affichées aux clients pendant le processus de réservation.",
+
+      "empty": {
+        "title": "Aucune politique trouvée",
+        "description": "Ce restaurant n’a pas encore défini de politique de réservation."
+      },
+
+      "policies": {
+        "cancellation": {
+          "title": "Politique d’annulation",
+          "description": "Définissez vos règles et délais d’annulation."
+        },
+        "deposit": {
+          "title": "Politique d’arrhes",
+          "description": "Expliquez les conditions relatives aux arrhes."
+        },
+        "dining": {
+          "title": "Politique de restauration",
+          "description": "Établissez les règles pour l’expérience de repas."
+        },
+        "noShow": {
+          "title": "Politique en cas d’absence",
+          "description": "Définissez les conséquences en cas de non-présentation."
+        }
+      },
+
+      "close": "Fermer"
+    },
+    "reservationDialog": {
+      "title": "Demande de réservation",
+      "description": "Remplissez vos coordonnées pour envoyer une demande de réservation. Nous vous répondrons bientôt.",
+
+      "fields": {
+        "date": {
+          "label": "Date"
+        },
+        "time": {
+          "label": "Heure",
+          "placeholder": "Sélectionner l’heure"
+        },
+        "name": {
+          "label": "Nom",
+          "placeholder": "Votre nom complet"
+        },
+        "email": {
+          "label": "E-mail",
+          "placeholder": "votre@email.fr"
+        },
+        "phone": {
+          "label": "Numéro de téléphone",
+          "placeholder": "+33 (1) 23 45 67 89",
+          "optional": "Optionnel"
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Dites-nous en plus sur vos besoins…"
+        }
+      },
+
+      "buttons": {
+        "submit": "Envoyer la demande",
+        "submitting": "Envoi en cours…"
+      },
+
+      "toast": {
+        "success": "Votre demande de réservation a été envoyée avec succès."
+      },
+
+      "errors": {
+        "submitFailed": "Échec de l’envoi de la demande de réservation",
+        "generic": "Une erreur s’est produite"
+      }
+    }
+  },
+  "ReservationSuccess": {
+    "verificationFailed": {
+      "title": "Échec de la vérification",
+      "description": "Nous n’avons pas pu vérifier votre paiement. Veuillez contacter le support."
+    },
+    "successHeader": {
+      "title": "Réservation confirmée !",
+      "description": "Votre table est réservée et prête. Nous avons hâte de vous accueillir !"
+    },
+    "infoCards": {
+      "date": "Date",
+      "time": "Heure",
+      "guests": "Invités",
+      "status": "Statut"
+    },
+    "reservationDetails": {
+      "confirmationSent": "Confirmation envoyée",
+      "sentTo": "Détails envoyés à {{email}}",
+      "depositPaid": "Acompte payé",
+      "paymentDetails": "{{amount}} {{currency}} • {{paymentMethod}}"
+    },
+    "helpfulTips": {
+      "title": "Avant votre arrivée",
+      "items": [
+        "Présentez-vous 10 à 15 minutes avant votre réservation",
+        "Apportez une pièce d’identité pour vérification",
+        "Contactez-nous en cas de retard"
+      ]
+    },
+    "referenceInfo": {
+      "label": "Référence de réservation"
+    },
+    "actions": {
+      "backToHome": "Retour à l’accueil"
+    }
+  },
+  "printPage": {
+    "printButton": "Imprimer la confirmation"
+  },
+  "reservationsTabs": {
+    "addNew": "Ajouter",
+    "overview": "Aperçu",
+    "reservations": "Réservations",
+    "tables": "Tables",
+    "areas": "Zones",
+    "payments": "Paiements",
+    "queries": "Demandes",
+    "policies": "Politiques",
+    "settings": "Paramètres"
   }
 }
