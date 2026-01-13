@@ -92,7 +92,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Analytik", icon: BarChart },
         { href: "/dashboard/orders", label: "Bestellungen", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
+        { href: "/dashboard/reservations", label: "Reservierungen", icon: UtensilsCrossed },
       ],
     },
     {
@@ -125,7 +125,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Panel", icon: Home },
         { href: "/dashboard/stats", label: "Analíticas", icon: BarChart },
         { href: "/dashboard/orders", label: "Pedidos", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
+        { href: "/dashboard/reservations", label: "Reservas", icon: UtensilsCrossed },
       ],
     },
     {
@@ -158,7 +158,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Tableau de bord", icon: Home },
         { href: "/dashboard/stats", label: "Analyses", icon: BarChart },
         { href: "/dashboard/orders", label: "Commandes", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
+        { href: "/dashboard/reservations", label: "Réservations", icon: UtensilsCrossed },
 
       ],
     },
@@ -192,7 +192,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Analitiche", icon: BarChart },
         { href: "/dashboard/orders", label: "Ordini", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
+        { href: "/dashboard/reservations", label: "Prenotazioni", icon: UtensilsCrossed },
       ],
     },
     {
@@ -225,7 +225,7 @@ const navigationGroups = {
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Statistieken", icon: BarChart },
         { href: "/dashboard/orders", label: "Bestellingen", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
+        { href: "/dashboard/reservations", label: "Reserveringen", icon: UtensilsCrossed },
       ],
     },
     {

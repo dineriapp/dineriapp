@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { Locale } from "@/i18n/routing";
 import { AlertCircle, CheckCircle, CheckCircle2, CheckSquare, Clock, EyeOff, Truck, UserCheck, XCircle } from "lucide-react";
 
 export const getStatusIcon = (status: string) => {
@@ -39,18 +40,60 @@ export const getReservationStatusIcon = (status: string) => {
       return <AlertCircle className="w-4 h-4 text-muted-foreground" />
   }
 }
+const PAYMENT_STATUS_LABELS: Record<Locale, Record<string, string>> = {
+  en: {
+    PAID: "Paid",
+    PENDING: "Pending",
+    FAILED: "Failed",
+    REFUNDED: "Refunded",
+  },
+  de: {
+    PAID: "Bezahlt",
+    PENDING: "Ausstehend",
+    FAILED: "Fehlgeschlagen",
+    REFUNDED: "Erstattet",
+  },
+  es: {
+    PAID: "Pagado",
+    PENDING: "Pendiente",
+    FAILED: "Fallido",
+    REFUNDED: "Reembolsado",
+  },
+  fr: {
+    PAID: "Payé",
+    PENDING: "En attente",
+    FAILED: "Échoué",
+    REFUNDED: "Remboursé",
+  },
+  it: {
+    PAID: "Pagato",
+    PENDING: "In sospeso",
+    FAILED: "Non riuscito",
+    REFUNDED: "Rimborsato",
+  },
+  nl: {
+    PAID: "Betaald",
+    PENDING: "In afwachting",
+    FAILED: "Mislukt",
+    REFUNDED: "Terugbetaald",
+  },
+}
 
-export const getPaymentStatusBadge = (status: string) => {
-  switch (status) {
-    case "PAID":
-      return <Badge className="bg-green-500">Paid</Badge>
-    case "PENDING":
-      return <Badge className="bg-yellow-500">Pending</Badge>
-    case "FAILED":
-      return <Badge className="bg-red-500">Failed</Badge>
-    case "REFUNDED":
-      return <Badge className="bg-blue-500">Refunded</Badge>
-    default:
-      return null
-  }
+const PAYMENT_STATUS_BADGE_CLASS: Record<string, string> = {
+  PAID: "bg-green-500",
+  PENDING: "bg-yellow-500",
+  FAILED: "bg-red-500",
+  REFUNDED: "bg-blue-500",
+}
+
+export const getPaymentStatusBadge = (
+  status: string,
+  locale: Locale = "en"
+) => {
+  const label = PAYMENT_STATUS_LABELS[locale]?.[status] ?? status
+  const className = PAYMENT_STATUS_BADGE_CLASS[status]
+
+  if (!className) return null
+
+  return <Badge className={className}>{label}</Badge>
 }

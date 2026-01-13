@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
+import { Locale } from "@/i18n/routing"
 import { ReservationUp } from "@/lib/types"
 import { formatDateTime } from "@/lib/utils"
 import { getPaymentStatusBadge, getReservationStatusIcon } from "@/lib/utils-jsx"
@@ -22,7 +23,7 @@ import {
     Users,
     XCircle
 } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 
 const STATUS_COLORS: Record<string, string> = {
     PENDING: "bg-yellow-100 text-yellow-800 border-yellow-300",
@@ -42,7 +43,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
 }) {
     const t = useTranslations("reservationsPage.reservationCard")
     const timeZone = restaurant?.timezone || "Asia/Karachi"
-
+    const locale: Locale = useLocale() as Locale
     return (
         <Card className="hover:shadow-lg bg-white border-border/70 gap-0 py-0 transition-all duration-200 rounded-xl overflow-hidden">
             <CardContent className="px-5 py-4 space-y-3">
@@ -72,7 +73,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                             variant="secondary"
                             className="px-3 py-1 font-medium capitalize tracking-wide border-border/50"
                         >
-                            {reservation.status.toLowerCase()}
+                            {t(`status.${reservation.status.toLowerCase()}`)}
                         </Badge>
                     </div>
                 </div>
@@ -158,7 +159,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                                         {Number(reservation.payment.amount).toFixed(2)}
                                     </span>
                                 </div>
-                                {getPaymentStatusBadge(reservation.payment.status)}
+                                {getPaymentStatusBadge(reservation.payment.status, locale)}
                             </div>
                         )}
                         {reservation.table_reservations?.length > 0 && (
@@ -194,7 +195,7 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                         }}
                     >
                         <SelectTrigger className={`w-fit cursor-pointer ${STATUS_COLORS[reservation.status]}`}>
-                            <span className="capitalize">{reservation.status.toLowerCase()}</span>
+                            <span className="capitalize">{t(`status.${reservation.status.toLowerCase()}`)}</span>
                         </SelectTrigger>
 
                         <SelectContent>
