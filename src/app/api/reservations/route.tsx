@@ -5,6 +5,8 @@ import type { ReservationsListResponse } from "@/lib/types";
 import { getEstimatedDuration } from '@/lib/utils';
 import { Prisma } from '@prisma/client';
 import { type NextRequest, NextResponse } from "next/server";
+import { getTranslations } from 'next-intl/server';
+import { cookies } from 'next/headers';
 
 export async function GET(request: NextRequest) {
     try {
@@ -98,15 +100,18 @@ interface CreateReservationRequest {
 
 export async function POST(request: NextRequest) {
     try {
+        const cookieStore = await cookies();
+        const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
+        const t = await getTranslations({ locale, namespace: 'reservations_api' });
 
         const body: CreateReservationRequest = await request.json();
 
-        const validationError = validateReservationRequest(body);
+        const validationError = await validateReservationRequest(body, locale);
         if (validationError) {
             return NextResponse.json({ error: validationError }, { status: 400 });
         }
 
-        const result: any = await createReservationWithValidation(body);
+        const result: any = await createReservationWithValidation(body, locale);
         if (!result.success) {
             return NextResponse.json({ error: result.error }, { status: 400 });
         }
@@ -115,41 +120,46 @@ export async function POST(request: NextRequest) {
             success: true,
             reservation: result.reservation,
             deposit: result.deposit,
-            message: 'Reservation created successfully'
+            message: t('success.reservation_created')
         });
 
     } catch {
+        const cookieStore = await cookies();
+        const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
+        const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
         return NextResponse.json(
-            { error: 'Failed to create reservation' },
+            { error: t('failed_create_reservation') },
             { status: 500 }
         );
     }
 }
 
-function validateReservationRequest(body: CreateReservationRequest): string | null {
-    if (!body.restaurantId) return 'Restaurant ID is required';
-    if (!body.customer_name?.trim()) return 'Customer name is required';
-    if (!body.customer_email?.trim()) return 'Customer email is required';
-    if (!body.arrival_time) return 'Arrival time is required';
-    if (!body.party_size || body.party_size < 1) return 'Valid party size is required';
-    if (!body.payment_method) return 'Payment method is required';
+async function validateReservationRequest(body: CreateReservationRequest, locale: string = 'en'): Promise<string | null> {
+    const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
+    if (!body.restaurantId) return t('restaurant_id_required');
+    if (!body.customer_name?.trim()) return t('customer_name_required');
+    if (!body.customer_email?.trim()) return t('customer_email_required');
+    if (!body.arrival_time) return t('arrival_time_required');
+    if (!body.party_size || body.party_size < 1) return t('valid_party_size_required');
+    if (!body.payment_method) return t('payment_method_required');
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(body.customer_email)) {
-        return 'Invalid email format';
+        return t('invalid_email_format');
     }
 
     // Validate arrival time is in the future
     const arrivalTime = new Date(body.arrival_time);
     if (arrivalTime <= new Date()) {
-        return 'Arrival time must be in the future';
+        return t('arrival_time_future');
     }
 
     return null;
 }
 
-async function createReservationWithValidation(data: CreateReservationRequest) {
+async function createReservationWithValidation(data: CreateReservationRequest, locale: string = 'en') {
+    const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
     const capacityService = new CapacityService();
     const arrivalTime = new Date(data.arrival_time);
 
@@ -168,7 +178,7 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
     });
 
     if (!restaurant) {
-        return { success: false, error: 'Restaurant not found' };
+        return { success: false, error: t('restaurant_not_found') };
     }
 
     const settings = restaurant?.reservation_settings?.settings as SettingsState | undefined;
@@ -184,7 +194,7 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
         return {
             success: false,
             error: custom_message_for_customers ||
-                "The restaurant is temporarily closed and cannot accept reservations."
+                t('restaurant_temporarily_closed')
         };
     }
 
@@ -193,7 +203,7 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
         return {
             success: false,
             error: custom_message_for_customers ||
-                "The restaurant is currently not accepting new reservations."
+                t('restaurant_not_accepting')
         };
     }
 
@@ -201,13 +211,13 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
     const estimatedDuration = getEstimatedDuration(settings, data.party_size);
 
     // Check opening hours
-    const openingHoursCheck = await checkOpeningHours(restaurant, arrivalTime);
+    const openingHoursCheck = await checkOpeningHours(restaurant, arrivalTime, locale);
     if (!openingHoursCheck.isOpen) {
         return { success: false, error: openingHoursCheck.error };
     }
 
     // Check time overrides
-    const overrideCheck = await checkTimeOverrides(restaurant, arrivalTime);
+    const overrideCheck = await checkTimeOverrides(restaurant, arrivalTime, locale);
     if (overrideCheck.isBlocked) {
         return { success: false, error: overrideCheck.error };
     }
@@ -223,7 +233,7 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
     if (!capacityCheck.available) {
         return {
             success: false,
-            error: `Not enough capacity. Only ${capacityCheck.availableCapacity} seats available for this time.`
+            error: t('not_enough_capacity', { availableCapacity: capacityCheck.availableCapacity })
         };
     }
 
@@ -277,7 +287,7 @@ async function createReservationWithValidation(data: CreateReservationRequest) {
     if (assignedTables.length === 0) {
         return {
             success: false,
-            error: 'No suitable tables available for the selected time and party size.'
+            error: t('no_suitable_tables')
         };
     }
 
@@ -450,7 +460,8 @@ function calculateDepositOnServer(
     return { amount: finalAmount, appliedRule };
 }
 
-async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
+async function checkOpeningHours(restaurant: any, arrivalTime: Date, locale: string = 'en') {
+    const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
     const openingHours = restaurant.opening_hours || {};
     const restaurantTimezone = restaurant.timezone || 'Europe/London';
 
@@ -465,7 +476,7 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
     if (!daySchedule || daySchedule.closed) {
         return {
             isOpen: false,
-            error: 'Restaurant is closed on the selected date.'
+            error: t('restaurant_closed_date')
         };
     }
 
@@ -476,7 +487,7 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
     if (!openTime || !closeTime) {
         return {
             isOpen: false,
-            error: 'Invalid opening hours configuration.'
+            error: t('invalid_opening_hours')
         };
     }
 
@@ -492,7 +503,7 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
     if (arrivalTimeInRestaurantTZ < openDateTime || arrivalTimeInRestaurantTZ > closeDateTime) {
         return {
             isOpen: false,
-            error: `Restaurant is open from ${daySchedule.open} to ${daySchedule.close} on ${dayName}.`
+            error: t('restaurant_open_hours', { open: daySchedule.open, close: daySchedule.close, dayName })
         };
     }
 
@@ -506,7 +517,8 @@ function getDayName(date: Date): string {
 }
 
 // Update checkTimeOverrides function to use restaurant timezone
-async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
+async function checkTimeOverrides(restaurant: any, arrivalTime: Date, locale: string = 'en') {
+    const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
     const settings = restaurant.reservation_settings?.settings as any;
     const overridesSettings = settings?.overrides_settings || {
         overrides_enabled: false,
@@ -541,9 +553,10 @@ async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
             const endMinutes = timeToMinutes(override.endTime);
 
             if (arrivalMinutes >= startMinutes && arrivalMinutes <= endMinutes) {
+                const reason = override.reason || t('scheduled_maintenance');
                 return {
                     isBlocked: true,
-                    error: `Time slot is blocked due to: ${override.reason || 'Scheduled maintenance'}`
+                    error: t('time_slot_blocked', { reason })
                 };
             }
         }

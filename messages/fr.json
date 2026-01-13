@@ -4121,5 +4121,38 @@
       "dayOfWeek": "Tarif { days } : { rate }",
       "default": "{ rate }"
     }
+  },
+  "reservations_api": {
+    "errors": {
+      "date_party_size_required": "Les paramètres de date et de taille de groupe sont requis",
+      "invalid_date_format": "Format de date invalide",
+      "invalid_party_size": "Taille de groupe invalide",
+      "failed_fetch_capacity": "Échec de la récupération des données de capacité",
+      "restaurant_not_found": "Restaurant introuvable",
+      "restaurant_closed_date": "Le restaurant est fermé à la date sélectionnée.",
+      "invalid_opening_hours": "Configuration des heures d'ouverture invalide.",
+      "restaurant_open_hours": "Le restaurant est ouvert de {open} à {close} le {dayName}.",
+      "time_slot_blocked": "Le créneau horaire est bloqué en raison de : {reason}",
+      "scheduled_maintenance": "Maintenance programmée",
+      "not_enough_capacity": "Capacité insuffisante. Seulement {availableCapacity} places disponibles pour ce créneau.",
+      "no_suitable_tables": "Aucune table appropriée disponible pour l'heure et la taille de groupe sélectionnées.",
+      "restaurant_id_required": "L'ID du restaurant est requis",
+      "customer_name_required": "Le nom du client est requis",
+      "customer_email_required": "L'e-mail du client est requis",
+      "arrival_time_required": "L'heure d'arrivée est requise",
+      "valid_party_size_required": "Une taille de groupe valide est requise",
+      "payment_method_required": "Le mode de paiement est requis",
+      "invalid_email_format": "Format d'e-mail invalide",
+      "arrival_time_future": "L'heure d'arrivée doit être dans le futur",
+      "failed_create_reservation": "Échec de la création de la réservation",
+      "restaurant_temporarily_closed": "Le restaurant est temporairement fermé et ne peut pas accepter de réservations.",
+      "restaurant_not_accepting": "Le restaurant n'accepte actuellement pas de nouvelles réservations.",
+      "required_fields": "Veuillez remplir tous les champs obligatoires",
+      "time_slot_unavailable": "Ce créneau horaire n'est pas disponible actuellement. Veuillez en sélectionner un autre."
+    },
+    "success": {
+      "reservation_can_be_created": "La réservation peut être créée avec succès",
+      "reservation_created": "Réservation créée avec succès"
+    }
   }
 }

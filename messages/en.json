@@ -4157,5 +4157,38 @@
       "dayOfWeek": "{ days } rate: { rate }",
       "default": "{ rate }"
     }
+  },
+  "reservations_api": {
+    "errors": {
+      "date_party_size_required": "Date and partySize parameters are required",
+      "invalid_date_format": "Invalid date format",
+      "invalid_party_size": "Invalid party size",
+      "failed_fetch_capacity": "Failed to fetch capacity data",
+      "restaurant_not_found": "Restaurant not found",
+      "restaurant_closed_date": "Restaurant is closed on the selected date.",
+      "invalid_opening_hours": "Invalid opening hours configuration.",
+      "restaurant_open_hours": "Restaurant is open from {open} to {close} on {dayName}.",
+      "time_slot_blocked": "Time slot is blocked due to: {reason}",
+      "scheduled_maintenance": "Scheduled maintenance",
+      "not_enough_capacity": "Not enough capacity. Only {availableCapacity} seats available for this time.",
+      "no_suitable_tables": "No suitable tables available for the selected time and party size.",
+      "restaurant_id_required": "Restaurant ID is required",
+      "customer_name_required": "Customer name is required",
+      "customer_email_required": "Customer email is required",
+      "arrival_time_required": "Arrival time is required",
+      "valid_party_size_required": "Valid party size is required",
+      "payment_method_required": "Payment method is required",
+      "invalid_email_format": "Invalid email format",
+      "arrival_time_future": "Arrival time must be in the future",
+      "failed_create_reservation": "Failed to create reservation",
+      "restaurant_temporarily_closed": "The restaurant is temporarily closed and cannot accept reservations.",
+      "restaurant_not_accepting": "The restaurant is currently not accepting new reservations.",
+      "required_fields": "Please fill in all required fields",
+      "time_slot_unavailable": "This time slot is currently unavailable. Please select a different time."
+    },
+    "success": {
+      "reservation_can_be_created": "Reservation can be created successfully",
+      "reservation_created": "Reservation created successfully"
+    }
   }
 }

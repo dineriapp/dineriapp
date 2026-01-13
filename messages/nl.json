@@ -4118,5 +4118,38 @@
       "dayOfWeek": "{ days }-tarief: { rate }",
       "default": "{ rate }"
     }
+  },
+  "reservations_api": {
+    "errors": {
+      "date_party_size_required": "Datum- en groepsgrootte-parameters zijn verplicht",
+      "invalid_date_format": "Ongeldig datumformaat",
+      "invalid_party_size": "Ongeldige groepsgrootte",
+      "failed_fetch_capacity": "Kan capaciteitsgegevens niet ophalen",
+      "restaurant_not_found": "Restaurant niet gevonden",
+      "restaurant_closed_date": "Het restaurant is gesloten op de geselecteerde datum.",
+      "invalid_opening_hours": "Ongeldige openingstijdenconfiguratie.",
+      "restaurant_open_hours": "Het restaurant is open van {open} tot {close} op {dayName}.",
+      "time_slot_blocked": "Tijdslot is geblokkeerd vanwege: {reason}",
+      "scheduled_maintenance": "Gepland onderhoud",
+      "not_enough_capacity": "Niet genoeg capaciteit. Alleen {availableCapacity} plaatsen beschikbaar voor dit tijdslot.",
+      "no_suitable_tables": "Geen geschikte tafels beschikbaar voor het geselecteerde tijdstip en groepsgrootte.",
+      "restaurant_id_required": "Restaurant-ID is verplicht",
+      "customer_name_required": "Klantnaam is verplicht",
+      "customer_email_required": "Klant-e-mail is verplicht",
+      "arrival_time_required": "Aankomsttijd is verplicht",
+      "valid_party_size_required": "Geldige groepsgrootte is verplicht",
+      "payment_method_required": "Betaalmethode is verplicht",
+      "invalid_email_format": "Ongeldig e-mailformaat",
+      "arrival_time_future": "Aankomsttijd moet in de toekomst liggen",
+      "failed_create_reservation": "Kan reservering niet aanmaken",
+      "restaurant_temporarily_closed": "Het restaurant is tijdelijk gesloten en kan geen reserveringen accepteren.",
+      "restaurant_not_accepting": "Het restaurant accepteert momenteel geen nieuwe reserveringen.",
+      "required_fields": "Vul alstublieft alle verplichte velden in",
+      "time_slot_unavailable": "Dit tijdslot is momenteel niet beschikbaar. Selecteer alstublieft een ander tijdslot."
+    },
+    "success": {
+      "reservation_can_be_created": "Reservering kan succesvol worden aangemaakt",
+      "reservation_created": "Reservering succesvol aangemaakt"
+    }
   }
 }

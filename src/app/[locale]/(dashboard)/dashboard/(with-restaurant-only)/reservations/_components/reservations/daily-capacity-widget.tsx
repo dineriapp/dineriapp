@@ -62,19 +62,22 @@ const DailyCapacityWidget = ({
                 cache: "no-store"
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to fetch capacity data');
-            }
-
             const result = await response.json();
+
+            if (!response.ok) {
+                // Use API error message if available (already translated), otherwise use translation fallback
+                throw new Error(result.error || t("loading.errorTitle"));
+            }
 
             if (result.success) {
                 setCapacityData(result.data);
             } else {
-                throw new Error(result.error);
+                // API error is already translated
+                throw new Error(result.error || t("loading.errorTitle"));
             }
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'An error occurred');
+            // Use API error message if available (already translated), otherwise use translation fallback
+            setError(err instanceof Error ? err.message : t("loading.errorTitle"));
         } finally {
             setLoading(false);
         }

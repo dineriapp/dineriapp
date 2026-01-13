@@ -3,12 +3,18 @@ import { CapacityService } from '@/lib/capacity-service';
 import prisma from '@/lib/prisma';
 import { getEstimatedDuration } from '@/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';
+import { getTranslations } from 'next-intl/server';
+import { cookies } from 'next/headers';
 
 export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const cookieStore = await cookies();
+        const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
+        const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
+
         const resolvedParams = await params;
 
         const { searchParams } = new URL(request.url);
@@ -18,7 +24,7 @@ export async function GET(
         // All parameters are required
         if (!dateParam || !partySizeParam) {
             return NextResponse.json({
-                error: 'Date and partySize parameters are required'
+                error: t('date_party_size_required')
             }, { status: 400 });
         }
 
@@ -26,13 +32,13 @@ export async function GET(
         const date = new Date(dateParam);
 
         if (isNaN(date.getTime())) {
-            return NextResponse.json({ error: 'Invalid date format' }, { status: 400 });
+            return NextResponse.json({ error: t('invalid_date_format') }, { status: 400 });
         }
 
         // Parse party size
         const partySize = parseInt(partySizeParam);
         if (isNaN(partySize) || partySize <= 0) {
-            return NextResponse.json({ error: 'Invalid party size' }, { status: 400 });
+            return NextResponse.json({ error: t('invalid_party_size') }, { status: 400 });
         }
 
         const capacityService = new CapacityService();
@@ -42,7 +48,8 @@ export async function GET(
             capacityService,
             restaurantId,
             date,
-            partySize
+            partySize,
+            locale
         );
 
         return NextResponse.json({
@@ -51,8 +58,11 @@ export async function GET(
         });
 
     } catch {
+        const cookieStore = await cookies();
+        const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
+        const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
         return NextResponse.json(
-            { error: 'Failed to fetch capacity data' },
+            { error: t('failed_fetch_capacity') },
             { status: 500 }
         );
     }
@@ -63,8 +73,10 @@ async function getReservationFeasibilityCheck(
     capacityService: CapacityService,
     restaurantId: string,
     date: Date, // This now contains the full datetime
-    partySize: number
+    partySize: number,
+    locale: string = 'en'
 ) {
+    const t = await getTranslations({ locale, namespace: 'reservations_api' });
 
     console.log('Date:', date.toISOString().split('T')[0]);
 
@@ -80,7 +92,7 @@ async function getReservationFeasibilityCheck(
     if (!restaurant) {
         return {
             canCreateReservation: false,
-            reason: 'Restaurant not found',
+            reason: t('errors.restaurant_not_found'),
             details: null
         };
     }
@@ -96,7 +108,7 @@ async function getReservationFeasibilityCheck(
     const timeInRestaurantTZ = convertToRestaurantTimezone(date, restaurantTimezone);
 
     // 2. Check opening hours (same logic) - WITH PROPER TIMEZONE
-    const openingHoursCheck = await checkOpeningHours(restaurant, timeInRestaurantTZ);
+    const openingHoursCheck = await checkOpeningHours(restaurant, timeInRestaurantTZ, locale);
     if (!openingHoursCheck.isOpen) {
         return {
             canCreateReservation: false,
@@ -106,7 +118,7 @@ async function getReservationFeasibilityCheck(
     }
 
     // 3. Check time overrides (same logic) - WITH PROPER TIMEZONE
-    const overrideCheck = await checkTimeOverrides(restaurant, timeInRestaurantTZ);
+    const overrideCheck = await checkTimeOverrides(restaurant, timeInRestaurantTZ, locale);
     if (overrideCheck.isBlocked) {
         return {
             canCreateReservation: false,
@@ -126,7 +138,7 @@ async function getReservationFeasibilityCheck(
     if (!capacityCheck.available) {
         return {
             canCreateReservation: false,
-            reason: `Not enough capacity. Only ${capacityCheck.availableCapacity} seats available for this time.`,
+            reason: t('errors.not_enough_capacity', { availableCapacity: capacityCheck.availableCapacity }),
             details: {
                 type: 'capacity',
                 availableCapacity: capacityCheck.availableCapacity,
@@ -181,7 +193,7 @@ async function getReservationFeasibilityCheck(
     if (!canCreateReservation) {
         return {
             canCreateReservation: false,
-            reason: 'No suitable tables available for the selected time and party size.',
+            reason: t('errors.no_suitable_tables'),
             details: {
                 type: 'table_availability',
                 tableCombinationsEnabled: enableTableCombinations,
@@ -195,7 +207,7 @@ async function getReservationFeasibilityCheck(
 
     return {
         canCreateReservation: true,
-        reason: 'Reservation can be created successfully',
+        reason: t('success.reservation_can_be_created'),
         details: {
             type: 'available',
             tables: assignedTables.map((table: any) => ({
@@ -329,7 +341,8 @@ async function findOptimalTableCombinationsByCapacity(
 }
 
 // Check opening hours with proper timezone support
-async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
+async function checkOpeningHours(restaurant: any, arrivalTime: Date, locale: string = 'en') {
+    const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
     const openingHours = restaurant.opening_hours || {};
 
     // arrivalTime is already in restaurant's timezone
@@ -339,7 +352,7 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
     if (!daySchedule || daySchedule.closed) {
         return {
             isOpen: false,
-            error: 'Restaurant is closed on the selected date.'
+            error: t('restaurant_closed_date')
         };
     }
 
@@ -349,7 +362,7 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
     if (!openTime || !closeTime) {
         return {
             isOpen: false,
-            error: 'Invalid opening hours configuration.'
+            error: t('invalid_opening_hours')
         };
     }
 
@@ -365,7 +378,7 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
     if (arrivalTime < openDateTime || arrivalTime > closeDateTime) {
         return {
             isOpen: false,
-            error: `Restaurant is open from ${daySchedule.open} to ${daySchedule.close} on ${dayName}.`
+            error: t('restaurant_open_hours', { open: daySchedule.open, close: daySchedule.close, dayName })
         };
     }
 
@@ -373,7 +386,8 @@ async function checkOpeningHours(restaurant: any, arrivalTime: Date) {
 }
 
 // Check time overrides with proper timezone support
-async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
+async function checkTimeOverrides(restaurant: any, arrivalTime: Date, locale: string = 'en') {
+    const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
     const settings = restaurant.reservation_settings?.settings as any;
     const overridesSettings = settings?.overrides_settings || {
         overrides_enabled: false,
@@ -402,9 +416,10 @@ async function checkTimeOverrides(restaurant: any, arrivalTime: Date) {
             const endMinutes = timeToMinutes(override.endTime);
 
             if (arrivalMinutes >= startMinutes && arrivalMinutes <= endMinutes) {
+                const reason = override.reason || t('scheduled_maintenance');
                 return {
                     isBlocked: true,
-                    error: `Time slot is blocked due to: ${override.reason || 'Scheduled maintenance'}`
+                    error: t('time_slot_blocked', { reason })
                 };
             }
         }

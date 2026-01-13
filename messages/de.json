@@ -4117,5 +4117,38 @@
       "dayOfWeek": "{ days }-Rate: { rate }",
       "default": "{ rate }"
     }
+  },
+  "reservations_api": {
+    "errors": {
+      "date_party_size_required": "Datum- und PartySize-Parameter sind erforderlich",
+      "invalid_date_format": "Ungültiges Datumsformat",
+      "invalid_party_size": "Ungültige Gruppengröße",
+      "failed_fetch_capacity": "Fehler beim Abrufen der Kapazitätsdaten",
+      "restaurant_not_found": "Restaurant nicht gefunden",
+      "restaurant_closed_date": "Das Restaurant ist am ausgewählten Datum geschlossen.",
+      "invalid_opening_hours": "Ungültige Öffnungszeiten-Konfiguration.",
+      "restaurant_open_hours": "Das Restaurant ist von {open} bis {close} am {dayName} geöffnet.",
+      "time_slot_blocked": "Zeitslot ist blockiert aufgrund von: {reason}",
+      "scheduled_maintenance": "Geplante Wartung",
+      "not_enough_capacity": "Nicht genug Kapazität. Nur {availableCapacity} Plätze für diese Zeit verfügbar.",
+      "no_suitable_tables": "Keine geeigneten Tische für die ausgewählte Zeit und Gruppengröße verfügbar.",
+      "restaurant_id_required": "Restaurant-ID ist erforderlich",
+      "customer_name_required": "Kundenname ist erforderlich",
+      "customer_email_required": "Kunden-E-Mail ist erforderlich",
+      "arrival_time_required": "Ankunftszeit ist erforderlich",
+      "valid_party_size_required": "Gültige Gruppengröße ist erforderlich",
+      "payment_method_required": "Zahlungsmethode ist erforderlich",
+      "invalid_email_format": "Ungültiges E-Mail-Format",
+      "arrival_time_future": "Ankunftszeit muss in der Zukunft liegen",
+      "failed_create_reservation": "Fehler beim Erstellen der Reservierung",
+      "restaurant_temporarily_closed": "Das Restaurant ist vorübergehend geschlossen und kann keine Reservierungen entgegennehmen.",
+      "restaurant_not_accepting": "Das Restaurant nimmt derzeit keine neuen Reservierungen entgegen.",
+      "required_fields": "Bitte füllen Sie alle erforderlichen Felder aus",
+      "time_slot_unavailable": "Dieses Zeitfenster ist derzeit nicht verfügbar. Bitte wählen Sie eine andere Zeit."
+    },
+    "success": {
+      "reservation_can_be_created": "Reservierung kann erfolgreich erstellt werden",
+      "reservation_created": "Reservierung erfolgreich erstellt"
+    }
   }
 }

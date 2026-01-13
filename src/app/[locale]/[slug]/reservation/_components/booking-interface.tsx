@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import DailyCapacityWidget from "./daily-capacity-widget";
 import ReservationPoliciesDialog from "./reservation-policies-dialog";
 import { ReservationDialog } from "./reservation-query-dialog";
+import { useTranslations } from "next-intl";
 
 // Format time slots for dropdown (30-min intervals)
 const fmt = new Intl.DateTimeFormat("en-US", {
@@ -41,6 +42,7 @@ const timeSlots = Array.from({ length: 48 }, (_, i) => {
 
 const BookingInterface = ({ restaurant }: { restaurant: Restaurant & { reservation_settings: { settings: SettingsState }, Reservation_policy: ReservationPolicy | null } }) => {
     const { data: areas = [], isLoading } = useAreas(restaurant?.id);
+    const t = useTranslations("reservations_api");
 
     const settings = restaurant?.reservation_settings?.settings as SettingsState | undefined;
 
@@ -275,13 +277,13 @@ const BookingInterface = ({ restaurant }: { restaurant: Restaurant & { reservati
 
         // Strict validation
         if (!date || !selectedTime || !name || !email) {
-            setError("Please fill in all required fields");
+            setError(t("errors.required_fields"));
             setIsSubmitting(false);
             return;
         }
 
         if (isTimeBlocked) {
-            setError("This time slot is currently unavailable. Please select a different time.");
+            setError(t("errors.time_slot_unavailable"));
             setIsSubmitting(false);
             return;
         }
@@ -316,7 +318,7 @@ const BookingInterface = ({ restaurant }: { restaurant: Restaurant & { reservati
                     window.location.href = result.checkout_url;
                 } else {
                     // No deposit required, reservation confirmed immediately
-                    toast.success('Reservation created successfully!');
+                    toast.success(t("success.reservation_created"));
                     // Reset form
                     setDate(undefined);
                     setSelectedTime("");
@@ -328,11 +330,12 @@ const BookingInterface = ({ restaurant }: { restaurant: Restaurant & { reservati
                     setNotes("");
                 }
             } else {
-                setError(result.error || 'Failed to create reservation');
+                // API error is already translated
+                setError(result.error || t("errors.failed_create_reservation"));
             }
         } catch (error) {
             console.error('Reservation error:', error);
-            setError('Failed to create reservation. Please try again.');
+            setError(t("errors.failed_create_reservation"));
         } finally {
             setIsSubmitting(false);
         }

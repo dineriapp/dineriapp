@@ -4122,5 +4122,38 @@
       "dayOfWeek": "Tarifa de { days }: { rate }",
       "default": "{ rate }"
     }
+  },
+  "reservations_api": {
+    "errors": {
+      "date_party_size_required": "Los parámetros de fecha y tamaño de grupo son obligatorios",
+      "invalid_date_format": "Formato de fecha no válido",
+      "invalid_party_size": "Tamaño de grupo no válido",
+      "failed_fetch_capacity": "Error al obtener los datos de capacidad",
+      "restaurant_not_found": "Restaurante no encontrado",
+      "restaurant_closed_date": "El restaurante está cerrado en la fecha seleccionada.",
+      "invalid_opening_hours": "Configuración de horario de apertura no válida.",
+      "restaurant_open_hours": "El restaurante está abierto de {open} a {close} el {dayName}.",
+      "time_slot_blocked": "La franja horaria está bloqueada debido a: {reason}",
+      "scheduled_maintenance": "Mantenimiento programado",
+      "not_enough_capacity": "No hay suficiente capacidad. Solo {availableCapacity} asientos disponibles para este horario.",
+      "no_suitable_tables": "No hay mesas adecuadas disponibles para la hora y el tamaño de grupo seleccionados.",
+      "restaurant_id_required": "Se requiere el ID del restaurante",
+      "customer_name_required": "Se requiere el nombre del cliente",
+      "customer_email_required": "Se requiere el correo electrónico del cliente",
+      "arrival_time_required": "Se requiere la hora de llegada",
+      "valid_party_size_required": "Se requiere un tamaño de grupo válido",
+      "payment_method_required": "Se requiere el método de pago",
+      "invalid_email_format": "Formato de correo electrónico no válido",
+      "arrival_time_future": "La hora de llegada debe ser en el futuro",
+      "failed_create_reservation": "Error al crear la reserva",
+      "restaurant_temporarily_closed": "El restaurante está temporalmente cerrado y no puede aceptar reservas.",
+      "restaurant_not_accepting": "El restaurante actualmente no está aceptando nuevas reservas.",
+      "required_fields": "Por favor complete todos los campos requeridos",
+      "time_slot_unavailable": "Este horario no está disponible actualmente. Por favor seleccione un horario diferente."
+    },
+    "success": {
+      "reservation_can_be_created": "La reserva se puede crear con éxito",
+      "reservation_created": "Reserva creada con éxito"
+    }
   }
 }
