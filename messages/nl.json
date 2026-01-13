@@ -4150,6 +4150,222 @@
     "success": {
       "reservation_can_be_created": "Reservering kan succesvol worden aangemaakt",
       "reservation_created": "Reservering succesvol aangemaakt"
+    },
+    "makeAReservation": {
+      "notFoundTitle": "Reservering of restaurant niet gevonden",
+      "reservationTitle": "{ restaurantName } - Reservering",
+      "reservationDescription": "Reserveringen bij { restaurantName }. { bio }",
+      "reservationHeader": {
+        "subtitle": "Reserveringen",
+        "dropQuery": "Verwijder aanvraag"
+      },
+      "loading": "Reservering laden...",
+      "booking": {
+        "loading": "Laden...",
+        "checkingAvailability": "Beschikbaarheid controleren...",
+        "makeReservation": "Maak een reservering",
+        "bookTableAt": "Reserveer uw tafel bij { restaurantName }",
+
+        "notFindingOptionTitle": "Vindt u de gewenste tijd of optie niet?",
+        "notFindingOptionDesc": "U kunt ons uw voorkeurstijd of vragen sturen.",
+        "dropReservationQuery": "Verwijder reserveringsaanvraag",
+
+        "requiredError": "Vul alle verplichte velden in",
+        "timeUnavailable": "Dit tijdstip is momenteel niet beschikbaar. Kies een ander tijdstip.",
+        "reservationFailed": "Reservering kon niet worden aangemaakt",
+        "reservationRetry": "Reservering kon niet worden aangemaakt. Probeer het opnieuw.",
+        "reservationSuccess": "Reservering succesvol aangemaakt!",
+
+        "date": "Datum *",
+        "time": "Tijd *",
+        "selectDateFirst": "Selecteer eerst een datum",
+        "closed": "Gesloten",
+        "selectTime": "Selecteer tijd",
+        "restaurantClosed": "Het restaurant is op deze dag gesloten.",
+        "openFrom": "Geopend van { open } tot { close }",
+        "timeSlotUnavailable": "Dit tijdstip is niet beschikbaar",
+
+        "limitedAvailability": "Beperkte beschikbaarheid",
+        "limitedAvailabilityDesc": "Sommige tijdstippen zijn mogelijk niet beschikbaar op deze datum.",
+
+        "partySize": "Aantal gasten *",
+        "selectPartySize": "Selecteer aantal gasten",
+        "person": "persoon",
+        "people": "personen",
+
+        "preferredArea": "Voorkeurslocatie",
+        "noPreference": "Geen voorkeur",
+
+        "fullName": "Volledige naam *",
+        "email": "E-mailadres *",
+        "phone": "Telefoonnummer",
+        "specialRequests": "Speciale verzoeken",
+        "specialRequestsPlaceholder": "Allergieën, dieetwensen, verjaardagen, enz.",
+
+        "agreePolicies": "Ik ga akkoord met het reserveringsbeleid.",
+        "viewPolicies": "Klik hier om het beleid te bekijken",
+
+        "reservationSummary": "Reserveringsoverzicht",
+        "yourReservation": "Uw reservering",
+        "date2": "Datum:",
+        "time2": "Tijd:",
+        "guests": "Gasten:",
+        "preferredAreaLabel": "Voorkeurslocatie:",
+        "depositRequired": "Borg vereist:",
+        "depositNote": "Deze borg wordt verrekend met uw eindrekening en is terugbetaalbaar volgens ons annuleringsbeleid.",
+
+        "cancellationPolicies": "Annuleringsvoorwaarden",
+        "cancelWithin": "Annuleer binnen { hours } uur voor { percent }% terugbetaling",
+
+        "processing": "Verwerken...",
+        "creatingReservation": "Reservering aanmaken...",
+        "timeSlotUnavailableBtn": "Tijdstip niet beschikbaar",
+        "completeReservation": "Reservering voltooien",
+        "payDeposit": "en borg betalen",
+
+        "helpText": "Wilt u wijzigingen aanbrengen? Neem contact met ons op via { phone }.",
+        "resturantdirectly": "het restaurant rechtstreeks"
+      },
+      "dailyCapacity": {
+        "title": "Controle reserveringsmogelijkheid",
+        "guests": "• {partySize} gasten",
+
+        "status": {
+          "available": "Beschikbaar",
+          "notAvailable": "Niet beschikbaar"
+        },
+
+        "errors": {
+          "title": "Fout bij laden capaciteitsgegevens",
+          "fetchFailed": "Capaciteitsgegevens konden niet worden geladen",
+          "generic": "Er is een fout opgetreden"
+        }
+      },
+      "reservationPolicies": {
+        "title": "Restaurantbeleid",
+        "description": "Dit beleid wordt weergegeven tijdens het reserveringsproces.",
+
+        "empty": {
+          "title": "Geen beleid gevonden",
+          "description": "Dit restaurant heeft nog geen reserveringsbeleid ingesteld."
+        },
+
+        "policies": {
+          "cancellation": {
+            "title": "Annuleringsbeleid",
+            "description": "Stel uw annuleringsregels en termijnen in."
+          },
+          "deposit": {
+            "title": "Borgbeleid",
+            "description": "Leg de vereisten voor borgbetaling uit."
+          },
+          "dining": {
+            "title": "Restaurantbeleid",
+            "description": "Stel regels op voor de eetervaring."
+          },
+          "noShow": {
+            "title": "No-show beleid",
+            "description": "Bepaal de gevolgen bij niet opdagen."
+          }
+        },
+
+        "close": "Sluiten"
+      },
+      "reservationDialog": {
+        "title": "Reserveringsaanvraag",
+        "description": "Vul uw gegevens in om een reserveringsaanvraag te sturen. We nemen spoedig contact met u op.",
+
+        "fields": {
+          "date": {
+            "label": "Datum"
+          },
+          "time": {
+            "label": "Tijd",
+            "placeholder": "Selecteer tijd"
+          },
+          "name": {
+            "label": "Naam",
+            "placeholder": "Uw volledige naam"
+          },
+          "email": {
+            "label": "E-mail",
+            "placeholder": "uw@email.nl"
+          },
+          "phone": {
+            "label": "Telefoonnummer",
+            "placeholder": "+31 (6) 12345678",
+            "optional": "Optioneel"
+          },
+          "message": {
+            "label": "Bericht",
+            "placeholder": "Vertel ons over uw reserveringswensen..."
+          }
+        },
+
+        "buttons": {
+          "submit": "Verzend aanvraag",
+          "submitting": "Verzenden..."
+        },
+
+        "toast": {
+          "success": "Uw reserveringsaanvraag is succesvol verstuurd."
+        },
+
+        "errors": {
+          "submitFailed": "Reserveringsaanvraag kon niet worden verstuurd",
+          "generic": "Er is iets misgegaan"
+        }
+      }
+    },
+    "ReservationSuccess": {
+      "verificationFailed": {
+        "title": "Verificatie mislukt",
+        "description": "We konden uw betaling niet verifiëren. Neem contact op met de klantenservice."
+      },
+      "successHeader": {
+        "title": "Reservering bevestigd!",
+        "description": "Uw tafel is gereserveerd en klaar. We kijken ernaar uit u te verwelkomen!"
+      },
+      "infoCards": {
+        "date": "Datum",
+        "time": "Tijd",
+        "guests": "Gasten",
+        "status": "Status"
+      },
+      "reservationDetails": {
+        "confirmationSent": "Bevestiging verzonden",
+        "sentTo": "Details verzonden naar {{email}}",
+        "depositPaid": "Aanbetaling voldaan",
+        "paymentDetails": "{{amount}} {{currency}} • {{paymentMethod}}"
+      },
+      "helpfulTips": {
+        "title": "Vóór uw aankomst",
+        "items": [
+          "Kom 10–15 minuten vóór uw reservatie",
+          "Neem uw identiteitsbewijs mee ter verificatie",
+          "Neem contact met ons op bij vertraging"
+        ]
+      },
+      "referenceInfo": {
+        "label": "Reserveringsreferentie"
+      },
+      "actions": {
+        "backToHome": "Terug naar home"
+      }
+    },
+    "printPage": {
+      "printButton": "Bevestiging afdrukken"
+    },
+    "reservationsTabs": {
+      "addNew": "Nieuw toevoegen",
+      "overview": "Overzicht",
+      "reservations": "Reserveringen",
+      "tables": "Tafels",
+      "areas": "Gebieden",
+      "payments": "Betalingen",
+      "queries": "Vragen",
+      "policies": "Beleid",
+      "settings": "Instellingen"
     }
   }
 }

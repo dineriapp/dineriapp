@@ -4150,6 +4150,222 @@
     "success": {
       "reservation_can_be_created": "La prenotazione può essere creata con successo",
       "reservation_created": "Prenotazione creata con successo"
+    },
+    "makeAReservation": {
+      "notFoundTitle": "Prenotazione o ristorante non trovato",
+      "reservationTitle": "{ restaurantName } - Prenotazione",
+      "reservationDescription": "Prenotazioni presso { restaurantName }. { bio }",
+      "reservationHeader": {
+        "subtitle": "Prenotazioni",
+        "dropQuery": "Elimina richiesta"
+      },
+      "loading": "Caricamento prenotazione...",
+      "booking": {
+        "loading": "Caricamento...",
+        "checkingAvailability": "Verifica disponibilità...",
+        "makeReservation": "Effettua una prenotazione",
+        "bookTableAt": "Prenota il tuo tavolo al { restaurantName }",
+
+        "notFindingOptionTitle": "Non trovi l'orario o l'opzione desiderata?",
+        "notFindingOptionDesc": "Puoi inviarci il tuo orario preferito o qualsiasi domanda.",
+        "dropReservationQuery": "Elimina richiesta di prenotazione",
+
+        "requiredError": "Compila tutti i campi obbligatori",
+        "timeUnavailable": "Questo orario non è al momento disponibile. Scegline un altro.",
+        "reservationFailed": "Impossibile creare la prenotazione",
+        "reservationRetry": "Impossibile creare la prenotazione. Riprova.",
+        "reservationSuccess": "Prenotazione creata con successo!",
+
+        "date": "Data *",
+        "time": "Orario *",
+        "selectDateFirst": "Seleziona prima la data",
+        "closed": "Chiuso",
+        "selectTime": "Seleziona orario",
+        "restaurantClosed": "Il ristorante è chiuso in questo giorno.",
+        "openFrom": "Aperto dalle { open } alle { close }",
+        "timeSlotUnavailable": "Questo orario non è disponibile",
+
+        "limitedAvailability": "Disponibilità limitata",
+        "limitedAvailabilityDesc": "Alcuni orari potrebbero non essere disponibili in questa data.",
+
+        "partySize": "Numero di persone *",
+        "selectPartySize": "Seleziona numero di persone",
+        "person": "persona",
+        "people": "persone",
+
+        "preferredArea": "Area preferita",
+        "noPreference": "Nessuna preferenza",
+
+        "fullName": "Nome e cognome *",
+        "email": "Indirizzo email *",
+        "phone": "Numero di telefono",
+        "specialRequests": "Richieste speciali",
+        "specialRequestsPlaceholder": "Allergie, restrizioni dietetiche, celebrazioni, ecc.",
+
+        "agreePolicies": "Accetto le condizioni di prenotazione.",
+        "viewPolicies": "Clicca qui per visualizzare le condizioni",
+
+        "reservationSummary": "Riepilogo prenotazione",
+        "yourReservation": "La tua prenotazione",
+        "date2": "Data:",
+        "time2": "Orario:",
+        "guests": "Ospiti:",
+        "preferredAreaLabel": "Area preferita:",
+        "depositRequired": "Caparra richiesta:",
+        "depositNote": "Questa caparra verrà applicata al tuo conto finale ed è rimborsabile secondo la nostra politica di cancellazione.",
+
+        "cancellationPolicies": "Condizioni di cancellazione",
+        "cancelWithin": "Cancella entro { hours } ore per un rimborso del { percent }%",
+
+        "processing": "Elaborazione...",
+        "creatingReservation": "Creazione prenotazione...",
+        "timeSlotUnavailableBtn": "Orario non disponibile",
+        "completeReservation": "Completa prenotazione",
+        "payDeposit": "e paga la caparra",
+
+        "helpText": "Devi apportare modifiche? Contattaci al { phone }.",
+        "resturantdirectly": "il ristorante direttamente"
+      },
+      "dailyCapacity": {
+        "title": "Verifica fattibilità prenotazione",
+        "guests": "• {partySize} ospiti",
+
+        "status": {
+          "available": "Disponibile",
+          "notAvailable": "Non disponibile"
+        },
+
+        "errors": {
+          "title": "Errore caricamento dati capacità",
+          "fetchFailed": "Impossibile caricare i dati sulla capacità",
+          "generic": "Si è verificato un errore"
+        }
+      },
+      "reservationPolicies": {
+        "title": "Condizioni del ristorante",
+        "description": "Queste condizioni vengono mostrate ai clienti durante il processo di prenotazione.",
+
+        "empty": {
+          "title": "Nessuna condizione trovata",
+          "description": "Questo ristorante non ha ancora definito condizioni di prenotazione."
+        },
+
+        "policies": {
+          "cancellation": {
+            "title": "Condizioni di cancellazione",
+            "description": "Definisci le tue regole e tempistiche di cancellazione."
+          },
+          "deposit": {
+            "title": "Condizioni sulla caparra",
+            "description": "Spiega i requisiti relativi alla caparra."
+          },
+          "dining": {
+            "title": "Condizioni di ristorazione",
+            "description": "Imposta le regole per l'esperienza in sala."
+          },
+          "noShow": {
+            "title": "Condizioni per mancata presentazione",
+            "description": "Definisci le conseguenze per prenotazioni non onorate."
+          }
+        },
+
+        "close": "Chiudi"
+      },
+      "reservationDialog": {
+        "title": "Richiesta di prenotazione",
+        "description": "Inserisci i tuoi dati per inviare una richiesta di prenotazione. Ti risponderemo a breve.",
+
+        "fields": {
+          "date": {
+            "label": "Data"
+          },
+          "time": {
+            "label": "Orario",
+            "placeholder": "Seleziona orario"
+          },
+          "name": {
+            "label": "Nome",
+            "placeholder": "Il tuo nome completo"
+          },
+          "email": {
+            "label": "Email",
+            "placeholder": "tua@email.it"
+          },
+          "phone": {
+            "label": "Numero di telefono",
+            "placeholder": "+39 300 000 0000",
+            "optional": "Opzionale"
+          },
+          "message": {
+            "label": "Messaggio",
+            "placeholder": "Raccontaci le tue esigenze..."
+          }
+        },
+
+        "buttons": {
+          "submit": "Invia richiesta",
+          "submitting": "Invio in corso..."
+        },
+
+        "toast": {
+          "success": "La tua richiesta di prenotazione è stata inviata con successo."
+        },
+
+        "errors": {
+          "submitFailed": "Impossibile inviare la richiesta di prenotazione",
+          "generic": "Qualcosa è andato storto"
+        }
+      }
+    },
+    "ReservationSuccess": {
+      "verificationFailed": {
+        "title": "Verifica fallita",
+        "description": "Non siamo riusciti a verificare il tuo pagamento. Contatta l’assistenza."
+      },
+      "successHeader": {
+        "title": "Prenotazione confermata!",
+        "description": "Il tuo tavolo è prenotato e pronto. Non vediamo l’ora di accoglierti!"
+      },
+      "infoCards": {
+        "date": "Data",
+        "time": "Ora",
+        "guests": "Ospiti",
+        "status": "Stato"
+      },
+      "reservationDetails": {
+        "confirmationSent": "Conferma inviata",
+        "sentTo": "Dettagli inviati a {{email}}",
+        "depositPaid": "Caparra pagata",
+        "paymentDetails": "{{amount}} {{currency}} • {{paymentMethod}}"
+      },
+      "helpfulTips": {
+        "title": "Prima del tuo arrivo",
+        "items": [
+          "Presentati 10–15 minuti prima della prenotazione",
+          "Porta un documento d’identità per la verifica",
+          "Contattaci in caso di ritardo"
+        ]
+      },
+      "referenceInfo": {
+        "label": "Riferimento prenotazione"
+      },
+      "actions": {
+        "backToHome": "Torna alla home"
+      }
+    },
+    "printPage": {
+      "printButton": "Stampa conferma"
+    },
+    "reservationsTabs": {
+      "addNew": "Aggiungi nuovo",
+      "overview": "Panoramica",
+      "reservations": "Prenotazioni",
+      "tables": "Tavoli",
+      "areas": "Aree",
+      "payments": "Pagamenti",
+      "queries": "Richieste",
+      "policies": "Politiche",
+      "settings": "Impostazioni"
     }
   }
 }
