@@ -358,7 +358,7 @@ export function AppSidebar() {
                     <Button
                       size="sm"
                       variant="secondary"
-                      className="w-full bg-main-action hover:bg-emerald-700 font-poppins rounded-full h-[38px] text-white text-sm"
+                      className="w-full bg-main-green hover:bg-emerald-700 font-poppins rounded-full h-[38px] text-white text-sm"
                       onClick={() => router.push("/dashboard/create")}
                     >
                       <Plus /> {t("new_restaurant")}
@@ -394,12 +394,12 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="gap-1">
         {navigationGroups[locale]?.map((group) => (
-          <SidebarGroup key={group.label} className="py-0">
+          <SidebarGroup key={group.label} className="py-0 border-b border-black/30 pb-4">
             <SidebarGroupLabel className="!text-[12px] font-semibold uppercase">
               {group.label}
             </SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu className="gap-0">
+              <SidebarMenu className="gap-0.5">
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname === item.href;
@@ -426,20 +426,20 @@ export function AppSidebar() {
                           href={isLocked ? "#" : item.href}
                           onClick={handleClick}
                           className={`
-                                                        flex items-center space-x-2 w-full
-                                                        rounded-md px-2 py-1.5 text-sm transition
+                                                        flex items-center space-x-1 w-full
+                                                        pl-3 pr-2 py-1.5 text-sm rounded-md! transition-all
                                                         ${isLocked
                               ? "cursor-not-allowed opacity-60"
                               : ""
                             }
                                                         ${isActive
-                              ? "bg-gray-100 text-main-action font-medium"
-                              : "hover:bg-main-background font-normal"
+                              ? "bg-main-green text-white font-medium hover:bg-main-green!"
+                              : "hover:bg-main-green! font-normal"
                             }
                                                     `}
                         >
-                          <Icon className="h-5 w-5 group-hover/btn:!text-main-action" />
-                          <span className="group-hover/btn:!text-main-action">
+                          <Icon className="h-6 w-6 group-hover/btn:!text-white transition-all" />
+                          <span className="group-hover/btn:!text-white transition-all">
                             {item.label}
                           </span>
                         </Link>
