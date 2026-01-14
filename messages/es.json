@@ -4371,5 +4371,23 @@
     "queries": "Consultas",
     "policies": "Políticas",
     "settings": "Configuración"
+  },
+  "reservationStatus": {
+    "PENDING": "Pendiente",
+    "CONFIRMED": "Confirmada",
+    "SEATED": "Sentados",
+    "COMPLETED": "Completada",
+    "CANCELLED": "Cancelada",
+    "NO_SHOW": "No se presentó"
+  },
+  "reservationPaymentStatus": {
+    "PENDING": "Pendiente",
+    "PAID": "Pagado",
+    "FAILED": "Fallido",
+    "REFUNDED": "Reembolsado"
+  },
+  "paymentMethod": {
+    "card": "Tarjeta",
+    "cash": "Efectivo"
   }
 }

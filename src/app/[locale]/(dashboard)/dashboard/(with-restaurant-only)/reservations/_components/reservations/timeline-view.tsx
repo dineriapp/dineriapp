@@ -1,15 +1,26 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
+import { Locale } from "@/i18n/routing"
 import { ReservationUp } from "@/lib/types"
+import { useRestaurantStore } from "@/stores/restaurant-store"
 import { format } from "date-fns"
+import { de, enUS, es, fr, it, nl } from "date-fns/locale"
 import { Columns, Loader, Rows } from "lucide-react"
+import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 import HorizontalTimeline from "./horizontal-timeline"
 import VerticalTimeline from "./vertical-timeline"
-import { useRestaurantStore } from "@/stores/restaurant-store"
-import { useTranslations } from "next-intl"
 type TimelineOrientation = 'horizontal' | 'vertical';
+
+const locales = {
+    de: de,
+    en: enUS,
+    es: es,
+    fr: fr,
+    it: it,
+    nl: nl,
+};
 
 interface ReservationTimelineProps {
     reservations: ReservationUp[]
@@ -20,6 +31,8 @@ interface ReservationTimelineProps {
 export function ReservationTimeline({ reservations, selectedDate, isLoading }: ReservationTimelineProps) {
     const [orientation, setOrientation] = useState<TimelineOrientation>('horizontal');
     const t = useTranslations("reservationTimeline")
+
+    const locale = useLocale() as Locale
     const { selectedRestaurant } = useRestaurantStore()
     if (!selectedDate) {
         return (
@@ -68,7 +81,7 @@ export function ReservationTimeline({ reservations, selectedDate, isLoading }: R
                         <div className="sticky top-0 z-10 ">
                             <div className="py-3">
                                 <h3 className="font-semibold text-xl text-slate-900">
-                                    {format(selectedDate, "EEEE, MMMM d, yyyy")}
+                                    {format(selectedDate, "EEEE, MMMM d, yyyy", { locale: locales[locale as Locale] ?? enUS })}
                                 </h3>
                                 <p className="text-sm text-slate-600 mt-1">
                                     {t("header.reservationsCount", { count: reservations.length })}

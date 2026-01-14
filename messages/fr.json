@@ -4370,5 +4370,23 @@
     "queries": "Demandes",
     "policies": "Politiques",
     "settings": "Paramètres"
+  },
+  "reservationStatus": {
+    "PENDING": "En attente",
+    "CONFIRMED": "Confirmée",
+    "SEATED": "Installés",
+    "COMPLETED": "Terminée",
+    "CANCELLED": "Annulée",
+    "NO_SHOW": "Ne s’est pas présenté"
+  },
+  "reservationPaymentStatus": {
+    "PENDING": "En attente",
+    "PAID": "Payé",
+    "FAILED": "Échoué",
+    "REFUNDED": "Remboursé"
+  },
+  "paymentMethod": {
+    "card": "Carte",
+    "cash": "Espèces"
   }
 }

@@ -4405,5 +4405,23 @@
     "queries": "Queries",
     "policies": "Policies",
     "settings": "Settings"
+  },
+  "reservationStatus": {
+    "PENDING": "Pending",
+    "CONFIRMED": "Confirmed",
+    "SEATED": "Seated",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled",
+    "NO_SHOW": "No-show"
+  },
+  "reservationPaymentStatus": {
+    "PENDING": "Pending",
+    "PAID": "Paid",
+    "FAILED": "Failed",
+    "REFUNDED": "Refunded"
+  },
+  "paymentMethod": {
+    "card": "Card",
+    "cash": "Cash"
   }
 }

@@ -29,11 +29,11 @@ import {
     ArrowDownRight,
     ArrowUpRight,
     Banknote,
-    DollarSign,
     Download,
+    EuroIcon,
     Filter,
     ReceiptText,
-    RefreshCcw,
+    RefreshCcw
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
@@ -127,6 +127,9 @@ export default function PaymentsPage() {
     const [search, setSearch] = useState("")
     const [statusFilter, setStatusFilter] = useState("ALL")
     const t = useTranslations("reservationPaymentsPage")
+    const paymentStatusTranslation = useTranslations("reservationPaymentStatus")
+    const paymentMethodeTranslation = useTranslations("paymentMethod")
+
     const { selectedRestaurant: restaurant } = useRestaurantStore()
     const restaurantId = restaurant?.id
 
@@ -246,7 +249,7 @@ export default function PaymentsPage() {
                 <StatCard
                     title={t("stats.thisMonth")}
                     value={`€${stats.thisMonth.toFixed(2)}`}
-                    icon={<DollarSign className="h-5 w-5 text-gray-400" />}
+                    icon={<EuroIcon className="h-5 w-5 text-gray-400" />}
                     trend={growth}
                     description={t("stats.vsLastMonth")}
                 />
@@ -376,11 +379,11 @@ export default function PaymentsPage() {
                                             variant="outline"
                                             className={getStatusBadgeVariant(payment.status)}
                                         >
-                                            {payment.status}
+                                            {paymentStatusTranslation(payment.status)}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="capitalize">
-                                        {payment.payment_method || 'N/A'}
+                                        {payment.payment_method ? paymentMethodeTranslation(payment.payment_method) : 'N/A'}
                                     </TableCell>
                                     <TableCell>
                                         {payment.paid_at ? formatDateTime(payment.paid_at, restaurant.timezone || undefined) : "-"}

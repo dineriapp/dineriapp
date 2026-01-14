@@ -4367,5 +4367,23 @@
     "queries": "Vragen",
     "policies": "Beleid",
     "settings": "Instellingen"
+  },
+  "reservationStatus": {
+    "PENDING": "In afwachting",
+    "CONFIRMED": "Bevestigd",
+    "SEATED": "Gezeten",
+    "COMPLETED": "Voltooid",
+    "CANCELLED": "Geannuleerd",
+    "NO_SHOW": "Niet komen opdagen"
+  },
+  "reservationPaymentStatus": {
+    "PENDING": "In afwachting",
+    "PAID": "Betaald",
+    "FAILED": "Mislukt",
+    "REFUNDED": "Terugbetaald"
+  },
+  "paymentMethod": {
+    "card": "Kaart",
+    "cash": "Contant"
   }
 }

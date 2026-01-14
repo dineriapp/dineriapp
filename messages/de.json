@@ -4364,5 +4364,23 @@
     "queries": "Anfragen",
     "policies": "Richtlinien",
     "settings": "Einstellungen"
+  },
+  "reservationStatus": {
+    "PENDING": "Ausstehend",
+    "CONFIRMED": "Bestätigt",
+    "SEATED": "Platziert",
+    "COMPLETED": "Abgeschlossen",
+    "CANCELLED": "Storniert",
+    "NO_SHOW": "Nicht erschienen"
+  },
+  "reservationPaymentStatus": {
+    "PENDING": "Ausstehend",
+    "PAID": "Bezahlt",
+    "FAILED": "Fehlgeschlagen",
+    "REFUNDED": "Erstattet"
+  },
+  "paymentMethod": {
+    "card": "Karte",
+    "cash": "Bar"
   }
 }

@@ -1,5 +1,5 @@
 "use client";
-import { AlertCircle, Calendar, Clock, CreditCard, DollarSign, MapPin, Users } from "lucide-react";
+import { AlertCircle, Calendar, Clock, CreditCard, EuroIcon, MapPin, Users } from "lucide-react";
 
 import LoadingUI from "@/components/loading-ui";
 import { Card } from "@/components/ui/card";
@@ -15,14 +15,14 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useAreas } from "@/lib/area-queries";
+import { getUTCFromLocalDateTime } from "@/lib/date-utils";
 import { OpeningHoursData, RestaurantWithCount } from "@/types";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { DynamicRule, OverridesSettings, SettingsState, TimeSlotOverride } from "../settings/types";
 import DailyCapacityWidget from "./daily-capacity-widget";
-import { toast } from "sonner";
-import { getUTCFromLocalDateTime } from "@/lib/date-utils";
 import ReservationStatusBanner from "./reservation-status-banner";
-import { useTranslations } from "next-intl";
 
 // Format time slots for dropdown (30-min intervals)
 const fmt = new Intl.DateTimeFormat("en-US", {
@@ -753,7 +753,7 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                                         onChange={(e) => setPaymentMethod(e.target.value as "cash")}
                                         className="text-blue-600"
                                     />
-                                    <DollarSign className="h-5 w-5 text-gray-600" />
+                                    <EuroIcon className="h-5 w-5 text-gray-600" />
                                     <div className="flex-1">
                                         <div className="font-medium">
                                             {t("paymentMethod.cash.title")}

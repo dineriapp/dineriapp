@@ -47,6 +47,7 @@ const HorizontalTimeline = ({
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const t = useTranslations("reservationTimeline.Timeline")
+    const statusTrans = useTranslations("reservationStatus");
 
     // Generate time slots for 24 hours in 30-minute intervals using the specified timezone
     const timeSlots = useMemo(() => {
@@ -261,7 +262,7 @@ ${reservation.preferred_area ? `${t("tooltip.preferredArea")} ${reservation.pref
                                                                                 reservation.status === 'COMPLETED' ? 'bg-gray-400 text-black' :
                                                                                     'bg-red-400 text-white'}`}
                                                             >
-                                                                {reservation.status.toLowerCase()}
+                                                                {statusTrans(reservation.status)}
                                                             </div>
                                                             {reservation.payment ? (
                                                                 <div

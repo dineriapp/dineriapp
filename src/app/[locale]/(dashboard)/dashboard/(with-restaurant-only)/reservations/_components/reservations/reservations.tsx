@@ -16,13 +16,13 @@ import {
     CalendarIcon,
     List
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { DateRange } from "react-day-picker"
-import { FcTimeline } from "react-icons/fc"
+import { MdOutlineViewTimeline } from "react-icons/md"
 import { toast } from "sonner"
 import { ReservationCard } from "./reservation-card"
 import { ReservationTimeline } from "./timeline-view"
-import { useTranslations } from "next-intl"
 
 const ReservationCardSkeleton = () => (
     <Card className="rounded-xl border border-border/60 bg-white animate-pulse">
@@ -66,7 +66,7 @@ export default function ReservationsPage() {
 
     const views = [
         { key: "list", label: t("view.list"), icon: <List className="w-4 h-4" /> },
-        { key: "timeline", label: t("view.timeline"), icon: <FcTimeline className="w-4 h-4" /> },
+        { key: "timeline", label: t("view.timeline"), icon: <MdOutlineViewTimeline className="w-4 h-4" /> },
     ]
 
     const { selectedRestaurant: restaurant } = useRestaurantStore()

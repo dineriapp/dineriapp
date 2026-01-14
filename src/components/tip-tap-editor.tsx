@@ -81,7 +81,7 @@ const TipTapEditor = ({
                         <TipTapMenuBar editor={editor} />
                     </div>
 
-                    <div className="px-4 py-3 min-h-[320px]">
+                    <div className="px-4 py-3 min-h-[120px]">
                         <EditorContent editor={editor} />
                     </div>
                 </>

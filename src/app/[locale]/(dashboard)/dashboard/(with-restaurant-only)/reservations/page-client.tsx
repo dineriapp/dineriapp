@@ -127,28 +127,28 @@
 
 import {
   Calendar,
-  DollarSign,
+  EuroIcon,
   LayoutDashboard,
   Map,
   MessageSquare,
   Notebook,
   Plus,
   Settings,
-  Users,
+  Users
 } from "lucide-react";
-import { useCallback, useMemo } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useMemo } from "react";
 
 import AreasPage from "./_components/areas";
 import OverviewPage from "./_components/overview/overview-page";
 import PaymentsPage from "./_components/payments";
+import PoliciesTab from "./_components/policies/policies-tab";
 import QuereisPage from "./_components/queries/queries-page";
 import NewReservationPage from "./_components/reservations/new-reservation-page";
 import Reservations from "./_components/reservations/reservations";
 import SettingsPage from "./_components/settings";
 import TablesPage from "./_components/tables";
-import PoliciesTab from "./_components/policies/policies-tab";
 
 const DEFAULT_TAB = "reservations";
 
@@ -202,7 +202,7 @@ export default function ReservationsPage() {
     {
       key: "payments",
       label: t("payments"),
-      icon: <DollarSign className="w-4 h-4" />,
+      icon: <EuroIcon className="w-4 h-4" />,
     },
     {
       key: "queries",
@@ -254,20 +254,17 @@ export default function ReservationsPage() {
             key={tab.key}
             onClick={() => setTab(tab.key)}
             className={`flex border-b-2 border-transparent items-center gap-2 px-6 py-3 cursor-pointer text-sm font-medium transition-all whitespace-nowrap
-              ${
-                activeTab === tab.key && tab.key !== "add-new"
-                  ? "!border-main-green text-main-green bg-gray-50"
-                  : "text-gray-600 hover:text-main-green"
+              ${activeTab === tab.key && tab.key !== "add-new"
+                ? "!border-main-green text-main-green bg-gray-50"
+                : "text-gray-600 hover:text-main-green"
               }
-              ${
-                tab.key === "add-new"
-                  ? "bg-main-green text-white hover:text-white"
-                  : ""
+              ${tab.key === "add-new"
+                ? "bg-main-green text-white hover:text-white"
+                : ""
               }
-              ${
-                activeTab === "add-new" && tab.key === "add-new"
-                  ? "!border-white"
-                  : ""
+              ${activeTab === "add-new" && tab.key === "add-new"
+                ? "!border-white"
+                : ""
               }
             `}
           >
