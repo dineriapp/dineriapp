@@ -29,9 +29,9 @@ export function ReservationHeader({
       style={{
         backgroundColor: stylesData.headerBg,
       }}
-      className="sticky top-0 z-40 shadow-sm"
+      className="sticky top-0 z-40 shadow-sm w-full"
     >
-      <div className="container mx-auto px-4">
+      <div className="w-full px-4 max-w-7xl mx-auto">
         <div className="flex items-center justify-between h-16">
           {/* Left side - Restaurant info */}
           <div className="flex items-center space-x-4">

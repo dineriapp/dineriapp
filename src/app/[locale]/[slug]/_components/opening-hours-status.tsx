@@ -27,6 +27,7 @@ export function OpeningHoursStatus({
     onClick,
 }: OpeningHoursStatusProps) {
     const t = useTranslations("opening_hours_status")
+    const s = useTranslations("time")
     const [status, setStatus] = useState<ReturnType<typeof getRestaurantStatusWithClientView> | null>(null)
     useEffect(() => {
         const clientTz = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -81,14 +82,14 @@ export function OpeningHoursStatus({
     }[statusType]
 
     const nextChange = status.isOpen
-        ? t("until", { time: status.closingTime })
-        : status.timeUntilOpen
-            ?
-            status.nextOpeningDay ?
-                t("opens_in_with_day", { time: status.timeUntilOpen, day: status.nextOpeningDay })
-                :
-                t("opens_in", { time: status.timeUntilOpen })
+        ? s("closes_at", { time: status.closingTime })
+        : status.openingTime
+            ? status.nextOpeningDay
+                ? s("opens_at_with_day", { day: status.nextOpeningDay, time: status.openingTime })
+                : s("opens_at", { time: status.openingTime })
             : t("closed_fallback")
+
+
 
     return pop ? (
         <div className="flex items-center justify-center gap-2">

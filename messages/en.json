@@ -4423,5 +4423,10 @@
   "paymentMethod": {
     "card": "Card",
     "cash": "Cash"
+  },
+  "time": {
+    "closes_at": "closes at {time}",
+    "opens_at": "opens at {time}",
+    "opens_at_with_day": "opens {day} at {time}"
   }
 }

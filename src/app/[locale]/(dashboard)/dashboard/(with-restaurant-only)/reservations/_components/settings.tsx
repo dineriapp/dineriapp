@@ -6,15 +6,29 @@ import UnsavedChangesUi from "@/components/unsaved-changes-ui";
 import { useReservationSettings, useSaveReservationSettings } from "@/lib/reservation-settings-queries";
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils";
 import { useRestaurantStore } from "@/stores/restaurant-store";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import DepositSystem from "./settings/deposit-system";
 import { NotificationSettingsComponent } from "./settings/notification-settings";
+import ReservationControlSettings from "./settings/reservation-control";
 import RestaurantSettingsManager from "./settings/restaurent-settings";
 import TimeSlotOverrides from "./settings/time-slot-overrides";
 import { SettingsState } from "./settings/types";
-import ReservationControlSettings from "./settings/reservation-control";
-import { useTranslations } from "next-intl";
+
+const deepMerge = <T extends Record<string, any>>(base: T, incoming: Partial<T>): T => {
+    const out: any = { ...base };
+    for (const key of Object.keys(incoming || {})) {
+        const v = (incoming as any)[key];
+        if (v && typeof v === "object" && !Array.isArray(v)) {
+            out[key] = deepMerge(base[key] ?? {}, v);
+        } else if (v !== undefined) {
+            out[key] = v;
+        }
+    }
+    return out;
+};
+
 
 const default_data: SettingsState = {
     overrides_settings: {
@@ -36,10 +50,12 @@ const default_data: SettingsState = {
     },
     notification_settings: {
         notifications_enabled: false,
+
         email_confirmation_enabled: true,
         email_24h_reminder_enabled: true,
         email_cancellation_enabled: true,
         sms_2h_reminder_enabled: false,
+
         reminder_time_24h: "10:00:00",
         email_from_name: "",
         email_reply_to: "",
@@ -51,6 +67,27 @@ const default_data: SettingsState = {
             "Reminder: Your reservation at {{restaurant_name}} today at {{time}} for {{party_size}}. Reply CANCEL to cancel.",
         resend_api_key: "",
         test_mode: true,
+
+        // management
+        owner_notifications_enabled: false,
+        owner_emails: [],
+        owner_notification_timing: "immediate",
+        owner_notification_times: [],
+        owner_notify_new_bookings: true,
+        owner_notify_cancellations: true,
+
+        // reviews
+        review_email: {
+            enabled: false,
+            delay_hours: 2,
+            email_subject: "Thank you for dining with us! Share your experience",
+            email_body:
+                "Dear {{customer_name}},\n\nThank you for choosing {{restaurant_name}} for your dining experience. We hope you enjoyed your visit!\n\nWe would greatly appreciate if you could take a moment to share your experience with others by leaving a review.\n\n{{review_links}}\n\nBest regards,\n{{restaurant_name}} Team",
+            google_review_link: "",
+            yelp_review_link: "",
+            tripadvisor_review_link: "",
+            other_review_links: [],
+        },
     },
     deposit_settings: {
         depositSystemEnabled: false,
@@ -115,14 +152,16 @@ export default function SettingsPage() {
 
     // 🔸 Sync state with fetched settings
     useEffect(() => {
-        if (initialSettings) {
-            // if it's empty object {}, fallback to your default_data
-            if (Object.keys(initialSettings).length === 0) {
-                setSettings(default_data);
-            } else {
-                setSettings(initialSettings);
-            }
+        if (!initialSettings) return;
+
+        if (Object.keys(initialSettings).length === 0) {
+            setSettings(default_data);
+            return;
         }
+
+        // ✅ Merge defaults with incoming JSON
+        const merged = deepMerge(default_data, initialSettings as any);
+        setSettings(merged);
     }, [initialSettings]);
 
 

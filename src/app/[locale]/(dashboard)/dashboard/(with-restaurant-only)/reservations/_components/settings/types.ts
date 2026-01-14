@@ -23,22 +23,57 @@ export interface RestaurantSettings {
     overbooking_percentage: number;
 }
 
+export type OwnerNotificationTiming = "immediate" | "daily" | "custom";
+
+export interface ReviewLinkInput {
+    id: string;
+    name: string;
+    url: string;
+}
+
+export interface ReviewEmailSettings {
+    enabled: boolean;
+    delay_hours: number;
+    email_subject: string;
+    email_body: string;
+    google_review_link: string;
+    yelp_review_link: string;
+    tripadvisor_review_link: string;
+    other_review_links: ReviewLinkInput[];
+}
+
 export interface NotificationSettings {
     notifications_enabled: boolean;
+
     email_confirmation_enabled: boolean;
     email_24h_reminder_enabled: boolean;
     email_cancellation_enabled: boolean;
     sms_2h_reminder_enabled: boolean;
+
     reminder_time_24h: string;
     email_from_name: string;
     email_reply_to: string;
+
     email_confirmation_subject: string;
     email_confirmation_body: string;
+
     email_reminder_subject: string;
     email_reminder_body: string;
+
     sms_reminder_template: string;
     resend_api_key: string;
     test_mode: boolean;
+
+    // Management notifications (extra)
+    owner_notifications_enabled: boolean;
+    owner_emails: string[];
+    owner_notification_timing: OwnerNotificationTiming;
+    owner_notification_times: string[];
+    owner_notify_new_bookings: boolean;
+    owner_notify_cancellations: boolean;
+
+    // Review request emails (extra)
+    review_email: ReviewEmailSettings;
 }
 
 export type DepositType = "per-person" | "flat-rate";

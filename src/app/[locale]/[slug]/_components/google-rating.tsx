@@ -43,8 +43,8 @@ export function GoogleRating({ info, color, className, iconsColor, underline = f
                     textDecorationColor: color
                 }}
                 className="">
-                {info.user_ratings_total || 0}{" "}
-                ( {info.user_ratings_total === 1
+
+                ({info.user_ratings_total || 0}{" "}{info.user_ratings_total === 1
                     ? (
                         locale === "en" ? "review" :
                             locale === "es" ? "reseña" :
@@ -63,7 +63,7 @@ export function GoogleRating({ info, color, className, iconsColor, underline = f
                                             locale === "nl" ? "beoordelingen" :
                                                 "reviews"
                     )
-                } )
+                })
             </span>
         </div>
     );

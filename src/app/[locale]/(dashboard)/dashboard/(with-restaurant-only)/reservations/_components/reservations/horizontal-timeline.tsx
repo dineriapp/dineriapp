@@ -2,7 +2,7 @@
 import { ReservationUp } from '@/lib/types';
 import { Check, Clock, UserCircle, WalletMinimal } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useMemo, useRef, useState, useCallback } from 'react';
+import { useMemo, useRef, useState, useCallback, useEffect } from 'react';
 
 const HOUR_WIDTH = 400; // Increased for better visibility
 const TABLE_LABEL_WIDTH = 200; // Increased for better visibility
@@ -48,6 +48,8 @@ const HorizontalTimeline = ({
     const [scrollLeft, setScrollLeft] = useState(0);
     const t = useTranslations("reservationTimeline.Timeline")
     const statusTrans = useTranslations("reservationStatus");
+    const wheelTargetRef = useRef<number | null>(null);
+    const wheelRafRef = useRef<number | null>(null);
 
     // Generate time slots for 24 hours in 30-minute intervals using the specified timezone
     const timeSlots = useMemo(() => {
@@ -147,6 +149,73 @@ const HorizontalTimeline = ({
         const walk = (x - startX) * 2; // Scroll multiplier
         timelineRef.current.scrollLeft = scrollLeft - walk;
     }, [isDragging, startX, scrollLeft]);
+
+    useEffect(() => {
+        const el = timelineRef.current;
+        if (!el) return;
+
+        const animate = () => {
+            if (!el || wheelTargetRef.current === null) {
+                wheelRafRef.current = null;
+                return;
+            }
+
+            const target = wheelTargetRef.current;
+            const current = el.scrollLeft;
+
+            const diff = target - current;
+
+            // stop when close enough
+            if (Math.abs(diff) < 0.5) {
+                el.scrollLeft = target;
+                wheelTargetRef.current = null;
+                wheelRafRef.current = null;
+                return;
+            }
+
+            // easing: move a fraction each frame (lower = smoother, higher = faster)
+            el.scrollLeft = current + diff * 0.18;
+
+            wheelRafRef.current = requestAnimationFrame(animate);
+        };
+
+        const onWheel = (e: WheelEvent) => {
+            // allow trackpad horizontal / shift+wheel default behavior
+            if (e.shiftKey || Math.abs(e.deltaX) > 0) return;
+
+            e.preventDefault();
+
+            // initialize target if needed
+            if (wheelTargetRef.current === null) {
+                wheelTargetRef.current = el.scrollLeft;
+            }
+
+            // accumulate wheel input into a target (multiplier controls speed)
+            wheelTargetRef.current += e.deltaY * 1.2;
+
+            // clamp (optional but good)
+            wheelTargetRef.current = Math.max(
+                0,
+                Math.min(wheelTargetRef.current, el.scrollWidth - el.clientWidth)
+            );
+
+            // start animation loop if not already running
+            if (wheelRafRef.current === null) {
+                wheelRafRef.current = requestAnimationFrame(animate);
+            }
+        };
+
+        el.addEventListener("wheel", onWheel, { passive: false });
+
+        return () => {
+            el.removeEventListener("wheel", onWheel as EventListener);
+            if (wheelRafRef.current !== null) cancelAnimationFrame(wheelRafRef.current);
+            wheelRafRef.current = null;
+            wheelTargetRef.current = null;
+        };
+    }, []);
+
+
 
     return (
         <>

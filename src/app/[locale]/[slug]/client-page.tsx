@@ -128,7 +128,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
     const getBackgroundStyle = () => {
         if (restaurant.bg_type === "image" && restaurant.bg_image_url) {
             return {
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${restaurant.bg_image_url})`,
+                backgroundImage: `url(${restaurant.bg_image_url})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }

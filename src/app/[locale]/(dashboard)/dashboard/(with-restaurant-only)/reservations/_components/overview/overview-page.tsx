@@ -16,8 +16,7 @@ import DayCapacity from "./day-capacity"
 import { useTranslations } from "next-intl"
 
 const OverviewPage = () => {
-    const defaultDate = new Date("2025-11-22")
-    const [date, setDate] = useState(defaultDate)
+    const [date, setDate] = useState(() => new Date())
     const [open, setOpen] = useState(false)
     const { selectedRestaurant: restaurant } = useRestaurantStore()
     const t = useTranslations("overviewPage")

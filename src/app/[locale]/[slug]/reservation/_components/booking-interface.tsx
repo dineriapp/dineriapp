@@ -74,14 +74,14 @@ const BookingInterface = ({
     return restaurant.opening_hours
       ? (restaurant.opening_hours as OpeningHoursData)
       : {
-          friday: { open: "", close: "", closed: true },
-          monday: { open: "08:00 AM", close: "04:30 PM", closed: false },
-          sunday: { open: "09:00 AM", close: "08:00 PM", closed: false },
-          tuesday: { open: "06:00 AM", close: "09:00 PM", closed: false },
-          saturday: { open: "06:00 AM", close: "07:00 PM", closed: false },
-          thursday: { open: "06:00 AM", close: "06:00 PM", closed: false },
-          wednesday: { open: "", close: "", closed: true },
-        };
+        friday: { open: "", close: "", closed: true },
+        monday: { open: "08:00 AM", close: "04:30 PM", closed: false },
+        sunday: { open: "09:00 AM", close: "08:00 PM", closed: false },
+        tuesday: { open: "06:00 AM", close: "09:00 PM", closed: false },
+        saturday: { open: "06:00 AM", close: "07:00 PM", closed: false },
+        thursday: { open: "06:00 AM", close: "06:00 PM", closed: false },
+        wednesday: { open: "", close: "", closed: true },
+      };
   }, [restaurant.opening_hours]);
 
   // --- State ---
@@ -389,7 +389,7 @@ const BookingInterface = ({
   if (!restaurant || isLoading) return <LoadingUI text={t("loading")} />;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-5 w-full relative">
+    <div className="min-h-screen bg-gray-50 py-8 w-full relative">
       <div className="max-w-7xl w-full mx-auto">
         <div className="max-w-6xl mx-auto">
           <form
@@ -512,8 +512,8 @@ const BookingInterface = ({
                                 !date
                                   ? t("selectDateFirst")
                                   : openTimes.closed
-                                  ? t("closed")
-                                  : t("selectTime")
+                                    ? t("closed")
+                                    : t("selectTime")
                               }
                             />
                           </SelectTrigger>
@@ -878,31 +878,31 @@ const BookingInterface = ({
                     <>
                       {settings?.deposit_settings?.cancellationPolicies
                         ?.length > 0 && (
-                        <div className="pt-4 border-t">
-                          <h4 className="font-semibold text-gray-900 mb-3">
-                            {t("cancellationPolicies")}
-                          </h4>
-                          <div className="space-y-2 text-sm text-gray-600">
-                            {settings.deposit_settings.cancellationPolicies
-                              .filter((policy: any) => policy.active)
-                              .map((policy: any) => (
-                                <div
-                                  key={`${Math.random()}-${Math.random()}`}
-                                  className="flex items-start gap-2"
-                                >
-                                  <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <div className="pt-4 border-t">
+                            <h4 className="font-semibold text-gray-900 mb-3">
+                              {t("cancellationPolicies")}
+                            </h4>
+                            <div className="space-y-2 text-sm text-gray-600">
+                              {settings.deposit_settings.cancellationPolicies
+                                .filter((policy: any) => policy.active)
+                                .map((policy: any) => (
+                                  <div
+                                    key={`${Math.random()}-${Math.random()}`}
+                                    className="flex items-start gap-2"
+                                  >
+                                    <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
 
-                                  {t("cancelWithin", {
-                                    hours: policy.hoursBefore,
-                                    percent: policy.refundPercentage,
-                                  })}
-                                  {/* Cancel within {policy.hoursBefore} hours for{" "}
+                                    {t("cancelWithin", {
+                                      hours: policy.hoursBefore,
+                                      percent: policy.refundPercentage,
+                                    })}
+                                    {/* Cancel within {policy.hoursBefore} hours for{" "}
                                   {policy.refundPercentage}% refund */}
-                                </div>
-                              ))}
+                                  </div>
+                                ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
                     </>
                   )}
                   {/* Submit Button  */}
@@ -932,8 +932,7 @@ const BookingInterface = ({
                     ) : isTimeBlocked ? (
                       t("timeSlotUnavailableBtn")
                     ) : (
-                      `${t("completeReservation")} ${
-                        displayDepositAmount > 0 ? t("payDeposit") : ""
+                      `${t("completeReservation")} ${displayDepositAmount > 0 ? t("payDeposit") : ""
                       }`
                     )}
                   </button>
@@ -963,27 +962,23 @@ function getRuleDescription(rule: DynamicRule): string {
 
   switch (rule.ruleType) {
     case "special-date":
-      return `Special date rate: ${
-        rule.depositType === "per-person"
+      return `Special date rate: ${rule.depositType === "per-person"
           ? `€${amount} per person`
           : `€${amount} flat rate`
-      }`;
+        }`;
 
     case "time-slot":
-      return `Time slot rate (${rule.startTime}-${rule.endTime}): ${
-        rule.depositType === "per-person"
+      return `Time slot rate (${rule.startTime}-${rule.endTime}): ${rule.depositType === "per-person"
           ? `€${amount} per person`
           : `€${amount} flat rate`
-      }`;
+        }`;
 
     case "party-size":
-      return `Party size rate (${rule.minPartySize}-${
-        rule.maxPartySize
-      } people): ${
-        rule.depositType === "per-person"
+      return `Party size rate (${rule.minPartySize}-${rule.maxPartySize
+        } people): ${rule.depositType === "per-person"
           ? `€${amount} per person`
           : `€${amount} flat rate`
-      }`;
+        }`;
 
     case "day-of-week":
       const daysMap: { [key: string]: string } = {
@@ -1000,18 +995,16 @@ function getRuleDescription(rule: DynamicRule): string {
           ?.split(",")
           .map((d) => daysMap[d.trim()])
           .join(", ") || "";
-      return `${dayNames} rate: ${
-        rule.depositType === "per-person"
+      return `${dayNames} rate: ${rule.depositType === "per-person"
           ? `€${amount} per person`
           : `€${amount} flat rate`
-      }`;
+        }`;
 
     default:
-      return `${
-        rule.depositType === "per-person"
+      return `${rule.depositType === "per-person"
           ? `€${amount} per person`
           : `€${amount} flat rate`
-      }`;
+        }`;
   }
 }
 
