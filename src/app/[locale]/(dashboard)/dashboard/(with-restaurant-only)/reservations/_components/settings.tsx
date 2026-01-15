@@ -9,11 +9,11 @@ import { useRestaurantStore } from "@/stores/restaurant-store";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import DepositSystem from "./settings/deposit-system";
+// import DepositSystem from "./settings/deposit-system";
 import { NotificationSettingsComponent } from "./settings/notification-settings";
-import ReservationControlSettings from "./settings/reservation-control";
-import RestaurantSettingsManager from "./settings/restaurent-settings";
-import TimeSlotOverrides from "./settings/time-slot-overrides";
+// import ReservationControlSettings from "./settings/reservation-control";
+// import RestaurantSettingsManager from "./settings/restaurent-settings";
+// import TimeSlotOverrides from "./settings/time-slot-overrides";
 import { SettingsState } from "./settings/types";
 
 const deepMerge = <T extends Record<string, any>>(base: T, incoming: Partial<T>): T => {
@@ -49,24 +49,30 @@ const default_data: SettingsState = {
         custom_message_for_customers: "",
     },
     notification_settings: {
+        // configration 
         notifications_enabled: false,
+        email_from_name: "",
+        email_reply_to: "",
+        sendgrid_api_key: "",
+        email_test_to: "",
+        test_mode_passed: false,
+
+        // templates
+        email_confirmation_subject: "Your reservation at {{restaurant_name}}",
+        email_confirmation_body: `Hi {{guest_name}},\n\nThis confirms your reservation for {{party_size}} on {{date}} at {{time}}.\n\nWe look forward to seeing you!\n\nNeed to cancel? Visit your confirmation link.\n\n{{restaurant_name}}\n{{restaurant_contact}}`,
+        email_reminder_subject: "Reminder: Your reservation tomorrow at {{restaurant_name}}",
+        email_reminder_body: `Hi {{guest_name}},\n\nThis is a friendly reminder about your reservation tomorrow:\n\nParty size: {{party_size}}\nDate: {{date}}\nTime: {{time}}\n\nWe look forward to seeing you!\n\n{{restaurant_name}}\n{{restaurant_contact}}`,
+        email_cancellation_subject: "Your reservation at {{restaurant_name}} has been cancelled",
+        email_cancellation_body: `Hi {{guest_name}},\n\nWe’re sorry to inform you that your reservation at {{restaurant_name}} has been cancelled.\n\nIf you have any questions or need assistance, please contact us.\n\n{{restaurant_name}}\n{{restaurant_contact}}`,
+
 
         email_confirmation_enabled: true,
         email_24h_reminder_enabled: true,
         email_cancellation_enabled: true,
         sms_2h_reminder_enabled: false,
-
         reminder_time_24h: "10:00:00",
-        email_from_name: "",
-        email_reply_to: "",
-        email_confirmation_subject: "Your reservation at {{restaurant_name}}",
-        email_confirmation_body: `Hi {{guest_name}},\n\nThis confirms your reservation for {{party_size}} on {{date}} at {{time}}.\n\nWe look forward to seeing you!\n\nNeed to cancel? Visit your confirmation link.\n\n{{restaurant_name}}\n{{restaurant_contact}}`,
-        email_reminder_subject: "Reminder: Your reservation tomorrow at {{restaurant_name}}",
-        email_reminder_body: `Hi {{guest_name}},\n\nThis is a friendly reminder about your reservation tomorrow:\n\nParty size: {{party_size}}\nDate: {{date}}\nTime: {{time}}\n\nWe look forward to seeing you!\n\n{{restaurant_name}}\n{{restaurant_contact}}`,
         sms_reminder_template:
             "Reminder: Your reservation at {{restaurant_name}} today at {{time}} for {{party_size}}. Reply CANCEL to cancel.",
-        resend_api_key: "",
-        test_mode: true,
 
         // management
         owner_notifications_enabled: false,
@@ -75,19 +81,6 @@ const default_data: SettingsState = {
         owner_notification_times: [],
         owner_notify_new_bookings: true,
         owner_notify_cancellations: true,
-
-        // reviews
-        review_email: {
-            enabled: false,
-            delay_hours: 2,
-            email_subject: "Thank you for dining with us! Share your experience",
-            email_body:
-                "Dear {{customer_name}},\n\nThank you for choosing {{restaurant_name}} for your dining experience. We hope you enjoyed your visit!\n\nWe would greatly appreciate if you could take a moment to share your experience with others by leaving a review.\n\n{{review_links}}\n\nBest regards,\n{{restaurant_name}} Team",
-            google_review_link: "",
-            yelp_review_link: "",
-            tripadvisor_review_link: "",
-            other_review_links: [],
-        },
     },
     deposit_settings: {
         depositSystemEnabled: false,
@@ -181,26 +174,26 @@ export default function SettingsPage() {
             </div>
             <div className="space-y-3">
                 {/* NEW SECTION */}
-                <ReservationControlSettings
+                {/* <ReservationControlSettings
                     settings={settings.restaurantSettings}
                     updateSettingsSection={updateSettingsSection}
                 />
                 <DepositSystem
                     value={settings.deposit_settings}
                     onChange={(val) => updateSettingsSection("deposit_settings", val)}
-                />
+                /> */}
                 <NotificationSettingsComponent
                     settings={settings.notification_settings}
                     updateSettingsSection={updateSettingsSection}
                 />
-                <TimeSlotOverrides
+                {/* <TimeSlotOverrides
                     settings={settings.overrides_settings}
                     updateSettingsSection={updateSettingsSection}
                 />
                 <RestaurantSettingsManager
                     settings={settings.restaurantSettings}
                     updateSettingsSection={updateSettingsSection}
-                />
+                /> */}
             </div>
             {/* changes detection penal  */}
             <UnsavedChangesPanel

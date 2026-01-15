@@ -4354,6 +4354,7 @@
     }
   },
   "printPage": { "printButton": "Bestätigung drucken" },
+  "Common": { "printButton": "Bestätigung drucken" },
   "reservationsTabs": {
     "addNew": "Neu hinzufügen",
     "overview": "Übersicht",

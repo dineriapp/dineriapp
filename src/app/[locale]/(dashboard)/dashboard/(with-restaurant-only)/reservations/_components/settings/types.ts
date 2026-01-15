@@ -43,7 +43,24 @@ export interface ReviewEmailSettings {
 }
 
 export interface NotificationSettings {
+    // configration 
     notifications_enabled: boolean;
+    email_from_name: string;
+    email_reply_to: string;
+    sendgrid_api_key: string;
+    email_test_to: string;
+    test_mode_passed: boolean;
+
+    // templates 
+    email_confirmation_subject: string;
+    email_confirmation_body: string;
+
+    email_reminder_subject: string;
+    email_reminder_body: string;
+    email_cancellation_subject: string;
+    email_cancellation_body: string;
+
+
 
     email_confirmation_enabled: boolean;
     email_24h_reminder_enabled: boolean;
@@ -51,18 +68,10 @@ export interface NotificationSettings {
     sms_2h_reminder_enabled: boolean;
 
     reminder_time_24h: string;
-    email_from_name: string;
-    email_reply_to: string;
 
-    email_confirmation_subject: string;
-    email_confirmation_body: string;
 
-    email_reminder_subject: string;
-    email_reminder_body: string;
 
     sms_reminder_template: string;
-    resend_api_key: string;
-    test_mode: boolean;
 
     // Management notifications (extra)
     owner_notifications_enabled: boolean;
@@ -73,7 +82,7 @@ export interface NotificationSettings {
     owner_notify_cancellations: boolean;
 
     // Review request emails (extra)
-    review_email: ReviewEmailSettings;
+    // review_email: ReviewEmailSettings;
 }
 
 export type DepositType = "per-person" | "flat-rate";

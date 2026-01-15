@@ -4392,6 +4392,9 @@
       "backToHome": "Back to Home"
     }
   },
+  "Common": {
+    "printButton": "Print Confirmation"
+  },
   "printPage": {
     "printButton": "Print Confirmation"
   },

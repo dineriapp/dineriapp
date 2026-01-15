@@ -223,3 +223,31 @@ export function normalizeBaseUrl(url: string) {
   return url.endsWith("/") ? url.slice(0, -1) : url;
 }
 
+export function renderTemplate(template: string, vars: Record<string, any>) {
+  if (!template) return "";
+  // supports whitespace: {{ guest_name }}
+  return template.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (_, key) => {
+    const val = vars[key];
+    return val === undefined || val === null ? "" : String(val);
+  });
+}
+
+export function isNonEmptyString(v: unknown): v is string {
+  return typeof v === "string" && v.trim().length > 0;
+}
+
+export function escapeHtml(str: string) {
+  return str
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+export function textToSimpleHtml(text: string) {
+  // safe + keeps formatting
+  return `<pre style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; white-space: pre-wrap; margin: 0;">${escapeHtml(
+    text
+  )}</pre>`;
+}

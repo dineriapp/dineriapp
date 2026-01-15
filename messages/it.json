@@ -4357,6 +4357,9 @@
   "printPage": {
     "printButton": "Stampa conferma"
   },
+  "Common": {
+    "printButton": "Stampa conferma"
+  },
   "reservationsTabs": {
     "addNew": "Aggiungi nuovo",
     "overview": "Panoramica",

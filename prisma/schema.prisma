@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-   directUrl = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -766,4 +766,12 @@ enum ReservationSource {
   PHONE
   WALK_IN
   PARTNER
+}
+
+model NotificationVerificationCode {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }

@@ -4357,6 +4357,9 @@
   "printPage": {
     "printButton": "Bevestiging afdrukken"
   },
+  "Common": {
+    "printButton": "Bevestiging afdrukken"
+  },
   "reservationsTabs": {
     "addNew": "Nieuw toevoegen",
     "overview": "Overzicht",

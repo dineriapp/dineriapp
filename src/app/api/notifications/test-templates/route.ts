@@ -1,0 +1,170 @@
+import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
+import { checkAuth } from "@/lib/auth/utils";
+import prisma from "@/lib/prisma";
+import { sendEmailWithSendGridUsingKey } from "@/lib/send-grid";
+import { isNonEmptyString, renderTemplate, textToSimpleHtml } from "@/lib/utils";
+import { NextResponse } from "next/server";
+import { z } from "zod";
+
+const startSchema = z.object({
+    restaurant_id: z.string(),
+    sendTo: z.string().email("Enter a valid email address"),
+    restaurant_name: z.string().min(1, "Restaurant name is required"),
+    guest_name: z.string().min(1, "Guest name is required"),
+    party_size: z.coerce.number().int("Must be a whole number").min(1, "Must be at least 1"),
+    date: z.string().min(1, "Date is required"),
+    time: z.string().min(1, "Time is required"),
+    restaurant_contact: z.string().min(1, "Restaurant contact is required"),
+});
+
+export async function POST(req: Request) {
+    try {
+        const session = await checkAuth();
+        if (!session?.user) {
+            return NextResponse.json({ ok: false, message: "unauthorized" }, { status: 401 });
+        }
+
+        const body = await req.json();
+        const data = startSchema.parse(body);
+
+        const restaurant = await prisma.restaurant.findFirst({
+            where: {
+                id: data.restaurant_id,
+                user_id: session.user.id,
+            },
+            select: {
+                reservation_settings: true,
+            },
+        });
+
+        if (!restaurant) {
+            return NextResponse.json(
+                { ok: false, message: "Restaurant not found or invalid user." },
+                { status: 401 }
+            );
+        }
+
+        const settings = restaurant?.reservation_settings?.settings as SettingsState | undefined;
+        const ns = settings?.notification_settings;
+
+        const enabled = Boolean(ns?.notifications_enabled);
+        const testModePassed = Boolean(ns?.test_mode_passed);
+        if (!enabled || !testModePassed) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    message: "Email notifications are not enabled or test mode is not passed.",
+                },
+                { status: 400 }
+            );
+        }
+
+        // 2) Ensure SendGrid config exists
+        const apiKey = ns?.sendgrid_api_key;
+        const fromEmail = ns?.email_reply_to;
+        const fromName = ns?.email_from_name;
+        const replyTo = ns?.email_reply_to;
+
+        const missing: string[] = [];
+        if (!isNonEmptyString(apiKey)) missing.push("sendgrid_api_key");
+        if (!isNonEmptyString(data.sendTo)) missing.push("sendTo");
+        if (!isNonEmptyString(fromEmail)) missing.push("fromEmail");
+        if (!isNonEmptyString(fromName)) missing.push("fromName");
+        if (!isNonEmptyString(replyTo)) missing.push("replyTo");
+
+        if (missing.length) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    message: `Missing email configuration: ${missing.join(", ")}`,
+                },
+                { status: 400 }
+            );
+        }
+
+        const templates = [
+            {
+                type: "confirmation",
+                subject: ns?.email_confirmation_subject ?? "",
+                body: ns?.email_confirmation_body ?? "",
+            },
+            {
+                type: "reminder",
+                subject: ns?.email_reminder_subject ?? "",
+                body: ns?.email_reminder_body ?? "",
+            },
+            {
+                type: "cancellation",
+                subject: ns?.email_cancellation_subject ?? "",
+                body: ns?.email_cancellation_body ?? "",
+            },
+        ];
+
+        const vars = {
+            restaurant_name: data.restaurant_name,
+            guest_name: data.guest_name,
+            party_size: data.party_size,
+            date: data.date,
+            time: data.time,
+            restaurant_contact: data.restaurant_contact,
+        };
+
+        const renderedTemplates = templates.map((t) => ({
+            ...t,
+            rendered_subject: renderTemplate(t.subject, vars),
+            rendered_body: renderTemplate(t.body, vars),
+        }));
+
+        // 3) Send emails (3 templates)
+        try {
+            for (const t of renderedTemplates) {
+                const subject = `[TEST] ${t.rendered_subject || t.type}`;
+                const text = t.rendered_body || "";
+                const html = textToSimpleHtml(text);
+
+                await sendEmailWithSendGridUsingKey({
+                    apiKey: apiKey!,
+                    to: data.sendTo,
+                    fromEmail: fromEmail!,
+                    fromName,
+                    replyTo,
+                    subject,
+                    html,
+                    text,
+                });
+            }
+        } catch (e: any) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    message: e?.message || "Failed to send email. Check API key / sender verification.",
+                },
+                { status: 400 }
+            );
+        }
+
+        return NextResponse.json({
+            ok: true,
+            message: `Test emails sent to ${data.sendTo}`,
+            templates: renderedTemplates,
+            data,
+        });
+    } catch (err: any) {
+        if (err instanceof z.ZodError) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    message: "Fields validation error",
+                    errors: err.flatten(),
+                },
+                { status: 400 }
+            );
+        }
+
+        console.log(err);
+        return NextResponse.json(
+            { ok: false, message: err?.message ?? "Something went wrong" },
+            { status: 400 }
+        );
+    }
+}
