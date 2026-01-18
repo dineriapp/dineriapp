@@ -60,29 +60,19 @@ export interface NotificationSettings {
     email_cancellation_subject: string;
     email_cancellation_body: string;
 
-
-
+    // when to send 
     email_confirmation_enabled: boolean;
     email_24h_reminder_enabled: boolean;
     email_cancellation_enabled: boolean;
-    sms_2h_reminder_enabled: boolean;
 
-    reminder_time_24h: string;
-
-
-
-    sms_reminder_template: string;
-
-    // Management notifications (extra)
+    // Management notifications
     owner_notifications_enabled: boolean;
     owner_emails: string[];
-    owner_notification_timing: OwnerNotificationTiming;
-    owner_notification_times: string[];
     owner_notify_new_bookings: boolean;
     owner_notify_cancellations: boolean;
 
-    // Review request emails (extra)
-    // review_email: ReviewEmailSettings;
+    // Review request emails
+    review_email: ReviewEmailSettings;
 }
 
 export type DepositType = "per-person" | "flat-rate";

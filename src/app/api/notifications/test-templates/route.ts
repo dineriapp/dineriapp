@@ -1,8 +1,9 @@
 import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
 import { checkAuth } from "@/lib/auth/utils";
+import { extractSendGridFromSettings, getRenderedReservationEmailTemplates } from "@/lib/email-utils";
 import prisma from "@/lib/prisma";
 import { sendEmailWithSendGridUsingKey } from "@/lib/send-grid";
-import { isNonEmptyString, renderTemplate, textToSimpleHtml } from "@/lib/utils";
+import { textToSimpleHtml } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -45,60 +46,13 @@ export async function POST(req: Request) {
         }
 
         const settings = restaurant?.reservation_settings?.settings as SettingsState | undefined;
-        const ns = settings?.notification_settings;
 
-        const enabled = Boolean(ns?.notifications_enabled);
-        const testModePassed = Boolean(ns?.test_mode_passed);
-        if (!enabled || !testModePassed) {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    message: "Email notifications are not enabled or test mode is not passed.",
-                },
-                { status: 400 }
-            );
+        const extracted = extractSendGridFromSettings(settings);
+        if (!extracted.ok) {
+            return NextResponse.json({ ok: false, message: extracted.message }, { status: 400 });
         }
 
-        // 2) Ensure SendGrid config exists
-        const apiKey = ns?.sendgrid_api_key;
-        const fromEmail = ns?.email_reply_to;
-        const fromName = ns?.email_from_name;
-        const replyTo = ns?.email_reply_to;
-
-        const missing: string[] = [];
-        if (!isNonEmptyString(apiKey)) missing.push("sendgrid_api_key");
-        if (!isNonEmptyString(data.sendTo)) missing.push("sendTo");
-        if (!isNonEmptyString(fromEmail)) missing.push("fromEmail");
-        if (!isNonEmptyString(fromName)) missing.push("fromName");
-        if (!isNonEmptyString(replyTo)) missing.push("replyTo");
-
-        if (missing.length) {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    message: `Missing email configuration: ${missing.join(", ")}`,
-                },
-                { status: 400 }
-            );
-        }
-
-        const templates = [
-            {
-                type: "confirmation",
-                subject: ns?.email_confirmation_subject ?? "",
-                body: ns?.email_confirmation_body ?? "",
-            },
-            {
-                type: "reminder",
-                subject: ns?.email_reminder_subject ?? "",
-                body: ns?.email_reminder_body ?? "",
-            },
-            {
-                type: "cancellation",
-                subject: ns?.email_cancellation_subject ?? "",
-                body: ns?.email_cancellation_body ?? "",
-            },
-        ];
+        const { apiKey, fromEmail, fromName } = extracted.config;
 
         const vars = {
             restaurant_name: data.restaurant_name,
@@ -109,13 +63,8 @@ export async function POST(req: Request) {
             restaurant_contact: data.restaurant_contact,
         };
 
-        const renderedTemplates = templates.map((t) => ({
-            ...t,
-            rendered_subject: renderTemplate(t.subject, vars),
-            rendered_body: renderTemplate(t.body, vars),
-        }));
+        const renderedTemplates = getRenderedReservationEmailTemplates(settings, vars);
 
-        // 3) Send emails (3 templates)
         try {
             for (const t of renderedTemplates) {
                 const subject = `[TEST] ${t.rendered_subject || t.type}`;
@@ -123,11 +72,11 @@ export async function POST(req: Request) {
                 const html = textToSimpleHtml(text);
 
                 await sendEmailWithSendGridUsingKey({
-                    apiKey: apiKey!,
+                    apiKey: apiKey,
                     to: data.sendTo,
-                    fromEmail: fromEmail!,
+                    fromEmail: fromEmail,
                     fromName,
-                    replyTo,
+                    replyTo: fromEmail,
                     subject,
                     html,
                     text,

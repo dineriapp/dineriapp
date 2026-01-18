@@ -1,12 +1,15 @@
 import { DynamicRule, SettingsState } from '@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types';
 import { CapacityService } from '@/lib/capacity-service';
+import { extractSendGridFromSettings, getRenderedReservationEmailTemplates } from '@/lib/email-utils';
 import prisma from "@/lib/prisma";
+import { sendEmailWithSendGridUsingKey } from '@/lib/send-grid';
 import type { ReservationsListResponse } from "@/lib/types";
-import { getEstimatedDuration } from '@/lib/utils';
+import { getEstimatedDuration, textToSimpleHtml } from '@/lib/utils';
 import { Prisma } from '@prisma/client';
-import { type NextRequest, NextResponse } from "next/server";
 import { getTranslations } from 'next-intl/server';
 import { cookies } from 'next/headers';
+import { type NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 
 export async function GET(request: NextRequest) {
     try {
@@ -162,8 +165,6 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
     const t = await getTranslations({ locale, namespace: 'reservations_api.errors' });
     const capacityService = new CapacityService();
     const arrivalTime = new Date(data.arrival_time);
-
-    console.log('Arrival time:', arrivalTime);
 
     // Get restaurant and settings
     const restaurant = await prisma.restaurant.findUnique({
@@ -336,6 +337,95 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
                     status: 'PAID',
                     deposit_amount: depositAmount,
                     paid_at: new Date(),
+                }
+            });
+        }
+
+        const extracted = extractSendGridFromSettings(settings);
+
+        if (extracted.ok) {
+            const vars = {
+                restaurant_name: restaurant.name ?? "",
+                guest_name: reservation.customer_name ?? "",
+                party_size: data.party_size,
+                date: reservation.arrival_time.toLocaleDateString("en-GB"),
+                time: reservation.arrival_time.toLocaleTimeString("en-GB", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                }),
+                restaurant_contact: restaurant.phone ?? "",
+            };
+
+            const { apiKey, fromEmail, fromName } = extracted.config;
+            const renderedTemplates = getRenderedReservationEmailTemplates(settings, vars);
+
+            // schedule background work (won’t block response)
+            after(async () => {
+                try {
+                    const tasks: Promise<any>[] = [];
+
+                    // send to customer (only if enabled)
+                    if (extracted.email_confirmation_enabled) {
+                        const t = renderedTemplates.find((x) => x.type === "confirmation");
+                        if (t && reservation.customer_email) {
+                            const subject = t.rendered_subject || t.type;
+                            const text = t.rendered_body || "";
+                            const html = textToSimpleHtml(text);
+
+                            tasks.push(
+                                sendEmailWithSendGridUsingKey({
+                                    apiKey,
+                                    to: reservation.customer_email,
+                                    fromEmail,
+                                    fromName,
+                                    replyTo: fromEmail,
+                                    subject,
+                                    html,
+                                    text,
+                                })
+                            );
+                        }
+                    }
+
+                    // send to owner(s)
+                    const shouldNotifyOwner =
+                        extracted.owner_notifications_enabled &&
+                        extracted.owner_notify_new_bookings &&
+                        extracted.owner_emails.length > 0;
+
+                    if (shouldNotifyOwner) {
+                        const ownerSubject = `New reservation: ${vars.guest_name} (${vars.party_size}) - ${vars.date} ${vars.time}`;
+                        const ownerText =
+                            `New reservation received.\n\n` +
+                            `Restaurant: ${vars.restaurant_name}\n` +
+                            `Guest: ${vars.guest_name}\n` +
+                            `Party size: ${vars.party_size}\n` +
+                            `Date: ${vars.date}\n` +
+                            `Time: ${vars.time}\n` +
+                            `Contact: ${reservation.customer_email}\n`;
+
+                        const ownerHtml = textToSimpleHtml(ownerText);
+
+                        for (const ownerEmail of extracted.owner_emails) {
+                            tasks.push(
+                                sendEmailWithSendGridUsingKey({
+                                    apiKey,
+                                    to: ownerEmail,
+                                    fromEmail,
+                                    fromName,
+                                    replyTo: fromEmail,
+                                    subject: ownerSubject,
+                                    html: ownerHtml,
+                                    text: ownerText,
+                                })
+                            );
+                        }
+                    }
+
+                    await Promise.allSettled(tasks);
+                } catch (e) {
+                    console.log(e);
                 }
             });
         }

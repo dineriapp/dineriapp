@@ -102,7 +102,7 @@ export function NotificationSettingsComponent({ settings, updateSettingsSection 
             <CardContent className="py-0 px-0">
                 {
                     showinfo && (
-                        <div className="rounded-lg relative border border-green-200 bg-green-50 p-4 border-l-4 border-l-green-500">
+                        <div className="rounded-lg relative border border-green-200 bg-green-50 p-4 border-l-4 border-l-green-500 mx-5 mb-2">
                             <X
                                 className="absolute cursor-pointer top-2 right-2 size-4"
                                 onClick={() => setShowInfo(false)}

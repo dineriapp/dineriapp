@@ -14,15 +14,20 @@ const EmailTemplates = ({ settings, updateSettingsSection }: Props) => {
 
     return (
         <div className='w-full space-y-3'>
-            <div className='w-full flex items-center justify-end'>
-                <TestTemplatesDialog />
-            </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-800">
-                    <strong>Available variables:</strong> {`{{restaurant_name}}`}, {`{{guest_name}}`},{" "}
-                    {`{{party_size}}`}, {`{{date}}`}, {`{{time}}`}, {`{{restaurant_contact}}`}
+            <div className="w-full flex flex-col gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-blue-900">
+                    <span className="font-semibold">Available variables:</span>{" "}
+                    <span className="font-mono text-blue-800">
+                        {`{{restaurant_name}}`}, {`{{guest_name}}`}, {`{{party_size}}`}, {`{{date}}`}, {`{{time}}`},{" "}
+                        {`{{restaurant_contact}}`}
+                    </span>
                 </p>
+
+                <div className="flex justify-end">
+                    <TestTemplatesDialog />
+                </div>
             </div>
+
             <Card className='p-4'>
                 <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Confirmation Subject</label>

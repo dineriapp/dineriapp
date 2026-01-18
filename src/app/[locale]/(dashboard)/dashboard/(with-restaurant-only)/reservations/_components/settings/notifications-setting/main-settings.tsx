@@ -1,6 +1,6 @@
 "use client";
 import { Switch } from '@/components/ui/switch';
-import { Check, Plus, Trash2, Users } from 'lucide-react';
+import { Check, Mail, Plus, Trash2, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { NotificationSettings } from '../types';
 import EmailTemplates from './email-templates';
@@ -9,9 +9,6 @@ interface Props {
     settings: NotificationSettings;
     updateSettingsSection: (section: "notification_settings", value: NotificationSettings) => void;
 }
-
-const ensureTime = (t: string) => (t?.length === 5 ? `${t}:00` : t);
-
 
 const MainSettings = ({ settings, updateSettingsSection }: Props) => {
     const [activeTab, setActiveTab] = useState<"general" | "templates" | "management" | "reviews">("general");
@@ -85,14 +82,7 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                 <div className="flex-1">
                                     <div className="font-medium">24-Hour Reminder</div>
                                     <div className="text-sm text-slate-600">
-                                        Send the day before reservation at
-                                        <input
-                                            type="time"
-                                            value={ensureTime(settings.reminder_time_24h)}
-                                            onChange={(e) => setSettings({ reminder_time_24h: ensureTime(e.target.value) })}
-                                            className="border border-slate-300 rounded px-2 py-1 ml-4 text-sm"
-                                            onClick={(e) => e.stopPropagation()}
-                                        />
+                                        Send the day before reservation.
                                     </div>
                                 </div>
                             </label>
@@ -238,6 +228,189 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                 <div className="text-sm text-slate-600">Get notified when a reservation is cancelled</div>
                                             </div>
                                         </label>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
+                {/* ============== reviews ============== */}
+
+                {activeTab === "reviews" && (
+                    <>
+                        <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div className="flex items-center gap-3">
+                                <Mail className="w-5 h-5 text-slate-600" />
+                                <div>
+                                    <div className="font-semibold text-slate-900">Review Request Emails</div>
+                                    <div className="text-sm text-slate-600">
+                                        Ask customers for reviews after their reservation
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Switch
+                                checked={settings.review_email?.enabled ?? false}
+                                onCheckedChange={(val) =>
+                                    setSettings({ review_email: { ...settings.review_email, enabled: val } })
+                                }
+                            />
+                        </div>
+
+                        {settings.review_email?.enabled && (
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">Email Delay</label>
+                                    <select
+                                        value={settings.review_email.delay_hours}
+                                        onChange={(e) =>
+                                            setSettings({
+                                                review_email: { ...settings.review_email, delay_hours: parseInt(e.target.value) },
+                                            })
+                                        }
+                                        className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                                    >
+                                        <option value={1}>1 hour after dining</option>
+                                        <option value={2}>2 hours after dining</option>
+                                        <option value={4}>4 hours after dining</option>
+                                        <option value={6}>6 hours after dining</option>
+                                        <option value={12}>12 hours after dining</option>
+                                        <option value={24}>Next day</option>
+                                        <option value={48}>2 days later</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">Email Subject</label>
+                                    <input
+                                        type="text"
+                                        value={settings.review_email.email_subject}
+                                        onChange={(e) =>
+                                            setSettings({ review_email: { ...settings.review_email, email_subject: e.target.value } })
+                                        }
+                                        className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                                    />
+                                </div>
+
+                                <div>
+                                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
+                                        <p className="text-xs text-blue-800">
+                                            <strong>Available variables:</strong> {`{{customer_name}}`}, {`{{restaurant_name}}`},{" "}
+                                            {`{{review_links}}`}
+                                        </p>
+                                    </div>
+
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">Email Body</label>
+                                    <textarea
+                                        rows={10}
+                                        value={settings.review_email.email_body}
+                                        onChange={(e) =>
+                                            setSettings({ review_email: { ...settings.review_email, email_body: e.target.value } })
+                                        }
+                                        className="w-full px-4 py-2 border border-slate-300 rounded-lg font-mono text-sm"
+                                    />
+                                </div>
+
+                                <div className="border-t border-slate-200 pt-6 space-y-3">
+                                    <div className="font-semibold text-slate-900">Review Platform Links</div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 mb-2">Google Review Link</label>
+                                        <input
+                                            type="url"
+                                            value={settings.review_email.google_review_link}
+                                            onChange={(e) =>
+                                                setSettings({
+                                                    review_email: { ...settings.review_email, google_review_link: e.target.value },
+                                                })
+                                            }
+                                            className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                                            placeholder="https://g.page/r/..."
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 mb-2">Yelp Review Link</label>
+                                        <input
+                                            type="url"
+                                            value={settings.review_email.yelp_review_link}
+                                            onChange={(e) =>
+                                                setSettings({ review_email: { ...settings.review_email, yelp_review_link: e.target.value } })
+                                            }
+                                            className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                                            placeholder="https://www.yelp.com/biz/..."
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 mb-2">TripAdvisor Review Link</label>
+                                        <input
+                                            type="url"
+                                            value={settings.review_email.tripadvisor_review_link}
+                                            onChange={(e) =>
+                                                setSettings({
+                                                    review_email: { ...settings.review_email, tripadvisor_review_link: e.target.value },
+                                                })
+                                            }
+                                            className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                                            placeholder="https://www.tripadvisor.com/..."
+                                        />
+                                    </div>
+
+                                    {/* Custom platforms */}
+                                    <div className="space-y-2">
+                                        {(settings.review_email.other_review_links || []).map((link, idx) => (
+                                            <div key={link.id || idx} className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={link.name}
+                                                    onChange={(e) => {
+                                                        const next = [...settings.review_email.other_review_links];
+                                                        next[idx] = { ...next[idx], name: e.target.value };
+                                                        setSettings({ review_email: { ...settings.review_email, other_review_links: next } });
+                                                    }}
+                                                    placeholder="Platform name"
+                                                    className="flex-1 px-4 py-2 border border-slate-300 rounded-lg"
+                                                />
+                                                <input
+                                                    type="url"
+                                                    value={link.url}
+                                                    onChange={(e) => {
+                                                        const next = [...settings.review_email.other_review_links];
+                                                        next[idx] = { ...next[idx], url: e.target.value };
+                                                        setSettings({ review_email: { ...settings.review_email, other_review_links: next } });
+                                                    }}
+                                                    placeholder="https://..."
+                                                    className="flex-1 px-4 py-2 border border-slate-300 rounded-lg"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const next = settings.review_email.other_review_links.filter((_, i) => i !== idx);
+                                                        setSettings({ review_email: { ...settings.review_email, other_review_links: next } });
+                                                    }}
+                                                    className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                                                    aria-label="Remove platform"
+                                                >
+                                                    <Trash2 className="w-5 h-5" />
+                                                </button>
+                                            </div>
+                                        ))}
+
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const next = [
+                                                    ...(settings.review_email.other_review_links || []),
+                                                    { id: crypto.randomUUID(), name: "", url: "" },
+                                                ];
+                                                setSettings({ review_email: { ...settings.review_email, other_review_links: next } });
+                                            }}
+                                            className="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors border border-slate-200"
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                            Add Another Platform
+                                        </button>
                                     </div>
                                 </div>
                             </div>
