@@ -3749,7 +3749,9 @@
       "noReservations": "Nessuna prenotazione trovata"
     },
     "toast": {
-      "deleteSuccess": "Prenotazione eliminata con successo!"
+      "deleteSuccess": "Prenotazione eliminata con successo!",
+      "reminderSuccess": "Email di promemoria inviata con successo!",
+      "genericError": "Qualcosa è andato storto. Per favore riprova."
     },
     "reservationCard": {
       "partyOf": "Gruppo di { count }",
@@ -3776,7 +3778,8 @@
         "noteLabel": "Nota:"
       },
       "actions": {
-        "delete": "Elimina"
+        "delete": "Elimina",
+        "sendReminder": "Invia promemoria"
       },
       "status": {
         "pending": "In attesa",
@@ -4388,5 +4391,315 @@
   "paymentMethod": {
     "card": "Carta",
     "cash": "Contanti"
+  },
+  "notificationSettings": {
+    "title": "Impostazioni notifiche",
+    "description": "Configura notifiche email automatiche per le prenotazioni",
+
+    "status": {
+      "testingPassed": "Fase di test superata",
+      "testingNotPassed": "Fase di test non superata"
+    },
+
+    "actions": {
+      "changeIntegration": "Modifica valori di integrazione",
+      "cancel": "Annulla",
+      "confirmChange": "Sì, modifica"
+    },
+
+    "dialogs": {
+      "changeIntegrationTitle": "Modificare i valori di integrazione?",
+      "changeIntegrationDescription": "Se modifichi questi valori, la fase di test verrà reimpostata su Non superata. Dovrai verificare di nuovo inviando un nuovo codice alla tua email di test."
+    },
+
+    "infoBanner": {
+      "title": "Integrazione completata",
+      "description": "La tua integrazione email è verificata e funzionante. Salva le modifiche prima di aggiornare altre impostazioni, in modo che l’integrazione rimanga attiva."
+    }
+  },
+  "integration": {
+    "info": {
+      "title": "Verifica integrazione email",
+      "description": "Invieremo un codice di verifica a 4 cifre alla tua email di test. Dopo la verifica, potrai gestire in sicurezza le altre impostazioni di notifica."
+    },
+
+    "messages": {
+      "codeSent": "Abbiamo inviato un codice a 4 cifre alla tua email di test.",
+      "verificationSuccess": "Verifica completata con successo. Le impostazioni sono pronte — fai clic su Salva per applicarle.",
+      "requestFailed": "Richiesta non riuscita",
+      "somethingWentWrong": "Qualcosa è andato storto"
+    },
+
+    "form": {
+      "fromName": {
+        "label": "Nome mittente",
+        "placeholder": "Nome del tuo ristorante",
+        "help": "Questo nome verrà mostrato ai clienti come mittente.",
+        "errors": {
+          "min": "Il nome del mittente deve contenere almeno 2 caratteri",
+          "max": "Il nome del mittente deve contenere al massimo 60 caratteri"
+        }
+      },
+
+      "replyTo": {
+        "label": "Rispondi a",
+        "placeholder": "prenotazioni@tuoristorante.com",
+        "help": "Questo indirizzo email verrà utilizzato per inviare notifiche ai clienti.",
+        "errors": {
+          "required": "L’email di risposta è obbligatoria",
+          "invalid": "L’email di risposta deve essere valida"
+        }
+      },
+
+      "testEmail": {
+        "label": "Invia email di test a",
+        "placeholder": "test@dominio.com",
+        "help": "Invieremo il codice di verifica a questo indirizzo email.",
+        "errors": {
+          "required": "L’email di test è obbligatoria",
+          "invalid": "L’email di test deve essere valida"
+        }
+      },
+
+      "apiKey": {
+        "label": "Chiave API Resend",
+        "placeholder": "xxxxxxxxxxxx",
+        "help": "La tua chiave API Resend viene utilizzata per inviare email dal tuo account.",
+        "errors": {
+          "required": "La chiave API Resend è obbligatoria"
+        }
+      },
+
+      "submit": "Convalida e invia codice"
+    },
+
+    "verification": {
+      "title": "Inserisci codice di verifica",
+      "description": "Abbiamo inviato un codice a 4 cifre alla tua email di test. Inseriscilo qui sotto per completare la verifica.",
+      "codeLabel": "Codice a 4 cifre",
+      "placeholder": "1234",
+      "submit": "Verifica codice",
+      "errors": {
+        "invalid": "Inserisci il codice a 4 cifre"
+      }
+    }
+  },
+  "emailTemplates": {
+    "variables": {
+      "label": "Variabili disponibili:"
+    },
+
+    "confirmation": {
+      "subjectLabel": "Oggetto di conferma",
+      "bodyLabel": "Contenuto della conferma"
+    },
+
+    "reminder": {
+      "subjectLabel": "Oggetto del promemoria",
+      "bodyLabel": "Contenuto del promemoria"
+    },
+
+    "cancellation": {
+      "subjectLabel": "Oggetto di cancellazione",
+      "bodyLabel": "Contenuto della cancellazione"
+    }
+  },
+  "testTemplatesDialog": {
+    "trigger": {
+      "button": "Testa i modelli"
+    },
+
+    "dialog": {
+      "title": "Testa i modelli",
+      "description": "Inserisci valori di esempio e invia il modulo per testare le variabili email."
+    },
+
+    "messages": {
+      "submitting": "Invio in corso...",
+      "submit": "Invia test",
+      "reset": "Reimposta",
+      "fail": "Richiesta non riuscita",
+      "genric": "Qualcosa è andato storto."
+    },
+
+    "success": {
+      "iconText": "Successo"
+    },
+
+    "error": {
+      "iconText": "Errore"
+    },
+
+    "form": {
+      "sendTo": {
+        "label": "Invia email di test a",
+        "placeholder": "test@esempio.com",
+        "errors": {
+          "invalid": "Inserisci un indirizzo email valido"
+        }
+      },
+
+      "variables": {
+        "title": "Variabili",
+
+        "restaurant_name": {
+          "label": "restaurant_name",
+          "error": "Il nome del ristorante è obbligatorio"
+        },
+
+        "guest_name": {
+          "label": "guest_name",
+          "error": "Il nome dell’ospite è obbligatorio"
+        },
+
+        "party_size": {
+          "label": "party_size",
+          "invalid": "Deve essere un numero intero",
+          "min": "Deve essere almeno 1"
+        },
+
+        "date": {
+          "label": "date",
+          "error": "La data è obbligatoria"
+        },
+
+        "time": {
+          "label": "time",
+          "error": "L’orario è obbligatorio"
+        },
+
+        "restaurant_contact": {
+          "label": "restaurant_contact",
+          "error": "Il contatto del ristorante è obbligatorio"
+        }
+      }
+    }
+  },
+  "mainSettings": {
+    "tabs": {
+      "general": "Impostazioni generali",
+      "templates": "Modelli email",
+      "management": "Notifiche di gestione",
+      "reviews": "Richieste di recensione"
+    },
+
+    "general": {
+      "bookingConfirmation": {
+        "title": "Conferma prenotazione",
+        "description": "Inviata immediatamente quando viene creata la prenotazione"
+      },
+      "reminderButton": {
+        "title": "Pulsante email di promemoria",
+        "description": "Abilita un pulsante sotto ogni prenotazione per inviare email di promemoria ai clienti."
+      },
+      "cancellation": {
+        "title": "Conferma cancellazione",
+        "description": "Inviata quando la prenotazione viene cancellata"
+      }
+    },
+
+    "management": {
+      "section": {
+        "title": "Notifiche di gestione",
+        "description": "Ricevi avvisi email su nuove prenotazioni e cancellazioni"
+      },
+      "emails": {
+        "label": "Indirizzi email di gestione",
+        "placeholder": "manager@ristorante.it",
+        "add": "Aggiungi un’altra email",
+        "limit": "Aggiungi fino a 5 indirizzi email"
+      },
+      "events": {
+        "label": "Eventi di notifica",
+        "title": "Nuove prenotazioni",
+        "description": "Ricevi una notifica quando viene creata una prenotazione",
+        "cancellations_title": "Cancellazioni",
+        "cancellations_description": "Ricevi una notifica quando una prenotazione viene cancellata"
+      }
+    },
+
+    "reviews": {
+      "toggle": {
+        "title": "Email di richiesta recensioni",
+        "description": "Chiedi ai clienti una recensione dopo la prenotazione"
+      },
+      "subject": {
+        "label": "Oggetto email"
+      },
+      "body": {
+        "label": "Corpo dell’email"
+      },
+      "variables": {
+        "label": "Variabili disponibili:"
+      },
+      "platforms": {
+        "title": "Link alle piattaforme di recensioni",
+        "google": {
+          "label": "Link recensione Google",
+          "placeholder": "https://g.page/r/..."
+        },
+        "yelp": {
+          "label": "Link recensione Yelp",
+          "placeholder": "https://www.yelp.com/biz/..."
+        },
+        "tripadvisor": {
+          "label": "Link recensione TripAdvisor",
+          "placeholder": "https://www.tripadvisor.com/..."
+        },
+        "custom": {
+          "namePlaceholder": "Nome piattaforma",
+          "urlPlaceholder": "https://...",
+          "remove": "Rimuovi piattaforma",
+          "add": "Aggiungi un’altra piattaforma"
+        }
+      }
+    }
+  },
+  "sendReminder": {
+    "errors": {
+      "unauthorized": "non autorizzato",
+      "missingReservationId": "ID della prenotazione mancante",
+      "reservationNotFound": "Prenotazione non trovata",
+      "reminderAlreadySent": "Il promemoria è già stato inviato",
+      "restaurantNotFound": "Ristorante non trovato",
+      "reminderNotEnabled": "L’email di promemoria non è abilitata",
+      "templateNotConfigured": "Il modello di promemoria non è configurato",
+      "failedToSend": "Invio dell’email di promemoria non riuscito"
+    },
+
+    "success": {
+      "sent": "Email di promemoria inviata"
+    }
+  },
+  "updateReservationStatus": {
+    "errors": {
+      "unauthorized": "non autorizzato",
+      "missingReservationIdOrStatus": "ID della prenotazione o stato mancante",
+      "failedToUpdate": "Impossibile aggiornare lo stato"
+    }
+  },
+  "testTemplatesApi": {
+    "errors": {
+      "unauthorized": "non autorizzato",
+      "restaurantNotFound": "Ristorante non trovato o utente non valido.",
+      "sendFailed": "Impossibile inviare l’email. Controlla la chiave API o la verifica del mittente.",
+      "validationError": "Errore di validazione dei campi",
+      "generic": "Qualcosa è andato storto"
+    },
+
+    "success": {
+      "sent": "Email di test inviate a { sendTo }"
+    }
+  },
+  "startNotificationIntegration": {
+    "errors": {
+      "unauthorized": "non autorizzato",
+      "sendFailed": "Impossibile inviare l’email. Controlla la chiave API o la verifica del mittente.",
+      "generic": "Qualcosa è andato storto"
+    },
+
+    "success": {
+      "created": "Codice di verifica creato"
+    }
   }
 }

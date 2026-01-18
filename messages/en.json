@@ -3768,8 +3768,11 @@
     },
 
     "toast": {
-      "deleteSuccess": "Reservation deleted successfully!"
+      "deleteSuccess": "Reservation deleted successfully!",
+      "reminderSuccess": "Reminder email sent successfully!",
+      "genericError": "Something went wrong. Please try again."
     },
+
     "reservationCard": {
       "partyOf": "Party of { count }",
 
@@ -3805,9 +3808,9 @@
       },
 
       "actions": {
-        "delete": "Delete"
+        "delete": "Delete",
+        "sendReminder": "Send Reminder"
       },
-
       "status": {
         "pending": "Pending",
         "confirmed": "Confirmed",
@@ -4431,5 +4434,312 @@
     "closes_at": "closes at {time}",
     "opens_at": "opens at {time}",
     "opens_at_with_day": "opens {day} at {time}"
+  },
+  "notificationSettings": {
+    "title": "Notification Settings",
+    "description": "Configure automated email notifications for reservations",
+
+    "status": {
+      "testingPassed": "Testing phase passed",
+      "testingNotPassed": "Testing phase not passed"
+    },
+
+    "actions": {
+      "changeIntegration": "Change integration values",
+      "cancel": "Cancel",
+      "confirmChange": "Yes, change"
+    },
+
+    "dialogs": {
+      "changeIntegrationTitle": "Change integration values?",
+      "changeIntegrationDescription": "If you change these values, the testing phase will be reset to Not Passed. You will need to verify again by sending a new code to your test email."
+    },
+
+    "infoBanner": {
+      "title": "Integrations done",
+      "description": "Your email integration is verified and working. Please save your changes before updating any other settings, so your integration stays active."
+    }
+  },
+  "integration": {
+    "info": {
+      "title": "Verify email integration",
+      "description": "We will send a 4-digit verification code to your test email. After verification, you can manage other notification settings safely."
+    },
+
+    "messages": {
+      "codeSent": "We sent a 4-digit code to your test email.",
+      "verificationSuccess": "Verification successful. Your settings are ready — please click Save to apply them.",
+      "requestFailed": "Request failed",
+      "somethingWentWrong": "Something went wrong"
+    },
+
+    "form": {
+      "fromName": {
+        "label": "From Name",
+        "placeholder": "Your Restaurant Name",
+        "help": "This name will appear to customers as the sender name.",
+        "errors": {
+          "min": "From Name must be at least 2 characters",
+          "max": "From Name must be 60 characters or less"
+        }
+      },
+
+      "replyTo": {
+        "label": "Reply-To",
+        "placeholder": "reservations@yourrestaurant.com",
+        "help": "This email address will be used to send notification emails to customers.",
+        "errors": {
+          "required": "Reply-To email is required",
+          "invalid": "Reply-To must be a valid email"
+        }
+      },
+
+      "testEmail": {
+        "label": "Test email send to",
+        "placeholder": "test@domain.com",
+        "help": "We will send the verification code to this email address.",
+        "errors": {
+          "required": "Test email is required",
+          "invalid": "Test email must be a valid email"
+        }
+      },
+
+      "apiKey": {
+        "label": "Resend API Key",
+        "placeholder": "xxxxxxxxxxxx",
+        "help": "Your Resend API key is used to send emails from your account.",
+        "errors": {
+          "required": "Resend API key is required"
+        }
+      },
+
+      "submit": "Validate & Send Code"
+    },
+
+    "verification": {
+      "title": "Enter verification code",
+      "description": "We sent a 4-digit code to your test email. Enter it below to complete verification.",
+      "codeLabel": "4-digit code",
+      "placeholder": "1234",
+      "submit": "Verify Code",
+      "errors": {
+        "invalid": "Enter the 4-digit code"
+      }
+    }
+  },
+  "emailTemplates": {
+    "variables": {
+      "label": "Available variables:"
+    },
+
+    "confirmation": {
+      "subjectLabel": "Confirmation Subject",
+      "bodyLabel": "Confirmation Body"
+    },
+
+    "reminder": {
+      "subjectLabel": "Reminder Subject",
+      "bodyLabel": "Reminder Body"
+    },
+
+    "cancellation": {
+      "subjectLabel": "Cancellation Subject",
+      "bodyLabel": "Cancellation Body"
+    }
+  },
+  "testTemplatesDialog": {
+    "trigger": {
+      "button": "Test your templates"
+    },
+
+    "dialog": {
+      "title": "Test your templates",
+      "description": "Enter sample values and submit to test your email variables."
+    },
+
+    "messages": {
+      "submitting": "Submitting...",
+      "submit": "Submit Test",
+      "reset": "Reset",
+      "fail": "Request failed",
+      "genric": "Something went wrong."
+    },
+
+    "success": {
+      "iconText": "Success"
+    },
+
+    "error": {
+      "iconText": "Error"
+    },
+
+    "form": {
+      "sendTo": {
+        "label": "Send Test Emails To",
+        "placeholder": "test@example.com",
+        "errors": {
+          "invalid": "Enter a valid email address"
+        }
+      },
+
+      "variables": {
+        "title": "Variables",
+
+        "restaurant_name": {
+          "label": "restaurant_name",
+          "error": "Restaurant name is required"
+        },
+
+        "guest_name": {
+          "label": "guest_name",
+          "error": "Guest name is required"
+        },
+
+        "party_size": {
+          "label": "party_size",
+          "invalid": "Must be a whole number",
+          "min": "Must be at least 1"
+        },
+
+        "date": {
+          "label": "date",
+          "error": "Date is required"
+        },
+
+        "time": {
+          "label": "time",
+          "error": "Time is required"
+        },
+
+        "restaurant_contact": {
+          "label": "restaurant_contact",
+          "error": "Restaurant contact is required"
+        }
+      }
+    }
+  },
+  "mainSettings": {
+    "tabs": {
+      "general": "General Settings",
+      "templates": "Email Templates",
+      "management": "Management Notifications",
+      "reviews": "Review Requests"
+    },
+
+    "general": {
+      "bookingConfirmation": {
+        "title": "Booking Confirmation",
+        "description": "Send immediately when reservation is created"
+      },
+      "reminderButton": {
+        "title": "Reminder Email Button",
+        "description": "Enables a button under each reservation for sending reminder emails to customers."
+      },
+      "cancellation": {
+        "title": "Cancellation Confirmation",
+        "description": "Send when reservation is cancelled"
+      }
+    },
+
+    "management": {
+      "section": {
+        "title": "Management Notifications",
+        "description": "Receive email alerts about new bookings and cancellations"
+      },
+      "emails": {
+        "label": "Management Email Addresses",
+        "placeholder": "manager@restaurant.com",
+        "add": "Add Another Email",
+        "limit": "Add up to 5 email addresses"
+      },
+      "events": {
+        "label": "Notification Events",
+        "title": "New Bookings",
+        "description": "Get notified when a reservation is created",
+        "cancellations_title": "Cancellations",
+        "cancellations_description": "Get notified when a reservation is cancelled"
+      }
+    },
+
+    "reviews": {
+      "toggle": {
+        "title": "Review Request Emails",
+        "description": "Ask customers for reviews after their reservation"
+      },
+      "subject": {
+        "label": "Email Subject"
+      },
+      "body": {
+        "label": "Email Body"
+      },
+      "variables": {
+        "label": "Available variables:"
+      },
+      "platforms": {
+        "title": "Review Platform Links",
+        "google": {
+          "label": "Google Review Link",
+          "placeholder": "https://g.page/r/..."
+        },
+        "yelp": {
+          "label": "Yelp Review Link",
+          "placeholder": "https://www.yelp.com/biz/..."
+        },
+        "tripadvisor": {
+          "label": "TripAdvisor Review Link",
+          "placeholder": "https://www.tripadvisor.com/..."
+        },
+        "custom": {
+          "namePlaceholder": "Platform name",
+          "urlPlaceholder": "https://...",
+          "remove": "Remove platform",
+          "add": "Add Another Platform"
+        }
+      }
+    }
+  },
+  "sendReminder": {
+    "errors": {
+      "unauthorized": "unauthorized",
+      "missingReservationId": "Missing reservationId",
+      "reservationNotFound": "Reservation not found",
+      "reminderAlreadySent": "Reminder already sent",
+      "restaurantNotFound": "Restaurant not found",
+      "reminderNotEnabled": "Reminder email not enabled",
+      "templateNotConfigured": "Reminder template not configured",
+      "failedToSend": "Failed to send reminder email"
+    },
+
+    "success": {
+      "sent": "Reminder email sent"
+    }
+  },
+  "updateReservationStatus": {
+    "errors": {
+      "unauthorized": "unauthorized",
+      "missingReservationIdOrStatus": "Missing reservationId or status",
+      "failedToUpdate": "Failed to update status"
+    }
+  },
+  "testTemplatesApi": {
+    "errors": {
+      "unauthorized": "unauthorized",
+      "restaurantNotFound": "Restaurant not found or invalid user.",
+      "sendFailed": "Failed to send email. Check API key / sender verification.",
+      "validationError": "Fields validation error",
+      "generic": "Something went wrong"
+    },
+
+    "success": {
+      "sent": "Test emails sent to { sendTo }"
+    }
+  },
+  "startNotificationIntegration": {
+    "errors": {
+      "unauthorized": "unauthorized",
+      "sendFailed": "Failed to send email. Check API key / sender verification.",
+      "generic": "Something went wrong"
+    },
+    "success": { "created": "Verification code created" }
   }
 }

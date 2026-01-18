@@ -65,18 +65,17 @@ const default_data: SettingsState = {
         email_cancellation_subject: "Your reservation at {{restaurant_name}} has been cancelled",
         email_cancellation_body: `Hi {{guest_name}},\n\nWe’re sorry to inform you that your reservation at {{restaurant_name}} has been cancelled.\n\nIf you have any questions or need assistance, please contact us.\n\n{{restaurant_name}}\n{{restaurant_contact}}`,
         // when to send 
-        email_confirmation_enabled: true,
-        email_24h_reminder_enabled: true,
-        email_cancellation_enabled: true,
+        email_confirmation_enabled: false,
+        email_24h_reminder_enabled: false,
+        email_cancellation_enabled: false,
 
         // management
         owner_notifications_enabled: false,
         owner_emails: [],
-        owner_notify_new_bookings: true,
-        owner_notify_cancellations: true,
+        owner_notify_new_bookings: false,
+        owner_notify_cancellations: false,
         review_email: {
             enabled: false,
-            delay_hours: 2,
             email_subject: "Thank you for dining with us! Share your experience",
             email_body:
                 "Dear {{customer_name}},\n\nThank you for choosing {{restaurant_name}} for your dining experience. We hope you enjoyed your visit!\n\nWe would greatly appreciate if you could take a moment to share your experience with others by leaving a review.\n\n{{review_links}}\n\nBest regards,\n{{restaurant_name}} Team",

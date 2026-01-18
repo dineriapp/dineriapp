@@ -1,25 +1,27 @@
 
 import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
 import { checkAuth } from "@/lib/auth/utils";
-import { extractSendGridFromSettings, getRenderedReservationEmailTemplates } from "@/lib/email-utils";
+import { extractSendGridFromSettings, getRenderedReservationEmailTemplates, renderReviewLinks, replaceVars } from "@/lib/email-utils";
 import prisma from "@/lib/prisma";
 import { sendEmailWithSendGridUsingKey } from "@/lib/send-grid";
 import { textToSimpleHtml } from "@/lib/utils";
 import { Reservation } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 import { after, NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+    const t = await getTranslations("updateReservationStatus")
     try {
         const body = await request.json();
         const { reservationId, status } = body;
         const session = await checkAuth();
         if (!session?.user) {
-            return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+            return NextResponse.json({ ok: false, error: t("errors.unauthorized") }, { status: 401 });
         }
 
         if (!reservationId || !status) {
             return NextResponse.json(
-                { success: false, error: "Missing reservationId or status" },
+                { success: false, error: t("errors.missingReservationIdOrStatus") },
                 { status: 400 }
             );
         }
@@ -29,7 +31,7 @@ export async function POST(request: NextRequest) {
             data: { status },
         });
 
-        if (status === "CANCELLED" || status === "CONFIRMED") {
+        if (status === "CANCELLED" || status === "CONFIRMED" || status === "COMPLETED") {
             const restaurant = await prisma.restaurant.findFirst({
                 where: {
                     id: updated.restaurant_id,
@@ -44,8 +46,51 @@ export async function POST(request: NextRequest) {
             if (restaurant) {
                 const settings = restaurant.reservation_settings?.settings as SettingsState | undefined;
                 const extracted = extractSendGridFromSettings(settings);
+                if (status === "CANCELLED" || status === "CONFIRMED") {
+                    sendEmailsForStatus(status, extracted, settings, restaurant, updated);
+                }
+                if (status === "COMPLETED" && extracted.ok) {
+                    const reviewSettings = extracted.review;
 
-                sendEmailsForStatus(status, extracted, settings, restaurant, updated);
+                    if (
+                        reviewSettings?.enabled &&
+                        reviewSettings.email_subject &&
+                        extracted.email_24h_reminder_enabled === true &&
+                        reviewSettings.email_body &&
+                        updated.customer_email
+                    ) {
+                        const reviewLinksText = renderReviewLinks(reviewSettings);
+
+                        const vars = {
+                            restaurant_name: restaurant.name ?? "",
+                            customer_name: updated.customer_name ?? "",
+                            review_links: reviewLinksText,
+                        };
+
+                        const subject = replaceVars(reviewSettings.email_subject, vars);
+                        const body = replaceVars(reviewSettings.email_body, vars);
+
+                        const html = textToSimpleHtml(body);
+
+                        after(async () => {
+                            try {
+                                await sendEmailWithSendGridUsingKey({
+                                    apiKey: extracted.config.apiKey,
+                                    to: updated.customer_email!,
+                                    fromEmail: extracted.config.fromEmail,
+                                    fromName: extracted.config.fromName,
+                                    replyTo: extracted.config.fromEmail,
+                                    subject,
+                                    html,
+                                    text: body,
+                                });
+                            } catch (e) {
+                                console.error("Review email error:", e);
+                            }
+                        });
+                    }
+                }
+
             }
         }
 
@@ -57,7 +102,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error("Update Status Error:", error);
         return NextResponse.json(
-            { success: false, error: "Failed to update status" },
+            { success: false, error: t("errors.failedToUpdate") },
             { status: 500 }
         );
     }

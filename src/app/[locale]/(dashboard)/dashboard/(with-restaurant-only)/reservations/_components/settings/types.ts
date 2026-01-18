@@ -26,14 +26,12 @@ export interface RestaurantSettings {
 export type OwnerNotificationTiming = "immediate" | "daily" | "custom";
 
 export interface ReviewLinkInput {
-    id: string;
     name: string;
     url: string;
 }
 
 export interface ReviewEmailSettings {
     enabled: boolean;
-    delay_hours: number;
     email_subject: string;
     email_body: string;
     google_review_link: string;

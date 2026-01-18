@@ -19,6 +19,7 @@ import { useState } from "react";
 import Integration from "./notifications-setting/integration";
 import MainSettings from "./notifications-setting/main-settings";
 import { NotificationSettings } from "./types";
+import { useTranslations } from "next-intl";
 
 interface NotificationSettingsProps {
     settings: NotificationSettings;
@@ -27,7 +28,7 @@ interface NotificationSettingsProps {
 
 export function NotificationSettingsComponent({ settings, updateSettingsSection }: NotificationSettingsProps) {
     const [showinfo, setShowInfo] = useState<boolean>(false);
-
+    const t = useTranslations("notificationSettings")
     const setSettings = (partial: Partial<NotificationSettings>) => {
         updateSettingsSection("notification_settings", { ...settings, ...partial });
     };
@@ -36,23 +37,27 @@ export function NotificationSettingsComponent({ settings, updateSettingsSection 
         <Card className="gap-4 pb-0">
             {/* Header */}
             <CardHeader>
-                <div className="flex flex-row items-center justify-between">
+                <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
                     <div>
-                        <CardTitle>Notification Settings</CardTitle>
-                        <CardDescription>Configure automated email notifications for reservations</CardDescription>
+                        <CardTitle>
+                            {t("title")}
+                        </CardTitle>
+                        <CardDescription>
+                            {t("description")}
+                        </CardDescription>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-start md:items-center md:flex-row flex-col gap-3">
                         {/* Test status badge */}
                         {settings.notifications_enabled && (
                             settings.test_mode_passed ? (
                                 <div className="inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-sm text-green-700">
                                     <CheckCircle2 className="h-4 w-4" />
-                                    Testing phase passed
+                                    {t("status.testingPassed")}
                                 </div>
                             ) : (
                                 <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm text-amber-800">
                                     <AlertCircle className="h-4 w-4" />
-                                    Testing phase not passed
+                                    {t("status.testingNotPassed")}
                                 </div>
                             )
                         )}
@@ -60,28 +65,31 @@ export function NotificationSettingsComponent({ settings, updateSettingsSection 
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                     <Button variant="default" size="sm" className="h-8">
-                                        Change integration values
+                                        {t("actions.changeIntegration")}
                                     </Button>
                                 </AlertDialogTrigger>
 
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Change integration values?</AlertDialogTitle>
+                                        <AlertDialogTitle>
+                                            {t("dialogs.changeIntegrationTitle")}
+                                        </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            If you change these values, the testing phase will be reset to <b>Not Passed</b>.
-                                            You will need to verify again by sending a new code to your test email.
+                                            {t("dialogs.changeIntegrationDescription")}
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
 
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogCancel>
+                                            {t("actions.cancel")}
+                                        </AlertDialogCancel>
                                         <AlertDialogAction
                                             onClick={() => {
                                                 // reset test mode so user can re-verify
                                                 setSettings({ test_mode_passed: false });
                                             }}
                                         >
-                                            Yes, change
+                                            {t("actions.confirmChange")}
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -110,10 +118,11 @@ export function NotificationSettingsComponent({ settings, updateSettingsSection 
                             <div className="flex items-start gap-3">
                                 <Check className="h-5 w-5 text-green-700 mt-0.5" />
                                 <div>
-                                    <p className="text-sm font-semibold text-green-900">Integrations done</p>
+                                    <p className="text-sm font-semibold text-green-900">
+                                        {t("infoBanner.title")}
+                                    </p>
                                     <p className="mt-1 text-sm text-green-800">
-                                        Your email integration is verified and working. Please save your changes before updating any other settings, so your
-                                        integration stays active.
+                                        {t("infoBanner.description")}
                                     </p>
                                 </div>
                             </div>

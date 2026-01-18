@@ -1,6 +1,7 @@
 "use client";
 import { Switch } from '@/components/ui/switch';
 import { Check, Mail, Plus, Trash2, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { NotificationSettings } from '../types';
 import EmailTemplates from './email-templates';
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const MainSettings = ({ settings, updateSettingsSection }: Props) => {
+    const t = useTranslations("mainSettings")
     const [activeTab, setActiveTab] = useState<"general" | "templates" | "management" | "reviews">("general");
 
     const setSettings = (partial: Partial<NotificationSettings>) => {
@@ -30,15 +32,15 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`px-6 py-3 font-medium border-b-2 ${activeTab === tab
-                            ? "border-slate-900 text-slate-900"
+                        className={`px-6 py-3 max-sm:w-full font-medium border-b-2 ${activeTab === tab
+                            ? "border-slate-900 text-slate-900 bg-gray-100"
                             : "border-transparent text-slate-600 hover:text-slate-900"
                             }`}
                     >
-                        {tab === "general" && "General Settings"}
-                        {tab === "templates" && "Email Templates"}
-                        {tab === "management" && "Management Notifications"}
-                        {tab === "reviews" && "Review Requests"}
+                        {tab === "general" && t("tabs.general")}
+                        {tab === "templates" && t("tabs.templates")}
+                        {tab === "management" && t("tabs.management")}
+                        {tab === "reviews" && t("tabs.reviews")}
                     </button>
                 ))}
             </div>
@@ -62,8 +64,12 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                     {settings.email_confirmation_enabled && <Check className="w-4 h-4" />}
                                 </button>
                                 <div className="flex-1">
-                                    <div className="font-medium">Booking Confirmation</div>
-                                    <div className="text-sm text-slate-600">Send immediately when reservation is created</div>
+                                    <div className="font-medium">
+                                        {t("general.bookingConfirmation.title")}
+                                    </div>
+                                    <div className="text-sm text-slate-600">
+                                        {t("general.bookingConfirmation.description")}
+                                    </div>
                                 </div>
                             </label>
 
@@ -80,9 +86,11 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                     {settings.email_24h_reminder_enabled && <Check className="w-4 h-4" />}
                                 </button>
                                 <div className="flex-1">
-                                    <div className="font-medium">24-Hour Reminder</div>
+                                    <div className="font-medium">
+                                        {t("general.reminderButton.title")}
+                                    </div>
                                     <div className="text-sm text-slate-600">
-                                        Send the day before reservation.
+                                        {t("general.reminderButton.description")}
                                     </div>
                                 </div>
                             </label>
@@ -100,8 +108,12 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                     {settings.email_cancellation_enabled && <Check className="w-4 h-4" />}
                                 </button>
                                 <div className="flex-1">
-                                    <div className="font-medium">Cancellation Confirmation</div>
-                                    <div className="text-sm text-slate-600">Send when reservation is cancelled</div>
+                                    <div className="font-medium">
+                                        {t("general.cancellation.title")}
+                                    </div>
+                                    <div className="text-sm text-slate-600">
+                                        {t("general.cancellation.description")}
+                                    </div>
                                 </div>
                             </label>
                         </div>
@@ -120,9 +132,11 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                             <div className="flex items-center gap-3">
                                 <Users className="w-5 h-5 text-slate-600" />
                                 <div>
-                                    <div className="font-semibold text-slate-900">Management Notifications</div>
+                                    <div className="font-semibold text-slate-900">
+                                        {t("management.section.title")}
+                                    </div>
                                     <div className="text-sm text-slate-600">
-                                        Receive email alerts about new bookings and cancellations
+                                        {t("management.section.description")}
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +151,9 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                             <div className="space-y-4">
                                 {/* Emails */}
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-2">Management Email Addresses</label>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        {t("management.emails.label")}
+                                    </label>
 
                                     <div className="space-y-2">
                                         {ownerEmailInputs.map((email, index) => (
@@ -150,7 +166,7 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                         next[index] = e.target.value;
                                                         setSettings({ owner_emails: next.filter((x) => x !== undefined) });
                                                     }}
-                                                    placeholder="manager@restaurant.com"
+                                                    placeholder={t("management.emails.placeholder")}
                                                     className="flex-1 px-4 py-2 border border-slate-300 rounded-lg"
                                                 />
 
@@ -179,16 +195,20 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                             className="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors border border-slate-200 disabled:opacity-50"
                                         >
                                             <Plus className="w-4 h-4" />
-                                            Add Another Email
+                                            {t("management.emails.add")}
                                         </button>
                                     </div>
 
-                                    <p className="text-xs text-slate-500 mt-1">Add up to 5 email addresses</p>
+                                    <p className="text-xs text-slate-500 mt-1">
+                                        {t("management.emails.limit")}
+                                    </p>
                                 </div>
 
                                 {/* Events */}
                                 <div className="border-t border-slate-200 pt-4">
-                                    <label className="block text-sm font-medium text-slate-700 mb-3">Notification Events</label>
+                                    <label className="block text-sm font-medium text-slate-700 mb-3">
+                                        {t("management.events.label")}
+                                    </label>
 
                                     <div className="space-y-2">
                                         <label className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg hover:bg-gray-100 cursor-pointer">
@@ -205,8 +225,12 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                 {settings.owner_notify_new_bookings && <Check className="w-4 h-4" />}
                                             </button>
                                             <div className="flex-1">
-                                                <div className="font-medium">New Bookings</div>
-                                                <div className="text-sm text-slate-600">Get notified when a reservation is created</div>
+                                                <div className="font-medium">
+                                                    {t("management.events.label")}
+                                                </div>
+                                                <div className="text-sm text-slate-600">
+                                                    {t("management.events.description")}
+                                                </div>
                                             </div>
                                         </label>
 
@@ -224,8 +248,12 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                 {settings.owner_notify_cancellations && <Check className="w-4 h-4" />}
                                             </button>
                                             <div className="flex-1">
-                                                <div className="font-medium">Cancellations</div>
-                                                <div className="text-sm text-slate-600">Get notified when a reservation is cancelled</div>
+                                                <div className="font-medium">
+                                                    {t("management.events.cancellations_title")}
+                                                </div>
+                                                <div className="text-sm text-slate-600">
+                                                    {t("management.events.cancellations_description")}
+                                                </div>
                                             </div>
                                         </label>
                                     </div>
@@ -242,9 +270,11 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                             <div className="flex items-center gap-3">
                                 <Mail className="w-5 h-5 text-slate-600" />
                                 <div>
-                                    <div className="font-semibold text-slate-900">Review Request Emails</div>
+                                    <div className="font-semibold text-slate-900">
+                                        {t("reviews.toggle.title")}
+                                    </div>
                                     <div className="text-sm text-slate-600">
-                                        Ask customers for reviews after their reservation
+                                        {t("reviews.toggle.description")}
                                     </div>
                                 </div>
                             </div>
@@ -260,28 +290,9 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                         {settings.review_email?.enabled && (
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-2">Email Delay</label>
-                                    <select
-                                        value={settings.review_email.delay_hours}
-                                        onChange={(e) =>
-                                            setSettings({
-                                                review_email: { ...settings.review_email, delay_hours: parseInt(e.target.value) },
-                                            })
-                                        }
-                                        className="w-full px-4 py-2 border border-slate-300 rounded-lg"
-                                    >
-                                        <option value={1}>1 hour after dining</option>
-                                        <option value={2}>2 hours after dining</option>
-                                        <option value={4}>4 hours after dining</option>
-                                        <option value={6}>6 hours after dining</option>
-                                        <option value={12}>12 hours after dining</option>
-                                        <option value={24}>Next day</option>
-                                        <option value={48}>2 days later</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-2">Email Subject</label>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        {t("reviews.subject.label")}
+                                    </label>
                                     <input
                                         type="text"
                                         value={settings.review_email.email_subject}
@@ -295,12 +306,17 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                 <div>
                                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
                                         <p className="text-xs text-blue-800">
-                                            <strong>Available variables:</strong> {`{{customer_name}}`}, {`{{restaurant_name}}`},{" "}
+                                            <strong>
+                                                {t("reviews.variables.label")}
+                                            </strong>
+                                            {`{{customer_name}}`}, {`{{restaurant_name}}`},{" "}
                                             {`{{review_links}}`}
                                         </p>
                                     </div>
 
-                                    <label className="block text-sm font-medium text-slate-700 mb-2">Email Body</label>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        {t("reviews.body.label")}
+                                    </label>
                                     <textarea
                                         rows={10}
                                         value={settings.review_email.email_body}
@@ -312,10 +328,14 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                 </div>
 
                                 <div className="border-t border-slate-200 pt-6 space-y-3">
-                                    <div className="font-semibold text-slate-900">Review Platform Links</div>
+                                    <div className="font-semibold text-slate-900">
+                                        {t("reviews.platforms.title")}
+                                    </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-2">Google Review Link</label>
+                                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                                            {t("reviews.platforms.google.label")}
+                                        </label>
                                         <input
                                             type="url"
                                             value={settings.review_email.google_review_link}
@@ -325,12 +345,14 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                 })
                                             }
                                             className="w-full px-4 py-2 border border-slate-300 rounded-lg"
-                                            placeholder="https://g.page/r/..."
+                                            placeholder={t("reviews.platforms.google.placeholder")}
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-2">Yelp Review Link</label>
+                                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                                            {t("reviews.platforms.yelp.label")}
+                                        </label>
                                         <input
                                             type="url"
                                             value={settings.review_email.yelp_review_link}
@@ -338,12 +360,14 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                 setSettings({ review_email: { ...settings.review_email, yelp_review_link: e.target.value } })
                                             }
                                             className="w-full px-4 py-2 border border-slate-300 rounded-lg"
-                                            placeholder="https://www.yelp.com/biz/..."
+                                            placeholder={t("reviews.platforms.yelp.placeholder")}
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-2">TripAdvisor Review Link</label>
+                                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                                            {t("reviews.platforms.tripadvisor.label")}
+                                        </label>
                                         <input
                                             type="url"
                                             value={settings.review_email.tripadvisor_review_link}
@@ -353,14 +377,14 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                 })
                                             }
                                             className="w-full px-4 py-2 border border-slate-300 rounded-lg"
-                                            placeholder="https://www.tripadvisor.com/..."
+                                            placeholder={t("reviews.platforms.tripadvisor.placeholder")}
                                         />
                                     </div>
 
                                     {/* Custom platforms */}
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 border-t pt-4">
                                         {(settings.review_email.other_review_links || []).map((link, idx) => (
-                                            <div key={link.id || idx} className="flex gap-2">
+                                            <div key={idx} className="flex flex-wrap gap-2">
                                                 <input
                                                     type="text"
                                                     value={link.name}
@@ -369,7 +393,7 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                         next[idx] = { ...next[idx], name: e.target.value };
                                                         setSettings({ review_email: { ...settings.review_email, other_review_links: next } });
                                                     }}
-                                                    placeholder="Platform name"
+                                                    placeholder={t("reviews.platforms.custom.namePlaceholder")}
                                                     className="flex-1 px-4 py-2 border border-slate-300 rounded-lg"
                                                 />
                                                 <input
@@ -380,7 +404,7 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                         next[idx] = { ...next[idx], url: e.target.value };
                                                         setSettings({ review_email: { ...settings.review_email, other_review_links: next } });
                                                     }}
-                                                    placeholder="https://..."
+                                                    placeholder={t("reviews.platforms.custom.urlPlaceholder")}
                                                     className="flex-1 px-4 py-2 border border-slate-300 rounded-lg"
                                                 />
                                                 <button
@@ -390,7 +414,7 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                                         setSettings({ review_email: { ...settings.review_email, other_review_links: next } });
                                                     }}
                                                     className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
-                                                    aria-label="Remove platform"
+                                                    aria-label={t("reviews.platforms.custom.remove")}
                                                 >
                                                     <Trash2 className="w-5 h-5" />
                                                 </button>
@@ -409,7 +433,7 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                             className="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors border border-slate-200"
                                         >
                                             <Plus className="w-4 h-4" />
-                                            Add Another Platform
+                                            {t("reviews.platforms.custom.add")}
                                         </button>
                                     </div>
                                 </div>

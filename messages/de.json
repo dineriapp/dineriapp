@@ -3748,7 +3748,9 @@
       "noReservations": "Keine Reservierungen gefunden"
     },
     "toast": {
-      "deleteSuccess": "Reservierung erfolgreich gelöscht!"
+      "deleteSuccess": "Reservierung erfolgreich gelöscht!",
+      "reminderSuccess": "Erinnerungs-E-Mail erfolgreich gesendet!",
+      "genericError": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
     },
     "reservationCard": {
       "partyOf": "Gruppe von { count }",
@@ -3775,7 +3777,8 @@
         "noteLabel": "Notiz:"
       },
       "actions": {
-        "delete": "Löschen"
+        "delete": "Löschen",
+        "sendReminder": "Erinnerung senden"
       },
       "status": {
         "pending": "Ausstehend",
@@ -4383,5 +4386,315 @@
   "paymentMethod": {
     "card": "Karte",
     "cash": "Bar"
+  },
+  "notificationSettings": {
+    "title": "Benachrichtigungseinstellungen",
+    "description": "Konfigurieren Sie automatisierte E-Mail-Benachrichtigungen für Reservierungen",
+
+    "status": {
+      "testingPassed": "Testphase bestanden",
+      "testingNotPassed": "Testphase nicht bestanden"
+    },
+
+    "actions": {
+      "changeIntegration": "Integrationswerte ändern",
+      "cancel": "Abbrechen",
+      "confirmChange": "Ja, ändern"
+    },
+
+    "dialogs": {
+      "changeIntegrationTitle": "Integrationswerte ändern?",
+      "changeIntegrationDescription": "Wenn Sie diese Werte ändern, wird die Testphase auf Nicht bestanden zurückgesetzt. Sie müssen erneut verifizieren, indem Sie einen neuen Code an Ihre Test-E-Mail senden."
+    },
+
+    "infoBanner": {
+      "title": "Integration abgeschlossen",
+      "description": "Ihre E-Mail-Integration ist verifiziert und funktioniert. Bitte speichern Sie Ihre Änderungen, bevor Sie andere Einstellungen aktualisieren, damit Ihre Integration aktiv bleibt."
+    }
+  },
+  "integration": {
+    "info": {
+      "title": "E-Mail-Integration verifizieren",
+      "description": "Wir senden einen 4-stelligen Bestätigungscode an Ihre Test-E-Mail-Adresse. Nach der Verifizierung können Sie andere Benachrichtigungseinstellungen sicher verwalten."
+    },
+
+    "messages": {
+      "codeSent": "Wir haben einen 4-stelligen Code an Ihre Test-E-Mail gesendet.",
+      "verificationSuccess": "Verifizierung erfolgreich. Ihre Einstellungen sind bereit – bitte klicken Sie auf Speichern, um sie anzuwenden.",
+      "requestFailed": "Anfrage fehlgeschlagen",
+      "somethingWentWrong": "Etwas ist schiefgelaufen"
+    },
+
+    "form": {
+      "fromName": {
+        "label": "Absendername",
+        "placeholder": "Name Ihres Restaurants",
+        "help": "Dieser Name wird Kunden als Absender angezeigt.",
+        "errors": {
+          "min": "Der Absendername muss mindestens 2 Zeichen enthalten",
+          "max": "Der Absendername darf höchstens 60 Zeichen enthalten"
+        }
+      },
+
+      "replyTo": {
+        "label": "Antwort an",
+        "placeholder": "reservierungen@ihrrestaurant.de",
+        "help": "Diese E-Mail-Adresse wird verwendet, um Benachrichtigungen an Kunden zu senden.",
+        "errors": {
+          "required": "Antwort-E-Mail ist erforderlich",
+          "invalid": "Antwort-E-Mail muss eine gültige E-Mail-Adresse sein"
+        }
+      },
+
+      "testEmail": {
+        "label": "Test-E-Mail senden an",
+        "placeholder": "test@domain.de",
+        "help": "Wir senden den Bestätigungscode an diese E-Mail-Adresse.",
+        "errors": {
+          "required": "Test-E-Mail ist erforderlich",
+          "invalid": "Test-E-Mail muss eine gültige E-Mail-Adresse sein"
+        }
+      },
+
+      "apiKey": {
+        "label": "Resend API-Schlüssel",
+        "placeholder": "xxxxxxxxxxxx",
+        "help": "Ihr Resend-API-Schlüssel wird verwendet, um E-Mails über Ihr Konto zu senden.",
+        "errors": {
+          "required": "Resend API-Schlüssel ist erforderlich"
+        }
+      },
+
+      "submit": "Validieren & Code senden"
+    },
+
+    "verification": {
+      "title": "Bestätigungscode eingeben",
+      "description": "Wir haben einen 4-stelligen Code an Ihre Test-E-Mail gesendet. Geben Sie ihn unten ein, um die Verifizierung abzuschließen.",
+      "codeLabel": "4-stelliger Code",
+      "placeholder": "1234",
+      "submit": "Code verifizieren",
+      "errors": {
+        "invalid": "Geben Sie den 4-stelligen Code ein"
+      }
+    }
+  },
+  "emailTemplates": {
+    "variables": {
+      "label": "Verfügbare Variablen:"
+    },
+
+    "confirmation": {
+      "subjectLabel": "Bestätigungsbetreff",
+      "bodyLabel": "Bestätigungstext"
+    },
+
+    "reminder": {
+      "subjectLabel": "Erinnerungsbetreff",
+      "bodyLabel": "Erinnerungstext"
+    },
+
+    "cancellation": {
+      "subjectLabel": "Stornierungsbetreff",
+      "bodyLabel": "Stornierungstext"
+    }
+  },
+  "testTemplatesDialog": {
+    "trigger": {
+      "button": "Vorlagen testen"
+    },
+
+    "dialog": {
+      "title": "Vorlagen testen",
+      "description": "Geben Sie Beispielwerte ein und senden Sie diese, um Ihre E-Mail-Variablen zu testen."
+    },
+
+    "messages": {
+      "submitting": "Wird gesendet...",
+      "submit": "Test absenden",
+      "reset": "Zurücksetzen",
+      "fail": "Anfrage fehlgeschlagen",
+      "genric": "Etwas ist schiefgelaufen."
+    },
+
+    "success": {
+      "iconText": "Erfolg"
+    },
+
+    "error": {
+      "iconText": "Fehler"
+    },
+
+    "form": {
+      "sendTo": {
+        "label": "Test-E-Mails senden an",
+        "placeholder": "test@beispiel.de",
+        "errors": {
+          "invalid": "Geben Sie eine gültige E-Mail-Adresse ein"
+        }
+      },
+
+      "variables": {
+        "title": "Variablen",
+
+        "restaurant_name": {
+          "label": "restaurant_name",
+          "error": "Restaurantname ist erforderlich"
+        },
+
+        "guest_name": {
+          "label": "guest_name",
+          "error": "Gastname ist erforderlich"
+        },
+
+        "party_size": {
+          "label": "party_size",
+          "invalid": "Muss eine ganze Zahl sein",
+          "min": "Muss mindestens 1 sein"
+        },
+
+        "date": {
+          "label": "date",
+          "error": "Datum ist erforderlich"
+        },
+
+        "time": {
+          "label": "time",
+          "error": "Uhrzeit ist erforderlich"
+        },
+
+        "restaurant_contact": {
+          "label": "restaurant_contact",
+          "error": "Restaurantkontakt ist erforderlich"
+        }
+      }
+    }
+  },
+  "mainSettings": {
+    "tabs": {
+      "general": "Allgemeine Einstellungen",
+      "templates": "E-Mail-Vorlagen",
+      "management": "Verwaltungsbenachrichtigungen",
+      "reviews": "Bewertungsanfragen"
+    },
+
+    "general": {
+      "bookingConfirmation": {
+        "title": "Buchungsbestätigung",
+        "description": "Wird sofort gesendet, wenn eine Reservierung erstellt wird"
+      },
+      "reminderButton": {
+        "title": "Erinnerungs-E-Mail-Schaltfläche",
+        "description": "Aktiviert eine Schaltfläche unter jeder Reservierung zum Senden von Erinnerungs-E-Mails an Kunden."
+      },
+      "cancellation": {
+        "title": "Stornierungsbestätigung",
+        "description": "Wird gesendet, wenn eine Reservierung storniert wird"
+      }
+    },
+
+    "management": {
+      "section": {
+        "title": "Verwaltungsbenachrichtigungen",
+        "description": "Erhalten Sie E-Mail-Benachrichtigungen über neue Buchungen und Stornierungen"
+      },
+      "emails": {
+        "label": "E-Mail-Adressen für die Verwaltung",
+        "placeholder": "manager@restaurant.de",
+        "add": "Weitere E-Mail hinzufügen",
+        "limit": "Bis zu 5 E-Mail-Adressen hinzufügen"
+      },
+      "events": {
+        "label": "Benachrichtigungsereignisse",
+        "title": "Neue Buchungen",
+        "description": "Benachrichtigung erhalten, wenn eine Reservierung erstellt wird",
+        "cancellations_title": "Stornierungen",
+        "cancellations_description": "Benachrichtigung erhalten, wenn eine Reservierung storniert wird"
+      }
+    },
+
+    "reviews": {
+      "toggle": {
+        "title": "E-Mails zur Bewertungsanfrage",
+        "description": "Bitten Sie Kunden nach ihrer Reservierung um eine Bewertung"
+      },
+      "subject": {
+        "label": "E-Mail-Betreff"
+      },
+      "body": {
+        "label": "E-Mail-Inhalt"
+      },
+      "variables": {
+        "label": "Verfügbare Variablen:"
+      },
+      "platforms": {
+        "title": "Links zu Bewertungsplattformen",
+        "google": {
+          "label": "Google-Bewertungslink",
+          "placeholder": "https://g.page/r/..."
+        },
+        "yelp": {
+          "label": "Yelp-Bewertungslink",
+          "placeholder": "https://www.yelp.com/biz/..."
+        },
+        "tripadvisor": {
+          "label": "TripAdvisor-Bewertungslink",
+          "placeholder": "https://www.tripadvisor.com/..."
+        },
+        "custom": {
+          "namePlaceholder": "Plattformname",
+          "urlPlaceholder": "https://...",
+          "remove": "Plattform entfernen",
+          "add": "Weitere Plattform hinzufügen"
+        }
+      }
+    }
+  },
+  "sendReminder": {
+    "errors": {
+      "unauthorized": "nicht autorisiert",
+      "missingReservationId": "Reservierungs-ID fehlt",
+      "reservationNotFound": "Reservierung nicht gefunden",
+      "reminderAlreadySent": "Erinnerung wurde bereits gesendet",
+      "restaurantNotFound": "Restaurant nicht gefunden",
+      "reminderNotEnabled": "Erinnerungs-E-Mail ist nicht aktiviert",
+      "templateNotConfigured": "Erinnerungsvorlage ist nicht konfiguriert",
+      "failedToSend": "Senden der Erinnerungs-E-Mail fehlgeschlagen"
+    },
+
+    "success": {
+      "sent": "Erinnerungs-E-Mail gesendet"
+    }
+  },
+  "updateReservationStatus": {
+    "errors": {
+      "unauthorized": "nicht autorisiert",
+      "missingReservationIdOrStatus": "Reservierungs-ID oder Status fehlt",
+      "failedToUpdate": "Status konnte nicht aktualisiert werden"
+    }
+  },
+  "testTemplatesApi": {
+    "errors": {
+      "unauthorized": "nicht autorisiert",
+      "restaurantNotFound": "Restaurant nicht gefunden oder ungültiger Benutzer.",
+      "sendFailed": "E-Mail konnte nicht gesendet werden. API-Schlüssel oder Absenderverifizierung prüfen.",
+      "validationError": "Fehler bei der Feldvalidierung",
+      "generic": "Etwas ist schiefgelaufen"
+    },
+
+    "success": {
+      "sent": "Test-E-Mails wurden an { sendTo } gesendet"
+    }
+  },
+  "startNotificationIntegration": {
+    "errors": {
+      "unauthorized": "nicht autorisiert",
+      "sendFailed": "E-Mail konnte nicht gesendet werden. API-Schlüssel oder Absenderverifizierung prüfen.",
+      "generic": "Etwas ist schiefgelaufen"
+    },
+
+    "success": {
+      "created": "Verifizierungscode erstellt"
+    }
   }
 }

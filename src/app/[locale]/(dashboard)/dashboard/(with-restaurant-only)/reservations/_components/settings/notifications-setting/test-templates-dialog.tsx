@@ -18,6 +18,7 @@ import { z } from "zod";
 import kyInstance from "@/lib/ky"; // adjust path to where you placed kyInstance
 import { useMutation } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // ---- types ----
 type ApiResponse = {
@@ -25,24 +26,26 @@ type ApiResponse = {
     message?: string;
 };
 
-// ---- form ----
-const formSchema = z.object({
-    sendTo: z.string().email("Enter a valid email address"),
-    restaurant_name: z.string().min(1, "Restaurant name is required"),
-    guest_name: z.string().min(1, "Guest name is required"),
-    party_size: z.coerce.number().int("Must be a whole number").min(1, "Must be at least 1"),
-    date: z.string().min(1, "Date is required"),
-    time: z.string().min(1, "Time is required"),
-    restaurant_contact: z.string().min(1, "Restaurant contact is required"),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
-type TestTemplatesPayload = FormValues & {
-    restaurant_id?: string;
-};
 
 const TestTemplatesDialog = () => {
+    const t = useTranslations("testTemplatesDialog")
+    // ---- form ----
+    const formSchema = z.object({
+        sendTo: z.string().email(t("form.sendTo.errors.invalid")),
+        restaurant_name: z.string().min(1, t("form.variables.restaurant_name.error")),
+        guest_name: z.string().min(1, t("form.variables.guest_name.error")),
+        party_size: z.coerce.number().int(t("form.variables.party_size.invalid")).min(1, t("form.variables.party_size.min")),
+        date: z.string().min(1, t("form.variables.date.error")),
+        time: z.string().min(1, t("form.variables.time.error")),
+        restaurant_contact: z.string().min(1, t("form.variables.restaurant_contact.error")),
+    });
+
+    type FormValues = z.infer<typeof formSchema>;
+
+    type TestTemplatesPayload = FormValues & {
+        restaurant_id?: string;
+    };
+
     const { selectedRestaurant: restaurant } = useRestaurantStore();
 
     const {
@@ -71,13 +74,11 @@ const TestTemplatesDialog = () => {
                 .json<ApiResponse>();
 
             if (!res.ok) {
-                throw new Error(res.message || "Request failed");
+                throw new Error(res.message || t("messages.fail"));
             }
             return res;
         },
-        onSuccess: (res) => {
-            console.log("TEST TEMPLATES SUCCESS:", res);
-        },
+
         onError: async (err: any) => {
             // Ky HTTPError
             if (err?.name === "HTTPError" && err?.response) {
@@ -86,11 +87,11 @@ const TestTemplatesDialog = () => {
                     console.log("TEST TEMPLATES ERROR:", data);
                     return;
                 } catch {
-                    console.log(`Request failed (${err.response.status})`);
+                    console.log(`${t("messages.fail")} (${err.response.status})`);
                     return;
                 }
             }
-            console.log(err?.message || "Something went wrong");
+            console.log(err?.message || t("messages.genric"));
         },
     });
 
@@ -108,14 +109,18 @@ const TestTemplatesDialog = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="default">Test your templates</Button>
+                <Button variant="default">
+                    {t("trigger.button")}
+                </Button>
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-[520px] max-h-[90dvh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>Test your templates</DialogTitle>
+                    <DialogTitle>
+                        {t("dialog.title")}
+                    </DialogTitle>
                     <DialogDescription>
-                        Enter sample values and submit to test your email variables.
+                        {t("dialog.description")}
                     </DialogDescription>
                 </DialogHeader>
                 {/* show server response */}
@@ -149,10 +154,12 @@ const TestTemplatesDialog = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Send to */}
                     <div className="space-y-1">
-                        <label className="text-sm font-medium text-slate-700">Send Test Emails To</label>
+                        <label className="text-sm font-medium text-slate-700">
+                            {t("form.sendTo.label")}
+                        </label>
                         <input
                             type="email"
-                            placeholder="test@example.com"
+                            placeholder={t("form.sendTo.placeholder")}
                             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
                             {...register("sendTo")}
                         />
@@ -160,12 +167,16 @@ const TestTemplatesDialog = () => {
                     </div>
 
                     <div className="rounded-lg border p-3">
-                        <p className="text-sm font-semibold text-slate-900">Variables</p>
+                        <p className="text-sm font-semibold text-slate-900">
+                            {t("form.variables.title")}
+                        </p>
 
                         <div className="mt-3 grid grid-cols-2 gap-4">
                             {/* restaurant_name */}
                             <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">restaurant_name</label>
+                                <label className="text-sm font-medium text-slate-700">
+                                    {t("form.variables.restaurant_name.label")}
+                                </label>
                                 <input
                                     type="text"
                                     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
@@ -178,7 +189,9 @@ const TestTemplatesDialog = () => {
 
                             {/* guest_name */}
                             <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">guest_name</label>
+                                <label className="text-sm font-medium text-slate-700">
+                                    {t("form.variables.guest_name.label")}
+                                </label>
                                 <input
                                     type="text"
                                     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
@@ -191,7 +204,9 @@ const TestTemplatesDialog = () => {
 
                             {/* party_size */}
                             <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">party_size</label>
+                                <label className="text-sm font-medium text-slate-700">
+                                    {t("form.variables.party_size.label")}
+                                </label>
                                 <input
                                     type="number"
                                     min={1}
@@ -205,7 +220,9 @@ const TestTemplatesDialog = () => {
 
                             {/* date */}
                             <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">date</label>
+                                <label className="text-sm font-medium text-slate-700">
+                                    {t("form.variables.date.label")}
+                                </label>
                                 <input
                                     type="date"
                                     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
@@ -216,7 +233,9 @@ const TestTemplatesDialog = () => {
 
                             {/* time */}
                             <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">time</label>
+                                <label className="text-sm font-medium text-slate-700">
+                                    {t("form.variables.time.label")}
+                                </label>
                                 <input
                                     type="time"
                                     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
@@ -227,7 +246,9 @@ const TestTemplatesDialog = () => {
 
                             {/* restaurant_contact */}
                             <div className="space-y-1">
-                                <label className="text-sm font-medium text-slate-700">restaurant_contact</label>
+                                <label className="text-sm font-medium text-slate-700">
+                                    {t("form.variables.restaurant_contact.label")}
+                                </label>
                                 <input
                                     type="text"
                                     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
@@ -248,10 +269,10 @@ const TestTemplatesDialog = () => {
                             onClick={() => reset()}
                             disabled={loading}
                         >
-                            Reset
+                            {t("messages.reset")}
                         </Button>
                         <Button type="submit" disabled={loading}>
-                            {loading ? "Submitting..." : "Submit Test"}
+                            {loading ? t("messages.submitting") : t("messages.submit")}
                         </Button>
                     </div>
 

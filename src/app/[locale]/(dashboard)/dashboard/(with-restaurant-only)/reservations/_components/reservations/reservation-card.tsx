@@ -16,6 +16,7 @@ import {
     EuroIcon,
     EyeOff,
     FilePlus2,
+    Loader,
     Mail,
     Phone,
     Trash2,
@@ -24,6 +25,7 @@ import {
     XCircle
 } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
+import { MdNotificationAdd } from "react-icons/md"
 
 const STATUS_COLORS: Record<string, string> = {
     PENDING: "bg-yellow-100 text-yellow-800 border-yellow-300",
@@ -35,11 +37,16 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 
-export function ReservationCard({ reservation, UpdateStatus, restaurant, handleDelete }: {
+export function ReservationCard({ reservation, UpdateStatus, restaurant, handleDelete, handleSendReminder, isSendingReminder }: {
     reservation: ReservationUp, UpdateStatus: (args: {
         reservationId: string;
         status: ReservationStatus;
-    }) => void; restaurant: Restaurant, handleDelete: (id: string) => void
+    }) => void;
+    restaurant: Restaurant,
+    handleDelete: (id: string) => void
+    handleSendReminder: (id: string) => void,
+    isSendingReminder: boolean;
+
 }) {
     const t = useTranslations("reservationsPage.reservationCard")
     const timeZone = restaurant?.timezone || "Asia/Karachi"
@@ -228,6 +235,25 @@ export function ReservationCard({ reservation, UpdateStatus, restaurant, handleD
                         <Trash2 className="w-4 h-4" />
                         {t("actions.delete")}
                     </Button>
+                    {
+                        reservation.reminder_sent ? null : (
+                            <Button
+                                size="sm"
+                                variant="default"
+                                className="gap-2 cursor-pointer"
+                                disabled={isSendingReminder}
+                                onClick={() => handleSendReminder(reservation.id)}
+                            >
+                                {isSendingReminder ? (
+                                    <Loader className="w-4 h-4 animate-spin" />
+                                ) : (
+                                    <MdNotificationAdd className="w-4 h-4" />
+                                )}
+                                {t("actions.sendReminder")}
+                            </Button>
+                        )
+                    }
+
                 </div>
             </CardContent>
         </Card>

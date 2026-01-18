@@ -8,38 +8,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { NotificationSettings } from "../types";
+import { useTranslations } from "next-intl";
 
-const integrationSchema = z.object({
-    email_from_name: z
-        .string()
-        .trim()
-        .min(2, "From Name must be at least 2 characters")
-        .max(60, "From Name must be 60 characters or less"),
 
-    email_reply_to: z
-        .string()
-        .trim()
-        .min(1, "Reply-To email is required")
-        .email("Reply-To must be a valid email"),
-
-    email_test_to: z
-        .string()
-        .trim()
-        .min(1, "Test email is required")
-        .email("Test email must be a valid email"),
-
-    sendgrid_api_key: z
-        .string()
-        .trim()
-        .min(1, "Resend API key is required")
-});
-
-const codeSchema = z.object({
-    code: z.string().trim().regex(/^\d{4}$/, "Enter the 4-digit code"),
-});
-
-type IntegrationFormValues = z.infer<typeof integrationSchema>;
-type CodeFormValues = z.infer<typeof codeSchema>;
 type ApiResponse = { ok: boolean; message?: string; };
 
 type Props = {
@@ -47,12 +18,43 @@ type Props = {
     onIntegrationSuccess: (values: Partial<NotificationSettings>) => void;
 };
 
-
 export default function Integration({ onIntegrationSuccess, settings }: Props) {
+    const t = useTranslations("integration");
+
+    const codeSchema = z.object({
+        code: z.string().trim().regex(/^\d{4}$/, t("verification.errors.invalid")),
+    });
+
+    type CodeFormValues = z.infer<typeof codeSchema>;
+    const integrationSchema = z.object({
+        email_from_name: z
+            .string()
+            .trim()
+            .min(2, t("form.fromName.errors.min"))
+            .max(60, t("form.fromName.errors.max")),
+
+        email_reply_to: z
+            .string()
+            .trim()
+            .min(1, t("form.replyTo.errors.required"))
+            .email(t("form.replyTo.errors.invalid")),
+
+        email_test_to: z
+            .string()
+            .trim()
+            .min(1, t("form.testEmail.errors.required"))
+            .email(t("form.testEmail.errors.invalid")),
+
+        sendgrid_api_key: z
+            .string()
+            .trim()
+            .min(1, t("form.apiKey.errors.required"))
+    });
+    type IntegrationFormValues = z.infer<typeof integrationSchema>;
+
     const [step, setStep] = useState<"FORM" | "CODE">("FORM");
     const [showinfo, setShowInfo] = useState<boolean>(true);
     const [serverMsg, setServerMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
-
     const form = useForm<IntegrationFormValues>({
         resolver: zodResolver(integrationSchema),
         mode: "onBlur",
@@ -84,12 +86,12 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
             const res = await kyInstance.post("/api/notifications/integration/start", { json: payload }).json<ApiResponse>();
 
             if (!res.ok) {
-                throw new Error(res.message || `Request failed`);
+                throw new Error(res.message || t("messages.requestFailed"));
             }
             return res;
         },
         onSuccess: () => {
-            setServerMsg({ type: "success", text: "We sent a 4-digit code to your test email." });
+            setServerMsg({ type: "success", text: t("messages.codeSent") });
             setStep("CODE");
         },
         onError: async (err: any) => {
@@ -97,14 +99,14 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
             if (err?.name === "HTTPError" && err?.response) {
                 try {
                     const data = (await err.response.json()) as ApiResponse;
-                    setServerMsg({ type: "error", text: data.message || "Request failed" });
+                    setServerMsg({ type: "error", text: data.message || t("messages.requestFailed") });
                     return;
                 } catch {
-                    setServerMsg({ type: "error", text: `Request failed (${err.response.status})` });
+                    setServerMsg({ type: "error", text: `${t("messages.requestFailed")}` });
                     return;
                 }
             }
-            setServerMsg({ type: "error", text: err?.message || "Something went wrong" });
+            setServerMsg({ type: "error", text: err?.message || t("messages.somethingWentWrong") });
         },
     });
 
@@ -114,14 +116,14 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
             const res = await kyInstance.post("/api/notifications/integration/verify", { json: payload }).json<ApiResponse>();
 
             if (!res.ok) {
-                throw new Error(res.message || `Request failed`);
+                throw new Error(res.message || t("messages.requestFailed"));
             }
             return res;
         },
         onSuccess: () => {
             setServerMsg({
                 type: "success",
-                text: "Verification successful. Your settings are ready — please click Save to apply them."
+                text: t("messages.verificationSuccess")
             });
             const configuredValues = form.getValues();
 
@@ -135,14 +137,14 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
             if (err?.name === "HTTPError" && err?.response) {
                 try {
                     const data = (await err.response.json()) as ApiResponse;
-                    setServerMsg({ type: "error", text: data.message || "Request failed" });
+                    setServerMsg({ type: "error", text: data.message || t("messages.requestFailed") });
                     return;
                 } catch {
-                    setServerMsg({ type: "error", text: `Request failed (${err.response.status})` });
+                    setServerMsg({ type: "error", text: t("messages.requestFailed") });
                     return;
                 }
             }
-            setServerMsg({ type: "error", text: err?.message || "Something went wrong" });
+            setServerMsg({ type: "error", text: err?.message || t("messages.somethingWentWrong") });
         },
     });
 
@@ -158,10 +160,11 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
                     <div className="flex items-start gap-3">
                         <Info className="h-5 w-5 text-blue-700 mt-0.5" />
                         <div>
-                            <p className="text-sm font-semibold text-blue-900">Verify email integration</p>
+                            <p className="text-sm font-semibold text-blue-900">
+                                {t("info.title")}
+                            </p>
                             <p className="mt-1 text-sm text-blue-800">
-                                We will send a 4-digit verification code to your test email. After verification, you can manage
-                                other notification settings safely.
+                                {t("info.description")}
                             </p>
                         </div>
                     </div>
@@ -190,28 +193,36 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-2">From Name</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                                {t("form.fromName.label")}
+                            </label>
                             <input
                                 type="text"
                                 {...form.register("email_from_name")}
                                 className={inputClass(!!form.formState.errors.email_from_name)}
-                                placeholder="Your Restaurant Name"
+                                placeholder={t("form.fromName.placeholder")}
                             />
-                            <Help>This name will appear to customers as the sender name.</Help>
+                            <Help>
+                                {t("form.fromName.help")}
+                            </Help>
                             {form.formState.errors.email_from_name && (
                                 <p className="mt-1 text-sm text-red-600">{form.formState.errors.email_from_name.message}</p>
                             )}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-2">Reply-To</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                                {t("form.replyTo.label")}
+                            </label>
                             <input
                                 type="email"
                                 {...form.register("email_reply_to")}
                                 className={inputClass(!!form.formState.errors.email_reply_to)}
-                                placeholder="reservations@yourrestaurant.com"
+                                placeholder={t("form.replyTo.placeholder")}
                             />
-                            <Help>This email address will be used to send notification emails to customers.</Help>
+                            <Help>
+                                {t("form.replyTo.help")}
+                            </Help>
                             {form.formState.errors.email_reply_to && (
                                 <p className="mt-1 text-sm text-red-600">{form.formState.errors.email_reply_to.message}</p>
                             )}
@@ -219,28 +230,34 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Test email send to</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                            {t("form.testEmail.label")}
+                        </label>
                         <input
                             type="email"
                             {...form.register("email_test_to")}
                             className={inputClass(!!form.formState.errors.email_test_to)}
-                            placeholder="test@domain.com"
+                            placeholder={t("form.testEmail.placeholder")}
                         />
-                        <Help>We will send the verification code to this email address.</Help>
+                        <Help>{t("form.testEmail.help")}</Help>
                         {form.formState.errors.email_test_to && (
                             <p className="mt-1 text-sm text-red-600">{form.formState.errors.email_test_to.message}</p>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Resend API Key</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                            {t("form.apiKey.label")}
+                        </label>
                         <input
                             type="password"
                             {...form.register("sendgrid_api_key")}
                             className={inputClass(!!form.formState.errors.sendgrid_api_key)}
-                            placeholder="re_xxxxxxxxxxxx"
+                            placeholder={t("form.apiKey.placeholder")}
                         />
-                        <Help>Your Resend API key is used to send emails from your account.</Help>
+                        <Help>
+                            {t("form.apiKey.help")}
+                        </Help>
                         {form.formState.errors.sendgrid_api_key && (
                             <p className="mt-1 text-sm text-red-600">{form.formState.errors.sendgrid_api_key.message}</p>
                         )}
@@ -253,7 +270,7 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
                             className="px-4 py-2 rounded-lg cursor-pointer bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-50 inline-flex items-center gap-2"
                         >
                             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                            Validate & Send Code
+                            {t("form.submit")}
                         </button>
                     </div>
                 </form>
@@ -269,20 +286,24 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
                     className="space-y-4"
                 >
                     <div className="rounded-lg border border-slate-200 bg-white p-4">
-                        <p className="text-sm font-medium text-slate-800">Enter verification code</p>
+                        <p className="text-sm font-medium text-slate-800">
+                            {t("verification.title")}
+                        </p>
                         <p className="mt-1 text-sm text-slate-600">
-                            We sent a 4-digit code to your test email. Enter it below to complete verification.
+                            {t("verification.description")}
                         </p>
 
                         <div className="mt-4">
-                            <label className="block text-sm font-medium text-slate-700 mb-2">4-digit code</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">
+                                {t("verification.codeLabel")}
+                            </label>
                             <input
                                 type="text"
                                 inputMode="numeric"
                                 maxLength={4}
                                 {...codeForm.register("code")}
                                 className={inputClass(!!codeForm.formState.errors.code)}
-                                placeholder="1234"
+                                placeholder={t("verification.placeholder")}
                             />
                             {codeForm.formState.errors.code && (
                                 <p className="mt-1 text-sm text-red-600">{codeForm.formState.errors.code.message}</p>
@@ -296,7 +317,7 @@ export default function Integration({ onIntegrationSuccess, settings }: Props) {
                                 className="px-4 py-2 rounded-lg cursor-pointer bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-50 inline-flex items-center gap-2"
                             >
                                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-                                Verify Code
+                                {t("verification.submit")}
                             </button>
                         </div>
                     </div>

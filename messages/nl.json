@@ -3749,7 +3749,9 @@
       "noReservations": "Geen reserveringen gevonden"
     },
     "toast": {
-      "deleteSuccess": "Reservering succesvol verwijderd!"
+      "deleteSuccess": "Reservering succesvol verwijderd!",
+      "reminderSuccess": "Herinneringsmail succesvol verzonden!",
+      "genericError": "Er is iets misgegaan. Probeer het opnieuw."
     },
     "reservationCard": {
       "partyOf": "Gezelschap van { count }",
@@ -3776,7 +3778,8 @@
         "noteLabel": "Opmerking:"
       },
       "actions": {
-        "delete": "Verwijderen"
+        "delete": "Verwijderen",
+        "sendReminder": "Herinnering verzenden"
       },
       "status": {
         "pending": "In afwachting",
@@ -4388,5 +4391,315 @@
   "paymentMethod": {
     "card": "Kaart",
     "cash": "Contant"
+  },
+  "notificationSettings": {
+    "title": "Meldingsinstellingen",
+    "description": "Configureer geautomatiseerde e-mailmeldingen voor reserveringen",
+
+    "status": {
+      "testingPassed": "Testfase geslaagd",
+      "testingNotPassed": "Testfase niet geslaagd"
+    },
+
+    "actions": {
+      "changeIntegration": "Integratiewaarden wijzigen",
+      "cancel": "Annuleren",
+      "confirmChange": "Ja, wijzigen"
+    },
+
+    "dialogs": {
+      "changeIntegrationTitle": "Integratiewaarden wijzigen?",
+      "changeIntegrationDescription": "Als u deze waarden wijzigt, wordt de testfase teruggezet naar Niet geslaagd. U moet opnieuw verifiëren door een nieuwe code naar uw test-e-mail te sturen."
+    },
+
+    "infoBanner": {
+      "title": "Integratie voltooid",
+      "description": "Uw e-mailintegratie is geverifieerd en werkt correct. Sla uw wijzigingen op voordat u andere instellingen bijwerkt, zodat de integratie actief blijft."
+    }
+  },
+  "integration": {
+    "info": {
+      "title": "E-mailintegratie verifiëren",
+      "description": "We sturen een 4-cijferige verificatiecode naar je test-e-mailadres. Na verificatie kun je andere meldingsinstellingen veilig beheren."
+    },
+
+    "messages": {
+      "codeSent": "We hebben een 4-cijferige code naar je test-e-mail gestuurd.",
+      "verificationSuccess": "Verificatie geslaagd. Je instellingen zijn klaar — klik op Opslaan om ze toe te passen.",
+      "requestFailed": "Verzoek mislukt",
+      "somethingWentWrong": "Er is iets misgegaan"
+    },
+
+    "form": {
+      "fromName": {
+        "label": "Afzendernaam",
+        "placeholder": "Naam van je restaurant",
+        "help": "Deze naam wordt aan klanten getoond als afzender.",
+        "errors": {
+          "min": "De afzendernaam moet minimaal 2 tekens bevatten",
+          "max": "De afzendernaam mag maximaal 60 tekens bevatten"
+        }
+      },
+
+      "replyTo": {
+        "label": "Antwoorden aan",
+        "placeholder": "reserveringen@jouwrestaurant.com",
+        "help": "Dit e-mailadres wordt gebruikt om meldingen naar klanten te sturen.",
+        "errors": {
+          "required": "Antwoord-e-mailadres is verplicht",
+          "invalid": "Antwoord-e-mailadres moet geldig zijn"
+        }
+      },
+
+      "testEmail": {
+        "label": "Test-e-mail verzenden naar",
+        "placeholder": "test@domein.com",
+        "help": "We sturen de verificatiecode naar dit e-mailadres.",
+        "errors": {
+          "required": "Test-e-mail is verplicht",
+          "invalid": "Test-e-mail moet een geldig e-mailadres zijn"
+        }
+      },
+
+      "apiKey": {
+        "label": "Resend API-sleutel",
+        "placeholder": "xxxxxxxxxxxx",
+        "help": "Je Resend API-sleutel wordt gebruikt om e-mails via je account te verzenden.",
+        "errors": {
+          "required": "Resend API-sleutel is verplicht"
+        }
+      },
+
+      "submit": "Valideren en code verzenden"
+    },
+
+    "verification": {
+      "title": "Verificatiecode invoeren",
+      "description": "We hebben een 4-cijferige code naar je test-e-mail gestuurd. Voer deze hieronder in om de verificatie te voltooien.",
+      "codeLabel": "4-cijferige code",
+      "placeholder": "1234",
+      "submit": "Code verifiëren",
+      "errors": {
+        "invalid": "Voer de 4-cijferige code in"
+      }
+    }
+  },
+  "emailTemplates": {
+    "variables": {
+      "label": "Beschikbare variabelen:"
+    },
+
+    "confirmation": {
+      "subjectLabel": "Bevestigingsonderwerp",
+      "bodyLabel": "Bevestigingstekst"
+    },
+
+    "reminder": {
+      "subjectLabel": "Herinneringsonderwerp",
+      "bodyLabel": "Herinneringstekst"
+    },
+
+    "cancellation": {
+      "subjectLabel": "Annuleringsonderwerp",
+      "bodyLabel": "Annuleringstekst"
+    }
+  },
+  "testTemplatesDialog": {
+    "trigger": {
+      "button": "Sjablonen testen"
+    },
+
+    "dialog": {
+      "title": "Sjablonen testen",
+      "description": "Voer voorbeeldwaarden in en verzend om je e-mailvariabelen te testen."
+    },
+
+    "messages": {
+      "submitting": "Bezig met verzenden...",
+      "submit": "Test verzenden",
+      "reset": "Resetten",
+      "fail": "Verzoek mislukt",
+      "genric": "Er is iets misgegaan."
+    },
+
+    "success": {
+      "iconText": "Succes"
+    },
+
+    "error": {
+      "iconText": "Fout"
+    },
+
+    "form": {
+      "sendTo": {
+        "label": "Test-e-mails verzenden naar",
+        "placeholder": "test@voorbeeld.nl",
+        "errors": {
+          "invalid": "Voer een geldig e-mailadres in"
+        }
+      },
+
+      "variables": {
+        "title": "Variabelen",
+
+        "restaurant_name": {
+          "label": "restaurant_name",
+          "error": "Restaurantnaam is verplicht"
+        },
+
+        "guest_name": {
+          "label": "guest_name",
+          "error": "Gastnaam is verplicht"
+        },
+
+        "party_size": {
+          "label": "party_size",
+          "invalid": "Moet een geheel getal zijn",
+          "min": "Moet minimaal 1 zijn"
+        },
+
+        "date": {
+          "label": "date",
+          "error": "Datum is verplicht"
+        },
+
+        "time": {
+          "label": "time",
+          "error": "Tijd is verplicht"
+        },
+
+        "restaurant_contact": {
+          "label": "restaurant_contact",
+          "error": "Restaurantcontact is verplicht"
+        }
+      }
+    }
+  },
+  "mainSettings": {
+    "tabs": {
+      "general": "Algemene instellingen",
+      "templates": "E-mailsjablonen",
+      "management": "Beheermeldingen",
+      "reviews": "Beoordelingsverzoeken"
+    },
+
+    "general": {
+      "bookingConfirmation": {
+        "title": "Boekingsbevestiging",
+        "description": "Wordt direct verzonden wanneer een reservering wordt aangemaakt"
+      },
+      "reminderButton": {
+        "title": "Herinneringsmailknop",
+        "description": "Activeert een knop onder elke reservering om herinneringsmails naar klanten te sturen."
+      },
+      "cancellation": {
+        "title": "Annuleringsbevestiging",
+        "description": "Wordt verzonden wanneer een reservering wordt geannuleerd"
+      }
+    },
+
+    "management": {
+      "section": {
+        "title": "Beheermeldingen",
+        "description": "Ontvang e-mailmeldingen over nieuwe boekingen en annuleringen"
+      },
+      "emails": {
+        "label": "Beheer-e-mailadressen",
+        "placeholder": "manager@restaurant.nl",
+        "add": "Nog een e-mailadres toevoegen",
+        "limit": "Voeg maximaal 5 e-mailadressen toe"
+      },
+      "events": {
+        "label": "Meldingsgebeurtenissen",
+        "title": "Nieuwe boekingen",
+        "description": "Ontvang een melding wanneer een reservering wordt aangemaakt",
+        "cancellations_title": "Annuleringen",
+        "cancellations_description": "Ontvang een melding wanneer een reservering wordt geannuleerd"
+      }
+    },
+
+    "reviews": {
+      "toggle": {
+        "title": "Beoordelingsverzoek-e-mails",
+        "description": "Vraag klanten om een beoordeling na hun reservering"
+      },
+      "subject": {
+        "label": "E-mailonderwerp"
+      },
+      "body": {
+        "label": "E-mailtekst"
+      },
+      "variables": {
+        "label": "Beschikbare variabelen:"
+      },
+      "platforms": {
+        "title": "Links naar beoordelingsplatforms",
+        "google": {
+          "label": "Google-beoordelingslink",
+          "placeholder": "https://g.page/r/..."
+        },
+        "yelp": {
+          "label": "Yelp-beoordelingslink",
+          "placeholder": "https://www.yelp.com/biz/..."
+        },
+        "tripadvisor": {
+          "label": "TripAdvisor-beoordelingslink",
+          "placeholder": "https://www.tripadvisor.com/..."
+        },
+        "custom": {
+          "namePlaceholder": "Platformnaam",
+          "urlPlaceholder": "https://...",
+          "remove": "Platform verwijderen",
+          "add": "Nog een platform toevoegen"
+        }
+      }
+    }
+  },
+  "sendReminder": {
+    "errors": {
+      "unauthorized": "niet geautoriseerd",
+      "missingReservationId": "Reserverings-ID ontbreekt",
+      "reservationNotFound": "Reservering niet gevonden",
+      "reminderAlreadySent": "Herinnering is al verzonden",
+      "restaurantNotFound": "Restaurant niet gevonden",
+      "reminderNotEnabled": "Herinneringsmail is niet ingeschakeld",
+      "templateNotConfigured": "Herinneringssjabloon is niet geconfigureerd",
+      "failedToSend": "Verzenden van herinneringsmail mislukt"
+    },
+
+    "success": {
+      "sent": "Herinneringsmail verzonden"
+    }
+  },
+  "updateReservationStatus": {
+    "errors": {
+      "unauthorized": "niet geautoriseerd",
+      "missingReservationIdOrStatus": "Reserverings-ID of status ontbreekt",
+      "failedToUpdate": "Status bijwerken mislukt"
+    }
+  },
+  "testTemplatesApi": {
+    "errors": {
+      "unauthorized": "niet geautoriseerd",
+      "restaurantNotFound": "Restaurant niet gevonden of ongeldige gebruiker.",
+      "sendFailed": "E-mail verzenden mislukt. Controleer de API-sleutel of afzenderverificatie.",
+      "validationError": "Validatiefout in velden",
+      "generic": "Er is iets misgegaan"
+    },
+
+    "success": {
+      "sent": "Test-e-mails verzonden naar { sendTo }"
+    }
+  },
+  "startNotificationIntegration": {
+    "errors": {
+      "unauthorized": "niet geautoriseerd",
+      "sendFailed": "E-mail verzenden mislukt. Controleer de API-sleutel of afzenderverificatie.",
+      "generic": "Er is iets misgegaan"
+    },
+
+    "success": {
+      "created": "Verificatiecode aangemaakt"
+    }
   }
 }

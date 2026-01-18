@@ -128,6 +128,22 @@ export const reservationsApi = {
         const body = await res.json<{ success: true; data: ReservationPolicy }>();
         return body.data;
     },
+    sendReservationReminderEmail: async (reservationId: string) => {
+        const res = await fetch("/api/reservations/reminder", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reservationId }),
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            throw new Error(data.error || "Failed to send reminder email");
+        }
+
+        return data;
+    },
+
 };
 
 export function useReservations(
@@ -298,3 +314,44 @@ export function useUpdateReservationPolicy() {
         },
     });
 }
+export function useSendReservationReminderEmail() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (reservationId: string) =>
+            reservationsApi.sendReservationReminderEmail(reservationId),
+
+        onSuccess: (response) => {
+            const reservationId = response.data.id;
+
+            queryClient.setQueriesData(
+                { queryKey: [RESERVATIONS_QUERY_KEY] },
+                (oldData: any) => {
+                    if (!oldData) return oldData;
+
+                    if (Array.isArray(oldData)) {
+                        return oldData.map((r) =>
+                            r.id === reservationId
+                                ? { ...r, reminder_sent: true }
+                                : r
+                        );
+                    }
+
+                    if (oldData?.data) {
+                        return {
+                            ...oldData,
+                            data: oldData.data.map((r: any) =>
+                                r.id === reservationId
+                                    ? { ...r, reminder_sent: true }
+                                    : r
+                            ),
+                        };
+                    }
+
+                    return oldData;
+                }
+            );
+        },
+    });
+}
+

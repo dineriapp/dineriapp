@@ -4,6 +4,7 @@ import { extractSendGridFromSettings, getRenderedReservationEmailTemplates } fro
 import prisma from "@/lib/prisma";
 import { sendEmailWithSendGridUsingKey } from "@/lib/send-grid";
 import { textToSimpleHtml } from "@/lib/utils";
+import { getTranslations } from "next-intl/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -19,10 +20,11 @@ const startSchema = z.object({
 });
 
 export async function POST(req: Request) {
+    const t = await getTranslations("testTemplatesApi")
     try {
         const session = await checkAuth();
         if (!session?.user) {
-            return NextResponse.json({ ok: false, message: "unauthorized" }, { status: 401 });
+            return NextResponse.json({ ok: false, message: t("errors.unauthorized") }, { status: 401 });
         }
 
         const body = await req.json();
@@ -40,7 +42,7 @@ export async function POST(req: Request) {
 
         if (!restaurant) {
             return NextResponse.json(
-                { ok: false, message: "Restaurant not found or invalid user." },
+                { ok: false, message: t("errors.restaurantNotFound") },
                 { status: 401 }
             );
         }
@@ -86,7 +88,7 @@ export async function POST(req: Request) {
             return NextResponse.json(
                 {
                     ok: false,
-                    message: e?.message || "Failed to send email. Check API key / sender verification.",
+                    message: e?.message || t("errors.sendFailed"),
                 },
                 { status: 400 }
             );
@@ -94,7 +96,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json({
             ok: true,
-            message: `Test emails sent to ${data.sendTo}`,
+            message: `${t("success.sent", { sendTo: data.sendTo })}`,
             templates: renderedTemplates,
             data,
         });
@@ -103,7 +105,7 @@ export async function POST(req: Request) {
             return NextResponse.json(
                 {
                     ok: false,
-                    message: "Fields validation error",
+                    message: t("errors.validationError"),
                     errors: err.flatten(),
                 },
                 { status: 400 }
@@ -112,7 +114,7 @@ export async function POST(req: Request) {
 
         console.log(err);
         return NextResponse.json(
-            { ok: false, message: err?.message ?? "Something went wrong" },
+            { ok: false, message: err?.message ?? `${t("errors.generic")}` },
             { status: 400 }
         );
     }

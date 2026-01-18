@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -661,8 +661,9 @@ model Reservation {
   preferred_area   String?
 
   // Status tracking
-  status ReservationStatus @default(PENDING)
-  source ReservationSource @default(ONLINE)
+  status        ReservationStatus @default(PENDING)
+  source        ReservationSource @default(ONLINE)
+  reminder_sent Boolean           @default(false)
 
   // Timestamps for lifecycle tracking
   confirmed_at DateTime?

@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useDeleteReservation, useReservations, useUpdateReservationStatus } from "@/lib/reservation-queries"
+import { useDeleteReservation, useReservations, useSendReservationReminderEmail, useUpdateReservationStatus } from "@/lib/reservation-queries"
 import { cn } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { Restaurant } from "@prisma/client"
@@ -56,11 +56,23 @@ export default function ReservationsPage() {
     const [view, setView] = useState<"list" | "timeline">("list")
     const { mutate: deleteReservation, isPending: isDeleting } = useDeleteReservation();
     const { mutate: UpdateStatus, isPending: isUpdating } = useUpdateReservationStatus();
+    const sendReminderMutation = useSendReservationReminderEmail();
+
+    const [sendingReminderId, setSendingReminderId] = useState<string | null>(null);
+
+    const handleSendReminder = (reservationId: string) => {
+        setSendingReminderId(reservationId);
+        sendReminderMutation.mutate(reservationId, {
+            onSettled: () => setSendingReminderId(null),
+            onError: (e) => toast.error(e.message),
+            onSuccess: () => toast.success(t("toast.reminderSuccess")),
+        });
+    };
 
     const handleDelete = (id: string) => {
         deleteReservation(id, {
             onSuccess: () => toast.success(t("toast.deleteSuccess")),
-            onError: (error) => toast.error(error.message),
+            onError: () => toast.error(t("toast.genericError")),
         });
     };
 
@@ -336,7 +348,9 @@ export default function ReservationsPage() {
                                             <ReservationCard
                                                 reservation={reservation}
                                                 UpdateStatus={UpdateStatus}
+                                                handleSendReminder={handleSendReminder}
                                                 restaurant={restaurant as Restaurant}
+                                                isSendingReminder={sendingReminderId === reservation.id}
                                                 handleDelete={handleDelete}
                                             />
                                         </div>

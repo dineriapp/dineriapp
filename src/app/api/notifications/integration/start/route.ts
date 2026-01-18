@@ -1,6 +1,7 @@
 import { checkAuth } from "@/lib/auth/utils";
 import prisma from "@/lib/prisma";
 import { sendEmailWithSendGridUsingKey } from "@/lib/send-grid";
+import { getTranslations } from "next-intl/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -16,6 +17,7 @@ function generate4DigitCode() {
 }
 
 export async function POST(req: Request) {
+    const t = await getTranslations("startNotificationIntegration")
     try {
         const body = await req.json();
         const data = startSchema.parse(body);
@@ -23,7 +25,7 @@ export async function POST(req: Request) {
 
         const session = await checkAuth()
         if (!session?.user) {
-            return NextResponse.json({ ok: false, message: "unauthorized" }, { status: 401 })
+            return NextResponse.json({ ok: false, message: t("errors.unauthorized") }, { status: 401 })
         }
 
         const code = generate4DigitCode();
@@ -49,18 +51,18 @@ export async function POST(req: Request) {
             });
         } catch (e: any) {
             return NextResponse.json(
-                { ok: false, message: e?.message || "Failed to send email. Check API key / sender verification." },
+                { ok: false, message: e?.message || t("errors.sendFailed") },
                 { status: 400 }
             );
         }
         return NextResponse.json({
             ok: true,
-            message: "Verification code created",
+            message: t("success.created"),
         });
     } catch (err: any) {
         console.log(err)
         return NextResponse.json(
-            { ok: false, message: err?.message ?? "Something went wrong" },
+            { ok: false, message: err?.message ?? t("errors.generic") },
             { status: 400 }
         );
     }

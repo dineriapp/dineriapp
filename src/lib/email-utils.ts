@@ -1,4 +1,4 @@
-import type { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
+import type { ReviewEmailSettings, SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
 import { isNonEmptyString, renderTemplate } from "@/lib/utils";
 
 type SendGridEmailConfig = {
@@ -16,6 +16,7 @@ type NotificationFlags = {
     owner_emails: string[];
     owner_notify_new_bookings: boolean;
     owner_notify_cancellations: boolean;
+    review: ReviewEmailSettings
 };
 
 type ExtractOk = {
@@ -51,6 +52,7 @@ export function extractSendGridFromSettings(
         owner_emails: ns?.owner_emails ?? [],
         owner_notify_new_bookings: ns?.owner_notify_new_bookings ?? false,
         owner_notify_cancellations: ns?.owner_notify_cancellations ?? false,
+        review: ns?.review_email ?? { enabled: false, email_body: "", email_subject: "", google_review_link: "", other_review_links: [], tripadvisor_review_link: "", yelp_review_link: "" }
     };
 
     if (!enabled || !testModePassed) {
@@ -152,3 +154,38 @@ export function getRenderedReservationEmailTemplates(
         rendered_body: renderTemplate(t.body, vars),
     }));
 }
+
+export const renderReviewLinks = (links: {
+    google_review_link?: string;
+    yelp_review_link?: string;
+    tripadvisor_review_link?: string;
+    other_review_links?: { name: string; url: string }[];
+}) => {
+    const result: string[] = [];
+
+    if (links.google_review_link)
+        result.push(`Google: ${links.google_review_link}`);
+
+    if (links.yelp_review_link)
+        result.push(`Yelp: ${links.yelp_review_link}`);
+
+    if (links.tripadvisor_review_link)
+        result.push(`TripAdvisor: ${links.tripadvisor_review_link}`);
+
+    links.other_review_links?.forEach((l) => {
+        result.push(`${l.name}: ${l.url}`);
+    });
+
+    return result.join("\n");
+};
+
+export const replaceVars = (template: string, vars: Record<string, string>) => {
+    let result = template;
+
+    for (const [key, value] of Object.entries(vars)) {
+        const regex = new RegExp(`{{\\s*${key}\\s*}}`, "g");
+        result = result.replace(regex, value);
+    }
+
+    return result;
+};
