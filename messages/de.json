@@ -1653,9 +1653,9 @@
           "title": "Willkommen bei { restaurant }!",
           "description": "So wird dein Willkommens-Popup für Besucher angezeigt",
           "ratings": "Bewertungen",
-          "address": "{{address}}",
+          "address": "{ address }",
           "hours": "Heute geöffnet",
-          "phone": "{{phone}}"
+          "phone": "{ phone }"
         }
       },
       "unsavedChanges": {
@@ -3664,7 +3664,7 @@
       "tables": "Tische werden geladen..."
     },
     "error": {
-      "loadingTables": "Fehler beim Laden der Tische: {{message}}"
+      "loadingTables": "Fehler beim Laden der Tische: { message }"
     },
     "stats": {
       "totalTables": "Tische insgesamt",
@@ -4337,9 +4337,9 @@
     },
     "reservationDetails": {
       "confirmationSent": "Bestätigung gesendet",
-      "sentTo": "Details wurden an {{email}} gesendet",
+      "sentTo": "Details wurden an { email } gesendet",
       "depositPaid": "Anzahlung bezahlt",
-      "paymentDetails": "{{amount}} {{currency}} • {{paymentMethod}}"
+      "paymentDetails": "{ amount } { currency } • { paymentMethod }"
     },
     "helpfulTips": {
       "title": "Vor Ihrer Ankunft",

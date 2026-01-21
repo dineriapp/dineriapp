@@ -1,10 +1,10 @@
 "use client";
 
 import { ReservationPolicy, Restaurant } from "@prisma/client";
+import ReservationStatusBanner from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/reservations/reservation-status-banner";
+import { SettingsState } from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
 import BookingInterface from "./_components/booking-interface";
 import { ReservationHeader } from "./reservation-header";
-import { SettingsState } from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
-import ReservationStatusBanner from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/reservations/reservation-status-banner";
 
 interface ReservationClientProps {
     restaurant: Restaurant & { reservation_settings: { settings: SettingsState }, Reservation_policy: ReservationPolicy | null };
@@ -26,12 +26,6 @@ const ReservationClientSide = ({ restaurant }: ReservationClientProps) => {
         >
             <ReservationHeader
                 restaurant={restaurant}
-                stylesData={{
-                    headerBg: restaurant.headerBg,
-                    headerCartButtonBG: restaurant.headerCartButtonBG,
-                    headerCartButtonBorder: restaurant.headerCartButtonBorder,
-                    headerText: restaurant.headerText,
-                }}
             />
 
             {/* 🔥 Status Banner (always show if paused/closed/message) */}

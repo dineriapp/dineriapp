@@ -771,8 +771,8 @@ const BookingInterface = ({
                 {/* Restaurant Info */}
                 <div className="space-y-3 relative">
                   <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-6 w-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <MapPin className="h-6 w-6 text-main-green" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">
@@ -783,8 +783,8 @@ const BookingInterface = ({
                       </p>
                     </div>
                   </div>
-                  <p className="inline-flex top-3 right-3 items-center gap-1 px-2 py-0.5 text-[13px] font-medium bg-blue-100 text-blue-700 border border-blue-200 rounded-full">
-                    <Clock className="h-4 w-4 text-blue-600" />
+                  <p className="inline-flex top-3 right-3 items-center gap-1 px-2 py-0.5 text-[13px] font-medium bg-blue-100 text-green-700 border border-blue-200 rounded-full">
+                    <Clock className="h-4 w-4 text-main-green" />
                     {restaurant?.timezone}
                   </p>
 
@@ -856,7 +856,7 @@ const BookingInterface = ({
                         <span className="text-sm font-medium text-gray-700">
                           {t("depositRequired")}
                         </span>
-                        <span className="text-lg font-bold text-blue-600">
+                        <span className="text-lg font-bold text-main-green">
                           {displayDepositAmount}{" "}
                           {settings?.deposit_settings?.depositCurrency || "EUR"}
                         </span>
@@ -920,7 +920,7 @@ const BookingInterface = ({
                       loading ||
                       !phoneRegex.test(phone)
                     }
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold text-sm"
+                    className="w-full bg-main-green text-white py-2 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold text-sm"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center justify-center">
@@ -963,14 +963,14 @@ function getRuleDescription(rule: DynamicRule): string {
   switch (rule.ruleType) {
     case "special-date":
       return `Special date rate: ${rule.depositType === "per-person"
-          ? `€${amount} per person`
-          : `€${amount} flat rate`
+        ? `€${amount} per person`
+        : `€${amount} flat rate`
         }`;
 
     case "time-slot":
       return `Time slot rate (${rule.startTime}-${rule.endTime}): ${rule.depositType === "per-person"
-          ? `€${amount} per person`
-          : `€${amount} flat rate`
+        ? `€${amount} per person`
+        : `€${amount} flat rate`
         }`;
 
     case "party-size":
@@ -996,14 +996,14 @@ function getRuleDescription(rule: DynamicRule): string {
           .map((d) => daysMap[d.trim()])
           .join(", ") || "";
       return `${dayNames} rate: ${rule.depositType === "per-person"
-          ? `€${amount} per person`
-          : `€${amount} flat rate`
+        ? `€${amount} per person`
+        : `€${amount} flat rate`
         }`;
 
     default:
       return `${rule.depositType === "per-person"
-          ? `€${amount} per person`
-          : `€${amount} flat rate`
+        ? `€${amount} per person`
+        : `€${amount} flat rate`
         }`;
   }
 }

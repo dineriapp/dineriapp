@@ -1653,9 +1653,9 @@
           "title": "Welcome to { restaurant }!",
           "description": "This is how your welcome popup will appear to visitors",
           "ratings": "reviews",
-          "address": "{{address}}",
+          "address": "{ address }",
           "hours": "Open Today",
-          "phone": "{{phone}}"
+          "phone": "{ phone }"
         }
       },
       "unsavedChanges": {
@@ -3672,7 +3672,7 @@
     },
 
     "error": {
-      "loadingTables": "Error loading tables: {{message}}"
+      "loadingTables": "Error loading tables: { message }"
     },
 
     "stats": {
@@ -4376,9 +4376,9 @@
     },
     "reservationDetails": {
       "confirmationSent": "Confirmation Sent",
-      "sentTo": "Details sent to {{email}}",
+      "sentTo": "Details sent to { email }",
       "depositPaid": "Deposit Paid",
-      "paymentDetails": "{{amount}} {{currency}} • {{paymentMethod}}"
+      "paymentDetails": "{ amount } { currency } • { paymentMethod }"
     },
     "helpfulTips": {
       "title": "Before You Arrive",

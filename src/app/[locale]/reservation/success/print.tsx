@@ -8,7 +8,7 @@ export default function PrintButton() {
   return (
     <button
       onClick={() => window.print()}
-      className="bg-blue-600 text-white text-center px-4 py-2.5 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
+      className="bg-[#009a5e] text-white text-center px-4 py-3 rounded-md hover:bg-emerald-700 transition font-semibold text-sm shadow-sm"
     >
       {t("printButton")}
     </button>

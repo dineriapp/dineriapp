@@ -10,26 +10,16 @@ import { useTranslations } from "next-intl";
 
 interface ReservationHeaderProps {
   restaurant: Restaurant;
-  stylesData: {
-    headerBg: string;
-    headerText: string;
-    headerCartButtonBG: string;
-    headerCartButtonBorder: string;
-  };
 }
 
 export function ReservationHeader({
   restaurant,
-  stylesData,
 }: ReservationHeaderProps) {
   const t = useTranslations("makeAReservation.reservationHeader");
 
   return (
     <div
-      style={{
-        backgroundColor: stylesData.headerBg,
-      }}
-      className="sticky top-0 z-40 shadow-sm w-full"
+      className="sticky bg-white top-0 z-40 shadow-sm w-full"
     >
       <div className="w-full px-4 max-w-7xl mx-auto">
         <div className="flex items-center justify-between h-16">
@@ -39,12 +29,9 @@ export function ReservationHeader({
               <Button
                 variant="ghost"
                 size="sm"
-                className="p-2 cursor-pointer hover:bg-transparent"
+                className="p-2 cursor-pointer"
               >
                 <ArrowLeft
-                  style={{
-                    color: stylesData.headerText,
-                  }}
                   className="h-4 w-4"
                 />
               </Button>
@@ -63,17 +50,11 @@ export function ReservationHeader({
               )}
               <div className="space-y-1">
                 <h1
-                  style={{
-                    color: stylesData.headerText,
-                  }}
                   className="text-lg !leading-[1] font-bold text-gray-900 line-clamp-1"
                 >
                   {restaurant.name}
                 </h1>
                 <p
-                  style={{
-                    color: stylesData.headerText,
-                  }}
                   className="text-sm opacity-80 !leading-[1]"
                 >
                   {t("subtitle")}
@@ -84,11 +65,6 @@ export function ReservationHeader({
 
           {/* Right side - Drop Query */}
           <Button
-            style={{
-              backgroundColor: stylesData.headerCartButtonBG,
-              color: stylesData.headerText,
-              borderColor: stylesData.headerCartButtonBorder || "white",
-            }}
             variant="outline"
             className="relative cursor-pointer"
             size="sm"
