@@ -9,11 +9,11 @@ import { useRestaurantStore } from "@/stores/restaurant-store";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-// import DepositSystem from "./settings/deposit-system";
+import DepositSystem from "./settings/deposit-system";
 import { NotificationSettingsComponent } from "./settings/notification-settings";
-// import ReservationControlSettings from "./settings/reservation-control";
-// import RestaurantSettingsManager from "./settings/restaurent-settings";
-// import TimeSlotOverrides from "./settings/time-slot-overrides";
+import ReservationControlSettings from "./settings/reservation-control";
+import RestaurantSettingsManager from "./settings/restaurent-settings";
+import TimeSlotOverrides from "./settings/time-slot-overrides";
 import { SettingsState } from "./settings/types";
 
 const deepMerge = <T extends Record<string, any>>(base: T, incoming: Partial<T>): T => {
@@ -177,26 +177,26 @@ export default function SettingsPage() {
             </div>
             <div className="space-y-3">
                 {/* NEW SECTION */}
-                {/* <ReservationControlSettings
+                <ReservationControlSettings
                     settings={settings.restaurantSettings}
                     updateSettingsSection={updateSettingsSection}
                 />
                 <DepositSystem
                     value={settings.deposit_settings}
                     onChange={(val) => updateSettingsSection("deposit_settings", val)}
-                /> */}
+                />
                 <NotificationSettingsComponent
                     settings={settings.notification_settings}
                     updateSettingsSection={updateSettingsSection}
                 />
-                {/* <TimeSlotOverrides
+                <TimeSlotOverrides
                     settings={settings.overrides_settings}
                     updateSettingsSection={updateSettingsSection}
                 />
                 <RestaurantSettingsManager
                     settings={settings.restaurantSettings}
                     updateSettingsSection={updateSettingsSection}
-                /> */}
+                />
             </div>
             {/* changes detection penal  */}
             <UnsavedChangesPanel
