@@ -251,3 +251,9 @@ export function textToSimpleHtml(text: string) {
     text
   )}</pre>`;
 }
+
+export async function sha256(file: File): Promise<string> {
+  const buffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+  return btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
+}

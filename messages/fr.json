@@ -223,7 +223,8 @@
         }
       },
       "submit": "Envoyer la demande",
-      "successMessage": "Votre demande de démo a été envoyée. Nous vous contacterons bientôt !"
+      "successMessage": "Votre demande de démo a été envoyée. Nous vous contacterons bientôt !",
+      "errorMessage": "Une erreur s’est produite. Veuillez réessayer."
     }
   },
   "PlansPage": {
@@ -657,7 +658,12 @@
     "Support": {
       "pageTitle": "Contacter le support",
       "intro": "Remplissez le formulaire ci-dessous et notre équipe vous répondra dès que possible.",
-
+      "toast": {
+        "successTitle": "Message envoyé",
+        "successDescription": "Votre demande d’assistance a été envoyée.",
+        "errorTitle": "Échec de l’envoi",
+        "errorDescription": "Veuillez réessayer."
+      },
       "fields": {
         "name": "Nom complet",
         "email": "E-mail",

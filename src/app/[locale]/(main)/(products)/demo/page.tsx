@@ -16,9 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "next-intl";
-
-
-
+import { toast } from "sonner";
 
 export default function DemoPage() {
 
@@ -53,10 +51,26 @@ export default function DemoPage() {
         },
     });
 
-    const onSubmit = (values: DemoFormValues) => {
-        console.log("Demo request submitted:", values);
-        alert(t("successMessage"));
+    const onSubmit = async (values: DemoFormValues) => {
+        try {
+            const res = await fetch("/api/demo-request", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(values),
+            });
+
+            if (!res.ok) throw new Error("Validation failed");
+
+            toast.success(t("successMessage"));
+            form.reset();
+        } catch (err) {
+            console.error(err);
+            toast.error(t("errorMessage"));
+        }
     };
+
 
     return (
         <div className="min-h-screen bg-[#002147] flex flex-col">
@@ -197,7 +211,9 @@ export default function DemoPage() {
 
                             <div className="flex justify-center">
 
-                                <Button type="submit" className="bg-[#009A5E] hover:bg-[#104e37] hover:scale-105 font-poppins h-[62px] transition-transform text-lg px-10 cursor-pointer rounded-full">
+                                <Button type="submit"
+                                    disabled={form.formState.isSubmitting}
+                                    className="bg-[#009A5E] hover:bg-[#104e37] hover:scale-105 font-poppins h-[62px] transition-transform text-lg px-10 cursor-pointer rounded-full">
                                     {t("submit")}
                                 </Button>
                             </div>

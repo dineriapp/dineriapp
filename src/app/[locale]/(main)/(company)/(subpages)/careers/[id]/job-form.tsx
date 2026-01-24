@@ -1,20 +1,21 @@
 "use client";
 
-import type React from "react";
 
-import { Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Check } from "lucide-react";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
+import * as z from "zod";
 
+import JobListings from "@/app/[locale]/Data/job-data";
+import FileDropzone from "@/components/shared/file-dropzone";
 import {
   Select,
   SelectContent,
@@ -22,19 +23,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import JobListings from "@/app/[locale]/Data/job-data";
-import { useLocale, useTranslations } from "next-intl";
 import { Locale } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
 
 
 
-export default function JobForm({ id }: { id: number }) {
+export default function JobForm({ id, title }: { id: number, title: string }) {
   const locale: Locale = useLocale() as Locale;
   const t = useTranslations("CareersSubPage.JobForm");
+  const [filesUploading, setFilesUploading] = useState(false);
 
   const job = JobListings[locale]?.find((j) => j.id == id);
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const applicationSchema = z.object({
@@ -48,7 +48,7 @@ export default function JobForm({ id }: { id: number }) {
     experience: z.string().min(1, t("errors.experienceRequired")),
     education: z.string().min(1, t("errors.educationRequired")),
     coverLetter: z.string().min(50, t("errors.coverLetterMin")),
-    resume: z.instanceof(File, { message: t("errors.resumeRequired") }),
+    resume: z.string().url(t("errors.resumeRequired")),
     portfolio: z.string().url(t("errors.invalidUrl")).optional().or(z.literal("")),
     linkedIn: z.string().url(t("errors.invalidUrl")).optional().or(z.literal("")),
     github: z.string().url(t("errors.invalidUrl")).optional().or(z.literal("")),
@@ -78,31 +78,28 @@ export default function JobForm({ id }: { id: number }) {
   }
 
   const onSubmit = async (data: ApplicationForm) => {
-    console.log("Application submitted:", data);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const res = await fetch("/api/job-apply", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, ...data }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Validation failed");
+      }
+
       toast.success(t("toasts.applicationSuccess"));
       setIsSubmitted(true);
       reset();
-      setSelectedFile(null);
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error(t("toasts.applicationError"));
     }
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-      // This is the key fix - you need to set the value in the form
-      setValue("resume", file, { shouldValidate: true });
-    } else {
-      // Clear the file if no file is selected
-      setSelectedFile(null);
-      setValue("resume", undefined as any, { shouldValidate: true });
-    }
-  };
 
   return (
     <div className="min-h-screen ">
@@ -509,34 +506,23 @@ export default function JobForm({ id }: { id: number }) {
                     </div>
 
                     <div>
-                      <Label className="mb-3" htmlFor="resume">
-                        {t("fields.resume")} *
-                      </Label>
-                      <div className="mt-1 flex items-center gap-4">
-                        <input
-                          id="resume"
-                          type="file"
-                          accept=".pdf,.doc,.docx"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                        />
-                        <Button
-                          type="button"
-                          className="!h-[54px] font-poppins"
-                          variant="outline"
-                          onClick={() =>
-                            document.getElementById("resume")?.click()
-                          }
-                        >
-                          <Upload className="w-4 h-4 mr-2" />
-                          {t("buttons.uploadResume")}
-                        </Button>
-                        {selectedFile && (
-                          <span className="text-sm text-gray-600">
-                            {selectedFile.name}
-                          </span>
+                      <Label className="mb-3">
+                        {t("fields.resume")} * {watch("resume") && (
+                          <p className="text-sm text-muted-foreground">
+                            <Check className="size-4 text-green-500" />
+                          </p>
                         )}
-                      </div>
+                      </Label>
+
+                      <FileDropzone
+                        fileUploadDone={(urls) => {
+                          // only 1 resume file
+                          setValue("resume", urls[0], { shouldValidate: true });
+                        }}
+                        types=".pdf"
+                        onUploadingChange={setFilesUploading}
+                      />
+
                       {errors.resume && (
                         <p className="text-red-500 text-sm mt-1">
                           {errors.resume.message}
@@ -564,7 +550,7 @@ export default function JobForm({ id }: { id: number }) {
                     <div className="pt-4">
                       <Button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || filesUploading}
                         className="w-full bg-[#002147] hover:bg-main-hover/80 cursor-pointer transition-all font-poppins text-lg h-[60px] "
                       >
                         {isSubmitting ? t("buttons.submitting") : t("buttons.submit")}

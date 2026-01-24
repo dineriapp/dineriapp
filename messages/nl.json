@@ -223,7 +223,8 @@
         }
       },
       "submit": "Verzoek indienen",
-      "successMessage": "Uw demoaanvraag is verzonden. We nemen snel contact met u op!"
+      "successMessage": "Uw demoaanvraag is verzonden. We nemen snel contact met u op!",
+      "errorMessage": "Er is iets misgegaan. Probeer het opnieuw."
     }
   },
   "PlansPage": {
@@ -657,7 +658,12 @@
     "Support": {
       "pageTitle": "Contact opnemen met support",
       "intro": "Vul het onderstaande formulier in en ons team neemt zo snel mogelijk contact met je op.",
-
+      "toast": {
+        "successTitle": "Bericht verzonden",
+        "successDescription": "Je ondersteuningsverzoek is verzonden.",
+        "errorTitle": "Verzenden mislukt",
+        "errorDescription": "Probeer het opnieuw."
+      },
       "fields": {
         "name": "Volledige naam",
         "email": "E-mail",

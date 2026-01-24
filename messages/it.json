@@ -223,7 +223,8 @@
         }
       },
       "submit": "Invia richiesta",
-      "successMessage": "La tua richiesta di demo è stata inviata. Ti contatteremo presto!"
+      "successMessage": "La tua richiesta di demo è stata inviata. Ti contatteremo presto!",
+      "errorMessage": "Qualcosa è andato storto. Per favore riprova."
     }
   },
   "PlansPage": {
@@ -657,7 +658,12 @@
     "Support": {
       "pageTitle": "Contatta il supporto",
       "intro": "Compila il modulo qui sotto e il nostro team ti risponderà il prima possibile.",
-
+      "toast": {
+        "successTitle": "Messaggio inviato",
+        "successDescription": "La tua richiesta di supporto è stata inviata.",
+        "errorTitle": "Invio non riuscito",
+        "errorDescription": "Per favore riprova."
+      },
       "fields": {
         "name": "Nome completo",
         "email": "Email",

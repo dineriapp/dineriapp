@@ -223,7 +223,8 @@
         }
       },
       "submit": "Submit Request",
-      "successMessage": "Your demo request has been submitted. We’ll contact you soon!"
+      "successMessage": "Your demo request has been submitted. We’ll contact you soon!",
+      "errorMessage": "Something went wrong. Please try again."
     }
   },
   "PlansPage": {
@@ -657,7 +658,12 @@
     "Support": {
       "pageTitle": "Contact Support",
       "intro": "Fill out the form below and our team will get back to you as soon as possible.",
-
+      "toast": {
+        "successTitle": "Message sent",
+        "successDescription": "Your support request has been submitted.",
+        "errorTitle": "Submission failed",
+        "errorDescription": "Please try again."
+      },
       "fields": {
         "name": "Full Name",
         "email": "Email",

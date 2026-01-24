@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import FileDropzone from "@/components/shared/file-dropzone";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -15,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -23,17 +22,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, CheckCircle2, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
-
-
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 
 export default function SupportForm() {
   const t = useTranslations("HelpCenter.Support")
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [filesUploading, setFilesUploading] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
@@ -58,7 +59,7 @@ export default function SupportForm() {
     message: z.string().min(10, {
       message: t("errors.messageMin"),
     }),
-    attachments: z.any().optional(),
+    attachments: z.array(z.string().url()).optional(),
     terms: z.boolean().refine((val) => val === true, {
       message: t("errors.termsRequired"),
     }),
@@ -84,28 +85,41 @@ export default function SupportForm() {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true);
     setSubmitStatus("idle");
-    console.log(values);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const res = await fetch("/api/support", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
 
-      // Randomly determine success for demo purposes
-      const isSuccess = Math.random() > 0.3;
-
-      if (isSuccess) {
-        setSubmitStatus("success");
-        form.reset();
-      } else {
-        throw new Error("Submission failed");
+      if (!res.ok) {
+        throw new Error("Validation failed");
       }
+
+      toast.success(t("toast.successTitle"), {
+        description: t("toast.successDescription"),
+      });
+
+      setSubmitStatus("success");
+      form.reset({
+        issueType: values.issueType
+      });
     } catch (error) {
       console.error("Submission error:", error);
+
+      toast.error(t("toast.errorTitle"), {
+        description: t("toast.errorDescription"),
+      });
+
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
   }
+
 
   return (
     <div className=" mx-auto px-6 scroll-mt-32 pb-10 pt-10 w-full max-w-5xl">
@@ -319,16 +333,15 @@ export default function SupportForm() {
             name="attachments"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {t("fields.attachments")}
-                </FormLabel>
+                <FormLabel>{t("fields.attachments")}</FormLabel>
                 <FormControl>
-                  <Input
-                    type="file"
-                    onChange={(e) => field.onChange(e.target.files)}
-                    className="!h-10"
-                    multiple
+                  <FileDropzone
+                    fileUploadDone={(urls) => {
+                      field.onChange([...(field.value || []), ...urls]);
+                    }}
+                    onUploadingChange={setFilesUploading}
                   />
+
                 </FormControl>
                 <FormDescription>
                   {t("descriptions.attachments")}
@@ -337,6 +350,8 @@ export default function SupportForm() {
               </FormItem>
             )}
           />
+
+
 
           <FormField
             control={form.control}
@@ -364,7 +379,11 @@ export default function SupportForm() {
             )}
           />
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isSubmitting || filesUploading}
+          >
             {isSubmitting ? (
               <>
                 <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent" />

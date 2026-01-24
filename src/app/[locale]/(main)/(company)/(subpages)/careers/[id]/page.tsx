@@ -21,8 +21,6 @@ export default function JobDetailPage({
   const locale: Locale = useLocale() as Locale;
   const job = JobListings[locale]?.find((j) => j.id == jobId);
 
-  console.log(job);
-
   if (!job) {
     return (
       <div className="max-w-3xl mx-auto px-6 pb-8 pt-32 lg:pt-40 text-center">
@@ -260,7 +258,7 @@ export default function JobDetailPage({
           </section> */}
 
           {/* Application Form Section */}
-          <JobForm id={jobId} />
+          <JobForm id={jobId} title={job.title} />
         </div>
       </div>
     </div>

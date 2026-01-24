@@ -106,7 +106,7 @@ export function Header() {
                           {t("login")}
                         </Button>
                       </Link>
-                      <Link href="/signup">
+                      <Link href="/sign-up">
                         <Button className="bg-[#002147] hover:bg-main-hover/80 font-poppins font-[600] text-lg text-[#FFFFFF] cursor-pointer h-[52px] px-[40px] transition-all rounded-full">
                           {t("signup")}
                         </Button>

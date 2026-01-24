@@ -223,7 +223,8 @@
         }
       },
       "submit": "Anfrage absenden",
-      "successMessage": "Ihre Demo-Anfrage wurde übermittelt. Wir werden Sie in Kürze kontaktieren!"
+      "successMessage": "Ihre Demo-Anfrage wurde übermittelt. Wir werden Sie in Kürze kontaktieren!",
+      "errorMessage": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
     }
   },
   "PlansPage": {
@@ -657,7 +658,12 @@
     "Support": {
       "pageTitle": "Support kontaktieren",
       "intro": "Füllen Sie das untenstehende Formular aus, und unser Team wird sich so schnell wie möglich bei Ihnen melden.",
-
+      "toast": {
+        "successTitle": "Nachricht gesendet",
+        "successDescription": "Ihre Support-Anfrage wurde übermittelt.",
+        "errorTitle": "Übermittlung fehlgeschlagen",
+        "errorDescription": "Bitte versuchen Sie es erneut."
+      },
       "fields": {
         "name": "Vollständiger Name",
         "email": "E-Mail",
