@@ -182,7 +182,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
     const bookingDisabled =
         restaurant?.reservation_settings?.settings?.restaurantSettings?.pause_new_reservations === true ||
-        restaurant?.reservation_settings?.settings?.restaurantSettings?.emergency_closure === true;
+        restaurant?.reservation_settings?.settings?.restaurantSettings?.emergency_closure === true || !restaurant?.reservation_settings?.settings
 
     const hasMenuItems =
         restaurant.menuCategories?.some(

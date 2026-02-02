@@ -7,6 +7,15 @@ import prisma from "../prisma";
 import { normalizeName, VALID_DOMAINS } from "./utils";
 import { hashPassword, verifyPassword } from "./argon2";
 import { sendEmailAction } from "./send-email.action";
+// import { STRIPE_PLANS } from "./stripe";
+// import Stripe from "stripe"
+// import { stripe } from "@better-auth/stripe"
+// import type { BetterAuthPlugin } from "better-auth"
+
+// const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+//   apiVersion: "2025-07-30.basil",
+//   typescript: true,
+// })
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -193,7 +202,18 @@ export const auth = betterAuth({
     },
   },
   trustedOrigins: [String(process.env.BETTER_AUTH_URL)],
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    // stripe({
+    //   stripeClient,
+    //   stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+    //   createCustomerOnSignUp: true,
+    //   subscription: {
+    //     enabled: true,
+    //     plans: STRIPE_PLANS,
+    //   },
+    // }) as BetterAuthPlugin,
+  ],
 });
 
 export type ErrorCodeBetterAuth = keyof typeof auth.$ERROR_CODES | "UNKNOWN";

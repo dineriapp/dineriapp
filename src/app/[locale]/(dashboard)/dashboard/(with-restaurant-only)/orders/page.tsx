@@ -59,7 +59,7 @@ export default function OrdersPage() {
   const [dateFilter, setDateFilter] = useState("all");
   const [refreshSeconds, setRefreshSeconds] = useState(() => {
     const saved = localStorage.getItem("refreshSeconds");
-    return saved ? Number(saved) : 500; // default 4 seconds
+    return saved ? Number(saved) : 120; // default 4 seconds
   });
 
   const [selectedOrder, setSelectedOrder] = useState<OrderWithItems | null>(
