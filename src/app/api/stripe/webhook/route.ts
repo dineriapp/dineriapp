@@ -92,8 +92,6 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         return
     }
 
-    const sub = await stripe.subscriptions.retrieve(session.subscription as string)
-
     try {
         await prisma.user.update({
             where: { id: userId },
@@ -102,8 +100,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                 subscription_status: "active",
                 stripe_customer_id: session.customer as string,
                 stripe_subscription_id: session.subscription as string,
-                subscription_current_period_start: new Date(sub?.current_period_start * 1000) ?? new Date(),
-                subscription_current_period_end: new Date(sub?.current_period_end * 1000) ?? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                subscription_current_period_start: new Date(),
+                subscription_current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             },
         })
 
