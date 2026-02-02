@@ -6,17 +6,12 @@ import { getTranslations } from "next-intl/server";
 const updateSocialSchema = z.object({
     instagram: z.string().url("Invalid Instagram URL").optional().or(z.literal("")),
     facebook: z.string().url("Invalid Facebook URL").optional().or(z.literal("")),
-    tiktok: z
+    tiktok: z.string().url("Invalid TikTok URL").optional().or(z.literal("")),
+    whatsapp: z
         .string()
-        .regex(/^@?[A-Za-z0-9._]{2,24}$/, {
-            message: "Invalid TikTok username",
-        })
+        .regex(/^\+[1-9]\d{1,14}$/, "Invalid WhatsApp number format")
         .optional()
-        .or(z.literal("")), whatsapp: z
-            .string()
-            .regex(/^\+[1-9]\d{1,14}$/, "Invalid WhatsApp number format")
-            .optional()
-            .or(z.literal("")),
+        .or(z.literal("")),
     social_icons_position: z.enum(["top", "bottom"]).optional(),
 })
 
@@ -27,9 +22,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         const { id } = await params
         const body = await request.json()
 
+        console.log("Validated Data:", body);
         // Validate request body
         const validatedData = updateSocialSchema.parse(body)
-
         // Check if restaurant exists
         const existingRestaurant = await prisma.restaurant.findUnique({
             where: { id },

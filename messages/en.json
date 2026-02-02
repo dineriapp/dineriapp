@@ -6,6 +6,9 @@
     "loggedInMessage": "Welcome back! Ready to boost your growth?",
     "goToDashboard": "Go to Dashboard"
   },
+  "global": {
+    "visit": "Visit"
+  },
   "Header": {
     "home": "Home",
     "features": "Features",
@@ -1204,6 +1207,7 @@
         "title": "Business Information",
         "description": "Manage your restaurant's basic information and branding"
       },
+      "uplaod": "Upload",
       "form": {
         "labels": {
           "name": "Restaurant Name *",
@@ -1411,21 +1415,21 @@
           "instagram": "Instagram Profile URL",
           "facebook": "Facebook Page URL",
           "whatsapp": "WhatsApp Number",
-          "tiktok": "TikTok Username",
+          "tiktok": "TikTok Profile URL",
           "social_icons_position": "Social Icons Position"
         },
         "placeholders": {
           "instagram": "https://instagram.com/your.restaurant",
           "facebook": "https://facebook.com/your.restaurant",
           "whatsapp": "+1234567890",
-          "tiktok": "@username",
+          "tiktok": "https://tiktok.com/@yourrestaurant",
           "selectPosition": "Select position"
         },
         "help": {
           "instagram": "Enter your Instagram profile URL (e.g., https://instagram.com/yourrestaurant)",
           "facebook": "Enter your Facebook page URL (e.g., https://facebook.com/yourrestaurant)",
           "whatsapp": "Enter your WhatsApp number with country code (e.g., +1234567890)",
-          "tiktok": "Enter your TikTok username starting with @ (e.g., @myrestaurant)",
+          "tiktok": "Enter your TikTok profile URL (e.g., https://tiktok.com/@myrestaurant)",
           "social_icons_position": "Choose where social media icons appear on your restaurant page"
         },
         "selectOptions": {
@@ -1816,6 +1820,11 @@
       }
     },
     "dashboardMobilePreview": {
+      "btns": {
+        "menu": "Menu",
+        "events": "Events",
+        "faq": "FAQ"
+      },
       "card": {
         "title": "Preview",
         "description": "See how your page looks on mobile devices",
@@ -2507,7 +2516,8 @@
     "role": "Role",
     "plan": "Plan",
     "status": "Status",
-    "joined": "Joined"
+    "joined": "Joined",
+    "dashboard": "Dashboard"
   },
   "EmailChangePage": {
     "backToSettings": "Back to Settings",

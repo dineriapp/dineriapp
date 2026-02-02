@@ -1,4 +1,4 @@
-import type { ReviewEmailSettings, SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
+import type { ReviewEmailSettings, SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 import { isNonEmptyString, renderTemplate } from "@/lib/utils";
 
 type SendGridEmailConfig = {

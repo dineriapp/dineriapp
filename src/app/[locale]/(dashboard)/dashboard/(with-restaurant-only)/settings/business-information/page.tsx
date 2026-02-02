@@ -2,6 +2,7 @@
 
 import LoadingUI from "@/components/loading-ui"
 import { UnsavedChangesPanel } from "@/components/pages/dashboard/unsaved-cahnges-penal"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,7 +11,7 @@ import UnsavedChangesUi from "@/components/unsaved-changes-ui"
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { uploadImage } from "@/supabase/clients/client"
-import { Building2, Globe } from "lucide-react"
+import { Building2, Globe, Upload } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { useEffect, useState } from "react"
@@ -372,19 +373,36 @@ export default function BusinessInformationPage() {
                             {t("form.labels.logo")}
                         </Label>
                         <div className="relative">
+                            {/* Hidden file input */}
                             <Input
                                 id="logo_file"
                                 type="file"
                                 accept="image/*"
                                 disabled={saving || uploadingLogo}
                                 onChange={(e) => handleLogoFileChange(e.target.files?.[0])}
-
+                                className="hidden"
                             />
-                            {uploadingLogo && (
-                                <span className="absolute right-3 top-3 text-xs text-slate-500">
-                                    {t("form.upload.uploading")}
-                                </span>
-                            )}
+
+                            {/* Upload button */}
+                            <Button
+                                type="button"
+                                disabled={saving || uploadingLogo}
+                                onClick={() => document.getElementById("logo_file")?.click()}
+                                className="w-full text-sm! cursor-pointer"
+                                variant={"outline"}
+                            >
+                                <Upload />
+                                {uploadingLogo ? (
+                                    <>
+                                        {t("form.upload.uploading")}
+                                    </>
+                                )
+                                    :
+                                    <>
+                                        {t("uplaod")}
+                                    </>
+                                }
+                            </Button>
                         </div>
 
                         {/* Logo Preview */}

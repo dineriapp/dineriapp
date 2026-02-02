@@ -6,6 +6,9 @@
     "loggedInMessage": "¡Bienvenido de nuevo! ¿Listo para impulsar tu crecimiento?",
     "goToDashboard": "Ir al panel"
   },
+  "global": {
+    "visit": "Visitar"
+  },
   "Header": {
     "home": "Inicio",
     "features": "Funciones",
@@ -1204,6 +1207,7 @@
         "title": "Información del Negocio",
         "description": "Administra la información básica y la identidad de tu restaurante"
       },
+      "uplaod": "Subir",
       "form": {
         "labels": {
           "name": "Nombre del Restaurante *",
@@ -1411,21 +1415,21 @@
           "instagram": "URL del perfil de Instagram",
           "facebook": "URL de la página de Facebook",
           "whatsapp": "Número de WhatsApp",
-          "tiktok": "Nombre de usuario de TikTok",
+          "tiktok": "URL del perfil de TikTok",
           "social_icons_position": "Posición de los iconos sociales"
         },
         "placeholders": {
           "instagram": "https://instagram.com/tu.restaurante",
           "facebook": "https://facebook.com/tu.restaurante",
           "whatsapp": "+1234567890",
-          "tiktok": "@usuario",
+          "tiktok": "https://tiktok.com/@turestaurante",
           "selectPosition": "Seleccionar posición"
         },
         "help": {
           "instagram": "Introduce la URL de tu perfil de Instagram (ejemplo: https://instagram.com/turestaurante)",
           "facebook": "Introduce la URL de tu página de Facebook (ejemplo: https://facebook.com/turestaurante)",
           "whatsapp": "Introduce tu número de WhatsApp con el código de país (ejemplo: +1234567890)",
-          "tiktok": "Introduce tu nombre de usuario de TikTok comenzando con @ (ejemplo: @mirestaurante)",
+          "tiktok": "Introduce la URL de tu perfil de TikTok (ejemplo: https://tiktok.com/@mirestaurante)",
           "social_icons_position": "Elige dónde aparecen los iconos de redes sociales en la página de tu restaurante"
         },
         "selectOptions": {
@@ -1816,6 +1820,11 @@
       }
     },
     "dashboardMobilePreview": {
+      "btns": {
+        "menu": "Menú",
+        "events": "Eventos",
+        "faq": "FAQ"
+      },
       "card": {
         "title": "Vista previa",
         "description": "Así se ve tu página en dispositivos móviles",
@@ -2508,7 +2517,8 @@
     "role": "Rol",
     "plan": "Plan",
     "status": "Estado",
-    "joined": "Se unió"
+    "joined": "Se unió",
+    "dashboard": "Panel"
   },
   "EmailChangePage": {
     "backToSettings": "Volver a la configuración",

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Skeleton } from '@/components/ui/skeleton'
 import { getLucideIconBySlug } from '@/lib/get-icons'
 import { useLinks } from '@/lib/link-queries'
-import { container } from '@/lib/reuseable-data'
+import { container, itemSlugPage } from '@/lib/reuseable-data'
 import { useGoogleReviews } from '@/lib/review-api'
 import { getBackgroundStyle } from '@/lib/utils'
 import { OpeningHoursData } from '@/types'
@@ -17,6 +17,9 @@ import { motion } from "motion/react"
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { useState } from 'react'
+import { useMenuCategories } from '@/lib/menu-queries'
+import { useEvents } from '@/lib/event-queries'
+import { useFaqCategories } from '@/lib/faq-queries'
 
 const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Restaurant }) => {
     const t = useTranslations("dashboard.dashboardMobilePreview");
@@ -24,6 +27,20 @@ const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Re
     const openingHours = selectedRestaurant?.opening_hours ? (selectedRestaurant?.opening_hours as OpeningHoursData) : null
     const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(selectedRestaurant?.google_place_id);
     const { data: links = [], isLoading: linksLoading, } = useLinks(selectedRestaurant?.id)
+    const { data: categories } = useMenuCategories(selectedRestaurant?.id)
+    const { data: events } = useEvents(selectedRestaurant?.id)
+    const { data: faqcategories } = useFaqCategories(selectedRestaurant?.id)
+
+    const hasMenuItems =
+        categories?.some(
+            (category) => category.items && category.items.length > 0
+        )
+
+    const hasFaqsItems =
+        faqcategories?.some(
+            (category) => category.faqs && category.faqs.length > 0
+        )
+    const buttonTextColor = selectedRestaurant.button_text_icons_color || "#000000"
 
     return (
         <Card className="overflow-hidden border-slate-200">
@@ -186,6 +203,7 @@ const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Re
                                                     {
                                                         address: selectedRestaurant?.address,
                                                         email: selectedRestaurant.email,
+                                                        tiktok: selectedRestaurant.tiktok,
                                                         facebook: selectedRestaurant.facebook,
                                                         instagram: selectedRestaurant.facebook,
                                                         whatsapp: selectedRestaurant.whatsapp,
@@ -278,6 +296,183 @@ const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Re
                                                 </>
                                         }
 
+                                        {
+                                            categories &&
+                                            <>
+                                                {categories?.length > 0 && hasMenuItems && (
+                                                    <motion.button
+                                                        variants={itemSlugPage}
+                                                        className={`group flex items-center justify-center  text-center ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant.button_style === "pill"
+                                                            ? "rounded-full"
+                                                            : selectedRestaurant.button_style === "square"
+                                                                ? "rounded-md"
+                                                                : "rounded-xl"
+                                                            }`}
+                                                        style={{
+                                                            backgroundColor:
+                                                                selectedRestaurant.button_variant === "solid"
+                                                                    ? selectedRestaurant.accent_color || "#10b981"
+                                                                    : "transparent",
+                                                            backdropFilter: "blur(8px)",
+                                                            border: `2px solid ${selectedRestaurant.accent_color || "#10b981"}`,
+                                                            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                                            color: selectedRestaurant.button_variant === "solid" ? buttonTextColor : selectedRestaurant.accent_color || "#10b981",
+                                                            fontFamily: selectedRestaurant.font_family || "Inter",
+                                                            letterSpacing: "0.01em",
+                                                        }}
+                                                    >
+                                                        {
+                                                            selectedRestaurant?.button_icons_show
+                                                            &&
+                                                            <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                                                style={{
+                                                                    backgroundColor: selectedRestaurant.button_text_icons_color || "transparent"
+                                                                }}
+                                                            >
+                                                                {getLucideIconBySlug("menu", { className: "w-4 h-4", style: { color: selectedRestaurant.accent_color || "transparent" } })}
+                                                            </div>
+                                                        }
+                                                        <span
+                                                            className={`relative w-full text-[15px] ${selectedRestaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                } transition-colors duration-300 font-medium`}
+                                                            style={{
+                                                                color:
+                                                                    selectedRestaurant.button_variant === "outline" ? selectedRestaurant.accent_color || "#10b981" : buttonTextColor,
+                                                            }}
+                                                        >
+
+                                                            {t("btns.menu")}
+                                                        </span>
+                                                        {
+                                                            selectedRestaurant?.button_icons_show
+                                                            &&
+                                                            <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                                                <MoreVertical className="size-4" />
+                                                            </div>
+                                                        }
+                                                    </motion.button>
+                                                )}
+                                            </>
+                                        }
+
+                                        {
+                                            events &&
+                                            <>
+                                                {events.length > 0 && (
+                                                    <motion.button
+                                                        variants={itemSlugPage}
+                                                        className={`group flex items-center justify-center  text-center ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant.button_style === "pill"
+                                                            ? "rounded-full"
+                                                            : selectedRestaurant.button_style === "square"
+                                                                ? "rounded-md"
+                                                                : "rounded-xl"
+                                                            }`}
+                                                        style={{
+                                                            backgroundColor:
+                                                                selectedRestaurant.button_variant === "solid"
+                                                                    ? selectedRestaurant.accent_color || "#10b981"
+                                                                    : "transparent",
+                                                            backdropFilter: "blur(8px)",
+                                                            border: `2px solid ${selectedRestaurant.accent_color || "#10b981"}`,
+                                                            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                                            color: selectedRestaurant.button_variant === "solid" ? buttonTextColor : selectedRestaurant.accent_color || "#10b981",
+                                                            fontFamily: selectedRestaurant.font_family || "Inter",
+                                                            letterSpacing: "0.01em",
+                                                        }}
+                                                    >
+                                                        {
+                                                            selectedRestaurant?.button_icons_show
+                                                            &&
+                                                            <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                                                style={{
+                                                                    backgroundColor: selectedRestaurant.button_text_icons_color || "transparent"
+                                                                }}
+                                                            >
+                                                                {getLucideIconBySlug("events", { className: "w-4 h-4", style: { color: selectedRestaurant.accent_color || "transparent" } })}
+                                                            </div>
+                                                        }
+                                                        <span
+                                                            className={`relative w-full text-[15px] ${selectedRestaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                } transition-colors duration-300 font-medium`}
+                                                            style={{
+                                                                color:
+                                                                    selectedRestaurant.button_variant === "outline" ? selectedRestaurant.accent_color || "#10b981" : buttonTextColor,
+                                                            }}
+                                                        >
+                                                            {t("btns.events")}
+                                                        </span>
+                                                        {
+                                                            selectedRestaurant?.button_icons_show
+                                                            &&
+                                                            <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                                                <MoreVertical className="size-4" />
+                                                            </div>
+                                                        }
+                                                    </motion.button>
+                                                )}
+                                            </>
+                                        }
+                                        {faqcategories
+                                            &&
+                                            <>
+                                                {faqcategories.length > 0 && hasFaqsItems && (
+                                                    <motion.button
+                                                        variants={itemSlugPage}
+                                                        className={`group flex items-center justify-center  text-center ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant.button_style === "pill"
+                                                            ? "rounded-full"
+                                                            : selectedRestaurant.button_style === "square"
+                                                                ? "rounded-md"
+                                                                : "rounded-xl"
+                                                            }`}
+                                                        style={{
+                                                            backgroundColor:
+                                                                selectedRestaurant.button_variant === "solid"
+                                                                    ? selectedRestaurant.accent_color || "#10b981"
+                                                                    : "transparent",
+                                                            backdropFilter: "blur(8px)",
+                                                            border: `2px solid ${selectedRestaurant.accent_color || "#10b981"}`,
+                                                            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                                            color: selectedRestaurant.button_variant === "solid" ? buttonTextColor : selectedRestaurant.accent_color || "#10b981",
+                                                            fontFamily: selectedRestaurant.font_family || "Inter",
+                                                            letterSpacing: "0.01em",
+                                                        }}
+                                                    >
+
+                                                        {
+                                                            selectedRestaurant?.button_icons_show
+                                                            &&
+                                                            <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                                                style={{
+                                                                    backgroundColor: selectedRestaurant.button_text_icons_color || "transparent"
+                                                                }}
+                                                            >
+                                                                {getLucideIconBySlug("faq", { className: "w-4 h-4", style: { color: selectedRestaurant.accent_color || "transparent" } })}
+                                                            </div>
+                                                        }
+                                                        <span
+                                                            className={`relative w-full text-[15px] ${selectedRestaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                } transition-colors duration-300 font-medium`}
+                                                            style={{
+                                                                color:
+                                                                    selectedRestaurant.button_variant === "outline" ? selectedRestaurant.accent_color || "#10b981" : buttonTextColor,
+                                                            }}
+                                                        >
+
+                                                            {t("btns.faq")}
+                                                        </span>
+                                                        {
+                                                            selectedRestaurant?.button_icons_show
+                                                            &&
+                                                            <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                                                <MoreVertical className="size-4" />
+                                                            </div>
+                                                        }
+
+                                                    </motion.button>
+                                                )}
+
+                                            </>
+                                        }
                                     </motion.div>
                                 </div>
 

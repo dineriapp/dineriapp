@@ -31,6 +31,7 @@ export default function DashboardPage() {
     const { fetchAndSet } = useSyncRestaurants();
     const { monthlyVisits } = useMonthlyVisits(selectedRestaurant?.id);
     const t = useTranslations("dashboard")
+
     useEffect(() => {
         fetchAndSet();
     }, []);

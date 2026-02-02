@@ -63,10 +63,7 @@ const SocialIcons: FC<SocialIconsProps> = ({
         });
     }
     if (restaurant.tiktok) {
-        const username = restaurant.tiktok.startsWith("@")
-            ? restaurant.tiktok.slice(1) // remove the @ for the URL
-            : restaurant.tiktok;
-        const formattedTiktok = `https://www.tiktok.com/@${username}`;
+        const formattedTiktok = `${restaurant.tiktok}`;
 
         socialLinks.push({
             url: formattedTiktok,

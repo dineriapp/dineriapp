@@ -1,7 +1,7 @@
 // hooks/useReservationSettings.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import kyInstance from "./ky";
-import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
+import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 
 
 

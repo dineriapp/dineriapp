@@ -162,7 +162,7 @@ export function useDeleteCategory(restaurantId: string | undefined) {
             toast.error(t("errors.failed_to_delete_category"))
         },
         onSuccess: () => {
-            toast.success(t("errors.category_deleted_successfully"))
+            toast.success(t("success.category_deleted_successfully"))
         },
         onSettled: () => {
             if (restaurantId) {

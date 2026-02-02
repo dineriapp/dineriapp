@@ -1,5 +1,5 @@
 
-import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
+import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 import { checkAuth } from "@/lib/auth/utils";
 import { extractSendGridFromSettings, getRenderedReservationEmailTemplates, renderReviewLinks, replaceVars } from "@/lib/email-utils";
 import prisma from "@/lib/prisma";

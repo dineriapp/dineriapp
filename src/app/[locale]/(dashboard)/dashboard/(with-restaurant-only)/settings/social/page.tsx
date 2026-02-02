@@ -297,7 +297,7 @@ export default function SocialPage() {
                   let value = e.target.value;
                   // Always ensure it starts with "@"
                   if (value && !value.startsWith("@")) {
-                    value = "@" + value;
+                    value = "" + value;
                   }
                   handleInputChange("tiktok", value);
                 }}

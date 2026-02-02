@@ -15,7 +15,7 @@ import { useAreas } from "@/lib/area-queries"
 import { useCreateTable, useDeleteTable, useTables, useUpdateTable } from "@/lib/table-queries"
 import type { CreateTableInput } from "@/lib/types"
 import { useRestaurantStore } from "@/stores/restaurant-store"
-import { ArrowDownRight, ArrowUpRight, PlusCircle, ToggleLeft, ToggleRight, Trash2, Users } from "lucide-react"
+import { PlusCircle, ToggleLeft, ToggleRight, Trash2, Users } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 
@@ -91,24 +91,24 @@ export default function TablesGridPage() {
         title,
         value,
         icon,
-        trendValue,
+        // trendValue,
     }: {
         title: string
         value: number
         icon: React.ReactNode
         trendValue: number
     }) => {
-        const isPositive = trendValue >= 0
+        // const isPositive = trendValue >= 0
         return (
             <Card className="bg-white border shadow-sm">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                     <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
                         {icon} {title}
                     </CardTitle>
-                    <span className={`flex items-center text-xs font-semibold ${isPositive ? "text-green-600" : "text-red-600"}`}>
+                    {/* <span className={`flex items-center text-xs font-semibold ${isPositive ? "text-green-600" : "text-red-600"}`}>
                         {isPositive ? <ArrowUpRight className="h-4 w-4 mr-1" /> : <ArrowDownRight className="h-4 w-4 mr-1" />}
                         {Math.abs(trendValue)}%
-                    </span>
+                    </span> */}
                 </CardHeader>
                 <CardContent>
                     <p className="text-2xl font-bold">{value}</p>

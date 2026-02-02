@@ -989,3 +989,9 @@ export const faq_item_animation = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 },
 }
+
+
+export const itemSlugPage = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+}

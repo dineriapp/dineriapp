@@ -6,6 +6,9 @@
     "loggedInMessage": "Bon retour ! Prêt à stimuler votre croissance ?",
     "goToDashboard": "Aller au tableau de bord"
   },
+  "global": {
+    "visit": "Visiter"
+  },
   "Header": {
     "home": "Accueil",
     "features": "Fonctionnalités",
@@ -1204,6 +1207,7 @@
         "title": "Informations sur l’entreprise",
         "description": "Gérez les informations de base et l’image de marque de votre restaurant"
       },
+      "uplaod": "Téléverser",
       "form": {
         "labels": {
           "name": "Nom du restaurant *",
@@ -1411,21 +1415,21 @@
           "instagram": "URL du profil Instagram",
           "facebook": "URL de la page Facebook",
           "whatsapp": "Numéro WhatsApp",
-          "tiktok": "Nom d'utilisateur TikTok",
+          "tiktok": "URL du profil TikTok",
           "social_icons_position": "Position des icônes sociales"
         },
         "placeholders": {
           "instagram": "https://instagram.com/votre.restaurant",
           "facebook": "https://facebook.com/votre.restaurant",
           "whatsapp": "+1234567890",
-          "tiktok": "@nomutilisateur",
+          "tiktok": "https://tiktok.com/@votrerestaurant",
           "selectPosition": "Sélectionner la position"
         },
         "help": {
           "instagram": "Saisissez l'URL de votre profil Instagram (exemple : https://instagram.com/votrerestaurant)",
           "facebook": "Saisissez l'URL de votre page Facebook (exemple : https://facebook.com/votrerestaurant)",
           "whatsapp": "Saisissez votre numéro WhatsApp avec l'indicatif du pays (exemple : +1234567890)",
-          "tiktok": "Saisissez votre nom d'utilisateur TikTok commençant par @ (exemple : @monrestaurant)",
+          "tiktok": "Saisissez l'URL de votre profil TikTok (exemple : https://tiktok.com/@monrestaurant)",
           "social_icons_position": "Choisissez où les icônes de réseaux sociaux apparaissent sur la page de votre restaurant"
         },
         "selectOptions": {
@@ -1816,6 +1820,11 @@
       }
     },
     "dashboardMobilePreview": {
+      "btns": {
+        "menu": "Menu",
+        "events": "Événements",
+        "faq": "FAQ"
+      },
       "card": {
         "title": "Aperçu",
         "description": "Voyez à quoi ressemble votre page sur les appareils mobiles",
@@ -2507,7 +2516,8 @@
     "role": "Rôle",
     "plan": "Forfait",
     "status": "Statut",
-    "joined": "Inscrit le"
+    "joined": "Inscrit le",
+    "dashboard": "Tableau de bord"
   },
   "EmailChangePage": {
     "backToSettings": "Retour aux paramètres",

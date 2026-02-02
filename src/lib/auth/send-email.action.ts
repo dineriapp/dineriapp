@@ -32,6 +32,7 @@ export async function sendEmailAction(params: SendEmailParams) {
 
   try {
     await sgMail.send(msg);
+    console.log({ msg: `email send to: ${to}` })
     return { success: true };
   } catch (err: any) {
     const sgErrors = err?.response?.body?.errors;

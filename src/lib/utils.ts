@@ -3,7 +3,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { OrderStatusActions } from "./reuseable-data";
 import { Locale } from "@/i18n/routing";
-import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
+import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

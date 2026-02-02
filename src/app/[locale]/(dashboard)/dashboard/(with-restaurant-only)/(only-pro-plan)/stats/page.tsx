@@ -94,7 +94,6 @@ export default function StatsPage() {
                     <h1 className="text-3xl font-bold text-[#002147]">
                         {t("page.title")}
                     </h1>
-                    <p className="mt-1 text-gray-600">{t("page.subtitle")} {stats.restaurant.name}</p>
                 </div>
                 <div className="flex items-center space-x-2">
                     <div className="h-2 w-2 bg-[#009a5e] rounded-full animate-pulse"></div>

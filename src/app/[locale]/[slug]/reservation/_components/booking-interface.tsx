@@ -6,7 +6,7 @@ import {
   OverridesSettings,
   SettingsState,
   TimeSlotOverride,
-} from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
+} from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 import LoadingUI from "@/components/loading-ui";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

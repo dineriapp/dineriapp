@@ -12,8 +12,8 @@ export default async function WithProPlanLayout({
         headers: await headers()
     })
 
-    if (!session?.user) redirect("/dashbaord")
-    if (session.user.subscription_plan === "basic") redirect("/dashbaord")
+    if (!session?.user) redirect("/dashboard")
+    if (session.user.subscription_plan === "basic") redirect("/dashboard")
 
     return (
         children

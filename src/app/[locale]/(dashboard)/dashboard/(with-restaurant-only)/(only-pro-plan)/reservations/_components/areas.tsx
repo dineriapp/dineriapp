@@ -14,9 +14,9 @@ import { Switch } from "@/components/ui/switch"
 import { useAreas, useCreateArea, useDeleteArea, useUpdateArea } from "@/lib/area-queries"
 import { useRestaurantStore } from "@/stores/restaurant-store"
 import { Area } from "@prisma/client"
-import { ArrowDownRight, ArrowUpRight, MapPin, Pencil, PlusCircle, ToggleLeft, ToggleRight, Trash2 } from "lucide-react"
-import { useState } from "react"
+import { MapPin, Pencil, PlusCircle, ToggleLeft, ToggleRight, Trash2 } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { useState } from "react"
 
 export default function AreasPage() {
     const [search, setSearch] = useState("")
@@ -107,24 +107,24 @@ export default function AreasPage() {
         title,
         value,
         icon,
-        trendValue,
+        // trendValue,
     }: {
         title: string
         value: number
         icon: React.ReactNode
         trendValue: number
     }) => {
-        const isPositive = trendValue >= 0
+        // const isPositive = trendValue >= 0
         return (
             <Card className="bg-white border shadow-sm gap-2">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                     <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
                         {icon} {title}
                     </CardTitle>
-                    <span className={`flex items-center text-xs font-semibold ${isPositive ? "text-green-600" : "text-red-600"}`}>
+                    {/* <span className={`flex items-center text-xs font-semibold ${isPositive ? "text-green-600" : "text-red-600"}`}>
                         {isPositive ? <ArrowUpRight className="h-4 w-4 mr-1" /> : <ArrowDownRight className="h-4 w-4 mr-1" />}
                         {Math.abs(trendValue)}%
-                    </span>
+                    </span> */}
                 </CardHeader>
                 <CardContent>
                     <p className="text-2xl font-bold">{value}</p>

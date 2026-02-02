@@ -1,4 +1,4 @@
-import { SettingsState } from '@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types';
+import { SettingsState } from '@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types';
 import { CapacityService } from '@/lib/capacity-service';
 import prisma from '@/lib/prisma';
 import { getEstimatedDuration } from '@/lib/utils';

@@ -1,8 +1,8 @@
 "use client";
 
 import { ReservationPolicy, Restaurant } from "@prisma/client";
-import ReservationStatusBanner from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/reservations/reservation-status-banner";
-import { SettingsState } from "../../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types";
+import ReservationStatusBanner from "../../(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/reservations/reservation-status-banner";
+import { SettingsState } from "../../(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 import BookingInterface from "./_components/booking-interface";
 import { ReservationHeader } from "./reservation-header";
 

@@ -27,7 +27,8 @@ import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
 import { OpeningHoursStatus } from "./_components/opening-hours-status"
 import { WelcomePopup } from "./_components/welcome-popup"
 import { MenuItems } from "./menu-items"
-import { SettingsState } from "../(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types"
+import { SettingsState } from "../(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types"
+import { itemSlugPage } from "@/lib/reuseable-data"
 
 // Define the complete types with relations using Prisma types
 type RestaurantWithRelations = Restaurant & {
@@ -60,10 +61,6 @@ const container = {
     },
 }
 
-const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-}
 
 const trackLinkClick = async (linkId: string) => {
     try {
@@ -186,6 +183,16 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
     const bookingDisabled =
         restaurant?.reservation_settings?.settings?.restaurantSettings?.pause_new_reservations === true ||
         restaurant?.reservation_settings?.settings?.restaurantSettings?.emergency_closure === true;
+
+    const hasMenuItems =
+        restaurant.menuCategories?.some(
+            (category) => category.items && category.items.length > 0
+        )
+    const hasFaqsItems =
+        restaurant.faqCategories?.some(
+            (category) => category.faqs && category.faqs.length > 0
+        )
+
 
     return (
         <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
@@ -324,9 +331,9 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                 <motion.div variants={container} initial="hidden" animate="show" className="flex-grow flex flex-col"
                     style={{ rowGap: `${restaurant.buttons_gap_in_px}px` }}
                 >
-                    {!bookingDisabled &&
+                    {!bookingDisabled && restaurant?.user?.subscription_plan !== "basic" &&
                         <motion.a
-                            variants={item}
+                            variants={itemSlugPage}
                             href={`/${restaurant.slug}/reservation`}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -383,7 +390,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                     {restaurant.links.map((link) => (
                         <motion.a
                             key={link.id}
-                            variants={item}
+                            variants={itemSlugPage}
                             href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -440,9 +447,9 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
 
 
-                    {restaurant.menuCategories.length > 0 && !isMenuPage && (
+                    {restaurant.menuCategories.length > 0 && !isMenuPage && hasMenuItems && (
                         <motion.button
-                            variants={item}
+                            variants={itemSlugPage}
                             onClick={() => setShowMenuDialog(true)}
                             className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
                                 ? "rounded-full"
@@ -497,7 +504,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
 
                     {restaurant.events.length > 0 && (
                         <motion.button
-                            variants={item}
+                            variants={itemSlugPage}
                             onClick={() => setShowEventsDialog(true)}
                             className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
                                 ? "rounded-full"
@@ -550,9 +557,9 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                     )}
 
                     {/* FAQ Button - Always show if there are FAQ categories */}
-                    {restaurant.faqCategories.length > 0 && (
+                    {restaurant.faqCategories.length > 0 && hasFaqsItems && (
                         <motion.button
-                            variants={item}
+                            variants={itemSlugPage}
                             onClick={() => setShowFAQDialog(true)}
                             className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
                                 ? "rounded-full"
@@ -899,7 +906,7 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                 >
                     <p className="text-xs" style={{ color: headingsColor, opacity: 0.7 }}>
                         {" "}
-                        {t("powered_by")}
+                        {t("powered_by")}{" "}
                         <Link href="/" className="hover:underline" style={{ color: restaurant.accent_color || "#10b981" }}>
                             dineri.app
                         </Link>

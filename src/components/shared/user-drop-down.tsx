@@ -140,7 +140,7 @@ export const UserDropDown = ({ className, SizeClassName = "size-[52px]" }: UserD
                         <DropdownMenuItem asChild className="h-10 hover:!bg-main-green group cursor-pointer hover:!text-white">
                             <Link href={"/dashboard"}>
                                 <PieChart className="group-hover:!text-white" />
-                                Dashboard
+                                {nu("dashboard")}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="h-10 hover:!bg-red-400 group cursor-pointer hover:!text-white" onClick={handleSignOut}>

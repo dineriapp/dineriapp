@@ -6,6 +6,9 @@
     "loggedInMessage": "Willkommen zurück! Bereit, dein Wachstum zu steigern?",
     "goToDashboard": "Zum Dashboard"
   },
+  "global": {
+    "visit": "Besuchen"
+  },
   "Header": {
     "home": "Startseite",
     "features": "Funktionen",
@@ -1204,6 +1207,7 @@
         "title": "Geschäftsinformationen",
         "description": "Verwalten Sie die grundlegenden Informationen und das Branding Ihres Restaurants"
       },
+      "uplaod": "Hochladen",
       "form": {
         "labels": {
           "name": "Restaurantname *",
@@ -1411,21 +1415,21 @@
           "instagram": "Instagram-Profil-URL",
           "facebook": "Facebook-Seiten-URL",
           "whatsapp": "WhatsApp-Nummer",
-          "tiktok": "TikTok-Benutzername",
+          "tiktok": "TikTok-Profil-URL",
           "social_icons_position": "Position der Social-Icons"
         },
         "placeholders": {
           "instagram": "https://instagram.com/dein.restaurant",
           "facebook": "https://facebook.com/dein.restaurant",
           "whatsapp": "+1234567890",
-          "tiktok": "@benutzername",
+          "tiktok": "https://tiktok.com/@deinrestaurant",
           "selectPosition": "Position auswählen"
         },
         "help": {
           "instagram": "Gib die URL deines Instagram-Profils ein (z. B. https://instagram.com/deinrestaurant)",
           "facebook": "Gib die URL deiner Facebook-Seite ein (z. B. https://facebook.com/deinrestaurant)",
           "whatsapp": "Gib deine WhatsApp-Nummer mit Ländervorwahl ein (z. B. +1234567890)",
-          "tiktok": "Gib deinen TikTok-Benutzernamen ein, beginnend mit @ (z. B. @meinrestaurant)",
+          "tiktok": "Gib die URL deines TikTok-Profils ein (z. B. https://tiktok.com/@meinrestaurant)",
           "social_icons_position": "Wähle, wo die Social-Media-Icons auf deiner Restaurantseite erscheinen sollen"
         },
         "selectOptions": {
@@ -1812,6 +1816,11 @@
       }
     },
     "dashboardMobilePreview": {
+      "btns": {
+        "menu": "Speisekarte",
+        "events": "Veranstaltungen",
+        "faq": "FAQ"
+      },
       "card": {
         "title": "Vorschau",
         "description": "So sieht deine Seite auf mobilen Geräten aus",
@@ -2503,7 +2512,8 @@
     "role": "Rolle",
     "plan": "Plan",
     "status": "Status",
-    "joined": "Beigetreten"
+    "joined": "Beigetreten",
+    "dashboard": "Übersicht"
   },
   "EmailChangePage": {
     "backToSettings": "Zurück zu den Einstellungen",

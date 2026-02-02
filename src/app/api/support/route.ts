@@ -2,7 +2,7 @@ import { sendEmailAction } from "@/lib/auth/send-email.action";
 import { after, NextResponse } from "next/server";
 import * as z from "zod";
 
-export const supportSchema = z.object({
+const supportSchema = z.object({
     name: z.string().min(2),
     email: z.string().email(),
     urgency: z.enum(["low", "medium", "high"]),

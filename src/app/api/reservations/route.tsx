@@ -1,4 +1,4 @@
-import { DynamicRule, SettingsState } from '@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/reservations/_components/settings/types';
+import { DynamicRule, SettingsState } from '@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types';
 import { CapacityService } from '@/lib/capacity-service';
 import { extractSendGridFromSettings, getRenderedReservationEmailTemplates } from '@/lib/email-utils';
 import prisma from "@/lib/prisma";

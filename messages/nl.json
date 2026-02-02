@@ -6,6 +6,9 @@
     "loggedInMessage": "Welkom terug! Klaar om je groei te stimuleren?",
     "goToDashboard": "Ga naar dashboard"
   },
+  "global": {
+    "visit": "Bezoeken"
+  },
   "Header": {
     "home": "Home",
     "features": "Functies",
@@ -1204,6 +1207,7 @@
         "title": "Bedrijfsinformatie",
         "description": "Beheer de basisinformatie en branding van je restaurant"
       },
+      "uplaod": "Uploaden",
       "form": {
         "labels": {
           "name": "Naam van het restaurant *",
@@ -1411,21 +1415,21 @@
           "instagram": "Instagram-profiel URL",
           "facebook": "Facebook-pagina URL",
           "whatsapp": "WhatsApp-nummer",
-          "tiktok": "TikTok-gebruikersnaam",
+          "tiktok": "TikTok-profiel URL",
           "social_icons_position": "Positie van sociale iconen"
         },
         "placeholders": {
           "instagram": "https://instagram.com/jouw.restaurant",
           "facebook": "https://facebook.com/jouw.restaurant",
           "whatsapp": "+1234567890",
-          "tiktok": "@gebruikersnaam",
+          "tiktok": "https://tiktok.com/@jouwrestaurant",
           "selectPosition": "Selecteer positie"
         },
         "help": {
           "instagram": "Voer de URL van je Instagram-profiel in (bijv. https://instagram.com/jouwrestaurant)",
           "facebook": "Voer de URL van je Facebook-pagina in (bijv. https://facebook.com/jouwrestaurant)",
           "whatsapp": "Voer je WhatsApp-nummer in met landcode (bijv. +1234567890)",
-          "tiktok": "Voer je TikTok-gebruikersnaam in beginnend met @ (bijv. @mijnrestaurant)",
+          "tiktok": "Voer de URL van je TikTok-profiel in (bijv. https://tiktok.com/@mijnrestaurant)",
           "social_icons_position": "Kies waar de sociale media-iconen op je restaurantpagina worden weergegeven"
         },
         "selectOptions": {
@@ -1812,6 +1816,11 @@
       }
     },
     "dashboardMobilePreview": {
+      "btns": {
+        "menu": "Menu",
+        "events": "Evenementen",
+        "faq": "FAQ"
+      },
       "card": {
         "title": "Voorbeeld",
         "description": "Bekijk hoe je pagina eruitziet op mobiele apparaten",
@@ -2503,7 +2512,8 @@
     "role": "Rol",
     "plan": "Plan",
     "status": "Status",
-    "joined": "Lid sinds"
+    "joined": "Lid sinds",
+    "dashboard": "Overzicht"
   },
   "EmailChangePage": {
     "backToSettings": "Terug naar instellingen",
