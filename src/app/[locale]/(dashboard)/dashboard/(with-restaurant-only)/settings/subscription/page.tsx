@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Loader2, CreditCard, Calendar, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,13 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { getStripePlans, STRIPE_PLANS } from "@/lib//stripe-plans";
-import { toast } from "sonner";
-import { Link } from "@/i18n/navigation";;
-import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Locale } from "@/i18n/routing";
+import { getStripePlans, STRIPE_PLANS } from "@/lib//stripe-plans";
+import { useUpgradePopupStore } from "@/stores/upgrade-popup-store";
+import { AlertCircle, CreditCard, Loader2 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+;
 
 interface SubscriptionData {
   plan: string;
@@ -27,12 +28,14 @@ interface SubscriptionData {
 }
 
 export default function SubscriptionPage() {
+  const openPopup = useUpgradePopupStore(state => state.open)
+  const up = useTranslations("update")
+
   const [subscription, setSubscription] = useState<SubscriptionData | null>(
     null
   );
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
-  const router = useRouter();
   const locale: Locale = useLocale() as Locale
   const t = useTranslations("Settings.subscription")
   useEffect(() => {
@@ -79,10 +82,6 @@ export default function SubscriptionPage() {
     }
   };
 
-  const handleUpgrade = () => {
-    router.push("/#pricing");
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -127,7 +126,7 @@ export default function SubscriptionPage() {
           </Alert>
         )}
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-1">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
@@ -173,7 +172,12 @@ export default function SubscriptionPage() {
               </div>
 
               {isBasic ? (
-                <Button onClick={handleUpgrade} className="w-full">
+                <Button
+                  onClick={() => {
+                    openPopup(up("text"));
+                  }}
+                  className="w-full cursor-pointer"
+                >
                   {t("plan.basic.upgradeButton")}
                 </Button>
               ) : (
@@ -199,7 +203,7 @@ export default function SubscriptionPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle>
                 {t("billing.title")}
@@ -270,7 +274,7 @@ export default function SubscriptionPage() {
                 </div>
               )}
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
 
         {isBasic && (
@@ -306,7 +310,7 @@ export default function SubscriptionPage() {
                   </ul>
                 </div>
               </div>
-              <Button onClick={handleUpgrade} className="mt-4 h-[44px]" asChild>
+              <Button className="mt-4 h-[44px]" asChild>
                 <Link href={"/plans"}>
                   {t("upgrade.viewPlansButton")}
                 </Link>

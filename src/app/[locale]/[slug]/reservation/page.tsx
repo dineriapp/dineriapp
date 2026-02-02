@@ -1,9 +1,8 @@
 import prisma from "@/lib/prisma";
-import { notFound } from "next/navigation";
-import ReservationClientSide from "./reservation-client-side";
-import { SettingsState } from "../../(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 import { getTranslations } from "next-intl/server";
-import ReservationNotAvailable from "@/components/reservation-not-available";
+import { notFound } from "next/navigation";
+import { SettingsState } from "../../(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
+import ReservationClientSide from "./reservation-client-side";
 
 interface MenuPageProps {
   params: Promise<{ slug: string }>;
@@ -36,19 +35,21 @@ export default async function MenuPage({ params }: MenuPageProps) {
 
   const user = await prisma.user.findFirst({
     where: { id: restaurant.user_id },
+    select: { subscription_plan: true },
   })
+
+
+  if (!user) {
+    notFound();
+  }
 
   const settings = restaurant?.reservation_settings
     ?.settings as unknown as SettingsState;
 
-  if (!settings || user?.subscription_plan === "basic") {
-    return (<ReservationNotAvailable />);
-  }
-
-
   return (
     <div className="min-h-screen bg-gray-50">
       <ReservationClientSide
+        userSubscriptionPlan={user?.subscription_plan}
         restaurant={{
           ...restaurant,
           reservation_settings: {

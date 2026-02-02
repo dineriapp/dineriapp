@@ -11,6 +11,7 @@ const UpgradeBtn = () => {
     return (
         <Button
             size="sm"
+            type='button'
             onClick={() => {
                 openPopup(t("text"));
             }}

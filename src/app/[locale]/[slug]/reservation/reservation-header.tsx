@@ -10,10 +10,12 @@ import { useTranslations } from "next-intl";
 
 interface ReservationHeaderProps {
   restaurant: Restaurant;
+  plan: "basic" | "pro" | "enterprise";
 }
 
 export function ReservationHeader({
   restaurant,
+  plan,
 }: ReservationHeaderProps) {
   const t = useTranslations("makeAReservation.reservationHeader");
 
@@ -64,7 +66,7 @@ export function ReservationHeader({
           </div>
 
           {/* Right side - Drop Query */}
-          <Button
+          {plan !== "basic" && <Button
             variant="outline"
             className="relative cursor-pointer"
             size="sm"
@@ -77,7 +79,7 @@ export function ReservationHeader({
                 {t("dropQuery")}
               </button>
             </ReservationDialog>
-          </Button>
+          </Button>}
         </div>
       </div>
     </div>

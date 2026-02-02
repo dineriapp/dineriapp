@@ -8,9 +8,10 @@ import { ReservationHeader } from "./reservation-header";
 
 interface ReservationClientProps {
     restaurant: Restaurant & { reservation_settings: { settings: SettingsState }, Reservation_policy: ReservationPolicy | null };
+    userSubscriptionPlan: "basic" | "pro" | "enterprise";
 }
 
-const ReservationClientSide = ({ restaurant }: ReservationClientProps) => {
+const ReservationClientSide = ({ restaurant, userSubscriptionPlan }: ReservationClientProps) => {
     const settings = restaurant?.reservation_settings?.settings;
     const rs = settings?.restaurantSettings;
 
@@ -26,6 +27,7 @@ const ReservationClientSide = ({ restaurant }: ReservationClientProps) => {
         >
             <ReservationHeader
                 restaurant={restaurant}
+                plan={userSubscriptionPlan}
             />
 
             {/* 🔥 Status Banner (always show if paused/closed/message) */}
@@ -38,7 +40,7 @@ const ReservationClientSide = ({ restaurant }: ReservationClientProps) => {
             {/* 🔥 Only show booking interface when NOT paused/closed */}
             {!bookingDisabled && (
                 <div className="w-full px-5">
-                    <BookingInterface restaurant={restaurant} />
+                    <BookingInterface restaurant={restaurant} userSubscriptionPlan={userSubscriptionPlan} />
                 </div>
             )}
         </div>

@@ -1,11 +1,10 @@
 // @ts-nocheck
-import { type NextRequest, NextResponse } from "next/server"
-import { headers } from "next/headers"
-import type Stripe from "stripe"
-import { isValidPlan } from "@/lib/stripe-plans"
-import { stripe } from "@/lib/stripe"
 import prisma from "@/lib/prisma"
-import { getTranslations } from "next-intl/server"
+import { stripe } from "@/lib/stripe"
+import { isValidPlan } from "@/lib/stripe-plans"
+import { headers } from "next/headers"
+import { type NextRequest, NextResponse } from "next/server"
+import type Stripe from "stripe"
 
 interface WebhookMetadata {
     user_id?: string
@@ -14,7 +13,6 @@ interface WebhookMetadata {
 
 export async function POST(request: NextRequest) {
 
-    const t = await getTranslations("stripe_webhook_api")
     const body = await request.text()
     const headersList = await headers()
     const signature = headersList.get("stripe-signature")
@@ -100,8 +98,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
                 subscription_status: "active",
                 stripe_customer_id: session.customer as string,
                 stripe_subscription_id: session.subscription as string,
-                subscription_current_period_start: new Date(),
-                subscription_current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+                subscription_current_period_start: new Date(sub.current_period_start * 1000),
+                subscription_current_period_end: new Date(sub.current_period_end * 1000),
             },
         })
 
@@ -114,7 +112,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     console.log("Processing customer.subscription.updated")
-
+    console.dir(subscription)
     if (!subscription.id) {
         console.error("No subscription ID provided")
         return
@@ -132,12 +130,25 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 
         const status = mapStripeStatus(subscription.status)
 
+        //  get plan from price metadata
+        const price =
+            subscription.pending_update?.subscription_items?.[0]?.price ??
+            subscription.items.data[0].price
+        const plan = price.metadata?.plan
+
+        console.log("Detected plan from Stripe:", plan)
+
         const dataToUpdate: any = {
             subscription_status: status,
+            subscription_current_period_start: new Date(subscription.current_period_start * 1000),
+            subscription_current_period_end: new Date(subscription.current_period_end * 1000),
         }
 
+        // If canceled or unpaid → fallback to basic
         if (status === "inactive") {
             dataToUpdate.subscription_plan = "basic"
+        } else if (plan && isValidPlan(plan)) {
+            dataToUpdate.subscription_plan = plan
         }
 
         await prisma.user.update({
@@ -145,7 +156,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
             data: dataToUpdate,
         })
 
-        console.log(`Subscription updated for user ${user.id}, status: ${status}`)
+        console.log(`Subscription updated for user ${user.id}, plan: ${dataToUpdate.subscription_plan}, status: ${status}`)
     } catch (error) {
         console.error("Failed to update subscription:", error)
         throw error

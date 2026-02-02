@@ -30,6 +30,8 @@ import DailyCapacityWidget from "./daily-capacity-widget";
 import ReservationPoliciesDialog from "./reservation-policies-dialog";
 import { ReservationDialog } from "./reservation-query-dialog";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
+import UpgradeBtn from "@/components/upgrade-btn";
 
 // Format time slots for dropdown (30-min intervals)
 const fmt = new Intl.DateTimeFormat("en-US", {
@@ -47,11 +49,13 @@ const timeSlots = Array.from({ length: 48 }, (_, i) => {
 
 const BookingInterface = ({
   restaurant,
+  userSubscriptionPlan
 }: {
   restaurant: Restaurant & {
     reservation_settings: { settings: SettingsState };
     Reservation_policy: ReservationPolicy | null;
   };
+  userSubscriptionPlan: "basic" | "pro" | "enterprise";
 }) => {
   const t = useTranslations("makeAReservation.booking");
 
@@ -399,6 +403,13 @@ const BookingInterface = ({
             {/* Main Form */}
             <div className="lg:col-span-2">
               <Card className="p-5 shadow-lg relative overflow-hidden">
+                {
+                  userSubscriptionPlan === "basic"
+                  &&
+                  <div className="w-full h-full bg-white/40 absolute top-0 flex items-center justify-center left-0 z-10 backdrop-blur-[2px]">
+                    <UpgradeBtn />
+                  </div>
+                }
                 {loading && (
                   <div className="w-full h-full flex gap-1 items-center justify-center absolute flex-col top-0 left-0 bg-white/70 z-[10]">
                     <Loader className="size-8 animate-spin" />
@@ -762,8 +773,16 @@ const BookingInterface = ({
             </div>
 
             {/* Summary Sidebar */}
-            <div className="lg:col-span-1">
-              <Card className="p-5 shadow-lg gap-0 sticky top-20">
+            <div className={cn("lg:col-span-1 relative")}>
+
+              <Card className="p-5 shadow-lg gap-0 sticky top-20 overflow-hidden">
+                {
+                  userSubscriptionPlan === "basic"
+                  &&
+                  <div className="w-full h-full bg-white/40 absolute top-0 flex items-center justify-center left-0 z-10 backdrop-blur-[2px]">
+                    <UpgradeBtn />
+                  </div>
+                }
                 <h3 className="text-xl mb-3 font-bold text-gray-900 pb-2 border-b">
                   {t("reservationSummary")}
                 </h3>
