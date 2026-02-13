@@ -1,14 +1,23 @@
 import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 import prisma from "@/lib/prisma"
-import { stripe } from "@/lib/stripe"
+import { getValidStripeClient } from "@/lib/stripe"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
-import type Stripe from "stripe"
+import Stripe from "stripe"
+
+const log = (label: string, data?: any) => {
+    console.log(`[WEBHOOK] ${label}`, data ?? "")
+}
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const t = await getTranslations("restaurant_webhook_api")
 
     const { id: restaurantId } = await params
+    log("Incoming webhook request", {
+        restaurantId,
+        method: request.method,
+        url: request.url,
+    })
 
     if (!restaurantId) {
         return NextResponse.json({ error: t("errors.restaurant_id_missing") }, { status: 400 })
@@ -17,18 +26,39 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // Fetch the webhook secret from DB
     const restaurant = await prisma.restaurant.findUnique({
         where: { id: restaurantId },
-        select: { stripe_webhook_secret_encrypted: true },
+        select: { stripe_webhook_secret_encrypted: true, stripe_secret_key_encrypted: true },
     })
 
-    if (!restaurant || !restaurant.stripe_webhook_secret_encrypted) {
+
+    log("Restaurant webhook config loaded", {
+        restaurantId,
+        hasWebhookSecret: !!restaurant?.stripe_webhook_secret_encrypted,
+    })
+
+
+    if (!restaurant || !restaurant.stripe_webhook_secret_encrypted || !restaurant.stripe_secret_key_encrypted) {
         return NextResponse.json({ error: t("errors.webhook_secret_not_found") }, { status: 400 })
     }
 
-    const webhookSecret = decrypt_key(restaurant.stripe_webhook_secret_encrypted)
 
+    const webhookSecret = decrypt_key(restaurant.stripe_webhook_secret_encrypted)
+    const stripeSecretKey = decrypt_key(restaurant.stripe_secret_key_encrypted)
+
+    const stripeClient = await getValidStripeClient(stripeSecretKey)
+
+    if (!stripeClient) {
+        return NextResponse.json({ error: t("errors.invalid_stripe_secret_key") }, { status: 400 })
+    }
 
     const body = await request.text()
     const signature = request.headers.get("stripe-signature")
+
+    log("Stripe signature received", {
+        hasSignature: !!signature,
+    })
+
+    log("Raw body length", body.length)
+
 
     if (!signature) {
         console.error("No Stripe signature found")
@@ -39,11 +69,18 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     try {
         // event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
-        event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+        event = stripeClient.webhooks.constructEvent(body, signature, webhookSecret)
+        log("Stripe event verified", {
+            type: event.type,
+            id: event.id,
+        })
+
     } catch (error) {
         console.error("Webhook signature verification failed:", error)
         return NextResponse.json({ error: t("errors.invalid_signature") }, { status: 400 })
     }
+
+
 
     // Check if this is a payment-related event by looking at metadata
     const isPaymentEvent = (metadata: any) => {
@@ -80,6 +117,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // For other payment-related events, check metadata
     if (event.data.object && "metadata" in event.data.object) {
         const metadata = (event.data.object as any).metadata;
+        log("Event metadata", metadata)
 
         // Check if it's a reservation deposit event first
         if (isReservationDepositEvent(metadata)) {
@@ -113,6 +151,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     try {
         switch (event.type) {
             case "checkout.session.completed":
+
                 await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session)
                 break
 

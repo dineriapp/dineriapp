@@ -13,6 +13,7 @@ export async function getValidStripeClient(secretKey: string): Promise<false | S
     try {
         const testStripe = new Stripe(secretKey, {
             apiVersion: "2025-07-30.basil",
+            typescript: true
         })
 
         const account = await testStripe.accounts.retrieve()

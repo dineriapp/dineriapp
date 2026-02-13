@@ -138,7 +138,8 @@ export async function POST(request: NextRequest) {
 
         // Generate unique order number
         const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
-
+        console.log(
+            items)
         // Create Stripe checkout session
         const session = await stripeClient.checkout.sessions.create({
             payment_method_types: ["card"],
@@ -149,27 +150,33 @@ export async function POST(request: NextRequest) {
                         ? item.addons.reduce((sum, addon) => sum + addon.price, 0)
                         : 0
 
+                    const descriptionParts = [
+                        item.description,
+                        Array.isArray(item.addons) && item.addons.length > 0
+                            ? "Addons: " +
+                            item.addons
+                                .map((addon) => `${addon.name} (€${addon.price.toFixed(2)})`)
+                                .join(", ")
+                            : null,
+                    ].filter(Boolean)
+
+                    const productData: Stripe.Checkout.SessionCreateParams.LineItem.PriceData.ProductData = {
+                        name: item.name,
+                        metadata: {
+                            category: item.category,
+                            allergens: item.allergens?.join(", ") || "",
+                        },
+                    }
+
+                    if (descriptionParts.length > 0) {
+                        productData.description = descriptionParts.join(" | ")
+                    }
+
                     return {
                         price_data: {
                             currency: "eur",
-                            product_data: {
-                                name: item.name,
-                                description: [
-                                    item.description,
-                                    Array.isArray(item.addons) && item.addons.length > 0
-                                        ? "Addons: " + item.addons
-                                            .map((addon) => `${addon.name} (€${addon.price.toFixed(2)})`)
-                                            .join(", ")
-                                        : null
-                                ]
-                                    .filter(Boolean)
-                                    .join(" | "),
-                                metadata: {
-                                    category: item.category,
-                                    allergens: item.allergens?.join(", ") || "",
-                                },
-                            },
-                            unit_amount: Math.round((item.price + addonsTotal) * 100), // ✅ include addons
+                            product_data: productData,
+                            unit_amount: Math.round((item.price + addonsTotal) * 100),
                         },
                         quantity: item.quantity,
                     }
