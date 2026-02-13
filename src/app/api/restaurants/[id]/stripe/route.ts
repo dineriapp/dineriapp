@@ -90,8 +90,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         }
 
         // Register webhook for the restaurant
-        const webhookUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/stripe/${id}/webhook`
-        // const webhookUrl = `https://dineri.vercel.app/api/stripe/${id}/webhook`
+        // const webhookUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/stripe/${id}/webhook`
+        const webhookUrl = `https://dineri.vercel.app/api/stripe/${id}/webhook`
 
         try {
             const webhook = await stripeClient.webhookEndpoints.create({
@@ -103,17 +103,15 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                 ],
                 description: `Restaurant ${id} Webhook`,
             })
-            console.log(webhook)
             if (webhook?.secret) {
                 updateData.stripe_webhook_secret_encrypted = encrypt_key(webhook.secret)
             } else {
                 return NextResponse.json({ error: t("errors.invalid_stripe_secret_or_webhook_error") }, { status: 400 })
             }
         } catch (err: any) {
-            console.error(err)
+            console.error("Failed to register webhook:", err)
             // Silently ignore if webhook already exists
             if (err?.raw?.type !== "invalid_request_error") {
-                console.error("Failed to register webhook:", err)
                 return NextResponse.json({ error: t("errors.invalid_stripe_secret_or_webhook_error") }, { status: 400 })
             }
             return NextResponse.json({ error: t("errors.invalid_stripe_secret_or_webhook_error") }, { status: 400 })

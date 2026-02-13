@@ -234,7 +234,7 @@ export default function BusinessInformationPage() {
             const updateData = {
                 name: formData.name.trim(),
                 slug: formData.slug.trim(),
-                bio: formData.bio.trim() || null,
+                bio: formData.bio.trim() || "",
                 logo_url: formData.logo_url.trim() || null,
             }
 

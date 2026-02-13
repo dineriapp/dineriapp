@@ -89,7 +89,7 @@ export const UserDropDown = ({ className, SizeClassName = "size-[52px]" }: UserD
                                     {/* Subscription Plan */}
                                     <div className="flex items-center px-2 justify-between text-[15px] text-muted-foreground">
                                         <div className="flex items-center gap-2">
-                                            <CreditCard className="h-5 w-5 text-blue-500" />
+                                            <CreditCard className="h-5 w-5 text-main-green" />
                                             <span>{nu("plan")}</span>
                                         </div>
                                         <span className="font-medium capitalize">
@@ -102,7 +102,7 @@ export const UserDropDown = ({ className, SizeClassName = "size-[52px]" }: UserD
                                     {/* Subscription Status */}
                                     <div className="flex items-center px-2 justify-between text-[15px] text-muted-foreground">
                                         <div className="flex items-center gap-2 ">
-                                            <BadgeCheck className="h-5 w-5 text-blue-500" />
+                                            <BadgeCheck className="h-5 w-5 text-main-green" />
                                             <span>{nu("status")}</span>
                                         </div>
                                         <span
@@ -125,7 +125,7 @@ export const UserDropDown = ({ className, SizeClassName = "size-[52px]" }: UserD
                                     {/* Joined Date */}
                                     <div className="flex items-center px-2 justify-between text-[15px] text-muted-foreground">
                                         <div className="flex items-center gap-2">
-                                            <Calendar className="h-5 w-5 text-slate-500" />
+                                            <Calendar className="h-5 w-5 text-main-green" />
                                             <span className="">{nu("joined")}</span>
                                         </div>
                                         <span className="font-medium">

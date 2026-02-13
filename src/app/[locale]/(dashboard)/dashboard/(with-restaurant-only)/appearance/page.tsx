@@ -15,9 +15,12 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Locale } from "@/i18n/routing"
+import { useEvents } from "@/lib/event-queries"
+import { useFaqCategories } from "@/lib/faq-queries"
 import { getLucideIconBySlug } from "@/lib/get-icons"
 import { useLinks } from "@/lib/link-queries"
-import { colorPresets, container2, fonts, gradientDirectionsLangs, gradientPresets, textColorPresets } from "@/lib/reuseable-data"
+import { useMenuCategories } from "@/lib/menu-queries"
+import { colorPresets, container2, fonts, gradientDirectionsLangs, gradientPresets, itemSlugPage, textColorPresets } from "@/lib/reuseable-data"
 import { useGoogleReviews } from "@/lib/review-api"
 import { AppearanceFormData } from "@/lib/types"
 import { getBackgroundStyle, ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
@@ -46,6 +49,7 @@ export default function AppearancePage() {
     const { data: links = [], isLoading: linksLoading, } = useLinks(selectedRestaurant?.id)
     const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(selectedRestaurant?.google_place_id);
     const t = useTranslations("appearance")
+    const t2 = useTranslations("dashboard.dashboardMobilePreview");
     // Form state
     const [formData, setFormData] = useState<AppearanceFormData>({
         bg_color: "#ffffff",
@@ -70,7 +74,19 @@ export default function AppearancePage() {
 
     // Initial form data for reset functionality
     const [initialData, setInitialData] = useState<AppearanceFormData>(formData)
+    const { data: categories } = useMenuCategories(selectedRestaurant?.id)
+    const { data: events } = useEvents(selectedRestaurant?.id)
+    const { data: faqcategories } = useFaqCategories(selectedRestaurant?.id)
 
+    const hasMenuItems =
+        categories?.some(
+            (category) => category.items && category.items.length > 0
+        )
+
+    const hasFaqsItems =
+        faqcategories?.some(
+            (category) => category.faqs && category.faqs.length > 0
+        )
     // UI state
     const [saving, setSaving] = useState(false)
     const [currentTime] = useState(() => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }))
@@ -156,6 +172,7 @@ export default function AppearancePage() {
     }
 
     const openingHours = selectedRestaurant?.opening_hours ? (selectedRestaurant?.opening_hours as OpeningHoursData) : null
+    const buttonTextColor = selectedRestaurant?.button_text_icons_color || "#000000"
 
     // Apply template
     // const applyTemplate = async (template: Template) => {
@@ -237,7 +254,7 @@ export default function AppearancePage() {
                                                     htmlFor="rounded"
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
+                                                    <div className="w-full h-10 rounded-2xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
                                                     <span className="text-slate-700">
                                                         {t("rounded")}
                                                     </span>
@@ -250,7 +267,7 @@ export default function AppearancePage() {
                                                     htmlFor="square"
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
+                                                    <div className="w-full h-10 rounded-sm bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
                                                     <span className="text-slate-700">
                                                         {t("square")}
                                                     </span>
@@ -263,7 +280,7 @@ export default function AppearancePage() {
                                                     htmlFor="pill"
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
+                                                    <div className="w-full h-10 rounded-full bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
                                                     <span className="text-slate-700">
                                                         {t("pill")}
                                                     </span>
@@ -289,13 +306,13 @@ export default function AppearancePage() {
                                                     htmlFor="solid"
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-green to-main-blue mb-2 flex items-center justify-center">
+                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-green to-main-blue flex items-center justify-center">
                                                         <span className="text-white text-xs font-medium">
                                                             {t("solid")}
                                                         </span>
                                                     </div>
                                                     <span className="text-slate-700">
-                                                        {t("solid")}
+                                                        {/* {t("solid")} */}
                                                     </span>
                                                 </Label>
                                             </div>
@@ -306,13 +323,13 @@ export default function AppearancePage() {
                                                     htmlFor="outline"
                                                     className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
                                                 >
-                                                    <div className="w-full h-10 rounded-xl bg-white border-2 border-teal-600 mb-2 flex items-center justify-center">
+                                                    <div className="w-full h-10 rounded-xl bg-white border-2 border-teal-600 flex items-center justify-center">
                                                         <span className="text-teal-600 text-xs font-medium">
                                                             {t("outline")}
                                                         </span>
                                                     </div>
                                                     <span className="text-slate-700">
-                                                        {t("outline")}
+                                                        {/* {t("outline")} */}
                                                     </span>
                                                 </Label>
                                             </div>
@@ -1051,6 +1068,183 @@ export default function AppearancePage() {
                                                                         </p>
                                                                 }
                                                             </>
+                                                    }
+                                                    {
+                                                        categories &&
+                                                        <>
+                                                            {categories?.length > 0 && hasMenuItems && (
+                                                                <motion.button
+                                                                    variants={itemSlugPage}
+                                                                    className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
+                                                                        ? "rounded-full"
+                                                                        : formData.button_style === "square"
+                                                                            ? "rounded-md"
+                                                                            : "rounded-xl"
+                                                                        }`}
+                                                                    style={{
+                                                                        backgroundColor:
+                                                                            formData.button_variant === "solid"
+                                                                                ? formData.accent_color || "#10b981"
+                                                                                : "transparent",
+                                                                        backdropFilter: "blur(8px)",
+                                                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
+                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                                                        color: formData.button_variant === "solid" ? buttonTextColor : formData.accent_color || "#10b981",
+                                                                        fontFamily: formData.font_family || "Inter",
+                                                                        letterSpacing: "0.01em",
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        formData?.button_icons_show
+                                                                        &&
+                                                                        <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                                                            style={{
+                                                                                backgroundColor: formData.button_text_icons_color || "transparent"
+                                                                            }}
+                                                                        >
+                                                                            {getLucideIconBySlug("menu", { className: "w-4 h-4", style: { color: formData.accent_color || "transparent" } })}
+                                                                        </div>
+                                                                    }
+                                                                    <span
+                                                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                            } transition-colors duration-300 font-medium`}
+                                                                        style={{
+                                                                            color:
+                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : buttonTextColor,
+                                                                        }}
+                                                                    >
+
+                                                                        {t2("btns.menu")}
+                                                                    </span>
+                                                                    {
+                                                                        formData?.button_icons_show
+                                                                        &&
+                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                                                            <MoreVertical className="size-4" />
+                                                                        </div>
+                                                                    }
+                                                                </motion.button>
+                                                            )}
+                                                        </>
+                                                    }
+
+                                                    {
+                                                        events &&
+                                                        <>
+                                                            {events.length > 0 && (
+                                                                <motion.button
+                                                                    variants={itemSlugPage}
+                                                                    className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
+                                                                        ? "rounded-full"
+                                                                        : formData.button_style === "square"
+                                                                            ? "rounded-md"
+                                                                            : "rounded-xl"
+                                                                        }`}
+                                                                    style={{
+                                                                        backgroundColor:
+                                                                            formData.button_variant === "solid"
+                                                                                ? formData.accent_color || "#10b981"
+                                                                                : "transparent",
+                                                                        backdropFilter: "blur(8px)",
+                                                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
+                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                                                        color: formData.button_variant === "solid" ? buttonTextColor : formData.accent_color || "#10b981",
+                                                                        fontFamily: formData.font_family || "Inter",
+                                                                        letterSpacing: "0.01em",
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        formData?.button_icons_show
+                                                                        &&
+                                                                        <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                                                            style={{
+                                                                                backgroundColor: formData.button_text_icons_color || "transparent"
+                                                                            }}
+                                                                        >
+                                                                            {getLucideIconBySlug("events", { className: "w-4 h-4", style: { color: formData.accent_color || "transparent" } })}
+                                                                        </div>
+                                                                    }
+                                                                    <span
+                                                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                            } transition-colors duration-300 font-medium`}
+                                                                        style={{
+                                                                            color:
+                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : buttonTextColor,
+                                                                        }}
+                                                                    >
+                                                                        {t2("btns.events")}
+                                                                    </span>
+                                                                    {
+                                                                        formData?.button_icons_show
+                                                                        &&
+                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                                                            <MoreVertical className="size-4" />
+                                                                        </div>
+                                                                    }
+                                                                </motion.button>
+                                                            )}
+                                                        </>
+                                                    }
+                                                    {faqcategories
+                                                        &&
+                                                        <>
+                                                            {faqcategories.length > 0 && hasFaqsItems && (
+                                                                <motion.button
+                                                                    variants={itemSlugPage}
+                                                                    className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
+                                                                        ? "rounded-full"
+                                                                        : formData.button_style === "square"
+                                                                            ? "rounded-md"
+                                                                            : "rounded-xl"
+                                                                        }`}
+                                                                    style={{
+                                                                        backgroundColor:
+                                                                            formData.button_variant === "solid"
+                                                                                ? formData.accent_color || "#10b981"
+                                                                                : "transparent",
+                                                                        backdropFilter: "blur(8px)",
+                                                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
+                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                                                        color: formData.button_variant === "solid" ? buttonTextColor : formData.accent_color || "#10b981",
+                                                                        fontFamily: formData.font_family || "Inter",
+                                                                        letterSpacing: "0.01em",
+                                                                    }}
+                                                                >
+
+                                                                    {
+                                                                        formData?.button_icons_show
+                                                                        &&
+                                                                        <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                                                            style={{
+                                                                                backgroundColor: formData.button_text_icons_color || "transparent"
+                                                                            }}
+                                                                        >
+                                                                            {getLucideIconBySlug("faq", { className: "w-4 h-4", style: { color: formData.accent_color || "transparent" } })}
+                                                                        </div>
+                                                                    }
+                                                                    <span
+                                                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
+                                                                            } transition-colors duration-300 font-medium`}
+                                                                        style={{
+                                                                            color:
+                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : buttonTextColor,
+                                                                        }}
+                                                                    >
+
+                                                                        {t2("btns.faq")}
+                                                                    </span>
+                                                                    {
+                                                                        formData?.button_icons_show
+                                                                        &&
+                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                                                            <MoreVertical className="size-4" />
+                                                                        </div>
+                                                                    }
+
+                                                                </motion.button>
+                                                            )}
+
+                                                        </>
                                                     }
                                                 </motion.div>
                                             </div>
