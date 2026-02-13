@@ -212,33 +212,68 @@ export async function POST(request: NextRequest) {
             customer_email: customerInfo.email,
             metadata: {
                 type: "payment",
-                user_id: userId || "guest",
+            },
+        })
+
+        const order = await prisma.order.create({
+            data: {
                 restaurant_id: restaurant.id,
+                stripe_session_id: session.id,
+                stripe_payment_intent: "", // will update later
                 order_number: orderNumber,
-                order_type: orderType,
-                preferredISO: preferredISO,
-                subtotal: subtotal.toString(),
-                tax_amount: taxAmount.toString(),
-                delivery_fee: deliveryFee.toString(),
-                total_amount: totalAmount.toString(),
+
                 customer_name: customerInfo.name,
                 customer_email: customerInfo.email,
                 customer_phone: customerInfo.phone,
-                // Address fields
-                delivery_address: deliveryAddress?.formattedAddress || "",
-                street: deliveryAddress?.street || "",
-                city: deliveryAddress?.city || "",
-                state: deliveryAddress?.state || "",
-                postal_code: deliveryAddress?.postalCode || "",
-                country: deliveryAddress?.country || "",
-                latitude: deliveryAddress?.latitude?.toString() || "",
-                longitude: deliveryAddress?.longitude?.toString() || "",
-                delivery_notes: deliveryNotes || "",
-                special_instructions: specialInstructions || "",
-                is_guest: isGuest.toString(),
-                items: JSON.stringify(items),
+
+                delivery_address: deliveryAddress?.formattedAddress || null,
+                street: deliveryAddress?.street || null,
+                city: deliveryAddress?.city || null,
+                state: deliveryAddress?.state || null,
+                postal_code: deliveryAddress?.postalCode || null,
+                country: deliveryAddress?.country || null,
+                latitude: deliveryAddress?.latitude || null,
+                longitude: deliveryAddress?.longitude || null,
+
+                notes: deliveryNotes || null,
+                order_type: orderType,
+                preferredISO: preferredISO || "",
+
+                status: "pending",
+                payment_status: "pending",
+
+                subtotal,
+                tax_amount: taxAmount,
+                delivery_fee: deliveryFee,
+                total_amount: totalAmount,
+
+                special_instructions: specialInstructions || null,
+                estimated_ready_time: new Date(Date.now() + 30 * 60 * 1000),
+
+                items: {
+                    create: items.map((item) => ({
+                        menu_item_id: item.id,
+                        name: item.name,
+                        description: item.description,
+                        price: item.price,
+                        quantity: item.quantity,
+                        item_total: item.price * item.quantity,
+                        allergens: item.allergens || [],
+                        addons: item.addons,
+                    })),
+                },
+
+                ...(userId && userId !== "guest" ? { user_id: userId } : {}),
             },
         })
+
+        await stripeClient.checkout.sessions.update(session.id, {
+            metadata: {
+                type: "payment",
+                order_id: order.id,
+            },
+        })
+
 
         return NextResponse.json({ url: session.url })
     } catch (error) {

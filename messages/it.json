@@ -2606,10 +2606,9 @@
     "selectDirectionPlaceholder": "Seleziona la direzione",
     "startColor": "Colore iniziale",
     "endColor": "Colore finale",
-    "imageUrl": "URL dell'immagine",
     "imageUrl_placeholder": "https://example.com/background.jpg",
-    "imageUrl_hint": "Inserisci l'URL della tua immagine di sfondo. Per risultati ottimali, utilizza un'immagine di almeno 1920x1080px.",
-
+    "imageUrl": "Immagine",
+    "imageUrl_hint": "Carica la tua immagine di sfondo. Per risultati ottimali, utilizza un’immagine di almeno 1920×1080 pixel.",
     "accentColor": "Colore di accento",
     "accentColor_description": "Questo colore verrà utilizzato per pulsanti ed elementi evidenziati",
     "colorPresets": "Colori preimpostati",

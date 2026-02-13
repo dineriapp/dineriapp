@@ -2611,9 +2611,9 @@
     "selectDirectionPlaceholder": "Selecciona la dirección",
     "startColor": "Color inicial",
     "endColor": "Color final",
-    "imageUrl": "URL de la imagen",
     "imageUrl_placeholder": "https://example.com/background.jpg",
-    "imageUrl_hint": "Introduce la URL de tu imagen de fondo. Para obtener mejores resultados, utiliza una imagen de al menos 1920x1080px.",
+    "imageUrl": "Imagen",
+    "imageUrl_hint": "Sube tu imagen de fondo. Para obtener mejores resultados, utiliza una imagen de al menos 1920×1080 píxeles.",
 
     "accentColor": "Color de acento",
     "accentColor_description": "Este color se usará para los botones y los elementos destacados",

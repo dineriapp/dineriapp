@@ -2610,10 +2610,9 @@
     "selectDirectionPlaceholder": "Select direction",
     "startColor": "Start Color",
     "endColor": "End Color",
-    "imageUrl": "Image URL",
     "imageUrl_placeholder": "https://example.com/background.jpg",
-    "imageUrl_hint": "Enter the URL of your background image. For best results, use an image at least 1920x1080px.",
-
+    "imageUrl": "Image",
+    "imageUrl_hint": "Upload your background image. For best results, use an image that is at least 1920×1080 pixels.",
     "accentColor": "Accent Color",
     "accentColor_description": "This color will be used for buttons and highlights",
     "colorPresets": "Color Presets",

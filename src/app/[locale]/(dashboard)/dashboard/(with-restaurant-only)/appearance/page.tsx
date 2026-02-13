@@ -25,11 +25,13 @@ import { useGoogleReviews } from "@/lib/review-api"
 import { AppearanceFormData } from "@/lib/types"
 import { getBackgroundStyle, ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
+import { uploadImage } from "@/supabase/clients/client"
 import { OpeningHoursData } from "@/types"
 import { GradientDirection } from "@prisma/client"
 import {
     Battery,
     ImageIcon,
+    Loader,
     MoreVertical,
     Paintbrush,
     Palette,
@@ -37,6 +39,7 @@ import {
     Save,
     Signal,
     Type,
+    Upload,
     Wifi
 } from "lucide-react"
 import { motion } from "motion/react"
@@ -48,6 +51,7 @@ export default function AppearancePage() {
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
     const { data: links = [], isLoading: linksLoading, } = useLinks(selectedRestaurant?.id)
     const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(selectedRestaurant?.google_place_id);
+    const [uploadingLogo, setUploadingLogo] = useState(false);
     const t = useTranslations("appearance")
     const t2 = useTranslations("dashboard.dashboardMobilePreview");
     // Form state
@@ -168,6 +172,28 @@ export default function AppearancePage() {
             toast.error(error instanceof Error ? error.message : t("failedToChange"))
         } finally {
             setSaving(false)
+        }
+    }
+
+    const handleUrlChange = (value: string) => {
+        updateFormData({ bg_image_url: value })
+    }
+
+    async function handleFileChange(file?: File) {
+        if (!file) return;
+        // optional: quick client validation
+        if (!file.type.startsWith("image/")) {
+            return;
+        }
+        setUploadingLogo(true);
+        try {
+            const uploadedUrl = await uploadImage(file); // <- your existing uploader
+            if (uploadedUrl) handleUrlChange(uploadedUrl); // reuse same updater
+
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setUploadingLogo(false);
         }
     }
 
@@ -647,7 +673,7 @@ export default function AppearancePage() {
                                                     <Label className="text-slate-700">
                                                         {t("imageUrl")}
                                                     </Label>
-                                                    <div className="flex items-center gap-2">
+                                                    {/* <div className="flex items-center gap-2">
                                                         <Input
                                                             type="url"
                                                             value={formData.bg_image_url || ""}
@@ -655,6 +681,40 @@ export default function AppearancePage() {
                                                             placeholder={t("imageUrl_placeholder")}
                                                             className="flex-1 border-slate-200"
                                                         />
+                                                    </div>
+                                                    <p className="text-xs text-slate-500">
+                                                        {t("imageUrl_hint")}
+                                                    </p> */}
+                                                    <div className="relative">
+                                                        {/* Hidden file input */}
+                                                        <Input
+                                                            id="logo_file"
+                                                            type="file"
+                                                            accept="image/*"
+                                                            disabled={saving || uploadingLogo}
+                                                            onChange={(e) => handleFileChange(e.target.files?.[0])}
+                                                            className="hidden"
+                                                        />
+
+                                                        {/* Upload button */}
+                                                        <Button
+                                                            type="button"
+                                                            disabled={saving || uploadingLogo}
+                                                            onClick={() => document.getElementById("logo_file")?.click()}
+                                                            className="w-full text-sm! cursor-pointer"
+                                                            variant={"outline"}
+                                                        >
+                                                            {uploadingLogo ? (
+                                                                <>
+                                                                    <Loader className="animate-spin" />
+                                                                </>
+                                                            )
+                                                                :
+                                                                <>
+                                                                    <Upload />
+                                                                </>
+                                                            }
+                                                        </Button>
                                                     </div>
                                                     <p className="text-xs text-slate-500">
                                                         {t("imageUrl_hint")}

@@ -2606,9 +2606,9 @@
     "selectDirectionPlaceholder": "Richtung auswählen",
     "startColor": "Startfarbe",
     "endColor": "Endfarbe",
-    "imageUrl": "Bild-URL",
     "imageUrl_placeholder": "https://example.com/background.jpg",
-    "imageUrl_hint": "Geben Sie die URL Ihres Hintergrundbilds ein. Für beste Ergebnisse verwenden Sie ein Bild mit mindestens 1920x1080px.",
+    "imageUrl": "Bild",
+    "imageUrl_hint": "Laden Sie Ihr Hintergrundbild hoch. Für beste Ergebnisse verwenden Sie ein Bild mit mindestens 1920×1080 Pixeln.",
 
     "accentColor": "Akzentfarbe",
     "accentColor_description": "Diese Farbe wird für Schaltflächen und Hervorhebungen verwendet",

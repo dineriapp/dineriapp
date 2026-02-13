@@ -2610,10 +2610,9 @@
     "selectDirectionPlaceholder": "Sélectionnez la direction",
     "startColor": "Couleur de départ",
     "endColor": "Couleur de fin",
-    "imageUrl": "URL de l'image",
     "imageUrl_placeholder": "https://example.com/background.jpg",
-    "imageUrl_hint": "Saisissez l'URL de votre image d'arrière-plan. Pour de meilleurs résultats, utilisez une image d'au moins 1920x1080px.",
-
+    "imageUrl": "Image",
+    "imageUrl_hint": "Téléchargez votre image d’arrière-plan. Pour de meilleurs résultats, utilisez une image d’au moins 1920×1080 pixels.",
     "accentColor": "Couleur d'accentuation",
     "accentColor_description": "Cette couleur sera utilisée pour les boutons et les éléments mis en évidence",
     "colorPresets": "Couleurs prédéfinies",

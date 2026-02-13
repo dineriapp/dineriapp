@@ -31,7 +31,6 @@ interface CartDrawerProps {
 }
 
 export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen, onClose }: CartDrawerProps) {
-    const { getCartItems, getCartTotal, updateQuantity, removeItem, clearCart } = useCartStore()
     const [isProcessing, setIsProcessing] = useState(false)
     const [showCheckout, setShowCheckout] = useState(false)
     const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false)
@@ -71,7 +70,13 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
     const isPickupAllowed =
         businessStatus === "ALLOKAY" || businessStatus === "DISABLE_DELIVERY";
 
-    const items = getCartItems(restaurantSlug)
+    const cartitems = useCartStore((state) => state.items[restaurantSlug])
+    const updateQuantity = useCartStore((state) => state.updateQuantity)
+    const removeItem = useCartStore((state) => state.removeItem)
+    const clearCart = useCartStore((state) => state.clearCart)
+    const getCartTotal = useCartStore((state) => state.getCartTotal)
+
+    const safeItems = cartitems ?? []
     const subtotal = getCartTotal(restaurantSlug)
     const taxRate = restaurant.tax_percentage / 100;
     const taxAmount = subtotal * taxRate
@@ -133,10 +138,13 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
             errors.email = t("errors.email_invalid")
         }
 
+        const cleanedPhone = customerInfo.phone.replace(/[\s\-().]/g, "");
+
+
         if (!customerInfo.phone.trim()) {
-            errors.phone = t("errors.phone_required")
-        } else if (!/^[+]?[1-9][\d]{0,15}$/.test(customerInfo.phone.replace(/[\s\-$$$$]/g, ""))) {
-            errors.phone = t("errors.phone_invalid")
+            errors.phone = t("errors.phone_required");
+        } else if (!/^[1-9]\d{6,15}$/.test(cleanedPhone)) {
+            errors.phone = t("errors.phone_invalid");
         }
 
         if (orderType === "delivery") {
@@ -150,7 +158,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
     }
 
     const handleProceedToCheckout = async () => {
-        if (items.length === 0) {
+        if (safeItems.length === 0) {
             toast.error(t("toasts.cart_empty"))
             return
         }
@@ -170,7 +178,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                 },
                 body: JSON.stringify({
                     restaurantSlug,
-                    items: items.map((item) => ({
+                    items: safeItems.map((item) => ({
                         id: item.id,
                         name: item.name,
                         description: item.description,
@@ -274,11 +282,11 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                     <SheetDescription
 
                     ><span>{t("header.from_label")} </span> <span className="font-semibold">{restaurantName}</span></SheetDescription>
-                    {!showCheckout && items.length > 0 && (
+                    {!showCheckout && safeItems.length > 0 && (
                         <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => clearCart(restaurantSlug)}
+                            onClick={() => clearCart()}
 
                             className=" absolute bottom-2 right-2 hover:bg-transparent cursor-pointer"
                         >
@@ -292,7 +300,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                 <div className="flex-1 overflow-y-auto py-2 px-4">
                     {!showCheckout ? (
                         // Cart Items View
-                        items.length === 0 ? (
+                        safeItems.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full text-center">
                                 <ShoppingBag
 
@@ -315,9 +323,9 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                             </div>
                         ) : (
                             <div className="space-y-3">
-                                {items.map((item) => (
+                                {safeItems.map((item) => (
                                     <CartItemComponent
-                                        key={item.id}
+                                        key={item.cartItemId}
                                         item={item}
                                         restaurant={restaurant}
                                         onQuantityChange={(quantity) => handleQuantityChange(item.cartItemId || "", quantity)}
@@ -355,13 +363,13 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                 <div className="space-y-2 text-sm">
                                     <div className="flex justify-between">
                                         <span>
-                                            {t("order_summary.items_plural", { count: items.length })}
+                                            {t("order_summary.items_plural", { count: safeItems.length })}
                                         </span>
                                         <span>€{subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>
-                                            {t("tax_label.title", {
+                                            {t("order_summary.tax_label", {
                                                 taxPercentage: restaurant.tax_percentage
                                             })}
                                         </span>
@@ -445,18 +453,32 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                                         <Input
                                             id="phone"
                                             type="tel"
+                                            inputMode="numeric"
+                                            pattern="[1-9][0-9]*"
                                             value={customerInfo.phone}
                                             onChange={(e) => {
-                                                setCustomerInfo((prev) => ({ ...prev, phone: e.target.value }))
+                                                let value = e.target.value;
+
+                                                // Remove non-digits
+                                                value = value.replace(/\D/g, "");
+
+                                                // Prevent starting with 0
+                                                if (value.startsWith("0")) {
+                                                    value = value.replace(/^0+/, "");
+                                                }
+
+                                                setCustomerInfo((prev) => ({ ...prev, phone: value }));
+
                                                 if (formErrors.phone) {
-                                                    setFormErrors((prev) => ({ ...prev, phone: "" }))
+                                                    setFormErrors((prev) => ({ ...prev, phone: "" }));
                                                 }
                                             }}
-
                                             placeholder={t("checkout_form.phone_placeholder")}
                                             className={formErrors.phone ? "border-red-500" : ""}
                                             autoComplete="tel"
+                                            maxLength={16}
                                         />
+
                                         {formErrors.phone && <p
 
                                             className="text-sm text-red-500 mt-1">{formErrors.phone}</p>}
@@ -572,7 +594,7 @@ export function CartDrawer({ restaurantSlug, restaurant, restaurantName, isOpen,
                 </div>
 
                 {/* Footer */}
-                {items.length > 0 && (
+                {safeItems.length > 0 && (
                     <div className="border-t pt-4 space-y-4 px-4 pb-4"
 
                     >

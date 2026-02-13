@@ -20,7 +20,7 @@ interface CartState {
     addItem: (restaurantSlug: string, item: Omit<CartItem, "quantity">) => void
     removeItem: (restaurantSlug: string, itemId: string) => void
     updateQuantity: (restaurantSlug: string, itemId: string, quantity: number) => void
-    clearCart: (restaurantSlug: string) => void
+    clearCart: () => void
     getCartItems: (restaurantSlug: string) => CartItem[]
     getCartTotal: (restaurantSlug: string) => number
     getCartItemCount: (restaurantSlug: string) => number
@@ -43,7 +43,7 @@ export const useCartStore = create<CartState>()(
                         const existingAddonsKey = JSON.stringify(
                             (i.addons || []).sort((a, b) => a.name.localeCompare(b.name))
                         )
-                        return i.cartItemId === item.cartItemId && existingAddonsKey === newAddonsKey
+                        return i.id === item.id && existingAddonsKey === newAddonsKey
                     })
 
                     if (existingItemIndex >= 0) {
@@ -63,6 +63,7 @@ export const useCartStore = create<CartState>()(
                     }
                 })
             },
+
             removeItem: (restaurantSlug, cartItemId) => {
                 set((state) => {
                     const restaurantItems = state.items[restaurantSlug] || []
@@ -91,14 +92,10 @@ export const useCartStore = create<CartState>()(
                 })
             },
 
-            clearCart: (restaurantSlug) => {
-                set((state) => ({
-                    items: {
-                        ...state.items,
-                        [restaurantSlug]: [],
-                    },
-                }))
+            clearCart: () => {
+                set({ items: {} })
             },
+
 
             getCartItems: (restaurantSlug) => {
                 return get().items[restaurantSlug] || []

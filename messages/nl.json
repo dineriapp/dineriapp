@@ -2606,10 +2606,9 @@
     "selectDirectionPlaceholder": "Selecteer richting",
     "startColor": "Startkleur",
     "endColor": "Eindkleur",
-    "imageUrl": "Afbeeldings-URL",
     "imageUrl_placeholder": "https://example.com/background.jpg",
-    "imageUrl_hint": "Voer de URL van je achtergrondafbeelding in. Gebruik voor de beste resultaten een afbeelding van minimaal 1920x1080px.",
-
+    "imageUrl": "Afbeelding",
+    "imageUrl_hint": "Upload je achtergrondafbeelding. Voor het beste resultaat gebruik je een afbeelding van minimaal 1920×1080 pixels.",
     "accentColor": "Accentkleur",
     "accentColor_description": "Deze kleur wordt gebruikt voor knoppen en accenten",
     "colorPresets": "Kleurenvoorinstellingen",
