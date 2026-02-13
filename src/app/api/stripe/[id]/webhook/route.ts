@@ -10,7 +10,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     const { id: restaurantId } = await params
 
-
     if (!restaurantId) {
         return NextResponse.json({ error: t("errors.restaurant_id_missing") }, { status: 400 })
     }
@@ -27,8 +26,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
 
-    // const webhookSecret = decrypt_key(restaurant.stripe_webhook_secret_encrypted)
-    const webhookSecret = "whsec_546d4d8c4ff223921853c8e4505dae65435a7d7a093bb2aea52c9d8ee8c647ae"
+    const webhookSecret = decrypt_key(restaurant.stripe_webhook_secret_encrypted)
     const stripeSecretKey = decrypt_key(restaurant.stripe_secret_key_encrypted)
 
     const stripeClient = await getValidStripeClient(stripeSecretKey)
