@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -534,8 +534,8 @@ model Order {
   id                    String        @id @default(uuid()) @db.Uuid
   user_id               String?       @db.Uuid // Made optional for guest orders
   restaurant_id         String        @db.Uuid
-  stripe_payment_intent String        @unique
-  stripe_session_id     String?       @unique
+  stripe_payment_intent String
+  stripe_session_id     String?
   order_number          String        @unique
   customer_name         String?
   customer_email        String?
