@@ -75,7 +75,7 @@ export function AddressInput({
 
     // Validate address completeness
     const validateAddress = (address: AddressData) => {
-        const isValid = !!(address.street && address.city && address.state && address.postalCode && address.country)
+        const isValid = !!(address.street && address.city && address.state && address.country)
         onValidationChange?.(isValid)
         return isValid
     }
@@ -135,47 +135,89 @@ export function AddressInput({
     }
 
     // Parse Google Places address components
-    const parseAddressComponents = (place: google.maps.places.PlaceResult): AddressData => {
+    const parseAddressComponents = (
+        place: google.maps.places.PlaceResult
+    ): AddressData => {
         const components = place.address_components ?? []
 
-        let street = ''
-        let city = ''
-        let state = ''
-        let postalCode = ''
-        let country = ''
+        let streetNumber = ""
+        let route = ""
+        let fallbackStreet = ""
+        let city = ""
+        let state = ""
+        let postalCode = ""
+        let country = ""
 
         components.forEach((component) => {
             const types = component.types
 
-            if (types.includes('street_number')) {
-                street = component.long_name + ' '
-            } else if (types.includes('route')) {
-                street += component.long_name
-            } else if (types.includes('locality') || types.includes('sublocality')) {
-                city = component.long_name
-            } else if (types.includes('administrative_area_level_1')) {
-                state = component.short_name
-            } else if (types.includes('postal_code')) {
+            // Proper street structure (if available)
+            if (types.includes("street_number")) {
+                streetNumber = component.long_name
+            }
+
+            if (types.includes("route")) {
+                route = component.long_name
+            }
+
+            // 🔥 Fallback for Pakistan (component with no types)
+            if (types.length === 0 && !fallbackStreet) {
+                fallbackStreet = component.long_name
+            }
+
+            if (
+                types.includes("locality") ||
+                types.includes("sublocality") ||
+                types.includes("postal_town")
+            ) {
+                if (!city) city = component.long_name
+            }
+
+            if (types.includes("administrative_area_level_1")) {
+                state = component.long_name
+            }
+
+            if (types.includes("postal_code")) {
                 postalCode = component.long_name
-            } else if (types.includes('country')) {
+            }
+
+            if (types.includes("country")) {
                 country = component.long_name
             }
         })
+
+        // Build street properly
+        let street = ""
+
+        // Always prefer full formatted address
+        if (place.formatted_address) {
+            street = place.formatted_address
+        }
+        // If somehow formatted_address missing
+        else if (streetNumber || route) {
+            street = `${streetNumber} ${route}`.trim()
+        }
+        // Final fallback
+        else if (fallbackStreet) {
+            street = fallbackStreet
+        }
+
 
         const lat = place.geometry?.location?.lat?.()
         const lng = place.geometry?.location?.lng?.()
 
         return {
-            street: street.trim(),
+            street,
             city,
             state,
             postalCode,
             country,
-            latitude: lat ?? 0, // or throw error if you want this to be required
+            latitude: lat ?? 0,
             longitude: lng ?? 0,
-            formattedAddress: place.formatted_address ?? '',
+            formattedAddress: place.formatted_address ?? "",
         }
     }
+
 
     // Get current location
     const getCurrentLocation = () => {
@@ -195,21 +237,32 @@ export function AddressInput({
 
                     geocoder.geocode(
                         { location: { lat: latitude, lng: longitude } },
-                        // @ts-expect-error due to types 
-                        (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
+                        (results, status) => {
                             setIsGettingLocation(false);
-                            if (status === "OK" && results && results[0]) {
-                                const addressData = parseAddressComponents({
-                                    formatted_address: results[0].formatted_address,
-                                    geometry: results[0].geometry,
-                                    address_components: results[0].address_components,
-                                } as google.maps.places.PlaceResult);
 
-                                onChange(addressData);
-                                setQuery(addressData.formattedAddress);
+                            if (status === "OK" && results && results.length > 0) {
+
+                                // 🔥 Try to find result that includes postal code
+                                const resultWithPostal = results.find(r =>
+                                    r.address_components.some(c =>
+                                        c.types.includes("postal_code")
+                                    )
+                                )
+
+                                const bestResult = resultWithPostal || results[0]
+
+                                const addressData = parseAddressComponents({
+                                    formatted_address: bestResult.formatted_address,
+                                    geometry: bestResult.geometry,
+                                    address_components: bestResult.address_components,
+                                } as google.maps.places.PlaceResult)
+
+                                onChange(addressData)
+                                setQuery(addressData.formattedAddress)
                             }
                         }
-                    );
+                    )
+
                 }
 
             },
