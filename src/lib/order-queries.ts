@@ -114,11 +114,13 @@ export function useUpdateOrderStatus(restaurantId?: string) {
             }
             toast.error(error.message)
         },
-        onSuccess: (data, { status }) => {
+        onSuccess: async (data, { status }) => {
             toast.success(t("success.order_status_updated", { status: status }))
             // Invalidate and refetch both orders and stats
             queryClient.invalidateQueries({ queryKey: ["orders", restaurantId] })
-            queryClient.invalidateQueries({ queryKey: ["order-stats", restaurantId] })
+            await queryClient.refetchQueries({
+                queryKey: ["order-stats", restaurantId],
+            });
         },
     })
 }

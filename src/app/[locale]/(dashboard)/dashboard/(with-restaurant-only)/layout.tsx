@@ -11,6 +11,7 @@ import { Link } from "@/i18n/navigation"
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { auth } from "@/lib/auth/auth";
+import UpgradeAutoShow from "@/components/upgrade-auto-show";
 
 export const metadata: Metadata = {
     title: "Dashbaord",
@@ -47,48 +48,50 @@ export default async function WithResttaurantLayout({
     const isPremium = session?.user?.subscription_plan === "basic" ? false : true
 
     return (
-        <div className="bg-[#3C3C3C]">
-            <SidebarProvider defaultOpen={defaultOpen} className="!rounded-[14px] overflow-hidden">
-                <AppSidebar />
-                <main className="w-full bg-gray-50 h-screen overflow-y-auto">
-                    <div className="min-h-screen">
-                        <div className="border-b border-slate-200 bg-white shadow-sm">
-                            <div className="mx-auto px-4 h-[62px] flex items-center justify-between">
-                                <div className="flex items-center space-x-4 md:hidden">
-                                    <Link href="/dashboard" className="flex items-center space-x-2 group">
-                                        <Image
-                                            src={"/logo.png"}
-                                            alt="logo.png"
-                                            width={250}
-                                            height={100}
-                                            className="w-full max-w-[170px] "
-                                        />
-                                    </Link>
-                                </div>
-                                <div className="flex items-center justify-between gap-1 md:flex-row flex-row-reverse md:w-full">
-                                    <SidebarTrigger />
-                                    <div className="flex items-center gap-1">
-                                        <LocaleSwitcher
-                                            SizeClassName="!size-10"
-                                            IconSizeClassName="!size-[20px]"
-                                        />
-                                        {!isPremium && (
-                                            <UpgradeBtn />
-                                        )}
-                                        <VisitBtn />
+        <>
+            <UpgradeAutoShow />
+            <div className="bg-[#3C3C3C]">
+                <SidebarProvider defaultOpen={defaultOpen} className="!rounded-[14px] overflow-hidden">
+                    <AppSidebar />
+                    <main className="w-full bg-gray-50 h-screen overflow-y-auto">
+                        <div className="min-h-screen">
+                            <div className="border-b border-slate-200 bg-white shadow-sm">
+                                <div className="mx-auto px-4 h-[62px] flex items-center justify-between">
+                                    <div className="flex items-center space-x-4 md:hidden">
+                                        <Link href="/dashboard" className="flex items-center space-x-2 group">
+                                            <Image
+                                                src={"/logo.png"}
+                                                alt="logo.png"
+                                                width={250}
+                                                height={100}
+                                                className="w-full max-w-[170px] "
+                                            />
+                                        </Link>
                                     </div>
+                                    <div className="flex items-center justify-between gap-1 md:flex-row flex-row-reverse md:w-full">
+                                        <SidebarTrigger />
+                                        <div className="flex items-center gap-1">
+                                            <LocaleSwitcher
+                                                SizeClassName="!size-10"
+                                                IconSizeClassName="!size-[20px]"
+                                            />
+                                            {!isPremium && (
+                                                <UpgradeBtn />
+                                            )}
+                                            <VisitBtn />
+                                        </div>
+                                    </div>
+
                                 </div>
-
                             </div>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                {children}
+                            </Suspense>
                         </div>
-                        <Suspense fallback={<div>Loading...</div>}>
-                            {children}
-                        </Suspense>
-                    </div>
-                </main>
-            </SidebarProvider>
-        </div>
-
+                    </main>
+                </SidebarProvider>
+            </div>
+        </>
 
     );
 }

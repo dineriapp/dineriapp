@@ -39,7 +39,7 @@ interface FaqCategoryActionsProps {
     openPopup: (msg: string) => void;
 
     // Add category handlers
-    handleAddCategory: (e: React.FormEvent) => void;
+    handleAddCategory: (e: React.FormEvent) => Promise<boolean>;
     handleAddFromTemplate: (template: FaqTemplate) => void;
     resetForm: () => void;
 
@@ -198,7 +198,14 @@ export const FaqCategoryActions = ({
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
-                        <form onSubmit={handleAddCategory}>
+                        <form onSubmit={async (e) => {
+                            const success = await handleAddCategory(e)
+
+                            if (success) {
+                                setIsAddCategoryDialogOpen(false)
+                                resetForm()
+                            }
+                        }}>
                             <DialogHeader>
                                 <DialogTitle>
                                     {t("addCategoryTitle")}

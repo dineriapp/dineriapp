@@ -9,17 +9,22 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useSession } from "@/lib/auth/auth-client";
 import { getStripePlans, StripePlan } from "@/lib/stripe-plans"; // adjust path if needed
+import { Loader } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 ;
 
 export default function PlansPage() {
     const locale = useLocale()
     const t = useTranslations("PlansPage")
+
     const planKeys: StripePlan[] = ["basic", "pro", "enterprise"];
+    const [loadingPlan, setLoadingPlan] = useState<StripePlan | null>(null);
     const plans = getStripePlans(locale);
+    const router = useRouter()
     const { data: session } = useSession();
     return (
         <div className="min-h-screen bg-[white] flex flex-col">
@@ -105,36 +110,57 @@ export default function PlansPage() {
 
                                 <CardFooter>
                                     <Button
+                                        onClick={() => {
+                                            setLoadingPlan(key);
+
+                                            localStorage.setItem("comingFrom", "plans");
+
+                                            if (!session?.user) {
+                                                router.push("/sign-up");
+                                            } else {
+                                                router.push("/dashboard");
+                                            }
+                                        }}
+
+                                        disabled={loadingPlan === key}
                                         className={`w-full h-[52px] rounded-full font-poppins cursor-pointer font-semibold ${isHighlighted
                                             ? "bg-[#009A5E] hover:bg-[#009A5E]/80 text-white"
                                             : "bg-gray-100 hover:bg-gray-200 text-[#002147]"
                                             }`}
                                     >
-                                        {plan.price === 0 ? (
-                                            locale === "de"
-                                                ? "Kostenlos starten"
-                                                : locale === "es"
-                                                    ? "Comenzar gratis"
-                                                    : locale === "fr"
-                                                        ? "Commencer gratuitement"
-                                                        : locale === "it"
-                                                            ? "Inizia gratis"
-                                                            : locale === "nl"
-                                                                ? "Gratis starten"
-                                                                : "Start Free"
-                                        ) : (
-                                            locale === "de"
-                                                ? "Plan wählen"
-                                                : locale === "es"
-                                                    ? "Elegir plan"
-                                                    : locale === "fr"
-                                                        ? "Choisir le plan"
-                                                        : locale === "it"
-                                                            ? "Scegli piano"
-                                                            : locale === "nl"
-                                                                ? "Kies plan"
-                                                                : "Choose Plan"
-                                        )}
+                                        {
+                                            loadingPlan === key ? (
+                                                <Loader className="h-5 w-5 animate-spin" />
+                                            ) :
+                                                <>
+                                                    {plan.price === 0 ? (
+                                                        locale === "de"
+                                                            ? "Kostenlos starten"
+                                                            : locale === "es"
+                                                                ? "Comenzar gratis"
+                                                                : locale === "fr"
+                                                                    ? "Commencer gratuitement"
+                                                                    : locale === "it"
+                                                                        ? "Inizia gratis"
+                                                                        : locale === "nl"
+                                                                            ? "Gratis starten"
+                                                                            : "Start Free"
+                                                    ) : (
+                                                        locale === "de"
+                                                            ? "Plan wählen"
+                                                            : locale === "es"
+                                                                ? "Elegir plan"
+                                                                : locale === "fr"
+                                                                    ? "Choisir le plan"
+                                                                    : locale === "it"
+                                                                        ? "Scegli piano"
+                                                                        : locale === "nl"
+                                                                            ? "Kies plan"
+                                                                            : "Choose Plan"
+                                                    )}
+                                                </>
+                                        }
+
                                     </Button>
                                 </CardFooter>
                             </Card>

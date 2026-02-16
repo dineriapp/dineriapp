@@ -1,14 +1,14 @@
 import { cn } from "@/lib/utils";
 import {
-    Instagram,
     Facebook,
-    MessageCircle,
+    Instagram,
     Mail,
-    MapPin
+    MapPin,
+    Phone
 } from "lucide-react";
 import type { FC } from "react";
-import { JSX } from "react"
-import { FaTiktok } from "react-icons/fa";
+import { JSX } from "react";
+import { FaTiktok, FaWhatsapp } from "react-icons/fa";
 
 interface SocialLink {
     url: string;
@@ -24,6 +24,7 @@ interface SocialIconsProps {
         tiktok?: string | null;
         email?: string | null;
         address?: string | null;
+        phone?: string | null;
     };
     theme: {
         socialIconColor: string;
@@ -31,16 +32,16 @@ interface SocialIconsProps {
         socialIconBgShow: boolean;
         socialIconBgColor: string;
     };
+    isPreview?: boolean
 }
 
 const SocialIcons: FC<SocialIconsProps> = ({
     restaurant,
     theme,
-    className
+    className,
 }) => {
     // Create social links dynamically
     const socialLinks: SocialLink[] = [];
-
     if (restaurant.instagram) {
         socialLinks.push({
             url: restaurant.instagram,
@@ -59,7 +60,7 @@ const SocialIcons: FC<SocialIconsProps> = ({
         const formattedWhatsapp = `https://wa.me/${restaurant.whatsapp.replace(/\D/g, "")}`;
         socialLinks.push({
             url: formattedWhatsapp,
-            icon: <MessageCircle className="h-6 w-6" />
+            icon: <FaWhatsapp className="h-6 w-6" />
         });
     }
     if (restaurant.tiktok) {
@@ -78,11 +79,19 @@ const SocialIcons: FC<SocialIconsProps> = ({
         });
     }
 
+    if (restaurant.phone) {
+        socialLinks.push({
+            url: `tel:${restaurant.phone}`,
+            icon: <Phone className="h-5.5 w-5.5" />
+        });
+    }
+
+
     if (restaurant.address) {
         const encodedAddress = encodeURIComponent(restaurant.address);
         socialLinks.push({
             url: `https://maps.google.com/?q=${encodedAddress}`,
-            icon: <MapPin className="h-6 w-6" />
+            icon: <MapPin className="h-5.5 w-5.5" />
         });
     }
 

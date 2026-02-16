@@ -31,7 +31,7 @@ import { useUpgradePopupStore } from "@/stores/upgrade-popup-store"
 import { Eye, HelpCircle, Search, Star } from "lucide-react"
 import { motion } from "motion/react"
 import { useLocale, useTranslations } from "next-intl"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 // Animation variants
 
@@ -101,23 +101,22 @@ export default function FAQPage() {
         }
     }, [categories])
 
-    const handleAddCategory = (e: React.FormEvent) => {
+    const handleAddCategory = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (!newCategoryName.trim() || !restaurantId) return
+        if (!newCategoryName.trim() || !restaurantId) return false
 
-        createCategoryMutation.mutate(
-            {
+        try {
+            await createCategoryMutation.mutateAsync({
                 name: newCategoryName.trim(),
                 description: newCategoryDescription.trim() || undefined,
-            },
-            {
-                onSuccess: () => {
-                    setNewCategoryName("")
-                    setNewCategoryDescription("")
-                },
-            },
-        )
+            })
+
+            return true
+        } catch {
+            return false
+        }
     }
+
 
     const handleEditCategory = (e: React.FormEvent) => {
         e.preventDefault()
@@ -151,14 +150,16 @@ export default function FAQPage() {
                 answer: newFAQAnswer.trim(),
                 is_featured: isFeatured,
             },
-            {
-                onSuccess: () => {
-                    resetForm()
-                    setIsAddFAQDialogOpen(false)
-                },
-            },
         )
     }
+
+    useEffect(() => {
+        if (createFaqMutation.isSuccess) {
+            resetForm();
+            setIsAddFAQDialogOpen(false);
+        }
+    }, [createFaqMutation.isSuccess]);
+
 
     const handleEditFAQ = (e: React.FormEvent) => {
         e.preventDefault()

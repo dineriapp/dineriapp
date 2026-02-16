@@ -403,6 +403,7 @@ export default function BusinessInformationPage() {
                                     </>
                                 }
                             </Button>
+
                         </div>
 
                         {/* Logo Preview */}
@@ -411,24 +412,39 @@ export default function BusinessInformationPage() {
                                 <p className="text-sm font-medium text-gray-700 mb-2">
                                     {t("form.help.logo_preview")}
                                 </p>
-                                <div className="border rounded-lg p-4 bg-gray-50">
-                                    <Image
-                                        src={formData.logo_url || "/placeholder.svg"}
-                                        alt="Logo preview"
-                                        className="max-h-40 max-w-40 object-contain"
-                                        width={200}
-                                        height={200}
-                                        onError={(e) => {
-                                            const target = e.target as HTMLImageElement
-                                            target.style.display = "none"
-                                            setErrors((prev) => ({ ...prev, logo_url: "Unable to load image from this URL" }))
+                                <div className="border rounded-lg p-4 bg-gray-50 relative w-fit">
+                                    <div className="size-40! rounded-full overflow-hidden">
+                                        <Image
+                                            src={formData.logo_url || "/placeholder.svg"}
+                                            alt="Logo preview"
+                                            className="w-full h-full object-cover"
+                                            width={200}
+                                            height={200}
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement
+                                                target.style.display = "none"
+                                                setErrors((prev) => ({ ...prev, logo_url: "Unable to load image from this URL" }))
+                                            }}
+                                            onLoad={() => {
+                                                if (errors.logo_url === "Unable to load image from this URL") {
+                                                    setErrors((prev) => ({ ...prev, logo_url: undefined }))
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                    {/* Delete Button */}
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="destructive"
+                                        className="absolute -top-3 -right-3 cursor-pointer rounded-full h-8 w-8 p-0 shadow-md"
+                                        onClick={() => {
+                                            setFormData((prev) => ({ ...prev, logo_url: "" }));
+                                            setErrors((prev) => ({ ...prev, logo_url: undefined }));
                                         }}
-                                        onLoad={() => {
-                                            if (errors.logo_url === "Unable to load image from this URL") {
-                                                setErrors((prev) => ({ ...prev, logo_url: undefined }))
-                                            }
-                                        }}
-                                    />
+                                    >
+                                        ✕
+                                    </Button>
                                 </div>
                             </div>
                         )}

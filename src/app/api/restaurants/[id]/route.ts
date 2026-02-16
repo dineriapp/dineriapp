@@ -35,7 +35,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         // Parse and validate request body
         const body = await request.json()
         const validatedData = updateRestaurantSchema.parse(body)
-
         // Check if slug is unique (excluding current restaurant)
         if (validatedData.slug !== restaurant.slug) {
             const existingRestaurant = await prisma.restaurant.findFirst({
@@ -63,7 +62,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                 logo_url: validatedData.logo_url || null,
             },
         })
-
         return NextResponse.json({
             data: updatedRestaurant,
             message: t("success.restaurant_update_success"),

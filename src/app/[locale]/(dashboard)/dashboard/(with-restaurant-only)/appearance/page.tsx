@@ -1037,8 +1037,10 @@ export default function AppearancePage() {
                                                                     address: selectedRestaurant?.address,
                                                                     email: selectedRestaurant.email,
                                                                     facebook: selectedRestaurant.facebook,
-                                                                    instagram: selectedRestaurant.facebook,
+                                                                    instagram: selectedRestaurant.instagram,
                                                                     whatsapp: selectedRestaurant.whatsapp,
+                                                                    tiktok: selectedRestaurant.tiktok,
+                                                                    phone: selectedRestaurant.phone
                                                                 }
                                                             }
                                                             className="mb-4"

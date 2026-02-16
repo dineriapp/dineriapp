@@ -312,9 +312,10 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
                                     address: restaurant?.address,
                                     email: restaurant.email,
                                     facebook: restaurant.facebook,
-                                    instagram: restaurant.facebook,
+                                    instagram: restaurant.instagram,
                                     whatsapp: restaurant.whatsapp,
-                                    tiktok: restaurant.tiktok
+                                    tiktok: restaurant.tiktok,
+                                    phone: restaurant.phone
                                 }
                             }
                             className="mb-4 sm:mb-8"

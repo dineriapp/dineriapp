@@ -207,6 +207,7 @@ const DashabordMobilePreview = ({ selectedRestaurant }: { selectedRestaurant: Re
                                                         facebook: selectedRestaurant.facebook,
                                                         instagram: selectedRestaurant.facebook,
                                                         whatsapp: selectedRestaurant.whatsapp,
+                                                        phone: selectedRestaurant?.phone
                                                     }
                                                 }
                                                 className="mb-4"

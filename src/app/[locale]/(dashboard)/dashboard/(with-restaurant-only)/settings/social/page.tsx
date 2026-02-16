@@ -9,10 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import UnsavedChangesUi from "@/components/unsaved-changes-ui"
 import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
 import { useRestaurantStore } from "@/stores/restaurant-store"
-import { AlertCircle, Facebook, Instagram, MessageCircle } from "lucide-react"
+import { AlertCircle, Facebook, Instagram } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
-import { FaTiktok } from "react-icons/fa"
+import { FaTiktok, FaWhatsapp } from "react-icons/fa"
 import { toast } from "sonner"
 
 interface SocialFormData {
@@ -262,7 +262,7 @@ export default function SocialPage() {
 
             </Label>
             <div className="relative">
-              <MessageCircle className="absolute left-3 top-3 h-4 w-4 text-green-600" />
+              <FaWhatsapp className="absolute left-3 top-3 h-4 w-4 text-green-600" />
               <Input
                 id="whatsapp"
                 value={formData.whatsapp}
