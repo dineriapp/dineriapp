@@ -1,9 +1,12 @@
 "use client"
 
+import VerifiedBadge from "@/components/icons/verified-badge"
 import SocialIcons from "@/components/social-icons"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Link } from "@/i18n/navigation"
 import { getLucideIconBySlug } from "@/lib/get-icons"
+import { itemSlugPage } from "@/lib/reuseable-data"
 import { cn } from "@/lib/utils"
 import { OpeningHoursData, ReviewsInfo } from "@/types"
 import type { Event, Faq, FaqCategory, MenuCategory, MenuItem, Link as PrismaLink, Restaurant, User } from "@prisma/client"
@@ -13,22 +16,24 @@ import {
     ExternalLink,
     MenuIcon,
     MoreVertical,
+    Share2,
     UtensilsCrossed
 } from "lucide-react"
 import { motion } from "motion/react"
 import { useTranslations } from "next-intl"
-import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation"
 import type React from "react"
 import { useEffect, useRef, useState } from "react"
+import { SettingsState } from "../(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types"
 import { FAQSection } from "./_components/faq-section"
 import { GoogleRating } from "./_components/google-rating"
 import { OpeningHoursDialog } from "./_components/opening-hours-dialog"
 import { OpeningHoursStatus } from "./_components/opening-hours-status"
 import { WelcomePopup } from "./_components/welcome-popup"
 import { MenuItems } from "./menu-items"
-import { SettingsState } from "../(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types"
-import { itemSlugPage } from "@/lib/reuseable-data"
+import { toast } from "sonner"
+
+
 
 // Define the complete types with relations using Prisma types
 type RestaurantWithRelations = Restaurant & {
@@ -43,8 +48,6 @@ type RestaurantWithRelations = Restaurant & {
     })[]
     reservation_settings: { settings: SettingsState }
 }
-
-
 
 interface ClientPageProps {
     restaurant: RestaurantWithRelations
@@ -178,6 +181,25 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
         return category ? category.items.filter(itm => itm.show_in_quick_menu).map((item) => ({ ...item, categoryName: category.name })) : []
     }
 
+    const handleShare = async () => {
+        const shareData = {
+            title: document.title,
+            text: "Check this out!",
+            url: window.location.href,
+        };
+
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData);
+            } catch {
+                console.log("Share cancelled");
+            }
+        } else {
+            await navigator.clipboard.writeText(window.location.href);
+            toast("Link copied to clipboard!");
+        }
+    };
+
     const filteredMenuItems = getFilteredMenuItems()
 
     const bookingDisabled =
@@ -193,737 +215,843 @@ export default function ClientPage({ restaurant, reviewsInfo }: ClientPageProps)
             (category) => category.faqs && category.faqs.length > 0
         )
 
+    const hasReservation =
+        !bookingDisabled && restaurant?.user?.subscription_plan !== "basic";
+
+    const hasCustomLinks = restaurant.links.length > 0;
+
+    const hasMenu =
+        restaurant.menuCategories.length > 0 && !isMenuPage && hasMenuItems;
+
+    const hasEvents = restaurant.events.length > 0;
+
+    const hasFaq =
+        restaurant.faqCategories.length > 0 && hasFaqsItems;
+
+    const hasFoodSection =
+        hasReservation || hasCustomLinks || hasMenu || hasEvents;
+
+    const hasAboutSection = hasFaq;
+
+    const isCompletelyEmpty =
+        !hasFoodSection && !hasAboutSection;
 
     return (
-        <div className="relative flex min-h-screen flex-col" style={getBackgroundStyle()}>
+        <>
             <div
-                className="pointer-events-none absolute bottom-0 left-0 right-0 h-32"
+                className="relative flex min-h-screen flex-col"
                 style={{
-                    background:
-                        restaurant.bg_type === "gradient"
-                            ? `linear-gradient(to bottom, transparent, ${restaurant.bg_gradient_end})`
-                            : restaurant.bg_type === "image"
-                                ? "linear-gradient(to bottom, transparent, rgba(0,0,0,0.6))"
-                                : `linear-gradient(to bottom, transparent, ${restaurant.bg_color || "#ffffff"})`,
+                    ...getBackgroundStyle(),
+                    //                 backgroundImage: `radial-gradient(
+                    //   transparent 30%,
+                    //   rgba(6, 78, 59, 0.125) 30%,
+                    //   rgba(6, 78, 59, 0.125) 31%,
+                    //   transparent 31%,
+                    //   transparent 60%,
+                    //   rgba(6, 78, 59, 0.125) 60%,
+                    //   rgba(6, 78, 59, 0.125) 61%,
+                    //   transparent 61%
+                    // )`,
+                    //                 backgroundSize: "80px 80px",
+                    //                 backdropFilter: "blur(14px)",
+                    fontFamily: restaurant.font_family || "var(--font-space-grotesk)",
                 }}
-            />
-
-            <div className="container relative mx-auto flex max-w-[570px] flex-grow flex-col px-4 py-8">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex flex-col items-center text-center"
-                >
-                    {restaurant.logo_url ? (
-                        <motion.img
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                            src={restaurant.logo_url}
-                            alt={restaurant.name}
-                            onError={handleImageError}
-                            className="mb-5 h-24 w-24 rounded-full object-cover"
-                            loading="eager"
-                        />
-                    ) : (
-                        <motion.div
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                            className="mb-5 flex h-24 w-24 items-center justify-center rounded-full shadow-lg ring-4 ring-white/20 fallback-initial"
-                            style={{ backgroundColor: restaurant.accent_color || "#10b981" }}
+            >
+                <div className="relative w-full mx-auto flex max-w-[930px] flex-grow flex-col px-4 pb-8 pt-5 sm:pt-12">
+                    <div className="w-full flex justify-end">
+                        <button
+                            onClick={handleShare}
+                            title="Share this page"
+                            className="flex items-center gap-2 cursor-pointer font-inherit! px-4 py-2 rounded-full transition-all hover:scale-105"
+                            style={{
+                                backgroundColor:
+                                    restaurant.button_variant === "solid"
+                                        ? restaurant.accent_color || "#10b981"
+                                        : "transparent",
+                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                            }}
                         >
-                            <span className="text-2xl font-bold text-white">{restaurant.name.charAt(0)}</span>
+                            <Share2 className="w-4 h-4" />
+                            <span
+                                className="text-sm font-medium">Share</span>
+                        </button>
+                    </div>
+                    <div className="max-w-[480px] mx-auto w-full flex flex-grow flex-col pt-11">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex flex-col items-center text-center"
+                        >
+                            {restaurant.logo_url ? (
+                                <motion.img
+                                    initial={{ scale: 0.8, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                    src={restaurant.logo_url}
+                                    alt={restaurant.name}
+                                    onError={handleImageError}
+                                    className="h-32 w-32 rounded-full object-cover"
+                                    loading="eager"
+                                    style={{
+                                        boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px",
+                                    }}
+                                />
+                            ) : (
+                                <motion.div
+                                    initial={{ scale: 0.8, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                    className="flex h-32 w-32 items-center justify-center rounded-full shadow-lg ring-4 ring-white/20 fallback-initial"
+                                    style={{ backgroundColor: restaurant.accent_color || "#10b981", }}
+                                >
+
+                                    <span className="text-5xl font-bold text-white">{restaurant.name.charAt(0)}</span>
+                                </motion.div>
+                            )}
+                            <div className="flex items-center mt-4 justify-center gap-1">
+                                <motion.h2
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="text-[28px] font-bold"
+                                    style={{
+                                        color: headingsColor,
+                                    }}
+                                >
+                                    {restaurant.name}
+                                </motion.h2>
+                                <VerifiedBadge />
+                            </div>
+                            {restaurant.bio && (
+                                <motion.p
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="mx-auto text-[17px] mt-3"
+                                    style={{
+                                        color: headingsColor,
+                                        opacity: 0.9,
+                                    }}
+                                >
+                                    {restaurant.bio}
+                                </motion.p>
+                            )}
+                            <div className="flex items-center justify-center mt-4 gap-2">
+                                {/* Opening Hours */}
+                                {openingHours && restaurant.timezone && (
+                                    <motion.div
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.25 }}
+                                        className=""
+                                    >
+                                        <OpeningHoursStatus
+                                            openingHours={openingHours}
+                                            restaurentTimeZone={restaurant.timezone || ""}
+                                            color={restaurant.headings_text_color || "#000000"}
+                                            className="text-white cursor-pointer text-center"
+                                            accentColor={restaurant.headings_text_color || "#10b981"}
+                                            onClick={() => setShowOpeningHoursDialog(true)}
+                                        />
+                                    </motion.div>
+                                )}
+                                {/* reviews  */}
+                                {restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && (
+                                    <motion.a
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.25 }}
+                                        target="_blank"
+                                        href={`https://search.google.com/local/reviews?placeid=${restaurant.google_place_id}`}
+                                        className=""
+                                    >
+                                        <GoogleRating info={reviewsInfo}
+                                            color={restaurant.headings_text_color || "#000000"}
+                                            className="text-white" />
+                                    </motion.a>
+                                )}
+
+                            </div>
+
+                            {(restaurant.instagram ||
+                                restaurant.facebook ||
+                                restaurant.email ||
+                                restaurant.address ||
+                                restaurant.whatsapp) &&
+                                restaurant.social_icons_position === "top" &&
+                                <SocialIcons
+                                    restaurant={
+                                        {
+                                            address: restaurant?.address,
+                                            email: restaurant.email,
+                                            facebook: restaurant.facebook,
+                                            instagram: restaurant.instagram,
+                                            whatsapp: restaurant.whatsapp,
+                                            tiktok: restaurant.tiktok,
+                                            phone: restaurant.phone
+                                        }
+                                    }
+                                    className="mt-6"
+                                    theme={{
+                                        socialIconColor: restaurant.social_icon_color,
+                                        socialIconBgShow: restaurant.social_icon_bg_show,
+                                        socialIconBgColor: restaurant.social_icon_bg_color,
+                                        social_icon_gap: restaurant.social_icon_gap
+                                    }}
+                                />
+                            }
                         </motion.div>
-                    )}
 
-                    <motion.h2
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="mb-3 text-2xl font-bold"
-                        style={{
-                            color: headingsColor,
-                            fontFamily: restaurant.font_family || "Inter",
-                        }}
-                    >
-                        {restaurant.name}
-                    </motion.h2>
-
-                    {/* Opening Hours Status */}
-                    {openingHours && restaurant.timezone && (
-                        <motion.div
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.25 }}
-                            className="mb-4"
+                        <motion.div variants={container} initial="hidden" animate="show" className="flex-grow mt-8 flex flex-col"
+                            style={{ rowGap: `${restaurant.buttons_gap_in_px}px` }}
                         >
-                            <OpeningHoursStatus
+                            {isCompletelyEmpty && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="py-8 text-center"
+                                    style={{ color: headingsColor, opacity: 0.7 }}
+                                >
+
+                                    {t("no_links_added")}
+                                </motion.div>
+                            )}
+
+                            {
+                                hasFoodSection
+                                &&
+                                <motion.h2
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="text-[20px] font-bold text-center uppercase"
+                                    style={{
+                                        color: headingsColor,
+                                        opacity: 0.9,
+                                    }}
+                                >
+                                    Food & Drinks
+                                </motion.h2>
+                            }
+
+                            {!bookingDisabled && restaurant?.user?.subscription_plan !== "basic" &&
+                                <motion.a
+                                    variants={itemSlugPage}
+                                    href={`/${restaurant.slug}/reservation`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    // onClick={() => trackLinkClick(link.id)}
+                                    className={`group flex items-center justify-center  text-center  w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} ${restaurant.button_style === "pill"
+                                        ? "rounded-full"
+                                        : restaurant.button_style === "square"
+                                            ? "rounded-md"
+                                            : "rounded-xl"
+                                        }`}
+                                    style={{
+                                        backgroundColor:
+                                            restaurant.button_variant === "solid"
+                                                ? restaurant.accent_color || "#10b981"
+                                                : "transparent",
+                                        backdropFilter: "blur(8px)",
+                                        border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                        color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                                        letterSpacing: "0.01em",
+                                    }}
+                                >
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                                            style={{
+                                                backgroundColor: restaurant.button_text_icons_color || "transparent"
+                                            }}
+                                        >
+                                            <UtensilsCrossed style={{ color: restaurant.accent_color || "transparent" }} className="w-4 sm:w-5 h-4 sm:h-5" />
+                                        </div>
+                                    }
+                                    <span
+                                        className={`relative w-full text-[18px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                            } transition-colors duration-300 font-medium`}
+                                        style={{
+                                            color:
+                                                restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                        }}
+                                    >
+                                        {t("reserve_table")}{restaurant.reservation_settings?.settings?.deposit_settings?.depositSystemEnabled ? `- ${restaurant.reservation_settings?.settings?.deposit_settings?.depositAmount}${restaurant.reservation_settings?.settings?.deposit_settings?.depositCurrency}` : ""}
+                                    </span>
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                            <MoreVertical className="size-4" />
+                                        </div>
+                                    }
+                                </motion.a>
+                            }
+                            {restaurant.links.map((link) => (
+                                <motion.a
+                                    key={link.id}
+                                    variants={itemSlugPage}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => trackLinkClick(link.id)}
+                                    className={`group flex items-center justify-center  text-center  w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} ${restaurant.button_style === "pill"
+                                        ? "rounded-full"
+                                        : restaurant.button_style === "square"
+                                            ? "rounded-md"
+                                            : "rounded-xl"
+                                        }`}
+                                    style={{
+                                        backgroundColor:
+                                            restaurant.button_variant === "solid"
+                                                ? restaurant.accent_color || "#10b981"
+                                                : "transparent",
+                                        backdropFilter: "blur(8px)",
+                                        border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                        color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                                        letterSpacing: "0.01em",
+                                    }}
+                                >
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                                            style={{
+                                                backgroundColor: restaurant.button_text_icons_color || "transparent"
+                                            }}
+                                        >
+                                            {getLucideIconBySlug(link.icon_slug, { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
+                                        </div>
+                                    }
+                                    <span
+                                        className={`relative w-full text-[18px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                            } transition-colors duration-300 font-medium`}
+                                        style={{
+                                            color:
+                                                restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                        }}
+                                    >
+                                        {link.title}
+                                    </span>
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                            <MoreVertical className="size-4" />
+                                        </div>
+                                    }
+                                </motion.a>
+                            ))}
+
+                            {restaurant.menuCategories.length > 0 && !isMenuPage && hasMenuItems && (
+                                <motion.button
+                                    variants={itemSlugPage}
+                                    onClick={() => setShowMenuDialog(true)}
+                                    className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                                        ? "rounded-full"
+                                        : restaurant.button_style === "square"
+                                            ? "rounded-md"
+                                            : "rounded-xl"
+                                        }`}
+                                    style={{
+                                        backgroundColor:
+                                            restaurant.button_variant === "solid"
+                                                ? restaurant.accent_color || "#10b981"
+                                                : "transparent",
+                                        color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                                        backdropFilter: "blur(8px)",
+                                        border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                        letterSpacing: "0.01em",
+                                    }}
+                                >
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                                            style={{
+                                                backgroundColor: restaurant.button_text_icons_color || "transparent"
+                                            }}
+                                        >
+                                            {getLucideIconBySlug("menu", { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
+                                        </div>
+                                    }
+                                    <span
+                                        className={`relative w-full text-[18px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                            } transition-colors duration-300 font-medium`}
+                                        style={{
+                                            color:
+                                                restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                        }}
+                                    >
+
+                                        {t("menu")}
+                                    </span>
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                            <MoreVertical className="size-4" />
+                                        </div>
+                                    }
+                                </motion.button>
+                            )}
+
+                            {restaurant.events.length > 0 && (
+                                <motion.button
+                                    variants={itemSlugPage}
+                                    onClick={() => setShowEventsDialog(true)}
+                                    className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                                        ? "rounded-full"
+                                        : restaurant.button_style === "square"
+                                            ? "rounded-md"
+                                            : "rounded-xl"
+                                        }`}
+                                    style={{
+                                        backgroundColor:
+                                            restaurant.button_variant === "solid"
+                                                ? restaurant.accent_color || "#10b981"
+                                                : "transparent",
+                                        backdropFilter: "blur(8px)",
+                                        border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                        color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                                        letterSpacing: "0.01em",
+                                    }}
+                                >
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                                            style={{
+                                                backgroundColor: restaurant.button_text_icons_color || "transparent"
+                                            }}
+                                        >
+                                            {getLucideIconBySlug("events", { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
+                                        </div>
+                                    }
+                                    <span
+                                        className={`relative w-full text-[18px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                            } transition-colors duration-300 font-medium`}
+                                        style={{
+                                            color:
+                                                restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                        }}
+                                    >
+                                        {t("events")}
+                                    </span>
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                            <MoreVertical className="size-4" />
+                                        </div>
+                                    }
+                                </motion.button>
+                            )}
+
+                            {
+                                hasAboutSection
+                                &&
+                                <motion.h2
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="text-[20px] font-bold text-center uppercase"
+                                    style={{
+                                        color: headingsColor,
+                                        opacity: 0.9,
+                                    }}
+                                >
+                                    About
+                                </motion.h2>
+                            }
+
+                            {/* FAQ Button - Always show if there are FAQ categories */}
+                            {restaurant.faqCategories.length > 0 && hasFaqsItems && (
+                                <motion.button
+                                    variants={itemSlugPage}
+                                    onClick={() => setShowFAQDialog(true)}
+                                    className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                                        ? "rounded-full"
+                                        : restaurant.button_style === "square"
+                                            ? "rounded-md"
+                                            : "rounded-xl"
+                                        }`}
+                                    style={{
+                                        backgroundColor:
+                                            restaurant.button_variant === "solid"
+                                                ? restaurant.accent_color || "#10b981"
+                                                : "transparent",
+                                        backdropFilter: "blur(8px)",
+                                        border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                        color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
+                                        letterSpacing: "0.01em",
+                                    }}
+                                >
+
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                                            style={{
+                                                backgroundColor: restaurant.button_text_icons_color || "transparent"
+                                            }}
+                                        >
+                                            {getLucideIconBySlug("faq", { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
+                                        </div>
+                                    }
+                                    <span
+                                        className={`relative w-full text-[18px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
+                                            } transition-colors duration-300 font-medium`}
+                                        style={{
+                                            color:
+                                                restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                        }}
+                                    >
+
+                                        {t("faq")}
+                                    </span>
+                                    {
+                                        restaurant?.button_icons_show
+                                        &&
+                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                            <MoreVertical className="size-4" />
+                                        </div>
+                                    }
+
+                                </motion.button>
+                            )}
+
+                            {(restaurant.instagram ||
+                                restaurant.facebook ||
+                                restaurant.email ||
+                                restaurant.address ||
+                                restaurant.whatsapp) &&
+                                restaurant.social_icons_position === "bottom"
+                                &&
+                                <SocialIcons
+                                    restaurant={
+                                        {
+                                            address: restaurant?.address,
+                                            email: restaurant.email,
+                                            facebook: restaurant.facebook,
+                                            instagram: restaurant.instagram,
+                                            whatsapp: restaurant.whatsapp,
+                                            tiktok: restaurant.tiktok,
+                                            phone: restaurant.phone
+                                        }
+                                    }
+                                    className="mb-6"
+                                    theme={{
+                                        socialIconColor: restaurant.social_icon_color,
+                                        socialIconBgShow: restaurant.social_icon_bg_show,
+                                        socialIconBgColor: restaurant.social_icon_bg_color,
+                                        social_icon_gap: restaurant.social_icon_gap
+                                    }}
+                                />
+                            }
+                        </motion.div>
+
+                        {/* Opening Hours Dialog */}
+                        {openingHours && restaurant.timezone
+                            &&
+                            <OpeningHoursDialog
+                                isOpen={showOpeningHoursDialog}
+                                onClose={() => setShowOpeningHoursDialog(false)}
                                 openingHours={openingHours}
                                 restaurentTimeZone={restaurant.timezone || ""}
-                                color={restaurant.headings_text_color || "#000000"}
-                                className="text-white cursor-pointer text-center"
-                                accentColor={restaurant.headings_text_color || "#10b981"}
-                                onClick={() => setShowOpeningHoursDialog(true)}
+                                restaurantName={restaurant.name}
+                                accentColor={restaurant.accent_color || "#10b981"}
                             />
-                        </motion.div>
-                    )}
+                        }
 
-                    {restaurant.google_place_id && restaurant?.user?.subscription_plan !== "basic" && (
-                        <motion.a
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.25 }}
-                            target="_blank"
-                            href={`https://search.google.com/local/reviews?placeid=${restaurant.google_place_id}`}
-                            className="mb-4"
+                        {/* Enhanced Menu Dialog */}
+                        <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}
+
                         >
-                            <GoogleRating info={reviewsInfo}
-                                color={restaurant.headings_text_color || "#000000"}
-                                className="text-white" />
-                        </motion.a>
-                    )}
-
-                    {restaurant.bio && (
-                        <motion.p
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                            className="mx-auto mb-4 sm:mb-6 max-w-md text-sm"
-                            style={{
-                                color: headingsColor,
-                                fontFamily: restaurant.font_family || "Inter",
-                                opacity: 0.9,
-                            }}
-                        >
-                            {restaurant.bio}
-                        </motion.p>
-                    )}
-
-                    {(restaurant.instagram ||
-                        restaurant.facebook ||
-                        restaurant.email ||
-                        restaurant.address ||
-                        restaurant.whatsapp) &&
-                        restaurant.social_icons_position === "top" &&
-                        <SocialIcons
-                            restaurant={
-                                {
-                                    address: restaurant?.address,
-                                    email: restaurant.email,
-                                    facebook: restaurant.facebook,
-                                    instagram: restaurant.instagram,
-                                    whatsapp: restaurant.whatsapp,
-                                    tiktok: restaurant.tiktok,
-                                    phone: restaurant.phone
-                                }
-                            }
-                            className="mb-4 sm:mb-8"
-                            theme={{
-                                socialIconColor: restaurant.social_icon_color,
-                                socialIconBgShow: restaurant.social_icon_bg_show,
-                                socialIconBgColor: restaurant.social_icon_bg_color,
-                                social_icon_gap: restaurant.social_icon_gap
-                            }}
-                        />
-                    }
-                </motion.div>
-
-                <motion.div variants={container} initial="hidden" animate="show" className="flex-grow flex flex-col"
-                    style={{ rowGap: `${restaurant.buttons_gap_in_px}px` }}
-                >
-                    {!bookingDisabled && restaurant?.user?.subscription_plan !== "basic" &&
-                        <motion.a
-                            variants={itemSlugPage}
-                            href={`/${restaurant.slug}/reservation`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            // onClick={() => trackLinkClick(link.id)}
-                            className={`group flex items-center justify-center  text-center  w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} ${restaurant.button_style === "pill"
-                                ? "rounded-full"
-                                : restaurant.button_style === "square"
-                                    ? "rounded-md"
-                                    : "rounded-xl"
-                                }`}
-                            style={{
-                                backgroundColor:
-                                    restaurant.button_variant === "solid"
-                                        ? restaurant.accent_color || "#10b981"
-                                        : "transparent",
-                                backdropFilter: "blur(8px)",
-                                border: `2px solid ${restaurant.accent_color || "#10b981"}`,
-                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
-                                fontFamily: restaurant.font_family || "Inter",
-                                letterSpacing: "0.01em",
-                            }}
-                        >
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
-                                    style={{
-                                        backgroundColor: restaurant.button_text_icons_color || "transparent"
-                                    }}
-                                >
-                                    <UtensilsCrossed style={{ color: restaurant.accent_color || "transparent" }} className="w-4 sm:w-5 h-4 sm:h-5" />
-                                </div>
-                            }
-                            <span
-                                className={`relative w-full text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
-                                    } transition-colors duration-300 font-medium`}
+                            <DialogContent
                                 style={{
-                                    color:
-                                        restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
+                                    backgroundColor: restaurant.bgColor
                                 }}
-                            >
-                                {t("reserve_table")}{restaurant.reservation_settings?.settings?.deposit_settings?.depositSystemEnabled ? `${restaurant.reservation_settings?.settings?.deposit_settings?.depositAmount}${restaurant.reservation_settings?.settings?.deposit_settings?.depositCurrency}` : "NO"}
-                            </span>
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                    <MoreVertical className="size-4" />
-                                </div>
-                            }
-                        </motion.a>
-                    }
-                    {restaurant.links.map((link) => (
-                        <motion.a
-                            key={link.id}
-                            variants={itemSlugPage}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => trackLinkClick(link.id)}
-                            className={`group flex items-center justify-center  text-center  w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} ${restaurant.button_style === "pill"
-                                ? "rounded-full"
-                                : restaurant.button_style === "square"
-                                    ? "rounded-md"
-                                    : "rounded-xl"
-                                }`}
-                            style={{
-                                backgroundColor:
-                                    restaurant.button_variant === "solid"
-                                        ? restaurant.accent_color || "#10b981"
-                                        : "transparent",
-                                backdropFilter: "blur(8px)",
-                                border: `2px solid ${restaurant.accent_color || "#10b981"}`,
-                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
-                                fontFamily: restaurant.font_family || "Inter",
-                                letterSpacing: "0.01em",
-                            }}
-                        >
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
-                                    style={{
-                                        backgroundColor: restaurant.button_text_icons_color || "transparent"
-                                    }}
-                                >
-                                    {getLucideIconBySlug(link.icon_slug, { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
-                                </div>
-                            }
-                            <span
-                                className={`relative w-full text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
-                                    } transition-colors duration-300 font-medium`}
-                                style={{
-                                    color:
-                                        restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
-                                }}
-                            >
-                                {link.title}
-                            </span>
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                    <MoreVertical className="size-4" />
-                                </div>
-                            }
-                        </motion.a>
-                    ))}
-
-
-
-                    {restaurant.menuCategories.length > 0 && !isMenuPage && hasMenuItems && (
-                        <motion.button
-                            variants={itemSlugPage}
-                            onClick={() => setShowMenuDialog(true)}
-                            className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
-                                ? "rounded-full"
-                                : restaurant.button_style === "square"
-                                    ? "rounded-md"
-                                    : "rounded-xl"
-                                }`}
-                            style={{
-                                backgroundColor:
-                                    restaurant.button_variant === "solid"
-                                        ? restaurant.accent_color || "#10b981"
-                                        : "transparent",
-                                backdropFilter: "blur(8px)",
-                                border: `2px solid ${restaurant.accent_color || "#10b981"}`,
-                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
-                                fontFamily: restaurant.font_family || "Inter",
-                                letterSpacing: "0.01em",
-                            }}
-                        >
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
-                                    style={{
-                                        backgroundColor: restaurant.button_text_icons_color || "transparent"
-                                    }}
-                                >
-                                    {getLucideIconBySlug("menu", { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
-                                </div>
-                            }
-                            <span
-                                className={`relative w-full text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
-                                    } transition-colors duration-300 font-medium`}
-                                style={{
-                                    color:
-                                        restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
-                                }}
-                            >
-
-                                {t("menu")}
-                            </span>
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                    <MoreVertical className="size-4" />
-                                </div>
-                            }
-                        </motion.button>
-                    )}
-
-                    {restaurant.events.length > 0 && (
-                        <motion.button
-                            variants={itemSlugPage}
-                            onClick={() => setShowEventsDialog(true)}
-                            className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
-                                ? "rounded-full"
-                                : restaurant.button_style === "square"
-                                    ? "rounded-md"
-                                    : "rounded-xl"
-                                }`}
-                            style={{
-                                backgroundColor:
-                                    restaurant.button_variant === "solid"
-                                        ? restaurant.accent_color || "#10b981"
-                                        : "transparent",
-                                backdropFilter: "blur(8px)",
-                                border: `2px solid ${restaurant.accent_color || "#10b981"}`,
-                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
-                                fontFamily: restaurant.font_family || "Inter",
-                                letterSpacing: "0.01em",
-                            }}
-                        >
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
-                                    style={{
-                                        backgroundColor: restaurant.button_text_icons_color || "transparent"
-                                    }}
-                                >
-                                    {getLucideIconBySlug("events", { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
-                                </div>
-                            }
-                            <span
-                                className={`relative w-full text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
-                                    } transition-colors duration-300 font-medium`}
-                                style={{
-                                    color:
-                                        restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
-                                }}
-                            >
-                                {t("events")}
-                            </span>
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                    <MoreVertical className="size-4" />
-                                </div>
-                            }
-                        </motion.button>
-                    )}
-
-                    {/* FAQ Button - Always show if there are FAQ categories */}
-                    {restaurant.faqCategories.length > 0 && hasFaqsItems && (
-                        <motion.button
-                            variants={itemSlugPage}
-                            onClick={() => setShowFAQDialog(true)}
-                            className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full h-[52px] sm:h-[64px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
-                                ? "rounded-full"
-                                : restaurant.button_style === "square"
-                                    ? "rounded-md"
-                                    : "rounded-xl"
-                                }`}
-                            style={{
-                                backgroundColor:
-                                    restaurant.button_variant === "solid"
-                                        ? restaurant.accent_color || "#10b981"
-                                        : "transparent",
-                                backdropFilter: "blur(8px)",
-                                border: `2px solid ${restaurant.accent_color || "#10b981"}`,
-                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                color: restaurant.button_variant === "solid" ? buttonTextColor : restaurant.accent_color || "#10b981",
-                                fontFamily: restaurant.font_family || "Inter",
-                                letterSpacing: "0.01em",
-                            }}
-                        >
-
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
-                                    style={{
-                                        backgroundColor: restaurant.button_text_icons_color || "transparent"
-                                    }}
-                                >
-                                    {getLucideIconBySlug("faq", { className: "w-4 sm:w-5 h-4 sm:h-5", style: { color: restaurant.accent_color || "transparent" } })}
-                                </div>
-                            }
-                            <span
-                                className={`relative w-full text-[15px] ${restaurant.button_variant === "outline" ? "group-hover:text-white" : ""
-                                    } transition-colors duration-300 font-medium`}
-                                style={{
-                                    color:
-                                        restaurant.button_variant === "outline" ? restaurant.accent_color || "#10b981" : buttonTextColor,
-                                }}
-                            >
-
-                                {t("faq")}
-                            </span>
-                            {
-                                restaurant?.button_icons_show
-                                &&
-                                <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                    <MoreVertical className="size-4" />
-                                </div>
-                            }
-
-                        </motion.button>
-                    )}
-
-                    {restaurant.links.length === 0 && !restaurant.menuCategories.length && !restaurant.events.length && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="py-8 text-center"
-                            style={{ color: headingsColor, opacity: 0.7 }}
-                        >
-
-                            {t("no_links_added")}
-                        </motion.div>
-                    )}
-
-                    {(restaurant.instagram ||
-                        restaurant.facebook ||
-                        restaurant.email ||
-                        restaurant.address ||
-                        restaurant.whatsapp) &&
-                        restaurant.social_icons_position === "bottom"
-                        &&
-                        <SocialIcons
-                            restaurant={
-                                {
-                                    address: restaurant?.address,
-                                    email: restaurant.email,
-                                    facebook: restaurant.facebook,
-                                    instagram: restaurant.facebook,
-                                    whatsapp: restaurant.whatsapp,
-                                }
-                            }
-                            className="mb-4 sm:mb-8"
-                            theme={{
-                                socialIconColor: restaurant.social_icon_color,
-                                socialIconBgShow: restaurant.social_icon_bg_show,
-                                socialIconBgColor: restaurant.social_icon_bg_color,
-                                social_icon_gap: restaurant.social_icon_gap
-                            }}
-                        />
-                    }
-                </motion.div>
-
-                {/* Opening Hours Dialog */}
-                {openingHours && restaurant.timezone
-                    &&
-                    <OpeningHoursDialog
-                        isOpen={showOpeningHoursDialog}
-                        onClose={() => setShowOpeningHoursDialog(false)}
-                        openingHours={openingHours}
-                        restaurentTimeZone={restaurant.timezone || ""}
-                        restaurantName={restaurant.name}
-                        accentColor={restaurant.accent_color || "#10b981"}
-                    />
-                }
-
-                {/* Enhanced Menu Dialog */}
-                <Dialog open={showMenuDialog} onOpenChange={setShowMenuDialog}
-
-                >
-                    <DialogContent
-                        style={{
-                            backgroundColor: restaurant.bgColor
-                        }}
-                        closeIconColor={restaurant.textColor}
-                        className="max-h-[90vh] max-w-[90vw] border-transparent no-scroll sm:!max-w-[570px] overflow-hidden overflow-y-auto">
-                        <DialogHeader className="pb-1">
-                            <DialogTitle
-                                style={{ color: restaurant.textColor }}
-                                className="flex items-center text-start gap-2 text-xl">
-                                <MenuIcon className="h-6 w-6" />
-                                <span>
-                                    {m("title")}
-                                </span>
-                            </DialogTitle>
-                            <DialogDescription
-                                style={{ color: restaurant.textColor }}
-                                className="text-base text-start">
-                                {m("description")}
-                            </DialogDescription>
-                        </DialogHeader>
-
-                        {/* Category Tabs */}
-                        <div className="relative mb-0 flex items-center ">
-                            <div className="flex gap-2 overflow-x-auto no-scroll max-w-[70vw] sm:!max-w-[430px]">
-                                {/* All Items Tab */}
-                                <Button
-                                    variant={selectedMenuCategory === "all" ? "default" : "outline"}
-                                    size="lg"
-                                    onClick={() => setSelectedMenuCategory("all")}
-                                    style={{
-                                        backgroundColor: selectedMenuCategory === "all" ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
-                                        color: selectedMenuCategory === "all" ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
-                                    }}
-                                    className={cn(
-                                        "whitespace-nowrap cursor-pointer !text-sm flex-shrink-0 h-10 px-4 rounded-full font-medium transition-all duration-200",
-                                        selectedMenuCategory === "all" ? "shadow-md" : ""
-                                    )}
-                                >
-                                    <span className="flex items-center  gap-2">
-                                        <span className="">
-                                            {m("all_items_tab")}
+                                closeIconColor={restaurant.textColor}
+                                className="max-h-[90vh] max-w-[90vw] border-transparent no-scroll sm:!max-w-[570px] overflow-hidden overflow-y-auto">
+                                <DialogHeader className="pb-1">
+                                    <DialogTitle
+                                        style={{ color: restaurant.textColor }}
+                                        className="flex items-center text-start gap-2 text-xl">
+                                        <MenuIcon className="h-6 w-6" />
+                                        <span>
+                                            {m("title")}
                                         </span>
-                                        <span
-                                            className="px-2 py-0.5 rounded-full text-xs font-semibold"
-                                            style={{
-                                                backgroundColor: selectedMenuCategory === "all" ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
-                                                color: selectedMenuCategory === "all" ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
-                                            }}
-                                        >
-                                            {restaurant.menuCategories.filter(c => c.show_in_quick_menu).flatMap((category) =>
-                                                category.items.filter(itm => itm.show_in_quick_menu)
-                                            ).length}
-                                        </span>
-                                    </span>
-                                </Button>
+                                    </DialogTitle>
+                                    <DialogDescription
+                                        style={{ color: restaurant.textColor }}
+                                        className="text-base text-start">
+                                        {m("description")}
+                                    </DialogDescription>
+                                </DialogHeader>
+
                                 {/* Category Tabs */}
-                                {restaurant.menuCategories.filter(cat => cat.items.filter(i => i.show_in_quick_menu).length !== 0).map((category) => {
-                                    if (!category.show_in_quick_menu) return null
-
-                                    return <div className="keen-slider__slide !w-auto !min-w-fit" key={category.id}>
+                                <div className="relative mb-0 flex items-center ">
+                                    <div className="flex gap-2 overflow-x-auto no-scroll max-w-[70vw] sm:!max-w-[430px]">
+                                        {/* All Items Tab */}
                                         <Button
-                                            key={category.id}
-                                            variant={selectedMenuCategory === category.id ? "default" : "outline"}
+                                            variant={selectedMenuCategory === "all" ? "default" : "outline"}
                                             size="lg"
-                                            onClick={() => setSelectedMenuCategory(category.id)}
+                                            onClick={() => setSelectedMenuCategory("all")}
+                                            style={{
+                                                backgroundColor: selectedMenuCategory === "all" ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
+                                                color: selectedMenuCategory === "all" ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
+                                            }}
                                             className={cn(
                                                 "whitespace-nowrap cursor-pointer !text-sm flex-shrink-0 h-10 px-4 rounded-full font-medium transition-all duration-200",
-                                                selectedMenuCategory === category.id ? "shadow-md" : ""
+                                                selectedMenuCategory === "all" ? "shadow-md" : ""
                                             )}
-                                            style={{
-                                                backgroundColor: selectedMenuCategory === category.id ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
-                                                color: selectedMenuCategory === category.id ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
-                                            }}
                                         >
-                                            <span className="flex items-center gap-2">
-                                                <span>{category.name}</span>
+                                            <span className="flex items-center  gap-2">
+                                                <span className="">
+                                                    {m("all_items_tab")}
+                                                </span>
                                                 <span
                                                     className="px-2 py-0.5 rounded-full text-xs font-semibold"
                                                     style={{
-                                                        backgroundColor: selectedMenuCategory === category.id ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
-                                                        color: selectedMenuCategory === category.id ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
+                                                        backgroundColor: selectedMenuCategory === "all" ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
+                                                        color: selectedMenuCategory === "all" ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
                                                     }}
                                                 >
-                                                    {restaurant.menuCategories.find((cat) => cat.id === category.id)?.items?.filter(item => item.show_in_quick_menu).length}
+                                                    {restaurant.menuCategories.filter(c => c.show_in_quick_menu).flatMap((category) =>
+                                                        category.items.filter(itm => itm.show_in_quick_menu)
+                                                    ).length}
                                                 </span>
                                             </span>
                                         </Button>
-                                    </div>
-                                })}
-                            </div>
+                                        {/* Category Tabs */}
+                                        {restaurant.menuCategories.filter(cat => cat.items.filter(i => i.show_in_quick_menu).length !== 0).map((category) => {
+                                            if (!category.show_in_quick_menu) return null
 
-                            {/* View More Button */}
-                            <div className="absolute w-[180px] flex justify-end right-0 bottom-0 items-center">
-                                <div
-                                    className="w-fit  flex items-center justify-end"
-                                    style={{
-                                        background: `linear-gradient(to left, ${restaurant.bgColor} 80%, transparent 100%)`
-                                    }}
-                                >
+                                            return <div className="keen-slider__slide !w-auto !min-w-fit" key={category.id}>
+                                                <Button
+                                                    key={category.id}
+                                                    variant={selectedMenuCategory === category.id ? "default" : "outline"}
+                                                    size="lg"
+                                                    onClick={() => setSelectedMenuCategory(category.id)}
+                                                    className={cn(
+                                                        "whitespace-nowrap cursor-pointer !text-sm flex-shrink-0 h-10 px-4 rounded-full font-medium transition-all duration-200",
+                                                        selectedMenuCategory === category.id ? "shadow-md" : ""
+                                                    )}
+                                                    style={{
+                                                        backgroundColor: selectedMenuCategory === category.id ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
+                                                        color: selectedMenuCategory === category.id ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
+                                                    }}
+                                                >
+                                                    <span className="flex items-center gap-2">
+                                                        <span>{category.name}</span>
+                                                        <span
+                                                            className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                                                            style={{
+                                                                backgroundColor: selectedMenuCategory === category.id ? restaurant.tabsTextColor : restaurant.tabsTextDefaultColor,
+                                                                color: selectedMenuCategory === category.id ? restaurant.tabsButtonBG : restaurant.tabsButtonDefault,
+                                                            }}
+                                                        >
+                                                            {restaurant.menuCategories.find((cat) => cat.id === category.id)?.items?.filter(item => item.show_in_quick_menu).length}
+                                                        </span>
+                                                    </span>
+                                                </Button>
+                                            </div>
+                                        })}
+                                    </div>
+
+                                    {/* View More Button */}
+                                    <div className="absolute w-[180px] flex justify-end right-0 bottom-0 items-center">
+                                        <div
+                                            className="w-fit  flex items-center justify-end"
+                                            style={{
+                                                background: `linear-gradient(to left, ${restaurant.bgColor} 80%, transparent 100%)`
+                                            }}
+                                        >
+                                            <Link
+                                                href={`/${restaurant.slug}/menu`}
+                                                className="flex items-center gap-1 px-4 py-[12px] shadow-md text-xs font-medium rounded-full transition-all duration-200 hover:shadow-md"
+                                                style={{
+                                                    backgroundColor: restaurant.tabsButtonDefault,
+                                                    color: restaurant.tabsTextDefaultColor,
+                                                }}
+                                                onClick={() => setShowMenuDialog(false)}
+                                            >
+                                                <span>
+                                                    {m("all_items_tab")}
+                                                </span>
+                                                <ArrowRight className="h-3 w-3" />
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Menu Items */}
+                                <div className="overflow-y-auto  max-h-[52vh] pr-2 ">
+                                    <MenuItems
+                                        restaurant={restaurant}
+                                        items={filteredMenuItems}
+                                        searchQuery={""}
+                                        restaurantSlug={restaurant.slug}
+                                        selectedCategory={selectedMenuCategory}
+                                    />
+                                </div>
+
+                                {/* Footer with full menu link */}
+                                <div className="pt-2 border-t border-black/30 mt-2">
                                     <Link
                                         href={`/${restaurant.slug}/menu`}
-                                        className="flex items-center gap-1 px-4 py-[12px] shadow-md text-xs font-medium rounded-full transition-all duration-200 hover:shadow-md"
+                                        className="w-full flex items-center justify-center  gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-md"
                                         style={{
-                                            backgroundColor: restaurant.tabsButtonDefault,
-                                            color: restaurant.tabsTextDefaultColor,
+                                            backgroundColor: restaurant.tabsButtonBG,
+                                            color: restaurant.tabsTextColor,
                                         }}
                                         onClick={() => setShowMenuDialog(false)}
                                     >
+                                        <MenuIcon className="h-4 w-4" />
                                         <span>
-                                            {m("all_items_tab")}
+                                            {m("view_full_menu_button")}
                                         </span>
-                                        <ArrowRight className="h-3 w-3" />
+                                        <ArrowRight className="h-4 w-4" />
                                     </Link>
                                 </div>
-                            </div>
-                        </div>
+                            </DialogContent>
+                        </Dialog>
 
-                        {/* Menu Items */}
-                        <div className="overflow-y-auto  max-h-[52vh] pr-2 ">
-                            <MenuItems
-                                restaurant={restaurant}
-                                items={filteredMenuItems}
-                                searchQuery={""}
-                                restaurantSlug={restaurant.slug}
-                                selectedCategory={selectedMenuCategory}
-                            />
-                        </div>
-
-                        {/* Footer with full menu link */}
-                        <div className="pt-2 border-t border-black/30 mt-2">
-                            <Link
-                                href={`/${restaurant.slug}/menu`}
-                                className="w-full flex items-center justify-center  gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-md"
-                                style={{
-                                    backgroundColor: restaurant.tabsButtonBG,
-                                    color: restaurant.tabsTextColor,
-                                }}
-                                onClick={() => setShowMenuDialog(false)}
-                            >
-                                <MenuIcon className="h-4 w-4" />
-                                <span>
-                                    {m("view_full_menu_button")}
-                                </span>
-                                <ArrowRight className="h-4 w-4" />
-                            </Link>
-                        </div>
-                    </DialogContent>
-                </Dialog>
-
-                {/* Events Dialog */}
-                <Dialog open={showEventsDialog} onOpenChange={setShowEventsDialog} >
-                    <DialogContent closeIconColor={restaurant.accent_color || "#10b981"} className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] border-transparent no-scroll overflow-y-auto" style={{ ...getBackgroundStyle() }}>
-                        <DialogHeader>
-                            <DialogTitle className="flex text-start items-center gap-2">
-                                <Calendar className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
-                                <span style={{ color: restaurant.accent_color || "#10b981" }}>
-                                    {e("title")}
-                                </span>
-                            </DialogTitle>
-                            <DialogDescription className="text-start" style={{ color: restaurant.accent_color || "#10b981" }}>
-
-                                {
-                                    restaurant.events.length === 1 ?
-                                        <>
-                                            {e("description_singular", { count: restaurant.events.length })}
-                                        </>
-                                        :
-                                        <>
-                                            {e("description_plural", { count: restaurant.events.length })}
-                                        </>
-                                }
-                            </DialogDescription>
-                        </DialogHeader>
-
-                        <div className="space-y-6 py-4">
-                            {restaurant.events.map((event) => (
-                                <div key={event.id} className="border-b pb-6 last:border-0 last:pb-0" style={{ borderColor: restaurant.headings_text_color || "white" }}>
-                                    <h3 className="mb-1 text-lg font-semibold" style={{ color: restaurant.accent_color || "#10b981" }}>{event.title}</h3>
-                                    {event.description &&
-                                        <p
-                                            className="mb-4 text-[15px] text-muted-foreground opacity-80"
-                                            style={{ color: restaurant.accent_color || "#10b981" }}
-                                        >
-                                            {event.description}
-                                        </p>
-                                    }
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <Calendar className="h-4 w-4" style={{ color: restaurant.accent_color || "#10b981" }} />
+                        {/* Events Dialog */}
+                        <Dialog open={showEventsDialog} onOpenChange={setShowEventsDialog} >
+                            <DialogContent closeIconColor={restaurant.accent_color || "#10b981"} className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] border-transparent no-scroll overflow-y-auto" style={{ ...getBackgroundStyle() }}>
+                                <DialogHeader>
+                                    <DialogTitle className="flex text-start items-center gap-2">
+                                        <Calendar className="h-5 w-5" style={{ color: restaurant.accent_color || "#10b981" }} />
                                         <span style={{ color: restaurant.accent_color || "#10b981" }}>
-                                            {new Date(event.date).toLocaleDateString("en-US", {
-                                                weekday: "long",
-                                                year: "numeric",
-                                                month: "long",
-                                                day: "numeric",
-                                                hour: "numeric",
-                                                minute: "numeric",
-                                            })}
+                                            {e("title")}
                                         </span>
-                                    </div>
-                                    {event.ticket_url && (
-                                        <div className="mt-4">
-                                            <a
-                                                href={event.ticket_url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-2 rounded-lg px-4 py-2 transition-transform hover:scale-105"
-                                                style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
-                                            >
-                                                {e("get_tickets_button")}
-                                                <ExternalLink className="h-4 w-4" />
-                                            </a>
+                                    </DialogTitle>
+                                    <DialogDescription className="text-start" style={{ color: restaurant.accent_color || "#10b981" }}>
+
+                                        {
+                                            restaurant.events.length === 1 ?
+                                                <>
+                                                    {e("description_singular", { count: restaurant.events.length })}
+                                                </>
+                                                :
+                                                <>
+                                                    {e("description_plural", { count: restaurant.events.length })}
+                                                </>
+                                        }
+                                    </DialogDescription>
+                                </DialogHeader>
+
+                                <div className="space-y-6 py-4">
+                                    {restaurant.events.map((event) => (
+                                        <div key={event.id} className="border-b pb-6 last:border-0 last:pb-0" style={{ borderColor: restaurant.headings_text_color || "white" }}>
+                                            <h3 className="mb-1 text-lg font-semibold" style={{ color: restaurant.accent_color || "#10b981" }}>{event.title}</h3>
+                                            {event.description &&
+                                                <p
+                                                    className="mb-4 text-[15px] text-muted-foreground opacity-80"
+                                                    style={{ color: restaurant.accent_color || "#10b981" }}
+                                                >
+                                                    {event.description}
+                                                </p>
+                                            }
+                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                <Calendar className="h-4 w-4" style={{ color: restaurant.accent_color || "#10b981" }} />
+                                                <span style={{ color: restaurant.accent_color || "#10b981" }}>
+                                                    {new Date(event.date).toLocaleDateString("en-US", {
+                                                        weekday: "long",
+                                                        year: "numeric",
+                                                        month: "long",
+                                                        day: "numeric",
+                                                        hour: "numeric",
+                                                        minute: "numeric",
+                                                    })}
+                                                </span>
+                                            </div>
+                                            {event.ticket_url && (
+                                                <div className="mt-4">
+                                                    <a
+                                                        href={event.ticket_url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center gap-2 rounded-lg px-4 py-2 transition-transform hover:scale-105"
+                                                        style={{ backgroundColor: restaurant.accent_color || "#10b981", color: restaurant.button_text_icons_color || "white" }}
+                                                    >
+                                                        {e("get_tickets_button")}
+                                                        <ExternalLink className="h-4 w-4" />
+                                                    </a>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                            </DialogContent>
+                        </Dialog>
 
-                {/* FAQ Dialog */}
-                <Dialog open={showFAQDialog} onOpenChange={setShowFAQDialog}>
-                    <DialogContent className="max-h-[90vh] no-scroll max-w-[90vw] sm:!max-w-[570px] overflow-y-auto border-transparent" >
-                        <FAQSection faqCategories={restaurant.faqCategories} cardstextColor={restaurant.button_text_icons_color || "black"} accentColor={restaurant.accent_color || "#10b981"} />
-                    </DialogContent>
-                </Dialog>
+                        {/* FAQ Dialog */}
+                        <Dialog open={showFAQDialog} onOpenChange={setShowFAQDialog}>
+                            <DialogContent className="max-h-[90vh] no-scroll max-w-[90vw] sm:!max-w-[570px] overflow-y-auto border-transparent" >
+                                <FAQSection faqCategories={restaurant.faqCategories} cardstextColor={restaurant.button_text_icons_color || "black"} accentColor={restaurant.accent_color || "#10b981"} />
+                            </DialogContent>
+                        </Dialog>
+                        {/* // TODO :- Do subscription check   */}
+                        {
+                            // restaurant?.user?.subscription_plan === "basic" && 
+                            <motion.footer
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.7 }}
+                                className="mt-13 pb-6 text-center flex flex-col items-center justify-center gap-3"
+                            >
+                                <div
+                                    className="flex items-center justify-center gap-4 text-xs opacity-60"
+                                    style={{ color: "rgb(6, 78, 59)" }}
+                                >
+                                    <Link href="/terms" className="hover:opacity-100 transition-opacity">
+                                        Terms
+                                    </Link>
+                                    <span>•</span>
+                                    <Link href="/privacy" className="hover:opacity-100 transition-opacity">
+                                        Privacy
+                                    </Link>
+                                    <span>•</span>
+                                    <Link href="/cookies" className="hover:opacity-100 transition-opacity">
+                                        Cookies
+                                    </Link>
+                                </div>
+                                <div
+                                    className="text-center"
+                                >
+                                    <p className="text-xs" style={{ color: headingsColor, opacity: 0.7 }}>
+                                        {" "}
+                                        {t("powered_by")}{" "}
+                                        <Link href="/" className="hover:underline" style={{ color: restaurant.accent_color || "#10b981" }}>
+                                            dineri.app
+                                        </Link>
+                                    </p>
+                                </div>
+                            </motion.footer>
+                        }
+                    </div>
+                </div>
 
-                {restaurant?.user?.subscription_plan === "basic" && <motion.footer
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.7 }}
-                    className="mt-12 pb-6 text-center"
-                >
-                    <p className="text-xs" style={{ color: headingsColor, opacity: 0.7 }}>
-                        {" "}
-                        {t("powered_by")}{" "}
-                        <Link href="/" className="hover:underline" style={{ color: restaurant.accent_color || "#10b981" }}>
-                            dineri.app
-                        </Link>
-                    </p>
-                </motion.footer>}
+                {/* Welcome Popup */}
+                <WelcomePopup
+                    restaurant={restaurant}
+                    isOpen={showWelcomePopup}
+                    RatingInfo={reviewsInfo}
+                    onClose={() => setShowWelcomePopup(false)}
+                    upcomingEvents={restaurant.events}
+                    welcomePopupShowInfo={welcomePopupShowInfo}
+                />
             </div>
+        </>
 
-            {/* Welcome Popup */}
-            <WelcomePopup
-                restaurant={restaurant}
-                isOpen={showWelcomePopup}
-                RatingInfo={reviewsInfo}
-                onClose={() => setShowWelcomePopup(false)}
-                upcomingEvents={restaurant.events}
-                welcomePopupShowInfo={welcomePopupShowInfo}
-            />
-        </div>
     )
 }

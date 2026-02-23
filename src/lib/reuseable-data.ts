@@ -189,6 +189,7 @@ export const motionItem = {
 
 export const fonts = [
     { name: "Inter", value: "var(--font-inter)", preview: "Modern and clean", weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },
+    { name: "Space Grotesk", value: "var(--font-space-grotesk)", preview: "Space Grotesk", weights: [300, 400, 500, 600, 700] },
     { name: "Roboto", value: "var(--font-roboto)", preview: "Professional and readable", weights: [100, 300, 400, 500, 700, 900] },
     { name: "Lora", value: "var(--font-lora)", preview: "Elegant serif style", weights: [400, 500, 600, 700] },
     { name: "Poppins", value: "var(--font-poppins)", preview: "Friendly and geometric", weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },

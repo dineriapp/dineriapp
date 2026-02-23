@@ -61,7 +61,7 @@ export default function AppearancePage() {
         headings_text_color: "#ffffff",
         button_text_icons_color: "#000000",
         button_style: "rounded",
-        font_family: "var(--font-inter)",
+        font_family: "var(--font-space-grotesk)",
         bg_type: "color",
         button_icons_show: true,
         social_icon_bg_show: false,
@@ -817,7 +817,7 @@ export default function AppearancePage() {
                                                 {t("font")}
                                             </Label>
                                             <Select
-                                                value={formData.font_family || "var(--font-inter)"}
+                                                value={formData.font_family || "var(--font-space-grotesk)"}
                                                 onValueChange={(value) => updateFormData({ font_family: value })}
                                             >
                                                 <SelectTrigger className="border-slate-200 !h-[50px] w-full">

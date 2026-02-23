@@ -7,7 +7,15 @@ import { routing } from "@/i18n/routing";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { redirect } from "next/navigation";
 import "./globals.css";
-// import { Roboto, Inter, Lora, Poppins, Open_Sans, Merriweather, Montserrat, Playfair_Display } from 'next/font/google';
+// import { Roboto, Inter, Lora, Poppins, Open_Sans, Merriweather, Montserrat, Playfair_Display, Space_Grotesk } from 'next/font/google';
+import { Space_Grotesk } from 'next/font/google';
+
+export const space = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
 
 // export const inter = Inter({
 //   subsets: ["latin"],
@@ -90,15 +98,14 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        // className={`${inter.className} antialiased`}
-        // className={`${inter.variable} ${roboto.variable} ${lora.variable} ${poppins.variable} ${openSans.variable} ${merriweather.variable} ${montserrat.variable} ${playfairDisplay.variable} antialiased`}
-        className={`antialiased`}
+        // className={`${inter.variable} ${roboto.variable} ${lora.variable} ${poppins.variable} ${openSans.variable} ${merriweather.variable} ${montserrat.variable} ${playfairDisplay.variable} ${space.variable} antialiased`}
+        className={`${space.variable} antialiased`}
       >
         <NextIntlClientProvider>
           <ThemeProvider
             attribute="class"
-            forcedTheme="light"      // 👈 This forces light theme always
-            enableSystem={false}     // 👈 Ignore system dark mode
+            forcedTheme="light"
+            enableSystem={false}
             disableTransitionOnChange
             themes={["light"]}
           >

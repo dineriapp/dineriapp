@@ -107,7 +107,7 @@ const SocialIcons: FC<SocialIconsProps> = ({
                     href={link.url}
                     target={link.url.startsWith("mailto:") ? "_self" : "_blank"}
                     rel="noopener noreferrer"
-                    className={`p-2 rounded-full backdrop-blur-sm transition-transform hover:scale-110 ${theme.socialIconBgShow ? "shadow-md" : ""
+                    className={`p-2.5 sm:p-4 rounded-full backdrop-blur-sm transition-transform hover:scale-110 ${theme.socialIconBgShow ? "shadow-md" : ""
                         }`}
                     style={{
                         color: theme.socialIconColor || "#10b981",

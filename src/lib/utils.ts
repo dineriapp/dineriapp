@@ -257,3 +257,10 @@ export async function sha256(file: File): Promise<string> {
   const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
   return btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
 }
+
+export function hexToRGBA(hex: string, opacity: string) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
