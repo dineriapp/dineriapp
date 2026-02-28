@@ -6,19 +6,14 @@ import OrdersTable from "@/components/pages/dashboard/orders/orders-table";
 import { RefreshIntervalSelect } from "@/components/pages/dashboard/orders/refresh-interval-select";
 import RestaurantOperationalSettingsCard from "@/components/restaurant-operational-settings-card";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   OrderWithItems,
   useExportOrders,
   useOrders,
   useOrderStats,
-  useRefreshOrders
+  useRefreshOrders,
 } from "@/lib/order-queries";
 import { useRestaurantStore } from "@/stores/restaurant-store";
 import {
@@ -29,10 +24,10 @@ import {
   Euro,
   Package,
   RefreshCw,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";;
+import { Link } from "@/i18n/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 export default function OrdersPage() {
@@ -46,11 +41,11 @@ export default function OrdersPage() {
     isRefetching,
   } = useOrders(restaurant?.id);
   const { data: stats, isLoading: statsLoading } = useOrderStats(
-    restaurant?.id
+    restaurant?.id,
   );
   const refreshOrders = useRefreshOrders(restaurant?.id);
   const exportOrders = useExportOrders(restaurant?.id);
-  const t = useTranslations("orders")
+  const t = useTranslations("orders");
   // Filters
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -63,7 +58,7 @@ export default function OrdersPage() {
   });
 
   const [selectedOrder, setSelectedOrder] = useState<OrderWithItems | null>(
-    null
+    null,
   );
 
   // Filter orders based on current filters
@@ -148,26 +143,19 @@ export default function OrdersPage() {
     return () => clearInterval(interval);
   }, [refreshSeconds]);
 
-
   // Show loading state when menu is being fetched
   if (isLoading || !restaurant) {
-    return (
-      <LoadingUI text={t("loading")} />
-    );
+    return <LoadingUI text={t("loading")} />;
   }
 
   // Error state
   if (error) {
     return (
       <div className="space-y-6 max-w-[1200px] mx-auto py-16">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-2">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
-              {t("title")}
-            </h1>
-            <p className="text-muted-foreground">
-              {t("subtitle")}
-            </p>
+            <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+            <p className="text-muted-foreground">{t("subtitle")}</p>
           </div>
         </div>
         <Card>
@@ -189,16 +177,12 @@ export default function OrdersPage() {
 
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto px-4 py-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {t("title")}
-          </h1>
-          <p className="text-muted-foreground">
-            {t("subtitle")}
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+          <p className="text-muted-foreground">{t("subtitle")}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 flex-wrap ">
           <Button
             variant="outline"
             onClick={handleRefresh}
@@ -215,7 +199,7 @@ export default function OrdersPage() {
           />
           <Link
             href={"/dashboard/settings/hours"}
-            className="flex items-center justify-between w-full h-full"
+            className="flex items-center justify-between w-max h-full"
           >
             <Button variant="outline">
               <Clock4 className="h-4 w-4 " />
@@ -228,7 +212,9 @@ export default function OrdersPage() {
             disabled={exportOrders.isPending}
           >
             <Download className="h-4 w-4 " />
-            {exportOrders.isPending ? t("buttons.exporting") : t("buttons.export")}
+            {exportOrders.isPending
+              ? t("buttons.exporting")
+              : t("buttons.export")}
           </Button>
         </div>
       </div>
@@ -277,10 +263,11 @@ export default function OrdersPage() {
               <CardContent>
                 <div className="text-2xl font-bold">
                   €{stats.total_revenue.toFixed(2)}
-
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {t("stats.todayRevenue", { amount: stats.today_revenue.toFixed(2) })}
+                  {t("stats.todayRevenue", {
+                    amount: stats.today_revenue.toFixed(2),
+                  })}
                 </p>
               </CardContent>
             </Card>
