@@ -64,20 +64,20 @@ const OverviewPage = () => {
         </Popover>
       </div>
       {/* content  */}
-      <div className="grid md:grid-cols-12 gap-4">
-        <div className="md:col-span-12">
+      <div className="grid 900:grid-cols-12 gap-4">
+        <div className="900:col-span-12">
           <MainStats
             restaurant_id={restaurant_id}
             formatted_date={formatted_date}
           />
         </div>
-        <div className="md:col-span-6">
+        <div className="900:col-span-6">
           <DayCapacity
             restaurant_id={restaurant_id}
             formatted_date={formatted_date}
           />
         </div>
-        <div className="md:col-span-6">
+        <div className="900:col-span-6">
           <StatusBreakdown
             restaurant_id={restaurant_id}
             formatted_date={formatted_date}

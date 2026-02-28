@@ -37,6 +37,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Locale } from "@/i18n/routing";
@@ -59,7 +60,11 @@ const navigationGroups = {
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Analytics", icon: BarChart },
         { href: "/dashboard/orders", label: "Orders", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Reservations", icon: UtensilsCrossed },
+        {
+          href: "/dashboard/reservations",
+          label: "Reservations",
+          icon: UtensilsCrossed,
+        },
       ],
     },
     {
@@ -80,7 +85,11 @@ const navigationGroups = {
       label: "Customization",
       items: [
         { href: "/dashboard/appearance", label: "Appearance", icon: Palette },
-        { href: "/dashboard/settings/business-information", label: "Settings", icon: Settings },
+        {
+          href: "/dashboard/settings/business-information",
+          label: "Settings",
+          icon: Settings,
+        },
       ],
     },
   ],
@@ -91,8 +100,16 @@ const navigationGroups = {
       items: [
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Analytik", icon: BarChart },
-        { href: "/dashboard/orders", label: "Bestellungen", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Reservierungen", icon: UtensilsCrossed },
+        {
+          href: "/dashboard/orders",
+          label: "Bestellungen",
+          icon: ShoppingCart,
+        },
+        {
+          href: "/dashboard/reservations",
+          label: "Reservierungen",
+          icon: UtensilsCrossed,
+        },
       ],
     },
     {
@@ -112,8 +129,16 @@ const navigationGroups = {
     {
       label: "Anpassung",
       items: [
-        { href: "/dashboard/appearance", label: "Erscheinungsbild", icon: Palette },
-        { href: "/dashboard/settings/business-information", label: "Einstellungen", icon: Settings },
+        {
+          href: "/dashboard/appearance",
+          label: "Erscheinungsbild",
+          icon: Palette,
+        },
+        {
+          href: "/dashboard/settings/business-information",
+          label: "Einstellungen",
+          icon: Settings,
+        },
       ],
     },
   ],
@@ -125,7 +150,11 @@ const navigationGroups = {
         { href: "/dashboard", label: "Panel", icon: Home },
         { href: "/dashboard/stats", label: "Analíticas", icon: BarChart },
         { href: "/dashboard/orders", label: "Pedidos", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Reservas", icon: UtensilsCrossed },
+        {
+          href: "/dashboard/reservations",
+          label: "Reservas",
+          icon: UtensilsCrossed,
+        },
       ],
     },
     {
@@ -140,13 +169,19 @@ const navigationGroups = {
     },
     {
       label: "Marketing",
-      items: [{ href: "/dashboard/qr-codes", label: "Códigos QR", icon: QrCode }],
+      items: [
+        { href: "/dashboard/qr-codes", label: "Códigos QR", icon: QrCode },
+      ],
     },
     {
       label: "Personalización",
       items: [
         { href: "/dashboard/appearance", label: "Apariencia", icon: Palette },
-        { href: "/dashboard/settings/business-information", label: "Configuración", icon: Settings },
+        {
+          href: "/dashboard/settings/business-information",
+          label: "Configuración",
+          icon: Settings,
+        },
       ],
     },
   ],
@@ -158,8 +193,11 @@ const navigationGroups = {
         { href: "/dashboard", label: "Tableau de bord", icon: Home },
         { href: "/dashboard/stats", label: "Analyses", icon: BarChart },
         { href: "/dashboard/orders", label: "Commandes", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Réservations", icon: UtensilsCrossed },
-
+        {
+          href: "/dashboard/reservations",
+          label: "Réservations",
+          icon: UtensilsCrossed,
+        },
       ],
     },
     {
@@ -180,7 +218,11 @@ const navigationGroups = {
       label: "Personnalisation",
       items: [
         { href: "/dashboard/appearance", label: "Apparence", icon: Palette },
-        { href: "/dashboard/settings/business-information", label: "Paramètres", icon: Settings },
+        {
+          href: "/dashboard/settings/business-information",
+          label: "Paramètres",
+          icon: Settings,
+        },
       ],
     },
   ],
@@ -192,7 +234,11 @@ const navigationGroups = {
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Analitiche", icon: BarChart },
         { href: "/dashboard/orders", label: "Ordini", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Prenotazioni", icon: UtensilsCrossed },
+        {
+          href: "/dashboard/reservations",
+          label: "Prenotazioni",
+          icon: UtensilsCrossed,
+        },
       ],
     },
     {
@@ -207,13 +253,19 @@ const navigationGroups = {
     },
     {
       label: "Marketing",
-      items: [{ href: "/dashboard/qr-codes", label: "Codici QR", icon: QrCode }],
+      items: [
+        { href: "/dashboard/qr-codes", label: "Codici QR", icon: QrCode },
+      ],
     },
     {
       label: "Personalizzazione",
       items: [
         { href: "/dashboard/appearance", label: "Aspetto", icon: Palette },
-        { href: "/dashboard/settings/business-information", label: "Impostazioni", icon: Settings },
+        {
+          href: "/dashboard/settings/business-information",
+          label: "Impostazioni",
+          icon: Settings,
+        },
       ],
     },
   ],
@@ -224,8 +276,16 @@ const navigationGroups = {
       items: [
         { href: "/dashboard", label: "Dashboard", icon: Home },
         { href: "/dashboard/stats", label: "Statistieken", icon: BarChart },
-        { href: "/dashboard/orders", label: "Bestellingen", icon: ShoppingCart },
-        { href: "/dashboard/reservations", label: "Reserveringen", icon: UtensilsCrossed },
+        {
+          href: "/dashboard/orders",
+          label: "Bestellingen",
+          icon: ShoppingCart,
+        },
+        {
+          href: "/dashboard/reservations",
+          label: "Reserveringen",
+          icon: UtensilsCrossed,
+        },
       ],
     },
     {
@@ -246,17 +306,21 @@ const navigationGroups = {
       label: "Aanpassing",
       items: [
         { href: "/dashboard/appearance", label: "Uiterlijk", icon: Palette },
-        { href: "/dashboard/settings/business-information", label: "Instellingen", icon: Settings },
+        {
+          href: "/dashboard/settings/business-information",
+          label: "Instellingen",
+          icon: Settings,
+        },
       ],
     },
   ],
 };
 
 export function AppSidebar() {
-  const locale: Locale = useLocale() as Locale
-  const t = useTranslations("DashboardSidebar")
+  const locale: Locale = useLocale() as Locale;
+  const t = useTranslations("DashboardSidebar");
   const { data: session } = useSession();
-
+  const { setOpen, setOpenMobile, isMobile } = useSidebar();
   const {
     restaurants,
     initializeRestaurants,
@@ -272,7 +336,7 @@ export function AppSidebar() {
   }, []);
 
   const router = useRouter();
-  const pathname = usePathname()
+  const pathname = usePathname();
   const openPopup = useUpgradePopupStore((state) => state.open);
 
   const hasMultiAccess =
@@ -335,10 +399,11 @@ export function AppSidebar() {
                                                         flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md
                                                         text-main transition-colors cursor-pointer
                                                         hover:bg-main-background
-                                                        ${isActive
-                            ? " font-medium text-black"
-                            : ""
-                          }
+                                                        ${
+                                                          isActive
+                                                            ? " font-medium text-black"
+                                                            : ""
+                                                        }
                                                     `}
                       >
                         <div className="flex items-center gap-2">
@@ -369,17 +434,12 @@ export function AppSidebar() {
                         {t("need_more")}
                       </p>
                       <p className="max-w-[200px]">
-                        {t("multi_restaurant_text")}
-                        .
+                        {t("multi_restaurant_text")}.
                       </p>
                       <Button
                         size="sm"
                         variant="secondary"
-                        onClick={() =>
-                          openPopup(
-                            t("multi_restaurant_text")
-                          )
-                        }
+                        onClick={() => openPopup(t("multi_restaurant_text"))}
                         className="mt-2 w-full bg-main-action hover:bg-emerald-700 rounded-full h-[38px] text-white text-sm"
                       >
                         {t("upgrade_plan")}
@@ -394,7 +454,10 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="gap-1">
         {navigationGroups[locale]?.map((group) => (
-          <SidebarGroup key={group.label} className="py-0 border-b border-black/30 pb-4">
+          <SidebarGroup
+            key={group.label}
+            className="py-0 border-b border-black/30 pb-4"
+          >
             <SidebarGroupLabel className="!text-[12px] font-semibold uppercase">
               {group.label}
             </SidebarGroupLabel>
@@ -405,7 +468,9 @@ export function AppSidebar() {
                   const isActive = pathname === item.href;
                   const isLocked =
                     !isPremium &&
-                    (item.href === "/dashboard/stats" || item.href === "/dashboard/reservations" || item.href === "/dashboard/qr-codes");
+                    (item.href === "/dashboard/stats" ||
+                      item.href === "/dashboard/reservations" ||
+                      item.href === "/dashboard/qr-codes");
 
                   const handleClick = (e: React.MouseEvent) => {
                     if (isLocked) {
@@ -413,6 +478,10 @@ export function AppSidebar() {
                       // openPopup(
                       //   t("locked_feature")
                       // );
+                    }
+                    // close sidebar only on mobile
+                    if (isMobile) {
+                      setOpenMobile(false);
                     }
                   };
 
@@ -428,14 +497,16 @@ export function AppSidebar() {
                           className={`
                                                         flex items-center space-x-1 w-full
                                                         pl-3 pr-2 py-1.5 text-sm rounded-md! transition-all
-                                                        ${isLocked
-                              ? "cursor-not-allowed opacity-60"
-                              : ""
-                            }
-                                                        ${isActive
-                              ? "bg-main-green text-white font-medium hover:bg-main-green!"
-                              : "hover:bg-main-green! font-normal"
-                            }
+                                                        ${
+                                                          isLocked
+                                                            ? "cursor-not-allowed opacity-60"
+                                                            : ""
+                                                        }
+                                                        ${
+                                                          isActive
+                                                            ? "bg-main-green text-white font-medium hover:bg-main-green!"
+                                                            : "hover:bg-main-green! font-normal"
+                                                        }
                                                     `}
                         >
                           <Icon className="h-6 w-6 group-hover/btn:!text-white transition-all" />

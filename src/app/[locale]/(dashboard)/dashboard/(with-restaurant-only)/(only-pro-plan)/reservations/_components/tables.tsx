@@ -176,7 +176,7 @@ export default function TablesGridPage() {
         <p className="text-slate-600 mt-1">{t("subtitle")}</p>
       </div>
       {/* --- Stats --- */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid md:grid-cols-2 900:grid-cols-4 gap-4">
         <StatCard
           title={t("stats.totalTables")}
           value={totalTables}
@@ -204,10 +204,10 @@ export default function TablesGridPage() {
       </div>
 
       {/* --- Filters --- */}
-      <div className="flex justify-between items-center gap-4">
-        <div className="flex gap-2">
+      <div className="flex justify-between flex-wrap items-center gap-4">
+        <div className="flex gap-2 max-md:flex-col max-md:w-full ">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[150px] !bg-white">
+            <SelectTrigger className="md:w-[150px] w-full h-11! !bg-white">
               <SelectValue placeholder={t("filters.statusPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
@@ -226,13 +226,13 @@ export default function TablesGridPage() {
             placeholder={t("filters.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-[250px] !bg-white"
+            className="md:w-[250px] w-full !bg-white h-11!"
           />
         </div>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-main-green text-white hover:bg-main-green/80 cursor-pointer">
+            <Button className="bg-main-green h-11! max-md:w-full text-white hover:bg-main-green/80 cursor-pointer">
               <PlusCircle className="h-4 w-4" />
               {t("dialog.addTableButton")}
             </Button>

@@ -109,9 +109,9 @@ const DayCapacity = ({
                   key={index}
                   className="grid grid-cols-4 gap-4 p-3 max-md:place-content-center max-md:place-items-center rounded-xl border bg-white hover:bg-gray-50 transition"
                 >
-                  <div className="font-medium text-gray-800 w-max flex items-center justify-start gap-2">
+                  <div className="font-medium text-gray-800 max-800:w-max flex items-center justify-start gap-2">
                     <Clock className="size-4" />
-                    <span className="max-md:text-sm">{slot.label}</span>
+                    <span className="text-sm">{slot.label}</span>
                   </div>
 
                   <div className={color}>
