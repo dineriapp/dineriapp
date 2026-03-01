@@ -1,679 +1,788 @@
-"use client"
+"use client";
 
-import { ColorSelector } from "@/app/[locale]/(dashboard)/_components/color-selection"
-import { GoogleRating } from "@/app/[locale]/[slug]/_components/google-rating"
-import { OpeningHoursStatus } from "@/app/[locale]/[slug]/_components/opening-hours-status"
-import LoadingUI from "@/components/loading-ui"
-import SocialIcons from "@/components/social-icons"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Locale } from "@/i18n/routing"
-import { useEvents } from "@/lib/event-queries"
-import { useFaqCategories } from "@/lib/faq-queries"
-import { getLucideIconBySlug } from "@/lib/get-icons"
-import { useLinks } from "@/lib/link-queries"
-import { useMenuCategories } from "@/lib/menu-queries"
-import { colorPresets, container2, fonts, gradientDirectionsLangs, gradientPresets, itemSlugPage, textColorPresets } from "@/lib/reuseable-data"
-import { useGoogleReviews } from "@/lib/review-api"
-import { AppearanceFormData } from "@/lib/types"
-import { getBackgroundStyle, ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils"
-import { useRestaurantStore } from "@/stores/restaurant-store"
-import { uploadImage } from "@/supabase/clients/client"
-import { OpeningHoursData } from "@/types"
-import { GradientDirection } from "@prisma/client"
+import { ColorSelector } from "@/app/[locale]/(dashboard)/_components/color-selection";
+import { GoogleRating } from "@/app/[locale]/[slug]/_components/google-rating";
+import { OpeningHoursStatus } from "@/app/[locale]/[slug]/_components/opening-hours-status";
+import LoadingUI from "@/components/loading-ui";
+import SocialIcons from "@/components/social-icons";
+import { Button } from "@/components/ui/button";
 import {
-    Battery,
-    ImageIcon,
-    Loader,
-    MoreVertical,
-    Paintbrush,
-    Palette,
-    RotateCcw,
-    Save,
-    Signal,
-    Type,
-    Upload,
-    Wifi
-} from "lucide-react"
-import { motion } from "motion/react"
-import { useLocale, useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Locale } from "@/i18n/routing";
+import { useEvents } from "@/lib/event-queries";
+import { useFaqCategories } from "@/lib/faq-queries";
+import { getLucideIconBySlug } from "@/lib/get-icons";
+import { useLinks } from "@/lib/link-queries";
+import { useMenuCategories } from "@/lib/menu-queries";
+import {
+  colorPresets,
+  container2,
+  fonts,
+  gradientDirectionsLangs,
+  gradientPresets,
+  itemSlugPage,
+  textColorPresets,
+} from "@/lib/reuseable-data";
+import { useGoogleReviews } from "@/lib/review-api";
+import { AppearanceFormData } from "@/lib/types";
+import {
+  getBackgroundStyle,
+  ResetChangesBtnClasses,
+  SaveChangesBtnClasses,
+} from "@/lib/utils";
+import { useRestaurantStore } from "@/stores/restaurant-store";
+import { uploadImage } from "@/supabase/clients/client";
+import { OpeningHoursData } from "@/types";
+import { GradientDirection } from "@prisma/client";
+import {
+  Battery,
+  ImageIcon,
+  Loader,
+  MoreVertical,
+  Paintbrush,
+  Palette,
+  RotateCcw,
+  Save,
+  Signal,
+  Type,
+  Upload,
+  Wifi,
+} from "lucide-react";
+import { motion } from "motion/react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function AppearancePage() {
-    const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore()
-    const { data: links = [], isLoading: linksLoading, } = useLinks(selectedRestaurant?.id)
-    const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(selectedRestaurant?.google_place_id);
-    const [uploadingLogo, setUploadingLogo] = useState(false);
-    const t = useTranslations("appearance")
-    const t2 = useTranslations("dashboard.dashboardMobilePreview");
-    // Form state
-    const [formData, setFormData] = useState<AppearanceFormData>({
-        bg_color: "#ffffff",
-        accent_color: "#10b981",
-        headings_text_color: "#ffffff",
-        button_text_icons_color: "#000000",
-        button_style: "rounded",
-        font_family: "var(--font-space-grotesk)",
-        bg_type: "color",
-        button_icons_show: true,
-        social_icon_bg_show: false,
-        social_icon_bg_color: "#FFFFFF",
-        social_icon_color: "#000000",
-        buttons_gap_in_px: 16,
-        social_icon_gap: 12,
-        bg_gradient_start: "#ffffff",
-        bg_gradient_end: "#f3f4f6",
-        gradient_direction: "bottom_right",
-        button_variant: "solid",
-        bg_image_url: "",
-    })
+  const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore();
+  const { data: links = [], isLoading: linksLoading } = useLinks(
+    selectedRestaurant?.id,
+  );
+  const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(
+    selectedRestaurant?.google_place_id,
+  );
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const t = useTranslations("appearance");
+  const t2 = useTranslations("dashboard.dashboardMobilePreview");
+  // Form state
+  const [formData, setFormData] = useState<AppearanceFormData>({
+    bg_color: "#ffffff",
+    accent_color: "#10b981",
+    headings_text_color: "#ffffff",
+    button_text_icons_color: "#000000",
+    button_style: "rounded",
+    font_family: "var(--font-space-grotesk)",
+    bg_type: "color",
+    button_icons_show: true,
+    social_icon_bg_show: false,
+    social_icon_bg_color: "#FFFFFF",
+    social_icon_color: "#000000",
+    buttons_gap_in_px: 16,
+    social_icon_gap: 12,
+    bg_gradient_start: "#ffffff",
+    bg_gradient_end: "#f3f4f6",
+    gradient_direction: "bottom_right",
+    button_variant: "solid",
+    bg_image_url: "",
+  });
 
-    // Initial form data for reset functionality
-    const [initialData, setInitialData] = useState<AppearanceFormData>(formData)
-    const { data: categories } = useMenuCategories(selectedRestaurant?.id)
-    const { data: events } = useEvents(selectedRestaurant?.id)
-    const { data: faqcategories } = useFaqCategories(selectedRestaurant?.id)
+  // Initial form data for reset functionality
+  const [initialData, setInitialData] = useState<AppearanceFormData>(formData);
+  const { data: categories } = useMenuCategories(selectedRestaurant?.id);
+  const { data: events } = useEvents(selectedRestaurant?.id);
+  const { data: faqcategories } = useFaqCategories(selectedRestaurant?.id);
 
-    const hasMenuItems =
-        categories?.some(
-            (category) => category.items && category.items.length > 0
-        )
+  const hasMenuItems = categories?.some(
+    (category) => category.items && category.items.length > 0,
+  );
 
-    const hasFaqsItems =
-        faqcategories?.some(
-            (category) => category.faqs && category.faqs.length > 0
-        )
-    // UI state
-    const [saving, setSaving] = useState(false)
-    const [currentTime] = useState(() => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }))
-    const locale = useLocale() as Locale
-    // Load initial data from restaurant store
-    useEffect(() => {
-        if (selectedRestaurant) {
-            const initialFormData: AppearanceFormData = {
-                bg_color: selectedRestaurant.bg_color || "#ffffff",
-                accent_color: selectedRestaurant.accent_color || "#10b981",
-                headings_text_color: selectedRestaurant.headings_text_color || "#ffffff",
-                button_text_icons_color: selectedRestaurant.button_text_icons_color || "#000000",
-                button_style: selectedRestaurant.button_style || "rounded",
-                font_family: selectedRestaurant.font_family || "Inter",
-                bg_type: selectedRestaurant.bg_type || "color",
-                button_icons_show: selectedRestaurant.button_icons_show,
-                buttons_gap_in_px: selectedRestaurant.buttons_gap_in_px,
-                social_icon_bg_show: selectedRestaurant.social_icon_bg_show,
-                social_icon_bg_color: selectedRestaurant.social_icon_bg_color,
-                social_icon_color: selectedRestaurant.social_icon_color,
-                social_icon_gap: selectedRestaurant.social_icon_gap,
-                bg_gradient_start: selectedRestaurant.bg_gradient_start || "#ffffff",
-                bg_gradient_end: selectedRestaurant.bg_gradient_end || "#f3f4f6",
-                gradient_direction: selectedRestaurant.gradient_direction || "bottom_right",
-                button_variant: selectedRestaurant.button_variant || "solid",
-                bg_image_url: selectedRestaurant.bg_image_url || "",
-            }
+  const hasFaqsItems = faqcategories?.some(
+    (category) => category.faqs && category.faqs.length > 0,
+  );
+  // UI state
+  const [saving, setSaving] = useState(false);
+  const [currentTime] = useState(() =>
+    new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+  );
+  const locale = useLocale() as Locale;
+  // Load initial data from restaurant store
+  useEffect(() => {
+    if (selectedRestaurant) {
+      const initialFormData: AppearanceFormData = {
+        bg_color: selectedRestaurant.bg_color || "#ffffff",
+        accent_color: selectedRestaurant.accent_color || "#10b981",
+        headings_text_color:
+          selectedRestaurant.headings_text_color || "#ffffff",
+        button_text_icons_color:
+          selectedRestaurant.button_text_icons_color || "#000000",
+        button_style: selectedRestaurant.button_style || "rounded",
+        font_family: selectedRestaurant.font_family || "Inter",
+        bg_type: selectedRestaurant.bg_type || "color",
+        button_icons_show: selectedRestaurant.button_icons_show,
+        buttons_gap_in_px: selectedRestaurant.buttons_gap_in_px,
+        social_icon_bg_show: selectedRestaurant.social_icon_bg_show,
+        social_icon_bg_color: selectedRestaurant.social_icon_bg_color,
+        social_icon_color: selectedRestaurant.social_icon_color,
+        social_icon_gap: selectedRestaurant.social_icon_gap,
+        bg_gradient_start: selectedRestaurant.bg_gradient_start || "#ffffff",
+        bg_gradient_end: selectedRestaurant.bg_gradient_end || "#f3f4f6",
+        gradient_direction:
+          selectedRestaurant.gradient_direction || "bottom_right",
+        button_variant: selectedRestaurant.button_variant || "solid",
+        bg_image_url: selectedRestaurant.bg_image_url || "",
+      };
 
-            setFormData(initialFormData)
-            setInitialData(initialFormData)
-        }
-    }, [selectedRestaurant])
-
-    // Check if form has changes
-    const hasChanges = JSON.stringify(formData) !== JSON.stringify(initialData)
-
-    // Update form data
-    const updateFormData = (updates: Partial<AppearanceFormData>) => {
-        setFormData((prev) => ({ ...prev, ...updates }))
+      setFormData(initialFormData);
+      setInitialData(initialFormData);
     }
+  }, [selectedRestaurant]);
 
-    // Reset form to initial state
-    const resetForm = () => {
-        setFormData(initialData)
-        toast.success(t("resetToOrignal"))
+  // Check if form has changes
+  const hasChanges = JSON.stringify(formData) !== JSON.stringify(initialData);
+
+  // Update form data
+  const updateFormData = (updates: Partial<AppearanceFormData>) => {
+    setFormData((prev) => ({ ...prev, ...updates }));
+  };
+
+  // Reset form to initial state
+  const resetForm = () => {
+    setFormData(initialData);
+    toast.success(t("resetToOrignal"));
+  };
+
+  // Save changes
+  const saveChanges = async () => {
+    if (!selectedRestaurant) return;
+
+    try {
+      setSaving(true);
+
+      const response = await fetch(
+        `/api/restaurants/${selectedRestaurant.id}/appearance`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || t("failedToChange"));
+      }
+
+      const result = await response.json();
+
+      // Update restaurant store with new data
+      updateSelectedRestaurant(result.data);
+
+      // Update initial data to reflect saved state
+      setInitialData(formData);
+
+      toast.success(t("SuccessToChange"));
+    } catch (error) {
+      console.error("Error saving appearance:", error);
+      toast.error(error instanceof Error ? error.message : t("failedToChange"));
+    } finally {
+      setSaving(false);
     }
+  };
 
-    // Save changes
-    const saveChanges = async () => {
-        if (!selectedRestaurant) return
+  const handleUrlChange = (value: string) => {
+    updateFormData({ bg_image_url: value });
+  };
 
-        try {
-            setSaving(true)
-
-            const response = await fetch(`/api/restaurants/${selectedRestaurant.id}/appearance`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            })
-
-            if (!response.ok) {
-                const error = await response.json()
-                throw new Error(error.error || t("failedToChange"))
-            }
-
-            const result = await response.json()
-
-            // Update restaurant store with new data
-            updateSelectedRestaurant(result.data)
-
-            // Update initial data to reflect saved state
-            setInitialData(formData)
-
-            toast.success(t("SuccessToChange"))
-        } catch (error) {
-            console.error("Error saving appearance:", error)
-            toast.error(error instanceof Error ? error.message : t("failedToChange"))
-        } finally {
-            setSaving(false)
-        }
+  async function handleFileChange(file?: File) {
+    if (!file) return;
+    // optional: quick client validation
+    if (!file.type.startsWith("image/")) {
+      return;
     }
-
-    const handleUrlChange = (value: string) => {
-        updateFormData({ bg_image_url: value })
+    setUploadingLogo(true);
+    try {
+      const uploadedUrl = await uploadImage(file); // <- your existing uploader
+      if (uploadedUrl) handleUrlChange(uploadedUrl); // reuse same updater
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setUploadingLogo(false);
     }
+  }
 
-    async function handleFileChange(file?: File) {
-        if (!file) return;
-        // optional: quick client validation
-        if (!file.type.startsWith("image/")) {
-            return;
-        }
-        setUploadingLogo(true);
-        try {
-            const uploadedUrl = await uploadImage(file); // <- your existing uploader
-            if (uploadedUrl) handleUrlChange(uploadedUrl); // reuse same updater
+  const openingHours = selectedRestaurant?.opening_hours
+    ? (selectedRestaurant?.opening_hours as OpeningHoursData)
+    : null;
+  const buttonTextColor =
+    selectedRestaurant?.button_text_icons_color || "#000000";
 
-        } catch (e) {
-            console.log(e)
-        } finally {
-            setUploadingLogo(false);
-        }
-    }
+  // Apply template
+  // const applyTemplate = async (template: Template) => {
+  //     const templateData = template.preview
+  //     setFormData(templateData)
+  // }
 
-    const openingHours = selectedRestaurant?.opening_hours ? (selectedRestaurant?.opening_hours as OpeningHoursData) : null
-    const buttonTextColor = selectedRestaurant?.button_text_icons_color || "#000000"
+  if (!selectedRestaurant) {
+    return <LoadingUI text={t("loadingAppearance")} />;
+  }
 
-    // Apply template
-    // const applyTemplate = async (template: Template) => {
-    //     const templateData = template.preview
-    //     setFormData(templateData)
-    // }
+  return (
+    <main className="max-w-[1200px] mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-main-blue">{t("appearance")}</h1>
+        <p className="text-slate-500 mt-1">{t("customizeRestaurantPage")}</p>
+      </div>
 
-    if (!selectedRestaurant) {
-        return (
-            <LoadingUI text={t("loadingAppearance")} />
-        )
-    }
-
-
-    return (
-        <main className="max-w-[1200px] mx-auto px-4 py-8">
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-main-blue">
-                    {t("appearance")}
-                </h1>
-                <p className="text-slate-500 mt-1">
-                    {t("customizeRestaurantPage")}
-                </p>
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-8">
-                <div className="space-y-6">
-                    <Tabs defaultValue="style" className="space-y-6">
-                        <TabsList className="grid grid-cols-3 gap-4 h-[44px] rounded-full w-full">
-                            <TabsTrigger value="style" className="flex items-center gap-2 rounded-full">
-                                <Paintbrush className="h-4 w-4" />
-                                <span>
-                                    {t("tabs_style")}
-                                </span>
-                            </TabsTrigger>
-                            <TabsTrigger value="colors" className="flex items-center gap-2 rounded-full">
-                                <Palette className="h-4 w-4" />
-                                <span>
-                                    {t("tabs_colors")}
-                                </span>
-                            </TabsTrigger>
-                            <TabsTrigger value="typography" className="flex items-center gap-2 rounded-full">
-                                <Type className="h-4 w-4" />
-                                <span>
-                                    {t("tabs_typography")}
-                                </span>
-                            </TabsTrigger>
-                            {/* <TabsTrigger value="templates" className="flex items-center gap-2 rounded-full">
+      <div className="grid lg:grid-cols-2 gap-8">
+        <div className="space-y-6">
+          <Tabs defaultValue="style" className="space-y-6">
+            <TabsList className="grid grid-cols-3 md:gap-4 gap-1 h-[44px] rounded-full w-full">
+              <TabsTrigger
+                value="style"
+                className="flex items-center gap-2 rounded-full"
+              >
+                <Paintbrush className="h-4 w-4" />
+                <span className="max-md:text-xs">{t("tabs_style")}</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="colors"
+                className="flex items-center gap-2 rounded-full"
+              >
+                <Palette className="h-4 w-4" />
+                <span className="max-md:text-xs">{t("tabs_colors")}</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="typography"
+                className="flex items-center gap-2 rounded-full"
+              >
+                <Type className="h-4 w-4" />
+                <span className="max-md:text-xs">{t("tabs_typography")}</span>
+              </TabsTrigger>
+              {/* <TabsTrigger value="templates" className="flex items-center gap-2 rounded-full">
                                 <Sparkles className="h-4 w-4" />
                                 <span>Templates</span>
                             </TabsTrigger> */}
-                        </TabsList>
+            </TabsList>
 
-                        <TabsContent value="style" className="space-y-4">
-                            <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
-                                <CardHeader className="py-4 gap-1 font-poppins bg-gray-100/50">
-                                    <CardTitle className="text-slate-900">
-                                        {t("buttonStyle")}
-                                    </CardTitle>
-                                    <CardDescription className="text-slate-500">
-                                        {t("buttonStyle_description")}
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-3 pt-4">
-                                    <div className="space-y-4">
-                                        <Label className="text-slate-700">
-                                            {t("shape")}
-                                        </Label>
-                                        <RadioGroup
-                                            value={formData.button_style}
-                                            onValueChange={(value: string) =>
-                                                updateFormData({ button_style: value as "rounded" | "square" | "pill" })
-                                            }
-                                            className="grid grid-cols-3 gap-4"
-                                        >
-                                            <div>
-                                                <RadioGroupItem value="rounded" id="rounded" className="peer sr-only" />
-                                                <Label
-                                                    htmlFor="rounded"
-                                                    className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
-                                                >
-                                                    <div className="w-full h-10 rounded-2xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
-                                                    <span className="text-slate-700">
-                                                        {t("rounded")}
-                                                    </span>
-                                                </Label>
-                                            </div>
+            <TabsContent value="style" className="space-y-4">
+              <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
+                <CardHeader className="py-4 gap-1 font-poppins bg-gray-100/50">
+                  <CardTitle className="text-slate-900">
+                    {t("buttonStyle")}
+                  </CardTitle>
+                  <CardDescription className="text-slate-500">
+                    {t("buttonStyle_description")}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3 pt-4">
+                  <div className="space-y-4">
+                    <Label className="text-slate-700">{t("shape")}</Label>
+                    <RadioGroup
+                      value={formData.button_style}
+                      onValueChange={(value: string) =>
+                        updateFormData({
+                          button_style: value as "rounded" | "square" | "pill",
+                        })
+                      }
+                      className="grid md:grid-cols-3 gap-4"
+                    >
+                      <div>
+                        <RadioGroupItem
+                          value="rounded"
+                          id="rounded"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="rounded"
+                          className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                        >
+                          <div className="w-full h-10 rounded-2xl bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
+                          <span className="text-slate-700">{t("rounded")}</span>
+                        </Label>
+                      </div>
 
-                                            <div>
-                                                <RadioGroupItem value="square" id="square" className="peer sr-only" />
-                                                <Label
-                                                    htmlFor="square"
-                                                    className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
-                                                >
-                                                    <div className="w-full h-10 rounded-sm bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
-                                                    <span className="text-slate-700">
-                                                        {t("square")}
-                                                    </span>
-                                                </Label>
-                                            </div>
+                      <div>
+                        <RadioGroupItem
+                          value="square"
+                          id="square"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="square"
+                          className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                        >
+                          <div className="w-full h-10 rounded-sm bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
+                          <span className="text-slate-700">{t("square")}</span>
+                        </Label>
+                      </div>
 
-                                            <div>
-                                                <RadioGroupItem value="pill" id="pill" className="peer sr-only" />
-                                                <Label
-                                                    htmlFor="pill"
-                                                    className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
-                                                >
-                                                    <div className="w-full h-10 rounded-full bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
-                                                    <span className="text-slate-700">
-                                                        {t("pill")}
-                                                    </span>
-                                                </Label>
-                                            </div>
-                                        </RadioGroup>
+                      <div>
+                        <RadioGroupItem
+                          value="pill"
+                          id="pill"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="pill"
+                          className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                        >
+                          <div className="w-full h-10 rounded-full bg-gradient-to-r from-main-action to-main-blue mb-2"></div>
+                          <span className="text-slate-700">{t("pill")}</span>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  <div className="space-y-4">
+                    <Label className="text-slate-700">{t("style")}</Label>
+                    <RadioGroup
+                      value={formData.button_variant}
+                      onValueChange={(value: string) =>
+                        updateFormData({
+                          button_variant: value as "solid" | "outline",
+                        })
+                      }
+                      className="grid md:grid-cols-2 gap-4"
+                    >
+                      <div>
+                        <RadioGroupItem
+                          value="solid"
+                          id="solid"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="solid"
+                          className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                        >
+                          <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-green to-main-blue flex items-center justify-center">
+                            <span className="text-white text-xs font-medium">
+                              {t("solid")}
+                            </span>
+                          </div>
+                          <span className="text-slate-700">
+                            {/* {t("solid")} */}
+                          </span>
+                        </Label>
+                      </div>
+
+                      <div>
+                        <RadioGroupItem
+                          value="outline"
+                          id="outline"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="outline"
+                          className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                        >
+                          <div className="w-full h-10 rounded-xl bg-white border-2 border-teal-600 flex items-center justify-center">
+                            <span className="text-teal-600 text-xs font-medium">
+                              {t("outline")}
+                            </span>
+                          </div>
+                          <span className="text-slate-700">
+                            {/* {t("outline")} */}
+                          </span>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  {/* button icons show  */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between border rounded-lg px-4 py-3">
+                      <div className="space-y-1">
+                        <Label className="text-slate-700 text-sm font-medium">
+                          {t("showIconsOnButtons")}
+                        </Label>
+                        <p className="text-sm text-muted-foreground">
+                          {t("showIconsOnButtons_description")}
+                        </p>
+                      </div>
+                      <Switch
+                        checked={formData.button_icons_show}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            button_icons_show: checked,
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                  {/* Gap between buttons (vertical spacing) */}
+                  <div className="space-y-2">
+                    <div>
+                      <Label className="text-slate-700 text-sm font-medium">
+                        {t("verticalGapBetweenButtons")}
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        {t("verticalGapBetweenButtons_description")}
+                      </p>
+                    </div>
+                    <Select
+                      value={String(formData.buttons_gap_in_px)}
+                      onValueChange={(value) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          buttons_gap_in_px: parseInt(value),
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("selectGapPlaceholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[...Array(16)].map((_, i) => {
+                          const gap = i * 2;
+                          if (gap === 0) return null;
+                          return (
+                            <SelectItem key={gap} value={String(gap)}>
+                              {gap}px
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
+                <CardHeader className="py-4 gap-1 bg-gray-100/50 font-poppins">
+                  <CardTitle className="text-slate-900">
+                    {t("socialIconStyle")}
+                  </CardTitle>
+                  <CardDescription className="text-slate-500">
+                    {t("socialIconStyle_description")}
+                  </CardDescription>
+                </CardHeader>
+
+                <CardContent className="space-y-3 pt-4">
+                  {/* Toggle for background */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between border rounded-lg px-4 py-3">
+                      <div className="space-y-1">
+                        <Label className="text-slate-700 text-sm font-medium">
+                          {t("showIconBackground")}
+                        </Label>
+                        <p className="text-sm text-muted-foreground">
+                          {t("showIconBackground_description")}
+                        </p>
+                      </div>
+                      <Switch
+                        checked={formData.social_icon_bg_show}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            social_icon_bg_show: checked,
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {/* Select background color */}
+                  <div className="space-y-2">
+                    <div>
+                      <Label className="text-slate-700 text-sm font-medium">
+                        {t("iconBackgroundColor")}
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        {t("iconBackgroundColor_description")}
+                      </p>
+                    </div>
+                    <ColorSelector
+                      value={formData.social_icon_bg_color}
+                      onChange={(val) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          social_icon_bg_color: val,
+                        }))
+                      }
+                    />
+                  </div>
+
+                  {/* Select icon color */}
+                  <div className="space-y-2">
+                    <div>
+                      <Label className="text-slate-700 text-sm font-medium">
+                        {t("iconColor")}
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        {t("iconColor_description")}
+                      </p>
+                    </div>
+                    <ColorSelector
+                      value={formData.social_icon_color}
+                      onChange={(val) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          social_icon_color: val,
+                        }))
+                      }
+                    />
+                  </div>
+                  {/* Horizonal Gap Between icons  */}
+                  <div className="space-y-2">
+                    <div>
+                      <Label className="text-slate-700 text-sm font-medium">
+                        {t("horizontalGapBetweenIcons")}
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        {t("horizontalGapBetweenIcons_description")}
+                      </p>
+                    </div>
+                    <Select
+                      value={String(formData.social_icon_gap)}
+                      onValueChange={(value) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          social_icon_gap: parseInt(value),
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("selectGapPlaceholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[...Array(12)].map((_, i) => {
+                          const gap = i * 2;
+                          if (gap === 0) return null;
+                          return (
+                            <SelectItem key={gap} value={String(gap)}>
+                              {gap}px
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="colors">
+              <div className="space-y-4">
+                <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
+                  <CardHeader className="py-4 font-poppins bg-gray-100/50">
+                    <CardTitle className="text-slate-900">
+                      {t("background")}
+                    </CardTitle>
+                    <CardDescription className="text-slate-500">
+                      {t("background_description")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4 pt-4">
+                    <RadioGroup
+                      value={formData.bg_type}
+                      onValueChange={(value: string) =>
+                        updateFormData({
+                          bg_type: value as "color" | "gradient" | "image",
+                        })
+                      }
+                      className="grid md:grid-cols-3 w-full  gap-3"
+                    >
+                      <div>
+                        <RadioGroupItem
+                          value="color"
+                          id="color"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="color"
+                          className="flex flex-col md:w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                        >
+                          <div className="w-full h-8 rounded bg-teal-600 mb-2"></div>
+                          <span className="text-slate-700">
+                            {t("solidColor")}
+                          </span>
+                        </Label>
+                      </div>
+
+                      <div>
+                        <RadioGroupItem
+                          value="gradient"
+                          id="gradient"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="gradient"
+                          className="flex flex-col md:w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                        >
+                          <div className="w-full h-8 rounded bg-gradient-to-r from-teal-500 to-blue-500 mb-2"></div>
+                          <span className="text-slate-700">
+                            {t("gradient")}
+                          </span>
+                        </Label>
+                      </div>
+
+                      <div>
+                        <RadioGroupItem
+                          value="image"
+                          id="image"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="image"
+                          className="flex flex-col md:w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
+                        >
+                          <div className="w-full h-8 rounded bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center mb-2">
+                            <ImageIcon className="h-6 w-6 text-slate-400" />
+                          </div>
+                          <span className="text-slate-700">{t("image")}</span>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+
+                    {formData.bg_type === "color" && (
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label className="text-slate-700">
+                            {t("backgroundColor")}
+                          </Label>
+                          <ColorSelector
+                            value={formData.bg_color}
+                            colors={[
+                              "#FFFFFF",
+                              "#000000",
+                              ...colorPresets.map((item) => item.color),
+                            ]}
+                            onChange={(val) =>
+                              updateFormData({ bg_color: val })
+                            }
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {formData.bg_type === "gradient" && (
+                      <div className="space-y-4">
+                        <div className="space-y-3">
+                          <Label className="text-slate-700">
+                            {t("gradientPresets")}
+                          </Label>
+
+                          <div className="grid grid-cols-10 gap-2">
+                            {gradientPresets.map((preset) => (
+                              <button
+                                key={preset.name}
+                                onClick={() =>
+                                  updateFormData({
+                                    bg_gradient_start: preset.start,
+                                    bg_gradient_end: preset.end,
+                                  })
+                                }
+                                className="w-full aspect-square rounded-lg overflow-hidden hover:ring-2 ring-offset-2 ring-teal-600 transition-all"
+                                style={{
+                                  background: `linear-gradient(to bottom right, ${preset.start}, ${preset.end})`,
+                                }}
+                                title={preset.name}
+                              />
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <Label className="text-slate-700">
+                            {t("gradientDirection")}
+                          </Label>
+                          <Select
+                            value={formData.gradient_direction}
+                            onValueChange={(value) =>
+                              updateFormData({
+                                gradient_direction: value as GradientDirection,
+                              })
+                            }
+                          >
+                            <SelectTrigger className="border-slate-200 !py-5 w-full">
+                              <SelectValue
+                                placeholder={t("selectDirectionPlaceholder")}
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {gradientDirectionsLangs[locale].map(
+                                (direction) => (
+                                  <SelectItem
+                                    key={direction.value}
+                                    value={direction.value}
+                                  >
+                                    <div className="flex flex-col items-start">
+                                      <span>{direction.label}</span>
+                                      <span className="text-xs text-slate-500">
+                                        {direction.preview}
+                                      </span>
                                     </div>
+                                  </SelectItem>
+                                ),
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
 
-                                    <div className="space-y-4">
-                                        <Label className="text-slate-700">
-                                            {t("style")}
-                                        </Label>
-                                        <RadioGroup
-                                            value={formData.button_variant}
-                                            onValueChange={(value: string) =>
-                                                updateFormData({ button_variant: value as "solid" | "outline" })
-                                            }
-                                            className="grid grid-cols-2 gap-4"
-                                        >
-                                            <div>
-                                                <RadioGroupItem value="solid" id="solid" className="peer sr-only" />
-                                                <Label
-                                                    htmlFor="solid"
-                                                    className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
-                                                >
-                                                    <div className="w-full h-10 rounded-xl bg-gradient-to-r from-main-green to-main-blue flex items-center justify-center">
-                                                        <span className="text-white text-xs font-medium">
-                                                            {t("solid")}
-                                                        </span>
-                                                    </div>
-                                                    <span className="text-slate-700">
-                                                        {/* {t("solid")} */}
-                                                    </span>
-                                                </Label>
-                                            </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-2">
+                            <Label className="text-slate-700">
+                              {t("startColor")}
+                            </Label>
+                            <ColorSelector
+                              value={formData.bg_gradient_start}
+                              colors={[
+                                "#FFFFFF",
+                                "#000000",
+                                ...colorPresets.map((item) => item.color),
+                              ]}
+                              onChange={(val) =>
+                                updateFormData({ bg_gradient_start: val })
+                              }
+                            />
+                          </div>
 
-                                            <div>
-                                                <RadioGroupItem value="outline" id="outline" className="peer sr-only" />
-                                                <Label
-                                                    htmlFor="outline"
-                                                    className="flex flex-col items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
-                                                >
-                                                    <div className="w-full h-10 rounded-xl bg-white border-2 border-teal-600 flex items-center justify-center">
-                                                        <span className="text-teal-600 text-xs font-medium">
-                                                            {t("outline")}
-                                                        </span>
-                                                    </div>
-                                                    <span className="text-slate-700">
-                                                        {/* {t("outline")} */}
-                                                    </span>
-                                                </Label>
-                                            </div>
-                                        </RadioGroup>
-                                    </div>
-                                    {/* button icons show  */}
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between border rounded-lg px-4 py-3">
-                                            <div className="space-y-1">
-                                                <Label className="text-slate-700 text-sm font-medium">
-                                                    {t("showIconsOnButtons")}
-                                                </Label>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {t("showIconsOnButtons_description")}
-                                                </p>
-                                            </div>
-                                            <Switch
-                                                checked={formData.button_icons_show}
-                                                onCheckedChange={(checked) =>
-                                                    setFormData((prev) => ({ ...prev, button_icons_show: checked }))
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                    {/* Gap between buttons (vertical spacing) */}
-                                    <div className="space-y-2">
-                                        <div>
-                                            <Label className="text-slate-700 text-sm font-medium">
-                                                {t("verticalGapBetweenButtons")}
-                                            </Label>
-                                            <p className="text-sm text-muted-foreground">
-                                                {t("verticalGapBetweenButtons_description")}
-                                            </p>
-                                        </div>
-                                        <Select
-                                            value={String(formData.buttons_gap_in_px)}
-                                            onValueChange={(value) =>
-                                                setFormData((prev) => ({ ...prev, buttons_gap_in_px: parseInt(value) }))
-                                            }
-                                        >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder={t("selectGapPlaceholder")} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {[...Array(16)].map((_, i) => {
-                                                    const gap = i * 2;
-                                                    if (gap === 0) return null
-                                                    return (
-                                                        <SelectItem key={gap} value={String(gap)}>
-                                                            {gap}px
-                                                        </SelectItem>
-                                                    );
-                                                })}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                            <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
-                                <CardHeader className="py-4 gap-1 bg-gray-100/50 font-poppins">
-                                    <CardTitle className="text-slate-900">
-                                        {t("socialIconStyle")}
-                                    </CardTitle>
-                                    <CardDescription className="text-slate-500">
-                                        {t("socialIconStyle_description")}
-                                    </CardDescription>
-                                </CardHeader>
+                          <div className="space-y-2">
+                            <Label className="text-slate-700">
+                              {t("endColor")}
+                            </Label>
+                            <ColorSelector
+                              value={formData.bg_gradient_end}
+                              colors={[
+                                "#FFFFFF",
+                                "#000000",
+                                ...colorPresets.map((item) => item.color),
+                              ]}
+                              onChange={(val) =>
+                                updateFormData({ bg_gradient_end: val })
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
-                                <CardContent className="space-y-3 pt-4">
-                                    {/* Toggle for background */}
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between border rounded-lg px-4 py-3">
-                                            <div className="space-y-1">
-                                                <Label className="text-slate-700 text-sm font-medium">
-                                                    {t("showIconBackground")}
-                                                </Label>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {t("showIconBackground_description")}
-                                                </p>
-                                            </div>
-                                            <Switch
-                                                checked={formData.social_icon_bg_show}
-                                                onCheckedChange={(checked) =>
-                                                    setFormData((prev) => ({ ...prev, social_icon_bg_show: checked }))
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Select background color */}
-                                    <div className="space-y-2">
-                                        <div>
-                                            <Label className="text-slate-700 text-sm font-medium">
-                                                {t("iconBackgroundColor")}
-                                            </Label>
-                                            <p className="text-sm text-muted-foreground">
-                                                {t("iconBackgroundColor_description")}
-                                            </p>
-                                        </div>
-                                        <ColorSelector
-                                            value={formData.social_icon_bg_color}
-                                            onChange={(val) => setFormData((prev) => ({ ...prev, social_icon_bg_color: val }))}
-                                        />
-                                    </div>
-
-                                    {/* Select icon color */}
-                                    <div className="space-y-2">
-                                        <div>
-                                            <Label className="text-slate-700 text-sm font-medium">
-                                                {t("iconColor")}
-                                            </Label>
-                                            <p className="text-sm text-muted-foreground">
-                                                {t("iconColor_description")}
-                                            </p>
-                                        </div>
-                                        <ColorSelector
-                                            value={formData.social_icon_color}
-                                            onChange={(val) => setFormData((prev) => ({ ...prev, social_icon_color: val }))}
-                                        />
-                                    </div>
-                                    {/* Horizonal Gap Between icons  */}
-                                    <div className="space-y-2">
-                                        <div>
-                                            <Label className="text-slate-700 text-sm font-medium">
-                                                {t("horizontalGapBetweenIcons")}
-                                            </Label>
-                                            <p className="text-sm text-muted-foreground">
-                                                {t("horizontalGapBetweenIcons_description")}
-                                            </p>
-                                        </div>
-                                        <Select
-                                            value={String(formData.social_icon_gap)}
-                                            onValueChange={(value) =>
-                                                setFormData((prev) => ({ ...prev, social_icon_gap: parseInt(value) }))
-                                            }
-                                        >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder={t("selectGapPlaceholder")} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {[...Array(12)].map((_, i) => {
-                                                    const gap = i * 2;
-                                                    if (gap === 0) return null
-                                                    return (
-                                                        <SelectItem key={gap} value={String(gap)}>
-                                                            {gap}px
-                                                        </SelectItem>
-                                                    );
-                                                })}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
-
-
-
-                        <TabsContent value="colors">
-                            <div className="space-y-4">
-                                <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
-                                    <CardHeader className="py-4 font-poppins bg-gray-100/50">
-                                        <CardTitle className="text-slate-900">
-                                            {t("background")}
-                                        </CardTitle>
-                                        <CardDescription className="text-slate-500">
-                                            {t("background_description")}
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4 pt-4">
-                                        <RadioGroup
-                                            value={formData.bg_type}
-                                            onValueChange={(value: string) =>
-                                                updateFormData({ bg_type: value as "color" | "gradient" | "image" })
-                                            }
-                                            className="flex gap-3"
-                                        >
-                                            <div>
-                                                <RadioGroupItem value="color" id="color" className="peer sr-only" />
-                                                <Label
-                                                    htmlFor="color"
-                                                    className="flex flex-col w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
-                                                >
-                                                    <div className="w-full h-8 rounded bg-teal-600 mb-2"></div>
-                                                    <span className="text-slate-700">
-                                                        {t("solidColor")}
-                                                    </span>
-                                                </Label>
-                                            </div>
-
-                                            <div>
-                                                <RadioGroupItem value="gradient" id="gradient" className="peer sr-only" />
-                                                <Label
-                                                    htmlFor="gradient"
-                                                    className="flex flex-col w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
-                                                >
-                                                    <div className="w-full h-8 rounded bg-gradient-to-r from-teal-500 to-blue-500 mb-2"></div>
-                                                    <span className="text-slate-700">
-                                                        {t("gradient")}
-                                                    </span>
-                                                </Label>
-                                            </div>
-
-                                            <div>
-                                                <RadioGroupItem value="image" id="image" className="peer sr-only" />
-                                                <Label
-                                                    htmlFor="image"
-                                                    className="flex flex-col w-[120px] items-center justify-between rounded-md border-2 border-slate-200 bg-white p-4 hover:bg-slate-50 hover:border-slate-300 peer-data-[state=checked]:border-teal-600 [&:has([data-state=checked])]:border-teal-600 cursor-pointer"
-                                                >
-                                                    <div className="w-full h-8 rounded bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center mb-2">
-                                                        <ImageIcon className="h-6 w-6 text-slate-400" />
-                                                    </div>
-                                                    <span className="text-slate-700">
-                                                        {t("image")}
-                                                    </span>
-                                                </Label>
-                                            </div>
-                                        </RadioGroup>
-
-                                        {formData.bg_type === "color" && (
-                                            <div className="space-y-4">
-                                                <div className="space-y-2">
-                                                    <Label className="text-slate-700">
-                                                        {t("backgroundColor")}
-                                                    </Label>
-                                                    <ColorSelector
-                                                        value={formData.bg_color}
-                                                        colors={["#FFFFFF", "#000000", ...colorPresets.map((item => item.color))]}
-                                                        onChange={(val) => updateFormData({ bg_color: val })}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {formData.bg_type === "gradient" && (
-                                            <div className="space-y-4">
-                                                <div className="space-y-3">
-                                                    <Label className="text-slate-700">
-                                                        {t("gradientPresets")}
-                                                    </Label>
-
-                                                    <div className="grid grid-cols-10 gap-2">
-                                                        {gradientPresets.map((preset) => (
-                                                            <button
-                                                                key={preset.name}
-                                                                onClick={() =>
-                                                                    updateFormData({
-                                                                        bg_gradient_start: preset.start,
-                                                                        bg_gradient_end: preset.end,
-                                                                    })
-                                                                }
-                                                                className="w-full aspect-square rounded-lg overflow-hidden hover:ring-2 ring-offset-2 ring-teal-600 transition-all"
-                                                                style={{
-                                                                    background: `linear-gradient(to bottom right, ${preset.start}, ${preset.end})`,
-                                                                }}
-                                                                title={preset.name}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                </div>
-
-                                                <div className="space-y-3">
-                                                    <Label className="text-slate-700">
-                                                        {t("gradientDirection")}
-                                                    </Label>
-                                                    <Select
-                                                        value={formData.gradient_direction}
-                                                        onValueChange={(value) => updateFormData({ gradient_direction: value as GradientDirection })}
-                                                    >
-                                                        <SelectTrigger className="border-slate-200 !py-5 w-full">
-                                                            <SelectValue placeholder={t("selectDirectionPlaceholder")} />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {gradientDirectionsLangs[locale].map((direction) => (
-                                                                <SelectItem key={direction.value} value={direction.value} >
-                                                                    <div className="flex flex-col items-start">
-                                                                        <span>{direction.label}</span>
-                                                                        <span className="text-xs text-slate-500">{direction.preview}</span>
-                                                                    </div>
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-
-                                                <div className="grid grid-cols-2 gap-3">
-                                                    <div className="space-y-2">
-                                                        <Label className="text-slate-700">
-                                                            {t("startColor")}
-                                                        </Label>
-                                                        <ColorSelector
-                                                            value={formData.bg_gradient_start}
-                                                            colors={["#FFFFFF", "#000000", ...colorPresets.map((item => item.color))]}
-                                                            onChange={(val) => updateFormData({ bg_gradient_start: val })}
-                                                        />
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                        <Label className="text-slate-700">
-                                                            {t("endColor")}
-                                                        </Label>
-                                                        <ColorSelector
-                                                            value={formData.bg_gradient_end}
-                                                            colors={["#FFFFFF", "#000000", ...colorPresets.map((item => item.color))]}
-                                                            onChange={(val) => updateFormData({ bg_gradient_end: val })}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {formData.bg_type === "image" && (
-                                            <div className="space-y-4">
-                                                <div className="space-y-2">
-                                                    <Label className="text-slate-700">
-                                                        {t("imageUrl")}
-                                                    </Label>
-                                                    {/* <div className="flex items-center gap-2">
+                    {formData.bg_type === "image" && (
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label className="text-slate-700">
+                            {t("imageUrl")}
+                          </Label>
+                          {/* <div className="flex items-center gap-2">
                                                         <Input
                                                             type="url"
                                                             value={formData.bg_image_url || ""}
@@ -685,648 +794,734 @@ export default function AppearancePage() {
                                                     <p className="text-xs text-slate-500">
                                                         {t("imageUrl_hint")}
                                                     </p> */}
-                                                    <div className="relative">
-                                                        {/* Hidden file input */}
-                                                        <Input
-                                                            id="logo_file"
-                                                            type="file"
-                                                            accept="image/*"
-                                                            disabled={saving || uploadingLogo}
-                                                            onChange={(e) => handleFileChange(e.target.files?.[0])}
-                                                            className="hidden"
-                                                        />
+                          <div className="relative">
+                            {/* Hidden file input */}
+                            <Input
+                              id="logo_file"
+                              type="file"
+                              accept="image/*"
+                              disabled={saving || uploadingLogo}
+                              onChange={(e) =>
+                                handleFileChange(e.target.files?.[0])
+                              }
+                              className="hidden"
+                            />
 
-                                                        {/* Upload button */}
-                                                        <Button
-                                                            type="button"
-                                                            disabled={saving || uploadingLogo}
-                                                            onClick={() => document.getElementById("logo_file")?.click()}
-                                                            className="w-full text-sm! cursor-pointer"
-                                                            variant={"outline"}
-                                                        >
-                                                            {uploadingLogo ? (
-                                                                <>
-                                                                    <Loader className="animate-spin" />
-                                                                </>
-                                                            )
-                                                                :
-                                                                <>
-                                                                    <Upload />
-                                                                </>
-                                                            }
-                                                        </Button>
-                                                    </div>
-                                                    <p className="text-xs text-slate-500">
-                                                        {t("imageUrl_hint")}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </CardContent>
-                                </Card>
-
-                                <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
-                                    <CardHeader className="py-4 font-poppins bg-gray-100/50">
-                                        <CardTitle className="text-slate-900">
-                                            {t("accentColor")}
-                                        </CardTitle>
-                                        <CardDescription className="text-slate-500">
-                                            {t("accentColor_description")}
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4 pt-4">
-                                        <div className="space-y-4">
-                                            <Label className="text-slate-700">
-                                                {t("colorPresets")}
-                                            </Label>
-                                            <div >
-                                                <ColorSelector
-                                                    value={formData.accent_color}
-                                                    colors={colorPresets.map((item => item.color))}
-                                                    onChange={(val) => updateFormData({ accent_color: val })}
-                                                />
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-
-                                <Card className="border-slate-200 gap-0 !pt-0 box-shad-every-2">
-                                    <CardHeader className="py-4 font-poppins bg-gray-100/50">
-                                        <CardTitle className="text-slate-900">
-                                            {t("textColors")}
-                                        </CardTitle>
-                                        <CardDescription className="text-slate-500">
-                                            {t("textColors_description")}
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4 pt-4">
-                                        <div className="space-y-4">
-                                            <div>
-                                                <Label className="text-slate-700">
-                                                    {t("headingsTextColor")}
-                                                </Label>
-                                                <p className="text-xs mt-2 text-slate-500">
-                                                    {t("headingsTextColor_hint")}
-                                                </p>
-                                            </div>
-                                            <div >
-                                                <ColorSelector
-                                                    value={formData.headings_text_color}
-                                                    colors={textColorPresets.map((item => item.color))}
-                                                    onChange={(val) => updateFormData({ headings_text_color: val })}
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-4">
-                                            <div>
-                                                <Label className="text-slate-700">
-                                                    {t("buttonTextIconsColor")}
-                                                </Label>
-                                                <p className="text-xs mt-2 text-slate-500">
-                                                    {t("buttonTextIconsColor_hint")}
-                                                </p>
-                                            </div>
-                                            <div >
-                                                <ColorSelector
-                                                    value={formData.button_text_icons_color}
-                                                    colors={textColorPresets.map((item => item.color))}
-                                                    onChange={(val) => updateFormData({ button_text_icons_color: val })}
-                                                />
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </TabsContent>
-
-                        <TabsContent value="typography">
-                            <Card className="border-slate-200 pt-0 box-shad-every-2">
-                                <CardHeader className="py-4 bg-gray-100/50 font-poppins">
-                                    <CardTitle className="text-slate-900">
-                                        {t("fontSelection")}
-                                    </CardTitle>
-                                    <CardDescription className="text-slate-500">
-                                        {t("fontSelection_description")}
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <Label className="text-slate-700">
-                                                {t("font")}
-                                            </Label>
-                                            <Select
-                                                value={formData.font_family || "var(--font-space-grotesk)"}
-                                                onValueChange={(value) => updateFormData({ font_family: value })}
-                                            >
-                                                <SelectTrigger className="border-slate-200 !h-[50px] w-full">
-                                                    <SelectValue placeholder={t("selectFontPlaceholder")} />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {fonts.map((font) => (
-                                                        <SelectItem key={font.value} value={font.value}>
-                                                            <div className="flex flex-col items-start ">
-                                                                <span style={{ fontFamily: font.value }}>{font.name}</span>
-                                                                {/* <span className="text-xs text-slate-500">{font.preview}</span> */}
-                                                            </div>
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <Label className="text-slate-700">
-                                                {t("preview")}
-                                            </Label>
-                                            <div className="p-4 rounded-lg bg-slate-100" style={{ fontFamily: formData.font_family }}>
-                                                <p className="text-2xl font-bold mb-2 text-slate-900">
-                                                    {t("preview_text_title")}
-                                                </p>
-                                                <p className="text-slate-600">
-                                                    {t("preview_text_paragraph")}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
-                    </Tabs>
-
-                    {/* Floating Action Buttons */}
-                    {hasChanges && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="fixed bottom-6 right-6 flex gap-2 z-50"
-                        >
+                            {/* Upload button */}
                             <Button
-                                onClick={resetForm}
-                                variant="outline"
-                                size="sm"
-                                className={`${ResetChangesBtnClasses} !bg-white`}
+                              type="button"
+                              disabled={saving || uploadingLogo}
+                              onClick={() =>
+                                document.getElementById("logo_file")?.click()
+                              }
+                              className="w-full text-sm! cursor-pointer"
+                              variant={"outline"}
                             >
-                                <RotateCcw className="h-4 w-4" />
-                                {t("reset")}
+                              {uploadingLogo ? (
+                                <>
+                                  <Loader className="animate-spin" />
+                                </>
+                              ) : (
+                                <>
+                                  <Upload />
+                                </>
+                              )}
                             </Button>
-                            <Button
-                                onClick={saveChanges}
-                                disabled={saving}
-                                size="sm"
-                                className={SaveChangesBtnClasses}
-                            >
-                                <Save className="size-4 aspect-square" />
-                                {saving ? t("saving") : t("saveChanges")}
-                            </Button>
-                        </motion.div>
+                          </div>
+                          <p className="text-xs text-slate-500">
+                            {t("imageUrl_hint")}
+                          </p>
+                        </div>
+                      </div>
                     )}
-                </div>
+                  </CardContent>
+                </Card>
 
-                {/* Live Preview */}
-                <div className="lg:sticky lg:top-24 space-y-6">
-                    <Card className="overflow-hidden pt-0 border-slate-200 box-shad-every-2">
-                        <CardHeader className="bg-gray-100/50 py-4 font-poppins">
-                            <CardTitle className="text-slate-900">
-                                {t("livePreview")}
-                            </CardTitle>
-                            <CardDescription className="text-slate-500">
-                                {t("livePreview_description")}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            <div className="mx-auto max-w-[350px] lg:max-w-[390px] p-6">
-                                <div className="relative">
-                                    <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-teal-500/20 to-blue-500/20 blur-xl opacity-30 scale-105 translate-y-2"></div>
+                <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
+                  <CardHeader className="py-4 font-poppins bg-gray-100/50">
+                    <CardTitle className="text-slate-900">
+                      {t("accentColor")}
+                    </CardTitle>
+                    <CardDescription className="text-slate-500">
+                      {t("accentColor_description")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4 pt-4">
+                    <div className="space-y-4">
+                      <Label className="text-slate-700">
+                        {t("colorPresets")}
+                      </Label>
+                      <div>
+                        <ColorSelector
+                          value={formData.accent_color}
+                          colors={colorPresets.map((item) => item.color)}
+                          onChange={(val) =>
+                            updateFormData({ accent_color: val })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
 
-                                    <div className="relative rounded-[2rem] bg-black overflow-hidden shadow-[0_0_0_12px_rgba(0,0,0,0.8)]">
-                                        <div className="absolute -right-[2px] top-16 w-[3px] h-12 bg-gray-800 rounded-l-lg"></div>
-                                        <div className="absolute -left-[2px] top-20 w-[3px] h-6 bg-gray-800 rounded-r-lg"></div>
-                                        <div className="absolute -left-[2px] top-28 w-[3px] h-6 bg-gray-800 rounded-r-lg"></div>
+                <Card className="border-slate-200 gap-0 !pt-0 box-shad-every-2">
+                  <CardHeader className="py-4 font-poppins bg-gray-100/50">
+                    <CardTitle className="text-slate-900">
+                      {t("textColors")}
+                    </CardTitle>
+                    <CardDescription className="text-slate-500">
+                      {t("textColors_description")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4 pt-4">
+                    <div className="space-y-4">
+                      <div>
+                        <Label className="text-slate-700">
+                          {t("headingsTextColor")}
+                        </Label>
+                        <p className="text-xs mt-2 text-slate-500">
+                          {t("headingsTextColor_hint")}
+                        </p>
+                      </div>
+                      <div>
+                        <ColorSelector
+                          value={formData.headings_text_color}
+                          colors={textColorPresets.map((item) => item.color)}
+                          onChange={(val) =>
+                            updateFormData({ headings_text_color: val })
+                          }
+                        />
+                      </div>
+                    </div>
 
-                                        <div className="absolute top-0 inset-x-0 flex justify-center z-10">
-                                            <div className="w-[84px] h-[32px] bg-black rounded-b-[18px] flex items-center justify-center">
-                                                <div className="w-2.5 h-2.5 rounded-full bg-[#1a1a1a] ring-[3px] ring-[#121212] absolute left-4"></div>
-                                                <div className="w-2 h-2 rounded-full bg-[#1a1a1a] absolute right-4"></div>
-                                            </div>
+                    <div className="space-y-4">
+                      <div>
+                        <Label className="text-slate-700">
+                          {t("buttonTextIconsColor")}
+                        </Label>
+                        <p className="text-xs mt-2 text-slate-500">
+                          {t("buttonTextIconsColor_hint")}
+                        </p>
+                      </div>
+                      <div>
+                        <ColorSelector
+                          value={formData.button_text_icons_color}
+                          colors={textColorPresets.map((item) => item.color)}
+                          onChange={(val) =>
+                            updateFormData({ button_text_icons_color: val })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="typography">
+              <Card className="border-slate-200 pt-0 box-shad-every-2">
+                <CardHeader className="py-4 bg-gray-100/50 font-poppins">
+                  <CardTitle className="text-slate-900">
+                    {t("fontSelection")}
+                  </CardTitle>
+                  <CardDescription className="text-slate-500">
+                    {t("fontSelection_description")}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-slate-700">{t("font")}</Label>
+                      <Select
+                        value={
+                          formData.font_family || "var(--font-space-grotesk)"
+                        }
+                        onValueChange={(value) =>
+                          updateFormData({ font_family: value })
+                        }
+                      >
+                        <SelectTrigger className="border-slate-200 !h-[50px] w-full">
+                          <SelectValue
+                            placeholder={t("selectFontPlaceholder")}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {fonts.map((font) => (
+                            <SelectItem key={font.value} value={font.value}>
+                              <div className="flex flex-col items-start ">
+                                <span style={{ fontFamily: font.value }}>
+                                  {font.name}
+                                </span>
+                                {/* <span className="text-xs text-slate-500">{font.preview}</span> */}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-slate-700">{t("preview")}</Label>
+                      <div
+                        className="p-4 rounded-lg bg-slate-100"
+                        style={{ fontFamily: formData.font_family }}
+                      >
+                        <p className="text-2xl font-bold mb-2 text-slate-900">
+                          {t("preview_text_title")}
+                        </p>
+                        <p className="text-slate-600">
+                          {t("preview_text_paragraph")}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          {/* Floating Action Buttons */}
+          {hasChanges && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="fixed bottom-6 right-6 flex gap-2 z-50"
+            >
+              <Button
+                onClick={resetForm}
+                variant="outline"
+                size="sm"
+                className={`${ResetChangesBtnClasses} !bg-white`}
+              >
+                <RotateCcw className="h-4 w-4" />
+                {t("reset")}
+              </Button>
+              <Button
+                onClick={saveChanges}
+                disabled={saving}
+                size="sm"
+                className={SaveChangesBtnClasses}
+              >
+                <Save className="size-4 aspect-square" />
+                {saving ? t("saving") : t("saveChanges")}
+              </Button>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Live Preview */}
+        <div className="lg:sticky lg:top-24 space-y-6">
+          <Card className="overflow-hidden pt-0 border-slate-200 box-shad-every-2">
+            <CardHeader className="bg-gray-100/50 py-4 font-poppins">
+              <CardTitle className="text-slate-900">
+                {t("livePreview")}
+              </CardTitle>
+              <CardDescription className="text-slate-500">
+                {t("livePreview_description")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="mx-auto max-w-[350px] lg:max-w-[390px] p-6">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-teal-500/20 to-blue-500/20 blur-xl opacity-30 scale-105 translate-y-2"></div>
+
+                  <div className="relative rounded-[2rem] bg-black overflow-hidden shadow-[0_0_0_12px_rgba(0,0,0,0.8)]">
+                    <div className="absolute -right-[2px] top-16 w-[3px] h-12 bg-gray-800 rounded-l-lg"></div>
+                    <div className="absolute -left-[2px] top-20 w-[3px] h-6 bg-gray-800 rounded-r-lg"></div>
+                    <div className="absolute -left-[2px] top-28 w-[3px] h-6 bg-gray-800 rounded-r-lg"></div>
+
+                    <div className="absolute top-0 inset-x-0 flex justify-center z-10">
+                      <div className="w-[84px] h-[32px] bg-black rounded-b-[18px] flex items-center justify-center">
+                        <div className="w-2.5 h-2.5 rounded-full bg-[#1a1a1a] ring-[3px] ring-[#121212] absolute left-4"></div>
+                        <div className="w-2 h-2 rounded-full bg-[#1a1a1a] absolute right-4"></div>
+                      </div>
+                    </div>
+
+                    <div className="relative z-10 flex items-center justify-between text-white px-4 pt-2 text-[12px] font-medium">
+                      <span>{currentTime}</span>
+                      <div className="flex items-center gap-1">
+                        <Signal className="h-3 w-3" />
+                        <Wifi className="h-3 w-3" />
+                        <Battery className="h-3 w-3" />
+                      </div>
+                    </div>
+
+                    <div className="mt-1">
+                      <div
+                        className="min-h-[600px] lg:min-h-[650px] no-scroll overflow-y-auto max-h-[610px]"
+                        style={getBackgroundStyle({
+                          props: {
+                            bg_color: formData?.bg_color || "",
+                            bg_gradient_end: formData.bg_gradient_end || "",
+                            bg_gradient_start:
+                              formData?.bg_gradient_start || "",
+                            bg_image_url: formData?.bg_image_url || "",
+                            bg_type: formData?.bg_type,
+                            gradient_direction: formData?.gradient_direction,
+                          },
+                        })}
+                      >
+                        <div className="p-4 flex flex-col items-center">
+                          {selectedRestaurant?.logo_url ? (
+                            <motion.img
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{
+                                type: "spring",
+                                stiffness: 200,
+                                damping: 15,
+                              }}
+                              src={selectedRestaurant.logo_url}
+                              alt={selectedRestaurant.name}
+                              className="mb-5 h-24 w-24 rounded-full object-cover"
+                              loading="eager"
+                            />
+                          ) : (
+                            <motion.div
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{
+                                type: "spring",
+                                stiffness: 200,
+                                damping: 15,
+                              }}
+                              className="mb-5 flex h-24 w-24 items-center justify-center rounded-full shadow-lg ring-4 ring-white/20 fallback-initial"
+                              style={{ backgroundColor: formData.accent_color }}
+                            >
+                              <span className="text-xl font-bold text-white">
+                                {selectedRestaurant?.name.charAt(0)}
+                              </span>
+                            </motion.div>
+                          )}
+
+                          <motion.h2
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                            className="mb-3 text-2xl font-bold"
+                            style={{
+                              color: formData.headings_text_color,
+                              fontFamily: formData.font_family,
+                            }}
+                          >
+                            {selectedRestaurant?.name}
+                          </motion.h2>
+
+                          {/* Opening Hours Status */}
+                          {openingHours && (
+                            <motion.div
+                              initial={{ y: 20, opacity: 0 }}
+                              animate={{ y: 0, opacity: 1 }}
+                              transition={{ delay: 0.25 }}
+                              className="mb-4"
+                            >
+                              <OpeningHoursStatus
+                                openingHours={openingHours}
+                                color={
+                                  formData.headings_text_color || "#000000"
+                                }
+                                className="text-white cursor-pointer text-center"
+                                accentColor={formData.accent_color || "#10b981"}
+                              />
+                            </motion.div>
+                          )}
+
+                          {selectedRestaurant?.google_place_id &&
+                          reviewLoading ? (
+                            <Skeleton className="w-[80px] h-[36px] animate-pulse" />
+                          ) : reviewData?.rating ? (
+                            <motion.div
+                              initial={{ y: 20, opacity: 0 }}
+                              animate={{ y: 0, opacity: 1 }}
+                              transition={{ delay: 0.25 }}
+                              className="mb-4"
+                            >
+                              <GoogleRating
+                                info={{
+                                  rating: reviewData?.rating,
+                                  user_ratings_total:
+                                    reviewData?.user_ratings_total,
+                                }}
+                                color={
+                                  formData?.headings_text_color || "#000000"
+                                }
+                              />
+                            </motion.div>
+                          ) : (
+                            ""
+                          )}
+
+                          {selectedRestaurant?.bio && (
+                            <motion.p
+                              initial={{ y: 20, opacity: 0 }}
+                              animate={{ y: 0, opacity: 1 }}
+                              transition={{ delay: 0.3 }}
+                              className="mx-auto mb-4 text-center max-w-md text-sm"
+                              style={{
+                                color: formData.headings_text_color,
+                                opacity: 0.9,
+                                fontFamily: formData.font_family,
+                              }}
+                            >
+                              {selectedRestaurant.bio}
+                            </motion.p>
+                          )}
+
+                          {(selectedRestaurant?.instagram ||
+                            selectedRestaurant?.facebook ||
+                            selectedRestaurant?.email ||
+                            selectedRestaurant?.address ||
+                            selectedRestaurant?.whatsapp) && (
+                            <SocialIcons
+                              restaurant={{
+                                address: selectedRestaurant?.address,
+                                email: selectedRestaurant.email,
+                                facebook: selectedRestaurant.facebook,
+                                instagram: selectedRestaurant.instagram,
+                                whatsapp: selectedRestaurant.whatsapp,
+                                tiktok: selectedRestaurant.tiktok,
+                                phone: selectedRestaurant.phone,
+                              }}
+                              className="mb-4"
+                              theme={{
+                                socialIconColor: formData.social_icon_color,
+                                socialIconBgShow: formData.social_icon_bg_show,
+                                socialIconBgColor:
+                                  formData.social_icon_bg_color,
+                                social_icon_gap: formData.social_icon_gap,
+                              }}
+                            />
+                          )}
+                        </div>
+
+                        <motion.div
+                          variants={container2}
+                          initial="hidden"
+                          animate="show"
+                          className="flex-grow px-4 mb-4 flex flex-col"
+                          style={{ rowGap: `${formData.buttons_gap_in_px}px` }}
+                        >
+                          {linksLoading ? (
+                            <p className="w-full text-center text-sm">
+                              {t("loading")}
+                            </p>
+                          ) : (
+                            <>
+                              {links?.length > 0 ? (
+                                <>
+                                  {links?.map((link) => (
+                                    <div
+                                      key={link.id}
+                                      rel="noopener noreferrer"
+                                      className={`group flex items-center justify-center  text-center w-full h-[52px]  transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} ${
+                                        formData.button_style === "pill"
+                                          ? "rounded-full"
+                                          : formData.button_style === "square"
+                                            ? "rounded-md"
+                                            : "rounded-xl"
+                                      }`}
+                                      style={{
+                                        backgroundColor:
+                                          formData.button_variant === "solid"
+                                            ? formData.accent_color || "#10b981"
+                                            : "transparent",
+                                        backdropFilter: "blur(8px)",
+                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
+                                        boxShadow:
+                                          "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                        color:
+                                          formData.button_variant === "solid"
+                                            ? formData.button_text_icons_color ||
+                                              "#000000"
+                                            : formData.accent_color ||
+                                              "#10b981",
+                                        fontFamily:
+                                          formData.font_family || "Inter",
+                                        letterSpacing: "0.01em",
+                                      }}
+                                    >
+                                      {formData.button_icons_show && (
+                                        <div
+                                          className="flex aspect-square absolute left-[7px]  shrink-0 size-[38px] items-center justify-center rounded-full "
+                                          style={{
+                                            backgroundColor:
+                                              formData.button_text_icons_color ||
+                                              "transparent",
+                                          }}
+                                        >
+                                          {getLucideIconBySlug(link.icon_slug, {
+                                            className: "w-4 h-4",
+                                            style: {
+                                              color:
+                                                formData.accent_color ||
+                                                "transparent",
+                                            },
+                                          })}
                                         </div>
-
-                                        <div className="relative z-10 flex items-center justify-between text-white px-4 pt-2 text-[12px] font-medium">
-                                            <span>{currentTime}</span>
-                                            <div className="flex items-center gap-1">
-                                                <Signal className="h-3 w-3" />
-                                                <Wifi className="h-3 w-3" />
-                                                <Battery className="h-3 w-3" />
-                                            </div>
+                                      )}
+                                      <span
+                                        className={`relative w-full text-[15px] ${
+                                          formData.button_variant === "outline"
+                                            ? "group-hover:text-white"
+                                            : ""
+                                        } transition-colors duration-300 font-medium`}
+                                        style={{
+                                          color:
+                                            formData.button_variant ===
+                                            "outline"
+                                              ? formData.accent_color ||
+                                                "#10b981"
+                                              : formData.button_text_icons_color,
+                                        }}
+                                      >
+                                        {link.title}
+                                      </span>
+                                      {formData.button_icons_show && (
+                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                          <MoreVertical className="size-4" />
                                         </div>
-
-                                        <div className="mt-1">
-                                            <div className="min-h-[600px] lg:min-h-[650px] no-scroll overflow-y-auto max-h-[610px]" style={getBackgroundStyle({
-                                                props: {
-                                                    bg_color: formData?.bg_color || "",
-                                                    bg_gradient_end: formData.bg_gradient_end || "",
-                                                    bg_gradient_start: formData?.bg_gradient_start || "",
-                                                    bg_image_url: formData?.bg_image_url || "",
-                                                    bg_type: formData?.bg_type,
-                                                    gradient_direction: formData?.gradient_direction
-                                                }
-                                            })}>
-                                                <div className="p-4 flex flex-col items-center">
-                                                    {selectedRestaurant?.logo_url ? (
-                                                        <motion.img
-                                                            initial={{ scale: 0.8, opacity: 0 }}
-                                                            animate={{ scale: 1, opacity: 1 }}
-                                                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                                                            src={selectedRestaurant.logo_url}
-                                                            alt={selectedRestaurant.name}
-                                                            className="mb-5 h-24 w-24 rounded-full object-cover"
-                                                            loading="eager" />
-                                                    ) : (
-                                                        <motion.div
-                                                            initial={{ scale: 0.8, opacity: 0 }}
-                                                            animate={{ scale: 1, opacity: 1 }}
-                                                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                                                            className="mb-5 flex h-24 w-24 items-center justify-center rounded-full shadow-lg ring-4 ring-white/20 fallback-initial"
-                                                            style={{ backgroundColor: formData.accent_color }}
-                                                        >
-                                                            <span className="text-xl font-bold text-white">{selectedRestaurant?.name.charAt(0)}</span>
-                                                        </motion.div>
-                                                    )}
-
-                                                    <motion.h2
-                                                        initial={{ y: 20, opacity: 0 }}
-                                                        animate={{ y: 0, opacity: 1 }}
-                                                        transition={{ delay: 0.2 }}
-                                                        className="mb-3 text-2xl font-bold"
-                                                        style={{
-                                                            color: formData.headings_text_color,
-                                                            fontFamily: formData.font_family,
-                                                        }}
-                                                    >
-                                                        {selectedRestaurant?.name}
-                                                    </motion.h2>
-
-                                                    {/* Opening Hours Status */}
-                                                    {openingHours && (
-                                                        <motion.div
-                                                            initial={{ y: 20, opacity: 0 }}
-                                                            animate={{ y: 0, opacity: 1 }}
-                                                            transition={{ delay: 0.25 }}
-                                                            className="mb-4"
-                                                        >
-                                                            <OpeningHoursStatus
-                                                                openingHours={openingHours}
-                                                                color={formData.headings_text_color || "#000000"}
-                                                                className="text-white cursor-pointer text-center"
-                                                                accentColor={formData.accent_color || "#10b981"}
-                                                            />
-                                                        </motion.div>
-                                                    )}
-
-                                                    {
-                                                        selectedRestaurant?.google_place_id &&
-                                                            reviewLoading
-                                                            ?
-                                                            <Skeleton className="w-[80px] h-[36px] animate-pulse" />
-                                                            :
-                                                            reviewData?.rating
-                                                                ?
-                                                                <motion.div
-                                                                    initial={{ y: 20, opacity: 0 }}
-                                                                    animate={{ y: 0, opacity: 1 }}
-                                                                    transition={{ delay: 0.25 }}
-                                                                    className="mb-4"
-                                                                >
-                                                                    <GoogleRating info={{
-                                                                        rating: reviewData?.rating,
-                                                                        user_ratings_total: reviewData?.user_ratings_total
-                                                                    }}
-                                                                        color={formData?.headings_text_color || "#000000"}
-                                                                    />
-                                                                </motion.div>
-                                                                :
-                                                                ""
-                                                    }
-
-                                                    {selectedRestaurant?.bio && (
-                                                        <motion.p
-                                                            initial={{ y: 20, opacity: 0 }}
-                                                            animate={{ y: 0, opacity: 1 }}
-                                                            transition={{ delay: 0.3 }}
-                                                            className="mx-auto mb-4 text-center max-w-md text-sm"
-                                                            style={{
-                                                                color: formData.headings_text_color,
-                                                                opacity: 0.9,
-                                                                fontFamily: formData.font_family,
-                                                            }}
-                                                        >
-                                                            {selectedRestaurant.bio}
-                                                        </motion.p>
-                                                    )}
-
-                                                    {(selectedRestaurant?.instagram ||
-                                                        selectedRestaurant?.facebook ||
-                                                        selectedRestaurant?.email ||
-                                                        selectedRestaurant?.address ||
-                                                        selectedRestaurant?.whatsapp)
-                                                        &&
-                                                        <SocialIcons
-                                                            restaurant={
-                                                                {
-                                                                    address: selectedRestaurant?.address,
-                                                                    email: selectedRestaurant.email,
-                                                                    facebook: selectedRestaurant.facebook,
-                                                                    instagram: selectedRestaurant.instagram,
-                                                                    whatsapp: selectedRestaurant.whatsapp,
-                                                                    tiktok: selectedRestaurant.tiktok,
-                                                                    phone: selectedRestaurant.phone
-                                                                }
-                                                            }
-                                                            className="mb-4"
-                                                            theme={{
-                                                                socialIconColor: formData.social_icon_color,
-                                                                socialIconBgShow: formData.social_icon_bg_show,
-                                                                socialIconBgColor: formData.social_icon_bg_color,
-                                                                social_icon_gap: formData.social_icon_gap
-                                                            }}
-                                                        />
-                                                    }
-                                                </div>
-
-                                                <motion.div variants={container2} initial="hidden" animate="show"
-                                                    className="flex-grow px-4 mb-4 flex flex-col"
-                                                    style={{ rowGap: `${formData.buttons_gap_in_px}px` }}
-                                                >
-                                                    {
-                                                        linksLoading ?
-                                                            <p className="w-full text-center text-sm">
-                                                                {t("loading")}
-                                                            </p>
-                                                            :
-                                                            <>
-                                                                {
-                                                                    links?.length > 0
-                                                                        ?
-                                                                        <>
-                                                                            {links?.map((link) => (
-                                                                                <div
-                                                                                    key={link.id}
-                                                                                    rel="noopener noreferrer"
-                                                                                    className={`group flex items-center justify-center  text-center w-full h-[52px]  transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} ${formData.button_style === "pill"
-                                                                                        ? "rounded-full"
-                                                                                        : formData.button_style === "square"
-                                                                                            ? "rounded-md"
-                                                                                            : "rounded-xl"
-                                                                                        }`}
-                                                                                    style={{
-                                                                                        backgroundColor:
-                                                                                            formData.button_variant === "solid"
-                                                                                                ? formData.accent_color || "#10b981"
-                                                                                                : "transparent",
-                                                                                        backdropFilter: "blur(8px)",
-                                                                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
-                                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                                                                        color: formData.button_variant === "solid" ? formData.button_text_icons_color || "#000000" : formData.accent_color || "#10b981",
-                                                                                        fontFamily: formData.font_family || "Inter",
-                                                                                        letterSpacing: "0.01em",
-                                                                                    }}
-                                                                                >
-
-                                                                                    {
-                                                                                        formData.button_icons_show
-                                                                                        &&
-                                                                                        <div className="flex aspect-square absolute left-[7px]  shrink-0 size-[38px] items-center justify-center rounded-full "
-                                                                                            style={{
-                                                                                                backgroundColor: formData.button_text_icons_color || "transparent"
-                                                                                            }}
-                                                                                        >
-                                                                                            {getLucideIconBySlug(link.icon_slug, { className: "w-4 h-4", style: { color: formData.accent_color || "transparent" } })}
-                                                                                        </div>
-                                                                                    }
-                                                                                    <span
-                                                                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
-                                                                                            } transition-colors duration-300 font-medium`}
-                                                                                        style={{
-                                                                                            color:
-                                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : formData.button_text_icons_color,
-                                                                                        }}
-                                                                                    >
-                                                                                        {link.title}
-                                                                                    </span>
-                                                                                    {
-                                                                                        formData.button_icons_show
-                                                                                        &&
-                                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                                                                            <MoreVertical className="size-4" />
-                                                                                        </div>
-                                                                                    }
-                                                                                </div>
-                                                                            ))}
-                                                                        </>
-                                                                        :
-                                                                        <p className="w-full text-center text-sm">
-                                                                            {t("noLinksYet")}
-                                                                        </p>
-                                                                }
-                                                            </>
-                                                    }
-                                                    {
-                                                        categories &&
-                                                        <>
-                                                            {categories?.length > 0 && hasMenuItems && (
-                                                                <motion.button
-                                                                    variants={itemSlugPage}
-                                                                    className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
-                                                                        ? "rounded-full"
-                                                                        : formData.button_style === "square"
-                                                                            ? "rounded-md"
-                                                                            : "rounded-xl"
-                                                                        }`}
-                                                                    style={{
-                                                                        backgroundColor:
-                                                                            formData.button_variant === "solid"
-                                                                                ? formData.accent_color || "#10b981"
-                                                                                : "transparent",
-                                                                        backdropFilter: "blur(8px)",
-                                                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
-                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                                                        color: formData.button_variant === "solid" ? buttonTextColor : formData.accent_color || "#10b981",
-                                                                        fontFamily: formData.font_family || "Inter",
-                                                                        letterSpacing: "0.01em",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        formData?.button_icons_show
-                                                                        &&
-                                                                        <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
-                                                                            style={{
-                                                                                backgroundColor: formData.button_text_icons_color || "transparent"
-                                                                            }}
-                                                                        >
-                                                                            {getLucideIconBySlug("menu", { className: "w-4 h-4", style: { color: formData.accent_color || "transparent" } })}
-                                                                        </div>
-                                                                    }
-                                                                    <span
-                                                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
-                                                                            } transition-colors duration-300 font-medium`}
-                                                                        style={{
-                                                                            color:
-                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : buttonTextColor,
-                                                                        }}
-                                                                    >
-
-                                                                        {t2("btns.menu")}
-                                                                    </span>
-                                                                    {
-                                                                        formData?.button_icons_show
-                                                                        &&
-                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                                                            <MoreVertical className="size-4" />
-                                                                        </div>
-                                                                    }
-                                                                </motion.button>
-                                                            )}
-                                                        </>
-                                                    }
-
-                                                    {
-                                                        events &&
-                                                        <>
-                                                            {events.length > 0 && (
-                                                                <motion.button
-                                                                    variants={itemSlugPage}
-                                                                    className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
-                                                                        ? "rounded-full"
-                                                                        : formData.button_style === "square"
-                                                                            ? "rounded-md"
-                                                                            : "rounded-xl"
-                                                                        }`}
-                                                                    style={{
-                                                                        backgroundColor:
-                                                                            formData.button_variant === "solid"
-                                                                                ? formData.accent_color || "#10b981"
-                                                                                : "transparent",
-                                                                        backdropFilter: "blur(8px)",
-                                                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
-                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                                                        color: formData.button_variant === "solid" ? buttonTextColor : formData.accent_color || "#10b981",
-                                                                        fontFamily: formData.font_family || "Inter",
-                                                                        letterSpacing: "0.01em",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        formData?.button_icons_show
-                                                                        &&
-                                                                        <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
-                                                                            style={{
-                                                                                backgroundColor: formData.button_text_icons_color || "transparent"
-                                                                            }}
-                                                                        >
-                                                                            {getLucideIconBySlug("events", { className: "w-4 h-4", style: { color: formData.accent_color || "transparent" } })}
-                                                                        </div>
-                                                                    }
-                                                                    <span
-                                                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
-                                                                            } transition-colors duration-300 font-medium`}
-                                                                        style={{
-                                                                            color:
-                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : buttonTextColor,
-                                                                        }}
-                                                                    >
-                                                                        {t2("btns.events")}
-                                                                    </span>
-                                                                    {
-                                                                        formData?.button_icons_show
-                                                                        &&
-                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                                                            <MoreVertical className="size-4" />
-                                                                        </div>
-                                                                    }
-                                                                </motion.button>
-                                                            )}
-                                                        </>
-                                                    }
-                                                    {faqcategories
-                                                        &&
-                                                        <>
-                                                            {faqcategories.length > 0 && hasFaqsItems && (
-                                                                <motion.button
-                                                                    variants={itemSlugPage}
-                                                                    className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
-                                                                        ? "rounded-full"
-                                                                        : formData.button_style === "square"
-                                                                            ? "rounded-md"
-                                                                            : "rounded-xl"
-                                                                        }`}
-                                                                    style={{
-                                                                        backgroundColor:
-                                                                            formData.button_variant === "solid"
-                                                                                ? formData.accent_color || "#10b981"
-                                                                                : "transparent",
-                                                                        backdropFilter: "blur(8px)",
-                                                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
-                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                                                        color: formData.button_variant === "solid" ? buttonTextColor : formData.accent_color || "#10b981",
-                                                                        fontFamily: formData.font_family || "Inter",
-                                                                        letterSpacing: "0.01em",
-                                                                    }}
-                                                                >
-
-                                                                    {
-                                                                        formData?.button_icons_show
-                                                                        &&
-                                                                        <div className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
-                                                                            style={{
-                                                                                backgroundColor: formData.button_text_icons_color || "transparent"
-                                                                            }}
-                                                                        >
-                                                                            {getLucideIconBySlug("faq", { className: "w-4 h-4", style: { color: formData.accent_color || "transparent" } })}
-                                                                        </div>
-                                                                    }
-                                                                    <span
-                                                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline" ? "group-hover:text-white" : ""
-                                                                            } transition-colors duration-300 font-medium`}
-                                                                        style={{
-                                                                            color:
-                                                                                formData.button_variant === "outline" ? formData.accent_color || "#10b981" : buttonTextColor,
-                                                                        }}
-                                                                    >
-
-                                                                        {t2("btns.faq")}
-                                                                    </span>
-                                                                    {
-                                                                        formData?.button_icons_show
-                                                                        &&
-                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                                                            <MoreVertical className="size-4" />
-                                                                        </div>
-                                                                    }
-
-                                                                </motion.button>
-                                                            )}
-
-                                                        </>
-                                                    }
-                                                </motion.div>
-                                            </div>
-
-                                            <div className="absolute bottom-1 inset-x-0 flex justify-center pb-1">
-                                                <div className="w-[100px] h-1 bg-white/30 rounded-full"></div>
-                                            </div>
-                                        </div>
+                                      )}
                                     </div>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
+                                  ))}
+                                </>
+                              ) : (
+                                <p className="w-full text-center text-sm">
+                                  {t("noLinksYet")}
+                                </p>
+                              )}
+                            </>
+                          )}
+                          {categories && (
+                            <>
+                              {categories?.length > 0 && hasMenuItems && (
+                                <motion.button
+                                  variants={itemSlugPage}
+                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${
+                                    formData.button_style === "pill"
+                                      ? "rounded-full"
+                                      : formData.button_style === "square"
+                                        ? "rounded-md"
+                                        : "rounded-xl"
+                                  }`}
+                                  style={{
+                                    backgroundColor:
+                                      formData.button_variant === "solid"
+                                        ? formData.accent_color || "#10b981"
+                                        : "transparent",
+                                    backdropFilter: "blur(8px)",
+                                    border: `2px solid ${formData.accent_color || "#10b981"}`,
+                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                    color:
+                                      formData.button_variant === "solid"
+                                        ? buttonTextColor
+                                        : formData.accent_color || "#10b981",
+                                    fontFamily: formData.font_family || "Inter",
+                                    letterSpacing: "0.01em",
+                                  }}
+                                >
+                                  {formData?.button_icons_show && (
+                                    <div
+                                      className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                      style={{
+                                        backgroundColor:
+                                          formData.button_text_icons_color ||
+                                          "transparent",
+                                      }}
+                                    >
+                                      {getLucideIconBySlug("menu", {
+                                        className: "w-4 h-4",
+                                        style: {
+                                          color:
+                                            formData.accent_color ||
+                                            "transparent",
+                                        },
+                                      })}
+                                    </div>
+                                  )}
+                                  <span
+                                    className={`relative w-full text-[15px] ${
+                                      formData.button_variant === "outline"
+                                        ? "group-hover:text-white"
+                                        : ""
+                                    } transition-colors duration-300 font-medium`}
+                                    style={{
+                                      color:
+                                        formData.button_variant === "outline"
+                                          ? formData.accent_color || "#10b981"
+                                          : buttonTextColor,
+                                    }}
+                                  >
+                                    {t2("btns.menu")}
+                                  </span>
+                                  {formData?.button_icons_show && (
+                                    <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                      <MoreVertical className="size-4" />
+                                    </div>
+                                  )}
+                                </motion.button>
+                              )}
+                            </>
+                          )}
+
+                          {events && (
+                            <>
+                              {events.length > 0 && (
+                                <motion.button
+                                  variants={itemSlugPage}
+                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${
+                                    formData.button_style === "pill"
+                                      ? "rounded-full"
+                                      : formData.button_style === "square"
+                                        ? "rounded-md"
+                                        : "rounded-xl"
+                                  }`}
+                                  style={{
+                                    backgroundColor:
+                                      formData.button_variant === "solid"
+                                        ? formData.accent_color || "#10b981"
+                                        : "transparent",
+                                    backdropFilter: "blur(8px)",
+                                    border: `2px solid ${formData.accent_color || "#10b981"}`,
+                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                    color:
+                                      formData.button_variant === "solid"
+                                        ? buttonTextColor
+                                        : formData.accent_color || "#10b981",
+                                    fontFamily: formData.font_family || "Inter",
+                                    letterSpacing: "0.01em",
+                                  }}
+                                >
+                                  {formData?.button_icons_show && (
+                                    <div
+                                      className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                      style={{
+                                        backgroundColor:
+                                          formData.button_text_icons_color ||
+                                          "transparent",
+                                      }}
+                                    >
+                                      {getLucideIconBySlug("events", {
+                                        className: "w-4 h-4",
+                                        style: {
+                                          color:
+                                            formData.accent_color ||
+                                            "transparent",
+                                        },
+                                      })}
+                                    </div>
+                                  )}
+                                  <span
+                                    className={`relative w-full text-[15px] ${
+                                      formData.button_variant === "outline"
+                                        ? "group-hover:text-white"
+                                        : ""
+                                    } transition-colors duration-300 font-medium`}
+                                    style={{
+                                      color:
+                                        formData.button_variant === "outline"
+                                          ? formData.accent_color || "#10b981"
+                                          : buttonTextColor,
+                                    }}
+                                  >
+                                    {t2("btns.events")}
+                                  </span>
+                                  {formData?.button_icons_show && (
+                                    <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                      <MoreVertical className="size-4" />
+                                    </div>
+                                  )}
+                                </motion.button>
+                              )}
+                            </>
+                          )}
+                          {faqcategories && (
+                            <>
+                              {faqcategories.length > 0 && hasFaqsItems && (
+                                <motion.button
+                                  variants={itemSlugPage}
+                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${
+                                    formData.button_style === "pill"
+                                      ? "rounded-full"
+                                      : formData.button_style === "square"
+                                        ? "rounded-md"
+                                        : "rounded-xl"
+                                  }`}
+                                  style={{
+                                    backgroundColor:
+                                      formData.button_variant === "solid"
+                                        ? formData.accent_color || "#10b981"
+                                        : "transparent",
+                                    backdropFilter: "blur(8px)",
+                                    border: `2px solid ${formData.accent_color || "#10b981"}`,
+                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                    color:
+                                      formData.button_variant === "solid"
+                                        ? buttonTextColor
+                                        : formData.accent_color || "#10b981",
+                                    fontFamily: formData.font_family || "Inter",
+                                    letterSpacing: "0.01em",
+                                  }}
+                                >
+                                  {formData?.button_icons_show && (
+                                    <div
+                                      className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
+                                      style={{
+                                        backgroundColor:
+                                          formData.button_text_icons_color ||
+                                          "transparent",
+                                      }}
+                                    >
+                                      {getLucideIconBySlug("faq", {
+                                        className: "w-4 h-4",
+                                        style: {
+                                          color:
+                                            formData.accent_color ||
+                                            "transparent",
+                                        },
+                                      })}
+                                    </div>
+                                  )}
+                                  <span
+                                    className={`relative w-full text-[15px] ${
+                                      formData.button_variant === "outline"
+                                        ? "group-hover:text-white"
+                                        : ""
+                                    } transition-colors duration-300 font-medium`}
+                                    style={{
+                                      color:
+                                        formData.button_variant === "outline"
+                                          ? formData.accent_color || "#10b981"
+                                          : buttonTextColor,
+                                    }}
+                                  >
+                                    {t2("btns.faq")}
+                                  </span>
+                                  {formData?.button_icons_show && (
+                                    <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                                      <MoreVertical className="size-4" />
+                                    </div>
+                                  )}
+                                </motion.button>
+                              )}
+                            </>
+                          )}
+                        </motion.div>
+                      </div>
+
+                      <div className="absolute bottom-1 inset-x-0 flex justify-center pb-1">
+                        <div className="w-[100px] h-1 bg-white/30 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </main>
-    )
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </main>
+  );
 }
-
-
 
 // {
 //        <TabsContent value="templates">
