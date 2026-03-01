@@ -81,7 +81,7 @@ export function MobileNav() {
                                         {t("login")}
                                     </Button>
                                 </Link>
-                                <Link href="/signup" onClick={() => setOpen(false)}>
+                                <Link href="/sign-up" onClick={() => setOpen(false)}>
                                     <Button className="w-full bg-main hover:bg-main/90">
                                         {t("signup")}
                                     </Button>

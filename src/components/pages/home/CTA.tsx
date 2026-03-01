@@ -14,7 +14,7 @@ const CTA = () => {
                     className="text-center text-[#002147] text-[60px] lg:text-[88px] font-[900] leading-[1.1]"
                     dangerouslySetInnerHTML={{ __html: t.raw("headline") }}
                 />
-                <Link href="/signup">
+                <Link href="/sign-up">
                     <button className="bg-[#009A5E] hover:bg-[#104e37] w-[232px] transition-all text-white font-poppins font-[600] cursor-pointer text-base px-[36px] h-[62px] rounded-full">
                         {t("cta")}
                     </button>

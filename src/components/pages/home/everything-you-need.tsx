@@ -79,7 +79,7 @@ const EverythingYouNeed = () => {
                     <p className='mt-5 sm:mt-7 text-[#1E2330] font-[500] font-inter sm:text-xl'>
                         {t('description')}
                     </p>
-                    <Link href={"/signup"}>
+                    <Link href={"/sign-up"}>
                         <button className='mt-6 sm:mt-10 px-[36px] bg-[#009A5E] hover:bg-[#009A5E]/80 rounded-full hover:opacity-70 cursor-pointer transition-all h-[61px] curpo text-[#FFFFFF] font-[600] font-poppins text-lg'>
                             {t('cta')}
                         </button>

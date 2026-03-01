@@ -15,7 +15,7 @@ const HowItWorks = () => {
                     <p className="text-[#FFFFFF] font-inter font-[500] text-xl mt-5 sm:mt-6">
                         {t("description")}
                     </p>
-                    <Link href={"/signup"}>
+                    <Link href={"/sign-up"}>
                         <button className='px-[46px] mt-5 sm:mt-8 bg-[#009A5E] hover:bg-[#009A5E]/80 rounded-full hover:opacity-80 cursor-pointer transition-all h-[58px] text-[white] font-[600] font-poppins text-lg'>
                             {t("cta")}
                         </button>

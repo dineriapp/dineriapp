@@ -20,7 +20,7 @@ const Hero = async () => {
                             {t("explore")}
                         </button>
                     </Link>
-                    <Link href={"/signup"}>
+                    <Link href={"/sign-up"}>
                         <button className=' px-[42px] h-[52px] 900:h-[66px] text-[#FFFFFF] bg-[#009A5E] hover:bg-[#009A5E]/80 transition-all font-poppins font-[600] text-sm 900:text-base rounded-full cursor-pointer'>
                             {t("cta")}
                         </button>

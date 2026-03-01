@@ -143,7 +143,7 @@ export function Footer() {
                 Create your restaurant profile in minutes
               </p>
             </div>
-            <Link href="/signup">
+            <Link href="/sign-up">
               <Button
                 size="lg"
                 className="group bg-gradient-to-r from-main-action to-main hover:from-[#29b765] hover:to-[#001e3a]"

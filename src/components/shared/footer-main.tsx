@@ -62,7 +62,7 @@ const FooterMain = () => {
                     </div>
                     {/* bottom */}
                     <div className='w-full mt-7 sm:mt-[99px] flex sm:flex-row flex-col sm:gap-0 gap-6 items-center justify-between'>
-                        <Link href={"/signup"} className='sm:w-auto w-full'>
+                        <Link href={"/sign-up"} className='sm:w-auto w-full'>
                             <div className=' flex items-center justify-center sm:w-auto w-full bg-[#009A5E] hover:bg-[#104e37] transition-all h-[62px] text-white px-[27px] rounded-full cursor-pointer hover: font-poppins font-[600] text-[18px] leading-[1]'>
                                 {t('cta')}
                             </div>

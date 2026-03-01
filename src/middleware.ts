@@ -34,7 +34,7 @@ export default async function middleware(request: NextRequest) {
     const isProtected =
         normalizedPath.startsWith("/dashboard")
 
-    const isAuthPage = normalizedPath === "/login" || normalizedPath === "/signup";
+    const isAuthPage = normalizedPath === "/login" || normalizedPath === "/sign-up";
 
     if (isProtected || isAuthPage) {
         const session = getSessionCookie(request);
