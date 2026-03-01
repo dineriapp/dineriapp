@@ -11,6 +11,7 @@ export default async function NotFound() {
                 </h1>
                 <p className="mb-8 text-center opacity-90">
                     {t("description")}
+
                 </p>
                 <Link
                     href="/"

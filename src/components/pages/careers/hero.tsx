@@ -26,6 +26,7 @@ const Hero = () => {
             // src={"/careers.avif"}
             src={"/img-f-2.avif"}
             alt="logo.png"
+
             width={700}
             height={700}
             className="w-full max-w-[600px]"

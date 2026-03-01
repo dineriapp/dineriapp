@@ -23,6 +23,7 @@ export default function LocaleSwitcher({ SizeClassName = "!size-10 lg:!size-12",
                 {routing.locales.map((item) => (
                     <Select.Item
                         key={item}
+
                         className="flex group  cursor-pointer items-center px-3 py-2 text-base  data-[highlighted]:bg-main-green "
                         value={item}
                     >

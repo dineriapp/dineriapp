@@ -14,6 +14,7 @@ interface MenuItemCardProps {
 type OpeningHours = {
   [key: string]: {
     open: string;
+
     close: string;
     closed: boolean;
   };
