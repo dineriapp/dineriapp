@@ -29,7 +29,7 @@ export default function RestaurantButton({
     children,
     icon,
     onClick,
-    isPreview,
+    // isPreview,
     href,
     target,
     rel,

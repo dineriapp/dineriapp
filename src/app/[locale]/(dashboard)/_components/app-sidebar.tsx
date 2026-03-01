@@ -320,7 +320,7 @@ export function AppSidebar() {
   const locale: Locale = useLocale() as Locale;
   const t = useTranslations("DashboardSidebar");
   const { data: session } = useSession();
-  const { setOpen, setOpenMobile, isMobile } = useSidebar();
+  const { setOpenMobile, isMobile } = useSidebar();
   const {
     restaurants,
     initializeRestaurants,
@@ -399,11 +399,10 @@ export function AppSidebar() {
                                                         flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md
                                                         text-main transition-colors cursor-pointer
                                                         hover:bg-main-background
-                                                        ${
-                                                          isActive
-                                                            ? " font-medium text-black"
-                                                            : ""
-                                                        }
+                                                        ${isActive
+                            ? " font-medium text-black"
+                            : ""
+                          }
                                                     `}
                       >
                         <div className="flex items-center gap-2">
@@ -497,16 +496,14 @@ export function AppSidebar() {
                           className={`
                                                         flex items-center space-x-1 w-full
                                                         pl-3 pr-2 py-1.5 text-sm rounded-md! transition-all
-                                                        ${
-                                                          isLocked
-                                                            ? "cursor-not-allowed opacity-60"
-                                                            : ""
-                                                        }
-                                                        ${
-                                                          isActive
-                                                            ? "bg-main-green text-white font-medium hover:bg-main-green!"
-                                                            : "hover:bg-main-green! font-normal"
-                                                        }
+                                                        ${isLocked
+                              ? "cursor-not-allowed opacity-60"
+                              : ""
+                            }
+                                                        ${isActive
+                              ? "bg-main-green text-white font-medium hover:bg-main-green!"
+                              : "hover:bg-main-green! font-normal"
+                            }
                                                     `}
                         >
                           <Icon className="h-6 w-6 group-hover/btn:!text-white transition-all" />
