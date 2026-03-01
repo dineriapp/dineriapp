@@ -28,7 +28,9 @@ import {
   Calendar,
   ExternalLink,
   MenuIcon,
+  MoreVertical,
   Share2,
+  UtensilsCrossed,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
@@ -44,6 +46,7 @@ import { OpeningHoursDialog } from "./_components/opening-hours-dialog";
 import { OpeningHoursStatus } from "./_components/opening-hours-status";
 import { WelcomePopup } from "./_components/welcome-popup";
 import { MenuItems } from "./menu-items";
+import { getLucideIconBySlug } from "@/lib/get-icons";
 
 // Define the complete types with relations using Prisma types
 type RestaurantWithRelations = Restaurant & {
@@ -507,9 +510,9 @@ export default function ClientPage({
                       letterSpacing: "0.01em",
                     }}
                   >
-                    {/* {restaurant?.button_icons_show && (
+                    {restaurant?.button_icons_show && (
                       <div
-                        className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                        className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px]! sm:!size-[62px] items-center justify-center rounded-full "
                         style={{
                           backgroundColor:
                             restaurant.button_text_icons_color || "transparent",
@@ -519,10 +522,10 @@ export default function ClientPage({
                           style={{
                             color: restaurant.accent_color || "transparent",
                           }}
-                          className="w-4 sm:w-5 h-4 sm:h-5"
+                          className="w-4 sm:w-6 h-4 sm:h-6"
                         />
                       </div>
-                    )} */}
+                    )}
                     <span
                       className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
                         ? "group-hover:text-white"
@@ -542,11 +545,11 @@ export default function ClientPage({
                         ${restaurant.reservation_settings?.settings?.deposit_settings?.depositCurrency}`
                         : ""} */}
                     </span>
-                    {/* {restaurant?.button_icons_show && (
-                      <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                    {restaurant?.button_icons_show && (
+                      <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
                         <MoreVertical className="size-4" />
                       </div>
-                    )} */}
+                    )}
                   </motion.a>
                 )}
 
@@ -577,22 +580,22 @@ export default function ClientPage({
                       letterSpacing: "0.01em",
                     }}
                   >
-                    {/* {restaurant?.button_icons_show && (
+                    {restaurant?.button_icons_show && (
                       <div
-                        className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                        className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px]! sm:size-[62px]! items-center justify-center rounded-full "
                         style={{
                           backgroundColor:
                             restaurant.button_text_icons_color || "transparent",
                         }}
                       >
                         {getLucideIconBySlug("menu", {
-                          className: "w-4 sm:w-5 h-4 sm:h-5",
+                          className: "w-4 sm:w-6 h-4 sm:h-6",
                           style: {
                             color: restaurant.accent_color || "transparent",
                           },
                         })}
                       </div>
-                    )} */}
+                    )}
                     <span
                       className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
                         ? "group-hover:text-white"
@@ -607,11 +610,11 @@ export default function ClientPage({
                     >
                       {t("menu")}
                     </span>
-                    {/* {restaurant?.button_icons_show && (
-                      <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                    {restaurant?.button_icons_show && (
+                      <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
                         <MoreVertical className="size-4" />
                       </div>
-                    )} */}
+                    )}
                   </motion.button>
                 )}
 
@@ -659,22 +662,22 @@ export default function ClientPage({
                     letterSpacing: "0.01em",
                   }}
                 >
-                  {/* {restaurant?.button_icons_show && (
+                  {restaurant?.button_icons_show && (
                     <div
-                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px]! sm:size-[62px]! items-center justify-center rounded-full "
                       style={{
                         backgroundColor:
                           restaurant.button_text_icons_color || "transparent",
                       }}
                     >
                       {getLucideIconBySlug(link.icon_slug, {
-                        className: "w-4 sm:w-5 h-4 sm:h-5",
+                        className: "w-4 sm:w-6 h-4 sm:h-6",
                         style: {
                           color: restaurant.accent_color || "transparent",
                         },
                       })}
                     </div>
-                  )} */}
+                  )}
                   <span
                     className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
                       ? "group-hover:text-white"
@@ -689,11 +692,11 @@ export default function ClientPage({
                   >
                     {link.title}
                   </span>
-                  {/* {restaurant?.button_icons_show && (
-                    <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                  {restaurant?.button_icons_show && (
+                    <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
                       <MoreVertical className="size-4" />
                     </div>
-                  )} */}
+                  )}
                 </motion.a>
               ))}
               {/* FAQ Button - Always show if there are FAQ categories */}
@@ -722,22 +725,22 @@ export default function ClientPage({
                     letterSpacing: "0.01em",
                   }}
                 >
-                  {/* {restaurant?.button_icons_show && (
+                  {restaurant?.button_icons_show && (
                     <div
-                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px] sm:size-[62px]! items-center justify-center rounded-full "
                       style={{
                         backgroundColor:
                           restaurant.button_text_icons_color || "transparent",
                       }}
                     >
                       {getLucideIconBySlug("faq", {
-                        className: "w-4 sm:w-5 h-4 sm:h-5",
+                        className: "w-4 sm:w-6 h-4 sm:h-6",
                         style: {
                           color: restaurant.accent_color || "transparent",
                         },
                       })}
                     </div>
-                  )} */}
+                  )}
                   <span
                     className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
                       ? "group-hover:text-white"
@@ -752,11 +755,11 @@ export default function ClientPage({
                   >
                     {t("faq")}
                   </span>
-                  {/* {restaurant?.button_icons_show && (
-                    <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                  {restaurant?.button_icons_show && (
+                    <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
                       <MoreVertical className="size-4" />
                     </div>
-                  )} */}
+                  )}
                 </motion.button>
               )}
               {restaurant.events.length > 0 && (
@@ -784,22 +787,22 @@ export default function ClientPage({
                     letterSpacing: "0.01em",
                   }}
                 >
-                  {/* {restaurant?.button_icons_show && (
+                  {restaurant?.button_icons_show && (
                     <div
-                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[38px] sm:!size-[46px] items-center justify-center rounded-full "
+                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px]! sm:size-[62px]! items-center justify-center rounded-full "
                       style={{
                         backgroundColor:
                           restaurant.button_text_icons_color || "transparent",
                       }}
                     >
                       {getLucideIconBySlug("events", {
-                        className: "w-4 sm:w-5 h-4 sm:h-5",
+                        className: "w-4 sm:w-6 h-4 sm:h-6",
                         style: {
                           color: restaurant.accent_color || "transparent",
                         },
                       })}
                     </div>
-                  )} */}
+                  )}
                   <span
                     className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
                       ? "group-hover:text-white"
@@ -814,11 +817,11 @@ export default function ClientPage({
                   >
                     {t("events")}
                   </span>
-                  {/* {restaurant?.button_icons_show && (
-                    <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
+                  {restaurant?.button_icons_show && (
+                    <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
                       <MoreVertical className="size-4" />
                     </div>
-                  )} */}
+                  )}
                 </motion.button>
               )}
 
@@ -1197,7 +1200,7 @@ export default function ClientPage({
               >
                 <div
                   className="flex items-center justify-center gap-4 text-xs opacity-60"
-                  style={{ color: "rgb(6, 78, 59)" }}
+                  style={{ color: headingsColor, opacity: 1 }}
                 >
                   <Link
                     href="/terms"
@@ -1223,14 +1226,14 @@ export default function ClientPage({
                 <div className="text-center">
                   <p
                     className="text-xs"
-                    style={{ color: headingsColor, opacity: 0.7 }}
+                    style={{ color: headingsColor, opacity: 1 }}
                   >
                     {" "}
                     {t("powered_by")}{" "}
                     <Link
                       href="/"
                       className="hover:underline"
-                    // style={{ color: restaurant.accent_color || "#10b981" }}
+                      style={{ color: restaurant.accent_color || "#10b981" }}
                     >
                       Dineri.app
                     </Link>
