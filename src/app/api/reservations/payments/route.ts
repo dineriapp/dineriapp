@@ -16,6 +16,9 @@ export async function GET(request: NextRequest) {
 
         const payments = await prisma.payment.findMany({
             where: {
+                reservation: {
+                    restaurant_id: restaurantId,
+                },
             },
             include: {
                 reservation: {

@@ -160,7 +160,7 @@ export default function QRCodesPage() {
                       {stats.totalQRCodes}
                     </div>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      {stats.activeQRCodes} {t("stats.active")}
+                      {t("stats.active", { count: stats.activeQRCodes })}
                     </p>
                   </CardContent>
                 </Card>
