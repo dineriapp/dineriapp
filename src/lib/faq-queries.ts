@@ -1,8 +1,8 @@
 import type { Faq, FaqCategory } from "@prisma/client"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import ky from "./ky"
-import { useTranslations } from "next-intl"
 
 // Use Prisma types with relations
 export type FaqCategoryWithFaqs = FaqCategory & {
@@ -28,7 +28,7 @@ export function useCreateFaqCategory(restaurantId: string | undefined) {
     const queryClient = useQueryClient()
     const t = useTranslations("faq_api_client")
     return useMutation({
-        mutationFn: async (data: { name: string; description?: string }) => {
+        mutationFn: async (data: { name: string; description?: string, showToast?: boolean }) => {
             if (!restaurantId) throw new Error(t("errors.restaurant_id_required"))
 
             const response = await ky
@@ -38,7 +38,7 @@ export function useCreateFaqCategory(restaurantId: string | undefined) {
                 .json<{ data: FaqCategoryWithFaqs }>()
             return response.data
         },
-        onMutate: async (newCategory: { name: string; description?: string }) => {
+        onMutate: async (newCategory: { name: string; description?: string, showToast?: boolean }) => {
             if (!restaurantId) return
 
             await queryClient.cancelQueries({ queryKey: ["faq-categories", restaurantId] })
@@ -71,18 +71,18 @@ export function useCreateFaqCategory(restaurantId: string | undefined) {
             }
             toast.error(t("errors.failed_to_add_faq_category"))
         },
-        onSuccess: () => {
-            toast.success(t("success.faq_category_added_successfully"))
+        onSuccess: (_, variables) => {
+            const { showToast = true } = variables
+
+            if (showToast) {
+                toast.success(t("success.faq_category_added_successfully"))
+            }
+
             // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
             }
-        },
-        onSettled: () => {
-            if (restaurantId) {
-                queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
-            }
-        },
+        }
     })
 }
 
@@ -126,12 +126,7 @@ export function useUpdateFaqCategory(restaurantId: string | undefined) {
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
             }
-        },
-        onSettled: () => {
-            if (restaurantId) {
-                queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
-            }
-        },
+        }
     })
 }
 
@@ -167,11 +162,6 @@ export function useDeleteFaqCategory(restaurantId: string | undefined) {
         onSuccess: () => {
             toast.success(t("success.faq_category_deleted_successfully"))
             // Force refetch to ensure fresh data
-            if (restaurantId) {
-                queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
-            }
-        },
-        onSettled: () => {
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
             }
@@ -222,12 +212,6 @@ export function useReorderFaqCategory(restaurantId: string | undefined) {
             }
             toast.error(t("errors.failed_to_reorder_faq_category"))
         },
-        onSuccess: () => {
-            // Force refetch to ensure fresh data
-            if (restaurantId) {
-                queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
-            }
-        },
         onSettled: () => {
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
@@ -245,7 +229,8 @@ export function useCreateFaq(restaurantId: string | undefined) {
             category_id: string
             question: string
             answer: string
-            is_featured?: boolean
+            is_featured?: boolean,
+            showToast?: boolean
         }) => {
             const response = await ky.post("/api/faq/items", { json: data }).json<{ data: Faq }>()
             return response.data
@@ -254,7 +239,8 @@ export function useCreateFaq(restaurantId: string | undefined) {
             category_id: string
             question: string
             answer: string
-            is_featured?: boolean
+            is_featured?: boolean,
+            showToast?: boolean
         }) => {
             if (!restaurantId) return
 
@@ -302,14 +288,13 @@ export function useCreateFaq(restaurantId: string | undefined) {
             }
             toast.error(t("errors.failed_to_add_faq"))
         },
-        onSuccess: () => {
-            toast.success(t("success.faq_added_successfully"))
-            // Force refetch to ensure fresh data
-            if (restaurantId) {
-                queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
+        onSuccess: (_, variables) => {
+            const { showToast = true } = variables
+
+            if (showToast) {
+                toast.success(t("success.faq_added_successfully"))
             }
-        },
-        onSettled: () => {
+            // Force refetch to ensure fresh data
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
             }
@@ -379,11 +364,6 @@ export function useUpdateFaq(restaurantId: string | undefined) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
             }
         },
-        onSettled: () => {
-            if (restaurantId) {
-                queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
-            }
-        },
     })
 }
 
@@ -423,11 +403,6 @@ export function useDeleteFaq(restaurantId: string | undefined) {
         onSuccess: () => {
             toast.success(t("success.faq_deleted_successfully"))
             // Force refetch to ensure fresh data
-            if (restaurantId) {
-                queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
-            }
-        },
-        onSettled: () => {
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
             }
@@ -482,12 +457,6 @@ export function useReorderFaq(restaurantId: string | undefined) {
                 queryClient.setQueryData(["faq-categories", restaurantId], context.previousCategories)
             }
             toast.error(t("errors.failed_to_reorder_faq"))
-        },
-        onSuccess: () => {
-            // Force refetch to ensure fresh data
-            if (restaurantId) {
-                queryClient.invalidateQueries({ queryKey: ["faq-categories", restaurantId] })
-            }
         },
         onSettled: () => {
             if (restaurantId) {

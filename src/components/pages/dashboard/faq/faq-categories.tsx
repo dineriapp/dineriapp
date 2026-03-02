@@ -384,7 +384,7 @@ export const FaqCategories: React.FC<FaqCategoriesProps> = ({
                       onReorder={(faqId, direction) =>
                         reorderFaqMutation.mutate({ faqId, direction })
                       }
-                      isDeleting={deleteFaqMutation.isPending}
+                      isDeleting={deleteFaqMutation.isPending || deleteCategoryMutation.isPending}
                       isReordering={reorderFaqMutation.isPending}
                     />
                   </div>

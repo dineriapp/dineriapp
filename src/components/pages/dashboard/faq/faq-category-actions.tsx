@@ -70,6 +70,7 @@ export const FaqCategoryActions = ({
 }: FaqCategoryActionsProps) => {
     const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
     const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState(false);
+    const [activeTemplateIndex, setActiveTemplateIndex] = useState<number | null>(null)
     const t = useTranslations("faqs.faqActions")
     const checkLimitAndPopup = () => {
         const plan = prismaUser?.subscription_plan ?? "basic";
@@ -155,13 +156,24 @@ export const FaqCategoryActions = ({
                                             </div>
                                             <div className="w-full">
                                                 <Button
-                                                    onClick={() => handleAddFromTemplate(template)}
+                                                    onClick={async () => {
+                                                        setActiveTemplateIndex(index)
+                                                        try {
+                                                            await handleAddFromTemplate(template)
+                                                        } finally {
+                                                            setActiveTemplateIndex(null)
+                                                        }
+                                                    }}
                                                     className="flex items-center gap-2 cursor-pointer hover:opacity-75 !bg-main-blue rounded-full !px-5 font-poppins h-[42px]"
-                                                    disabled={createCategoryMutation.isPending || createFaqMutation.isPending}
+                                                    disabled={
+                                                        (activeTemplateIndex !== null && activeTemplateIndex !== index) || createFaqMutation.isPending || createCategoryMutation.isPending || !restaurantId
+                                                    }
                                                 >
-                                                    {createCategoryMutation.isPending || createFaqMutation.isPending
-                                                        ? t("adding")
-                                                        : t("addThisCategory")}
+                                                    {
+                                                        activeTemplateIndex === index
+                                                            ? t("adding")
+                                                            : t("addThisCategory")
+                                                    }
                                                 </Button>
                                             </div>
                                         </CardContent>

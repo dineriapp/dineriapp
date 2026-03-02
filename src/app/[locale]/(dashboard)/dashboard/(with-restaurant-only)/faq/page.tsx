@@ -202,6 +202,7 @@ export default function FAQPage() {
       const categoryResult = await createCategoryMutation.mutateAsync({
         name: templateCategory.category,
         description: templateCategory.description,
+        showToast: true,
       });
 
       // Then add all FAQs to the category
@@ -210,7 +211,8 @@ export default function FAQPage() {
           category_id: categoryResult.id,
           question: faq.question,
           answer: faq.answer,
-          is_featured: index === 0, // Make first FAQ featured
+          is_featured: index === 0, // Make first FAQ featured,
+          showToast: false,
         });
       }
     } catch {
