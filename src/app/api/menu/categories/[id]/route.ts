@@ -29,8 +29,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             return NextResponse.json({ error: authResult.error }, { status: authResult.status || 500 })
         }
 
-        console.log(validated)
-
         const category = await prisma.menuCategory.update({
             where: { id: categoryId },
             data: validated,

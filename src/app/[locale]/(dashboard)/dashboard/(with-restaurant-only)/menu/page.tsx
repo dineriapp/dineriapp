@@ -41,7 +41,7 @@ import {
   useReorderItem,
   useUpdateCategory,
   useUpdateItem,
-} from "@/lib/menu-queries";
+} from "@/lib/tanstack/menu-queries";
 import { container3 } from "@/lib/reuseable-data";
 import { getStripePlans, isLimitReached } from "@/lib/stripe-plans";
 import { useRestaurantStore } from "@/stores/restaurant-store";
@@ -141,6 +141,7 @@ export default function MenuPage() {
           setNewCategoryName("");
           setNewCategoryDescription("");
           setIsAddCategoryDialogOpen(false);
+
         },
       },
     );
@@ -523,6 +524,7 @@ export default function MenuPage() {
                             setIsAddItemDialogOpen(true);
                           }
                         }}
+                        disabled={createCategoryMutation.isPending}
                         className="flex items-center gap-2 cursor-pointer text-white hover:text-white hover:opacity-75 !bg-main-green rounded-full !px-5 font-poppins h-[42px]"
                       >
                         <Plus className="h-4 w-4" />

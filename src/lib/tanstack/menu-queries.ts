@@ -1,8 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import ky from "./ky"
-import { toast } from "sonner"
 import type { MenuCategory, MenuItem } from "@prisma/client"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
+import { toast } from "sonner"
+import ky from "../ky"
 
 // Use Prisma types with relations
 type MenuCategoryWithItems = MenuCategory & {
@@ -38,38 +38,7 @@ export function useCreateCategory(restaurantId: string | undefined) {
                 .json<{ data: MenuCategoryWithItems }>()
             return response.data
         },
-        onMutate: async (newCategory: { name: string; description?: string }) => {
-            if (!restaurantId) return
-
-            await queryClient.cancelQueries({ queryKey: ["menu-categories", restaurantId] })
-
-            const previousCategories = queryClient.getQueryData<MenuCategoryWithItems[]>(["menu-categories", restaurantId])
-
-            const optimisticCategory: MenuCategoryWithItems = {
-                id: `temp-${Date.now()}`,
-                restaurant_id: restaurantId,
-                show_in_quick_menu: false,
-                name: newCategory.name,
-                description: newCategory.description || null,
-                sort_order:
-                    previousCategories && previousCategories.length > 0
-                        ? Math.max(...previousCategories.map((c) => c.sort_order)) + 1
-                        : 0,
-                items: [],
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            }
-
-            queryClient.setQueryData<MenuCategoryWithItems[]>(["menu-categories", restaurantId], (old) =>
-                old ? [...old, optimisticCategory] : [optimisticCategory],
-            )
-
-            return { previousCategories, optimisticCategory }
-        },
-        onError: (err, newCategory, context) => {
-            if (restaurantId && context?.previousCategories) {
-                queryClient.setQueryData(["menu-categories", restaurantId], context.previousCategories)
-            }
+        onError: () => {
             toast.error(t("errors.failed_to_add_category"))
         },
         onSuccess: () => {
@@ -78,12 +47,7 @@ export function useCreateCategory(restaurantId: string | undefined) {
             if (restaurantId) {
                 queryClient.invalidateQueries({ queryKey: ["menu-categories", restaurantId] })
             }
-        },
-        onSettled: () => {
-            if (restaurantId) {
-                queryClient.invalidateQueries({ queryKey: ["menu-categories", restaurantId] })
-            }
-        },
+        }
     })
 }
 

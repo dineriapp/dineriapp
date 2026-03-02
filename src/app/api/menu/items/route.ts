@@ -12,7 +12,6 @@ export async function POST(request: NextRequest) {
         const body = await request.json()
         const createItemSchema = await getCreateItemSchema()
         const validated = createItemSchema.parse(body)
-        console.log(validated)
         // First get the category to check ownership
         const category = await prisma.menuCategory.findUnique({
             where: { id: validated.category_id },
@@ -25,7 +24,6 @@ export async function POST(request: NextRequest) {
         // Authenticate user and verify restaurant ownership
         const authResult = await authenticateAndAuthorize(category.restaurant_id)
         if (authResult.error) {
-            console.log(authResult.error)
             return NextResponse.json({ error: authResult.error }, { status: authResult.status || 500 })
         }
 

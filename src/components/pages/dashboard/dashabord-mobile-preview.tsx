@@ -17,7 +17,7 @@ import { motion } from "motion/react"
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { useState } from 'react'
-import { useMenuCategories } from '@/lib/menu-queries'
+import { useMenuCategories } from '@/lib/tanstack/menu-queries'
 import { useEvents } from '@/lib/event-queries'
 import { useFaqCategories } from '@/lib/faq-queries'
 

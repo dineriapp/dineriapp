@@ -31,7 +31,7 @@ import { useEvents } from "@/lib/event-queries";
 import { useFaqCategories } from "@/lib/faq-queries";
 import { getLucideIconBySlug } from "@/lib/get-icons";
 import { useLinks } from "@/lib/link-queries";
-import { useMenuCategories } from "@/lib/menu-queries";
+import { useMenuCategories } from "@/lib/tanstack/menu-queries";
 import {
   colorPresets,
   container2,
@@ -1127,7 +1127,7 @@ export default function AppearancePage() {
                           )}
 
                           {selectedRestaurant?.google_place_id &&
-                          reviewLoading ? (
+                            reviewLoading ? (
                             <Skeleton className="w-[80px] h-[36px] animate-pulse" />
                           ) : reviewData?.rating ? (
                             <motion.div
@@ -1172,26 +1172,26 @@ export default function AppearancePage() {
                             selectedRestaurant?.email ||
                             selectedRestaurant?.address ||
                             selectedRestaurant?.whatsapp) && (
-                            <SocialIcons
-                              restaurant={{
-                                address: selectedRestaurant?.address,
-                                email: selectedRestaurant.email,
-                                facebook: selectedRestaurant.facebook,
-                                instagram: selectedRestaurant.instagram,
-                                whatsapp: selectedRestaurant.whatsapp,
-                                tiktok: selectedRestaurant.tiktok,
-                                phone: selectedRestaurant.phone,
-                              }}
-                              className="mb-4"
-                              theme={{
-                                socialIconColor: formData.social_icon_color,
-                                socialIconBgShow: formData.social_icon_bg_show,
-                                socialIconBgColor:
-                                  formData.social_icon_bg_color,
-                                social_icon_gap: formData.social_icon_gap,
-                              }}
-                            />
-                          )}
+                              <SocialIcons
+                                restaurant={{
+                                  address: selectedRestaurant?.address,
+                                  email: selectedRestaurant.email,
+                                  facebook: selectedRestaurant.facebook,
+                                  instagram: selectedRestaurant.instagram,
+                                  whatsapp: selectedRestaurant.whatsapp,
+                                  tiktok: selectedRestaurant.tiktok,
+                                  phone: selectedRestaurant.phone,
+                                }}
+                                className="mb-4"
+                                theme={{
+                                  socialIconColor: formData.social_icon_color,
+                                  socialIconBgShow: formData.social_icon_bg_show,
+                                  socialIconBgColor:
+                                    formData.social_icon_bg_color,
+                                  social_icon_gap: formData.social_icon_gap,
+                                }}
+                              />
+                            )}
                         </div>
 
                         <motion.div
@@ -1213,13 +1213,12 @@ export default function AppearancePage() {
                                     <div
                                       key={link.id}
                                       rel="noopener noreferrer"
-                                      className={`group flex items-center justify-center  text-center w-full h-[52px]  transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} ${
-                                        formData.button_style === "pill"
+                                      className={`group flex items-center justify-center  text-center w-full h-[52px]  transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} ${formData.button_style === "pill"
                                           ? "rounded-full"
                                           : formData.button_style === "square"
                                             ? "rounded-md"
                                             : "rounded-xl"
-                                      }`}
+                                        }`}
                                       style={{
                                         backgroundColor:
                                           formData.button_variant === "solid"
@@ -1232,9 +1231,9 @@ export default function AppearancePage() {
                                         color:
                                           formData.button_variant === "solid"
                                             ? formData.button_text_icons_color ||
-                                              "#000000"
+                                            "#000000"
                                             : formData.accent_color ||
-                                              "#10b981",
+                                            "#10b981",
                                         fontFamily:
                                           formData.font_family || "Inter",
                                         letterSpacing: "0.01em",
@@ -1260,17 +1259,16 @@ export default function AppearancePage() {
                                         </div>
                                       )}
                                       <span
-                                        className={`relative w-full text-[15px] ${
-                                          formData.button_variant === "outline"
+                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline"
                                             ? "group-hover:text-white"
                                             : ""
-                                        } transition-colors duration-300 font-medium`}
+                                          } transition-colors duration-300 font-medium`}
                                         style={{
                                           color:
                                             formData.button_variant ===
-                                            "outline"
+                                              "outline"
                                               ? formData.accent_color ||
-                                                "#10b981"
+                                              "#10b981"
                                               : formData.button_text_icons_color,
                                         }}
                                       >
@@ -1296,13 +1294,12 @@ export default function AppearancePage() {
                               {categories?.length > 0 && hasMenuItems && (
                                 <motion.button
                                   variants={itemSlugPage}
-                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${
-                                    formData.button_style === "pill"
+                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
                                       ? "rounded-full"
                                       : formData.button_style === "square"
                                         ? "rounded-md"
                                         : "rounded-xl"
-                                  }`}
+                                    }`}
                                   style={{
                                     backgroundColor:
                                       formData.button_variant === "solid"
@@ -1339,11 +1336,10 @@ export default function AppearancePage() {
                                     </div>
                                   )}
                                   <span
-                                    className={`relative w-full text-[15px] ${
-                                      formData.button_variant === "outline"
+                                    className={`relative w-full text-[15px] ${formData.button_variant === "outline"
                                         ? "group-hover:text-white"
                                         : ""
-                                    } transition-colors duration-300 font-medium`}
+                                      } transition-colors duration-300 font-medium`}
                                     style={{
                                       color:
                                         formData.button_variant === "outline"
@@ -1368,13 +1364,12 @@ export default function AppearancePage() {
                               {events.length > 0 && (
                                 <motion.button
                                   variants={itemSlugPage}
-                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${
-                                    formData.button_style === "pill"
+                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
                                       ? "rounded-full"
                                       : formData.button_style === "square"
                                         ? "rounded-md"
                                         : "rounded-xl"
-                                  }`}
+                                    }`}
                                   style={{
                                     backgroundColor:
                                       formData.button_variant === "solid"
@@ -1411,11 +1406,10 @@ export default function AppearancePage() {
                                     </div>
                                   )}
                                   <span
-                                    className={`relative w-full text-[15px] ${
-                                      formData.button_variant === "outline"
+                                    className={`relative w-full text-[15px] ${formData.button_variant === "outline"
                                         ? "group-hover:text-white"
                                         : ""
-                                    } transition-colors duration-300 font-medium`}
+                                      } transition-colors duration-300 font-medium`}
                                     style={{
                                       color:
                                         formData.button_variant === "outline"
@@ -1439,13 +1433,12 @@ export default function AppearancePage() {
                               {faqcategories.length > 0 && hasFaqsItems && (
                                 <motion.button
                                   variants={itemSlugPage}
-                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${
-                                    formData.button_style === "pill"
+                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
                                       ? "rounded-full"
                                       : formData.button_style === "square"
                                         ? "rounded-md"
                                         : "rounded-xl"
-                                  }`}
+                                    }`}
                                   style={{
                                     backgroundColor:
                                       formData.button_variant === "solid"
@@ -1482,11 +1475,10 @@ export default function AppearancePage() {
                                     </div>
                                   )}
                                   <span
-                                    className={`relative w-full text-[15px] ${
-                                      formData.button_variant === "outline"
+                                    className={`relative w-full text-[15px] ${formData.button_variant === "outline"
                                         ? "group-hover:text-white"
                                         : ""
-                                    } transition-colors duration-300 font-medium`}
+                                      } transition-colors duration-300 font-medium`}
                                     style={{
                                       color:
                                         formData.button_variant === "outline"
