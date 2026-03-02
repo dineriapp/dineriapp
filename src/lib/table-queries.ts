@@ -17,14 +17,32 @@ export const tablesApi = {
     },
 
     // Create a new table
-    createTable: async (restaurantId: string, data: CreateTableInput): Promise<Table> => {
-        const response = await kyInstance
-            .post("/api/tables", {
-                json: { ...data, restaurant_id: restaurantId },
-            })
-            .json<TableResponse>()
-        if (!response.success) throw new Error(response.error || "Failed to create table")
-        return response.data!
+    createTable: async (
+        restaurantId: string,
+        data: CreateTableInput
+    ): Promise<Table> => {
+        try {
+            const response = await kyInstance
+                .post("/api/tables", {
+                    json: { ...data, restaurant_id: restaurantId },
+                })
+                .json<TableResponse>()
+
+            if (!response.success) {
+                throw new Error(response.error || "Failed to create table")
+            }
+
+            return response.data!
+
+        } catch (error: any) {
+            // Extract backend error message if available
+            if (error.response) {
+                const errorData = await error.response.json()
+                throw new Error(errorData.error || "Failed to create table")
+            }
+
+            throw new Error(error.message || "Something went wrong")
+        }
     },
 
     // Update a table

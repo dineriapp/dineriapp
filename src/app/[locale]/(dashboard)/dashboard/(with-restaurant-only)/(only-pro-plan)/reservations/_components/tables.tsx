@@ -58,7 +58,7 @@ export default function TablesGridPage() {
 
   const [newTable, setNewTable] = useState<CreateTableInput>({
     tableNumber: "",
-    capacity: 0,
+    capacity: 1,
     areaId: "",
     status: "ACTIVE",
   });
@@ -103,10 +103,13 @@ export default function TablesGridPage() {
         setDialogOpen(false);
         setNewTable({
           tableNumber: "",
-          capacity: 0,
+          capacity: 1,
           areaId: "",
           status: "ACTIVE",
         });
+      },
+      onError: (error: any) => {
+        toast.error(error.message || "Failed to create table")
       },
     });
   };
@@ -257,13 +260,34 @@ export default function TablesGridPage() {
                 <Input
                   placeholder={t("dialog.fields.capacityPlaceholder")}
                   type="number"
-                  value={newTable.capacity}
-                  onChange={(e) =>
+                  min={1}
+                  step={1}
+                  inputMode="numeric"
+                  value={newTable.capacity ?? ""}
+                  onKeyDown={(e) => {
+                    if (["e", "E", "+", "-", "."].includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e) => {
+                    const value = e.target.value;
+
+                    // Allow empty while typing
+                    if (value === "") {
+                      setNewTable({
+                        ...newTable,
+                        capacity: 1,
+                      });
+                      return;
+                    }
+
+                    const numberValue = Math.max(1, Number(value));
+
                     setNewTable({
                       ...newTable,
-                      capacity: Number(e.target.value),
-                    })
-                  }
+                      capacity: numberValue,
+                    });
+                  }}
                 />
               </div>
               <div className="space-y-2">
@@ -337,9 +361,8 @@ export default function TablesGridPage() {
           >
             {/* Accent bar on top (status color) */}
             <div
-              className={`absolute top-0 left-0 w-full h-1 ${
-                table.status === "ACTIVE" ? "bg-green-500" : "bg-red-400"
-              }`}
+              className={`absolute top-0 left-0 w-full h-1 ${table.status === "ACTIVE" ? "bg-green-500" : "bg-red-400"
+                }`}
             />
 
             {/* Delete Icon */}
@@ -384,11 +407,10 @@ export default function TablesGridPage() {
               <div className="flex items-center justify-between border border-gray-100 bg-gray-50 rounded-xl p-2">
                 <Badge
                   variant="outline"
-                  className={`text-sm font-semibold px-3 py-1 rounded-lg shadow-sm ${
-                    table.status === "ACTIVE"
-                      ? "bg-green-50 text-green-700 border-green-200"
-                      : "bg-red-50 text-red-700 border-red-200"
-                  }`}
+                  className={`text-sm font-semibold px-3 py-1 rounded-lg shadow-sm ${table.status === "ACTIVE"
+                    ? "bg-green-50 text-green-700 border-green-200"
+                    : "bg-red-50 text-red-700 border-red-200"
+                    }`}
                 >
                   {table.status === "ACTIVE"
                     ? t("grid.active")

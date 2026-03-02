@@ -347,8 +347,8 @@ const BookingInterface = ({
         party_size: parseInt(partySize, 10),
         special_requests: notes,
         preferred_area: area !== "none" ? area : undefined,
-        success_url: `${window.location.origin}/reservation/success`,
-        cancel_url: `${window.location.origin}/reservation/cancel`,
+        success_url: `${window.location.origin}/${restaurant.slug}/reservation/success`,
+        cancel_url: `${window.location.origin}/${restaurant.slug}/reservation`,
       };
 
       const response = await fetch("/api/reservations/by-user", {

@@ -4716,5 +4716,16 @@
     "success": {
       "created": "Verificatiecode aangemaakt"
     }
+  },
+  "tableApi": {
+    "errors": {
+      "required_fields": "tableNumber, capaciteit, areaId en restaurant_id zijn verplicht",
+      "capacity_min": "Capaciteit moet minimaal 1 zijn",
+      "table_exists": "Tafelnummer bestaat al in dit restaurant",
+      "create_failed": "Tafel kon niet worden aangemaakt"
+    },
+    "success": {
+      "created": "Tafel succesvol aangemaakt"
+    }
   }
 }

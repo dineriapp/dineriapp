@@ -4712,5 +4712,16 @@
     "success": {
       "created": "Verifizierungscode erstellt"
     }
+  },
+  "tableApi": {
+    "errors": {
+      "required_fields": "Tischnummer, Kapazität, Bereich und restaurant_id sind erforderlich",
+      "capacity_min": "Kapazität muss mindestens 1 sein",
+      "table_exists": "Tischnummer existiert bereits in diesem Restaurant",
+      "create_failed": "Tisch konnte nicht erstellt werden"
+    },
+    "success": {
+      "created": "Tisch erfolgreich erstellt"
+    }
   }
 }

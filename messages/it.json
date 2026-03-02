@@ -4716,5 +4716,16 @@
     "success": {
       "created": "Codice di verifica creato"
     }
+  },
+  "tableApi": {
+    "errors": {
+      "required_fields": "tableNumber, capacità, areaId e restaurant_id sono obbligatori",
+      "capacity_min": "La capacità deve essere almeno 1",
+      "table_exists": "Il numero del tavolo esiste già in questo ristorante",
+      "create_failed": "Impossibile creare il tavolo"
+    },
+    "success": {
+      "created": "Tavolo creato con successo"
+    }
   }
 }

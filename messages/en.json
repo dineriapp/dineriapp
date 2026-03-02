@@ -4756,5 +4756,16 @@
       "generic": "Something went wrong"
     },
     "success": { "created": "Verification code created" }
+  },
+  "tableApi": {
+    "errors": {
+      "required_fields": "tableNumber, capacity, areaId, and restaurant_id are required",
+      "capacity_min": "Capacity must be at least 1",
+      "table_exists": "Table number already exists in this restaurant",
+      "create_failed": "Failed to create table"
+    },
+    "success": {
+      "created": "Table created successfully"
+    }
   }
 }

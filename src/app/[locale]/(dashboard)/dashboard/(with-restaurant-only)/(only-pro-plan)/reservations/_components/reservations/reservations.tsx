@@ -187,6 +187,23 @@ export default function ReservationsPage() {
     }
   }, [dateFilter]);
 
+  useEffect(() => {
+    if (view === "timeline") {
+      // If invalid filter selected for timeline
+      if (dateFilter !== "TODAY" && dateFilter !== "CUSTOM") {
+        setDateFilter("TODAY");
+        setCustomDate(new Date());
+        setRange(undefined);
+        return;
+      }
+
+      // If CUSTOM but no date selected
+      if (dateFilter === "CUSTOM" && !customDate) {
+        setCustomDate(new Date());
+      }
+    }
+  }, [view, dateFilter, customDate]);
+
   return (
     <>
       <div className="space-y-4 relative">
@@ -231,10 +248,17 @@ export default function ReservationsPage() {
                 <SelectValue placeholder="Filter by date" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">{t("date.all")}</SelectItem>
+                {view !== "timeline" && (
+                  <SelectItem value="ALL">{t("date.all")}</SelectItem>
+                )}
+
                 <SelectItem value="TODAY">{t("date.today")}</SelectItem>
+
                 <SelectItem value="CUSTOM">{t("date.custom")}</SelectItem>
-                <SelectItem value="RANGE">{t("date.range")}</SelectItem>
+
+                {view !== "timeline" && (
+                  <SelectItem value="RANGE">{t("date.range")}</SelectItem>
+                )}
               </SelectContent>
             </Select>
             {/* Custom Date Picker */}

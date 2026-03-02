@@ -1,23 +1,24 @@
 import { Card } from "@/components/ui/card";
 import { normalizeBaseUrl } from "@/lib/utils";
 import {
+  Calendar,
   CheckCircle,
   Clock,
   Mail,
   MapPin,
   Users,
-  Calendar,
 } from "lucide-react";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import Print from "./print";
-import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 
 interface SuccessPageProps {
   searchParams: Promise<{
     session_id?: string;
     reservation_id?: string;
   }>;
+  params: Promise<{ slug: string }>;
 }
 
 async function verifyAndUpdateReservation(
@@ -73,11 +74,13 @@ async function verifyAndUpdateReservation(
 
 export default async function ReservationSuccess({
   searchParams,
+  params
 }: SuccessPageProps) {
   const t = await getTranslations("ReservationSuccess");
-  const params = await searchParams;
-  const sessionId = params.session_id;
-  const reservationId = params.reservation_id;
+  const { slug } = await params
+  const Sparams = await searchParams;
+  const sessionId = Sparams.session_id;
+  const reservationId = Sparams.reservation_id;
 
   if (!sessionId || !reservationId) {
     notFound();
@@ -102,7 +105,7 @@ export default async function ReservationSuccess({
             {verificationResult.error || t("verificationFailed.description")}
           </p>
           <Link
-            href="/"
+            href={`/${slug}`}
             className="inline-block bg-blue-600 text-white px-4 py-2 text-sm rounded-lg hover:bg-blue-700 transition-colors"
           >
             {t("actions.backToHome")}
@@ -246,7 +249,7 @@ export default async function ReservationSuccess({
           {/* Action Buttons */}
           <div className="flex flex-col gap-2">
             <Link
-              href="/"
+              href={`/${slug}`}
               className="bg-[#009a5e] text-white text-center px-4 py-3 rounded-md hover:bg-emerald-700 transition font-semibold text-sm shadow-sm"
             >
               {t("actions.backToHome")}
