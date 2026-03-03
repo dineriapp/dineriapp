@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -164,18 +164,23 @@ enum RestaurantStatus {
 }
 
 model Restaurant {
-  id                               String              @id @default(uuid()) @db.Uuid
-  user_id                          String              @db.Uuid
-  name                             String
-  bio                              String?             @default("")
-  locations                        String[]            @default([])
-  logo_url                         String?
-  bg_color                         String?             @default("#ffffff")
-  accent_color                     String?             @default("#10b981")
-  headings_text_color              String?             @default("#064e3b")
-  button_text_icons_color          String?             @default("#ffffff")
-  button_style                     ButtonStyle         @default(pill)
-  button_icons_show                Boolean             @default(true)
+  id                      String      @id @default(uuid()) @db.Uuid
+  user_id                 String      @db.Uuid
+  name                    String
+  bio                     String?     @default("")
+  locations               String[]    @default([])
+  logo_url                String?
+  bg_color                String?     @default("#ffffff")
+  accent_color            String?     @default("#10b981")
+  headings_text_color     String?     @default("#064e3b")
+  button_text_icons_color String?     @default("#ffffff")
+  button_style            ButtonStyle @default(pill)
+  button_icons_show       Boolean     @default(true)
+
+  use_headings_in_buttons Boolean @default(true)
+  food_heading            String? @default("Food & Drinks")
+  about_heading           String? @default("About")
+
   buttons_gap_in_px                Int                 @default(16)
   font_family                      String?             @default("var(--font-space-grotesk)")
   bg_type                          BgType              @default(color)

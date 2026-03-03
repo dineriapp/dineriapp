@@ -1816,21 +1816,29 @@
       }
     },
     "dashboardMobilePreview": {
-      "btns": {
-        "menu": "Menu",
-        "events": "Evenementen",
-        "faq": "FAQ"
-      },
       "card": {
         "title": "Voorbeeld",
         "description": "Bekijk hoe je pagina eruitziet op mobiele apparaten",
         "visitButton": "Bezoeken"
       },
-      "loading": {
-        "links": "Laden.."
+      "actions": {
+        "share": "Delen"
       },
-      "emptyState": {
-        "noLinks": "Nog geen links, voeg er een paar toe om het voorbeeld te zien."
+      "buttons": {
+        "reserveTable": "Tafel reserveren",
+        "menu": "Menu",
+        "events": "Evenementen",
+        "faq": "FAQ"
+      },
+      "states": {
+        "loadingPreview": "Voorbeeld laden...",
+        "empty": "Geen links, menu of evenementen om weer te geven. Voeg er enkele toe via het dashboard!"
+      },
+      "footer": {
+        "terms": "Voorwaarden",
+        "privacy": "Privacy",
+        "cookies": "Cookies",
+        "poweredBy": "Aangedreven door"
       }
     },
     "quickActions": {
@@ -2560,7 +2568,12 @@
     "appearance": "Uiterlijk",
     "loadingAppearance": "Uiterlijk laden...",
     "customizeRestaurantPage": "Pas aan hoe de pagina van je restaurant eruitziet",
-
+    "separate_buttons_title": "Knoppen scheiden",
+    "separate_buttons_description": "Verdeel de knoppen in twee secties en bewerk hun koppen.",
+    "first_section_heading_label": "Kop van eerste sectie",
+    "second_section_heading_label": "Kop van tweede sectie",
+    "first_section_heading_placeholder": "bijv. Eten & Drinken",
+    "second_section_heading_placeholder": "bijv. Over ons",
     "tabs_style": "Stijl",
     "tabs_colors": "Kleuren",
     "tabs_typography": "Typografie",
@@ -3119,6 +3132,14 @@
     "menu": "Menu",
     "events": "Evenementen",
     "faq": "FAQ",
+    "share_button": "Delen",
+    "share_title": "Deze pagina delen",
+    "food_section_title": "Eten & Drinken",
+    "about_section_title": "Over ons",
+    "link_copied": "Link gekopieerd naar het klembord!",
+    "terms": "Voorwaarden",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
     "no_links_added": "Nog geen links toegevoegd",
     "powered_by": "Aangedreven door",
     "welcome_popup": {
@@ -4759,5 +4780,85 @@
     "error_invalid_code": "Ongeldige verificatiecode.",
     "error_generic": "Er is iets misgegaan. Probeer het opnieuw.",
     "success_verified": "Succesvol geverifieerd."
+  },
+  "emailIntegration": {
+    "title": "E-mailintegratie",
+    "description": "Configureer uw Resend-instellingen om reserverings- en notificatie-e-mails te verzenden.",
+    "alerts": {
+      "verificationSent": "De verificatiecode is naar uw e-mailadres verzonden.",
+      "verificationFailed": "Verificatie mislukt. Controleer de code en probeer opnieuw.",
+      "sendCodeFailed": "De verificatiecode kon niet worden verzonden. Controleer uw gegevens en probeer opnieuw.",
+      "integrationSuccess": "E-mailintegratie succesvol ingesteld. Klik op \"Wijzigingen opslaan\" om de integratie te activeren en op te slaan.",
+      "saveSuccess": "E-mailinstellingen succesvol opgeslagen.",
+      "saveFailed": "E-mailinstellingen konden niet worden opgeslagen."
+    },
+    "form": {
+      "fromName": {
+        "label": "Afzendernaam",
+        "placeholder": "Naam van uw restaurant",
+        "helper": "Deze naam wordt weergegeven als afzender wanneer e-mails naar klanten worden verzonden.",
+        "errors": {
+          "min": "De naam moet minimaal 2 tekens bevatten."
+        }
+      },
+      "fromEmail": {
+        "label": "Afzender e-mailadres",
+        "placeholder": "noreply@uwdomein.nl",
+        "helper": "Reserverings- en notificatie-e-mails worden vanaf dit adres verzonden.",
+        "errors": {
+          "invalid": "Voer een geldig e-mailadres in."
+        }
+      },
+      "testEmail": {
+        "label": "Test e-mail (voor verificatiecode)",
+        "placeholder": "u@voorbeeld.nl",
+        "helper": "We sturen een 4-cijferige verificatiecode (OTP) naar dit e-mailadres.",
+        "errors": {
+          "invalid": "Voer een geldig test e-mailadres in."
+        }
+      },
+      "apiKey": {
+        "label": "Resend API-sleutel",
+        "placeholder": "re_************************",
+        "helper": "Voer uw Resend API-sleutel in. Deze wordt veilig versleuteld opgeslagen.",
+        "errors": {
+          "min": "De Resend API-sleutel is verplicht en moet geldig zijn."
+        }
+      }
+    },
+    "time": {
+      "closes_at": "sluit om {time}",
+      "opens_at": "opent om {time}",
+      "opens_at_with_day": "opent {day} om {time}"
+    },
+    "codeStep": {
+      "label": "Voer de 4-cijferige code in",
+      "placeholder": "1234",
+      "helper": "Voer de verificatiecode in die naar uw test e-mailadres is verzonden.",
+      "errors": {
+        "length": "De code moet precies 4 cijfers bevatten.",
+        "numeric": "De code mag alleen cijfers bevatten."
+      },
+      "buttons": {
+        "back": "Terug",
+        "verify": "Verifiëren en activeren"
+      }
+    },
+    "buttons": {
+      "sendCode": "Verificatiecode verzenden",
+      "edit": "Bewerken",
+      "continue": "Doorgaan",
+      "cancel": "Annuleren",
+      "saveChanges": "Wijzigingen opslaan",
+      "resetChanges": "Wijzigingen resetten"
+    },
+    "status": {
+      "connected": "E-mailintegratie verbonden",
+      "reverificationTitle": "Nieuwe verificatie vereist",
+      "reverificationDescription": "Bij het wijzigen van afzendergegevens is opnieuw verificatie vereist. U moet de API-sleutel invoeren en de code bevestigen."
+    },
+    "loading": {
+      "page": "Laden"
+    }
   }
 }

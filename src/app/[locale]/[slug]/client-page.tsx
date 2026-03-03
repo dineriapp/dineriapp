@@ -10,8 +10,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Link } from "@/i18n/navigation";
+import { getLucideIconBySlug } from "@/lib/get-icons";
 import { itemSlugPage } from "@/lib/reuseable-data";
-import { cn } from "@/lib/utils";
+import { cn, getBackgroundStyle } from "@/lib/utils";
 import { OpeningHoursData, ReviewsInfo } from "@/types";
 import type {
   Event,
@@ -46,7 +47,6 @@ import { OpeningHoursDialog } from "./_components/opening-hours-dialog";
 import { OpeningHoursStatus } from "./_components/opening-hours-status";
 import { WelcomePopup } from "./_components/welcome-popup";
 import { MenuItems } from "./menu-items";
-import { getLucideIconBySlug } from "@/lib/get-icons";
 
 // Define the complete types with relations using Prisma types
 type RestaurantWithRelations = Restaurant & {
@@ -153,39 +153,6 @@ export default function ClientPage({
     }
   };
 
-  const getBackgroundStyle = () => {
-    if (restaurant.bg_type === "image" && restaurant.bg_image_url) {
-      return {
-        backgroundImage: `url(${restaurant.bg_image_url})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      };
-    }
-
-    if (
-      restaurant.bg_type === "gradient" &&
-      restaurant.bg_gradient_start &&
-      restaurant.bg_gradient_end
-    ) {
-      const directionMap: Record<string, string> = {
-        top: "to top",
-        bottom: "to bottom",
-        left: "to left",
-        right: "to right",
-        "top-right": "to top right",
-        "top-left": "to top left",
-        "bottom-right": "to bottom right",
-        "bottom-left": "to bottom left",
-      };
-
-      return {
-        backgroundImage: `linear-gradient(${directionMap[restaurant.gradient_direction] || "to bottom right"}, ${restaurant.bg_gradient_start}, ${restaurant.bg_gradient_end})`,
-      };
-    }
-
-    return { backgroundColor: restaurant.bg_color || "#ffffff" };
-  };
-
   const headingsColor = restaurant.headings_text_color || "#ffffff";
   const buttonTextColor = restaurant.button_text_icons_color || "#000000";
 
@@ -236,7 +203,7 @@ export default function ClientPage({
       }
     } else {
       await navigator.clipboard.writeText(window.location.href);
-      toast("Link copied to clipboard!");
+      toast(t("link_copied"));
     }
   };
 
@@ -252,6 +219,7 @@ export default function ClientPage({
   const hasMenuItems = restaurant.menuCategories?.some(
     (category) => category.items && category.items.length > 0,
   );
+
   const hasFaqsItems = restaurant.faqCategories?.some(
     (category) => category.faqs && category.faqs.length > 0,
   );
@@ -271,7 +239,7 @@ export default function ClientPage({
   const hasFoodSection =
     hasReservation || hasCustomLinks || hasMenu || hasEvents;
 
-  const hasAboutSection = hasFaq;
+  const hasAboutSection = hasFaq || hasCustomLinks || hasEvents;
 
   const isCompletelyEmpty = !hasFoodSection && !hasAboutSection;
 
@@ -280,19 +248,15 @@ export default function ClientPage({
       <div
         className="relative flex min-h-screen flex-col"
         style={{
-          ...getBackgroundStyle(),
-          //                 backgroundImage: `radial-gradient(
-          //   transparent 30%,
-          //   rgba(6, 78, 59, 0.125) 30%,
-          //   rgba(6, 78, 59, 0.125) 31%,
-          //   transparent 31%,
-          //   transparent 60%,
-          //   rgba(6, 78, 59, 0.125) 60%,
-          //   rgba(6, 78, 59, 0.125) 61%,
-          //   transparent 61%
-          // )`,
-          //                 backgroundSize: "80px 80px",
-          //                 backdropFilter: "blur(14px)",
+          ...getBackgroundStyle({
+            bg_color: restaurant?.bg_color || "",
+            bg_gradient_end: restaurant.bg_gradient_end || "",
+            bg_gradient_start:
+              restaurant?.bg_gradient_start || "",
+            bg_image_url: restaurant?.bg_image_url || "",
+            bg_type: restaurant?.bg_type,
+            gradient_direction: restaurant?.gradient_direction,
+          }),
           fontFamily: restaurant.font_family || "var(--font-space-grotesk)",
         }}
       >
@@ -300,7 +264,7 @@ export default function ClientPage({
           <div className="w-full flex justify-end">
             <button
               onClick={handleShare}
-              title="Share this page"
+              title={t("share_title")}
               className="flex items-center gap-2 cursor-pointer font-inherit! px-4 py-2 rounded-full transition-all hover:scale-105 "
               style={{
                 backgroundColor:
@@ -314,7 +278,7 @@ export default function ClientPage({
               }}
             >
               <Share2 className="w-4 h-4" />
-              <span className="text-sm font-medium">Share</span>
+              <span className="text-sm font-medium">{t("share_button")}</span>
             </button>
           </div>
           <div className="max-w-[480px] mx-auto w-full flex flex-grow flex-col pt-11">
@@ -364,7 +328,6 @@ export default function ClientPage({
                 >
                   {restaurant.name}
                 </motion.h2>
-                {/* <VerifiedBadge /> */}
                 <BsPatchCheckFill size={22} className="text-blue-500" />
               </div>
               {restaurant.bio && (
@@ -423,6 +386,8 @@ export default function ClientPage({
               {(restaurant.instagram ||
                 restaurant.facebook ||
                 restaurant.email ||
+                restaurant.tiktok ||
+                restaurant.phone ||
                 restaurant.address ||
                 restaurant.whatsapp) &&
                 restaurant.social_icons_position === "top" && (
@@ -466,7 +431,7 @@ export default function ClientPage({
                 </motion.div>
               )}
 
-              {hasFoodSection && (
+              {hasFoodSection && restaurant.use_headings_in_buttons && (
                 <motion.h2
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -477,171 +442,17 @@ export default function ClientPage({
                     opacity: 0.9,
                   }}
                 >
-                  Food & Drinks
+                  {restaurant.food_heading}
                 </motion.h2>
               )}
 
-              {!bookingDisabled &&
-                restaurant?.user?.subscription_plan !== "basic" && (
-                  <motion.a
-                    variants={itemSlugPage}
-                    href={`/${restaurant.slug}/reservation`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    // onClick={() => trackLinkClick(link.id)}
-                    className={`group flex items-center justify-center  text-center  w-full  py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} ${restaurant.button_style === "pill"
-                      ? "rounded-full"
-                      : restaurant.button_style === "square"
-                        ? "rounded-md"
-                        : "rounded-xl"
-                      }`}
-                    style={{
-                      backgroundColor:
-                        restaurant.button_variant === "solid"
-                          ? restaurant.accent_color || "#10b981"
-                          : "transparent",
-                      backdropFilter: "blur(8px)",
-                      border: `2px solid ${restaurant.accent_color || "#10b981"}`,
-                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                      color:
-                        restaurant.button_variant === "solid"
-                          ? buttonTextColor
-                          : restaurant.accent_color || "#10b981",
-                      letterSpacing: "0.01em",
-                    }}
-                  >
-                    {restaurant?.button_icons_show && (
-                      <div
-                        className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px]! sm:!size-[62px] items-center justify-center rounded-full "
-                        style={{
-                          backgroundColor:
-                            restaurant.button_text_icons_color || "transparent",
-                        }}
-                      >
-                        <UtensilsCrossed
-                          style={{
-                            color: restaurant.accent_color || "transparent",
-                          }}
-                          className="w-4 sm:w-6 h-4 sm:h-6"
-                        />
-                      </div>
-                    )}
-                    <span
-                      className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
-                        ? "group-hover:text-white"
-                        : ""
-                        } transition-colors duration-300 font-semibold break-all`}
-                      style={{
-                        color:
-                          restaurant.button_variant === "outline"
-                            ? restaurant.accent_color || "#10b981"
-                            : buttonTextColor,
-                      }}
-                    >
-                      {t("reserve_table")}
-                      {/* {restaurant.reservation_settings?.settings
-                        ?.deposit_settings?.depositSystemEnabled
-                        ? `- ${restaurant.reservation_settings?.settings?.deposit_settings?.depositAmount}
-                        ${restaurant.reservation_settings?.settings?.deposit_settings?.depositCurrency}`
-                        : ""} */}
-                    </span>
-                    {restaurant?.button_icons_show && (
-                      <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
-                        <MoreVertical className="size-4" />
-                      </div>
-                    )}
-                  </motion.a>
-                )}
-
-              {restaurant.menuCategories.length > 0 &&
-                !isMenuPage &&
-                hasMenuItems && (
-                  <motion.button
-                    variants={itemSlugPage}
-                    onClick={() => setShowMenuDialog(true)}
-                    className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full  py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
-                      ? "rounded-full"
-                      : restaurant.button_style === "square"
-                        ? "rounded-md"
-                        : "rounded-xl"
-                      }`}
-                    style={{
-                      backgroundColor:
-                        restaurant.button_variant === "solid"
-                          ? restaurant.accent_color || "#10b981"
-                          : "transparent",
-                      color:
-                        restaurant.button_variant === "solid"
-                          ? buttonTextColor
-                          : restaurant.accent_color || "#10b981",
-                      backdropFilter: "blur(8px)",
-                      border: `2px solid ${restaurant.accent_color || "#10b981"}`,
-                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                      letterSpacing: "0.01em",
-                    }}
-                  >
-                    {restaurant?.button_icons_show && (
-                      <div
-                        className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px]! sm:size-[62px]! items-center justify-center rounded-full "
-                        style={{
-                          backgroundColor:
-                            restaurant.button_text_icons_color || "transparent",
-                        }}
-                      >
-                        {getLucideIconBySlug("menu", {
-                          className: "w-4 sm:w-6 h-4 sm:h-6",
-                          style: {
-                            color: restaurant.accent_color || "transparent",
-                          },
-                        })}
-                      </div>
-                    )}
-                    <span
-                      className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
-                        ? "group-hover:text-white"
-                        : ""
-                        } transition-colors duration-300 font-semibold break-all`}
-                      style={{
-                        color:
-                          restaurant.button_variant === "outline"
-                            ? restaurant.accent_color || "#10b981"
-                            : buttonTextColor,
-                      }}
-                    >
-                      {t("menu")}
-                    </span>
-                    {restaurant?.button_icons_show && (
-                      <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
-                        <MoreVertical className="size-4" />
-                      </div>
-                    )}
-                  </motion.button>
-                )}
-
-              {hasAboutSection && (
-                <motion.h2
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                  className="text-[20px] font-bold text-center uppercase"
-                  style={{
-                    color: headingsColor,
-                    opacity: 0.9,
-                  }}
-                >
-                  About
-                </motion.h2>
-              )}
-
-              {restaurant.links.map((link) => (
+              {hasReservation && (
                 <motion.a
-                  key={link.id}
                   variants={itemSlugPage}
-                  href={link.url}
+                  href={`/${restaurant.slug}/reservation`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => trackLinkClick(link.id)}
-                  className={`group flex items-center justify-center  text-center  w-full  py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} ${restaurant.button_style === "pill"
+                  className={`group flex items-center justify-center  text-center  w-full py-4 sm:py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} ${restaurant.button_style === "pill"
                     ? "rounded-full"
                     : restaurant.button_style === "square"
                       ? "rounded-md"
@@ -664,14 +475,165 @@ export default function ClientPage({
                 >
                   {restaurant?.button_icons_show && (
                     <div
-                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px]! sm:size-[62px]! items-center justify-center rounded-full "
+                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[54px]! sm:!size-[62px] items-center justify-center rounded-full "
+                      style={{
+                        backgroundColor:
+                          restaurant.button_text_icons_color || "transparent",
+                      }}
+                    >
+                      <UtensilsCrossed
+                        style={{
+                          color: restaurant.accent_color || "transparent",
+                        }}
+                        className="w-5 sm:w-6 h-5 sm:h-6"
+                      />
+                    </div>
+                  )}
+                  <span
+                    className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
+                      ? "group-hover:text-white"
+                      : ""
+                      } transition-colors duration-300 font-semibold break-all`}
+                    style={{
+                      color:
+                        restaurant.button_variant === "outline"
+                          ? restaurant.accent_color || "#10b981"
+                          : buttonTextColor,
+                    }}
+                  >
+                    {t("reserve_table")}
+                    {/* {restaurant.reservation_settings?.settings
+                        ?.deposit_settings?.depositSystemEnabled
+                        ? `- ${restaurant.reservation_settings?.settings?.deposit_settings?.depositAmount}
+                        ${restaurant.reservation_settings?.settings?.deposit_settings?.depositCurrency}`
+                        : ""} */}
+                  </span>
+                  {restaurant?.button_icons_show && (
+                    <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
+                      <MoreVertical className="size-4" />
+                    </div>
+                  )}
+                </motion.a>
+              )}
+
+              {hasMenu && (
+                <motion.button
+                  variants={itemSlugPage}
+                  onClick={() => setShowMenuDialog(true)}
+                  className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full py-4 sm:py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                    ? "rounded-full"
+                    : restaurant.button_style === "square"
+                      ? "rounded-md"
+                      : "rounded-xl"
+                    }`}
+                  style={{
+                    backgroundColor:
+                      restaurant.button_variant === "solid"
+                        ? restaurant.accent_color || "#10b981"
+                        : "transparent",
+                    color:
+                      restaurant.button_variant === "solid"
+                        ? buttonTextColor
+                        : restaurant.accent_color || "#10b981",
+                    backdropFilter: "blur(8px)",
+                    border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  {restaurant?.button_icons_show && (
+                    <div
+                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[54px]! sm:size-[62px]! items-center justify-center rounded-full "
+                      style={{
+                        backgroundColor:
+                          restaurant.button_text_icons_color || "transparent",
+                      }}
+                    >
+                      {getLucideIconBySlug("menu", {
+                        className: "w-5 sm:w-6 h-5 sm:h-6",
+                        style: {
+                          color: restaurant.accent_color || "transparent",
+                        },
+                      })}
+                    </div>
+                  )}
+                  <span
+                    className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
+                      ? "group-hover:text-white"
+                      : ""
+                      } transition-colors duration-300 font-semibold break-all`}
+                    style={{
+                      color:
+                        restaurant.button_variant === "outline"
+                          ? restaurant.accent_color || "#10b981"
+                          : buttonTextColor,
+                    }}
+                  >
+                    {t("menu")}
+                  </span>
+                  {restaurant?.button_icons_show && (
+                    <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
+                      <MoreVertical className="size-4" />
+                    </div>
+                  )}
+                </motion.button>
+              )}
+
+              {hasAboutSection && restaurant.use_headings_in_buttons && (
+                <motion.h2
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-[20px] font-bold text-center uppercase"
+                  style={{
+                    color: headingsColor,
+                    opacity: 0.9,
+                  }}
+                >
+
+                  {restaurant.about_heading}
+                </motion.h2>
+              )}
+
+              {restaurant?.links?.map((link) => (
+                <motion.a
+                  key={link.id}
+                  variants={itemSlugPage}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackLinkClick(link.id)}
+                  className={`group flex items-center justify-center  text-center  w-full py-4 sm:py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} ${restaurant.button_style === "pill"
+                    ? "rounded-full"
+                    : restaurant.button_style === "square"
+                      ? "rounded-md"
+                      : "rounded-xl"
+                    }`}
+                  style={{
+                    backgroundColor:
+                      restaurant.button_variant === "solid"
+                        ? restaurant.accent_color || "#10b981"
+                        : "transparent",
+                    backdropFilter: "blur(8px)",
+                    border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                    color:
+                      restaurant.button_variant === "solid"
+                        ? buttonTextColor
+                        : restaurant.accent_color || "#10b981",
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  {restaurant?.button_icons_show && (
+                    <div
+                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[54px]! sm:size-[62px]! items-center justify-center rounded-full "
                       style={{
                         backgroundColor:
                           restaurant.button_text_icons_color || "transparent",
                       }}
                     >
                       {getLucideIconBySlug(link.icon_slug, {
-                        className: "w-4 sm:w-6 h-4 sm:h-6",
+                        className: "w-5 sm:w-6 h-5 sm:h-6",
                         style: {
                           color: restaurant.accent_color || "transparent",
                         },
@@ -700,11 +662,11 @@ export default function ClientPage({
                 </motion.a>
               ))}
               {/* FAQ Button - Always show if there are FAQ categories */}
-              {restaurant.faqCategories.length > 0 && hasFaqsItems && (
+              {hasFaq && (
                 <motion.button
                   variants={itemSlugPage}
                   onClick={() => setShowFAQDialog(true)}
-                  className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full  py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                  className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full py-4 sm:py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
                     ? "rounded-full"
                     : restaurant.button_style === "square"
                       ? "rounded-md"
@@ -727,14 +689,14 @@ export default function ClientPage({
                 >
                   {restaurant?.button_icons_show && (
                     <div
-                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px] sm:size-[62px]! items-center justify-center rounded-full "
+                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[54px] sm:size-[62px]! items-center justify-center rounded-full "
                       style={{
                         backgroundColor:
                           restaurant.button_text_icons_color || "transparent",
                       }}
                     >
                       {getLucideIconBySlug("faq", {
-                        className: "w-4 sm:w-6 h-4 sm:h-6",
+                        className: "w-5 sm:w-6 h-5 sm:h-6",
                         style: {
                           color: restaurant.accent_color || "transparent",
                         },
@@ -762,11 +724,11 @@ export default function ClientPage({
                   )}
                 </motion.button>
               )}
-              {restaurant.events.length > 0 && (
+              {hasEvents && (
                 <motion.button
                   variants={itemSlugPage}
                   onClick={() => setShowEventsDialog(true)}
-                  className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full  py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                  className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full py-4 sm:py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
                     ? "rounded-full"
                     : restaurant.button_style === "square"
                       ? "rounded-md"
@@ -789,14 +751,14 @@ export default function ClientPage({
                 >
                   {restaurant?.button_icons_show && (
                     <div
-                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[60px]! sm:size-[62px]! items-center justify-center rounded-full "
+                      className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[54px]! sm:size-[62px]! items-center justify-center rounded-full "
                       style={{
                         backgroundColor:
                           restaurant.button_text_icons_color || "transparent",
                       }}
                     >
                       {getLucideIconBySlug("events", {
-                        className: "w-4 sm:w-6 h-4 sm:h-6",
+                        className: "w-5 sm:w-6 h-5 sm:h-6",
                         style: {
                           color: restaurant.accent_color || "transparent",
                         },
@@ -1073,7 +1035,17 @@ export default function ClientPage({
               <DialogContent
                 closeIconColor={restaurant.accent_color || "#10b981"}
                 className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] border-transparent no-scroll overflow-y-auto"
-                style={{ ...getBackgroundStyle() }}
+                style={{
+                  ...getBackgroundStyle({
+                    bg_color: restaurant?.bg_color || "",
+                    bg_gradient_end: restaurant.bg_gradient_end || "",
+                    bg_gradient_start:
+                      restaurant?.bg_gradient_start || "",
+                    bg_image_url: restaurant?.bg_image_url || "",
+                    bg_type: restaurant?.bg_type,
+                    gradient_direction: restaurant?.gradient_direction,
+                  })
+                }}
               >
                 <DialogHeader>
                   <DialogTitle className="flex text-start items-center gap-2">
@@ -1189,58 +1161,60 @@ export default function ClientPage({
                 />
               </DialogContent>
             </Dialog>
-            {/* // TODO :- Do subscription check   */}
-            {
-              // restaurant?.user?.subscription_plan === "basic" &&
-              <motion.footer
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
-                className="mt-13 pb-6 text-center flex flex-col items-center justify-center gap-3"
-              >
-                <div
-                  className="flex items-center justify-center gap-4 text-xs opacity-60"
-                  style={{ color: headingsColor, opacity: 1 }}
+            <div className="mt-13 pb-6">
+
+              {
+                restaurant?.user?.subscription_plan === "basic" &&
+                <motion.footer
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.7 }}
+                  className=" text-center flex flex-col items-center justify-center gap-3"
                 >
-                  <Link
-                    href="/terms"
-                    className="hover:opacity-100 transition-opacity"
-                  >
-                    Terms
-                  </Link>
-                  <span>•</span>
-                  <Link
-                    href="/privacy-policy"
-                    className="hover:opacity-100 transition-opacity"
-                  >
-                    Privacy
-                  </Link>
-                  <span>•</span>
-                  <Link
-                    href="/cookies"
-                    className="hover:opacity-100 transition-opacity"
-                  >
-                    Cookies
-                  </Link>
-                </div>
-                <div className="text-center">
-                  <p
-                    className="text-xs"
+                  <div
+                    className="flex items-center justify-center gap-4 text-xs opacity-60"
                     style={{ color: headingsColor, opacity: 1 }}
                   >
-                    {" "}
-                    {t("powered_by")}{" "}
                     <Link
-                      href="/"
-                      className="hover:underline"
-                      style={{ color: restaurant.accent_color || "#10b981" }}
+                      href="/terms"
+                      className="hover:opacity-100 transition-opacity"
                     >
-                      Dineri.app
+                      {t("terms")}
                     </Link>
-                  </p>
-                </div>
-              </motion.footer>
-            }
+                    <span>•</span>
+                    <Link
+                      href="/privacy-policy"
+                      className="hover:opacity-100 transition-opacity"
+                    >
+                      {t("privacy")}
+                    </Link>
+                    <span>•</span>
+                    <Link
+                      href="/cookies"
+                      className="hover:opacity-100 transition-opacity"
+                    >
+                      {t("cookies")}
+                    </Link>
+                  </div>
+                  <div className="text-center">
+                    <p
+                      className="text-xs"
+                      style={{ color: headingsColor, opacity: 1 }}
+                    >
+                      {" "}
+                      {t("powered_by")}{" "}
+                      <Link
+                        href="/"
+                        className="hover:underline"
+                        style={{ color: restaurant.accent_color || "#10b981" }}
+                      >
+                        Dineri.app
+                      </Link>
+                    </p>
+                  </div>
+                </motion.footer>
+              }
+            </div>
           </div>
         </div>
 

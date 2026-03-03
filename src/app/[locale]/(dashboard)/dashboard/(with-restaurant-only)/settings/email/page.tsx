@@ -21,29 +21,31 @@ import { ResetChangesBtnClasses, SaveChangesBtnClasses } from "@/lib/utils";
 import { useRestaurantStore } from "@/stores/restaurant-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Mail, Send, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const emailConfigSchema = z.object({
-    email_from_name: z.string().min(2, "Name must be at least 2 characters"),
-    email_from_address: z.string().email("Invalid email address"),
-    email_test_to: z.string().email("Invalid test email"),
-    resend_api_key: z.string().min(10, "API key is required"),
-});
-
-const codeSchema = z.object({
-    code: z
-        .string()
-        .length(4, "Code must be 4 digits")
-        .regex(/^\d+$/, "Code must be numeric"),
-});
-
-type EmailConfigValues = z.infer<typeof emailConfigSchema>;
-type CodeValues = z.infer<typeof codeSchema>;
-
 export default function EmailConfigPage() {
+    const t = useTranslations("emailIntegration");
+
+    const emailConfigSchema = z.object({
+        email_from_name: z.string().min(2, t("form.fromName.errors.min")),
+        email_from_address: z.string().email(t("form.fromEmail.errors.invalid")),
+        email_test_to: z.string().email(t("form.testEmail.errors.invalid")),
+        resend_api_key: z.string().min(10, t("form.apiKey.errors.min")),
+    });
+
+    const codeSchema = z.object({
+        code: z
+            .string()
+            .length(4, t("codeStep.errors.length"))
+            .regex(/^\d+$/, t("codeStep.errors.numeric")),
+    });
+
+    type EmailConfigValues = z.infer<typeof emailConfigSchema>;
+    type CodeValues = z.infer<typeof codeSchema>;
     const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore();
     const [isVerified, setIsVerified] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -52,7 +54,6 @@ export default function EmailConfigPage() {
     const [error, setError] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [editMode, setEditMode] = useState(false);
-
     const form = useForm<EmailConfigValues>({
         resolver: zodResolver(emailConfigSchema),
         defaultValues: {
@@ -86,10 +87,10 @@ export default function EmailConfigPage() {
             const result = await res.json();
 
             if (!res.ok || !result.ok) {
-                throw new Error(result.message || "Failed to send verification code");
+                throw new Error(result.message || t("alerts.sendCodeFailed"));
             }
 
-            setSuccessMsg("Verification code sent to your email.");
+            setSuccessMsg(t("alerts.verificationSent"));
             setStep("CODE");
         } catch (err: any) {
             setError(err.message);
@@ -113,10 +114,10 @@ export default function EmailConfigPage() {
             const result = await res.json();
 
             if (!res.ok || !result.ok) {
-                throw new Error(result.message || "Verification failed");
+                throw new Error(result.message || t("alerts.verificationFailed"));
             }
 
-            setSuccessMsg("Email integration configured successfully.");
+            setSuccessMsg(t("alerts.integrationSuccess"));
             setStep("FORM");
             setIsVerified(true);
             codeForm.reset();
@@ -164,7 +165,7 @@ export default function EmailConfigPage() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || "Failed to save email settings");
+                throw new Error(errorData.error || t("alerts.saveFailed"));
             }
 
             const result = await response.json();
@@ -178,16 +179,16 @@ export default function EmailConfigPage() {
             });
             setEditMode(false);
             setIsVerified(false);
-            toast.success("Email settings saved successfully.");
+            toast.success(t("alerts.saveSuccess"));
         } catch (error: any) {
-            toast.error(error.message || "Failed to save email settings.");
+            toast.error(error.message || t("alerts.saveFailed"));
         } finally {
             setSaving(false);
         }
     };
 
     if (!selectedRestaurant) {
-        return <LoadingUI text="Loading" />;
+        return <LoadingUI text={t("loading.page")} />;
     }
 
     const isConfigured =
@@ -199,9 +200,11 @@ export default function EmailConfigPage() {
         <>
             <Card className="pt-0 shadow-md border-gray-200">
                 <CardHeader className="bg-gray-50/50 py-4">
-                    <CardTitle>Email Integration</CardTitle>
+                    <CardTitle>
+                        {t("title")}
+                    </CardTitle>
                     <CardDescription>
-                        Configure your Resend email settings to send notifications.
+                        {t("description")}
                     </CardDescription>
                 </CardHeader>
 
@@ -223,8 +226,15 @@ export default function EmailConfigPage() {
                         <form onSubmit={form.handleSubmit(handleStart)} className="space-y-4">
 
                             <div className="space-y-2">
-                                <Label>From Name</Label>
-                                <Input {...form.register("email_from_name")} placeholder="Your Restaurant Name" />
+                                <Label>
+                                    {t("form.fromName.label")}
+                                </Label>
+                                <Input {...form.register("email_from_name")}
+                                    placeholder={t("form.fromName.placeholder")}
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    {t("form.fromName.helper")}
+                                </p>
                                 {form.formState.errors.email_from_name && (
                                     <p className="text-sm text-red-600">
                                         {form.formState.errors.email_from_name.message}
@@ -233,21 +243,30 @@ export default function EmailConfigPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label>From Email Address</Label>
+                                <Label>
+                                    {t("form.fromEmail.label")}
+                                </Label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-3 h-4 w-4 text-emerald-600" />
-                                    <Input type="email" className="pl-10" {...form.register("email_from_address")} placeholder="noreply@yourdomain.com" />
+                                    <Input type="email" className="pl-10" {...form.register("email_from_address")} placeholder={t("form.fromEmail.placeholder")} />
                                 </div>
+                                <p className="text-xs text-muted-foreground">
+                                    {t("form.fromEmail.helper")}
+                                </p>
                                 {form.formState.errors.email_from_address && (
                                     <p className="text-sm text-red-600">
                                         {form.formState.errors.email_from_address.message}
                                     </p>
                                 )}
+
                             </div>
 
                             <div className="space-y-2">
-                                <Label>Test Email (Where to send verification code)</Label>
-                                <Input type="email" {...form.register("email_test_to")} placeholder="you@example.com" />
+                                <Label>{t("form.testEmail.label")}</Label>
+                                <Input type="email" {...form.register("email_test_to")} placeholder={t("form.testEmail.placeholder")} />
+                                <p className="text-xs text-muted-foreground">
+                                    {t("form.testEmail.helper")}
+                                </p>
                                 {form.formState.errors.email_test_to && (
                                     <p className="text-sm text-red-600">
                                         {form.formState.errors.email_test_to.message}
@@ -256,8 +275,12 @@ export default function EmailConfigPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label>Resend API Key</Label>
-                                <Input type="password" {...form.register("resend_api_key")} placeholder="re_************************" />
+                                <Label>
+                                    {t("form.apiKey.label")}</Label>
+                                <Input type="password" {...form.register("resend_api_key")} placeholder={t("form.apiKey.placeholder")} />
+                                <p className="text-xs text-muted-foreground">
+                                    {t("form.apiKey.helper")}
+                                </p>
                                 {form.formState.errors.resend_api_key && (
                                     <p className="text-sm text-red-600">
                                         {form.formState.errors.resend_api_key.message}
@@ -276,7 +299,7 @@ export default function EmailConfigPage() {
                                     ) : (
                                         <Send className="h-4 w-4" />
                                     )}
-                                    Send Verification Code
+                                    {t("buttons.sendCode")}
                                 </button>
                             </div>
 
@@ -287,8 +310,13 @@ export default function EmailConfigPage() {
                         <form onSubmit={codeForm.handleSubmit(handleVerify)} className="space-y-4">
 
                             <div className="space-y-2">
-                                <Label>Enter 4-Digit Code</Label>
+                                <Label>
+                                    {t("codeStep.label")}
+                                </Label>
                                 <Input maxLength={4} {...codeForm.register("code")} placeholder="1234" />
+                                <p className="text-xs text-muted-foreground">
+                                    {t("codeStep.helper")}
+                                </p>
                                 {codeForm.formState.errors.code && (
                                     <p className="text-sm text-red-600">
                                         {codeForm.formState.errors.code.message}
@@ -302,7 +330,7 @@ export default function EmailConfigPage() {
                                     onClick={() => setStep("FORM")}
                                     className="text-sm text-slate-600 underline"
                                 >
-                                    Go Back
+                                    {t("codeStep.buttons.back")}
                                 </button>
 
                                 <button
@@ -315,7 +343,7 @@ export default function EmailConfigPage() {
                                     ) : (
                                         <ShieldCheck className="h-4 w-4" />
                                     )}
-                                    Verify & Activate
+                                    {t("codeStep.buttons.verify")}
                                 </button>
                             </div>
 
@@ -331,7 +359,7 @@ export default function EmailConfigPage() {
 
                                 <div className="text-sm">
                                     <p className="font-medium text-gray-900">
-                                        Email integration connected
+                                        {t("status.connected")}
                                     </p>
                                     <p className="text-gray-600 text-xs">
                                         {selectedRestaurant.email_from_address}
@@ -345,24 +373,23 @@ export default function EmailConfigPage() {
                                         type="button"
                                         className="text-sm font-medium text-emerald-700 hover:underline hover:text-emerald-800 transition"
                                     >
-                                        Edit
+                                        {t("buttons.edit")}
                                     </button>
                                 </AlertDialogTrigger>
 
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
                                         <AlertDialogTitle>
-                                            Re-verification required
+                                            {t("status.reverificationTitle")}
                                         </AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Changing sender details requires verifying your email again.
-                                            You will need to provide the API key and confirm with a verification code.
+                                            {t("status.reverificationDescription")}
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
 
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>
-                                            Cancel
+                                            {t("buttons.cancel")}
                                         </AlertDialogCancel>
 
                                         <AlertDialogAction
@@ -382,7 +409,7 @@ export default function EmailConfigPage() {
                                                 setStep("FORM");
                                             }}
                                         >
-                                            Continue
+                                            {t("buttons.continue")}
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>

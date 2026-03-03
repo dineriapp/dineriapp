@@ -35,6 +35,7 @@ const SocialIcons: FC<SocialIconsProps> = ({
   theme,
   className,
   containerClassName,
+  isPreview
 }) => {
   // Create social links dynamically
   const socialLinks: SocialLink[] = [];
@@ -78,7 +79,7 @@ const SocialIcons: FC<SocialIconsProps> = ({
   if (restaurant.phone) {
     socialLinks.push({
       url: `tel:${restaurant.phone}`,
-      icon: <Phone className="h-5.5 w-5.5" />,
+      icon: <Phone className="h-6 w-6" />,
     });
   }
 
@@ -103,9 +104,8 @@ const SocialIcons: FC<SocialIconsProps> = ({
           href={link.url}
           target={link.url.startsWith("mailto:") ? "_self" : "_blank"}
           rel="noopener noreferrer"
-          className={`p-2.5 sm:p-4 rounded-full backdrop-blur-sm transition-transform hover:scale-110 ${
-            theme.socialIconBgShow ? "shadow-md" : ""
-          }  ${containerClassName}`}
+          className={cn(`p-4! rounded-full backdrop-blur-sm transition-transform hover:scale-110 ${theme.socialIconBgShow ? "shadow-md" : ""
+            }  ${containerClassName}`, isPreview && "")}
           style={{
             color: theme.socialIconColor || "#10b981",
             backgroundColor: theme.socialIconBgShow

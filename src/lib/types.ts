@@ -131,6 +131,8 @@ export interface FAQ {
 export interface AppearanceFormData {
     bg_color: string
     accent_color: string
+    food_heading: string
+    about_heading: string
     headings_text_color: string
     button_text_icons_color: string
     button_style: "rounded" | "square" | "pill"
@@ -139,6 +141,7 @@ export interface AppearanceFormData {
     bg_gradient_start: string
     social_icon_bg_color: string
     social_icon_color: string
+    use_headings_in_buttons: boolean
     button_icons_show: boolean
     buttons_gap_in_px: number
     social_icon_gap: number

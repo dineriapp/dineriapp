@@ -1816,21 +1816,29 @@
       }
     },
     "dashboardMobilePreview": {
-      "btns": {
+      "card": {
+        "title": "Vorschau",
+        "description": "Sehen Sie, wie Ihre Seite auf Mobilgeräten aussieht",
+        "visitButton": "Besuchen"
+      },
+      "actions": {
+        "share": "Teilen"
+      },
+      "buttons": {
+        "reserveTable": "Tisch reservieren",
         "menu": "Speisekarte",
         "events": "Veranstaltungen",
         "faq": "FAQ"
       },
-      "card": {
-        "title": "Vorschau",
-        "description": "So sieht deine Seite auf mobilen Geräten aus",
-        "visitButton": "Besuchen"
+      "states": {
+        "loadingPreview": "Vorschau wird geladen...",
+        "empty": "Keine Links, Menüs oder Veranstaltungen vorhanden. Fügen Sie einige im Dashboard hinzu!"
       },
-      "loading": {
-        "links": "Lade.."
-      },
-      "emptyState": {
-        "noLinks": "Noch keine Links – füge welche hinzu, um die Vorschau zu sehen."
+      "footer": {
+        "terms": "AGB",
+        "privacy": "Datenschutz",
+        "cookies": "Cookies",
+        "poweredBy": "Bereitgestellt von"
       }
     },
     "quickActions": {
@@ -2560,7 +2568,12 @@
     "appearance": "Erscheinungsbild",
     "loadingAppearance": "Erscheinungsbild wird geladen...",
     "customizeRestaurantPage": "Passen Sie das Aussehen Ihrer Restaurantseite an",
-
+    "separate_buttons_title": "Buttons trennen",
+    "separate_buttons_description": "Teile die Buttons in zwei Bereiche und bearbeite ihre Überschriften.",
+    "first_section_heading_label": "Überschrift für ersten Bereich",
+    "second_section_heading_label": "Überschrift für zweiten Bereich",
+    "first_section_heading_placeholder": "z.B. Essen & Getränke",
+    "second_section_heading_placeholder": "z.B. Über uns",
     "tabs_style": "Stil",
     "tabs_colors": "Farben",
     "tabs_typography": "Typografie",
@@ -3121,6 +3134,14 @@
     "faq": "FAQ",
     "no_links_added": "Noch keine Links hinzugefügt",
     "powered_by": "Bereitgestellt von",
+    "share_button": "Teilen",
+    "share_title": "Diese Seite teilen",
+    "food_section_title": "Essen & Getränke",
+    "about_section_title": "Über uns",
+    "link_copied": "Link in die Zwischenablage kopiert!",
+    "terms": "AGB",
+    "privacy": "Datenschutz",
+    "cookies": "Cookies",
     "welcome_popup": {
       "welcome_message": "Willkommen bei { restaurantName }!",
       "default_message": "Willkommen! Wir freuen uns, dass Sie uns besuchen.",
@@ -3358,6 +3379,11 @@
       "checkout_no_url": "Keine Checkout-URL erhalten",
       "failed_checkout_session": "Checkout-Sitzung konnte nicht erstellt werden"
     }
+  },
+  "time": {
+    "closes_at": "schließt um {time}",
+    "opens_at": "öffnet um {time}",
+    "opens_at_with_day": "öffnet am {day} um {time}"
   },
   "order_success_page": {
     "order_not_found_title": "Bestellung nicht gefunden",
@@ -4756,5 +4782,80 @@
     "error_invalid_code": "Ungültiger Verifizierungscode.",
     "error_generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "success_verified": "Erfolgreich verifiziert."
+  },
+  "emailIntegration": {
+    "title": "E-Mail-Integration",
+    "description": "Konfigurieren Sie Ihre Resend-E-Mail-Einstellungen, um Reservierungs- und Benachrichtigungs-E-Mails zu versenden.",
+    "alerts": {
+      "verificationSent": "Der Bestätigungscode wurde an Ihre E-Mail-Adresse gesendet.",
+      "verificationFailed": "Bestätigung fehlgeschlagen. Bitte überprüfen Sie den Code und versuchen Sie es erneut.",
+      "sendCodeFailed": "Der Bestätigungscode konnte nicht gesendet werden. Bitte überprüfen Sie Ihre Angaben und versuchen Sie es erneut.",
+      "integrationSuccess": "E-Mail-Integration erfolgreich eingerichtet. Klicken Sie auf „Änderungen speichern“, um die Integration zu aktivieren und zu speichern.",
+      "saveSuccess": "E-Mail-Einstellungen erfolgreich gespeichert.",
+      "saveFailed": "E-Mail-Einstellungen konnten nicht gespeichert werden."
+    },
+    "form": {
+      "fromName": {
+        "label": "Absendername",
+        "placeholder": "Name Ihres Restaurants",
+        "helper": "Dieser Name wird als Absender angezeigt, wenn E-Mails an Ihre Kunden gesendet werden.",
+        "errors": {
+          "min": "Der Name muss mindestens 2 Zeichen lang sein."
+        }
+      },
+      "fromEmail": {
+        "label": "Absender-E-Mail-Adresse",
+        "placeholder": "noreply@ihredomain.de",
+        "helper": "Von dieser E-Mail-Adresse werden Reservierungs- und Benachrichtigungs-E-Mails versendet.",
+        "errors": {
+          "invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+        }
+      },
+      "testEmail": {
+        "label": "Test-E-Mail (für Bestätigungscode)",
+        "placeholder": "sie@beispiel.de",
+        "helper": "Wir senden einen 4-stelligen Bestätigungscode (OTP) an diese E-Mail-Adresse.",
+        "errors": {
+          "invalid": "Bitte geben Sie eine gültige Test-E-Mail-Adresse ein."
+        }
+      },
+      "apiKey": {
+        "label": "Resend API-Schlüssel",
+        "placeholder": "re_************************",
+        "helper": "Geben Sie Ihren Resend API-Schlüssel ein. Er wird sicher verschlüsselt und niemals öffentlich zugänglich gemacht.",
+        "errors": {
+          "min": "Der Resend API-Schlüssel ist erforderlich und muss gültig sein."
+        }
+      }
+    },
+    "codeStep": {
+      "label": "4-stelligen Code eingeben",
+      "placeholder": "1234",
+      "helper": "Geben Sie den 4-stelligen Bestätigungscode ein, der an Ihre Test-E-Mail gesendet wurde.",
+      "errors": {
+        "length": "Der Bestätigungscode muss genau 4 Ziffern enthalten.",
+        "numeric": "Der Bestätigungscode darf nur Zahlen enthalten."
+      },
+      "buttons": {
+        "back": "Zurück",
+        "verify": "Bestätigen & Aktivieren"
+      }
+    },
+    "buttons": {
+      "sendCode": "Bestätigungscode senden",
+      "edit": "Bearbeiten",
+      "continue": "Fortfahren",
+      "cancel": "Abbrechen",
+      "saveChanges": "Änderungen speichern",
+      "resetChanges": "Änderungen zurücksetzen"
+    },
+    "status": {
+      "connected": "E-Mail-Integration verbunden",
+      "reverificationTitle": "Erneute Bestätigung erforderlich",
+      "reverificationDescription": "Beim Ändern der Absenderdaten ist eine erneute Bestätigung erforderlich. Sie müssen den API-Schlüssel eingeben und den Bestätigungscode bestätigen."
+    },
+    "loading": {
+      "page": "Wird geladen"
+    }
   }
 }

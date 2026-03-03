@@ -3,12 +3,13 @@ import { useRestaurants } from "@/lib/restaurents-queries";
 import { useRestaurantStore } from "@/stores/restaurant-store";
 import { GetRestaurantsResponse } from "@/types"; // adjust import as needed
 import { QueryObserverResult } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 export const useSyncRestaurants = () => {
     const { setRestaurants, setSelectedRestaurant } = useRestaurantStore();
     const { refetch } = useRestaurants();
 
-    const fetchAndSet = async () => {
+    const fetchAndSet = useCallback(async () => {
         const { data }: QueryObserverResult<GetRestaurantsResponse, unknown> = await refetch();
 
         if (!data) return;
@@ -29,7 +30,7 @@ export const useSyncRestaurants = () => {
                 setSelectedRestaurant(firstRestaurant);
             }
         }
-    };
+    }, [refetch, setRestaurants, setSelectedRestaurant]);
 
     return { fetchAndSet };
 };

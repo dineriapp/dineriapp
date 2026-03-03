@@ -1820,21 +1820,29 @@
       }
     },
     "dashboardMobilePreview": {
-      "btns": {
-        "menu": "Menú",
-        "events": "Eventos",
-        "faq": "FAQ"
-      },
       "card": {
         "title": "Vista previa",
-        "description": "Así se ve tu página en dispositivos móviles",
+        "description": "Mira cómo se ve tu página en dispositivos móviles",
         "visitButton": "Visitar"
       },
-      "loading": {
-        "links": "Cargando.."
+      "actions": {
+        "share": "Compartir"
       },
-      "emptyState": {
-        "noLinks": "Aún no tienes enlaces, agrega algunos para ver la vista previa."
+      "buttons": {
+        "reserveTable": "Reservar mesa",
+        "menu": "Menú",
+        "events": "Eventos",
+        "faq": "Preguntas frecuentes"
+      },
+      "states": {
+        "loadingPreview": "Cargando vista previa...",
+        "empty": "No hay enlaces, menú o eventos para mostrar. ¡Agrega algunos desde el panel!"
+      },
+      "footer": {
+        "terms": "Términos",
+        "privacy": "Privacidad",
+        "cookies": "Cookies",
+        "poweredBy": "Desarrollado por"
       }
     },
     "quickActions": {
@@ -2562,6 +2570,12 @@
     "toastFailed": "No se pudo cambiar el correo"
   },
   "appearance": {
+    "separate_buttons_title": "Separar botones",
+    "separate_buttons_description": "Divide los botones en dos secciones y edita sus títulos.",
+    "first_section_heading_label": "Título de la primera sección",
+    "second_section_heading_label": "Título de la segunda sección",
+    "first_section_heading_placeholder": "ej. Comida y Bebidas",
+    "second_section_heading_placeholder": "ej. Sobre nosotros",
     "appearance": "Apariencia",
     "loadingAppearance": "Cargando apariencia...",
     "customizeRestaurantPage": "Personaliza cómo se ve la página de tu restaurante",
@@ -3126,6 +3140,14 @@
     "faq": "Preguntas frecuentes",
     "no_links_added": "Aún no se han añadido enlaces",
     "powered_by": "Desarrollado por",
+    "share_button": "Compartir",
+    "share_title": "Compartir esta página",
+    "food_section_title": "Comida y Bebidas",
+    "about_section_title": "Sobre nosotros",
+    "link_copied": "¡Enlace copiado al portapapeles!",
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "cookies": "Cookies",
     "welcome_popup": {
       "welcome_message": "¡Bienvenido a { restaurantName }!",
       "default_message": "¡Bienvenido! Estamos emocionados de tenerte aquí.",
@@ -4022,6 +4044,11 @@
       "title": "Uso de capacidad"
     }
   },
+  "time": {
+    "closes_at": "cierra a las {time}",
+    "opens_at": "abre a las {time}",
+    "opens_at_with_day": "abre el {day} a las {time}"
+  },
   "dashbaordReservationForm": {
     "loading": "Cargando...",
     "title": "Agregar reserva",
@@ -4761,5 +4788,80 @@
     "error_invalid_code": "Código de verificación no válido.",
     "error_generic": "Algo salió mal. Por favor, inténtelo de nuevo.",
     "success_verified": "Verificado correctamente."
+  },
+  "emailIntegration": {
+    "title": "Integración de correo electrónico",
+    "description": "Configure los ajustes de Resend para enviar correos de reservas y notificaciones.",
+    "alerts": {
+      "verificationSent": "El código de verificación se envió a su correo electrónico.",
+      "verificationFailed": "La verificación falló. Revise el código e inténtelo nuevamente.",
+      "sendCodeFailed": "No se pudo enviar el código de verificación. Revise los datos e inténtelo nuevamente.",
+      "integrationSuccess": "Integración de correo configurada correctamente. Haga clic en \"Guardar cambios\" para activar y guardar la configuración.",
+      "saveSuccess": "Configuración de correo guardada correctamente.",
+      "saveFailed": "No se pudo guardar la configuración de correo."
+    },
+    "form": {
+      "fromName": {
+        "label": "Nombre del remitente",
+        "placeholder": "Nombre de su restaurante",
+        "helper": "Este nombre aparecerá como remitente cuando se envíen correos a sus clientes.",
+        "errors": {
+          "min": "El nombre debe tener al menos 2 caracteres."
+        }
+      },
+      "fromEmail": {
+        "label": "Correo del remitente",
+        "placeholder": "noreply@sudominio.com",
+        "helper": "Desde esta dirección se enviarán los correos de reservas y notificaciones.",
+        "errors": {
+          "invalid": "Ingrese un correo electrónico válido."
+        }
+      },
+      "testEmail": {
+        "label": "Correo de prueba",
+        "placeholder": "usted@ejemplo.com",
+        "helper": "Enviaremos un código de verificación de 4 dígitos (OTP) a este correo.",
+        "errors": {
+          "invalid": "Ingrese un correo electrónico de prueba válido."
+        }
+      },
+      "apiKey": {
+        "label": "Clave API de Resend",
+        "placeholder": "re_************************",
+        "helper": "Ingrese su clave API de Resend. Se almacenará de forma segura y encriptada.",
+        "errors": {
+          "min": "La clave API de Resend es obligatoria y debe ser válida."
+        }
+      }
+    },
+    "codeStep": {
+      "label": "Ingrese el código de 4 dígitos",
+      "placeholder": "1234",
+      "helper": "Ingrese el código de verificación enviado a su correo de prueba.",
+      "errors": {
+        "length": "El código debe tener exactamente 4 dígitos.",
+        "numeric": "El código solo debe contener números."
+      },
+      "buttons": {
+        "back": "Volver",
+        "verify": "Verificar y activar"
+      }
+    },
+    "buttons": {
+      "sendCode": "Enviar código de verificación",
+      "edit": "Editar",
+      "continue": "Continuar",
+      "cancel": "Cancelar",
+      "saveChanges": "Guardar cambios",
+      "resetChanges": "Restablecer cambios"
+    },
+    "status": {
+      "connected": "Integración de correo conectada",
+      "reverificationTitle": "Se requiere nueva verificación",
+      "reverificationDescription": "Al cambiar los datos del remitente, deberá verificar nuevamente su correo e ingresar la clave API y el código."
+    },
+    "loading": {
+      "page": "Cargando"
+    }
   }
 }

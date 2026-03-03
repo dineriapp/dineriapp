@@ -18,6 +18,11 @@
     "login": "Se connecter",
     "signup": "S'inscrire"
   },
+  "time": {
+    "closes_at": "ferme à {time}",
+    "opens_at": "ouvre à {time}",
+    "opens_at_with_day": "ouvre {day} à {time}"
+  },
   "Footer": {
     "product": "Produit",
     "features": "Fonctionnalités",
@@ -1820,21 +1825,29 @@
       }
     },
     "dashboardMobilePreview": {
-      "btns": {
-        "menu": "Menu",
-        "events": "Événements",
-        "faq": "FAQ"
-      },
       "card": {
         "title": "Aperçu",
         "description": "Voyez à quoi ressemble votre page sur les appareils mobiles",
         "visitButton": "Visiter"
       },
-      "loading": {
-        "links": "Chargement.."
+      "actions": {
+        "share": "Partager"
       },
-      "emptyState": {
-        "noLinks": "Aucun lien pour l’instant, ajoutez-en pour voir l’aperçu."
+      "buttons": {
+        "reserveTable": "Réserver une table",
+        "menu": "Menu",
+        "events": "Événements",
+        "faq": "FAQ"
+      },
+      "states": {
+        "loadingPreview": "Chargement de l’aperçu...",
+        "empty": "Aucun lien, menu ou événement à afficher. Ajoutez-en depuis le tableau de bord !"
+      },
+      "footer": {
+        "terms": "Conditions",
+        "privacy": "Confidentialité",
+        "cookies": "Cookies",
+        "poweredBy": "Propulsé par"
       }
     },
     "quickActions": {
@@ -2564,7 +2577,12 @@
     "appearance": "Apparence",
     "loadingAppearance": "Chargement de l'apparence...",
     "customizeRestaurantPage": "Personnalisez l'apparence de la page de votre restaurant",
-
+    "separate_buttons_title": "Séparer les boutons",
+    "separate_buttons_description": "Divisez les boutons en deux sections et modifiez leurs titres.",
+    "first_section_heading_label": "Titre de la première section",
+    "second_section_heading_label": "Titre de la deuxième section",
+    "first_section_heading_placeholder": "ex. Nourriture & Boissons",
+    "second_section_heading_placeholder": "ex. À propos",
     "tabs_style": "Style",
     "tabs_colors": "Couleurs",
     "tabs_typography": "Typographie",
@@ -3124,6 +3142,14 @@
     "faq": "FAQ",
     "no_links_added": "Aucun lien ajouté pour le moment",
     "powered_by": "Propulsé par",
+    "share_button": "Partager",
+    "share_title": "Partager cette page",
+    "food_section_title": "Nourriture & Boissons",
+    "about_section_title": "À propos",
+    "link_copied": "Lien copié dans le presse-papiers !",
+    "terms": "Conditions",
+    "privacy": "Confidentialité",
+    "cookies": "Cookies",
     "welcome_popup": {
       "welcome_message": "Bienvenue chez { restaurantName } !",
       "default_message": "Bienvenue ! Nous sommes ravis de vous accueillir.",
@@ -4424,13 +4450,13 @@
   "notificationSettings": {
     "title": "Paramètres de notification",
     "description": "Configurez des notifications automatiques par e-mail pour les réservations",
-"integration": {
-  "notConfiguredTitle": "Intégration e-mail non configurée",
-  "notConfiguredDescription": "Vous devez configurer vos paramètres e-mail avant d’activer les notifications.",
-  "configureButton": "Configurer l’e-mail",
-  "usingExistingTitle": "Utilisation de l’intégration e-mail existante",
-  "useForReservationsButton": "Utiliser pour les réservations"
-},
+    "integration": {
+      "notConfiguredTitle": "Intégration e-mail non configurée",
+      "notConfiguredDescription": "Vous devez configurer vos paramètres e-mail avant d’activer les notifications.",
+      "configureButton": "Configurer l’e-mail",
+      "usingExistingTitle": "Utilisation de l’intégration e-mail existante",
+      "useForReservationsButton": "Utiliser pour les réservations"
+    },
     "status": {
       "testingPassed": "Phase de test réussie",
       "testingNotPassed": "Phase de test non réussie"
@@ -4763,5 +4789,80 @@
     "error_invalid_code": "Code de vérification invalide.",
     "error_generic": "Une erreur s'est produite. Veuillez réessayer.",
     "success_verified": "Vérification réussie."
+  },
+  "emailIntegration": {
+    "title": "Intégration des e-mails",
+    "description": "Configurez vos paramètres Resend pour envoyer des e-mails de réservation et de notification.",
+    "alerts": {
+      "verificationSent": "Le code de vérification a été envoyé à votre adresse e-mail.",
+      "verificationFailed": "La vérification a échoué. Veuillez vérifier le code et réessayer.",
+      "sendCodeFailed": "Impossible d’envoyer le code de vérification. Veuillez vérifier vos informations et réessayer.",
+      "integrationSuccess": "Intégration e-mail configurée avec succès. Cliquez sur « Enregistrer les modifications » pour activer et sauvegarder la configuration.",
+      "saveSuccess": "Paramètres e-mail enregistrés avec succès.",
+      "saveFailed": "Impossible d’enregistrer les paramètres e-mail."
+    },
+    "form": {
+      "fromName": {
+        "label": "Nom de l’expéditeur",
+        "placeholder": "Nom de votre restaurant",
+        "helper": "Ce nom apparaîtra comme expéditeur lors de l’envoi d’e-mails à vos clients.",
+        "errors": {
+          "min": "Le nom doit contenir au moins 2 caractères."
+        }
+      },
+      "fromEmail": {
+        "label": "Adresse e-mail de l’expéditeur",
+        "placeholder": "noreply@votredomaine.com",
+        "helper": "Les e-mails de réservation et de notification seront envoyés depuis cette adresse.",
+        "errors": {
+          "invalid": "Veuillez saisir une adresse e-mail valide."
+        }
+      },
+      "testEmail": {
+        "label": "E-mail de test (pour le code)",
+        "placeholder": "vous@exemple.com",
+        "helper": "Nous enverrons un code de vérification à 4 chiffres (OTP) à cette adresse.",
+        "errors": {
+          "invalid": "Veuillez saisir une adresse e-mail de test valide."
+        }
+      },
+      "apiKey": {
+        "label": "Clé API Resend",
+        "placeholder": "re_************************",
+        "helper": "Saisissez votre clé API Resend. Elle sera stockée de manière sécurisée et chiffrée.",
+        "errors": {
+          "min": "La clé API Resend est requise et doit être valide."
+        }
+      }
+    },
+    "codeStep": {
+      "label": "Saisir le code à 4 chiffres",
+      "placeholder": "1234",
+      "helper": "Saisissez le code de vérification envoyé à votre e-mail de test.",
+      "errors": {
+        "length": "Le code doit contenir exactement 4 chiffres.",
+        "numeric": "Le code doit contenir uniquement des chiffres."
+      },
+      "buttons": {
+        "back": "Retour",
+        "verify": "Vérifier et activer"
+      }
+    },
+    "buttons": {
+      "sendCode": "Envoyer le code",
+      "edit": "Modifier",
+      "continue": "Continuer",
+      "cancel": "Annuler",
+      "saveChanges": "Enregistrer les modifications",
+      "resetChanges": "Réinitialiser les modifications"
+    },
+    "status": {
+      "connected": "Intégration e-mail connectée",
+      "reverificationTitle": "Nouvelle vérification requise",
+      "reverificationDescription": "Modifier les informations d’expéditeur nécessite une nouvelle vérification. Vous devrez saisir la clé API et confirmer le code."
+    },
+    "loading": {
+      "page": "Chargement"
+    }
   }
 }

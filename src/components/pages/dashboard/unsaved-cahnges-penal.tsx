@@ -28,7 +28,7 @@ export const UnsavedChangesPanel: React.FC<UnsavedChangesPanelProps> = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{
                 opacity: hasChanges ? 1 : 0,
-                y: hasChanges ? 0 : 20,
+                y: hasChanges ? 0 : 100,
             }}
             className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-end sm:items-center sm:flex-row-reverse flex-col gap-2 sm:gap-2"
         >

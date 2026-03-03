@@ -37,7 +37,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             button_icons_show,
             buttons_gap_in_px,
             social_icon_gap,
-            social_icon_bg_show
+            social_icon_bg_show,
+            use_headings_in_buttons,
+            food_heading,
+            about_heading,
         } = body
 
         // Validate required fields
@@ -96,6 +99,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                 button_variant,
                 button_icons_show: button_icons_show,
                 bg_image_url: bg_image_url || null,
+                use_headings_in_buttons: use_headings_in_buttons ?? false,
+                food_heading: food_heading ?? "",
+                about_heading: about_heading ?? "",
             },
         })
 

@@ -1,10 +1,8 @@
 "use client";
 
 import { ColorSelector } from "@/app/[locale]/(dashboard)/_components/color-selection";
-import { GoogleRating } from "@/app/[locale]/[slug]/_components/google-rating";
-import { OpeningHoursStatus } from "@/app/[locale]/[slug]/_components/opening-hours-status";
 import LoadingUI from "@/components/loading-ui";
-import SocialIcons from "@/components/social-icons";
+import SlugPagePreview from "@/components/shared/slug-page-preview";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,48 +21,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Locale } from "@/i18n/routing";
-import { useEvents } from "@/lib/event-queries";
-import { useFaqCategories } from "@/lib/faq-queries";
-import { getLucideIconBySlug } from "@/lib/get-icons";
-import { useLinks } from "@/lib/link-queries";
-import { useMenuCategories } from "@/lib/tanstack/menu-queries";
 import {
   colorPresets,
-  container2,
   fonts,
   gradientDirectionsLangs,
   gradientPresets,
-  itemSlugPage,
-  textColorPresets,
+  textColorPresets
 } from "@/lib/reuseable-data";
-import { useGoogleReviews } from "@/lib/review-api";
 import { AppearanceFormData } from "@/lib/types";
 import {
-  getBackgroundStyle,
   ResetChangesBtnClasses,
-  SaveChangesBtnClasses,
+  SaveChangesBtnClasses
 } from "@/lib/utils";
 import { useRestaurantStore } from "@/stores/restaurant-store";
 import { uploadImage } from "@/supabase/clients/client";
-import { OpeningHoursData } from "@/types";
 import { GradientDirection } from "@prisma/client";
 import {
-  Battery,
   ImageIcon,
   Loader,
-  MoreVertical,
   Paintbrush,
   Palette,
   RotateCcw,
   Save,
-  Signal,
   Type,
-  Upload,
-  Wifi,
+  Upload
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
@@ -73,15 +56,9 @@ import { toast } from "sonner";
 
 export default function AppearancePage() {
   const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore();
-  const { data: links = [], isLoading: linksLoading } = useLinks(
-    selectedRestaurant?.id,
-  );
-  const { data: reviewData, isLoading: reviewLoading } = useGoogleReviews(
-    selectedRestaurant?.google_place_id,
-  );
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const t = useTranslations("appearance");
-  const t2 = useTranslations("dashboard.dashboardMobilePreview");
+
   // Form state
   const [formData, setFormData] = useState<AppearanceFormData>({
     bg_color: "#ffffff",
@@ -92,6 +69,9 @@ export default function AppearancePage() {
     font_family: "var(--font-space-grotesk)",
     bg_type: "color",
     button_icons_show: true,
+    use_headings_in_buttons: true,
+    food_heading: "Food & Drinks",
+    about_heading: "About",
     social_icon_bg_show: false,
     social_icon_bg_color: "#FFFFFF",
     social_icon_color: "#000000",
@@ -104,24 +84,11 @@ export default function AppearancePage() {
     bg_image_url: "",
   });
 
-  // Initial form data for reset functionality
   const [initialData, setInitialData] = useState<AppearanceFormData>(formData);
-  const { data: categories } = useMenuCategories(selectedRestaurant?.id);
-  const { data: events } = useEvents(selectedRestaurant?.id);
-  const { data: faqcategories } = useFaqCategories(selectedRestaurant?.id);
 
-  const hasMenuItems = categories?.some(
-    (category) => category.items && category.items.length > 0,
-  );
-
-  const hasFaqsItems = faqcategories?.some(
-    (category) => category.faqs && category.faqs.length > 0,
-  );
   // UI state
   const [saving, setSaving] = useState(false);
-  const [currentTime] = useState(() =>
-    new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-  );
+
   const locale = useLocale() as Locale;
   // Load initial data from restaurant store
   useEffect(() => {
@@ -148,6 +115,9 @@ export default function AppearancePage() {
           selectedRestaurant.gradient_direction || "bottom_right",
         button_variant: selectedRestaurant.button_variant || "solid",
         bg_image_url: selectedRestaurant.bg_image_url || "",
+        about_heading: selectedRestaurant.about_heading || "About",
+        food_heading: selectedRestaurant.food_heading || "Food & Drinks",
+        use_headings_in_buttons: selectedRestaurant.use_headings_in_buttons,
       };
 
       setFormData(initialFormData);
@@ -229,12 +199,6 @@ export default function AppearancePage() {
       setUploadingLogo(false);
     }
   }
-
-  const openingHours = selectedRestaurant?.opening_hours
-    ? (selectedRestaurant?.opening_hours as OpeningHoursData)
-    : null;
-  const buttonTextColor =
-    selectedRestaurant?.button_text_icons_color || "#000000";
 
   // Apply template
   // const applyTemplate = async (template: Template) => {
@@ -427,6 +391,64 @@ export default function AppearancePage() {
                           }))
                         }
                       />
+                    </div>
+                    <div className="flex flex-col border rounded-lg px-4 py-3">
+                      <div className="flex items-center justify-between w-full">
+                        <div className="space-y-1">
+                          <Label className="text-slate-700 text-sm font-medium">
+                            {t("separate_buttons_title")}
+                          </Label>
+                          <p className="text-sm text-muted-foreground">
+                            {t("separate_buttons_description")}
+                          </p>
+                        </div>
+
+                        <Switch
+                          checked={formData.use_headings_in_buttons}
+                          onCheckedChange={(checked) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              use_headings_in_buttons: checked,
+                            }))
+                          }
+                        />
+                      </div>
+
+                      {formData.use_headings_in_buttons && (
+                        <div className="mt-4 flex flex-col gap-3">
+                          <div className="space-y-1">
+                            <Label className="text-sm">
+                              {t("first_section_heading_label")}
+                            </Label>
+                            <Input
+                              value={formData.food_heading || ""}
+                              onChange={(e) =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  food_heading: e.target.value,
+                                }))
+                              }
+                              placeholder={t("first_section_heading_placeholder")}
+                            />
+                          </div>
+
+                          <div className="space-y-1">
+                            <Label className="text-sm">
+                              {t("second_section_heading_label")}
+                            </Label>
+                            <Input
+                              value={formData.about_heading || ""}
+                              onChange={(e) =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  about_heading: e.target.value,
+                                }))
+                              }
+                              placeholder={t("second_section_heading_placeholder")}
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   {/* Gap between buttons (vertical spacing) */}
@@ -1010,506 +1032,7 @@ export default function AppearancePage() {
         </div>
 
         {/* Live Preview */}
-        <div className="lg:sticky lg:top-24 space-y-6">
-          <Card className="overflow-hidden pt-0 border-slate-200 box-shad-every-2">
-            <CardHeader className="bg-gray-100/50 py-4 font-poppins">
-              <CardTitle className="text-slate-900">
-                {t("livePreview")}
-              </CardTitle>
-              <CardDescription className="text-slate-500">
-                {t("livePreview_description")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="mx-auto max-w-[350px] lg:max-w-[390px] p-6">
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-teal-500/20 to-blue-500/20 blur-xl opacity-30 scale-105 translate-y-2"></div>
-
-                  <div className="relative rounded-[2rem] bg-black overflow-hidden shadow-[0_0_0_12px_rgba(0,0,0,0.8)]">
-                    <div className="absolute -right-[2px] top-16 w-[3px] h-12 bg-gray-800 rounded-l-lg"></div>
-                    <div className="absolute -left-[2px] top-20 w-[3px] h-6 bg-gray-800 rounded-r-lg"></div>
-                    <div className="absolute -left-[2px] top-28 w-[3px] h-6 bg-gray-800 rounded-r-lg"></div>
-
-                    <div className="absolute top-0 inset-x-0 flex justify-center z-10">
-                      <div className="w-[84px] h-[32px] bg-black rounded-b-[18px] flex items-center justify-center">
-                        <div className="w-2.5 h-2.5 rounded-full bg-[#1a1a1a] ring-[3px] ring-[#121212] absolute left-4"></div>
-                        <div className="w-2 h-2 rounded-full bg-[#1a1a1a] absolute right-4"></div>
-                      </div>
-                    </div>
-
-                    <div className="relative z-10 flex items-center justify-between text-white px-4 pt-2 text-[12px] font-medium">
-                      <span>{currentTime}</span>
-                      <div className="flex items-center gap-1">
-                        <Signal className="h-3 w-3" />
-                        <Wifi className="h-3 w-3" />
-                        <Battery className="h-3 w-3" />
-                      </div>
-                    </div>
-
-                    <div className="mt-1">
-                      <div
-                        className="min-h-[600px] lg:min-h-[650px] no-scroll overflow-y-auto max-h-[610px]"
-                        style={getBackgroundStyle({
-                          props: {
-                            bg_color: formData?.bg_color || "",
-                            bg_gradient_end: formData.bg_gradient_end || "",
-                            bg_gradient_start:
-                              formData?.bg_gradient_start || "",
-                            bg_image_url: formData?.bg_image_url || "",
-                            bg_type: formData?.bg_type,
-                            gradient_direction: formData?.gradient_direction,
-                          },
-                        })}
-                      >
-                        <div className="p-4 flex flex-col items-center">
-                          {selectedRestaurant?.logo_url ? (
-                            <motion.img
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{
-                                type: "spring",
-                                stiffness: 200,
-                                damping: 15,
-                              }}
-                              src={selectedRestaurant.logo_url}
-                              alt={selectedRestaurant.name}
-                              className="mb-5 h-24 w-24 rounded-full object-cover"
-                              loading="eager"
-                            />
-                          ) : (
-                            <motion.div
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{
-                                type: "spring",
-                                stiffness: 200,
-                                damping: 15,
-                              }}
-                              className="mb-5 flex h-24 w-24 items-center justify-center rounded-full shadow-lg ring-4 ring-white/20 fallback-initial"
-                              style={{ backgroundColor: formData.accent_color }}
-                            >
-                              <span className="text-xl font-bold text-white">
-                                {selectedRestaurant?.name.charAt(0)}
-                              </span>
-                            </motion.div>
-                          )}
-
-                          <motion.h2
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                            className="mb-3 text-2xl font-bold"
-                            style={{
-                              color: formData.headings_text_color,
-                              fontFamily: formData.font_family,
-                            }}
-                          >
-                            {selectedRestaurant?.name}
-                          </motion.h2>
-
-                          {/* Opening Hours Status */}
-                          {openingHours && (
-                            <motion.div
-                              initial={{ y: 20, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              transition={{ delay: 0.25 }}
-                              className="mb-4"
-                            >
-                              <OpeningHoursStatus
-                                openingHours={openingHours}
-                                color={
-                                  formData.headings_text_color || "#000000"
-                                }
-                                className="text-white cursor-pointer text-center"
-                                accentColor={formData.accent_color || "#10b981"}
-                              />
-                            </motion.div>
-                          )}
-
-                          {selectedRestaurant?.google_place_id &&
-                            reviewLoading ? (
-                            <Skeleton className="w-[80px] h-[36px] animate-pulse" />
-                          ) : reviewData?.rating ? (
-                            <motion.div
-                              initial={{ y: 20, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              transition={{ delay: 0.25 }}
-                              className="mb-4"
-                            >
-                              <GoogleRating
-                                info={{
-                                  rating: reviewData?.rating,
-                                  user_ratings_total:
-                                    reviewData?.user_ratings_total,
-                                }}
-                                color={
-                                  formData?.headings_text_color || "#000000"
-                                }
-                              />
-                            </motion.div>
-                          ) : (
-                            ""
-                          )}
-
-                          {selectedRestaurant?.bio && (
-                            <motion.p
-                              initial={{ y: 20, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              transition={{ delay: 0.3 }}
-                              className="mx-auto mb-4 text-center max-w-md text-sm"
-                              style={{
-                                color: formData.headings_text_color,
-                                opacity: 0.9,
-                                fontFamily: formData.font_family,
-                              }}
-                            >
-                              {selectedRestaurant.bio}
-                            </motion.p>
-                          )}
-
-                          {(selectedRestaurant?.instagram ||
-                            selectedRestaurant?.facebook ||
-                            selectedRestaurant?.email ||
-                            selectedRestaurant?.address ||
-                            selectedRestaurant?.whatsapp) && (
-                              <SocialIcons
-                                restaurant={{
-                                  address: selectedRestaurant?.address,
-                                  email: selectedRestaurant.email,
-                                  facebook: selectedRestaurant.facebook,
-                                  instagram: selectedRestaurant.instagram,
-                                  whatsapp: selectedRestaurant.whatsapp,
-                                  tiktok: selectedRestaurant.tiktok,
-                                  phone: selectedRestaurant.phone,
-                                }}
-                                className="mb-4"
-                                theme={{
-                                  socialIconColor: formData.social_icon_color,
-                                  socialIconBgShow: formData.social_icon_bg_show,
-                                  socialIconBgColor:
-                                    formData.social_icon_bg_color,
-                                  social_icon_gap: formData.social_icon_gap,
-                                }}
-                              />
-                            )}
-                        </div>
-
-                        <motion.div
-                          variants={container2}
-                          initial="hidden"
-                          animate="show"
-                          className="flex-grow px-4 mb-4 flex flex-col"
-                          style={{ rowGap: `${formData.buttons_gap_in_px}px` }}
-                        >
-                          {linksLoading ? (
-                            <p className="w-full text-center text-sm">
-                              {t("loading")}
-                            </p>
-                          ) : (
-                            <>
-                              {links?.length > 0 ? (
-                                <>
-                                  {links?.map((link) => (
-                                    <div
-                                      key={link.id}
-                                      rel="noopener noreferrer"
-                                      className={`group flex items-center justify-center  text-center w-full h-[52px]  transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${selectedRestaurant?.button_icons_show ? "px-14" : "px-4"} ${formData.button_style === "pill"
-                                          ? "rounded-full"
-                                          : formData.button_style === "square"
-                                            ? "rounded-md"
-                                            : "rounded-xl"
-                                        }`}
-                                      style={{
-                                        backgroundColor:
-                                          formData.button_variant === "solid"
-                                            ? formData.accent_color || "#10b981"
-                                            : "transparent",
-                                        backdropFilter: "blur(8px)",
-                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
-                                        boxShadow:
-                                          "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                        color:
-                                          formData.button_variant === "solid"
-                                            ? formData.button_text_icons_color ||
-                                            "#000000"
-                                            : formData.accent_color ||
-                                            "#10b981",
-                                        fontFamily:
-                                          formData.font_family || "Inter",
-                                        letterSpacing: "0.01em",
-                                      }}
-                                    >
-                                      {formData.button_icons_show && (
-                                        <div
-                                          className="flex aspect-square absolute left-[7px]  shrink-0 size-[38px] items-center justify-center rounded-full "
-                                          style={{
-                                            backgroundColor:
-                                              formData.button_text_icons_color ||
-                                              "transparent",
-                                          }}
-                                        >
-                                          {getLucideIconBySlug(link.icon_slug, {
-                                            className: "w-4 h-4",
-                                            style: {
-                                              color:
-                                                formData.accent_color ||
-                                                "transparent",
-                                            },
-                                          })}
-                                        </div>
-                                      )}
-                                      <span
-                                        className={`relative w-full text-[15px] ${formData.button_variant === "outline"
-                                            ? "group-hover:text-white"
-                                            : ""
-                                          } transition-colors duration-300 font-medium`}
-                                        style={{
-                                          color:
-                                            formData.button_variant ===
-                                              "outline"
-                                              ? formData.accent_color ||
-                                              "#10b981"
-                                              : formData.button_text_icons_color,
-                                        }}
-                                      >
-                                        {link.title}
-                                      </span>
-                                      {formData.button_icons_show && (
-                                        <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                          <MoreVertical className="size-4" />
-                                        </div>
-                                      )}
-                                    </div>
-                                  ))}
-                                </>
-                              ) : (
-                                <p className="w-full text-center text-sm">
-                                  {t("noLinksYet")}
-                                </p>
-                              )}
-                            </>
-                          )}
-                          {categories && (
-                            <>
-                              {categories?.length > 0 && hasMenuItems && (
-                                <motion.button
-                                  variants={itemSlugPage}
-                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
-                                      ? "rounded-full"
-                                      : formData.button_style === "square"
-                                        ? "rounded-md"
-                                        : "rounded-xl"
-                                    }`}
-                                  style={{
-                                    backgroundColor:
-                                      formData.button_variant === "solid"
-                                        ? formData.accent_color || "#10b981"
-                                        : "transparent",
-                                    backdropFilter: "blur(8px)",
-                                    border: `2px solid ${formData.accent_color || "#10b981"}`,
-                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                    color:
-                                      formData.button_variant === "solid"
-                                        ? buttonTextColor
-                                        : formData.accent_color || "#10b981",
-                                    fontFamily: formData.font_family || "Inter",
-                                    letterSpacing: "0.01em",
-                                  }}
-                                >
-                                  {formData?.button_icons_show && (
-                                    <div
-                                      className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
-                                      style={{
-                                        backgroundColor:
-                                          formData.button_text_icons_color ||
-                                          "transparent",
-                                      }}
-                                    >
-                                      {getLucideIconBySlug("menu", {
-                                        className: "w-4 h-4",
-                                        style: {
-                                          color:
-                                            formData.accent_color ||
-                                            "transparent",
-                                        },
-                                      })}
-                                    </div>
-                                  )}
-                                  <span
-                                    className={`relative w-full text-[15px] ${formData.button_variant === "outline"
-                                        ? "group-hover:text-white"
-                                        : ""
-                                      } transition-colors duration-300 font-medium`}
-                                    style={{
-                                      color:
-                                        formData.button_variant === "outline"
-                                          ? formData.accent_color || "#10b981"
-                                          : buttonTextColor,
-                                    }}
-                                  >
-                                    {t2("btns.menu")}
-                                  </span>
-                                  {formData?.button_icons_show && (
-                                    <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                      <MoreVertical className="size-4" />
-                                    </div>
-                                  )}
-                                </motion.button>
-                              )}
-                            </>
-                          )}
-
-                          {events && (
-                            <>
-                              {events.length > 0 && (
-                                <motion.button
-                                  variants={itemSlugPage}
-                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
-                                      ? "rounded-full"
-                                      : formData.button_style === "square"
-                                        ? "rounded-md"
-                                        : "rounded-xl"
-                                    }`}
-                                  style={{
-                                    backgroundColor:
-                                      formData.button_variant === "solid"
-                                        ? formData.accent_color || "#10b981"
-                                        : "transparent",
-                                    backdropFilter: "blur(8px)",
-                                    border: `2px solid ${formData.accent_color || "#10b981"}`,
-                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                    color:
-                                      formData.button_variant === "solid"
-                                        ? buttonTextColor
-                                        : formData.accent_color || "#10b981",
-                                    fontFamily: formData.font_family || "Inter",
-                                    letterSpacing: "0.01em",
-                                  }}
-                                >
-                                  {formData?.button_icons_show && (
-                                    <div
-                                      className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
-                                      style={{
-                                        backgroundColor:
-                                          formData.button_text_icons_color ||
-                                          "transparent",
-                                      }}
-                                    >
-                                      {getLucideIconBySlug("events", {
-                                        className: "w-4 h-4",
-                                        style: {
-                                          color:
-                                            formData.accent_color ||
-                                            "transparent",
-                                        },
-                                      })}
-                                    </div>
-                                  )}
-                                  <span
-                                    className={`relative w-full text-[15px] ${formData.button_variant === "outline"
-                                        ? "group-hover:text-white"
-                                        : ""
-                                      } transition-colors duration-300 font-medium`}
-                                    style={{
-                                      color:
-                                        formData.button_variant === "outline"
-                                          ? formData.accent_color || "#10b981"
-                                          : buttonTextColor,
-                                    }}
-                                  >
-                                    {t2("btns.events")}
-                                  </span>
-                                  {formData?.button_icons_show && (
-                                    <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                      <MoreVertical className="size-4" />
-                                    </div>
-                                  )}
-                                </motion.button>
-                              )}
-                            </>
-                          )}
-                          {faqcategories && (
-                            <>
-                              {faqcategories.length > 0 && hasFaqsItems && (
-                                <motion.button
-                                  variants={itemSlugPage}
-                                  className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14" : "px-4"} w-full h-[52px] transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
-                                      ? "rounded-full"
-                                      : formData.button_style === "square"
-                                        ? "rounded-md"
-                                        : "rounded-xl"
-                                    }`}
-                                  style={{
-                                    backgroundColor:
-                                      formData.button_variant === "solid"
-                                        ? formData.accent_color || "#10b981"
-                                        : "transparent",
-                                    backdropFilter: "blur(8px)",
-                                    border: `2px solid ${formData.accent_color || "#10b981"}`,
-                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-                                    color:
-                                      formData.button_variant === "solid"
-                                        ? buttonTextColor
-                                        : formData.accent_color || "#10b981",
-                                    fontFamily: formData.font_family || "Inter",
-                                    letterSpacing: "0.01em",
-                                  }}
-                                >
-                                  {formData?.button_icons_show && (
-                                    <div
-                                      className="flex aspect-square absolute left-[7px] shrink-0 size-[38px] items-center justify-center rounded-full "
-                                      style={{
-                                        backgroundColor:
-                                          formData.button_text_icons_color ||
-                                          "transparent",
-                                      }}
-                                    >
-                                      {getLucideIconBySlug("faq", {
-                                        className: "w-4 h-4",
-                                        style: {
-                                          color:
-                                            formData.accent_color ||
-                                            "transparent",
-                                        },
-                                      })}
-                                    </div>
-                                  )}
-                                  <span
-                                    className={`relative w-full text-[15px] ${formData.button_variant === "outline"
-                                        ? "group-hover:text-white"
-                                        : ""
-                                      } transition-colors duration-300 font-medium`}
-                                    style={{
-                                      color:
-                                        formData.button_variant === "outline"
-                                          ? formData.accent_color || "#10b981"
-                                          : buttonTextColor,
-                                    }}
-                                  >
-                                    {t2("btns.faq")}
-                                  </span>
-                                  {formData?.button_icons_show && (
-                                    <div className="absolute  right-[5px] flex items-center justify-center size-[25px] rounded-full hover:bg-gray-100/10">
-                                      <MoreVertical className="size-4" />
-                                    </div>
-                                  )}
-                                </motion.button>
-                              )}
-                            </>
-                          )}
-                        </motion.div>
-                      </div>
-
-                      <div className="absolute bottom-1 inset-x-0 flex justify-center pb-1">
-                        <div className="w-[100px] h-1 bg-white/30 rounded-full"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <SlugPagePreview className="lg:sticky lg:top-24 space-y-6" formData={formData} />
       </div>
     </main>
   );

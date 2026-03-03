@@ -26,17 +26,34 @@ export function normalizeBusinessStatus(raw?: string | null): RestaurantStatus {
   }
   return "ALLOKAY";
 }
+type BackgroundType = string;
 
-export const getBackgroundStyle = ({ props }: { props: { bg_type: string, bg_image_url: string, bg_gradient_start: string, bg_gradient_end: string, gradient_direction: string, bg_color: string } }) => {
-  if (props?.bg_type === "image" && props?.bg_image_url) {
+interface BackgroundProps {
+  bg_type?: BackgroundType;
+  bg_image_url?: string | null;
+  bg_gradient_start?: string | null;
+  bg_gradient_end?: string | null;
+  gradient_direction?: string | null;
+  bg_color?: string | null;
+}
+
+export function getBackgroundStyle({
+  bg_type,
+  bg_image_url,
+  bg_gradient_start,
+  bg_gradient_end,
+  gradient_direction,
+  bg_color,
+}: BackgroundProps): React.CSSProperties {
+  if (bg_type === "image" && bg_image_url) {
     return {
-      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${props?.bg_image_url})`,
+      backgroundImage: `url(${bg_image_url})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
-    }
+    };
   }
 
-  if (props?.bg_type === "gradient" && props?.bg_gradient_start && props?.bg_gradient_end) {
+  if (bg_type === "gradient" && bg_gradient_start && bg_gradient_end) {
     const directionMap: Record<string, string> = {
       top: "to top",
       bottom: "to bottom",
@@ -46,14 +63,17 @@ export const getBackgroundStyle = ({ props }: { props: { bg_type: string, bg_ima
       "top-left": "to top left",
       "bottom-right": "to bottom right",
       "bottom-left": "to bottom left",
-    }
+    };
 
     return {
-      backgroundImage: `linear-gradient(${directionMap[props?.gradient_direction] || "to bottom right"}, ${props?.bg_gradient_start}, ${props?.bg_gradient_end})`,
-    }
+      backgroundImage: `linear-gradient(${directionMap[gradient_direction || ""] || "to bottom right"
+        }, ${bg_gradient_start}, ${bg_gradient_end})`,
+    };
   }
 
-  return { backgroundColor: props?.bg_color || "#ffffff" }
+  return {
+    backgroundColor: bg_color || "#ffffff",
+  };
 }
 
 

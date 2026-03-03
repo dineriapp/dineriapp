@@ -26,6 +26,9 @@ export const templates: Template[] = [
             button_variant: "solid",
             font_family: "Playfair Display",
             bg_image_url: "",
+            about_heading: "About Us",
+            food_heading: "Our Menu",
+            use_headings_in_buttons: true,
         }
     },
     {
@@ -52,6 +55,9 @@ export const templates: Template[] = [
             button_variant: "solid",
             font_family: "Inter",
             bg_image_url: "",
+            about_heading: "About Us",
+            food_heading: "Our Menu",
+            use_headings_in_buttons: true,
         }
     },
     {
@@ -78,6 +84,9 @@ export const templates: Template[] = [
             button_variant: "solid",
             font_family: "Roboto",
             bg_image_url: "",
+            about_heading: "About Us",
+            food_heading: "Our Menu",
+            use_headings_in_buttons: true,
         }
     },
     {
@@ -104,6 +113,9 @@ export const templates: Template[] = [
             button_variant: "solid",
             font_family: "SF Pro Display",
             bg_image_url: "",
+            about_heading: "About Us",
+            food_heading: "Our Menu",
+            use_headings_in_buttons: true,
         }
     },
     {
@@ -130,6 +142,9 @@ export const templates: Template[] = [
             button_variant: "solid",
             font_family: "Helvetica Neue",
             bg_image_url: "",
+            about_heading: "About Us",
+            food_heading: "Our Menu",
+            use_headings_in_buttons: true,
         }
     },
     {
@@ -156,6 +171,9 @@ export const templates: Template[] = [
             button_variant: "solid",
             font_family: "Inter",
             bg_image_url: "",
+            about_heading: "About Us",
+            food_heading: "Our Menu",
+            use_headings_in_buttons: true,
         }
     }
 ]

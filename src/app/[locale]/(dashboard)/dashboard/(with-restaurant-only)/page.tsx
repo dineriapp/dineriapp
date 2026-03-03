@@ -1,10 +1,10 @@
 "use client"
 
 import LoadingUI from "@/components/loading-ui"
-import DashabordMobilePreview from "@/components/pages/dashboard/dashabord-mobile-preview"
 import QuickActions from "@/components/pages/dashboard/quick-actions"
 import RecentActivity from "@/components/pages/dashboard/recent-activity"
 import Share from "@/components/pages/dashboard/share"
+import SlugPagePreview from "@/components/shared/slug-page-preview"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useMonthlyVisits } from "@/hooks/useMonthlyVisits"
 import { useSyncRestaurants } from "@/hooks/useSyncRestaurants"
@@ -34,7 +34,7 @@ export default function DashboardPage() {
 
     useEffect(() => {
         fetchAndSet();
-    }, []);
+    }, [fetchAndSet]);
 
     if (restaurants.length === 0 || !selectedRestaurant || isLoading || isFetching) {
         return (
@@ -130,7 +130,29 @@ export default function DashboardPage() {
                     transition={{ delay: 0.3 }}
                     className="space-y-6"
                 >
-                    <DashabordMobilePreview selectedRestaurant={selectedRestaurant} />
+                    <SlugPagePreview formData={{
+                        bg_color: selectedRestaurant?.bg_color ?? "#ffffff",
+                        accent_color: selectedRestaurant?.accent_color ?? "#10b981",
+                        headings_text_color: selectedRestaurant?.headings_text_color ?? "#ffffff",
+                        button_text_icons_color: selectedRestaurant?.button_text_icons_color ?? "#000000",
+                        button_style: selectedRestaurant?.button_style ?? "rounded",
+                        font_family: selectedRestaurant?.font_family ?? "var(--font-space-grotesk)",
+                        bg_type: selectedRestaurant?.bg_type ?? "color",
+                        button_icons_show: selectedRestaurant?.button_icons_show ?? true,
+                        social_icon_bg_show: selectedRestaurant?.social_icon_bg_show ?? false,
+                        social_icon_bg_color: selectedRestaurant?.social_icon_bg_color ?? "#FFFFFF",
+                        social_icon_color: selectedRestaurant?.social_icon_color ?? "#000000",
+                        buttons_gap_in_px: selectedRestaurant?.buttons_gap_in_px ?? 16,
+                        social_icon_gap: selectedRestaurant?.social_icon_gap ?? 12,
+                        bg_gradient_start: selectedRestaurant?.bg_gradient_start ?? "#ffffff",
+                        bg_gradient_end: selectedRestaurant?.bg_gradient_end ?? "#f3f4f6",
+                        gradient_direction: selectedRestaurant?.gradient_direction ?? "bottom_right",
+                        button_variant: selectedRestaurant?.button_variant ?? "solid",
+                        bg_image_url: selectedRestaurant?.bg_image_url ?? "",
+                        about_heading: selectedRestaurant?.about_heading ?? "",
+                        food_heading: selectedRestaurant?.food_heading ?? "",
+                        use_headings_in_buttons: selectedRestaurant?.use_headings_in_buttons ?? false,
+                    }} />
                 </motion.div>
 
                 <motion.div

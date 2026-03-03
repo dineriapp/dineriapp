@@ -1820,21 +1820,29 @@
       }
     },
     "dashboardMobilePreview": {
-      "btns": {
-        "menu": "Menu",
-        "events": "Events",
-        "faq": "FAQ"
-      },
       "card": {
         "title": "Preview",
         "description": "See how your page looks on mobile devices",
         "visitButton": "Visit"
       },
-      "loading": {
-        "links": "Loading.."
+      "actions": {
+        "share": "Share"
       },
-      "emptyState": {
-        "noLinks": "No links yet add some to see preview."
+      "buttons": {
+        "reserveTable": "Reserve Table",
+        "menu": "Menu",
+        "events": "Events",
+        "faq": "FAQ"
+      },
+      "states": {
+        "loadingPreview": "Loading Preview...",
+        "empty": "No Links, Menu or Events to display. Add some from the dashboard!"
+      },
+      "footer": {
+        "terms": "Terms",
+        "privacy": "Privacy",
+        "cookies": "Cookies",
+        "poweredBy": "Powered by"
       }
     },
     "quickActions": {
@@ -2564,7 +2572,12 @@
     "appearance": "Appearance",
     "loadingAppearance": "Loading appearance...",
     "customizeRestaurantPage": "Customize how your restaurant page looks",
-
+    "separate_buttons_title": "Separate Buttons",
+    "separate_buttons_description": "Divide buttons into two sections and edit their headings.",
+    "first_section_heading_label": "First Section Heading",
+    "second_section_heading_label": "Second Section Heading",
+    "first_section_heading_placeholder": "e.g. Food & Drinks",
+    "second_section_heading_placeholder": "e.g. About",
     "tabs_style": "Style",
     "tabs_colors": "Colors",
     "tabs_typography": "Typography",
@@ -3119,6 +3132,14 @@
     "closed_fallback": "Closed"
   },
   "slug_page": {
+    "share_button": "Share",
+    "share_title": "Share this page",
+    "food_section_title": "Food & Drinks",
+    "about_section_title": "About",
+    "link_copied": "Link copied to clipboard!",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
     "reserve_table": "Reserve Table",
     "menu": "Menu",
     "events": "Events",
@@ -4799,5 +4820,85 @@
     "error_invalid_code": "Invalid verification code.",
     "error_generic": "Something went wrong. Please try again.",
     "success_verified": "Verified successfully."
+  },
+  "emailIntegration": {
+    "title": "Email Integration",
+    "description": "Configure your Resend email settings to send reservation and notification emails.",
+
+    "alerts": {
+      "verificationSent": "Verification code sent to your email address.",
+      "verificationFailed": "Verification failed. Please check the code and try again.",
+      "sendCodeFailed": "Failed to send verification code. Please check your details and try again.",
+      "integrationSuccess": "Email integration configured successfully. Click \"Save Changes\" to activate and store your integration settings.",
+      "saveSuccess": "Email settings saved successfully.",
+      "saveFailed": "Failed to save email settings."
+    },
+    "form": {
+      "fromName": {
+        "label": "From Name",
+        "placeholder": "Your Restaurant Name",
+        "helper": "This name will appear as the sender name when emails are sent to your customers.",
+        "errors": {
+          "min": "Name must be at least 2 characters."
+        }
+      },
+      "fromEmail": {
+        "label": "From Email Address",
+        "placeholder": "noreply@yourdomain.com",
+        "helper": "This is the email address from which reservation and notification emails will be sent.",
+        "errors": {
+          "invalid": "Please enter a valid email address."
+        }
+      },
+      "testEmail": {
+        "label": "Test Email (Where to send verification code)",
+        "placeholder": "you@example.com",
+        "helper": "We will send a 4-digit verification code (OTP) to this email to confirm your setup.",
+        "errors": {
+          "invalid": "Please enter a valid test email address."
+        }
+      },
+      "apiKey": {
+        "label": "Resend API Key",
+        "placeholder": "re_************************",
+        "helper": "Enter your Resend API key. It will be securely encrypted and never exposed publicly.",
+        "errors": {
+          "min": "Resend API key is required and must be valid."
+        }
+      }
+    },
+
+    "codeStep": {
+      "label": "Enter 4-Digit Code",
+      "placeholder": "1234",
+      "helper": "Enter the 4-digit verification code sent to your test email address.",
+      "errors": {
+        "length": "Verification code must be exactly 4 digits.",
+        "numeric": "Verification code must contain only numbers."
+      },
+      "buttons": {
+        "back": "Go Back",
+        "verify": "Verify & Activate"
+      }
+    },
+
+    "buttons": {
+      "sendCode": "Send Verification Code",
+      "edit": "Edit",
+      "continue": "Continue",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "resetChanges": "Reset Changes"
+    },
+
+    "status": {
+      "connected": "Email integration connected",
+      "reverificationTitle": "Re-verification Required",
+      "reverificationDescription": "Changing sender details requires verifying your email again. You will need to provide the API key and confirm with a verification code."
+    },
+
+    "loading": {
+      "page": "Loading"
+    }
   }
 }
