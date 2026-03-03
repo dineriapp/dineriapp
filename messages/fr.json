@@ -3419,10 +3419,22 @@
     "depositSystem": {
       "enableDepositSystemTitle": "Activer le système de dépôt",
       "enableDepositSystemDescription": "Exiger des dépôts pour les réservations",
-
+      "priorityRequired": "La priorité est requise.",
+      "priorityHelperText": "Les règles avec une priorité plus élevée sont appliquées en premier. Si plusieurs règles correspondent, celle avec la priorité la plus élevée sera utilisée.",
+      "priorityInvalid": "La priorité doit être un nombre valide non négatif.",
+      "priorityDuplicate": "Deux règles ne peuvent pas avoir la même priorité.",
       "defaultDepositTypeLabel": "Type de dépôt par défaut",
       "defaultDepositTypePerPerson": "Par personne",
       "defaultDepositTypeFlatRate": "Forfait",
+      "ruleDaysLabel": "Jours de la semaine",
+      "selectDays": "Sélectionner les jours",
+      "sunday": "Dimanche",
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi",
 
       "defaultAmountLabel": "Montant par défaut (EUR)",
       "currencyLabel": "Devise",
@@ -3447,7 +3459,6 @@
       "ruleAmountLabel": "Montant (EUR)",
       "rulePriorityLabel": "Priorité",
 
-      "ruleDaysLabel": "Jours (0=Dim, 6=Sam)",
       "ruleDaysPlaceholder": "ex. : 5,6",
 
       "ruleStartTimeLabel": "Heure de début",
@@ -4413,7 +4424,13 @@
   "notificationSettings": {
     "title": "Paramètres de notification",
     "description": "Configurez des notifications automatiques par e-mail pour les réservations",
-
+"integration": {
+  "notConfiguredTitle": "Intégration e-mail non configurée",
+  "notConfiguredDescription": "Vous devez configurer vos paramètres e-mail avant d’activer les notifications.",
+  "configureButton": "Configurer l’e-mail",
+  "usingExistingTitle": "Utilisation de l’intégration e-mail existante",
+  "useForReservationsButton": "Utiliser pour les réservations"
+},
     "status": {
       "testingPassed": "Phase de test réussie",
       "testingNotPassed": "Phase de test non réussie"
@@ -4730,5 +4747,21 @@
     "success": {
       "created": "Table créée avec succès"
     }
+  },
+  "notifications_api": {
+    "error_invalid_body": "Corps de la requête invalide.",
+    "error_unauthorized": "Vous n'êtes pas autorisé à effectuer cette action.",
+    "error_save_verification": "Impossible d'enregistrer le code de vérification.",
+    "error_send_email": "Impossible d'envoyer l'e-mail.",
+    "error_generic": "Une erreur s'est produite. Veuillez réessayer.",
+    "success_code_sent": "Le code de vérification a été envoyé avec succès."
+  },
+  "notification_verification_api": {
+    "error_unauthorized": "Vous n'êtes pas autorisé à effectuer cette action.",
+    "error_no_request": "Aucune demande de vérification trouvée.",
+    "error_code_expired": "Le code de vérification a expiré.",
+    "error_invalid_code": "Code de vérification invalide.",
+    "error_generic": "Une erreur s'est produite. Veuillez réessayer.",
+    "success_verified": "Vérification réussie."
   }
 }

@@ -117,7 +117,7 @@ export default function RestaurantSettingsManager({
             </Card>
 
             {/* Table Combinations */}
-            <Card>
+            {/* <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                         <CardTitle>
@@ -137,10 +137,10 @@ export default function RestaurantSettingsManager({
                         }
                     />
                 </CardHeader>
-            </Card>
+            </Card> */}
 
             {/* Overbooking */}
-            <Card>
+            {/* <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                         <CardTitle>
@@ -182,7 +182,7 @@ export default function RestaurantSettingsManager({
                         </div>
                     </CardContent>
                 )}
-            </Card>
+            </Card> */}
         </div>
     );
 }

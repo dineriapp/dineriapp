@@ -1,6 +1,7 @@
 "use server";
 
-import sgMail from "@sendgrid/mail";
+import { sendEmailUsingResend } from "../resend";
+
 
 type SendEmailParams = {
   to: string;
@@ -11,37 +12,19 @@ type SendEmailParams = {
 export async function sendEmailAction(params: SendEmailParams) {
   const { to, subject, html } = params;
 
-  const apiKey = process.env.SENDGRID_API_KEY?.trim();
-
-  if (!apiKey) {
-    throw new Error("SendGrid API key is missing.");
-  }
-
-  sgMail.setApiKey(apiKey);
-
-  const msg = {
+  const result = await sendEmailUsingResend({
+    type: "platform",
     to,
-    from: {
-      email: process.env.SENDGRID_FROM_EMAIL!, // must be verified in SendGrid
-      name: process.env.SENDGRID_FROM_NAME || "My App",
-    },
-    replyTo: process.env.SENDGRID_FROM_EMAIL!,
     subject,
     html,
-  };
+  });
 
-  try {
-    await sgMail.send(msg);
-    console.log({ msg: `email send to: ${to}` })
-    return { success: true };
-  } catch (err: any) {
-    const sgErrors = err?.response?.body?.errors;
-    const details =
-      Array.isArray(sgErrors) && sgErrors.length
-        ? sgErrors.map((e: any) => e.message).join(", ")
-        : err?.message;
-
-    console.error("SendGrid error:", details);
-    return { success: false, error: details || "Failed to send email" };
+  if (!result.success) {
+    console.error("Email error:", result.error);
+    return { success: false, error: result.error };
   }
+
+  console.log({ msg: `email sent to: ${to}` });
+
+  return { success: true };
 }

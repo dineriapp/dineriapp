@@ -3421,7 +3421,19 @@
     "depositSystem": {
       "enableDepositSystemTitle": "Enable Deposit System",
       "enableDepositSystemDescription": "Require deposits for reservations",
-
+      "priorityRequired": "Priority is required.",
+      "priorityHelperText": "Higher priority rules are applied first. If multiple rules match, the one with the highest priority will be used.",
+      "priorityInvalid": "Priority must be a valid non-negative number.",
+      "priorityDuplicate": "Two rules cannot have the same priority.",
+      "ruleDaysLabel": "Days of Week",
+      "selectDays": "Select days",
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
       "defaultDepositTypeLabel": "Default Deposit Type",
       "defaultDepositTypePerPerson": "Per Person",
       "defaultDepositTypeFlatRate": "Flat Rate",
@@ -3448,8 +3460,6 @@
 
       "ruleAmountLabel": "Amount (EUR)",
       "rulePriorityLabel": "Priority",
-
-      "ruleDaysLabel": "Days (0=Sun, 6=Sat)",
       "ruleDaysPlaceholder": "e.g. 5,6",
 
       "ruleStartTimeLabel": "Start Time",
@@ -4453,7 +4463,13 @@
   "notificationSettings": {
     "title": "Notification Settings",
     "description": "Configure automated email notifications for reservations",
-
+    "integration": {
+      "notConfiguredTitle": "Email integration not configured",
+      "notConfiguredDescription": "You need to configure your email settings before enabling notifications.",
+      "configureButton": "Configure Email",
+      "usingExistingTitle": "Using existing email integration",
+      "useForReservationsButton": "Use for Reservations"
+    },
     "status": {
       "testingPassed": "Testing phase passed",
       "testingNotPassed": "Testing phase not passed"
@@ -4767,5 +4783,21 @@
     "success": {
       "created": "Table created successfully"
     }
+  },
+  "notifications_api": {
+    "error_invalid_body": "Invalid request body.",
+    "error_unauthorized": "You are not authorized to perform this action.",
+    "error_save_verification": "Failed to save verification code.",
+    "error_send_email": "Failed to send email.",
+    "error_generic": "Something went wrong. Please try again.",
+    "success_code_sent": "Verification code sent successfully."
+  },
+  "notification_verification_api": {
+    "error_unauthorized": "You are not authorized to perform this action.",
+    "error_no_request": "No verification request found.",
+    "error_code_expired": "The verification code has expired.",
+    "error_invalid_code": "Invalid verification code.",
+    "error_generic": "Something went wrong. Please try again.",
+    "success_verified": "Verified successfully."
   }
 }

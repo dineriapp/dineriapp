@@ -1,9 +1,9 @@
 
 import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 import { checkAuth } from "@/lib/auth/utils";
-import { extractSendGridFromSettings, getRenderedReservationEmailTemplates, renderReviewLinks, replaceVars } from "@/lib/email-utils";
+import { extractNotificationsSettings, getRenderedReservationEmailTemplates, renderReviewLinks, replaceVars } from "@/lib/email-utils";
 import prisma from "@/lib/prisma";
-import { sendEmailWithSendGridUsingKey } from "@/lib/send-grid";
+import { sendEmailUsingResend } from "@/lib/resend";
 import { textToSimpleHtml } from "@/lib/utils";
 import { Reservation } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
@@ -39,13 +39,20 @@ export async function POST(request: NextRequest) {
                 },
                 select: {
                     reservation_settings: true,
+                    email_api_key_encrypted: true,
+                    email_from_address: true,
+                    email_from_name: true,
                     name: true,
                     phone: true
                 },
             });
             if (restaurant) {
                 const settings = restaurant.reservation_settings?.settings as SettingsState | undefined;
-                const extracted = extractSendGridFromSettings(settings);
+                const extracted = extractNotificationsSettings(settings as SettingsState, {
+                    email_api_key_encrypted: restaurant.email_api_key_encrypted,
+                    email_from_address: restaurant.email_from_address,
+                    email_from_name: restaurant.email_from_name,
+                });
                 if (status === "CANCELLED" || status === "CONFIRMED") {
                     sendEmailsForStatus(status, extracted, settings, restaurant, updated);
                 }
@@ -74,15 +81,14 @@ export async function POST(request: NextRequest) {
 
                         after(async () => {
                             try {
-                                await sendEmailWithSendGridUsingKey({
+                                await sendEmailUsingResend({
                                     apiKey: extracted.config.apiKey,
                                     to: updated.customer_email!,
                                     fromEmail: extracted.config.fromEmail,
                                     fromName: extracted.config.fromName,
-                                    replyTo: extracted.config.fromEmail,
                                     subject,
                                     html,
-                                    text: body,
+                                    type: "restaurant"
                                 });
                             } catch (e) {
                                 console.error("Review email error:", e);
@@ -113,7 +119,7 @@ type Status = "CANCELLED" | "CONFIRMED";
 
 const sendEmailsForStatus = (
     status: Status,
-    extracted: ReturnType<typeof extractSendGridFromSettings>,
+    extracted: ReturnType<typeof extractNotificationsSettings>,
     settings: SettingsState | undefined,
     restaurant: { name: string | null; phone: string | null },
     reservation: Reservation
@@ -155,15 +161,14 @@ const sendEmailsForStatus = (
                     const html = textToSimpleHtml(text);
 
                     tasks.push(
-                        sendEmailWithSendGridUsingKey({
+                        sendEmailUsingResend({
                             apiKey,
                             to: reservation.customer_email,
                             fromEmail,
                             fromName,
-                            replyTo: fromEmail,
+                            type: "restaurant",
                             subject,
                             html,
-                            text,
                         })
                     );
                 }
@@ -198,15 +203,14 @@ const sendEmailsForStatus = (
 
                 for (const ownerEmail of extracted.owner_emails) {
                     tasks.push(
-                        sendEmailWithSendGridUsingKey({
+                        sendEmailUsingResend({
                             apiKey,
                             to: ownerEmail,
                             fromEmail,
                             fromName,
-                            replyTo: fromEmail,
+                            type: "restaurant",
                             subject: ownerSubject,
                             html: ownerHtml,
-                            text: ownerText,
                         })
                     );
                 }

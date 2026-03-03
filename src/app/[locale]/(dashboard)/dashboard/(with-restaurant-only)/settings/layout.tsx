@@ -64,7 +64,7 @@ export default function SettingsLayout({
                                     }`}
                             >
                                 <div className="flex items-center gap-3">
-                                    <Icon className={`h-5 w-5 ${isActive ? "text-emerald-600" : "text-gray-500"}`} />
+                                    <Icon className={`h-5 w-5 shrink-0 ${isActive ? "text-emerald-600" : "text-gray-500"}`} />
                                     <div>
                                         <div className="font-medium">{section.title}</div>
                                         <div className="text-sm text-muted-foreground">{section.description}</div>

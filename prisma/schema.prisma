@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -258,6 +258,10 @@ model Restaurant {
   cardsText            String @default("black")
   cardsBadgesBg        String @default("#F5F5F5")
   cardsBadgesTextColor String @default("black")
+
+  email_api_key_encrypted String?
+  email_from_address      String?
+  email_from_name         String?
 
   events               Event[]
   faqCategories        FaqCategory[]

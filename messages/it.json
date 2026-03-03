@@ -3416,7 +3416,19 @@
     "depositSystem": {
       "enableDepositSystemTitle": "Abilita sistema di deposito",
       "enableDepositSystemDescription": "Richiedi depositi per le prenotazioni",
-
+      "priorityHelperText": "Le regole con priorità più alta vengono applicate per prime. Se più regole corrispondono, verrà utilizzata quella con la priorità più alta.",
+      "priorityRequired": "La priorità è obbligatoria.",
+      "priorityInvalid": "La priorità deve essere un numero valido non negativo.",
+      "priorityDuplicate": "Due regole non possono avere la stessa priorità.",
+      "ruleDaysLabel": "Giorni della settimana",
+      "selectDays": "Seleziona i giorni",
+      "sunday": "Domenica",
+      "monday": "Lunedì",
+      "tuesday": "Martedì",
+      "wednesday": "Mercoledì",
+      "thursday": "Giovedì",
+      "friday": "Venerdì",
+      "saturday": "Sabato",
       "defaultDepositTypeLabel": "Tipo di deposito predefinito",
       "defaultDepositTypePerPerson": "Per persona",
       "defaultDepositTypeFlatRate": "Tariffa fissa",
@@ -3444,7 +3456,6 @@
       "ruleAmountLabel": "Importo (EUR)",
       "rulePriorityLabel": "Priorità",
 
-      "ruleDaysLabel": "Giorni (0=Dom, 6=Sab)",
       "ruleDaysPlaceholder": "es.: 5,6",
 
       "ruleStartTimeLabel": "Ora di inizio",
@@ -4410,7 +4421,13 @@
   "notificationSettings": {
     "title": "Impostazioni notifiche",
     "description": "Configura notifiche email automatiche per le prenotazioni",
-
+    "integration": {
+      "notConfiguredTitle": "Integrazione email non configurata",
+      "notConfiguredDescription": "Devi configurare le impostazioni email prima di attivare le notifiche.",
+      "configureButton": "Configura email",
+      "usingExistingTitle": "Utilizzo dell'integrazione email esistente",
+      "useForReservationsButton": "Usa per le prenotazioni"
+    },
     "status": {
       "testingPassed": "Fase di test superata",
       "testingNotPassed": "Fase di test non superata"
@@ -4727,5 +4744,21 @@
     "success": {
       "created": "Tavolo creato con successo"
     }
+  },
+  "notifications_api": {
+    "error_invalid_body": "Corpo della richiesta non valido.",
+    "error_unauthorized": "Non sei autorizzato a eseguire questa azione.",
+    "error_save_verification": "Impossibile salvare il codice di verifica.",
+    "error_send_email": "Impossibile inviare l'email.",
+    "error_generic": "Si è verificato un errore. Riprova.",
+    "success_code_sent": "Codice di verifica inviato con successo."
+  },
+  "notification_verification_api": {
+    "error_unauthorized": "Non sei autorizzato a eseguire questa azione.",
+    "error_no_request": "Nessuna richiesta di verifica trovata.",
+    "error_code_expired": "Il codice di verifica è scaduto.",
+    "error_invalid_code": "Codice di verifica non valido.",
+    "error_generic": "Si è verificato un errore. Riprova.",
+    "success_verified": "Verifica completata con successo."
   }
 }

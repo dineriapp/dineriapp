@@ -3416,10 +3416,22 @@
     "depositSystem": {
       "enableDepositSystemTitle": "Einzahlungs­system aktivieren",
       "enableDepositSystemDescription": "Anzahlungen für Reservierungen erforderlich machen",
-
+      "priorityRequired": "Priorität ist erforderlich.",
+      "priorityInvalid": "Priorität muss eine gültige nicht-negative Zahl sein.",
+      "priorityDuplicate": "Zwei Regeln dürfen nicht dieselbe Priorität haben.",
       "defaultDepositTypeLabel": "Standard-Einzahlungsart",
       "defaultDepositTypePerPerson": "Pro Person",
       "defaultDepositTypeFlatRate": "Pauschalbetrag",
+      "priorityHelperText": "Regeln mit höherer Priorität werden zuerst angewendet. Wenn mehrere Regeln zutreffen, wird die mit der höchsten Priorität verwendet.",
+      "ruleDaysLabel": "Wochentage",
+      "selectDays": "Tage auswählen",
+      "sunday": "Sonntag",
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag",
 
       "defaultAmountLabel": "Standardbetrag (EUR)",
       "currencyLabel": "Währung",
@@ -3444,7 +3456,6 @@
       "ruleAmountLabel": "Betrag (EUR)",
       "rulePriorityLabel": "Priorität",
 
-      "ruleDaysLabel": "Tage (0=So, 6=Sa)",
       "ruleDaysPlaceholder": "z. B. 5,6",
 
       "ruleStartTimeLabel": "Startzeit",
@@ -4406,7 +4417,13 @@
   "notificationSettings": {
     "title": "Benachrichtigungseinstellungen",
     "description": "Konfigurieren Sie automatisierte E-Mail-Benachrichtigungen für Reservierungen",
-
+    "integration": {
+      "notConfiguredTitle": "E-Mail-Integration nicht konfiguriert",
+      "notConfiguredDescription": "Sie müssen Ihre E-Mail-Einstellungen konfigurieren, bevor Sie Benachrichtigungen aktivieren.",
+      "configureButton": "E-Mail konfigurieren",
+      "usingExistingTitle": "Bestehende E-Mail-Integration wird verwendet",
+      "useForReservationsButton": "Für Reservierungen verwenden"
+    },
     "status": {
       "testingPassed": "Testphase bestanden",
       "testingNotPassed": "Testphase nicht bestanden"
@@ -4723,5 +4740,21 @@
     "success": {
       "created": "Tisch erfolgreich erstellt"
     }
+  },
+  "notifications_api": {
+    "error_invalid_body": "Ungültiger Anforderungstext.",
+    "error_unauthorized": "Sie sind nicht berechtigt, diese Aktion auszuführen.",
+    "error_save_verification": "Verifizierungscode konnte nicht gespeichert werden.",
+    "error_send_email": "E-Mail konnte nicht gesendet werden.",
+    "error_generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "success_code_sent": "Verifizierungscode wurde erfolgreich gesendet."
+  },
+  "notification_verification_api": {
+    "error_unauthorized": "Sie sind nicht berechtigt, diese Aktion auszuführen.",
+    "error_no_request": "Keine Verifizierungsanfrage gefunden.",
+    "error_code_expired": "Der Verifizierungscode ist abgelaufen.",
+    "error_invalid_code": "Ungültiger Verifizierungscode.",
+    "error_generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "success_verified": "Erfolgreich verifiziert."
   }
 }

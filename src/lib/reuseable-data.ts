@@ -1,5 +1,5 @@
 import { Template } from "./types";
-import { Building2, Clock, CreditCard, Globe2, Instagram, Phone, ShieldAlert, Zap } from "lucide-react"
+import { Building2, Clock, CreditCard, Globe2, Instagram, Mail, Phone, ShieldAlert, Zap } from "lucide-react"
 
 export const templates: Template[] = [
     {
@@ -349,6 +349,13 @@ export const SettingsSidebarTabs = {
             href: "/dashboard/settings/stripe",
         },
         {
+            id: "email",
+            title: "Email Integration",
+            icon: Mail,
+            description: "Configure email sending and SMTP settings",
+            href: "/dashboard/settings/email",
+        },
+        {
             id: "popups",
             title: "Popups",
             icon: Zap,
@@ -413,6 +420,13 @@ export const SettingsSidebarTabs = {
             icon: CreditCard,
             description: "Zahlungsabwicklung konfigurieren",
             href: "/dashboard/settings/stripe",
+        },
+        {
+            id: "email",
+            title: "E-Mail-Integration",
+            icon: Mail,
+            description: "E-Mail-Versand und SMTP-Einstellungen konfigurieren",
+            href: "/dashboard/settings/email",
         },
         {
             id: "popups",
@@ -481,6 +495,13 @@ export const SettingsSidebarTabs = {
             href: "/dashboard/settings/stripe",
         },
         {
+            id: "email",
+            title: "Integración de correo electrónico",
+            icon: Mail,
+            description: "Configura el envío de correos y ajustes SMTP",
+            href: "/dashboard/settings/email",
+        },
+        {
             id: "popups",
             title: "Popups",
             icon: Zap,
@@ -545,6 +566,13 @@ export const SettingsSidebarTabs = {
             icon: CreditCard,
             description: "Configurer le traitement des paiements",
             href: "/dashboard/settings/stripe",
+        },
+        {
+            id: "email",
+            title: "Intégration e-mail",
+            icon: Mail,
+            description: "Configurer l'envoi d'e-mails et les paramètres SMTP",
+            href: "/dashboard/settings/email",
         },
         {
             id: "popups",
@@ -613,6 +641,13 @@ export const SettingsSidebarTabs = {
             href: "/dashboard/settings/stripe",
         },
         {
+            id: "email",
+            title: "Integrazione email",
+            icon: Mail,
+            description: "Configura l'invio di email e le impostazioni SMTP",
+            href: "/dashboard/settings/email",
+        },
+        {
             id: "popups",
             title: "Popups",
             icon: Zap,
@@ -677,6 +712,13 @@ export const SettingsSidebarTabs = {
             icon: CreditCard,
             description: "Configureer betalingsverwerking",
             href: "/dashboard/settings/stripe",
+        },
+        {
+            id: "email",
+            title: "E-mailintegratie",
+            icon: Mail,
+            description: "Configureer e-mailverzending en SMTP-instellingen",
+            href: "/dashboard/settings/email",
         },
         {
             id: "popups",

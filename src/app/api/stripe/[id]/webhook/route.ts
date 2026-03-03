@@ -1,5 +1,6 @@
 import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 import prisma from "@/lib/prisma"
+import { sendEmailUsingResend } from "@/lib/resend"
 import { getValidStripeClient } from "@/lib/stripe"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
@@ -26,7 +27,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
 
-    const webhookSecret = decrypt_key(restaurant.stripe_webhook_secret_encrypted)
+    // const webhookSecret = decrypt_key(restaurant.stripe_webhook_secret_encrypted)
+    const webhookSecret = "whsec_546d4d8c4ff223921853c8e4505dae65435a7d7a093bb2aea52c9d8ee8c647ae"
     const stripeSecretKey = decrypt_key(restaurant.stripe_secret_key_encrypted)
 
     const stripeClient = await getValidStripeClient(stripeSecretKey)
@@ -286,6 +288,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         where: { id: orderId },
     });
 
+
+
     if (!existingOrder) {
         console.error("Order not found:", orderId);
         return;
@@ -305,6 +309,81 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
             status: "confirmed",
         },
     });
+
+    const restaurent = await prisma.restaurant.findUnique({
+        where: {
+            id: existingOrder?.restaurant_id
+        },
+        select: {
+            name: true,
+            email_from_name: true,
+            email_from_address: true,
+            email_api_key_encrypted: true,
+        }
+    });
+
+    if (
+        restaurent &&
+        restaurent.email_from_name &&
+        restaurent.email_from_address &&
+        restaurent.email_api_key_encrypted
+    ) {
+        // existingOrder has all fields required to send email
+        const html = `
+<div style="font-family: Arial, sans-serif; background-color: #f9fafb; padding: 20px;">
+  <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px;">
+    
+    <h2 style="color: #111827; margin-bottom: 10px;">
+      Thank You for Your Order, ${existingOrder.customer_name || "Valued Customer"}!
+    </h2>
+
+    <p style="color: #374151; font-size: 15px;">
+      We’re happy to let you know that your payment has been successfully received and your order has been confirmed.
+    </p>
+
+    <div style="margin: 20px 0; padding: 15px; background: #f3f4f6; border-radius: 6px;">
+      <p style="margin: 5px 0;"><strong>Order Number:</strong> ${existingOrder.order_number}</p>
+      <p style="margin: 5px 0;"><strong>Order Type:</strong> ${existingOrder.order_type}</p>
+      <p style="margin: 5px 0;"><strong>Total Amount:</strong> €${existingOrder.total_amount.toFixed(2)}</p>
+      ${existingOrder.estimated_ready_time
+                ? `<p style="margin: 5px 0;"><strong>Estimated Ready Time:</strong> ${new Date(
+                    existingOrder.estimated_ready_time
+                ).toLocaleString()}</p>`
+                : ""
+            }
+    </div>
+
+    <p style="color: #374151; font-size: 15px;">
+      Our team is now preparing your order with care. ${existingOrder.order_type === "delivery"
+                ? "It will be delivered to your selected address."
+                : "It will be ready for pickup at the restaurant."
+            }
+    </p>
+
+    <p style="color: #374151; font-size: 15px; margin-top: 20px;">
+      If you have any questions, feel free to contact us.
+    </p>
+
+    <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;" />
+
+    <p style="font-size: 13px; color: #6b7280;">
+      Thank you for choosing ${restaurent.name}. We truly appreciate your business!
+    </p>
+
+  </div>
+</div>
+`;
+        const subject = `Your Order ${existingOrder.order_number} Has Been Confirmed`;        //    send email 
+        await sendEmailUsingResend({
+            type: "restaurant",
+            apiKey: decrypt_key(restaurent.email_api_key_encrypted),
+            to: existingOrder.customer_email || "",
+            fromEmail: restaurent.email_from_address,
+            fromName: restaurent.email_from_name,
+            html: html,
+            subject: subject,
+        });
+    }
 
     console.log(`Order ${orderId} confirmed`);
 }

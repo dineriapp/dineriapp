@@ -3421,10 +3421,19 @@
     "depositSystem": {
       "enableDepositSystemTitle": "Habilitar sistema de depósito",
       "enableDepositSystemDescription": "Requerir depósitos para reservas",
-
+      "priorityHelperText": "Las reglas con mayor prioridad se aplican primero. Si varias reglas coinciden, se usará la de mayor prioridad.",
       "defaultDepositTypeLabel": "Tipo de depósito predeterminado",
       "defaultDepositTypePerPerson": "Por persona",
       "defaultDepositTypeFlatRate": "Tarifa fija",
+      "ruleDaysLabel": "Días de la semana",
+      "selectDays": "Seleccionar días",
+      "sunday": "Domingo",
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado",
 
       "defaultAmountLabel": "Monto predeterminado (EUR)",
       "currencyLabel": "Moneda",
@@ -3448,8 +3457,6 @@
 
       "ruleAmountLabel": "Monto (EUR)",
       "rulePriorityLabel": "Prioridad",
-
-      "ruleDaysLabel": "Días (0=Dom, 6=Sáb)",
       "ruleDaysPlaceholder": "ej.: 5,6",
 
       "ruleStartTimeLabel": "Hora de inicio",
@@ -4415,7 +4422,13 @@
   "notificationSettings": {
     "title": "Configuración de notificaciones",
     "description": "Configura notificaciones automáticas por correo electrónico para reservas",
-
+    "integration": {
+      "notConfiguredTitle": "Integración de correo no configurada",
+      "notConfiguredDescription": "Debe configurar los ajustes de correo electrónico antes de activar las notificaciones.",
+      "configureButton": "Configurar correo",
+      "usingExistingTitle": "Usando integración de correo existente",
+      "useForReservationsButton": "Usar para reservas"
+    },
     "status": {
       "testingPassed": "Fase de prueba superada",
       "testingNotPassed": "Fase de prueba no superada"
@@ -4732,5 +4745,21 @@
     "success": {
       "created": "Mesa creada correctamente"
     }
+  },
+  "notifications_api": {
+    "error_invalid_body": "Cuerpo de la solicitud no válido.",
+    "error_unauthorized": "No está autorizado para realizar esta acción.",
+    "error_save_verification": "No se pudo guardar el código de verificación.",
+    "error_send_email": "No se pudo enviar el correo electrónico.",
+    "error_generic": "Algo salió mal. Por favor, inténtelo de nuevo.",
+    "success_code_sent": "El código de verificación se envió correctamente."
+  },
+  "notification_verification_api": {
+    "error_unauthorized": "No está autorizado para realizar esta acción.",
+    "error_no_request": "No se encontró ninguna solicitud de verificación.",
+    "error_code_expired": "El código de verificación ha expirado.",
+    "error_invalid_code": "Código de verificación no válido.",
+    "error_generic": "Algo salió mal. Por favor, inténtelo de nuevo.",
+    "success_verified": "Verificado correctamente."
   }
 }

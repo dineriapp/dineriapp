@@ -14,12 +14,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { useRestaurantStore } from "@/stores/restaurant-store";
 import { AlertCircle, Check, CheckCircle2, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
-import Integration from "./notifications-setting/integration";
 import MainSettings from "./notifications-setting/main-settings";
 import { NotificationSettings } from "./types";
-import { useTranslations } from "next-intl";
 
 interface NotificationSettingsProps {
     settings: NotificationSettings;
@@ -28,10 +28,20 @@ interface NotificationSettingsProps {
 
 export function NotificationSettingsComponent({ settings, updateSettingsSection }: NotificationSettingsProps) {
     const [showinfo, setShowInfo] = useState<boolean>(false);
+    const { selectedRestaurant } = useRestaurantStore();
     const t = useTranslations("notificationSettings")
     const setSettings = (partial: Partial<NotificationSettings>) => {
         updateSettingsSection("notification_settings", { ...settings, ...partial });
     };
+
+
+    const hasEmailConfigured =
+        !!selectedRestaurant?.email_from_name &&
+        !!selectedRestaurant?.email_from_address &&
+        !!selectedRestaurant?.email_api_key_encrypted;
+
+    const isIntegrationValid =
+        hasEmailConfigured && settings.test_mode_passed;
 
     return (
         <Card className="gap-4 pb-0">
@@ -49,7 +59,7 @@ export function NotificationSettingsComponent({ settings, updateSettingsSection 
                     <div className="flex items-start md:items-center md:flex-row flex-col gap-3">
                         {/* Test status badge */}
                         {settings.notifications_enabled && (
-                            settings.test_mode_passed ? (
+                            isIntegrationValid ? (
                                 <div className="inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-sm text-green-700">
                                     <CheckCircle2 className="h-4 w-4" />
                                     {t("status.testingPassed")}
@@ -61,7 +71,7 @@ export function NotificationSettingsComponent({ settings, updateSettingsSection 
                                 </div>
                             )
                         )}
-                        {settings.notifications_enabled && settings.test_mode_passed && (
+                        {settings.notifications_enabled && isIntegrationValid && (
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                     <Button variant="default" size="sm" className="h-8">
@@ -133,25 +143,67 @@ export function NotificationSettingsComponent({ settings, updateSettingsSection 
                 {settings.notifications_enabled && (
                     <>
                         {
-                            settings.test_mode_passed
+                            isIntegrationValid
                                 ?
                                 <>
                                 </>
                                 :
-                                <Integration
-                                    onIntegrationSuccess={(values) => {
-                                        setSettings(values)
-                                        setShowInfo(true);
-                                    }}
-                                    settings={settings}
-                                />
+                                <>
+                                    :
+                                    <>
+                                        {!hasEmailConfigured ? (
+                                            <div className="mx-5 mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
+                                                <div className="flex items-start justify-between gap-4">
+                                                    <div>
+                                                        <p className="text-sm font-medium text-amber-900">
+                                                            {t("integration.notConfiguredTitle")}
+                                                        </p>
+                                                        <p className="text-xs text-amber-800 mt-1">
+                                                            {t("integration.notConfiguredDescription")}
+                                                        </p>
+                                                    </div>
+
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => {
+                                                            window.location.href = "/dashboard/settings/email";
+                                                        }}
+                                                    >
+                                                        {t("integration.configureButton")}
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="mx-5 mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4 flex items-center justify-between">
+                                                <div>
+                                                    <p className="text-sm font-medium text-emerald-900">
+                                                        {t("integration.usingExistingTitle")}
+                                                    </p>
+                                                    <p className="text-xs text-emerald-800 mt-1">
+                                                        {selectedRestaurant?.email_from_address}
+                                                    </p>
+                                                </div>
+
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        setSettings({ test_mode_passed: true });
+                                                    }}
+                                                >
+                                                    {t("integration.useForReservationsButton")}
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </>
+                                </>
                         }
                     </>
                 )
                 }
                 {/* Other Settings  */}
                 {
-                    settings.notifications_enabled && settings.test_mode_passed && (
+                    settings.notifications_enabled && isIntegrationValid && (
                         <>
                             <MainSettings
                                 settings={settings}

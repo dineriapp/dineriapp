@@ -1,11 +1,11 @@
 import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 import { checkAuth } from "@/lib/auth/utils";
 import {
-    extractSendGridFromSettings,
+    extractNotificationsSettings,
     getRenderedReservationEmailTemplates,
 } from "@/lib/email-utils";
 import prisma from "@/lib/prisma";
-import { sendEmailWithSendGridUsingKey } from "@/lib/send-grid";
+import { sendEmailUsingResend } from "@/lib/resend";
 import { textToSimpleHtml } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import { after, NextRequest, NextResponse } from "next/server";
@@ -58,6 +58,9 @@ export async function POST(request: NextRequest) {
                 reservation_settings: true,
                 name: true,
                 phone: true,
+                email_api_key_encrypted: true,
+                email_from_address: true,
+                email_from_name: true
             },
         });
 
@@ -73,7 +76,13 @@ export async function POST(request: NextRequest) {
             | SettingsState
             | undefined;
 
-        const extracted = extractSendGridFromSettings(settings);
+        const extracted = extractNotificationsSettings(
+            settings as SettingsState,
+            {
+                email_api_key_encrypted: restaurant.email_api_key_encrypted,
+                email_from_address: restaurant.email_from_address,
+                email_from_name: restaurant.email_from_name
+            });
 
         if (
             !extracted.ok ||
@@ -115,15 +124,14 @@ export async function POST(request: NextRequest) {
 
         after(async () => {
             try {
-                await sendEmailWithSendGridUsingKey({
+                await sendEmailUsingResend({
                     apiKey: extracted.config.apiKey,
                     to: reservation.customer_email!,
                     fromEmail: extracted.config.fromEmail,
                     fromName: extracted.config.fromName,
-                    replyTo: extracted.config.fromEmail,
                     subject: reminderTemplate.rendered_subject,
                     html: textToSimpleHtml(reminderTemplate.rendered_body),
-                    text: reminderTemplate.rendered_body,
+                    type: "restaurant"
                 });
 
                 await prisma.reservation.update({

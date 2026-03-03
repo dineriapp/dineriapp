@@ -1,8 +1,9 @@
 import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 import { checkAuth } from "@/lib/auth/utils";
-import { extractSendGridFromSettings, getRenderedReservationEmailTemplates } from "@/lib/email-utils";
+import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt";
+import { getRenderedReservationEmailTemplates } from "@/lib/email-utils";
 import prisma from "@/lib/prisma";
-import { sendEmailWithSendGridUsingKey } from "@/lib/send-grid";
+import { sendEmailUsingResend } from "@/lib/resend";
 import { textToSimpleHtml } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import { NextResponse } from "next/server";
@@ -37,6 +38,9 @@ export async function POST(req: Request) {
             },
             select: {
                 reservation_settings: true,
+                email_from_name: true,
+                email_from_address: true,
+                email_api_key_encrypted: true,
             },
         });
 
@@ -49,12 +53,20 @@ export async function POST(req: Request) {
 
         const settings = restaurant?.reservation_settings?.settings as SettingsState | undefined;
 
-        const extracted = extractSendGridFromSettings(settings);
-        if (!extracted.ok) {
-            return NextResponse.json({ ok: false, message: extracted.message }, { status: 400 });
+        if (
+            !restaurant.email_from_name ||
+            !restaurant.email_from_address ||
+            !restaurant.email_api_key_encrypted
+        ) {
+            return NextResponse.json(
+                { ok: false, message: t("errors.validationError") },
+                { status: 400 }
+            );
         }
 
-        const { apiKey, fromEmail, fromName } = extracted.config;
+        const apiKey = decrypt_key(restaurant.email_api_key_encrypted);
+        const fromEmail = restaurant.email_from_address;
+        const fromName = restaurant.email_from_name;
 
         const vars = {
             restaurant_name: data.restaurant_name,
@@ -73,15 +85,14 @@ export async function POST(req: Request) {
                 const text = t.rendered_body || "";
                 const html = textToSimpleHtml(text);
 
-                await sendEmailWithSendGridUsingKey({
+                await sendEmailUsingResend({
+                    type: "restaurant",
                     apiKey: apiKey,
                     to: data.sendTo,
                     fromEmail: fromEmail,
-                    fromName,
-                    replyTo: fromEmail,
-                    subject,
-                    html,
-                    text,
+                    fromName: fromName,
+                    html: html,
+                    subject: subject,
                 });
             }
         } catch (e: any) {

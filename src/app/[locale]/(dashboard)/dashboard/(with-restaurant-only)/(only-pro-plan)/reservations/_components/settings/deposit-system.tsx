@@ -8,8 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -19,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Plus, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   CancellationPolicy,
   DepositSystemSettings,
@@ -26,7 +29,7 @@ import {
   DynamicRule,
   RuleType,
 } from "./types";
-import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 interface DepositSystemProps {
   value: DepositSystemSettings;
@@ -43,6 +46,16 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
     if (isNaN(num) || num < 0) return "0";
     return num.toString();
   };
+
+  const weekDays = [
+    { label: t("sunday"), value: 0 },
+    { label: t("monday"), value: 1 },
+    { label: t("tuesday"), value: 2 },
+    { label: t("wednesday"), value: 3 },
+    { label: t("thursday"), value: 4 },
+    { label: t("friday"), value: 5 },
+    { label: t("saturday"), value: 6 },
+  ];
 
   const sanitizePercentage = (val: string) => {
     if (val === "") return "";
@@ -65,13 +78,24 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
 
   // ===================== Rules =====================
   const addRule = () => {
+    // Get highest existing priority
+    const existingPriorities = value.dynamicRules.map((r) =>
+      Number(r.priority || 0)
+    );
+
+    const nextPriority =
+      existingPriorities.length > 0
+        ? Math.max(...existingPriorities) + 1
+        : 1;
+
     const newRule: DynamicRule = {
       id: Date.now(),
       ruleType: "day-of-week",
       depositType: "per-person",
       amount: "0",
-      priority: "0",
+      priority: String(nextPriority), // auto unique
     };
+
     updateDepositSystem("dynamicRules", [...value.dynamicRules, newRule]);
   };
 
@@ -80,9 +104,45 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
     key: K,
     valueThis: DynamicRule[K],
   ) => {
+
+    if (key === "priority") {
+      const raw = String(valueThis);
+
+      // Prevent empty
+      if (raw.trim() === "") {
+        toast.error(t("priorityRequired"));
+        return;
+      }
+
+      const numeric = Number(raw);
+
+      // Prevent invalid numbers
+      if (isNaN(numeric) || numeric < 0) {
+        toast.error(t("priorityInvalid"));
+        return;
+      }
+
+      const newPriority = String(numeric);
+
+      // Prevent duplicates
+      const duplicate = value.dynamicRules.find(
+        (rule) =>
+          rule.id !== id &&
+          rule.priority === newPriority
+      );
+
+      if (duplicate) {
+        toast.error(t("priorityDuplicate"));
+        return;
+      }
+
+      valueThis = newPriority as DynamicRule[K];
+    }
+
     const updated = value.dynamicRules.map((rule) =>
       rule.id === id ? { ...rule, [key]: valueThis } : rule,
     );
+
     updateDepositSystem("dynamicRules", updated);
   };
 
@@ -129,14 +189,70 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
   const renderRuleFields = (rule: DynamicRule) => {
     switch (rule.ruleType) {
       case "day-of-week":
+        const selectedDays = rule.days
+          ? rule.days.split(",").map((d) => Number(d.trim()))
+          : [];
+
+        const toggleDay = (day: number) => {
+          let updated: number[];
+
+          if (selectedDays.includes(day)) {
+            updated = selectedDays.filter((d) => d !== day);
+          } else {
+            updated = [...selectedDays, day];
+          }
+
+          updateRule(rule.id, "days", updated.sort().join(","));
+        };
+
         return (
           <div className="flex flex-col space-y-2 w-full col-span-4">
             <Label>{t("ruleDaysLabel")}</Label>
-            <Input
-              value={rule.days || ""}
-              onChange={(e) => updateRule(rule.id, "days", e.target.value)}
-              placeholder={t("ruleDaysPlaceholder")}
-            />
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="justify-start">
+                  {selectedDays.length > 0
+                    ? weekDays
+                      .filter((d) => selectedDays.includes(d.value))
+                      .map((d) => d.label)
+                      .join(", ")
+                    : t("selectDays")}
+                </Button>
+              </PopoverTrigger>
+
+              <PopoverContent
+                className="w-64 p-3 rounded-xl shadow-lg border bg-white"
+                align="start"
+              >
+                <div className="grid gap-1">
+                  {weekDays.map((day) => {
+                    const isSelected = selectedDays.includes(day.value);
+
+                    return (
+                      <div
+                        key={day.value}
+                        onClick={() => toggleDay(day.value)}
+                        className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors
+            ${isSelected
+                            ? "bg-primary/10 text-primary"
+                            : "hover:bg-muted/60"
+                          }`}
+                      >
+                        <Label className="cursor-pointer text-sm font-medium">
+                          {day.label}
+                        </Label>
+
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={() => toggleDay(day.value)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         );
 
@@ -439,6 +555,9 @@ export default function DepositSystem({ value, onChange }: DepositSystemProps) {
                         )
                       }
                     />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {t("priorityHelperText")}
+                    </p>
                   </div>
 
                   {/* Conditional fields */}

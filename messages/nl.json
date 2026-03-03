@@ -3416,10 +3416,22 @@
     "depositSystem": {
       "enableDepositSystemTitle": "Aanbetalingssysteem inschakelen",
       "enableDepositSystemDescription": "Aanbetalingen vereisen voor reserveringen",
-
+      "priorityRequired": "Prioriteit is verplicht.",
+      "priorityHelperText": "Regels met een hogere prioriteit worden eerst toegepast. Als meerdere regels overeenkomen, wordt degene met de hoogste prioriteit gebruikt.",
+      "priorityInvalid": "Prioriteit moet een geldig niet-negatief getal zijn.",
+      "priorityDuplicate": "Twee regels mogen niet dezelfde prioriteit hebben.",
       "defaultDepositTypeLabel": "Standaard aanbetalingstype",
       "defaultDepositTypePerPerson": "Per persoon",
       "defaultDepositTypeFlatRate": "Vast bedrag",
+      "ruleDaysLabel": "Dagen van de week",
+      "selectDays": "Selecteer dagen",
+      "sunday": "Zondag",
+      "monday": "Maandag",
+      "tuesday": "Dinsdag",
+      "wednesday": "Woensdag",
+      "thursday": "Donderdag",
+      "friday": "Vrijdag",
+      "saturday": "Zaterdag",
 
       "defaultAmountLabel": "Standaardbedrag (EUR)",
       "currencyLabel": "Valuta",
@@ -3443,8 +3455,6 @@
 
       "ruleAmountLabel": "Bedrag (EUR)",
       "rulePriorityLabel": "Prioriteit",
-
-      "ruleDaysLabel": "Dagen (0=Zo, 6=Za)",
       "ruleDaysPlaceholder": "bijv. 5,6",
 
       "ruleStartTimeLabel": "Starttijd",
@@ -4410,7 +4420,13 @@
   "notificationSettings": {
     "title": "Meldingsinstellingen",
     "description": "Configureer geautomatiseerde e-mailmeldingen voor reserveringen",
-
+    "integration": {
+      "notConfiguredTitle": "E-mailintegratie niet geconfigureerd",
+      "notConfiguredDescription": "U moet uw e-mailinstellingen configureren voordat u meldingen inschakelt.",
+      "configureButton": "E-mail configureren",
+      "usingExistingTitle": "Bestaande e-mailintegratie wordt gebruikt",
+      "useForReservationsButton": "Gebruiken voor reserveringen"
+    },
     "status": {
       "testingPassed": "Testfase geslaagd",
       "testingNotPassed": "Testfase niet geslaagd"
@@ -4727,5 +4743,21 @@
     "success": {
       "created": "Tafel succesvol aangemaakt"
     }
+  },
+  "notifications_api": {
+    "error_invalid_body": "Ongeldige aanvraaginhoud.",
+    "error_unauthorized": "U bent niet gemachtigd om deze actie uit te voeren.",
+    "error_save_verification": "Verificatiecode kon niet worden opgeslagen.",
+    "error_send_email": "E-mail kon niet worden verzonden.",
+    "error_generic": "Er is iets misgegaan. Probeer het opnieuw.",
+    "success_code_sent": "Verificatiecode succesvol verzonden."
+  },
+  "notification_verification_api": {
+    "error_unauthorized": "U bent niet gemachtigd om deze actie uit te voeren.",
+    "error_no_request": "Geen verificatieverzoek gevonden.",
+    "error_code_expired": "De verificatiecode is verlopen.",
+    "error_invalid_code": "Ongeldige verificatiecode.",
+    "error_generic": "Er is iets misgegaan. Probeer het opnieuw.",
+    "success_verified": "Succesvol geverifieerd."
   }
 }

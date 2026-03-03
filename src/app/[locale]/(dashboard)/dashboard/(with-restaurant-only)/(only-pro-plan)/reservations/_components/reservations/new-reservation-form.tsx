@@ -336,7 +336,7 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
                     }`
                 );
                 // Close dialog or reset form
-                window.location.reload();
+                window.location.href = "/dashboard/reservations?tab=reservations";
             } else {
                 setError(result.error || t("errors.failedToCreate"));
             }

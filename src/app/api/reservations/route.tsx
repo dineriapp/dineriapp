@@ -1,15 +1,14 @@
 import { DynamicRule, SettingsState } from '@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types';
 import { CapacityService } from '@/lib/capacity-service';
-import { extractSendGridFromSettings, getRenderedReservationEmailTemplates } from '@/lib/email-utils';
+import { extractNotificationsSettings, getRenderedReservationEmailTemplates } from '@/lib/email-utils';
 import prisma from "@/lib/prisma";
-import { sendEmailWithSendGridUsingKey } from '@/lib/send-grid';
+import { sendEmailUsingResend } from '@/lib/resend';
 import type { ReservationsListResponse } from "@/lib/types";
 import { getEstimatedDuration, textToSimpleHtml } from '@/lib/utils';
 import { Prisma } from '@prisma/client';
 import { getTranslations } from 'next-intl/server';
 import { cookies } from 'next/headers';
-import { type NextRequest, NextResponse } from "next/server";
-import { after } from "next/server";
+import { after, type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     try {
@@ -183,7 +182,6 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
     }
 
     const settings = restaurant?.reservation_settings?.settings as SettingsState | undefined;
-
     const {
         pause_new_reservations,
         emergency_closure,
@@ -341,7 +339,11 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
             });
         }
 
-        const extracted = extractSendGridFromSettings(settings);
+        const extracted = extractNotificationsSettings(settings as SettingsState, {
+            email_api_key_encrypted: restaurant.email_api_key_encrypted,
+            email_from_address: restaurant.email_from_address,
+            email_from_name: restaurant.email_from_name,
+        });
 
         if (extracted.ok) {
             const vars = {
@@ -357,7 +359,7 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
                 restaurant_contact: restaurant.phone ?? "",
             };
 
-            const { apiKey, fromEmail, fromName } = extracted.config;
+            const { apiKey, fromEmail, fromName } = extracted.config
             const renderedTemplates = getRenderedReservationEmailTemplates(settings, vars);
 
             // schedule background work (won’t block response)
@@ -374,15 +376,14 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
                             const html = textToSimpleHtml(text);
 
                             tasks.push(
-                                sendEmailWithSendGridUsingKey({
+                                sendEmailUsingResend({
                                     apiKey,
                                     to: reservation.customer_email,
                                     fromEmail,
                                     fromName,
-                                    replyTo: fromEmail,
                                     subject,
                                     html,
-                                    text,
+                                    type: "restaurant"
                                 })
                             );
                         }
@@ -409,15 +410,14 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
 
                         for (const ownerEmail of extracted.owner_emails) {
                             tasks.push(
-                                sendEmailWithSendGridUsingKey({
+                                sendEmailUsingResend({
                                     apiKey,
                                     to: ownerEmail,
                                     fromEmail,
                                     fromName,
-                                    replyTo: fromEmail,
                                     subject: ownerSubject,
                                     html: ownerHtml,
-                                    text: ownerText,
+                                    type: "restaurant"
                                 })
                             );
                         }

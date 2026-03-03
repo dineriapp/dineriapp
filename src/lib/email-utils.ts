@@ -1,7 +1,8 @@
 import type { ReviewEmailSettings, SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
-import { isNonEmptyString, renderTemplate } from "@/lib/utils";
+import { renderTemplate } from "@/lib/utils";
+import { decrypt_key } from "./crypto-encrypt-and-decrypt";
 
-type SendGridEmailConfig = {
+type EmailConfig = {
     apiKey: string;
     fromEmail: string;
     fromName: string;
@@ -22,26 +23,29 @@ type NotificationFlags = {
 type ExtractOk = {
     ok: true;
     enabled: true;
-    testModePassed: true;
-    config: SendGridEmailConfig;
+    config: EmailConfig;
+
 } & NotificationFlags;
 
 type ExtractFail = {
     ok: false;
     enabled: boolean;
-    testModePassed: boolean;
     message: string;
 } & NotificationFlags;
 
 export type ExtractResult = ExtractOk | ExtractFail;
 
-export function extractSendGridFromSettings(
-    settings?: SettingsState
+export function extractNotificationsSettings(
+    settings: SettingsState,
+    restaurant: {
+        email_from_name?: string | null;
+        email_from_address?: string | null;
+        email_api_key_encrypted?: string | null;
+    }
 ): ExtractResult {
     const ns = settings?.notification_settings;
 
     const enabled = Boolean(ns?.notifications_enabled);
-    const testModePassed = Boolean(ns?.test_mode_passed);
 
     const flags: NotificationFlags = {
         email_confirmation_enabled: ns?.email_confirmation_enabled ?? false,
@@ -55,52 +59,28 @@ export function extractSendGridFromSettings(
         review: ns?.review_email ?? { enabled: false, email_body: "", email_subject: "", google_review_link: "", other_review_links: [], tripadvisor_review_link: "", yelp_review_link: "" }
     };
 
-    if (!enabled || !testModePassed) {
+    const hasCredentials =
+        Boolean(restaurant?.email_from_name) &&
+        Boolean(restaurant?.email_from_address) &&
+        Boolean(restaurant?.email_api_key_encrypted);
+
+    if (!enabled || !hasCredentials) {
         return {
             ok: false,
             enabled,
-            testModePassed,
-            message: "Email notifications are not enabled or test mode is not passed.",
+            message: "Missing email credentials or notifications disabled.",
             ...flags,
         };
     }
 
-    const apiKey = ns?.sendgrid_api_key;
-    const fromEmail = ns?.email_reply_to;
-    const fromName = ns?.email_from_name;
-
-    if (!isNonEmptyString(apiKey)) {
-        return {
-            ok: false, enabled, testModePassed,
-            message: "Missing sendgrid_api_key",
-            ...flags,
-
-        };
-    }
-    if (!isNonEmptyString(fromEmail)) {
-        return {
-            ok: false,
-            enabled, testModePassed,
-            message: "Missing fromEmail",
-            ...flags,
-
-        };
-    }
-    if (!isNonEmptyString(fromName)) {
-        return {
-            ok: false,
-            enabled,
-            testModePassed,
-            message: "Missing fromName",
-            ...flags,
-
-        };
-    }
     return {
         ok: true,
+        config: {
+            apiKey: decrypt_key(restaurant.email_api_key_encrypted ?? "") as string,
+            fromEmail: restaurant.email_from_address as string,
+            fromName: restaurant.email_from_name as string,
+        },
         enabled: true,
-        testModePassed: true,
-        config: { apiKey, fromEmail, fromName },
         ...flags,
     };
 }

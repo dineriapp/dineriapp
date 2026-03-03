@@ -9,12 +9,12 @@ import { useRestaurantStore } from "@/stores/restaurant-store";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import DepositSystem from "./settings/deposit-system";
 import { NotificationSettingsComponent } from "./settings/notification-settings";
-import ReservationControlSettings from "./settings/reservation-control";
-import RestaurantSettingsManager from "./settings/restaurent-settings";
-import TimeSlotOverrides from "./settings/time-slot-overrides";
 import { SettingsState } from "./settings/types";
+import ReservationControlSettings from "./settings/reservation-control";
+import TimeSlotOverrides from "./settings/time-slot-overrides";
+import RestaurantSettingsManager from "./settings/restaurent-settings";
+import DepositSystem from "./settings/deposit-system";
 
 const deepMerge = <T extends Record<string, any>>(base: T, incoming: Partial<T>): T => {
     const out: any = { ...base };
@@ -51,9 +51,6 @@ const default_data: SettingsState = {
     notification_settings: {
         // configration 
         notifications_enabled: false,
-        email_from_name: "",
-        email_reply_to: "",
-        sendgrid_api_key: "",
         email_test_to: "",
         test_mode_passed: false,
 

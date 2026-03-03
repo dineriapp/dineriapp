@@ -42,17 +42,24 @@ export const useRestaurantStore = create<RestaurantState>()(
                 }
             },
             initializeRestaurants: (data) => {
-                set({ restaurants: data })
+                set({ restaurants: data });
 
-                const storedId = localStorage.getItem("selected-restaurant-id")
-                const firstRestaurant = data[0]
+                const storedId = localStorage.getItem("selected-restaurant-id");
+                const firstRestaurant = data[0];
 
-                if (!storedId && firstRestaurant) {
-                    set({ selectedRestaurant: firstRestaurant })
-                    localStorage.setItem("selected-restaurant-id", firstRestaurant.id)
-                } else {
-                    const found = data.find((r) => r.id === storedId)
-                    set({ selectedRestaurant: found || firstRestaurant })
+                let selected = null;
+
+                if (storedId) {
+                    selected = data.find((r) => r.id === storedId);
+                }
+
+                // Always use fresh object from backend
+                const finalRestaurant = selected || firstRestaurant || null;
+
+                set({ selectedRestaurant: finalRestaurant });
+
+                if (finalRestaurant) {
+                    localStorage.setItem("selected-restaurant-id", finalRestaurant.id);
                 }
             },
         }),

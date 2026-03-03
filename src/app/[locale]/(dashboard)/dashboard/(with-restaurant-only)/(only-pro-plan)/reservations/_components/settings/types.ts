@@ -43,9 +43,6 @@ export interface ReviewEmailSettings {
 export interface NotificationSettings {
     // configration 
     notifications_enabled: boolean;
-    email_from_name: string;
-    email_reply_to: string;
-    sendgrid_api_key: string;
     email_test_to: string;
     test_mode_passed: boolean;
 
