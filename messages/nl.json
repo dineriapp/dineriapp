@@ -175,36 +175,36 @@
   },
   "DemoPage": {
     "Hero": {
-      "title": "Vraag uw gratis demo aan <br /> en begin vandaag nog",
-      "description": "Ontdek hoe ons platform uw restaurant kan laten groeien. Vul het formulier in en wij nemen contact met u op om uw persoonlijke demo in te plannen."
+      "title": "Eén demo. Alles duidelijk.<br />",
+      "description": "Vul het formulier in en we plannen een persoonlijke demo op een moment dat jou uitkomt. Geen verplichtingen, geen verrassingen."
     },
     "Form": {
       "heading": "Vraag een demo aan",
-      "subheading": "Vul uw bedrijfsgegevens in en wij nemen contact met u op via telefoon of e-mail.",
+      "subheading": " Binnen 24 uur nemen we contact met je op",
       "fields": {
         "businessName": {
           "label": "Bedrijfsnaam",
-          "placeholder": "Naam van uw restaurant",
+          "placeholder": "Naam van je onderneming",
           "error": "Bedrijfsnaam is verplicht"
         },
         "contactPerson": {
           "label": "Contactpersoon",
-          "placeholder": "Uw naam",
+          "placeholder": "Hoe mogen we je noemen?",
           "error": "Contactpersoon is verplicht"
         },
         "email": {
           "label": "E-mail",
-          "placeholder": "voorbeeld@email.com",
+          "placeholder": "jouw@restaurant.nl",
           "error": "Voer een geldig e-mailadres in"
         },
         "phone": {
           "label": "Telefoon",
-          "placeholder": "+31 123 456 789",
+          "placeholder": "+316 123 456 789",
           "error": "Telefoonnummer is verplicht"
         },
         "address": {
           "label": "Adres",
-          "placeholder": "Hoofdstraat 123",
+          "placeholder": "Hoofdstraat 26",
           "error": "Adres is verplicht"
         },
         "city": {
@@ -219,18 +219,18 @@
         },
         "message": {
           "label": "Aanvullende opmerkingen",
-          "placeholder": "Vertel ons meer over de behoeften van uw bedrijf..."
+          "placeholder": "Vertel ons meer over de behoeften van de onderneming."
         }
       },
-      "submit": "Verzoek indienen",
-      "successMessage": "Uw demoaanvraag is verzonden. We nemen snel contact met u op!",
+      "submit": "Plan mijn demo",
+      "successMessage": "De demoaanvraag is verzonden. Binnen 24 uur nemen we contact met je op!",
       "errorMessage": "Er is iets misgegaan. Probeer het opnieuw."
     }
   },
   "PlansPage": {
     "header": {
-      "title": "Kies het juiste plan voor je restaurant",
-      "description": "Begin gratis en upgrade naarmate je restaurant groeit. Alle plannen bevatten krachtige tools om je menu, evenementen en merk online te tonen."
+      "title": "Welk plan past bij jou?",
+      "description": "Start gratis en schaal op wanneer jij er klaar voor bent. Elk plan geeft je de tools om jouw restaurant professioneel online te presenteren van menu tot reserveringen."
     },
     "footer": {
       "question": "Iets op maat nodig?",
@@ -539,44 +539,44 @@
   "HelpCenter": {
     "Introduction": {
       "pageTitle": "Introductie",
-      "welcome": "Welkom op het platform! Deze gids helpt je snel op weg en legt de basis uit. Of je nu een restaurant­eigenaar, manager of deel van een hospitalityteam bent, ons platform is gebouwd om je dagelijkse werkzaamheden eenvoudiger en efficiënter te maken.",
-      "welcome2": "Wij combineren eenvoud, flexibiliteit en krachtige functies zodat jij je kunt concentreren op het runnen van je bedrijf terwijl wij de technische kant regelen.",
+      "welcome": "Deze handleiding helpt je snel op weg met het platform. Of je nu restauranteigenaar, manager of onderdeel van een horecateam bent, Dineri is gebouwd om jouw dagelijkse werkzaamheden eenvoudiger te maken.",
+      "welcome2": "Wij regelen de techniek, jij focust op je restaurant.",
       "whyTitle": "Waarom dit platform gebruiken?",
       "why": {
         "centralizedManagement": {
-          "title": "Gecentraliseerd beheer",
-          "description": "Beheer menu’s, bestellingen, evenementen en promoties allemaal op één plek."
+          "title": "Alles op één plek",
+          "description": "Beheer je menu, bestellingen, reserveren, evenementen en meer vanuit één overzichtelijk dashboard."
         },
         "seamlessExperience": {
-          "title": "Naadloze gastervaring",
-          "description": "Geef je klanten een moderne en soepele manier om met je bedrijf te communiceren."
+          "title": "Professionele zichtbaarheid",
+          "description": "Een strakke, professionele pagina die jouw restaurant op zijn best laat zien op elk device."
         },
         "insights": {
-          "title": "Praktische inzichten",
-          "description": "Analyses die je laten zien wat werkt en waar je kunt verbeteren."
+          "title": "Data die werkt",
+          "description": "Meet wat werkt, verbeter wat niet. Direct toepasbare analyses voor jouw restaurant"
         },
         "scalable": {
-          "title": "Schaalbaar en flexibel",
-          "description": "Begin klein en groei met geavanceerde functies naarmate je behoeften toenemen."
+          "title": "Groeit met jou mee",
+          "description": "Start klein en schaal op wanneer jij er klaar voor bent."
         },
         "easyToUse": {
-          "title": "Eenvoudig te gebruiken",
-          "description": "Geen technische kennis vereist – ontworpen voor iedereen."
+          "title": "Geen technische kennis nodig",
+          "description": "Intuïtief en eenvoudig gebouwd voor horecaondernemers, niet voor developers."
         }
       },
       "whoTitle": "Voor wie is het?",
       "who": {
         "restaurants": {
           "title": "Restaurants & Cafés",
-          "description": "Vereenvoudig reserveringen, bestellingen en menu­beheer."
+          "description": "Beheer reserveringen, bestellingen en je menu vanuit één overzichtelijk platform."
         },
         "bars": {
           "title": "Bars & Lounges",
-          "description": "Promoot evenementen en betrek klanten met QR-codes en pop-ups."
+          "description": "Promoot evenementen, deel updates en betrek gasten via slimme QR-codes."
         },
         "hospitality": {
-          "title": "Hospitalitybedrijven",
-          "description": "Verkrijg inzichten via analyses en stroomlijn de operaties."
+          "title": "Hotels & Hospitality",
+          "description": "Stroomlijn je operaties en krijg direct inzicht in prestaties via analyses."
         },
         "chefs": {
           "title": "Privékoks & Cateringdiensten",
@@ -584,45 +584,45 @@
         },
         "foodTrucks": {
           "title": "Foodtrucks & Pop-ups",
-          "description": "Deel je locatie, menu en updates direct."
+          "description": "Deel je locatie, menu en laatste updates altijd en overal."
         }
       },
-      "keyPointsTitle": "Belangrijke punten om te onthouden",
+      "keyPointsTitle": "Belangrijke dingen om te weten",
       "keyPoints": [
-        "Eén centraal dashboard – Alles wat je nodig hebt (menu’s, bestellingen, analyses, evenementen) wordt vanuit één plek beheerd.",
-        "Snelle installatie – Binnen enkele minuten ben je klaar om te starten.",
-        "Geen technische vaardigheden vereist – De editor is ontworpen om eenvoudig en intuïtief te zijn.",
-        "Flexibele functies – Zet modules (bijv. evenementen, pop-ups, QR-codes) aan of uit naar behoefte.",
-        "Mobielvriendelijk – Werkt naadloos op elk apparaat, zowel voor jou als je gasten.",
-        "Aanpasbaar ontwerp – Pas de look en feel aan zodat het bij je merkidentiteit past.",
-        "Realtime updates – Alle wijzigingen die je aanbrengt worden direct doorgevoerd.",
-        "Veilig & betrouwbaar – Je gegevens en klantinformatie zijn beschermd.",
-        "Schaalbaar – Begin klein en breid uit naarmate je bedrijf groeit.",
-        "Continue verbeteringen – Regelmatige updates brengen nieuwe functies en verbeteringen."
+        "Alles op één plek – Menu's, reserveringen, bestellingen, analyses en evenementen beheerd vanuit één dashboard.",
+        "Direct live – Binnen enkele minuten ben je klaar om te starten.",
+        "Geen technische kennis nodig – De editor is intuïtief en eenvoudig voor iedereen.",
+        "Modulair & flexibel – Zet functies zoals evenementen, QR-codes en pop-ups aan of uit naar behoefte.",
+        "Mobielvriendelijk – Werkt naadloos op elk apparaat, voor jou en je gasten.",
+        "Jouw huisstijl – Pas kleuren, lettertypen en logo aan zodat alles bij jouw merk past.",
+        "Realtime wijzigingen – Aanpassingen zijn direct zichtbaar voor je gasten.",
+        "Veilig & betrouwbaar – Jouw gegevens en klantinformatie zijn altijd beschermd.",
+        "Groeit met je mee – Start klein en schaal op wanneer jij er klaar voor bent.",
+        "Altijd up-to-date – Regelmatige updates brengen nieuwe functies en verbeteringen."
       ]
     },
     "WhatIsNew": {
-      "pageTitle": "Wat is nieuw?",
-      "intro": "Blijf op de hoogte van de nieuwste functies en verbeteringen. We werken continu om het platform krachtiger, betrouwbaarder en gebruiksvriendelijker te maken.",
+      "pageTitle": "Wat is er nieuw?",
+      "intro": "We bouwen continu aan Dineri. Hier vind je de laatste updates, nieuwe functies en verbeteringen zodat jij altijd het beste van het platform gebruikt",
 
-      "septemberTitle": "September 2025 – Laatste updates",
+      "septemberTitle": "Maart 2026 – Laatste updates",
       "newFeaturesTitle": "Nieuwe functies",
       "newFeatures": {
         "menuEditor": {
-          "title": "Menu-editor",
-          "description": "Maak en pas eenvoudig je menu aan met itembeschrijvingen en prijzen. Gebruik het als een snel menu om direct te delen, of koppel het rechtstreeks aan je bestelsysteem voor een volledig geïntegreerde ervaring. Je kunt op elk moment schakelen tussen gekoppelde of zelfstandige modus."
+          "title": "Vooruitbetaling bij reserveringen",
+          "description": "Stel eenvoudig in dat gasten een aanbetaling doen bij het reserveren. Zo voorkom je no-shows en heb je meer zekerheid op een vol restaurant en meer omzet."
         },
         "qrCodes": {
           "title": "QR-codes",
-          "description": "Genereer direct QR-codes die je gasten rechtstreeks verbinden met je menu, evenementen of promoties. Elke scan wordt bijgehouden, zodat je precies kunt zien hoe vaak je QR-codes worden gebruikt en de betrokkenheid in realtime kunt meten."
+          "description": "Genereer gepersonaliseerde QR-codes die gasten direct verbinden met je menu, evenementen of promoties. Elke scan wordt bijgehouden, zo zie je precies wat werkt en meet je betrokkenheid in realtime"
         },
         "popups": {
           "title": "Pop-ups",
-          "description": "Maak eenvoudige, aanpasbare pop-ups om aankondigingen op je bestelpagina te delen, aankomende evenementen te benadrukken of gasten simpelweg te verwelkomen wanneer ze je pagina bezoeken."
+          "description": "Maak aanpasbare pop-ups voor je pagina, verwelkom gasten, en kondig evenementen aan of deel een speciale actie. Direct zichtbaar bij elk bezoek."
         }
       },
 
-      "octoberTitle": "Oktober 2025 – Updates",
+      "octoberTitle": "Januari 2026 – Updates",
       "improvementsTitle": "Verbeteringen",
       "improvements": {
         "typography": {
@@ -656,8 +656,8 @@
       }
     },
     "Support": {
-      "pageTitle": "Contact opnemen met support",
-      "intro": "Vul het onderstaande formulier in en ons team neemt zo snel mogelijk contact met je op.",
+      "pageTitle": "Hoe kunnen we helpen?",
+      "intro": "Vul het formulier in en ons team neemt zo snel mogelijk contact met je op.",
       "toast": {
         "successTitle": "Bericht verzonden",
         "successDescription": "Je ondersteuningsverzoek is verzonden.",
@@ -676,8 +676,8 @@
       },
 
       "placeholders": {
-        "name": "Jouw naam",
-        "email": "jouw.email@voorbeeld.com",
+        "name": "Hoe mogen we je noemen?",
+        "email": "jouw@restaurant.nl",
         "subject": "Korte beschrijving van je probleem",
         "message": "Beschrijf je probleem in detail...",
         "urgency": {
@@ -696,13 +696,13 @@
       },
 
       "descriptions": {
-        "message": "Geef zoveel mogelijk details om ons te helpen je beter te ondersteunen.",
-        "attachments": "Upload screenshots of documenten die ons kunnen helpen je probleem te begrijpen.",
-        "terms": "Je gaat akkoord met onze Servicevoorwaarden en ons Privacybeleid."
+        "message": "Hoe meer details je deelt, hoe sneller we je kunnen helpen.",
+        "attachments": "Voeg screenshots of bestanden toe om je vraag te verduidelijken.",
+        "terms": "Door te verzenden ga je akkoord met onze servicevoorwaarden en ons privacybeleid."
       },
 
       "buttons": {
-        "submit": "Verzoek indienen",
+        "submit": "Verstuur bericht",
         "submitting": "Versturen..."
       },
 
@@ -726,45 +726,45 @@
     "Features": {
       "Analytics": {
         "pageTitle": "Analyse",
-        "intro": "Volg weergaven, QR-scans en bestellingen om te begrijpen hoe je gasten met je bedrijf omgaan. Duidelijke inzichten helpen je om menu’s, promoties en prestaties te verbeteren.",
+        "intro": "Volg menuweergaves, QR-scans en bestellingen in realtime. Begrijp hoe gasten jouw pagina gebruiken en stuur bij waar nodig.",
 
         "overviewTitle": "Overzicht",
-        "overviewText": "Analyse geeft je waardevolle inzichten in hoe gasten omgaan met je menu’s, QR-codes en bestelsysteem. Met duidelijke data zie je wat werkt, herken je trends en neem je slimmere zakelijke beslissingen.",
+        "overviewText": "Met de analysefunctie zie je precies hoe gasten omgaan met je menu, QR-codes en bestelsysteem. Herken trends, ontdek wat werkt en neem slimmere beslissingen voor jouw restaurant.",
 
         "metricsTitle": "Belangrijkste statistieken uitgelegd",
         "metrics": {
           "totalLinkViews": {
             "title": "Totaal aantal linkweergaven",
-            "description": "Het totale aantal keren dat je gedeelde link is aangeklikt (inclusief herhaalde klikken van dezelfde persoon)."
+            "description": "Het totale aantal klikken op jouw gedeelde link inclusief meerdere klikken van dezelfde persoon."
           },
           "uniqueLinkVisitors": {
             "title": "Unieke linkbezoekers",
-            "description": "Het aantal individuele personen dat op je link heeft geklikt. Eén persoon die meerdere keren klikt, telt nog steeds als 1."
+            "description": "Het aantal individuele personen dat op jouw link heeft geklikt. Iemand die meerdere keren klikt, telt als één bezoeker."
           },
           "pageViews": {
             "title": "Paginaweergaven",
-            "description": "Het totale aantal keren dat je menu of pagina is bekeken (inclusief herhaalde weergaven)."
+            "description": "Het totale aantal keren dat jouw menu of pagina is bekeken inclusief herhaalde bezoeken."
           },
           "uniquePageVisitors": {
             "title": "Unieke paginabezoekers",
-            "description": "Het aantal verschillende personen dat je pagina heeft bezocht. Meerdere bezoeken door dezelfde persoon worden slechts één keer geteld."
+            "description": "Het aantal verschillende personen dat jouw pagina heeft bezocht. Meerdere bezoeken door dezelfde persoon tellen als één."
           }
         },
 
-        "benefitsTitle": "Belangrijkste voordelen",
+        "benefitsTitle": "Waarom analyse belangrijk is",
         "benefits": [
-          "Begrijp gastgedrag – Zie welke items en categorieën de meeste aandacht krijgen.",
-          "Meet de prestaties van QR-codes – Volg hoe vaak en waar je QR-codes worden gescand.",
-          "Bestelinzichten – Ontdek welke producten het beste verkopen en wanneer.",
-          "Datagestuurde beslissingen – Gebruik analyses om je menu, prijzen en promoties te optimaliseren."
+          "Begrijp je gasten – Zie welke menu-items en categorieën de meeste aandacht trekken.",
+          "Meet je QR-codes – Volg hoe vaak en waar je QR-codes worden gescand.",
+          "Bestelinzichten – Ontdek welke producten het beste verkopen en op welke momenten.",
+          "Slimmere beslissingen – Gebruik data om je menu, prijzen en promoties te optimaliseren."
         ],
 
-        "tipsTitle": "Tips",
+        "tipsTitle": "Tips om het meeste uit je analyse te halen",
         "tips": [
-          "Controleer je analyses wekelijks om trends vroegtijdig te herkennen.",
-          "Vergelijk verschillende perioden (bijv. vorige week vs. deze week) om groei te meten.",
-          "Gebruik inzichten om nieuwe promoties te testen of populaire items te benadrukken.",
-          "Combineer analyses met Evenementen of Pop-ups om te zien welke strategieën meer betrokkenheid opleveren."
+          "Controleer wekelijks je statistieken om trends vroeg te herkennen en snel bij te sturen.",
+          "Vergelijk deze week met vorige week om groei inzichtelijk te maken.",
+          "Gebruik je inzichten om gerichte promoties te testen of populaire items extra te benadrukken.",
+          "Koppel analyses aan evenementen of pop-ups om te zien welke aanpak het meeste oplevert."
         ]
       },
       "Orders": {
@@ -772,24 +772,24 @@
 
         "accessShopTitle": "1. Toegang tot je winkel",
         "accessShop": [
-          "Ga naar je restaurantpagina door <span class=\"text-main-action\">\"/menu\"</span> in te typen na je domein. Voorbeeld: <span class=\"text-main-action\">\"dineri.me/jouw-restaurant/menu\"</span>.",
+          "Ga naar je restaurantpagina door <span class=\"text-main-action\">\"/menu\"</span> in te typen na je domein. Voorbeeld: <span class=\"text-main-action\">\"dineri.app/jouw-restaurant/menu\"</span>.",
           "Dit is je <b>winkelpagina</b>, waar gasten bestellingen kunnen plaatsen.",
-          "Je kunt deze pagina volledig aanpassen via de <b>Knop Aanpassen</b> (rechtsonder).",
-          "<b>Tip:</b> Voeg eerst al je producten toe en gebruik daarna Aanpassen; het is gemakkelijker te ontwerpen wanneer je het volledige menu kunt zien."
+          "Je kunt deze pagina volledig aanpassen via de button<b> aanpassen</b> rechtsonder.",
+          "<b>Tip:</b> Voeg eerst al je producten toe voordat je de stylen gaat aanpassen, zo zie je meteen hoe het geheel eruitziet."
         ],
 
         "addProductsTitle": "2. Producten toevoegen",
         "addProducts": [
           "Ga in je dashboard naar <b>Menu</b> → Product toevoegen.",
-          "Bij het toevoegen van een product kun je ervoor kiezen het op te nemen in het <b>Snelle menu</b>.",
-          "Als je dit overslaat, verschijnt het product alleen in de <b>Winkel</b>."
+          "Bij elk product kies je of het wordt opgenomen in het <b>'Quick menu'</b>.",
+          "Sla je deze optie over, dan is het product alleen zichtbaar in je <b> winkel</b>."
         ],
 
         "manageOrdersTitle": "3. Bestellingen beheren",
         "manageOrders": [
-          "Bestellingen worden weergegeven in je <b>Bestellingen</b>-dashboard met details zoals items, aantal en tijd van bestelling.",
+          "Alle bestellingen verschijnen in je dashboard met een overzicht van items, aantal en tijdstip.",
           {
-            "title": "Werk de bestelstatus bij:",
+            "title": "Je kunt zelf de bestelstatus bijwerken:",
             "items": [
               "<b>In afwachting</b> → wacht op bevestiging",
               "<b>In uitvoering</b> → wordt bereid",
@@ -799,33 +799,33 @@
           }
         ],
 
-        "dashboardFunctionsTitle": "Aanvullende functies in het Bestellingen-dashboard",
+        "dashboardFunctionsTitle": "Aanvullende functies",
         "dashboardFunctions": [
-          "<b>Restaurantstatus</b><br/>Stel de beschikbaarheid van je restaurant in voor <b>bezorging, afhalen</b> of <b>niet beschikbaar</b>. Perfect voor drukke tijden of tijdelijke problemen wanneer je bestellingen moet stopzetten.",
-          "<b>Bezorgkosten</b><br/>Definieer je eigen bezorgtarieven direct in het dashboard.",
-          "<b>Verversingsinterval</b><br/>Laat je bestelpagina openstaan in je werkruimte en kies een automatisch verversingsinterval (bijv. elke 2, 5 of 15 minuten). Zo zie je altijd nieuwe bestellingen zonder het scherm aan te raken.",
-          "<b>Openingstijden</b><br/>Pas de openingstijden van je restaurant aan.<br/><b>Belangrijk:</b> Je kunt geen aparte tijden instellen voor bezorging vs. afhalen. Als je keuken andere tijden heeft (bijv. bezorging sluit eerder), zorg er dan voor dat dit wordt weerspiegeld in je hoofdopeningstijden.",
-          "<b>Bestelling exporteren</b><br/>Download je volledige bestelgeschiedenis als een Excel-bestand. Dit bevat alle belangrijke gegevens die je nodig kunt hebben voor boekhouding en administratie."
+          "<b>Restaurantstatus</b><br/>Stel in of jouw restaurant beschikbaar is voor bezorging, afhalen of tijdelijk gesloten. Handig voor drukke momenten of wanneer je even geen bestellingen wilt ontvangen.",
+          "<b>Bezorgkosten</b><br/>Stel je eigen bezorgtarieven in direct vanuit het dashboard..",
+          "<b>Verversingsinterval</b><br/>Laat je bestelpagina openstaan en kies een automatisch verversingsinterval, bijv. elke 2, 5 of 15 minuten. Zo mis je nooit een nieuwe bestelling.",
+          "<b>Openingstijden</b><br/>Pas de openingstijden van je restaurant aan. Let op: je kunt geen aparte tijden instellen voor bezorging en afhalen. Sluit je keuken eerder voor bezorging, zorg dan dat dit in je hoofdopeningstijden wordt verwerkt.",
+          "<b>Bestelling exporteren</b><br/>Download je volledige bestelgeschiedenis als Excel-bestand. Handig voor boekhouding en administratie."
         ],
 
         "benefitsTitle": "Belangrijkste voordelen",
         "benefits": [
-          "<b>Gecentraliseerd beheer –</b> Alle bestellingen, producten en instellingen op één plek.",
-          "<b>Aanpasbare winkel –</b> Pas je bestelpagina aan zodat deze bij je merk past.",
-          "<b>Operationele flexibiliteit –</b> Pas status, bezorgkosten en verversingsinterval naar wens aan.",
-          "<b>Gegevens binnen handbereik –</b> Exporteer bestelgeschiedenis voor rapportage of boekhouding."
+          "<b>Alles op één plek –</b> Beheer bestellingen, producten en instellingen vanuit één overzichtelijk dashboard.",
+          "<b>Volledig aanpasbaar –</b> Pas je bestelpagina volledig aan op jouw huisstijl en merk.",
+          "<b>Operationele flexibiliteit –</b> Stel status, bezorgkosten en verversingsinterval in zoals het jou uitkomt.",
+          "<b>Bestelgeschiedenis altijd bij de hand –</b> Exporteer je bestellingen voor rapportage of boekhouding wanneer je maar wilt."
         ],
 
         "tipsTitle": "Tips",
         "tips": [
-          "Voeg producten toe voordat je je winkel aanpast voor de beste bewerkingservaring.",
-          "Controleer regelmatig je <b>restaurantstatus</b> om gemiste bestellingen tijdens drukke tijden te voorkomen.",
-          "Gebruik de <b>verversingsinterval</b> op een tablet of scherm in je keuken om handsfree up-to-date te blijven.",
-          "Exporteer je bestelgeschiedenis maandelijks om je administratie georganiseerd te houden."
+          "Begin met je producten - Voeg eerst al je producten toe voordat je de winkel gaat aanpassen — zo zie je meteen het eindresultaat. ",
+          "Houd je status bij - Controleer regelmatig je restaurantstatus om gemiste bestellingen tijdens drukke momenten te voorkomen.",
+          "Gebruik een keukenscherm - Laat je bestelpagina openstaan op een tablet in de keuken met een automatisch verversingsinterval. Handsfree en altijd up-to-date.",
+          "Exporteer maandelijks - Download je bestelgeschiedenis elke maand om je administratie overzichtelijk te houden."
         ],
 
         "paymentsTitle": "Betalingen",
-        "payments": "Om betalingen rechtstreeks op je bankrekening te ontvangen, moet je je <b>Stripe-account</b> koppelen. Klik hier om te leren hoe je Stripe instelt en koppelt aan je restaurant."
+        "payments": "Om betalingen rechtstreeks op je bankrekening te ontvangen, koppel je jouw <b>Stripe-account</b> in de settings."
       },
       "Links": {
         "title": "Links",
