@@ -1,28 +1,25 @@
 {
   "TopBar": {
-    "message": "Tijd om klikken om te zetten in klanten.",
-    "setup": "Instellen",
-    "cta": "en begin binnen enkele minuten!",
-    "loggedInMessage": "Welkom terug! Klaar om je groei te stimuleren?",
-    "goToDashboard": "Ga naar dashboard"
-  },
-  "global": {
-    "visit": "Bezoeken"
+    "message": "Eén platform.",
+    "setup": "Al je links",
+    "cta": "en bestellingen en reserveringen op één plek",
+    "loggedInMessage": "Welkom terug!",
+    "goToDashboard": "Ga terug naar je dashboard"
   },
   "Header": {
-    "home": "Home",
+    "home": "",
     "features": "Oplossingen",
-    "demo": "Demo",
-    "learn": "Help",
+    "demo": "Bekijk demo",
+    "learn": "Informatie",
     "pricing": "Prijzen",
     "login": "Inloggen",
     "signup": "Aanmelden"
   },
   "Footer": {
     "product": "Product",
-    "features": "Functies",
+    "features": "Oplossingen",
     "demo": "Demo",
-    "plans": "Plannen",
+    "plans": "Prijzen",
     "faq": "FAQ",
 
     "company": "Bedrijf",
@@ -40,48 +37,48 @@
   },
   "Home": {
     "Hero": {
-      "title": "Verbind. Je <br class='sm:flex hidden'/>restaurant, <br class='sm:flex hidden'/>in een paar klikken.",
-      "explore": "Bekijk alle functies",
-      "cta": "Begin vandaag nog"
+      "title": "De link in bio,<br class='sm:flex hidden'/>gebouwd voor<br class='sm:flex hidden'/>restaurants",
+      "explore": "Ontdek alle functies",
+      "cta": "Gratis starten"
     },
     "Trusted": {
       "text": "Vertrouwd door restaurants wereldwijd"
     },
     "EverythingYouNeed": {
-      "headline": "Alles wat je nodig hebt om je restaurant te laten groeien",
-      "description": "Krachtige tools speciaal gemaakt voor restaurants. Maak een prachtige profielpagina, deel al je links, neem directe bestellingen met betalingen aan en volg de prestaties. Geen commissies. Alleen jouw merk, volledig onder controle.",
-      "cta": "Word lid",
+      "headline": "Alles wat jouw restaurant nodig heeft, achter één link",
+      "description": "Van een op maat gemaakte profielpagina tot directe bestellingen, Dineri geeft jou de tools om online te groeien. Zonder commissies, volledig in jouw huisstijl.",
+      "cta": "Gratis starten",
       "features": {
         "01": {
-          "title": "Aantrekkelijke restaurantpagina",
-          "description": "Een mooie, mobielvriendelijke pagina die perfect de unieke stijl van je restaurant weerspiegelt."
+          "title": "Jouw restaurant, jouw stijl",
+          "description": "Een mobielvriendelijke pagina die de uitstraling van jouw restaurant perfect weerspiegelt."
         },
         "02": {
-          "title": "Gebruiksvriendelijk dashboard",
-          "description": "Pas eenvoudig kleuren, lettertypen, logo’s en meer aan vanuit één intuïtief dashboard."
+          "title": "Alles beheren vanuit één plek",
+          "description": "Pas kleuren, lettertypen en logo's eenvoudig aan vanuit één overzichtelijk dashboard."
         },
         "03": {
-          "title": "Geïntegreerd bestelsysteem",
-          "description": "Beheer zelf de bestellingen en ontvang betalingen direct, zonder derde partijen of commissies."
+          "title": "Direct bestellingen ontvangen",
+          "description": "Ontvang bestellingen en betalingen rechtstreeks zonder tussenpersonen of commissies."
         },
         "04": {
           "title": "Analytics & inzichten",
-          "description": "Volg weergaven, klikken en bestellingen om je publiek beter te begrijpen en je prestaties te verbeteren."
+          "description": "Volg weergaven, klikken en bestellingen en ontdek wat werkt voor jouw restaurant."
         },
         "05": {
-          "title": "Evenementenkalender",
-          "description": "Maak een duidelijke en aantrekkelijke kalender voor evenementen, proeverijen of live muziek."
+          "title": "Reserveringen met vooruitbetaling",
+          "description": "Laat gasten een tafel reserveren met of zonder vooruitbetaling. Geen no-shows, geen gedoe."
         },
         "06": {
-          "title": "QR-codes",
-          "description": "Genereer, personaliseer en volg QR-codes om te zien hoe vaak ze worden gescand."
+          "title": "Slimme QR-codes",
+          "description": "Maak gepersonaliseerde QR-codes en volg precies hoe vaak ze worden gescand."
         }
       }
     },
     "HowItWorks": {
-      "headline": "Hoe dineri.app werkt",
-      "description": "Stel in, pas aan en ga binnen enkele minuten live",
-      "cta": "Nu deelnemen",
+      "headline": "Hoe Dineri werkt",
+      "description": "In drie stappen online. Geen technische kennis vereist.",
+      "cta": "Gratis starten",
       "steps": {
         "01": {
           "title": "Maak je profiel aan",
@@ -98,9 +95,9 @@
       }
     },
     "Plans": {
-      "headline": "Betaalbare plannen",
-      "description": "Duidelijke en eerlijke prijzen, zonder verborgen kosten, ontworpen om je bedrijf te laten groeien.",
-      "cta": "Bekijk alle plannen"
+      "headline": "Transparante prijzen",
+      "description": "Eerlijke prijzen die meegroeien met jouw restaurant. Geen verborgen kosten, geen commissies.",
+      "cta": "Bekijk de prijzen"
     },
     "Faqs": {
       "headline": "Vragen?",
@@ -109,69 +106,69 @@
         "01": {
           "question": "Heb ik technische vaardigheden nodig om Dineri.app te gebruiken?",
           "answer": [
-            "Nee, Dineri.app is ontworpen om gebruiksvriendelijk te zijn. Je hebt geen programmeerkennis nodig: alles werkt met eenvoudige formulieren en instellingen. Het platform is ook volledig mobielvriendelijk, zodat je de pagina van je restaurant eenvoudig kunt bijwerken en beheren vanaf je telefoon."
+            "Nee. Dineri is ontworpen voor horecaondernemers, niet voor developers. Alles werkt via eenvoudige formulieren en instellingen en er is dus geen enkele programmeerkennis vereist. Het platform is volledig mobielvriendelijk, zodat je jouw pagina altijd en overal kunt beheren, ook vanaf je telefoon."
           ]
         },
         "02": {
           "question": "Kan ik mijn bestaande reserveringssysteem koppelen?",
           "answer": [
-            "Op dit moment zijn volledige integraties met bekende reserveringssystemen nog niet beschikbaar. We werken hier actief aan en verwachten dit binnenkort als nieuwe functie uit te brengen. Voor nu kun je eenvoudig de link naar je bestaande reserveringstool toevoegen op je Dineri.app-pagina."
+            "Directe integraties met externe reserveringssystemen zijn momenteel in ontwikkeling. In de tussentijd kun je eenvoudig een link naar jouw bestaande reserveringstool toevoegen op jouw Dineri-pagina. We houden je op de hoogte zodra nieuwe koppelingen beschikbaar zijn."
           ]
         },
         "03": {
-          "question": "Welke domeinextensies kan ik gebruiken met Dineri.app?",
+          "question": "Kan ik een eigen domeinnaam gebruiken?",
           "answer": [
-            "Als je nog geen domein hebt, kun je kiezen uit een van onze gratis domeinen die zijn afgestemd op jouw markt. Bijvoorbeeld Ibiza.rest, Dineri.me, Thechef.me en nog veel meer.",
-            "We blijven voortdurend nieuwe en professionele domeinextensies aankopen zodat we je nog meer opties kunnen bieden die perfect passen bij jouw bedrijf — allemaal gratis beschikbaar."
+            "Ja. Je kunt jouw eigen domeinnaam koppelen aan jouw Dineri-pagina. Heb je nog geen domein? Dan krijg je gratis een subdomein via Dineri, zoals dineri.app/jouw-restaurantnaam. Dit is direct beschikbaar bij de aanmelding",
+            ""
           ]
         },
         "04": {
           "question": "Zijn er commissiekosten?",
           "answer": [
-            "Nee. Met Dineri.app behoud je 100% van je inkomsten. Geen commissie op afhaal- of bezorgbestellingen. In tegenstelling tot veel platforms die 10–30% per bestelling rekenen, betaal je hier alleen je abonnement. Meer winst, volledige controle en geen verrassingen.",
-            "Het beste van alles: je betalingen gaan rechtstreeks naar je bankrekening, waardoor je volledige controle hebt en direct toegang tot je inkomsten."
+            "Nee. Met Dineri behoud je 100% van je inkomsten. Je betaalt alleen een vast maandelijks abonnement, geen commissies op bestellingen, geen verborgen kosten. Betalingen gaan rechtstreeks naar jouw bankrekening, zodat je altijd direct toegang hebt tot je omzet.",
+            ""
           ]
         }
       }
     },
     "Understand": {
-      "headline": "Begrijp je publiek, laat je restaurant groeien",
-      "description": "Volg klikken, inkomsten en QR-scans in realtime. Krijg duidelijke inzichten in wat werkt, zodat je slimmere updates kunt maken en klanten blijft terughalen.",
+      "headline": "Jouw prestaties, realtime inzichtelijk",
+      "description": "Volg menuweergaves, QR-scans en bestellingen in realtime. Begrijp wat werkt, optimaliseer je pagina en haal meer omzet uit elke bezoeker.",
       "cta": "Begin vandaag nog"
     },
     "CTA": {
-      "headline": "Verhoog. Jouw.<span class='sm:hidden flex'> </span>Restaurant.",
-      "cta": "Begin nu"
+      "headline": "Connect. Your.<span class='sm:hidden flex'> </span> Restaurant.",
+      "cta": "Gratis starten"
     }
   },
   "FeaturesPage": {
     "Hero": {
-      "title": "Maak een basis voor de aanwezigheid van je<br />  restaurant.",
-      "description": "Toon je menu, trek meer klanten aan en beheer alles vanaf één eenvoudig platform — gebouwd om met je restaurant mee te groeien.",
+      "title": "Professioneel en compleet.<br />De online thuisbasis voor jouw restaurant.",
+      "description": "Presenteer je menu, trek nieuwe gasten aan en beheer alles vanuit één overzichtelijk platform, gebouwd voor restaurants die willen groeien.",
       "features": {
         "1": {
-          "title": "Genereer verkeer waar het telt",
-          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+          "title": "Geen no-shows meer",
+          "text": "Laat gasten direct een tafel reserveren met automatische bevestiging en optionele vooruitbetaling. Altijd overzichtelijk, zonder gedoe."
         },
         "2": {
-          "title": "Genereer verkeer waar het telt",
-          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+          "title": "Ordersysteem",
+          "text": "Ontvang afhaal- en bezorgbestellingen rechtstreeks via jouw pagina. Geen tussenpersonen, geen commissies, 100% van de omzet is voor jou."
         },
         "3": {
-          "title": "Genereer verkeer waar het telt",
-          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+          "title": "QR Tracking",
+          "text": "Genereer gepersonaliseerde QR-codes en volg precies hoeveel scans je ontvangt. Ontdek welke codes het beste presteren en optimaliseer jouw marketingaanpak."
         },
         "4": {
-          "title": "Genereer verkeer waar het telt",
-          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+          "title": "FAQ in één klik",
+          "text": "Maak eenvoudig een FAQ-sectie aan op jouw pagina. Beantwoord veelgestelde vragen van gasten en verminder onnodige telefoontjes."
         },
         "5": {
-          "title": "Genereer verkeer waar het telt",
-          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+          "title": "Reserveringssysteem",
+          "text": "Laat gasten een tafel reserveren via jouw pagina. Met automatische bevestigings- en annuleringsmails, vooruitbetaling en reviewverzoeken vanuit één overzichtelijk dashboard."
         },
         "6": {
-          "title": "Genereer verkeer waar het telt",
-          "text": "Koppel je sociale profielen, online winkel, website en alles waarmee je bezoekers wilt laten communiceren."
+          "title": "Digtaal menu",
+          "text": "Zet je menu online met categorieën, prijzen en allergeneninformatie. Pas het realtime aan vanuit je dashboard, envoudig, snel en altijd up-to-date"
         }
       }
     }
@@ -419,15 +416,15 @@
     }
   },
   "About": {
-    "title": "Van keuken tot code",
-    "description": "Het idee voor Dineri.app is ontstaan uit jarenlange ervaring met het bouwen van websites voor restaurants. In die tijd zagen we steeds hetzelfde probleem: eigenaren hadden geen tijd om hun site bij te werken, vonden de systemen te ingewikkeld of betaalden veel te veel voor functies die ze nooit gebruikten. Vaak werden dure ontwerpen en talloze uren werk geïnvesteerd, terwijl gasten in werkelijkheid alleen een paar belangrijke dingen willen zien: het menu, recensies, de locatie, reserveringsopties en de mogelijkheid om te bestellen.",
-    "p1": "Bovendien zijn de afgelopen jaren veel bestelplatforms onnodig hoge commissies per bestelling gaan rekenen. Veel restauranteigenaren zouden deze platforms graag verlaten, maar hebben simpelweg geen echt alternatief. Met Dineri.app kun je online bestellingen rechtstreeks aan je klanten aanbieden, zonder kosten te betalen of winstmarges te verliezen.",
-    "p2": "Wij zijn een team van webontwikkelaars, marketeers en professionals met jarenlange ervaring in de horecabranche. We weten hoe druk het runnen van een horecabedrijf kan zijn en hoe belangrijk het is om er online altijd aantrekkelijk en actueel uit te zien. Onze gecombineerde expertise in technologie, marketing en horeca betekent dat we precies weten wat restauranteigenaren nodig hebben."
+    "title": "Ons verhaal",
+    "description": "Het idee achter Dineri ontstond vanuit jarenlange ervaring met het bouwen van websites voor restaurants. Steeds zagen we hetzelfde probleem: eigenaren hadden geen tijd om hun site bij te werken, vonden systemen te ingewikkeld of betaalden veel te veel voor functies die ze nooit gebruikten. Terwijl gasten in werkelijkheid maar een paar dingen willen zien: het menu, recensies, de locatie en de mogelijkheid om te reserveren of bestellen.",
+    "p1": "Daar komt bij dat veel bestelplatforms de afgelopen jaren steeds hogere commissies zijn gaan rekenen. Veel restauranteigenaren willen deze platforms verlaten, maar hebben simpelweg geen goed alternatief. Dineri is dat alternatief. Ontvang bestellingen rechtstreeks van jouw klanten zonder commissies en zonder winstmarge die verdwijnt naar een platform.",
+    "p2": "Wij zijn een team van ontwikkelaars, marketeers en horecaprofessionals. We weten hoe druk het runnen van een restaurant is en hoe belangrijk het is om er online professioneel en actueel uit te zien. Die combinatie van technologie, marketing en horecakennis is precies waarom Dineri werkt."
   },
   "CareersPage": {
     "hero": {
-      "title": "Vorm de <br /> <span class='underline underline-offset-4 decoration-green-600'>toekomst</span> bij Dineri",
-      "description": "Bij Dineri geloven we dat talent en ideeën innovatie stimuleren. Sluit je aan bij ons team en help ons digitale oplossingen te bouwen die restaurants en hun klanten dichter bij elkaar brengen."
+      "title": "Samen bouwen<br /> <span class='underline underline-offset-4 decoration-green-600'></span> aan de horeca",
+      "description": "Bij Dineri geloven we dat de beste ideeën komen van mensen met passie. Help ons een platform te bouwen dat restaurants en hun gasten dichter bij elkaar brengt, en maak écht verschil in de horecabranche."
     }
   },
   "CareersSubPage": {
