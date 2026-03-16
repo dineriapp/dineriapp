@@ -81,7 +81,7 @@ export default function PlansPage() {
                                                         : locale === "it"
                                                             ? "Il più popolare"
                                                             : locale === "nl"
-                                                                ? "Meest populair"
+                                                                ? "Meest gekozen"
                                                                 : "Most Popular"}
                                         </p>
                                     )}
