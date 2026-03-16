@@ -1785,7 +1785,7 @@
   "dashboard": {
     "loadingText": "Je dashboard wordt geladen...",
     "welcomeTitle": "Welkom terug",
-    "welcomeSubtitle": "Beheer het profiel van je restaurant en volg de prestaties",
+    "welcomeSubtitle": "Alles over jouw restaurant in één overzicht",
     "stats": {
       "totalLinks": {
         "title": "Totaal aantal links",
@@ -1815,7 +1815,7 @@
     "dashboardMobilePreview": {
       "card": {
         "title": "Voorbeeld",
-        "description": "Bekijk hoe je pagina eruitziet op mobiele apparaten",
+        "description": "Zo ziet jouw pagina eruit op mobiel",
         "visitButton": "Bezoeken"
       },
       "actions": {
@@ -1840,7 +1840,7 @@
     },
     "quickActions": {
       "title": "Snelle acties",
-      "description": "Veelgebruikte taken en instellingen",
+      "description": "Veelgebruikte instellingen",
       "buttons": {
         "addNewLink": "Nieuwe link toevoegen",
         "editProfile": "Profiel bewerken",
@@ -1850,7 +1850,7 @@
     },
     "share": {
       "title": "Je restaurantpagina",
-      "description": "Deel je pagina met klanten",
+      "description": "Deel je pagina met je gasten",
       "copyToast": "URL gekopieerd naar klembord",
       "copyButton": "URL kopiëren",
       "uniqueUrlInfo": "Dit is de unieke URL van je pagina. Deel deze met je klanten zodat ze al je belangrijke links op één plek kunnen vinden.",
@@ -2051,7 +2051,7 @@
     "buttons": {
       "refresh": "Vernieuwen",
       "refreshing": "Bezig met vernieuwen...",
-      "changeTimeline": "Periode wijzigen",
+      "changeTimeline": "Openingstijden",
       "export": "Exporteren",
       "exporting": "Bezig met exporteren..."
     },
@@ -3894,7 +3894,7 @@
         },
         "revenue": {
           "title": "Omzet",
-          "footer": "Aanbetalingen geïnd"
+          "footer": "Aanbetalingen"
         }
       }
     },

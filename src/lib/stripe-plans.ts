@@ -422,7 +422,7 @@ export function getStripePlans(locale: string): StripePlans {
                 },
                 pro: {
                     name: "Pro",
-                    description: "Professioneel & compleet",
+                    description: "Professioneel en compleet",
                     price: 19,
                     priceId: process.env.STRIPE_PRO_PRICE_ID ?? null,
                     features: [
