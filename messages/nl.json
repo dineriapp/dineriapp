@@ -233,8 +233,8 @@
       "description": "Start gratis en schaal op wanneer jij er klaar voor bent. Elk plan geeft je de tools om jouw restaurant professioneel online te presenteren van menu tot reserveringen."
     },
     "footer": {
-      "question": "Iets op maat nodig?",
-      "action": "Neem contact op met ons team"
+      "question": "Liever iets op maat?",
+      "action": "Wij denken graag met je mee."
     }
   },
   "legalPages": {
@@ -1362,7 +1362,7 @@
     "opening-hours": {
       "page": {
         "title": "Openingstijden",
-        "description": "Stel de openingstijden van je restaurant in voor elke dag van de week"
+        "description": "Beheer de openingstijden van jouw restaurant"
       },
       "form": {
         "labels": {
@@ -1405,7 +1405,7 @@
     "social": {
       "page": {
         "title": "Sociale Media",
-        "description": "Koppel je sociale media-accounts en beheer hoe ze worden weergegeven"
+        "description": "Plak je profiellink en je sociale media verschijnen automatisch op jouw pagina."
       },
       "form": {
         "labels": {
@@ -1678,7 +1678,7 @@
       },
       "googlePlaces": {
         "title": "Google Places-integratie",
-        "description": "Verbind je Google Places-vermelding om beoordelingen en recensies te tonen",
+        "description": "Koppel je Google Places-vermelding en laat beoordelingen en recensies zien aan je gasten",
         "label": "Google Place ID",
         "placeholder": "bijv. ChIJN1t_tDeuEmsRUsoyG83frY4",
         "upgradePlaceholder": "Upgrade om een Place ID in te voeren",
@@ -1689,7 +1689,7 @@
         },
         "integrationDetected": {
           "title": "Integratie gedetecteerd",
-          "premiumDescription": "Je restaurant is verbonden met Google Places. Recensies en beoordelingen worden op je pagina weergegeven.",
+          "premiumDescription": "Je restaurant is verbonden met Google Places. Recensies en beoordelingen worden weergegeven.",
           "basicDescription": "Je restaurant is verbonden met Google Places, maar deze functie is alleen zichtbaar op je restaurantpagina als je een Pro- of Enterprise-abonnement hebt.",
           "placeId": "Place ID: "
         },
@@ -4780,7 +4780,7 @@
   },
   "emailIntegration": {
     "title": "E-mailintegratie",
-    "description": "Configureer uw Resend-instellingen om reserverings- en notificatie-e-mails te verzenden.",
+    "description": "Stel je e-mailinstellingen in voor reserveringsbevestigingen en notificaties aan je gasten.",
     "alerts": {
       "verificationSent": "De verificatiecode is naar uw e-mailadres verzonden.",
       "verificationFailed": "Verificatie mislukt. Controleer de code en probeer opnieuw.",
@@ -4792,24 +4792,24 @@
     "form": {
       "fromName": {
         "label": "Afzendernaam",
-        "placeholder": "Naam van uw restaurant",
-        "helper": "Deze naam wordt weergegeven als afzender wanneer e-mails naar klanten worden verzonden.",
+        "placeholder": "Naam van het restaurant",
+        "helper": "Dit is de naam die gasten zien als afzender van jouw e-mails.",
         "errors": {
           "min": "De naam moet minimaal 2 tekens bevatten."
         }
       },
       "fromEmail": {
         "label": "Afzender e-mailadres",
-        "placeholder": "noreply@uwdomein.nl",
-        "helper": "Reserverings- en notificatie-e-mails worden vanaf dit adres verzonden.",
+        "placeholder": "jouw-restaurant@dineri.app",
+        "helper": "Bevestigings- en notificatiemails worden verstuurd vanaf dit e-mailadres.",
         "errors": {
           "invalid": "Voer een geldig e-mailadres in."
         }
       },
       "testEmail": {
-        "label": "Test e-mail (voor verificatiecode)",
-        "placeholder": "u@voorbeeld.nl",
-        "helper": "We sturen een 4-cijferige verificatiecode (OTP) naar dit e-mailadres.",
+        "label": "E-mail voor verificatiecode",
+        "placeholder": "jouw@voorbeeld.nl",
+        "helper": "We sturen een 4-cijferige verificatiecode naar dit e-mailadres.",
         "errors": {
           "invalid": "Voer een geldig test e-mailadres in."
         }
@@ -4817,7 +4817,7 @@
       "apiKey": {
         "label": "Resend API-sleutel",
         "placeholder": "re_************************",
-        "helper": "Voer uw Resend API-sleutel in. Deze wordt veilig versleuteld opgeslagen.",
+        "helper": "Voer je Resend API-sleutel in. Deze wordt veilig versleuteld opgeslagen.",
         "errors": {
           "min": "De Resend API-sleutel is verplicht en moet geldig zijn."
         }

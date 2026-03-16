@@ -118,7 +118,7 @@ export default function JobDetailPage({
                     : locale === "it"
                       ? "Il Ruolo"
                       : locale === "nl"
-                        ? "De Rol"
+                        ? "Over de rol"
                         : "The Role"}
             </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
@@ -140,7 +140,7 @@ export default function JobDetailPage({
                       ? "Chi siamo"
                       : locale === "nl"
                         ? "Over ons"
-                        : "About"} {job.company}
+                        : "About"} 
             </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               {job?.aboutParas?.map((para, index) => (
@@ -160,7 +160,7 @@ export default function JobDetailPage({
                     : locale === "it"
                       ? "Di cosa sarai responsabile"
                       : locale === "nl"
-                        ? "Waar jij verantwoordelijk voor bent"
+                        ? "Wat je gaat doen"
                         : "What You’ll Own"}
             </h2>
             <div className="space-y-3">
@@ -188,7 +188,7 @@ export default function JobDetailPage({
                     : locale === "it"
                       ? "Requisiti"
                       : locale === "nl"
-                        ? "Vereisten"
+                        ? "Wat je meebrengt"
                         : "Requirements"}
             </h2>
             <ul className="space-y-2 text-gray-700">
@@ -209,7 +209,7 @@ export default function JobDetailPage({
                     : locale === "it"
                       ? "Benefici"
                       : locale === "nl"
-                        ? "Voordelen"
+                        ? "Wat wij bieden"
                         : "Benefits"}
             </h2>
             <ul className="space-y-2 text-gray-700">
