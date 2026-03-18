@@ -13,7 +13,7 @@
     "home": "Home",
     "features": "Features",
     "demo": "Demo",
-    "learn": "Learn",
+    "learn": "Resources",
     "pricing": "Pricing",
     "login": "Log in",
     "signup": "Sign Up"
@@ -22,7 +22,7 @@
     "product": "Product",
     "features": "Features",
     "demo": "Demo",
-    "plans": "Plans",
+    "plans": "Pricing",
     "faq": "FAQ",
 
     "company": "Company",
@@ -40,7 +40,7 @@
   },
   "Home": {
     "Hero": {
-      "title": "Connect. Your <br class='sm:flex hidden'/>restaurant, <br class='sm:flex hidden'/>in a few clicks.",
+      "title": "A restaurant bio<br class='sm:flex hidden'/>built for you<br class='sm:flex hidden'/>",
       "explore": "Explore all features",
       "cta": "Get started today"
     },
@@ -48,8 +48,8 @@
       "text": "Trusted by restaurants worldwide"
     },
     "EverythingYouNeed": {
-      "headline": "Everything you need to grow your restaurant",
-      "description": "Powerful tools made for restaurants. Create a stunning profile page, share all your links, take direct orders with payments, and track performance. No commissions. Just your brand, fully in control.",
+      "headline": "Everything your restaurant needs, behind one link.",
+      "description": "From a custom profile page to direct orders, Dineri gives restaurants the tools to grow online. No commissions, no middlemen. Just your brand, fully in your control.",
       "cta": "Join Now",
       "features": {
         "01": {
