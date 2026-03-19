@@ -835,7 +835,7 @@
         "howItWorksTitle": "Hoe het werkt",
         "howItWorks": [
           {
-            "title": "Klik op <b>Link toevoegen</b> en voer in:",
+            "title": "Klik op link toevoegen en voer in:",
             "items": [
               "Een <b>titel</b> (bijv. “Instagram” of “Tafel reserveren”).",
               "De <b>URL</b> van de pagina.",
@@ -855,50 +855,48 @@
         "tipsTitle": "Tips",
         "tips": [
           "Voeg je <b>reserveringslink</b> toe zodat gasten direct kunnen boeken.",
-          "Voeg links toe naar <b>sociale media</b> voor meer zichtbaarheid en betrokkenheid.",
+          "Voeg links toe naar je <b>sociale media</b> voor meer zichtbaarheid en betrokkenheid.",
           "Houd de lijst kort en relevant; te veel links kunnen gasten overweldigen.",
           "Gebruik <b>Analyse</b> om bij te houden welke links de meeste klikken krijgen."
         ]
       },
       "Menu": {
         "title": "Menu",
-        "intro": "Maak en personaliseer uw digitale menu met artikelbeschrijvingen, prijzen en categorieën. Gebruik het als een eenvoudig <b>Snelmenu</b> om direct te delen, of koppel het rechtstreeks aan uw <b>bestselsysteem</b> voor een complete digitale winkelervaring.",
+        "intro": "Maak en personaliseer je digitale menu met beschrijvingen, prijzen en categorieën. Gebruik het als snel deelbaar <b>Quick Menu</b> of koppel het aan je <b>bestelpagina</b>.",
         "overview_title": "Overzicht",
-        "overview_text": "De menufunctie is de basis van uw Dineri-configuratie. Hiermee kunt u een gestructureerd, professioneel menu opbouwen dat altijd up-to-date is. Gasten kunnen uw gerechten online bekijken en, als het bestelsysteem is ingeschakeld, ook direct via uw winkel bestellen.",
+        "overview_text": "Het menu is de basis van jouw Dineri-pagina. Bouw een professioneel, gestructureerd menu dat altijd up-to-date is. Gasten bekijken je aabod direct online, en als het bestelsysteem is ingeschakeld, kunnen ze ook meteen bestellen via jouw winkel.",
         "how_it_works": {
           "title": "Hoe het werkt",
           "steps": [
             {
-              "title": "<b>1. Categorieën maken</b>",
+              "title": "<b>1. Categorieën aanmaken</b>",
               "points": [
-                "Organiseer uw artikelen in categorieën (bijv. Voorgerechten, Hoofdgerechten, Dranken).",
-                "Kies of een categorie <b>ingeschakeld moet worden in het Snelmenu</b> of niet.",
-                "Categorieën die zijn uitgeschakeld voor het Snelmenu verschijnen nog steeds in uw Winkel (verbonden met Bestellingen)."
+                "Organiseer je menu in categorieën zoals voorgerechten, hoofdgerechten en dranken. ",
+                "Per categorie kies je of deze zichtbaar is in het Quick Menu.",
+                "Zet je een categorie uit voor het Quick Menu? Dan blijft deze gewoon zichtbaar in je winkel."
               ]
             },
             {
               "title": "<b>2. Producten toevoegen</b>",
               "points": [
-                "Ga naar uw dashboard → <b>Menu</b> → <b>Product toevoegen.</b>",
+                "Ga in je dashboard naar  → <b>Menu</b> → <b>Product toevoegen.</b>",
                 "Vul de <b>naam</b>, <b>beschrijving</b> en de <b>prijs</b> van het product in.",
-                "Wijs het product toe aan de juiste categorie.",
+                "Selecteer de bijbehorende categorie voor het product.",
                 "<b>Opmerking:</b> Afbeeldingen worden momenteel niet ondersteund."
               ]
             },
             {
               "title": "<b>3. Allergieën & extra’s</b>",
               "points": [
-                "Voor elk product kunt u <b>allergenen</b> specificeren (bijv. noten, gluten, zuivel).",
-                "Voeg optionele <b>extra’s</b> toe (bijv. “Extra kaas” of “Saus toevoegen”).",
-                "Belangrijk: Extra’s zijn <b>niet zichtbaar in het Snelmenu</b> — ze verschijnen alleen in de <b>Winkel</b> wanneer gasten een bestelling plaatsen."
+                "Geef per product de <b>allergenen</b> aan zoals noten, gluten of zuivel.",
+                "Voeg optionele <b>extra’s</b> toe zoals extra kaas of saus.",
+                "Let op: Extra’s zijn alleen zichtbaar in de <b>winkel</b>, niet in het Quick Menu"
               ]
             },
             {
               "title": "<b>4. Opslaan & publiceren</b>",
               "points": [
-                "Uw menu wordt direct bijgewerkt op alle kanalen: Snelmenu, Winkel, QR-codes en links.",
-                "Voeg optionele <b>extra’s</b> toe (bijv. “Extra kaas” of “Saus toevoegen”).",
-                "Belangrijk: Extra’s zijn <b>niet zichtbaar in het Snelmenu</b> — ze verschijnen alleen in de <b>Winkel</b> wanneer gasten een bestelling plaatsen."
+                "Sla je wijzigingen op en je menu wordt direct overal bijgewerkt"
               ]
             }
           ]
@@ -906,21 +904,21 @@
         "key_benefits": {
           "title": "Belangrijkste voordelen",
           "list": [
-            "<b>Gestructureerde menu’s –</b> Organiseer artikelen met categorieën voor eenvoudige navigatie.",
-            "<b>Snelmenu vs. Winkel –</b> Deel een lichtgewicht zelfstandig menu of een volledig geïntegreerde bestelwinkel.",
-            "<b>Allergeeninformatie –</b> Help gasten weloverwogen keuzes te maken.",
-            "<b>Flexibele extra’s –</b> Bied maatwerkopties (bijv. toppings, extra’s) om de bestelwaarde te verhogen.",
-            "<b>Updates in realtime –</b> Alle wijzigingen worden direct overal doorgevoerd."
+            "<b>Overzichtelijk & gestructureerd –</b> Organiseer je menu in duidelijke categorieën voor een prettige gastervaring.",
+            "<b>Quick Menu of volledige winkel –</b> Kies voor een snel deelbaar menu, een complete bestelpagina of gebruik beide tegelijk.",
+            "<b>Allergeneninformatie –</b> Geef gasten de informatie die ze nodig hebben om een weloverwogen keuze te maken.",
+            "<b>Flexibele extra’s –</b> Bied maatwerkopties zoals toppings en extra's aan om de bestelwaarde te verhogen.",
+            "<b>Direct live –</b> Elke wijziging is meteen zichtbaar."
           ]
         },
         "tips": {
           "title": "Tips",
           "list": [
-            "Maak categorieën voordat u artikelen toevoegt, dit houdt uw menu overzichtelijk.",
-            "Schakel alleen de meest relevante categorieën in voor het <b>Snelmenu</b> (bijv. Dranken, Eten) en houd andere exclusief voor uw Winkel.",
-            "Houd beschrijvingen duidelijk en eenvoudig — te veel tekst maakt het menu moeilijker leesbaar.",
-            "Gebruik extra’s verstandig: toevoegingen zoals toppings of sauzen kunnen de omzet verhogen.",
-            "Controleer regelmatig de allergeneninformatie om deze correct en up-to-date te houden."
+            "Maak eerst je categorieën aan voordat je producten toevoegt, zo blijft je menu overzichtelijk",
+            "Schakel alleen de meest relevante categorieën in voor het Quick Menu zoals dranken en eten. De rest blijft beschikbaar in je winkel.",
+            "Houd productbeschrijvingen beknopt en duidelijk. Te veel tekst maakt je menu onoverzichtelijk.",
+            "Toppings en sauzen als extra's kunnen de gemiddelde bestelwaarde verhogen.",
+            "Zorg dat je allergeneninformatie altijd correct en actueel is."
           ]
         }
       },
@@ -928,7 +926,7 @@
         "title": "Evenementen",
         "intro": "Kondig speciale evenementen aan en promoot ze rechtstreeks bij je gasten. Of het nu gaat om een live muziekavond, een feestelijk diner of een privéproeverij, je kunt alle details op één plek delen.",
         "overview_title": "Overzicht",
-        "overview_text": "De functie Evenementen helpt je je publiek te betrekken door aankomende activiteiten in je restaurant, bar of locatie te tonen. Gasten kunnen zien wat er gebeurt, wanneer het plaatsvindt en hoe ze kunnen deelnemen – allemaal via je digitale profiel.",
+        "overview_text": "Met de evenementenfunctie laat je gasten zien wat er speelt in jouw restaurant, bar of locatie. Alle details op één plek: wat het is, wanneer het plaatsvindt en hoe gasten kunnen deelnemen, direct zichtbaar op jouw Dineri-pagina.",
         "note": "<b>Opmerking</b>: Evenementen zijn beschikbaar in alle pakketten. Met een betaald pakket kun je <b>onbeperkte evenementen</b> maken.",
         "how_it_works": {
           "title": "Hoe het werkt",
@@ -937,22 +935,22 @@
             "2. Klik op <b>Evenement toevoegen</b> en voer de details in:",
             [
               "<b>Titel van het evenement</b>",
-              "<b>Beschrijving</b> (bijv. programma, artiesten of menupunten)",
+              "<b>Beschrijving</b> zoals programma, artiesten of menupunten",
               "<b>Datum & tijd</b>",
-              "<b>Locatie</b> (indien anders dan je hoofdlocatie)"
+              "<b>Locatie</b> (indien afwijkend van je hoofdlocatie)"
             ],
-            "3. Opslaan → Het evenement wordt automatisch weergegeven op je <b>profielpagina</b>.",
-            "4. Er wordt een nieuwe <b>Evenementen-link</b> toegevoegd aan de navigatie van je profiel zodat gasten eenvoudig alle aankomende activiteiten kunnen vinden.",
-            "5. Je kunt evenementen op elk moment bewerken of verwijderen en wijzigingen worden direct doorgevoerd."
+            "3. Sla op en het evenement verschijnt direct op jouw <b>profielpagina</b>.",
+            "4. Evenementen-link toegevoegd aan je profielnavigatie, zodat gasten eenvoudig alle aankomende activiteiten kunnen vinden.",
+            "5. Evenementen zijn op elk moment aan te passen of te verwijderen en wijzigingen worden direct doorgevoer"
           ]
         },
         "key_benefits": {
           "title": "Belangrijkste voordelen",
           "list": [
-            "<b>Promoot je bedrijf –</b> Benadruk speciale avonden, aanbiedingen of seizoensgebonden activiteiten.",
-            "<b>Onbeperkte evenementen –</b> Voeg zoveel evenementen toe als je wilt (alleen bij betaalde pakketten).",
-            "<b>Automatische zichtbaarheid –</b> Evenementen worden direct toegevoegd aan je profiel en weergegeven onder een speciale “Evenementen”-link.",
-            "<b>Geïntegreerde marketing –</b> Combineer met pop-ups om je evenementen in realtime aan te kondigen."
+            "<b>Promoot wat er speelt –</b> Breng speciale avonden, seizoensaanbiedingen en activiteiten onder de aandacht van je gasten.",
+            "<b>Onbeperkte evenementen –</b> Voeg zoveel evenementen toe als je wilt. Beschikbaar in alle betaalde pakketten.",
+            "<b>Direct zichtbaar –</b> Elk evenement verschijnt automatisch op je profiel onder een aparte Evenementen-link.",
+            "<b>Combineer met een pop-up –</b> Kondig evenementen aan via pop-ups voor extra zichtbaarheid op het juiste moment."
           ]
         },
         "integration_popups": {
