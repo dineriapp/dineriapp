@@ -541,7 +541,7 @@
       "pageTitle": "Introductie",
       "welcome": "Deze handleiding helpt je snel op weg met het platform. Of je nu restauranteigenaar, manager of onderdeel van een horecateam bent, Dineri is gebouwd om jouw dagelijkse werkzaamheden eenvoudiger te maken.",
       "welcome2": "Wij regelen de techniek, jij focust op je restaurant.",
-      "whyTitle": "Waarom dit platform gebruiken?",
+      "whyTitle": "Wat kan Dineri voor jou doen?",
       "why": {
         "centralizedManagement": {
           "title": "Alles op één plek",
@@ -587,7 +587,7 @@
           "description": "Deel je locatie, menu en laatste updates altijd en overal."
         }
       },
-      "keyPointsTitle": "Belangrijke dingen om te weten",
+      "keyPointsTitle": "Belangrijke punten om te onthouden",
       "keyPoints": [
         "Alles op één plek – Menu's, reserveringen, bestellingen, analyses en evenementen beheerd vanuit één dashboard.",
         "Direct live – Binnen enkele minuten ben je klaar om te starten.",
@@ -955,183 +955,179 @@
         },
         "integration_popups": {
           "title": "Integratie met pop-ups",
-          "text": "Naast het tonen van evenementen op je profiel kun je ze ook weergeven in een pop-up wanneer bezoekers op je pagina landen.",
+          "text": "Toon je evenement ook als pop-up wanneer gasten jouw pagina bezoeken.",
           "list": [
-            "Dit is een geweldige manier om direct de aandacht te trekken.",
-            "Om dit in te stellen, zie de <a href=\"/help-center/features#popups\" class=\"underline text-blue-500\">Pop-ups Gids</a> in het Helpcentrum."
+            "Zo trek je direct de aandacht.",
+            "Lees hoe je dit instelt in de <a href=\"/help-center/features#popups\" class=\"underline text-blue-500\">pop-ups</a> beschrijving."
           ]
         },
         "tips": {
           "title": "Tips",
           "list": [
-            "Voeg pakkende beschrijvingen toe (bijv. “Live DJ + cocktail specials”) om de aandacht te trekken.",
-            "Gebruik een <b>QR-code</b> speciaal voor je evenementenpagina en plaats deze op flyers, posters of tafels.",
-            "Archiveer afgelopen evenementen of verwijder ze snel om je profiel actueel te houden.",
-            "Combineer evenementen met <b>pop-ups</b> voor maximale zichtbaarheid."
+            "Schrijf pakkende beschrijvingen zoals 'Live DJ + cocktail specials' om direct de aandacht te trekken.",
+            "Maak een <b>QR-code</b> speciaal voor je evenementenpagina en plaats deze op flyers, posters of tafels.",
+            "Verwijder of archiveer afgelopen evenementen zodat gasten altijd de juiste informatie zien.",
+            "Gebruik pop-ups voor maximale zichtbaarheid op het moment dat gasten je pagina bezoeken."
           ]
         }
       },
       "FAQ": {
         "title": "FAQ",
-        "intro": "Voeg veelgestelde vragen toe aan je profiel zodat gasten snel antwoorden kunnen vinden zonder je rechtstreeks te hoeven contacteren.",
+        "intro": "Beantwoord veelgestelde vragen direct op jouw pagina en bespaar jezelf een hoop tijd.",
         "overview_title": "Overzicht",
-        "overview_text": "Met de FAQ-functie kun je een lijst maken van veelvoorkomende vragen en antwoorden over je restaurant, diensten of beleid. Dit bespaart tijd voor zowel jou als je gasten en zorgt tegelijk voor een betere ervaring.",
-        "note": "Je kunt de <b>Snelle Configuratietool</b> gebruiken (met vooraf geschreven veelgestelde vragen die je slechts licht hoeft aan te passen), of je eigen vragen en antwoorden helemaal zelf schrijven.",
+        "overview_text": "Met de FAQ-feature maak je een overzicht van veelgestelde vragen en antwoorden. Minder directe vragen, minder telefoontjes en een betere ervaring voor je gasten.",
+        "note": "Gebruik de snelle <b>configuratietool</b> met kant-en-klare vragen die je eenvoudig aanpast, of schrijf je eigen FAQ's volledig zelf.",
         "how_it_works": {
           "title": "Hoe het werkt",
           "steps": [
-            "1. Kies een van de twee opties:",
+            "1. Kies hoe je wilt beginnen:",
             [
-              "<b>Snelle configuratie</b> → Kies uit een reeks vooraf geschreven vragen (bijv. openingstijden, betaalmethoden, dieetopties) en maak kleine aanpassingen om ze geschikt te maken voor jouw bedrijf.",
-              "<b>Handmatige configuratie</b> → Schrijf je eigen vragen en antwoorden één voor één."
+              "<b>Snelle configuratie</b> → Kies uit kant-en-klare vragen zoals openingstijden, betaalmethoden en dieetopties. Pas ze aan voor jouw restaurant en je bent klaar.",
+              "<b>Handmatige configuratie</b> → Schrijf je eigen vragen en antwoorden volledig zelf, één voor één."
             ],
-            "2. Opslaan → De FAQ wordt automatisch weergegeven op je profielpagina in een speciale “FAQ”-sectie.",
-            "3. Je kunt vragen op elk moment bewerken of verwijderen."
+            "2. Sla op → De FAQ verschijnt automatisch in een aparte sectie op jouw profielpagina.",
+            "3. Vragen zijn op elk moment aan te passen of te verwijderen."
           ]
         },
         "key_benefits": {
           "title": "Belangrijkste voordelen",
           "list": [
-            "<b>Tijdbesparing –</b> Vooraf geschreven FAQ’s helpen je binnen enkele minuten te starten.",
-            "<b>Minder herhalende vragen –</b> Gasten kunnen direct antwoorden vinden.",
-            "<b>Flexibele configuratie –</b> Snelle configuratie voor snelheid, handmatige configuratie voor volledige controle.",
-            "<b>Betere klantervaring –</b> Gasten voelen zich geïnformeerd en zeker."
+            "<b>Snel opgezet –</b> Kant-en-klare vragen helpen je binnen enkele minuten aan de slag.",
+            "<b>Minder herhalende vragen –</b> Gasten vinden direct antwoord , zonder jou te hoeven contacteren.",
+            "<b>Flexibel naar wens –</b> Gebruik de snelle configuratie of schrijf alles zelf volledig naar wens.",
+            "<b>Betere gastervaring –</b> Geïnformeerde gasten voelen zich zekerder en komen sneller tot actie."
           ]
         },
         "tips": {
           "title": "Tips",
           "list": [
-            "Als je net begint, gebruik de <b>Snelle Configuratietool</b> om snel een FAQ online te zetten.",
-            "Houd antwoorden kort, duidelijk en gemakkelijk leesbaar.",
-            "Behandel eerst de basis: openingstijden, allergenen, bezorg- & afhaalopties, betaalmethoden.",
-            "Werk je FAQ bij zodra je menu, beleid of evenementen veranderen."
+            "Net gestart? Gebruik de snelle configuratietool om direct een FAQ online te zetten.",
+            "Beknopte antwoorden zijn makkelijker leesbaar en werken beter voor gasten..",
+            "Openingstijden, allergenen, bezorg- en afhaalopties en betaalmethoden zijn de vragen die gasten het vaakst stellen.",
+            "Pas je menu, beleid of evenementen aan? Update dan ook je FAQ."
           ]
         }
       },
       "Popups": {
         "title": "Popups",
-        "intro": "<b>Popups –</b> Maak eenvoudige, aanpasbare pop-ups om de aandacht van je gasten te trekken. Gebruik ze om aankondigingen te doen, evenementen te promoten of bezoekers op je pagina te verwelkomen.",
+        "intro": "Trek direct de aandacht van je gasten. Kondig iets aan, promoot een evenement of verwelkom bezoekers op het moment dat het telt.",
         "overview_title": "Overzicht",
-        "overview_text": "Met de functie Popups kun je belangrijke informatie benadrukken zodra een gast je profiel of bestellingspagina bezoekt. Pop-ups zijn een flexibel communicatiemiddel — perfect voor tijdelijke promoties, dringende aankondigingen of gewoon om bezoekers te verwelkomen. In tegenstelling tot statische inhoud zorgt een pop-up ervoor dat je boodschap niet over het hoofd wordt gezien.",
-        "note": "Pop-ups kunnen ook worden gekoppeld aan je <b>Evenementenfunctie</b>, zodat aankomende evenementen automatisch in een pop-upvenster worden weergegeven.",
+        "overview_text": "Met pop-ups breng je belangrijke informatie direct onder de aandacht zodra een gast jouw pagina of bestelpagina bezoekt. Perfect voor tijdelijke acties, dringende aankondigingen of een persoonlijk welkomstbericht. Anders dan statische content, een pop-up wordt altijd gezien.",
+        "note": "Koppel pop-ups aan je evenementen, en aankomende activiteiten verschijnen automatisch als pop-up op jouw pagina.",
         "popup_types": {
-          "title": "Soorten Pop-ups",
-          "text": "Er zijn <b>drie pop-upopties</b>, die afzonderlijk kunnen worden in- of uitgeschakeld — of zelfs gecombineerd:",
+          "title": "Soorten pop-ups",
+          "text": "Er zijn drie opties die afzonderlijk kunnen worden in- of uitgeschakeld, of zelfs gecombineerd:",
           "list": [
-            "<b>Homepage Pop-up –</b> Toon een aankondiging wanneer een bezoeker je hoofdpagina opent.",
-            "<b>Restaurantpagina Pop-up –</b> Toon berichten direct op je bestelpagina.",
-            "<b>Evenementen Pop-up –</b> Benadruk je aankomende evenementen in een pop-up."
+            "<b>Homepage Pop-up –</b> Toon een aankondiging zodra een bezoeker jouw hoofdpagina opent.",
+            "<b>Restaurantpagina Pop-up –</b> Toon een bericht direct op jouw bestelpagina.",
+            "<b>Evenementen Pop-up –</b> Zet aankomende evenementen automatisch in de spotlight."
           ],
-          "note": "💡 De Evenementen Pop-up kan worden gecombineerd met de Homepage Pop-up. In dat geval verschijnt je algemene bericht <b>samen met de evenementaankondigingen</b>. Je kunt er ook voor kiezen om er één uit te schakelen als je het eenvoudig wilt houden."
+          "note": "De evenementen pop-up kan worden gecombineerd met de homepage pop-up, zo verschijnt je algemene bericht samen met je evenementaankondigingen. Wil je het eenvoudig houden? Schakel er gewoon één uit."
         },
         "how_it_works": {
           "title": "Hoe het werkt",
           "steps": [
             "1. Ga naar de sectie Popups.",
-            "2. Maak een pop-up en configureer de volgende instellingen:",
             [
-              "<b>Titel</b> – Een korte kop voor je pop-up.",
-              "<b>Bericht –</b> De inhoud die je wilt tonen.",
-              "<b>Type pop-up –</b> Kies homepage, restaurantpagina, evenementen of een combinatie.",
-              "<b>Vertragingsfunctie –</b> Stel in hoeveel seconden na het laden van de pagina de pop-up moet verschijnen.",
-              "<b>Toon Actieknop (Verkennen) –</b> Zet dit aan/uit. Wanneer ingeschakeld, kunnen bezoekers op “Verkennen” klikken om de pop-up te sluiten en verder te gaan naar je pagina.",
-              "<b>Evenementopties</b> (bij gebruik van Evenementen Pop-ups):",
+              "<b>Titel</b> – Een korte, pakkende kop voor je pop-up.",
+              "<b>Bericht –</b> De inhoud die je wilt tonen aan je gasten.",
+              "<b>Type –</b> Kies homepage, bestelpagina, evenementen of een combinatie.",
+              "<b>Vertragingsfunctie –</b> Stel in hoeveel seconden na het laden de pop-up verschijnt.",
+              "<b>Actieknop –</b> Schakel de 'Verkennen'-knop in of uit, waarmee bezoekers de pop-up sluiten en verder gaan naar je pagina",
+              "<b>Evenementopties</b> (alleen bij evenementen pop-ups):",
               [
-                "<b>Tijdspanne van evenementen –</b> Selecteer welke evenementen moeten worden weergegeven.",
-                "<b>Maximum aantal evenementen in pop-up –</b> Beperk hoeveel evenementen worden getoond.",
-                "<b>Rotatiesnelheid evenementen –</b> Bepaal hoe snel evenementen in de pop-up wisselen."
+                "<b>Tijdspanne –</b> Selecteer welke evenementen worden weergegeven.",
+                "<b>Maximum aantal –</b> Beperk hoeveel evenementen tegelijk zichtbaar zijn.",
+                "<b>Rotatiesnelheid –</b> Bepaal hoe snel evenementen wisselen in de pop-up."
               ]
             ],
-            "3. Opslaan → Je pop-up is direct actief en zichtbaar voor bezoekers."
+            "2. Sla op en je pop-up is direct actief en zichtbaar voor je gasten."
           ]
         },
         "use_cases": {
           "title": "Gebruikssituaties",
           "list": [
-            "<b>Aankondigingen –</b> Informeer gasten over openingstijden, feestdagen of belangrijk nieuws.",
-            "<b>Promoties –</b> Benadruk kortingen, happy hours of nieuwe menu-items.",
-            "<b>Evenementen –</b> Toon automatisch aankomende evenementen in een pop-up.",
-            "<b>Welkomstbericht –</b> Verwelkom bezoekers de eerste keer dat ze op je pagina komen."
+            "<b>Aankondigingen –</b> Informeer gasten over gewijzigde openingstijden, feestdagen of belangrijk nieuws.",
+            "<b>Promoties –</b> Benadruk kortingen, happy hours of nieuwe menu-items op het juiste moment.",
+            "<b>Evenementen –</b> Toon aankomende evenementen automatisch als pop-up, zonder extra moeite.",
+            "<b>Welkomstbericht –</b> Verwelkom nieuwe bezoekers met een persoonlijk bericht zodra ze je pagina openen."
           ]
         },
         "key_benefits": {
           "title": "Belangrijkste voordelen",
           "list": [
-            "<b>Zeer flexibel –</b> Combineer verschillende soorten pop-ups voor de beste communicatie.",
-            "<b>Aangepaste timing –</b> Bepaal precies wanneer je pop-up verschijnt.",
-            "<b>Evenementintegratie –</b> Benadruk automatisch je evenementen zonder extra moeite.",
-            "<b>Gebruiksvriendelijk –</b> Snel in te stellen en eenvoudig op elk moment aan te passen."
+            "<b>Volledig flexibel –</b> Combineer verschillende type pop-up voor de meest effectieve communicatie.",
+            "<b>Aangepaste timing –</b> Bepaal zelf wanneer je pop-up verschijnt op de seconde nauwkeurig.",
+            "<b>Evenementintegratie –</b> Aankomende evenementen worden automatisch uitgelicht, zonder extra configuratie.",
+            "<b>Snel in te stellen –</b> Binnen enkele minuten actief en op elk moment eenvoudig aan te passen."
           ]
         },
         "tips": {
           "title": "Tips",
           "list": [
-            "Gebruik een korte vertraging (bijv. 2–3 seconden) zodat pop-ups natuurlijk en niet opdringerig aanvoelen.",
-            "Combineer een algemene homepage pop-up met evenementen pop-ups voor maximale zichtbaarheid.",
-            "Beperk het aantal evenementen in één pop-up zodat bezoekers niet worden overladen.",
-            "Werk de pop-upinhoud regelmatig bij om je communicatie relevant te houden."
+            "Een vertraging van 2–3 seconden voelt natuurlijker en minder opdringerig.",
+            "Gebruik homepage en evenementen pop-ups samen voor maximale zichtbaarheid.",
+            "Beperk het aantal evenementen per pop-up zodat gasten niet worden overladen.",
+            "Werk je pop-upinhoud regelmatig bij zodat je communicatie altijd actueel is."
           ]
         }
       },
       "QRCodes": {
         "title": "QR-codes",
-        "intro": "Genereer direct QR-codes die je gasten rechtstreeks verbinden met je menu, evenementen of promoties. Elke scan wordt bijgehouden zodat je de betrokkenheid in realtime kunt meten.",
+        "intro": "Genereer gepersonaliseerde QR-codes en track elke scan in realtime. Zo weet je precies wat je gasten bekijken en waar je QR-codes het beste presteren.",
         "overview_title": "Overzicht",
-        "overview_text": "QR-codes maken het gasten gemakkelijk om toegang te krijgen tot je digitale inhoud met slechts één scan vanaf hun smartphone. Of het nu je menu, je shop of een speciaal evenement is, QR-codes zijn een snelle en moderne manier om met klanten in contact te komen, zonder downloads of ingewikkelde stappen.",
+        "overview_text": "Met één scan hebben gasten direct toegang tot je menu of winke. QR-codes zijn de snelste manier om je digitale pagina onder de aandacht te brengen, zowel in je restaurant als daarbuiten.",
         "how_it_works": {
           "title": "Hoe het werkt",
           "steps": [
             "1. Genereer een QR-code",
             [
-              "Ga naar de <b>QR-codegenerator</b> in je dashboard.",
-              "Voer een <b>naam</b> in voor je QR-code (om hem later te herkennen).",
-              "Selecteer het <b>type</b>:",
+              "Ga naar de QR-codegenerator in je dashboard en geef je code een herkenbare naam.",
+              "Kies daarna het <b>type</b>:",
               [
                 "<b>Restaurantpagina</b> → Link direct naar je hoofdprofielpagina.",
-                "<b>Bestaande link</b> → Kies een link die je al hebt aangemaakt in de sectie Links via het dropdownmenu.",
-                "<b>Aangepaste link</b> → Voeg een externe URL toe, zoals sociale media, ticketverkoop, video’s of een andere pagina."
+                "<b>Bestaande link</b> → Kies een link uit je link-sectie via het dropdownmenu.",
+                "<b>Aangepaste link</b> → Voeg een externe URL toe, zoals sociale media, ticketverkoop of een video."
               ]
             ],
             "2. Pas het ontwerp aan",
             [
-              "Bekijk aan de rechterkant een voorbeeld van het huidige ontwerp van je QR-code.",
-              "Pas de <b>kleuren</b> aan om ze af te stemmen op je merkidentiteit.",
-              "Upload je <b>logo</b> om in het midden te plaatsen.",
-              "Voeg een <b>gepersonaliseerde tekst</b> toe onder de QR-code voor extra context."
+              "Bekijk rechts een live voorbeeld van je QR-code en pas het volgende aan:",
+              "Kleuren afgestemd op jouw huisstijl.",
+              "Gepersonaliseerde tekst onder de code."
             ],
             "3. Opslaan & beheren",
             [
-              "Na het genereren wordt de code opgeslagen in je <b>overzichtslijst</b>.",
-              "Vanaf hier kun je hem downloaden en gebruiken voor drukwerk of digitale verspreiding.",
-              "Elke QR-code wordt bijgehouden — je kunt in je <b>Analytics-dashboard</b> zien wanneer en hoe vaak hij is gescand."
+              "Na het genereren verschijnt de code in je overzichtslijst",
+              "Download het voor drukwerk of digitale verspreiding.",
+              "Elke scan wordt automatisch bijgehouden in je analytics-dashboard."
             ]
           ]
         },
         "key_benefits": {
           "title": "Belangrijkste voordelen",
           "list": [
-            "<b>Flexibele koppelingen –</b> Verbind QR-codes met je restaurantpagina, bestaande links of een aangepaste URL.",
-            "<b>Merkpersonalisatie –</b> Stem QR-codes af op je merk, voeg je logo toe en personaliseer de tekst.",
-            "<b>Traceerbaar –</b> Elke scan wordt geregistreerd zodat je prestaties kunt meten.",
-            "<b>Hergebruikbaar –</b> QR-codes veranderen niet; wanneer je de gekoppelde inhoud bijwerkt, blijft dezelfde code geldig."
+            "<b>Flexibele koppelingen –</b> Verbind je QR-code met je profielpagina, een bestaande link of een externe URL.",
+            "<b>Volledig in jouw huisstijl –</b> Voeg je logo toe, pas kleuren aan en personaliseer de tekst onder de code.",
+            "<b>Elke scan bijgehouden –</b> Track wanneer en hoe vaak je QR-codes worden gescand via je analytics-dashboard.",
+            "<b>Altijd geldig –</b> Pas je gekoppelde inhoud aan zonder een nieuwe QR-code te hoeven maken."
           ]
         },
         "use_cases": {
           "title": "Toepassingen",
           "list": [
-            "Plaats QR-codes op tafels voor directe toegang tot het menu.",
-            "Voeg QR-codes toe aan flyers of posters om evenementen te promoten.",
-            "Deel QR-codes op sociale media voor snelle toegang tot promoties of video’s.",
-            "Gebruik merkgebonden QR-codes bij de ingang voor een professionele eerste indruk."
+            "<b>Tafels</b> — directe toegang tot je menu via één scan.",
+            "<b>Flyers & posters</b> — promoot evenementen snel en modern.",
+            "<b>Sociale media</b> — deel promoties of video's met één klik."
           ]
         },
         "tips": {
           "title": "Tips",
           "list": [
-            "Geef je QR-codes altijd <b>duidelijke namen</b> zodat je ze later in je overzicht kunt herkennen.",
-            "Test QR-codes voordat je ze afdrukt om zeker te zijn dat ze op alle apparaten werken.",
-            "Gebruik merkkleuren en je logo om herkenning op te bouwen.",
-            "Controleer regelmatig de statistieken om te zien welke QR-codes het beste presteren."
+            "Geef codes een duidelijke naam, zo herken je ze later eenvoudig terug in je overzicht.",
+            "Test altijd vóór het afdrukken of de code werkt op verschillende apparaten voordat je hem gebruikt voor drukwerk.",
+            "Gebruik je huisstijl en je logo zodat QR-codes herkenbaar en professioneel zijn.",
+            "Bekijk je statistieken regelmatig en ontdek welke QR-codes het beste presteren en stuur je strategie bij."
           ]
         }
       }

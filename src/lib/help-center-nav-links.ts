@@ -448,15 +448,15 @@ export const navMain: Record<
             icon: BookOpen,
             items: [
                 {
-                    title: "Waarom dit platform gebruiken?",
+                    title: "Waarom Dineri?",
                     url: "/help-center/introduction#why-use-this-platform",
                 },
                 {
-                    title: "Voor wie is het bedoeld?",
+                    title: "Voor wie?",
                     url: "/help-center/introduction#who-is-it-for",
                 },
                 {
-                    title: "Belangrijke punten om te onthouden",
+                    title: "Belangrijke punten",
                     url: "/help-center/introduction#key-Points-to-remember",
                 },
             ],
@@ -518,11 +518,11 @@ export const navMain: Record<
             ],
         },
         {
-            title: "Contact opnemen",
+            title: "Support",
             icon: LifeBuoy,
             items: [
                 {
-                    title: "Hulp krijgen",
+                    title: "Contact opnemen",
                     url: "/help-center/support",
                 },
             ],
