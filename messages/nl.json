@@ -4,7 +4,10 @@
     "setup": "Al je links",
     "cta": "en bestellingen en reserveringen op één plek",
     "loggedInMessage": "Welkom terug!",
-    "goToDashboard": "Ga terug naar je dashboard"
+    "goToDashboard": "Ga naar je dashboard"
+  },
+  "global": {
+    "visit": "Bekijk live"
   },
   "Header": {
     "home": "Home",
@@ -1810,7 +1813,7 @@
       "card": {
         "title": "Voorbeeld",
         "description": "Zo ziet jouw pagina eruit op mobiel",
-        "visitButton": "Bezoeken"
+        "visitButton": "Bekijk live"
       },
       "actions": {
         "share": "Delen"
