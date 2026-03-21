@@ -16,7 +16,7 @@ import UpgradeAutoShow from "@/components/upgrade-auto-show";
 export const metadata: Metadata = {
   title: "Dashbaord",
   description:
-    "Dineri helps restaurants create beautiful, shareable pages with all their important links in one place — from menus and reservations to delivery and social media.",
+    "Dineri brings everything your restaurant needs online into one simple link. No commissions, no complexity.",
 };
 
 export default async function WithResttaurantLayout({

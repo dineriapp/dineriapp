@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     default: 'Dineri.app',
     template: '%s | Dineri.app'
   },
-  description: 'Dineri helps restaurants create beautiful, shareable pages with all their important links in one place — from menus and reservations to delivery and social media.',
+  description: 'Dineri brings everything your restaurant needs online into one simple link. No commissions, no complexity.',
 };
 
 export default async function RootLayout({
