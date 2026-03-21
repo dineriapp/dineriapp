@@ -24,7 +24,7 @@ const Hero = () => {
         <div className="lg:w-1/2 max-w-[500px] w-full">
           <Image
             // src={"/careers.avif"}
-            src={"/img-f-2.avif"}
+            src={"/img-f-p.avif"}
             alt="logo.png"
 
             width={700}
