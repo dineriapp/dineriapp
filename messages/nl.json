@@ -11,7 +11,7 @@
   },
   "Header": {
     "home": "Home",
-    "features": "Oplossingen",
+    "features": "Features",
     "demo": "Bekijk demo",
     "learn": "Support",
     "pricing": "Prijzen",
@@ -98,8 +98,8 @@
       }
     },
     "Plans": {
-      "headline": "Transparante prijzen",
-      "description": "Eerlijke prijzen die meegroeien met jouw restaurant. Geen verborgen kosten, geen commissies.",
+      "headline": "Geen verassingen.",
+      "description": "Vaste prijzen, geen commissies en geen verborgen kosten. Kies het plan dat bij jouw past.",
       "cta": "Bekijk de prijzen"
     },
     "Faqs": {
