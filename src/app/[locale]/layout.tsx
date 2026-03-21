@@ -74,7 +74,7 @@ export const playfairDisplay = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Dineri.app – All Your Restaurant Links in One Place',
+    absolute: 'Dineri.app – Simplifying restaurant software',
     default: 'Dineri.app',
     template: '%s | Dineri.app'
   },
