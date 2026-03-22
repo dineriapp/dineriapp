@@ -419,10 +419,10 @@
     }
   },
   "About": {
-    "title": "From kitchen to code",
-    "description": "The idea for Dineri.app was born from years of experience building websites for restaurants. During that time, we kept seeing the same problem: owners didn’t have the time to update their site, found the systems too complicated, or were paying far too much for features they never used. Often, expensive designs and countless hours of work were invested, while in reality guests only want to see a few key things: the menu, reviews, location, reservation options, and ordering possibilities.",
-    "p1": "On top of that, in recent years many ordering platforms have started charging unnecessarily high commissions on every order. Many restaurant owners would love to leave these platforms, but simply don’t have a real alternative. With Dineri.app, you can offer online ordering directly to your customers, without paying any fees or losing profit margins.",
-    "p2": "We are a team of web developers, marketers, and professionals with years of experience in the restaurant industry. We know how busy running a hospitality business can be, and how important it is to always look attractive and up-to-date online. Our combined expertise in technology, marketing, and hospitality means we know exactly what restaurant owners need."
+    "title": "Our story",
+    "description": "Dineri was born out of years of experience building websites for restaurants. We kept seeing the same problem: owners didn't have time to update their site, found systems too complicated, or were paying way too much for features they never used. Meanwhile, guests only ever want a few things: the menu, reviews, the location and a way to book or order.",
+    "p1": "On top of that, delivery platforms have been charging increasingly high commissions. Many restaurant owners want to leave these platforms but simply have no real alternative. Dineri is that alternative. Receive orders directly from your customers. No commissions, no margins disappearing into a platform.",
+    "p2": "We're a team of developers, marketers and hospitality professionals. We know how demanding it is to run a restaurant and how important it is to look professional and up to date online. That combination of technology, marketing and hospitality expertise is exactly why Dineri works."
   },
   "CareersPage": {
     "hero": {
