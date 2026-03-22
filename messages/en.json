@@ -107,41 +107,39 @@
       "description": "Everything you need to know about Dineri.",
       "items": {
         "01": {
-          "question": "Do I need technical skills to use Dineri.app?",
+          "question": "Do I need technical skills to use Dineri?",
           "answer": [
-            "No, Dineri.app is designed to be user-friendly. You don’t need any coding knowledge and everything works with simple forms and settings. The platform is also fully mobile-friendly, so you can easily update and manage your restaurant’s page directly from your phone."
+            "No. Dineri is built for restaurant owners, not developers. Everything works through simple forms and settings, no coding required. The platform is fully mobile-friendly, so you can manage your page anytime, anywhere, straight from your phone."
           ]
         },
         "02": {
           "question": "Can I connect my existing reservation system?",
           "answer": [
-            "At the moment, full integrations with well-known reservation systems are not yet available. We are actively working on this and plan to release it as a new feature soon. For now, you can simply add the link to your existing reservation tool on your Dineri.app page."
+            "Direct integrations with third-party reservation systems are currently in development. In the meantime, you can easily add a link to your existing reservation tool on your Dineri page. We'll keep you updated as new integrations become available."
           ]
         },
         "03": {
-          "question": "Which domain extensions can I use with Dineri.app?",
+          "question": "Can I use my own domain name?",
           "answer": [
-            "If you don’t have a domain yet, you can choose from one of our free domains tailored to your market. For example Ibiza.rest, Dineri.me, Thechef.me and many more.",
-            "We are continuously acquiring cool and professional domain extensions so we can offer you even more options that perfectly fit your business, all available for free."
+            "Yes. You can connect your own domain to your Dineri page. Don't have one yet? You'll automatically get a free subdomain like dineri.app/your-restaurant-name, available straight away when you sign up."
           ]
         },
         "04": {
           "question": "Are there any commission fees?",
           "answer": [
-            "No. With Dineri.app, you keep 100% of your earnings. No commission on take-away, or delivery orders. Unlike many platforms that charge 10–30% per order, you only pay your subscription. More profit, full control, and no surprises.",
-            "Best of all, your payments go directly to your bank account, giving you full control and instant access to your earnings."
+            "No. With Dineri you keep 100% of your revenue. You pay one fixed monthly subscription, no commissions on orders, no hidden fees. Payments go directly to your bank account, so you always have instant access to your earnings."
           ]
         }
       }
     },
     "Understand": {
-      "headline": "Understand your audience, grow your restaurant",
+      "headline": "Data that grows your restaurant.",
       "description": "Track clicks, revenue, and QR scans in real time. Get clear insights into what’s working, so you can make smarter updates and keep customers coming back.",
       "cta": "Get started today"
     },
     "CTA": {
-      "headline": "Elevate. Your.<span class='sm:hidden flex'> </span>Restaurant.",
-      "cta": "Start now"
+      "headline": "Elevate. Your.<span class='sm:hidden flex'> </span> Restaurant.",
+      "cta": "Go live today"
     }
   },
   "FeaturesPage": {
