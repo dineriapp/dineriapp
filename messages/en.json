@@ -232,12 +232,12 @@
   },
   "PlansPage": {
     "header": {
-      "title": "Choose the right plan for your restaurant",
-      "description": "Start free and upgrade as your restaurant grows. All plans come with powerful tools to showcase your menu, events, and brand online."
+      "title": "Which plan is right for you?",
+      "description": "Start for free and scale when you're ready. Every plan gives you the tools to present your restaurant professionally online, from menus to reservations."
     },
     "footer": {
-      "question": "Need something custom?",
-      "action": "Contact our team"
+      "question": "Looking for a custom plan?",
+      "action": "Let's talk."
     }
   },
   "legalPages": {
@@ -1767,7 +1767,7 @@
         }
       },
       "upgrade": {
-        "title": "Upgrade Your Plan",
+        "title": "Upgrade your plan",
         "description": "Unlock unlimited features and advanced capabilities",
         "pro": {
           "title": "Pro Plan - €19/month",
