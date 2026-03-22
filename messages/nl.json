@@ -1138,23 +1138,23 @@
   },
   "CreateRestaurantPage": {
     "page": {
-      "title": "Maak je Restaurant aan",
-      "subtitle": "Stel je restaurantprofiel in om te beginnen met dineri.app"
+      "title": "Maak je restaurant aan",
+      "subtitle": "Zet je restaurant online en begin direct met Dineri."
     },
     "card": {
       "title": "Restaurantgegevens",
-      "description": "Vertel ons over je restaurant om je profiel aan te maken"
+      "description": "Vul je gegevens in en je profiel is klaar om te starten."
     },
     "form": {
       "labels": {
-        "name": "Naam van het Restaurant",
+        "name": "Naam van het restaurant",
         "slug": "Pagina-URL",
-        "bio": "Korte Beschrijving"
+        "bio": "Korte beschrijving"
       },
       "placeholders": {
         "name": "bijv. Trattoria Milano",
         "slug": "jouw-restaurant",
-        "bio": "Vertel klanten in een paar woorden over je restaurant (max. 200 tekens)"
+        "bio": "Vertel je gasten in een paar woorden wat jouw restaurant uniek maakt (max. 200 tekens)"
       },
       "help": {
         "slug": "Gebruik alleen letters, cijfers en streepjes",
@@ -1167,7 +1167,7 @@
       },
       "buttons": {
         "cancel": "Annuleren",
-        "submit": "Maak Restaurantprofiel aan",
+        "submit": "Profiel aanmaken",
         "submitting": "Bezig met aanmaken..."
       },
       "error_box": {
@@ -1176,7 +1176,7 @@
     },
     "tip": {
       "title": "Pro Tip",
-      "text": "Kies een gedenkwaardige en gemakkelijk te typen URL voor je restaurant. Dit maakt het eenvoudiger voor klanten om je profiel te vinden en te delen."
+      "text": "Een korte URL is makkelijker te onthouden en te delen. Gebruik bij voorkeur de naam van je restaurant."
     }
   },
   "DashboardSidebar": {
@@ -1359,7 +1359,7 @@
     "opening-hours": {
       "page": {
         "title": "Openingstijden",
-        "description": "Beheer de openingstijden van jouw restaurant"
+        "description": "Beheer de openingstijden van je restaurant"
       },
       "form": {
         "labels": {
