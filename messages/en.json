@@ -146,32 +146,32 @@
   },
   "FeaturesPage": {
     "Hero": {
-      "title": "Create a homebase for your<br />  restaurant's presence.",
-      "description": "Showcase your menu, attract more customers, and manage everything from one simple platform — built to grow with your restaurant.",
+      "title": "Your restaurant's digital home.",
+      "description": "Showcase your menu, attract new guests and manage everything from one powerful platform, built for restaurants that want to grow.",
       "features": {
         "1": {
-          "title": "Drive traffic where it counts",
-          "text": "Link your social profiles, online store, website and anything else you want visitors to interact with."
+          "title": "No more no-shows",
+          "text": "Let guests book a table directly with automatic confirmations and optional prepayment. Always organized, no hassle."
         },
         "2": {
-          "title": "Drive traffic where it counts",
-          "text": "Link your social profiles, online store, website and anything else you want visitors to interact with."
+          "title": "Order system",
+          "text": "Keep 100% of your revenue. Direct orders, zero commissions.Your orders. Your money."
         },
         "3": {
-          "title": "Drive traffic where it counts",
-          "text": "Link your social profiles, online store, website and anything else you want visitors to interact with."
+          "title": "Track every scan",
+          "text": "Generate personalized QR codes and track every scan in real time. See which codes perform best and optimize your marketing strategy."
         },
         "4": {
-          "title": "Drive traffic where it counts",
-          "text": "Link your social profiles, online store, website and anything else you want visitors to interact with."
+          "title": "FAQ in one click",
+          "text": "Easily add a FAQ section to your page. Answer your guests' most common questions and cut down on unnecessary calls."
         },
         "5": {
-          "title": "Drive traffic where it counts",
-          "text": "Link your social profiles, online store, website and anything else you want visitors to interact with."
+          "title": "Reservation system.",
+          "text": "Let guests book a table directly through your page. Automatic confirmation and cancellation emails, prepayment options and review requests."
         },
         "6": {
-          "title": "Drive traffic where it counts",
-          "text": "Link your social profiles, online store, website and anything else you want visitors to interact with."
+          "title": "Digital menu",
+          "text": "Put your menu online with categories, prices and allergen information. Update it in real time from your dashboard. Simple, fast and always up to date."
         }
       }
     }
