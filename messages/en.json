@@ -49,62 +49,62 @@
     },
     "EverythingYouNeed": {
       "headline": "Everything your restaurant needs, behind one link.",
-      "description": "From a custom profile page to direct orders, Dineri gives restaurants the tools to grow online. No commissions, no middlemen. Just your brand, fully in your control.",
-      "cta": "Join Now",
+      "description": "From a custom profile page to direct orders, Dineri gives you the tools to grow online. No commissions, fully in your own style.",
+      "cta": "Get started free",
       "features": {
         "01": {
-          "title": "Attractive Restaurant Page",
-          "description": "A beautiful, (mobile)-friendly page that perfectly reflects your restaurant’s unique style."
+          "title": "Your restaurant, your style",
+          "description": "A mobile-friendly page that perfectly reflects the look and feel of your restaurant."
         },
         "02": {
-          "title": "User-Friendly Dashboard",
+          "title": "Manage everything",
           "description": "Easily customize colors, fonts, logos, and more from one intuitive dashboard."
         },
         "03": {
-          "title": "Integrated Food Order System",
-          "description": "Manage orders yourself and receive payments directly, no third-party platforms, no commissions."
+          "title": "Orders, straight to you",
+          "description": "Receive orders and payments directly — no middlemen, no commissions."
         },
         "04": {
-          "title": "Analytics & Insights",
-          "description": "Track views, clicks, and orders to better understand your audience and improve performance."
+          "title": "Analytics & insights",
+          "description": "Track views, clicks and orders, and discover what works best for your restaurant."
         },
         "05": {
-          "title": "Event Calendar",
-          "description": "Create a clear and engaging calendar for events, tastings, or live music."
+          "title": "Prepayment",
+          "description": "Let guests book a table with or without prepayment. Reduce no-shows, no hassle."
         },
         "06": {
-          "title": "QR Codes",
-          "description": "Generate, personalize, and track QR codes to see how often they are scanned."
+          "title": "QR-tracking",
+          "description": "Create personalized QR codes and track exactly how often they're scanned."
         }
       }
     },
     "HowItWorks": {
-      "headline": "How dineri.app works",
-      "description": "Set up, customize, and go live within a few minutes",
-      "cta": "Join now",
+      "headline": "How Dineri works",
+      "description": "Online in three steps. No technical knowledge required.",
+      "cta": "Go live today",
       "steps": {
         "01": {
-          "title": "Create your Profile",
-          "description": "Sign up and customize your restaurant page with your logo, photos, and key information."
+          "title": "Make it yours",
+          "description": "Sign up and customize your restaurant page with your logo, photos and key details."
         },
         "02": {
-          "title": "Add your content",
-          "description": "Upload your menu, highlight events or promotions, and link your socials, all in one place."
+          "title": "Add what matters",
+          "description": "Upload your menu, showcase events and promotions, and connect your socials all in one place."
         },
         "03": {
-          "title": "Share with customers",
-          "description": "Share your unique Dineri link via Instagram, Google Business, and flyers to connect with your guests."
+          "title": "Go live & share",
+          "description": "Share your unique Dineri link with the world."
         }
       }
     },
     "Plans": {
-      "headline": "Affordable plans",
-      "description": "Clear and honest pricing, with zero hidden costs, built to grow your business.",
-      "cta": "View All Plans"
+      "headline": "No tricks.",
+      "description": "What you see is what you pay, no commissions and no hidden fees. Choose the plan that works for you.",
+      "cta": "View all plans"
     },
     "Faqs": {
       "headline": "Got questions?",
-      "description": "Everything you need to know about our services",
+      "description": "Everything you need to know about Dineri.",
       "items": {
         "01": {
           "question": "Do I need technical skills to use Dineri.app?",

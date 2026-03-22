@@ -73,7 +73,7 @@
           "description": "Laat gasten een tafel reserveren met of zonder vooruitbetaling. Geen no-shows, geen gedoe."
         },
         "06": {
-          "title": "Slimme QR-codes",
+          "title": "QR-tracking",
           "description": "Maak gepersonaliseerde QR-codes en volg precies hoe vaak ze worden gescand."
         }
       }
