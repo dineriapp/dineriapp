@@ -119,7 +119,7 @@ export default function JobDetailPage({
                       ? "Il Ruolo"
                       : locale === "nl"
                         ? "Over de rol"
-                        : "The Role"}
+                        : "The role"}
             </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               {job?.roleParas?.map((para, index) => (

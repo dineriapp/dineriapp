@@ -10,23 +10,23 @@ const Jobs = () => {
         id: 1,
         label: "Marketing",
         labelColor: "bg-blue-100 text-blue-600",
-        title: "Growth & Marketing Specialist",
+        title: "Growth Marketer",
         description:
-          "Drive Dineri’s growth with creative campaigns and strategies that connect our platform with restaurants and their customers.",
+          "You own the Dineri brand. From social campaigns to content strategy, you're the reason restaurants choose us.",
         employmentType: "Part Time",
         location: "Remote",
-        salary: "Salary: Reflecting experience & skills",
+        salary: "Reflecting experience & skills",
       },
       {
         id: 2,
-        label: "Customer Success",
+        label: "Manager",
         labelColor: "bg-green-100 text-green-600",
-        title: "Customer Success Manager",
+        title: "Customer Manager",
         description:
-          "Be the main partner for our restaurants, driving success and growth while delivering exceptional support.",
+          "You're the person our restaurants rely on. You guide them, support them and make sure they get the most out of Dineri.",
         employmentType: "Part Time",
         location: "Remote",
-        salary: "Salary: Reflecting experience & skills",
+        salary: "Reflecting experience & skills",
       },
     ],
     de: [
@@ -167,7 +167,7 @@ const Jobs = () => {
                   ? "Posizioni aperte"
                   : locale === "nl"
                     ? "Huidige vacatures"
-                    : "Current Openings"}
+                    : "Open roles"}
         </h2>
         {jobListings[locale].length <= 0 ? (
           <p className="text-2xl text-main font-inter text-center">
