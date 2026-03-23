@@ -117,7 +117,7 @@ const Jobs = () => {
         id: 2,
         label: "Successo del Cliente",
         labelColor: "bg-green-100 text-green-600",
-        title: "Customer Success Manager",
+        title: "Customer Manager",
         description:
           "Sii il partner principale dei nostri ristoranti, guidando il loro successo e la loro crescita mentre offri un supporto eccezionale.",
         employmentType: "Part-time",
@@ -143,10 +143,10 @@ const Jobs = () => {
         labelColor: "bg-green-100 text-green-600",
         title: "Customer Manager",
         description:
-          "Jij bent het eerste aanspreekpunt voor onze restaurants. Je helpt hen groeien met Dineri en zorgt dat elke klant zich gezien en ondersteund voelt.",
+          "Jij bent de persoon waar onze restaurants op vertrouwen. Je begeleidt hen, ondersteunt hen en zorgt dat ze het maximale uit Dineri halen.",
         employmentType: "Deeltijd",
         location: "Op afstand",
-        salary: "Salaris: Afhankelijk van ervaring & vaardigheden",
+        salary: "Salaris: afhankelijk van ervaring & vaardigheden",
       },
     ],
   };
