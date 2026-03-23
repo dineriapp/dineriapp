@@ -286,9 +286,9 @@
         },
         "6": {
           "title": "6. Contact Us",
-          "p1": "If you have any questions or concerns about our Cookies Policy, please contact us at:",
-          "email": "Email: support@dineri.app",
-          "phone": "Phone: +123 456 7890"
+          "p1": "If you have any questions or concerns about our cookies policy, please contact us at:",
+          "email": "info@dineri.app",
+          "phone": ""
         }
       }
     },
@@ -362,8 +362,8 @@
         "11": {
           "title": "11. Contact Us",
           "p1": "If you have any questions about this Privacy Policy or wish to exercise any of your rights regarding your personal data, please contact us at:",
-          "email": "Email: support@dineri.app",
-          "phone": "Phone: +123 456 7890"
+          "email": "info@dineri.app",
+          "phone": ""
         }
       }
     },
@@ -410,8 +410,8 @@
         "8": {
           "title": "8. Contact Us",
           "p1": "If you have any questions about these Terms, please contact us at:",
-          "email": "Email: support@dineri.app",
-          "phone": "Phone: +123 456 7890"
+          "email": "info@dineri.app",
+          "phone": ""
         }
       }
     }

@@ -280,7 +280,7 @@
         "4": {
           "title": "4. Cookies beheren",
           "p1": "U kunt cookies beheren en controleren in de instellingen van uw browser. De meeste browsers laten u cookies weigeren of verwijderen, of u waarschuwen wanneer een cookie wordt ingesteld. Houd er rekening mee dat het uitschakelen van cookies de functionaliteit van sommige functies van de website kan beïnvloeden.",
-          "p2": "Voor meer informatie over het beheren van cookies in uw browser, bezoekt u de website <link>Alles over cookies</link>."
+          "p2": "Voor meer informatie over het beheren van cookies in uw browser, bezoekt u de website <link>alles over cookies</link>."
         },
         "5": {
           "title": "5. Wijzigingen in het cookiebeleid",
@@ -288,9 +288,9 @@
         },
         "6": {
           "title": "6. Neem contact met ons op",
-          "p1": "Als u vragen of opmerkingen heeft over ons cookiebeleid, neem dan contact met ons op via:",
-          "email": "E-mail: support@dineri.app",
-          "phone": "Telefoon: +123 456 7890"
+          "p1": "Heb je vragen of opmerkingen over ons cookiebeleid? Neem gerust contact met ons op:",
+          "email": "info@dineri.app",
+          "phone": ""
         }
       }
     },
@@ -363,9 +363,9 @@
         },
         "11": {
           "title": "11. Contact",
-          "p1": "Als je vragen hebt over dit Privacybeleid of je rechten met betrekking tot je persoonsgegevens wilt uitoefenen, neem dan contact met ons op via:",
-          "email": "E-mail: support@dineri.app",
-          "phone": "Telefoon: +123 456 7890"
+          "p1": "Vragen over je privacy of persoonlijke gegevens? We helpen je graag verder via:",
+          "email": "info@dineri.app",
+          "phone": ""
         }
       }
     },
@@ -411,9 +411,9 @@
         },
         "8": {
           "title": "8. Contact",
-          "p1": "Als je vragen hebt over deze Voorwaarden, neem dan contact met ons op via:",
-          "email": "E-mail: support@dineri.app",
-          "phone": "Telefoon: +123 456 7890"
+          "p1": "Heb je vragen over deze voorwaarden? Neem gerust contact met ons op via:",
+          "email": "info@dineri.app",
+          "phone": ""
         }
       }
     }
