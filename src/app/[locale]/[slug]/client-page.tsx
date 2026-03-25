@@ -1164,7 +1164,7 @@ export default function ClientPage({
             <div className="mt-13 pb-6">
 
               {
-                restaurant?.user?.subscription_plan === "basic" &&
+                restaurant?.user?.subscription_plan !== "enterprise" &&
                 <motion.footer
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -1179,21 +1179,21 @@ export default function ClientPage({
                       href="/terms"
                       className="hover:opacity-100 transition-opacity"
                     >
-                      {t("terms")}
+                      Terms
                     </Link>
                     <span>•</span>
                     <Link
                       href="/privacy-policy"
                       className="hover:opacity-100 transition-opacity"
                     >
-                      {t("privacy")}
+                      Privacy
                     </Link>
                     <span>•</span>
                     <Link
                       href="/cookies"
                       className="hover:opacity-100 transition-opacity"
                     >
-                      {t("cookies")}
+                      Cookies
                     </Link>
                   </div>
                   <div className="text-center">
@@ -1201,8 +1201,7 @@ export default function ClientPage({
                       className="text-xs"
                       style={{ color: headingsColor, opacity: 1 }}
                     >
-                      {" "}
-                      {t("powered_by")}{" "}
+                      Powered by{" "}
                       <Link
                         href="/"
                         className="hover:underline"
