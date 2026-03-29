@@ -3154,7 +3154,7 @@
     "open_now": "Nu open",
     "closed_now": "Nu gesloten",
     "operating_hours_text": "Openingstijden van { restaurantName }",
-    "timezone_label": "Tijdzone :- { restaurentTimeZone }",
+    "timezone_label": "Tijdzone : { restaurentTimeZone }",
     "monday": "Maandag",
     "tuesday": "Dinsdag",
     "wednesday": "Woensdag",

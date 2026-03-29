@@ -34,7 +34,7 @@
   --color-main: #002147;
   --color-main-background: #f8f9fb;
   --color-main-blue: #002147;
-  --color-main-green: #009a5e;
+  --color-main-green: #002147;
   --color-main-text: #333333;
   --color-main-action: #2ecc71;
   --color-main-warning: #e74c3c;
@@ -115,7 +115,7 @@
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-ring: oklch(62.812% 0.25748 29.198);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
 }

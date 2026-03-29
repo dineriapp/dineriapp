@@ -3162,7 +3162,7 @@
     "open_now": "Open Now",
     "closed_now": "Closed Now",
     "operating_hours_text": "{ restaurantName } operating hours",
-    "timezone_label": "Timezone :- { restaurentTimeZone }",
+    "timezone_label": "Timezone : { restaurentTimeZone }",
     "monday": "Monday",
     "tuesday": "Tuesday",
     "wednesday": "Wednesday",
