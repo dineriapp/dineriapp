@@ -14,7 +14,7 @@ const demoSchema = z.object({
 });
 
 const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbzjRXPpjF95XYZTc7eVbURAvKyVFclmMDtNVjdEnPM0mH7dixmPBzk1hY3XPUwMEL0/exec";
+    "https://script.google.com/macros/s/AKfycbx2BXJd6L-68exB3M36L_55-wSyf2EdkfWtIWhfGjMfEuoBvHE0_rnkw4osoVAsnG8C/exec";
 
 export async function POST(req: Request) {
     try {
