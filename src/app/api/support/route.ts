@@ -18,7 +18,7 @@ export type SupportFormData = z.infer<typeof supportSchema>;
 // Deployment ID
 // AKfycbxdUY_ - 2ASrI7QrIy61V2YvIuzcF - 8Vd - BZ_N59daJMrKmdpPMXKFC - cTxN5T2V11wQTg 
 const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxdUY_-2ASrI7QrIy61V2YvIuzcF-8Vd-BZ_N59daJMrKmdpPMXKFC-cTxN5T2V11wQTg/exec";
+    "https://script.google.com/macros/s/AKfycbwGnKGFhhA4H0-OduKmAnMDJbFDWsSWXKAnp3B_UdLOFruSvQvy0rjm5xiqWEdLSjA7jA/exec";
 
 export async function POST(req: Request) {
     try {
