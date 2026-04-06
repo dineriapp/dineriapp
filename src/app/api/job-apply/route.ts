@@ -27,7 +27,7 @@ const jobApplicationSchema = z.object({
 });
 
 const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxVTubkr5gOSC8ot-_g72WKSp3Ld8UDjNMrk8aYkTcyfAmxgamsF093iznBAj0FMjbm/exec";
+    "https://script.google.com/macros/s/AKfycbzsLjLDAODmfRzArfHtaHZUSnRHmdOLs9eG90gwllAhw03NutSy7s-dxj1EST2WOuCjjQ/exec";
 
 export async function POST(req: Request) {
     try {
