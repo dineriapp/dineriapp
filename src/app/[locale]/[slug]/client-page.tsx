@@ -1209,7 +1209,7 @@ export default function ClientPage({
       backgroundColor: "#ffffff",
       color: "#111111",}}
                       >
-                        Powered by dineri.ap
+                        Powered by dineri.app
                       </Link>
                     </p>
                   </div>
