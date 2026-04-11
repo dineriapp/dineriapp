@@ -1201,13 +1201,15 @@ export default function ClientPage({
                       className="text-xs"
                       style={{ color: headingsColor, opacity: 1 }}
                     >
-                      Powered by{" "}
+                      {" "}
                       <Link
-                        href="/"
-                        className="hover:underline"
-                        style={{ color: restaurant.accent_color || "#10b981" }}
+                         href="/"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition-all hover:scale-[1.03] active:scale-95 shadow-sm border border-black/10"
+    style={{
+      backgroundColor: "#ffffff",
+      color: "#111111",}}
                       >
-                        Dineri.app
+                        Powered by dineri.app
                       </Link>
                     </p>
                   </div>
