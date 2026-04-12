@@ -1033,19 +1033,14 @@ export default function ClientPage({
             {/* Events Dialog */}
             <Dialog open={showEventsDialog} onOpenChange={setShowEventsDialog}>
               <DialogContent
-                closeIconColor={restaurant.accent_color || "#10b981"}
+                closeIconColor={restaurant.accent_color || "#ffffff"}
                 className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] border-transparent no-scroll overflow-y-auto"
                 style={{
-                  ...getBackgroundStyle({
-                    bg_color: restaurant?.bg_color || "",
-                    bg_gradient_end: restaurant.bg_gradient_end || "",
-                    bg_gradient_start:
-                      restaurant?.bg_gradient_start || "",
-                    bg_image_url: restaurant?.bg_image_url || "",
-                    bg_type: restaurant?.bg_type,
-                    gradient_direction: restaurant?.gradient_direction,
-                  })
-                }}
+                background: "rgba(0,0,0,0.65)",
+                backdropFilter: "blur(14px)",
+                WebkitBackdropFilter: "blur(14px)",
+                color: "#ffffff",
+              }}
               >
                 <DialogHeader>
                   <DialogTitle className="flex text-start items-center gap-2">
