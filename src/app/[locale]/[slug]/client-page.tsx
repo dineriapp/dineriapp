@@ -984,18 +984,7 @@ export default function ClientPage({
                         background: `linear-gradient(to left, ${restaurant.bgColor} 80%, transparent 100%)`,
                       }}
                     >
-                      <Link
-                        href={`/${restaurant.slug}/menu`}
-                        className="flex items-center gap-1 px-4 py-[12px] shadow-md text-xs font-medium rounded-full transition-all duration-200 hover:shadow-md"
-                        style={{
-                          backgroundColor: restaurant.tabsButtonDefault,
-                          color: restaurant.tabsTextDefaultColor,
-                        }}
-                        onClick={() => setShowMenuDialog(false)}
-                      >
-                        <span>{m("all_items_tab")}</span>
-                        <ArrowRight className="h-3 w-3" />
-                      </Link>
+                      
                     </div>
                   </div>
                 </div>
