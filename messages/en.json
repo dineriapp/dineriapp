@@ -3193,7 +3193,7 @@
   "menu_dialog": {
     "title": "Menu",
     "description": "Browse our delicious menu items organized by category",
-    "all_items_tab": "Swipe",
+    "all_items_tab": "All items",
     "view_all_button": "View All",
     "view_full_menu_button": "View Full Menu & Order Online",
     "category_items_count_singular": "{ count } item",
