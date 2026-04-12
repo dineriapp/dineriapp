@@ -28,7 +28,7 @@ export const STRIPE_PLANS = {
     pro: {
         name: "Pro",
         description: "The complete solution",
-        price: 1,
+        price: 19,
         priceId: process.env.STRIPE_PRO_PRICE_ID,
         features: [
             "Unlimited links",
@@ -477,7 +477,7 @@ export function getStripePlans(locale: string): StripePlans {
                 pro: {
                     name: "Pro",
                     description: "The complete solution",
-                    price: 1,
+                    price: 19,
                     priceId: process.env.STRIPE_PRO_PRICE_ID ?? null,
                     features: [
                         "Unlimited links",
