@@ -985,7 +985,7 @@ export default function ClientPage({
                       }}
                     >
                       <Link
-                        href={`/${restaurant.slug}/menu`}
+                        href={`/${restaurant.slug}/`}
                         className="flex items-center gap-1 px-4 py-[12px] shadow-md text-xs font-medium rounded-full transition-all duration-200 hover:shadow-md"
                         style={{
                           backgroundColor: restaurant.tabsButtonDefault,

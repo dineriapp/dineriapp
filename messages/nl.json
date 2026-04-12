@@ -3185,7 +3185,7 @@
   "menu_dialog": {
     "title": "Menu",
     "description": "Ontdek onze heerlijke gerechten per categorie",
-    "all_items_tab": "Alle items",
+    "all_items_tab": "Swipe",
     "view_all_button": "Alles bekijken",
     "view_full_menu_button": "Volledig menu bekijken en online bestellen",
     "category_items_count_singular": "{ count } item",
