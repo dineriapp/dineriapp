@@ -1011,22 +1011,7 @@ export default function ClientPage({
                   />
                 </div>
 
-                {/* Footer with full menu link */}
-                <div className="pt-2 border-t border-black/30 mt-2">
-                  <Link
-                    href={`/${restaurant.slug}/menu`}
-                    className="w-full flex items-center justify-center  gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-md"
-                    style={{
-                      backgroundColor: restaurant.tabsButtonBG,
-                      color: restaurant.tabsTextColor,
-                    }}
-                    onClick={() => setShowMenuDialog(false)}
-                  >
-                    <MenuIcon className="h-4 w-4" />
-                    <span>{m("view_full_menu_button")}</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
+                
               </DialogContent>
             </Dialog>
 
