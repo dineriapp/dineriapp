@@ -976,29 +976,7 @@ export default function ClientPage({
                       })}
                   </div>
 
-                  {/* View More Button */}
-                  <div className="absolute w-[180px] flex justify-end right-0 bottom-0 items-center">
-                    <div
-                      className="w-fit  flex items-center justify-end"
-                      style={{
-                        background: `linear-gradient(to left, ${restaurant.bgColor} 80%, transparent 100%)`,
-                      }}
-                    >
-                      <Link
-                        href={`/${restaurant.slug}/menu`}
-                        className="flex items-center gap-1 px-4 py-[12px] shadow-md text-xs font-medium rounded-full transition-all duration-200 hover:shadow-md"
-                        style={{
-                          backgroundColor: restaurant.tabsButtonDefault,
-                          color: restaurant.tabsTextDefaultColor,
-                        }}
-                        onClick={() => setShowMenuDialog(false)}
-                      >
-                        <span>{m("all_items_tab")}</span>
-                        <ArrowRight className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                  
 
                 {/* Menu Items */}
                 <div className="overflow-y-auto  max-h-[52vh] pr-2 ">
