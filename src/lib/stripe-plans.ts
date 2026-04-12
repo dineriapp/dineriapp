@@ -477,7 +477,7 @@ export function getStripePlans(locale: string): StripePlans {
                 pro: {
                     name: "Pro",
                     description: "The complete solution",
-                    price: 19,
+                    price: 0,01,
                     priceId: process.env.STRIPE_PRO_PRICE_ID ?? null,
                     features: [
                         "Unlimited links",
