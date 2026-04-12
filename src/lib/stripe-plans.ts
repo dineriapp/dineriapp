@@ -28,7 +28,7 @@ export const STRIPE_PLANS = {
     pro: {
         name: "Pro",
         description: "The complete solution",
-        price: 19,
+        price: 1,
         priceId: process.env.STRIPE_PRO_PRICE_ID,
         features: [
             "Unlimited links",
