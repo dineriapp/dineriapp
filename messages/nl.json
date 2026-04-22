@@ -4854,5 +4854,10 @@
     "loading": {
       "page": "Laden"
     }
+  },
+  "time": {
+    "closes_at": "sluit om {time}",
+    "opens_at": "opent om {time}",
+    "opens_at_with_day": "opent op {day} om {time}"
   }
 }

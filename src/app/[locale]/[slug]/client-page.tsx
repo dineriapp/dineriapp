@@ -1,7 +1,6 @@
 "use client";
 
 import SocialIcons from "@/components/social-icons";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +11,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { getLucideIconBySlug } from "@/lib/get-icons";
 import { itemSlugPage } from "@/lib/reuseable-data";
-import { cn, getBackgroundStyle } from "@/lib/utils";
+import { getBackgroundStyle } from "@/lib/utils";
 import { OpeningHoursData, ReviewsInfo } from "@/types";
 import type {
   Event,
@@ -25,13 +24,12 @@ import type {
   User,
 } from "@prisma/client";
 import {
-  ArrowRight,
   Calendar,
   ExternalLink,
   MenuIcon,
   MoreVertical,
   Share2,
-  UtensilsCrossed,
+  UtensilsCrossed
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
@@ -46,6 +44,7 @@ import { GoogleRating } from "./_components/google-rating";
 import { OpeningHoursDialog } from "./_components/opening-hours-dialog";
 import { OpeningHoursStatus } from "./_components/opening-hours-status";
 import { WelcomePopup } from "./_components/welcome-popup";
+import { HorizontalDragScrollTabs } from "./horizontal-drag-scroll-tabs";
 import { MenuItems } from "./menu-items";
 
 // Define the complete types with relations using Prisma types
@@ -833,7 +832,7 @@ export default function ClientPage({
                   backgroundColor: restaurant.bgColor,
                 }}
                 closeIconColor={restaurant.textColor}
-                className="max-h-[90vh] max-w-[90vw] border-transparent no-scroll sm:!max-w-[570px] overflow-hidden overflow-y-auto"
+                className="max-h-[90vh] max-w-[90vw] max-sm:px-4 border-transparent no-scroll sm:!max-w-[570px] overflow-y-auto"
               >
                 <DialogHeader className="pb-1">
                   <DialogTitle
@@ -852,152 +851,15 @@ export default function ClientPage({
                 </DialogHeader>
 
                 {/* Category Tabs */}
-                <div className="relative mb-0 flex items-center ">
-                  <div className="flex gap-2 overflow-x-auto no-scroll max-w-[70vw] sm:!max-w-[430px]">
-                    {/* All Items Tab */}
-                    <Button
-                      variant={
-                        selectedMenuCategory === "all" ? "default" : "outline"
-                      }
-                      size="lg"
-                      onClick={() => setSelectedMenuCategory("all")}
-                      style={{
-                        backgroundColor:
-                          selectedMenuCategory === "all"
-                            ? restaurant.tabsButtonBG
-                            : restaurant.tabsButtonDefault,
-                        color:
-                          selectedMenuCategory === "all"
-                            ? restaurant.tabsTextColor
-                            : restaurant.tabsTextDefaultColor,
-                      }}
-                      className={cn(
-                        "whitespace-nowrap cursor-pointer !text-sm flex-shrink-0 h-10 px-4 rounded-full font-medium transition-all duration-200",
-                        selectedMenuCategory === "all" ? "shadow-md" : "",
-                      )}
-                    >
-                      <span className="flex items-center  gap-2">
-                        <span className="">{m("all_items_tab")}</span>
-                        <span
-                          className="px-2 py-0.5 rounded-full text-xs font-semibold"
-                          style={{
-                            backgroundColor:
-                              selectedMenuCategory === "all"
-                                ? restaurant.tabsTextColor
-                                : restaurant.tabsTextDefaultColor,
-                            color:
-                              selectedMenuCategory === "all"
-                                ? restaurant.tabsButtonBG
-                                : restaurant.tabsButtonDefault,
-                          }}
-                        >
-                          {
-                            restaurant.menuCategories
-                              .filter((c) => c.show_in_quick_menu)
-                              .flatMap((category) =>
-                                category.items.filter(
-                                  (itm) => itm.show_in_quick_menu,
-                                ),
-                              ).length
-                          }
-                        </span>
-                      </span>
-                    </Button>
-                    {/* Category Tabs */}
-                    {restaurant.menuCategories
-                      .filter(
-                        (cat) =>
-                          cat.items.filter((i) => i.show_in_quick_menu)
-                            .length !== 0,
-                      )
-                      .map((category) => {
-                        if (!category.show_in_quick_menu) return null;
-
-                        return (
-                          <div
-                            className="keen-slider__slide !w-auto !min-w-fit"
-                            key={category.id}
-                          >
-                            <Button
-                              key={category.id}
-                              variant={
-                                selectedMenuCategory === category.id
-                                  ? "default"
-                                  : "outline"
-                              }
-                              size="lg"
-                              onClick={() =>
-                                setSelectedMenuCategory(category.id)
-                              }
-                              className={cn(
-                                "whitespace-nowrap cursor-pointer !text-sm flex-shrink-0 h-10 px-4 rounded-full font-medium transition-all duration-200",
-                                selectedMenuCategory === category.id
-                                  ? "shadow-md"
-                                  : "",
-                              )}
-                              style={{
-                                backgroundColor:
-                                  selectedMenuCategory === category.id
-                                    ? restaurant.tabsButtonBG
-                                    : restaurant.tabsButtonDefault,
-                                color:
-                                  selectedMenuCategory === category.id
-                                    ? restaurant.tabsTextColor
-                                    : restaurant.tabsTextDefaultColor,
-                              }}
-                            >
-                              <span className="flex items-center gap-2">
-                                <span>{category.name}</span>
-                                <span
-                                  className="px-2 py-0.5 rounded-full text-xs font-semibold"
-                                  style={{
-                                    backgroundColor:
-                                      selectedMenuCategory === category.id
-                                        ? restaurant.tabsTextColor
-                                        : restaurant.tabsTextDefaultColor,
-                                    color:
-                                      selectedMenuCategory === category.id
-                                        ? restaurant.tabsButtonBG
-                                        : restaurant.tabsButtonDefault,
-                                  }}
-                                >
-                                  {
-                                    restaurant.menuCategories
-                                      .find((cat) => cat.id === category.id)
-                                      ?.items?.filter(
-                                        (item) => item.show_in_quick_menu,
-                                      ).length
-                                  }
-                                </span>
-                              </span>
-                            </Button>
-                          </div>
-                        );
-                      })}
-                  </div>
-
-                  {/* View More Button */}
-                  <div className="absolute w-[180px] flex justify-end right-0 bottom-0 items-center">
-                    <div
-                      className="w-fit  flex items-center justify-end"
-                      style={{
-                        background: `linear-gradient(to left, ${restaurant.bgColor} 80%, transparent 100%)`,
-                      }}
-                    >
-                      <Link
-                        href={`/${restaurant.slug}/`}
-                        className="flex items-center gap-1 px-4 py-[12px] shadow-md text-xs font-medium rounded-full transition-all duration-200 hover:shadow-md"
-                        style={{
-                          backgroundColor: restaurant.tabsButtonDefault,
-                          color: restaurant.tabsTextDefaultColor,
-                        }}
-                        onClick={() => setShowMenuDialog(false)}
-                      >
-                        <span>{m("all_items_tab")}</span>
-                        <ArrowRight className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  </div>
+                <div className="w-full overflow-hidden">
+                  <HorizontalDragScrollTabs
+                    restaurant={restaurant}
+                    selectedMenuCategory={selectedMenuCategory}
+                    setSelectedMenuCategory={setSelectedMenuCategory}
+                    translate={m}
+                    onViewAllClick={() => setShowMenuDialog(false)}
+                    className="mb-0"
+                  />
                 </div>
 
                 {/* Menu Items */}
@@ -1011,7 +873,7 @@ export default function ClientPage({
                   />
                 </div>
 
-                
+
               </DialogContent>
             </Dialog>
 
@@ -1021,11 +883,11 @@ export default function ClientPage({
                 closeIconColor={restaurant.accent_color || "#ffffff"}
                 className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] border-transparent no-scroll overflow-y-auto"
                 style={{
-                background: "rgba(0,0,0,0.65)",
-                backdropFilter: "blur(14px)",
-                WebkitBackdropFilter: "blur(14px)",
-                color: "#ffffff",
-              }}
+                  background: "rgba(0,0,0,0.65)",
+                  backdropFilter: "blur(14px)",
+                  WebkitBackdropFilter: "blur(14px)",
+                  color: "#ffffff",
+                }}
               >
                 <DialogHeader>
                   <DialogTitle className="flex text-start items-center gap-2">
@@ -1182,16 +1044,16 @@ export default function ClientPage({
                       style={{ color: headingsColor, opacity: 1 }}
                     >
                       {" "}
-                       <Link
-  href="/"
-  className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition-all hover:scale-[1.03] active:scale-95 shadow-sm border border-black/10"
-  style={{
-    backgroundColor: "#ffffff",
-    color: "#111111",
-  }}
->
-  Powered by dineri.app
-</Link>
+                      <Link
+                        href="/"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition-all hover:scale-[1.03] active:scale-95 shadow-sm border border-black/10"
+                        style={{
+                          backgroundColor: "#ffffff",
+                          color: "#111111",
+                        }}
+                      >
+                        Powered by dineri.app
+                      </Link>
                     </p>
                   </div>
                 </motion.footer>

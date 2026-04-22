@@ -13,12 +13,19 @@ export async function POST(request: NextRequest) {
     const t = await getTranslations("updateReservationStatus")
     try {
         const body = await request.json();
-        const { reservationId, status } = body;
-        const session = await checkAuth();
-        if (!session?.user) {
-            return NextResponse.json({ ok: false, error: t("errors.unauthorized") }, { status: 401 });
+        const { reservationId, status, user_id } = body;
+        const internalKey = request.headers.get("x-internal-key");
+        let session;
+        if (internalKey === process.env.INTERNAL_API_KEY) {
+        } else {
+            session = await checkAuth();
+            if (!session?.user) {
+                return NextResponse.json(
+                    { ok: false, error: t("errors.unauthorized") },
+                    { status: 401 }
+                );
+            }
         }
-
         if (!reservationId || !status) {
             return NextResponse.json(
                 { success: false, error: t("errors.missingReservationIdOrStatus") },
@@ -35,7 +42,7 @@ export async function POST(request: NextRequest) {
             const restaurant = await prisma.restaurant.findFirst({
                 where: {
                     id: updated.restaurant_id,
-                    user_id: session.user.id,
+                    user_id: session?.user?.id ?? user_id
                 },
                 select: {
                     reservation_settings: true,
