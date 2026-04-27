@@ -1131,14 +1131,14 @@ export default function ClientPage({
               </DialogContent>
             </Dialog>
             {/* StoryLine Dialog */}
-            <Dialog open={showStoryLine} onOpenChange={setShowStoryLine}>
+            {hasStoryLine && <Dialog open={showStoryLine} onOpenChange={setShowStoryLine}>
               <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] overflow-y-auto border-transparent">
                 <div className="py-6 space-y-4">
 
                   {/* Image */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={(restaurant?.StoryLine?.[0].file as UploadedFile)?.url ?? ""}
+                    src={(restaurant?.StoryLine?.[0]?.file as UploadedFile)?.url ?? ""}
                     alt=""
                     className="w-full aspect-video object-cover rounded-xl"
                   />
@@ -1148,7 +1148,7 @@ export default function ClientPage({
 
                     {/* Title */}
                     <h2 className="text-lg sm:text-xl font-semibold text-slate-800 leading-snug">
-                      {restaurant?.StoryLine?.[0].title}
+                      {restaurant?.StoryLine?.[0]?.title}
                     </h2>
 
                     {/* Divider (optional but nice) */}
@@ -1156,13 +1156,13 @@ export default function ClientPage({
 
                     {/* Description */}
                     <p className="text-slate-600 leading-relaxed px-2">
-                      {restaurant?.StoryLine?.[0].description}
+                      {restaurant?.StoryLine?.[0]?.description}
                     </p>
 
                   </div>
                 </div>
               </DialogContent>
-            </Dialog>
+            </Dialog>}
             <div className="mt-13 pb-6">
 
               {
