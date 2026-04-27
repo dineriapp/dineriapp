@@ -246,7 +246,7 @@ export default function ClientPage({
   const hasFoodSection =
     hasReservation || hasCustomLinks || hasMenu || hasEvents;
 
-  const hasStoryLine = restaurant?.StoryLine?.length > 0
+  const hasStoryLine = restaurant?.StoryLine?.length > 0 && restaurant?.StoryLine?.[0]?.title && restaurant?.StoryLine?.[0]?.description && restaurant?.StoryLine?.[0]?.file
 
   const hasAboutSection = hasFaq || hasCustomLinks || hasEvents || hasStoryLine;
 
