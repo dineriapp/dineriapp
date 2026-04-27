@@ -1,3 +1,4 @@
+import { MultiImageUploader, UploadedFile } from "@/components/shared/image-upader";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -11,9 +12,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Leaf, X } from "lucide-react";
+import { Leaf, UploadIcon, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import React from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 export interface Addon {
     name: string;
@@ -24,6 +25,8 @@ interface AddItemDialogProps {
     open: boolean;
     categoryName?: string;
     newItemName: string;
+    itemImage: UploadedFile[];
+    setItemImage: Dispatch<SetStateAction<UploadedFile[]>>;
     setNewItemName: (val: string) => void;
     newItemPrice: string;
     setNewItemPrice: (val: string) => void;
@@ -68,9 +71,13 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
     onClose,
     onSubmit,
     createItemPending,
+    itemImage,
+    setItemImage
 }) => {
     const allergenList = ["gluten", "dairy", "nuts", "eggs", "soy", "shellfish", "fish"];
     const t = useTranslations("MenuPage.AddAndEditItemDialog")
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
+
     return (
         <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
             <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
@@ -85,8 +92,28 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label>Item Image (optional)</Label>
+                            <MultiImageUploader
+                                value={itemImage}
+                                onChange={setItemImage}
+                                maxFiles={1}
+                                showLimit={false}
+                                onUploadingChange={setIsUploadingImage}
+                                className="w-full max-w-45"
+                                gridClassName="grid-col-1"
+                                PreviewItemClassName=" aspect-square!"
+                                triggerClassName="w-full bg-white rounded-xl hover:bg-gray-100"
+                            >
+                                <div className="w-full rounded-xl aspect-square! border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-2 cursor-pointer">
+                                    <UploadIcon className="size-5 text-gray-500" />
+                                    <span className="text-sm text-gray-500">Upload image</span>
+                                </div>
+                            </MultiImageUploader>
+                        </div>
                         {/* Name & Price */}
                         <div className="grid grid-cols-2 gap-4">
+
                             <div className="space-y-2">
                                 <Label htmlFor="itemName">
                                     {t("itemName")}
@@ -262,7 +289,7 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={!newItemName || !newItemPrice || createItemPending || isUploading}
+                            disabled={!newItemName || !newItemPrice || createItemPending || isUploading || isUploadingImage}
                             className="hover:opacity-75 !bg-main-blue cursor-pointer rounded-full h-[40px] font-poppins !px-5"
                         >
                             {isUploading ? t(`uploading`) : createItemPending ? t(`adding`) : t(`addItem`)}

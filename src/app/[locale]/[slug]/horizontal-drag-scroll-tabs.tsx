@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"; // adjust import path as needed
 import { cn } from "@/lib/utils"; // adjust import path as needed
+import { Restaurant } from "@prisma/client";
 import useEmblaCarousel from "embla-carousel-react";
 import { ArrowRight } from "lucide-react"; // adjust import path as needed
 import Link from "next/link";
@@ -16,18 +17,14 @@ interface MenuCategory {
     items: MenuItem[];
 }
 
-interface Restaurant {
-    slug: string;
-    bgColor: string;
-    tabsButtonBG: string;
-    tabsButtonDefault: string;
-    tabsTextColor: string;
-    tabsTextDefaultColor: string;
-    menuCategories: MenuCategory[];
+type RestaurantType = Restaurant & {
+    menuCategories: (MenuCategory & {
+        items: MenuItem[];
+    })[];
 }
 
 export interface HorizontalDragScrollTabsProps {
-    restaurant: Restaurant;
+    restaurant: RestaurantType
     selectedMenuCategory: string | number | "all";
     setSelectedMenuCategory: (categoryId: string | "all") => void;
     translate: (key: string) => string;
@@ -39,14 +36,14 @@ function countQuickMenuItems(category: MenuCategory): number {
     return category.items?.filter((item) => item.show_in_quick_menu).length ?? 0;
 }
 
-function getVisibleCategories(restaurant: Restaurant): MenuCategory[] {
+function getVisibleCategories(restaurant: RestaurantType): MenuCategory[] {
     return restaurant.menuCategories.filter((category) => {
         if (!category.show_in_quick_menu) return false;
         return countQuickMenuItems(category) > 0;
     });
 }
 
-function getTotalQuickMenuItems(restaurant: Restaurant): number {
+function getTotalQuickMenuItems(restaurant: RestaurantType): number {
     return getVisibleCategories(restaurant).reduce(
         (total, category) => total + countQuickMenuItems(category),
         0
@@ -199,7 +196,7 @@ export function HorizontalDragScrollTabs({
                         );
                     })}
 
-                    <div className="min-w-fit shrink-0">
+                    {restaurant.full_menu_btn_show && <div className="min-w-fit shrink-0">
                         <Link
                             href={`/${restaurant.slug}/menu`}
                             onClick={handleViewAllClick}
@@ -212,7 +209,7 @@ export function HorizontalDragScrollTabs({
                             <span>{translate("all_items_tab")}</span>
                             <ArrowRight className="h-3 w-3" />
                         </Link>
-                    </div>
+                    </div>}
                 </div>
             </div>
         </div>

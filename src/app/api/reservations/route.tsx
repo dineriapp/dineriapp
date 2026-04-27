@@ -1,8 +1,8 @@
 import { DynamicRule, SettingsState } from '@/app/[locale]/(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types';
 import { CapacityService } from '@/lib/capacity-service';
+import { publishEmailToQueue } from '@/lib/email-publisher';
 import { extractNotificationsSettings, getRenderedReservationEmailTemplates } from '@/lib/email-utils';
 import prisma from "@/lib/prisma";
-import { sendEmailUsingResend } from '@/lib/resend';
 import type { ReservationsListResponse } from "@/lib/types";
 import { getEstimatedDuration, textToSimpleHtml } from '@/lib/utils';
 import { Prisma } from '@prisma/client';
@@ -183,12 +183,12 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
 
     const settings = restaurant?.reservation_settings?.settings as SettingsState | undefined;
     const {
-        pause_new_reservations,
+        // pause_new_reservations,
         emergency_closure,
         custom_message_for_customers
     } = settings?.restaurantSettings || {};
 
-    // ⛔ Emergency closure → block immediately
+    // Emergency closure → block immediately
     if (emergency_closure) {
         return {
             success: false,
@@ -197,14 +197,14 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
         };
     }
 
-    // ⛔ Paused reservations → block (only if not emergency)
-    if (pause_new_reservations) {
-        return {
-            success: false,
-            error: custom_message_for_customers ||
-                t('restaurant_not_accepting')
-        };
-    }
+    // Paused reservations → block (only if not emergency)
+    // if (pause_new_reservations) {
+    //     return {
+    //         success: false,
+    //         error: custom_message_for_customers ||
+    //             t('restaurant_not_accepting')
+    //     };
+    // }
 
 
     const estimatedDuration = getEstimatedDuration(settings, data.party_size);
@@ -376,19 +376,63 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
                             const html = textToSimpleHtml(text);
 
                             tasks.push(
-                                sendEmailUsingResend({
+                                publishEmailToQueue({
                                     apiKey,
                                     to: reservation.customer_email,
                                     fromEmail,
                                     fromName,
                                     subject,
                                     html,
-                                    type: "restaurant"
+                                    type: "restaurant",
+                                    // delay: MiliSeconds 
                                 })
                             );
                         }
                     }
 
+                    if (extracted.email_24h_reminder_enabled) {
+
+                        const t = renderedTemplates.find((x) => x.type === "reminder");
+
+                        if (t && reservation.customer_email) {
+
+                            const subject = t.rendered_subject || t.type;
+                            const text = t.rendered_body || "";
+                            const html = textToSimpleHtml(text);
+                            let delayMs = 0;
+                            const reminderHoursBefore =
+                                (settings as SettingsState)?.notification_settings?.reminder_hours_before;
+
+
+                            if (reminderHoursBefore && reminderHoursBefore > 0) {
+                                const now = new Date();
+                                const arrivalTime = reservation.arrival_time;
+
+                                const hoursInMs = reminderHoursBefore * 60 * 60 * 1000;
+
+                                const rawDelay =
+                                    arrivalTime.getTime() - now.getTime() - hoursInMs;
+
+
+                                delayMs = rawDelay > 0 ? rawDelay : 0;
+                            }
+
+
+                            tasks.push(
+                                publishEmailToQueue({
+                                    apiKey,
+                                    to: reservation.customer_email,
+                                    fromEmail,
+                                    fromName,
+                                    subject,
+                                    html,
+                                    type: "restaurant",
+                                    delay: delayMs,
+                                })
+                            );
+
+                        }
+                    }
                     // send to owner(s)
                     const shouldNotifyOwner =
                         extracted.owner_notifications_enabled &&
@@ -410,7 +454,7 @@ async function createReservationWithValidation(data: CreateReservationRequest, l
 
                         for (const ownerEmail of extracted.owner_emails) {
                             tasks.push(
-                                sendEmailUsingResend({
+                                publishEmailToQueue({
                                     apiKey,
                                     to: ownerEmail,
                                     fromEmail,
@@ -681,7 +725,6 @@ function timeToMinutes(timeStr: string): number {
     if (period === 'PM') totalMinutes += 12 * 60;
     return totalMinutes;
 }
-
 
 export async function DELETE(request: NextRequest) {
     try {

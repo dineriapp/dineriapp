@@ -1,4 +1,4 @@
-import ky from "ky";
+import ky, { HTTPError } from "ky";
 
 const kyInstance = ky.create({
     timeout: 30000, // 30 seconds
@@ -10,3 +10,14 @@ const kyInstance = ky.create({
 });
 
 export default kyInstance;
+
+export async function handleApiError(err: unknown, fallback: string): Promise<never> {
+    if (err instanceof HTTPError) {
+        const data = (await err.response.json()) as { error?: string };
+        throw new Error(data.error || fallback);
+    }
+
+    if (err instanceof Error) throw err;
+
+    throw new Error(fallback);
+}

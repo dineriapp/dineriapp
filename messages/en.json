@@ -4669,6 +4669,7 @@
     }
   },
   "mainSettings": {
+    "reminde-me": "Reminder Hours Before",
     "tabs": {
       "general": "General Settings",
       "templates": "Email Templates",
@@ -4897,6 +4898,95 @@
 
     "loading": {
       "page": "Loading"
+    }
+  },
+  "appearance_new": {
+    "fullMenuOrderToggle": "Full menu & order online button",
+    "fullMenuOrderToggle_description": "optional toggle — visible or hidden",
+    "openingStatusColors": "Opening Status Colors",
+    "openingStatusColors_description": "Customize the colors for open, closing soon, opening soon, and closed states",
+
+    "openTextColor": "Open text color",
+    "openBgColor": "Open background color",
+
+    "closedTextColor": "Closed text color",
+    "closedBgColor": "Closed background color",
+    "defaultLanguage": "Default Language",
+    "selectLanguage": "Select Language",
+
+    "languages": {
+      "en": "English",
+      "de": "German",
+      "es": "Spanish",
+      "fr": "French",
+      "it": "Italian",
+      "nl": "Dutch"
+    }
+  },
+  "GalleryPage": {
+    "title": "Gallery Management",
+    "subtitle": "Manage your restaurant's photos and videos to showcase your brand, dishes, and ambiance.",
+    "saveOrder": "Save Order",
+    "addMedia": "Add Media",
+    "searchPlaceholder": "Search by title...",
+    "searchDisabledMessage": "Drag and drop is disabled while searching. Clear search to reorder.",
+    "emptyTitle": "No media found",
+    "emptySearchSuggestion": "Try a different search term",
+    "emptyDefaultSuggestion": "Click 'Add Media' to upload your first photo or video",
+    "deleteConfirm": "Are you sure you want to delete this item?",
+    "toasts": {
+      "deleteSuccess": "Deleted successfully",
+      "deleteError": "Failed to delete",
+      "saveOrderSuccess": "Gallery order saved successfully",
+      "saveOrderError": "Failed to save gallery order"
+    }
+  },
+  "GalleryItemForm": {
+    "titleAdd": "Add New Media",
+    "titleEdit": "Edit Media",
+    "imageButton": "Image",
+    "videoButton": "YouTube Video",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g., Delicious Pasta, Restaurant Interior, Live Event",
+    "titleRequired": "Title is required",
+    "mediaFileLabel": "Media File",
+    "mediaFileRequired": "At least one image file is required",
+    "youtubeUrlLabel": "YouTube URL",
+    "youtubeUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "youtubeUrlRequired": "YouTube URL is required",
+    "youtubeUrlInvalid": "Please enter a valid YouTube URL",
+    "externalLinkLabel": "External Link (optional)",
+    "externalLinkPlaceholder": "https://...",
+    "externalLinkHint": "Opens when user clicks the media",
+    "cancelButton": "Cancel",
+    "submitAdd": "Add Media",
+    "submitUpdate": "Update Media",
+    "toasts": {
+      "addSuccess": "Added successfully",
+      "updateSuccess": "Updated successfully",
+      "saveError": "Failed to save"
+    }
+  },
+  "StoryLine": {
+    "title": "Story Line",
+    "subtitle": "Create or update your storyline with a compelling image, title, and description. This content will be displayed prominently for your visitors.",
+    "imageLabel": "Story Image",
+    "imageRequired": "*",
+    "imageMaxHint": "(Max 1 file)",
+    "uploadButtonText": "Upload an image",
+    "uploadHint": "PNG, JPG, WEBP up to 5MB",
+    "recommendedRatio": "Recommended image ratio 16:9 for best display",
+    "showToggleLabel": "Show Story Line",
+    "showToggleHint": "Toggle to display this section on your page",
+    "titleFieldLabel": "Button text",
+    "titleFieldPlaceholder": "e.g., Delicious Pasta, Restaurant Interior, Live Event",
+    "contentFieldLabel": "Content",
+    "contentFieldPlaceholder": "Write your story content here...",
+    "saveButton": "Save Story Line",
+    "savingButton": "Saving",
+    "toasts": {
+      "saveSuccess": "Saved successfully",
+      "saveError": "Failed to save"
     }
   }
 }

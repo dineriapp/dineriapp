@@ -4622,6 +4622,7 @@
     }
   },
   "mainSettings": {
+    "reminde-me": "Herinneringsuren vooraf",
     "tabs": {
       "general": "Algemene instellingen",
       "templates": "E-mailsjablonen",
@@ -4859,5 +4860,96 @@
     "closes_at": "sluit om {time}",
     "opens_at": "opent om {time}",
     "opens_at_with_day": "opent op {day} om {time}"
+  },
+  "appearance_new": {
+    "fullMenuOrderToggle": "Volledig menu & online bestellen",
+    "fullMenuOrderToggle_description": "Optionele schakelaar — zichtbaar of verborgen",
+
+    "openingStatusColors": "Openingstijden kleuren",
+    "openingStatusColors_description": "Pas kleuren aan voor open, bijna gesloten, bijna open en gesloten",
+
+    "openTextColor": "Tekstkleur (Open)",
+    "openBgColor": "Achtergrondkleur (Open)",
+
+    "closedTextColor": "Tekstkleur (Gesloten)",
+    "closedBgColor": "Achtergrondkleur (Gesloten)",
+
+    "defaultLanguage": "Standaardtaal",
+    "selectLanguage": "Selecteer taal",
+
+    "languages": {
+      "en": "Engels",
+      "de": "Duits",
+      "es": "Spaans",
+      "fr": "Frans",
+      "it": "Italiaans",
+      "nl": "Nederlands"
+    }
+  },
+  "GalleryPage": {
+    "title": "Galerijbeheer",
+    "subtitle": "Beheer de foto's en video's van je restaurant om je merk, gerechten en sfeer te laten zien.",
+    "saveOrder": "Volgorde opslaan",
+    "addMedia": "Media toevoegen",
+    "searchPlaceholder": "Zoeken op titel...",
+    "searchDisabledMessage": "Slepen en neerzetten is uitgeschakeld tijdens het zoeken. Wis de zoekopdracht om opnieuw te ordenen.",
+    "emptyTitle": "Geen media gevonden",
+    "emptySearchSuggestion": "Probeer een andere zoekterm",
+    "emptyDefaultSuggestion": "Klik op 'Media toevoegen' om je eerste foto of video te uploaden",
+    "deleteConfirm": "Weet je zeker dat je dit item wilt verwijderen?",
+    "toasts": {
+      "deleteSuccess": "Succesvol verwijderd",
+      "deleteError": "Verwijderen mislukt",
+      "saveOrderSuccess": "Galerijvolgorde succesvol opgeslagen",
+      "saveOrderError": "Opslaan van galerijvolgorde mislukt"
+    }
+  },
+  "GalleryItemForm": {
+    "titleAdd": "Nieuwe media toevoegen",
+    "titleEdit": "Media bewerken",
+    "imageButton": "Afbeelding",
+    "videoButton": "YouTube-video",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "bijv. Heerlijke pasta, Restaurant interieur, Live-evenement",
+    "titleRequired": "Titel is verplicht",
+    "mediaFileLabel": "Mediabestand",
+    "mediaFileRequired": "Minstens één afbeeldingsbestand is vereist",
+    "youtubeUrlLabel": "YouTube-URL",
+    "youtubeUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "youtubeUrlRequired": "YouTube-URL is verplicht",
+    "youtubeUrlInvalid": "Voer een geldige YouTube-URL in",
+    "externalLinkLabel": "Externe link (optioneel)",
+    "externalLinkPlaceholder": "https://...",
+    "externalLinkHint": "Wordt geopend wanneer de gebruiker op de media klikt",
+    "cancelButton": "Annuleren",
+    "submitAdd": "Media toevoegen",
+    "submitUpdate": "Media bijwerken",
+    "toasts": {
+      "addSuccess": "Succesvol toegevoegd",
+      "updateSuccess": "Succesvol bijgewerkt",
+      "saveError": "Opslaan mislukt"
+    }
+  },
+  "StoryLine": {
+    "title": "Verhaal",
+    "subtitle": "Maak of werk je verhaal bij met een aantrekkelijke afbeelding, titel en beschrijving. Deze inhoud wordt prominent weergegeven voor je bezoekers.",
+    "imageLabel": "Verhaal afbeelding",
+    "imageRequired": "*",
+    "imageMaxHint": "(Max 1 bestand)",
+    "uploadButtonText": "Afbeelding uploaden",
+    "uploadHint": "PNG, JPG, WEBP tot 5MB",
+    "recommendedRatio": "Aanbevolen beeldverhouding 16:9 voor beste weergave",
+    "showToggleLabel": "Verhaal tonen",
+    "showToggleHint": "Schakel in om deze sectie op je pagina te tonen",
+    "titleFieldLabel": "Knoptekst",
+    "titleFieldPlaceholder": "bijv. Heerlijke pasta, Restaurant interieur, Live evenement",
+    "contentFieldLabel": "Inhoud",
+    "contentFieldPlaceholder": "Schrijf hier je verhaal...",
+    "saveButton": "Verhaal opslaan",
+    "savingButton": "Opslaan...",
+    "toasts": {
+      "saveSuccess": "Succesvol opgeslagen",
+      "saveError": "Opslaan mislukt"
+    }
   }
 }

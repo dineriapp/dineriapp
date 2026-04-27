@@ -25,11 +25,14 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsPatchCheckFill } from 'react-icons/bs';
 import SocialIcons from '../social-icons';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { useGalleryItems } from '@/lib/gallery-queries';
+import { GalleryCarousel } from '@/app/[locale]/[slug]/_components/gallery';
+import { StoryLine } from '@prisma/client';
 
 type SlugPagePreviewProps = {
     className?: string;
@@ -38,12 +41,14 @@ type SlugPagePreviewProps = {
 
 const SlugPagePreview = ({ className, formData }: SlugPagePreviewProps) => {
     const t2 = useTranslations("dashboard.dashboardMobilePreview");
-
+    const [storyLine, setStoryLine] = useState<StoryLine | null>(null);
+    const [storyLoading, setStoryLoading] = useState(false);
     const [currentTime] = useState(() =>
         new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     );
 
     const { selectedRestaurant } = useRestaurantStore();
+    const { data: galleryItems } = useGalleryItems(selectedRestaurant?.id);
     const { data: session } = useSession();
     const openingHours = selectedRestaurant?.opening_hours
         ? (selectedRestaurant?.opening_hours as OpeningHoursData)
@@ -105,7 +110,11 @@ const SlugPagePreview = ({ className, formData }: SlugPagePreviewProps) => {
     const hasFoodSection =
         hasReservation || hasCustomLinks || hasMenu || hasEvents;
 
-    const hasAboutSection = hasFaq || hasCustomLinks || hasEvents;
+    const hasStoryLine =
+        storyLine?.show &&
+        (storyLine?.title || storyLine?.description || storyLine?.file);
+
+    const hasAboutSection = hasFaq || hasCustomLinks || hasEvents || hasStoryLine;
 
     const isCompletelyEmpty = !hasFoodSection && !hasAboutSection;
 
@@ -122,6 +131,32 @@ const SlugPagePreview = ({ className, formData }: SlugPagePreviewProps) => {
     const buttonTextColor =
         formData?.button_text_icons_color || "#ffffff";
 
+    useEffect(() => {
+        if (!selectedRestaurant?.id) return;
+
+        const fetchStoryLine = async () => {
+            try {
+                setStoryLoading(true);
+
+                const res = await fetch(
+                    `/api/restaurants/${selectedRestaurant.id}/story-line`
+                );
+
+                const data = await res.json();
+
+                if (data?.success) {
+                    setStoryLine(data.data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch storyline", err);
+            } finally {
+                setStoryLoading(false);
+            }
+        };
+
+        fetchStoryLine();
+    }, [selectedRestaurant?.id]);
+    console.log({ storyLine, storyLoading })
     return (
         <div className={cn(className)}>
             <Card className="overflow-hidden pt-0 border-slate-200 box-shad-every-2">
@@ -338,10 +373,14 @@ const SlugPagePreview = ({ className, formData }: SlugPagePreviewProps) => {
                                                                         <OpeningHoursStatus
                                                                             openingHours={openingHours}
                                                                             restaurentTimeZone={selectedRestaurant?.timezone || ""}
-                                                                            color={selectedRestaurant?.headings_text_color || "#000000"}
+                                                                            color={formData?.headings_text_color || "#000000"}
                                                                             className="text-white cursor-pointer text-center"
-                                                                            accentColor={selectedRestaurant?.headings_text_color || "#10b981"}
+                                                                            accentColor={formData?.headings_text_color || "#10b981"}
                                                                             onClick={() => { }}
+                                                                            openTextColor={formData.openTextColor || "#065f46"}
+                                                                            openBgColor={formData.openBgColor || "#d1fae5"}
+                                                                            closedTextColor={formData.closedTextColor || "#991b1b"}
+                                                                            closedBgColor={formData.closedBgColor || "#fee2e2"}
                                                                         />
                                                                     </motion.div>
                                                                 )}
@@ -760,6 +799,79 @@ const SlugPagePreview = ({ className, formData }: SlugPagePreviewProps) => {
                                                                     )}
                                                                 </motion.button>
                                                             )}
+                                                            {hasStoryLine && (
+                                                                <motion.button
+                                                                    variants={itemSlugPage}
+                                                                    className={`group flex items-center justify-center  text-center ${formData?.button_icons_show ? "px-14 " : "px-4"} w-full py-4  transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${formData.button_style === "pill"
+                                                                        ? "rounded-full"
+                                                                        : formData.button_style === "square"
+                                                                            ? "rounded-md"
+                                                                            : "rounded-xl"
+                                                                        }`}
+                                                                    style={{
+                                                                        backgroundColor:
+                                                                            formData.button_variant === "solid"
+                                                                                ? formData.accent_color || "#10b981"
+                                                                                : "transparent",
+                                                                        backdropFilter: "blur(8px)",
+                                                                        border: `2px solid ${formData.accent_color || "#10b981"}`,
+                                                                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                                                                        color:
+                                                                            formData.button_variant === "solid"
+                                                                                ? buttonTextColor
+                                                                                : formData.accent_color || "#10b981",
+                                                                        letterSpacing: "0.01em",
+                                                                    }}
+                                                                >
+                                                                    {formData?.button_icons_show && (
+                                                                        <div
+                                                                            className="flex aspect-square absolute left-[7px] shrink-0 size-[54px] items-center justify-center rounded-full "
+                                                                            style={{
+                                                                                backgroundColor:
+                                                                                    formData.button_text_icons_color || "transparent",
+                                                                            }}
+                                                                        >
+                                                                            {getLucideIconBySlug("faq", {
+                                                                                className: "w-5 h-5",
+                                                                                style: {
+                                                                                    color: formData.accent_color || "transparent",
+                                                                                },
+                                                                            })}
+                                                                        </div>
+                                                                    )}
+                                                                    <span
+                                                                        className={`relative w-full text-[26px] ${formData.button_variant === "outline"
+                                                                            ? "group-hover:text-white"
+                                                                            : ""
+                                                                            } transition-colors duration-300 font-semibold break-all`}
+                                                                        style={{
+                                                                            color:
+                                                                                formData.button_variant === "outline"
+                                                                                    ? formData.accent_color || "#10b981"
+                                                                                    : buttonTextColor,
+                                                                        }}
+                                                                    >
+                                                                        {storyLine?.title}
+                                                                    </span>
+                                                                    {formData?.button_icons_show && (
+                                                                        <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
+                                                                            <MoreVertical className="size-4" />
+                                                                        </div>
+                                                                    )}
+                                                                </motion.button>
+                                                            )}
+                                                            {
+                                                                galleryItems && galleryItems?.length > 0 &&
+                                                                <>
+                                                                    <GalleryCarousel items={galleryItems} restaurant={{
+                                                                        accent_color: formData.accent_color,
+                                                                        button_style: formData.button_style,
+                                                                        button_text_icons_color: formData.button_text_icons_color,
+                                                                        button_variant: formData.button_variant,
+                                                                        buttons_gap_in_px: formData.buttons_gap_in_px
+                                                                    }} events={false} />
+                                                                </>
+                                                            }
 
                                                             {(selectedRestaurant?.instagram ||
                                                                 selectedRestaurant?.facebook ||

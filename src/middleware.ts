@@ -5,7 +5,7 @@ import { routing } from "./i18n/routing";
 
 const locales = ["en", "de", "es", "fr", "it", "nl"];
 
-// 🧭 Internationalization Middleware
+// Internationalization Middleware
 const intlMiddleware = createIntlMiddleware(routing);
 
 export default async function middleware(request: NextRequest) {

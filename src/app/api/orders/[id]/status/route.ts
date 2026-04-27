@@ -1,7 +1,7 @@
 import { checkAuth } from "@/lib/auth/utils"
 import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 import prisma from "@/lib/prisma"
-import { sendEmailUsingResend } from "@/lib/resend"
+import { publishEmailToQueue } from "@/lib/email-publisher"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
@@ -61,6 +61,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                     email_from_name: true,
                     email_from_address: true,
                     email_api_key_encrypted: true,
+                    google_place_id: true
                 },
             });
 
@@ -71,6 +72,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                 restaurant.email_api_key_encrypted &&
                 order.customer_email
             ) {
+
+                const reviewLink = restaurant.google_place_id
+                    ? `https://search.google.com/local/reviews?placeid=${restaurant.google_place_id}`
+                    : null;
+                console.log(reviewLink)
                 const html = `
 <div style="font-family: Arial, sans-serif; background-color: #f9fafb; padding: 20px;">
   <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px;">
@@ -96,6 +102,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       We truly hope you enjoy your meal! 🍽️
     </p>
 
+     ${reviewLink ? `
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="${reviewLink}" 
+         style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+        ⭐ Drop us a review on Google
+      </a>
+      <p style="font-size: 13px; color: #6b7280; margin-top: 10px;">
+        Your feedback helps us improve and helps other customers discover us.
+      </p>
+    </div>
+    ` : ''}
+
     <p style="color: #374151; font-size: 15px; margin-top: 20px;">
       Thank you for choosing ${restaurant.name}. We appreciate your trust and look forward to serving you again.
     </p>
@@ -110,7 +128,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 </div>
 `;
 
-                await sendEmailUsingResend({
+                await publishEmailToQueue({
                     type: "restaurant",
                     apiKey: decrypt_key(restaurant.email_api_key_encrypted),
                     to: order.customer_email,

@@ -247,11 +247,10 @@ export function WelcomePopup({
                           <button
                             key={index}
                             onClick={() => setCurrentEventIndex(index)}
-                            className={`w-2 h-2 rounded-full transition-all ${
-                              index === currentEventIndex
-                                ? "bg-white scale-125"
-                                : "bg-white/50"
-                            }`}
+                            className={`w-2 h-2 rounded-full transition-all ${index === currentEventIndex
+                              ? "bg-white scale-125"
+                              : "bg-white/50"
+                              }`}
                           />
                         ))}
                       </div>
@@ -300,11 +299,11 @@ export function WelcomePopup({
                         (
                         {RatingInfo?.user_ratings_total <= 1
                           ? t("reviews_singular", {
-                              count: RatingInfo?.user_ratings_total || 0,
-                            })
+                            count: RatingInfo?.user_ratings_total || 0,
+                          })
                           : t("reviews_plural", {
-                              count: RatingInfo?.user_ratings_total || 0,
-                            })}
+                            count: RatingInfo?.user_ratings_total || 0,
+                          })}
                         )
                       </span>
                     </div>
@@ -339,7 +338,11 @@ export function WelcomePopup({
                           color={restaurant.headings_text_color || "#000000"}
                           className="text-white cursor-pointer text-center"
                           accentColor={restaurant.accent_color || "#10b981"}
-                          onClick={() => {}}
+                          onClick={() => { }}
+                          openTextColor={restaurant.openTextColor || "#065f46"}
+                          openBgColor={restaurant.openBgColor || "#d1fae5"}
+                          closedTextColor={restaurant.closedTextColor || "#991b1b"}
+                          closedBgColor={restaurant.closedBgColor || "#fee2e2"}
                         />
                       </motion.div>
                     </>

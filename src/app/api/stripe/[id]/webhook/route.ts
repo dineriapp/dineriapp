@@ -1,6 +1,6 @@
 import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt"
 import prisma from "@/lib/prisma"
-import { sendEmailUsingResend } from "@/lib/resend"
+import { publishEmailToQueue } from "@/lib/email-publisher"
 import { getValidStripeClient } from "@/lib/stripe"
 import { getTranslations } from "next-intl/server"
 import { type NextRequest, NextResponse } from "next/server"
@@ -373,7 +373,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 </div>
 `;
         const subject = `Your Order ${existingOrder.order_number} Has Been Confirmed`;        //    send email 
-        await sendEmailUsingResend({
+        await publishEmailToQueue({
             type: "restaurant",
             apiKey: decrypt_key(restaurent.email_api_key_encrypted),
             to: existingOrder.customer_email || "",

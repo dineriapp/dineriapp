@@ -12,6 +12,7 @@ type Props = {
     children: ReactNode;
     defaultValue: string;
     SizeClassName?: string;
+    backgroundColor?: string
     IconSizeClassName?: string;
 };
 
@@ -19,7 +20,8 @@ export default function LocaleSwitcherSelect({
     children,
     defaultValue,
     SizeClassName,
-    IconSizeClassName
+    IconSizeClassName,
+    backgroundColor
 }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
@@ -55,8 +57,11 @@ export default function LocaleSwitcherSelect({
                     <Select.Portal>
                         <Select.Content
                             align="end"
-                            className="min-w-[8rem] z-[999999] overflow-hidden rounded-sm bg-white cursor-pointer shadow-md"
+                            className={cn("min-w-[8rem] z-[999999] overflow-hidden rounded-sm  cursor-pointer shadow-md", !backgroundColor && "bg-white")}
                             position="popper"
+                            style={{
+                                backgroundColor: backgroundColor ?? ""
+                            }}
                         >
                             <Select.Viewport>
                                 {children}

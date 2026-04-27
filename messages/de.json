@@ -4630,6 +4630,7 @@
     }
   },
   "mainSettings": {
+    "reminde-me": "Erinnerungsstunden vorher",
     "tabs": {
       "general": "Allgemeine Einstellungen",
       "templates": "E-Mail-Vorlagen",
@@ -4856,6 +4857,98 @@
     },
     "loading": {
       "page": "Wird geladen"
+    }
+  },
+
+  "appearance_new": {
+    "fullMenuOrderToggle": "Vollständiges Menü & Online-Bestellung",
+    "fullMenuOrderToggle_description": "Optionale Umschaltung — sichtbar oder verborgen",
+
+    "openingStatusColors": "Öffnungsstatus-Farben",
+    "openingStatusColors_description": "Farben für geöffnet, schließt bald, öffnet bald und geschlossen anpassen",
+
+    "openTextColor": "Textfarbe (Geöffnet)",
+    "openBgColor": "Hintergrundfarbe (Geöffnet)",
+
+    "closedTextColor": "Textfarbe (Geschlossen)",
+    "closedBgColor": "Hintergrundfarbe (Geschlossen)",
+
+    "defaultLanguage": "Standardsprache",
+    "selectLanguage": "Sprache auswählen",
+
+    "languages": {
+      "en": "Englisch",
+      "de": "Deutsch",
+      "es": "Spanisch",
+      "fr": "Französisch",
+      "it": "Italienisch",
+      "nl": "Niederländisch"
+    }
+  },
+  "GalleryPage": {
+    "title": "Galerieverwaltung",
+    "subtitle": "Verwalten Sie die Fotos und Videos Ihres Restaurants, um Ihre Marke, Gerichte und Atmosphäre zu präsentieren.",
+    "saveOrder": "Reihenfolge speichern",
+    "addMedia": "Medien hinzufügen",
+    "searchPlaceholder": "Nach Titel suchen...",
+    "searchDisabledMessage": "Drag & Drop ist während der Suche deaktiviert. Löschen Sie die Suche, um die Reihenfolge zu ändern.",
+    "emptyTitle": "Keine Medien gefunden",
+    "emptySearchSuggestion": "Versuchen Sie einen anderen Suchbegriff",
+    "emptyDefaultSuggestion": "Klicken Sie auf 'Medien hinzufügen', um Ihr erstes Foto oder Video hochzuladen",
+    "deleteConfirm": "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
+    "toasts": {
+      "deleteSuccess": "Erfolgreich gelöscht",
+      "deleteError": "Löschen fehlgeschlagen",
+      "saveOrderSuccess": "Galerie-Reihenfolge erfolgreich gespeichert",
+      "saveOrderError": "Speichern der Galerie-Reihenfolge fehlgeschlagen"
+    }
+  },
+  "GalleryItemForm": {
+    "titleAdd": "Neues Medium hinzufügen",
+    "titleEdit": "Medium bearbeiten",
+    "imageButton": "Bild",
+    "videoButton": "YouTube-Video",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "z. B. Leckere Pasta, Restaurant Interieur, Live-Event",
+    "titleRequired": "Titel ist erforderlich",
+    "mediaFileLabel": "Mediendatei",
+    "mediaFileRequired": "Mindestens eine Bilddatei ist erforderlich",
+    "youtubeUrlLabel": "YouTube-URL",
+    "youtubeUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "youtubeUrlRequired": "YouTube-URL ist erforderlich",
+    "youtubeUrlInvalid": "Bitte geben Sie eine gültige YouTube-URL ein",
+    "externalLinkLabel": "Externer Link (optional)",
+    "externalLinkPlaceholder": "https://...",
+    "externalLinkHint": "Wird geöffnet, wenn der Benutzer auf das Medium klickt",
+    "cancelButton": "Abbrechen",
+    "submitAdd": "Medium hinzufügen",
+    "submitUpdate": "Medium aktualisieren",
+    "toasts": {
+      "addSuccess": "Erfolgreich hinzugefügt",
+      "updateSuccess": "Erfolgreich aktualisiert",
+      "saveError": "Speichern fehlgeschlagen"
+    }
+  },
+  "StoryLine": {
+    "title": "Storyline",
+    "subtitle": "Erstellen oder aktualisieren Sie Ihre Story mit einem ansprechenden Bild, Titel und Beschreibung. Dieser Inhalt wird prominent für Ihre Besucher angezeigt.",
+    "imageLabel": "Story-Bild",
+    "imageRequired": "*",
+    "imageMaxHint": "(Max. 1 Datei)",
+    "uploadButtonText": "Bild hochladen",
+    "uploadHint": "PNG, JPG, WEBP bis zu 5MB",
+    "recommendedRatio": "Empfohlenes Seitenverhältnis 16:9 für beste Darstellung",
+    "showToggleLabel": "Storyline anzeigen",
+    "showToggleHint": "Aktivieren, um diesen Abschnitt auf Ihrer Seite anzuzeigen",
+    "titleFieldLabel": "Button-Text",
+    "titleFieldPlaceholder": "z. B. Köstliche Pasta, Restaurant Innenbereich, Live-Event",
+    "contentFieldLabel": "Inhalt",
+    "contentFieldPlaceholder": "Schreiben Sie hier Ihren Story-Inhalt...",
+    "saveButton": "Storyline speichern",
+    "savingButton": "Speichern...",
+    "toasts": {
+      "saveSuccess": "Erfolgreich gespeichert",
+      "saveError": "Speichern fehlgeschlagen"
     }
   }
 }

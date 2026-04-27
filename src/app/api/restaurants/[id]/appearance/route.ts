@@ -35,12 +35,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             social_icon_bg_color,
             social_icon_color,
             button_icons_show,
+            full_menu_btn_show,
             buttons_gap_in_px,
             social_icon_gap,
             social_icon_bg_show,
             use_headings_in_buttons,
             food_heading,
             about_heading,
+            openTextColor,
+            openBgColor,
+            closedTextColor,
+            closedBgColor,
+            language
         } = body
 
         // Validate required fields
@@ -98,10 +104,16 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
                 buttons_gap_in_px: Number(buttons_gap_in_px),
                 button_variant,
                 button_icons_show: button_icons_show,
+                full_menu_btn_show: full_menu_btn_show,
                 bg_image_url: bg_image_url || null,
                 use_headings_in_buttons: use_headings_in_buttons ?? false,
                 food_heading: food_heading ?? "",
                 about_heading: about_heading ?? "",
+                openTextColor,
+                openBgColor,
+                closedTextColor,
+                closedBgColor,
+                language,
             },
         })
 

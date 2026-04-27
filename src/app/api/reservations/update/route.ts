@@ -3,7 +3,7 @@ import { SettingsState } from "@/app/[locale]/(dashboard)/dashboard/(with-restau
 import { checkAuth } from "@/lib/auth/utils";
 import { extractNotificationsSettings, getRenderedReservationEmailTemplates, renderReviewLinks, replaceVars } from "@/lib/email-utils";
 import prisma from "@/lib/prisma";
-import { sendEmailUsingResend } from "@/lib/resend";
+import { publishEmailToQueue } from "@/lib/email-publisher";
 import { textToSimpleHtml } from "@/lib/utils";
 import { Reservation } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 
                         after(async () => {
                             try {
-                                await sendEmailUsingResend({
+                                await publishEmailToQueue({
                                     apiKey: extracted.config.apiKey,
                                     to: updated.customer_email!,
                                     fromEmail: extracted.config.fromEmail,
@@ -168,7 +168,7 @@ const sendEmailsForStatus = (
                     const html = textToSimpleHtml(text);
 
                     tasks.push(
-                        sendEmailUsingResend({
+                        publishEmailToQueue({
                             apiKey,
                             to: reservation.customer_email,
                             fromEmail,
@@ -210,7 +210,7 @@ const sendEmailsForStatus = (
 
                 for (const ownerEmail of extracted.owner_emails) {
                     tasks.push(
-                        sendEmailUsingResend({
+                        publishEmailToQueue({
                             apiKey,
                             to: ownerEmail,
                             fromEmail,

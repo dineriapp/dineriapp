@@ -4637,6 +4637,7 @@
     }
   },
   "mainSettings": {
+    "reminde-me": "Heures de rappel avant",
     "tabs": {
       "general": "Paramètres généraux",
       "templates": "Modèles d’e-mails",
@@ -4863,6 +4864,97 @@
     },
     "loading": {
       "page": "Chargement"
+    }
+  },
+  "appearance_new": {
+    "fullMenuOrderToggle": "Menu complet et commande en ligne",
+    "fullMenuOrderToggle_description": "Option facultative — visible ou caché",
+
+    "openingStatusColors": "Couleurs du statut d'ouverture",
+    "openingStatusColors_description": "Personnalisez les couleurs pour ouvert, bientôt fermé, bientôt ouvert et fermé",
+
+    "openTextColor": "Couleur du texte (Ouvert)",
+    "openBgColor": "Couleur de fond (Ouvert)",
+
+    "closedTextColor": "Couleur du texte (Fermé)",
+    "closedBgColor": "Couleur de fond (Fermé)",
+
+    "defaultLanguage": "Langue par défaut",
+    "selectLanguage": "Sélectionner la langue",
+
+    "languages": {
+      "en": "Anglais",
+      "de": "Allemand",
+      "es": "Espagnol",
+      "fr": "Français",
+      "it": "Italien",
+      "nl": "Néerlandais"
+    }
+  },
+  "GalleryPage": {
+    "title": "Gestion de la galerie",
+    "subtitle": "Gérez les photos et vidéos de votre restaurant pour mettre en valeur votre marque, vos plats et votre ambiance.",
+    "saveOrder": "Enregistrer l'ordre",
+    "addMedia": "Ajouter un média",
+    "searchPlaceholder": "Rechercher par titre...",
+    "searchDisabledMessage": "Le glisser-déposer est désactivé pendant la recherche. Effacez la recherche pour réorganiser.",
+    "emptyTitle": "Aucun média trouvé",
+    "emptySearchSuggestion": "Essayez un autre terme de recherche",
+    "emptyDefaultSuggestion": "Cliquez sur 'Ajouter un média' pour télécharger votre première photo ou vidéo",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+    "toasts": {
+      "deleteSuccess": "Supprimé avec succès",
+      "deleteError": "Échec de la suppression",
+      "saveOrderSuccess": "Ordre de la galerie enregistré avec succès",
+      "saveOrderError": "Échec de l'enregistrement de l'ordre de la galerie"
+    }
+  },
+  "GalleryItemForm": {
+    "titleAdd": "Ajouter un nouveau média",
+    "titleEdit": "Modifier le média",
+    "imageButton": "Image",
+    "videoButton": "Vidéo YouTube",
+    "titleLabel": "Titre",
+    "titlePlaceholder": "ex. Pâtes délicieuses, Intérieur du restaurant, Événement en direct",
+    "titleRequired": "Le titre est requis",
+    "mediaFileLabel": "Fichier multimédia",
+    "mediaFileRequired": "Au moins un fichier image est requis",
+    "youtubeUrlLabel": "URL YouTube",
+    "youtubeUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "youtubeUrlRequired": "L'URL YouTube est requise",
+    "youtubeUrlInvalid": "Veuillez saisir une URL YouTube valide",
+    "externalLinkLabel": "Lien externe (optionnel)",
+    "externalLinkPlaceholder": "https://...",
+    "externalLinkHint": "S'ouvre lorsque l'utilisateur clique sur le média",
+    "cancelButton": "Annuler",
+    "submitAdd": "Ajouter le média",
+    "submitUpdate": "Mettre à jour le média",
+    "toasts": {
+      "addSuccess": "Ajouté avec succès",
+      "updateSuccess": "Mis à jour avec succès",
+      "saveError": "Échec de l'enregistrement"
+    }
+  },
+  "StoryLine": {
+    "title": "Histoire",
+    "subtitle": "Créez ou mettez à jour votre histoire avec une image attrayante, un titre et une description. Ce contenu sera affiché de manière visible pour vos visiteurs.",
+    "imageLabel": "Image de l’histoire",
+    "imageRequired": "*",
+    "imageMaxHint": "(Max 1 fichier)",
+    "uploadButtonText": "Télécharger une image",
+    "uploadHint": "PNG, JPG, WEBP jusqu’à 5 Mo",
+    "recommendedRatio": "Ratio recommandé 16:9 pour un meilleur affichage",
+    "showToggleLabel": "Afficher l’histoire",
+    "showToggleHint": "Activer pour afficher cette section sur votre page",
+    "titleFieldLabel": "Texte du bouton",
+    "titleFieldPlaceholder": "ex. Pâtes délicieuses, Intérieur du restaurant, Événement en direct",
+    "contentFieldLabel": "Contenu",
+    "contentFieldPlaceholder": "Écrivez le contenu de votre histoire ici...",
+    "saveButton": "Enregistrer l’histoire",
+    "savingButton": "Enregistrement...",
+    "toasts": {
+      "saveSuccess": "Enregistré avec succès",
+      "saveError": "Échec de l’enregistrement"
     }
   }
 }

@@ -173,63 +173,73 @@ export function MenuItemCard({
             {item.description}
           </p>
         )}
-        <h4 className="mb-3">
-          <span
-            style={{
-              color: stylesData.cardsText,
-            }}
-            className="font-bold  text-lg text-black  whitespace-nowrap"
-          >
-            €{item.price.toFixed(2)}
-          </span>
-        </h4>
+        <div className="w-full flex items-start justify-between">
+          <div>
+            <h4 className="mb-3">
+              <span
+                style={{
+                  color: stylesData.cardsText,
+                }}
+                className="font-bold  text-lg text-black  whitespace-nowrap"
+              >
+                €{item.price.toFixed(2)}
+              </span>
+            </h4>
+            {/* Allergens */}
+            {item.allergens && item.allergens.length > 0 && (
+              <div className="mb-3">
+                <div className="flex flex-wrap gap-1">
+                  {item.allergens.slice(0, 3).map((allergen) => (
+                    <Badge
+                      style={{
+                        color: stylesData.cardsBadgesTextColor,
+                        backgroundColor: stylesData.cardsBadgesBg
+                      }}
+                      key={allergen}
+                      variant="secondary"
+                      className="text-xs"
+                    >
+                      {allergen}
+                    </Badge>
+                  ))}
+                  {item.allergens.length > 3 && (
+                    <Badge
+                      style={{
+                        color: stylesData.cardsBadgesTextColor,
+                        backgroundColor: stylesData.cardsBadgesBg
+                      }}
+                      variant="secondary"
+                      className="text-xs"
+                    >
+                      {t("allergens_more", { count: item.allergens.length - 3 })}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            )}
 
-
-        {/* Allergens */}
-        {item.allergens && item.allergens.length > 0 && (
-          <div className="mb-3">
-            <div className="flex flex-wrap gap-1">
-              {item.allergens.slice(0, 3).map((allergen) => (
-                <Badge
-                  style={{
-                    color: stylesData.cardsBadgesTextColor,
-                    backgroundColor: stylesData.cardsBadgesBg
-                  }}
-                  key={allergen}
-                  variant="secondary"
-                  className="text-xs"
-                >
-                  {allergen}
-                </Badge>
-              ))}
-              {item.allergens.length > 3 && (
-                <Badge
-                  style={{
-                    color: stylesData.cardsBadgesTextColor,
-                    backgroundColor: stylesData.cardsBadgesBg
-                  }}
-                  variant="secondary"
-                  className="text-xs"
-                >
-                  {t("allergens_more", { count: item.allergens.length - 3 })}
-                </Badge>
-              )}
-            </div>
+            {/* Allergen info */}
+            {item.allergen_info && (
+              <p
+                style={{
+                  color: stylesData.cardsBadgesTextColor,
+                  backgroundColor: stylesData.cardsBadgesBg
+                }}
+                className="text-xs italic w-fit px-2 py-0.5 mb-3 line-clamp-2"
+              >
+                {item.allergen_info}
+              </p>
+            )}
           </div>
-        )}
+          {item.image
+            &&
+            <div className="size-25! aspect-square! mt-3 rounded-md overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={item.image} alt="" className="w-full h-full object-cover" />
+            </div>
+          }
+        </div>
 
-        {/* Allergen info */}
-        {item.allergen_info && (
-          <p
-            style={{
-              color: stylesData.cardsBadgesTextColor,
-              backgroundColor: stylesData.cardsBadgesBg
-            }}
-            className="text-xs italic w-fit px-2 py-0.5 mb-3 line-clamp-2"
-          >
-            {item.allergen_info}
-          </p>
-        )}
       </CardContent>
     </Card>
   );

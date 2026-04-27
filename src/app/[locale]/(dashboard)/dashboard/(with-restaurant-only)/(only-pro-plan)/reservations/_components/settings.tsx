@@ -104,7 +104,7 @@ export default function SettingsPage() {
 
     const [hasChanges, setHasChanges] = useState(false);
 
-    // 🔸 Generic updater helper
+    // Generic updater helper
     const updateSettingsSection = <K extends keyof SettingsState>(
         section: K,
         value: SettingsState[K]
@@ -143,7 +143,7 @@ export default function SettingsPage() {
         }
     };
 
-    // 🔸 Sync state with fetched settings
+    // Sync state with fetched settings
     useEffect(() => {
         if (!initialSettings) return;
 
@@ -152,7 +152,7 @@ export default function SettingsPage() {
             return;
         }
 
-        // ✅ Merge defaults with incoming JSON
+        // Merge defaults with incoming JSON
         const merged = deepMerge(default_data, initialSettings as any);
         setSettings(merged);
     }, [initialSettings]);

@@ -239,6 +239,10 @@ export function MenuClient({ restaurant, reviewsInfo }: MenuClientProps) {
                     className=" cursor-pointer text-center"
                     accentColor={restaurant.textColor}
                     onClick={() => { }}
+                    openTextColor={restaurant.openTextColor || "#065f46"}
+                    openBgColor={restaurant.openBgColor || "#d1fae5"}
+                    closedTextColor={restaurant.closedTextColor || "#991b1b"}
+                    closedBgColor={restaurant.closedBgColor || "#fee2e2"}
                   />
                 </motion.div>
               )}

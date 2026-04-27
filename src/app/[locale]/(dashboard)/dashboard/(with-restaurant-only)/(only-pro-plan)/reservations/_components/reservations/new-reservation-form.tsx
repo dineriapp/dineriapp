@@ -350,7 +350,6 @@ const NewReservationForm = ({ restaurant }: { restaurant: RestaurantWithCount })
 
     if (!restaurant || isLoading) return <LoadingUI text={t("loading")} />;
     if (
-        settings?.restaurantSettings?.pause_new_reservations ||
         settings?.restaurantSettings?.emergency_closure
     ) {
         return <ReservationStatusBanner settings={settings} />;

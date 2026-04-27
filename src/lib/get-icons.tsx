@@ -15,6 +15,7 @@ import {
     type LucideProps,
     HelpCircle,
 } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import type { JSX } from "react"
 // 1. Define strict types for icon slugs
 export type IconSlug =
@@ -30,7 +31,8 @@ export type IconSlug =
     | "location"
     | "phone"
     | "instagram"
-    | "facebook";
+    | "facebook"
+    | "story-line"
 
 // 2. Type-safe icon registry with explicit mapping
 const iconRegistry: Record<IconSlug, LucideIcon> = {
@@ -47,6 +49,7 @@ const iconRegistry: Record<IconSlug, LucideIcon> = {
     phone: Phone,
     instagram: Instagram,
     facebook: Facebook,
+    "story-line": BookOpen,
 };
 
 // 3. Get all valid icon slugs programmatically

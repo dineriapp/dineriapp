@@ -177,6 +177,7 @@ export function getEstimatedDuration(
 }
 
 import { differenceInDays } from "date-fns";
+import { UploadedFile } from "@/components/shared/image-upader";
 
 export function getReservationStatus(date: Date): string {
   const today = new Date();
@@ -283,4 +284,38 @@ export function hexToRGBA(hex: string, opacity: string) {
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
+export const acceptedTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "video/mp4"
+];
+
+export function isUploadedFile(file: unknown): file is UploadedFile {
+  return (
+    typeof file === "object" &&
+    file !== null &&
+    "key" in file &&
+    typeof (file as any).key === "string"
+  );
+}
+
+export function getYoutubeId(url: string) {
+  const regExp =
+    /^.*(youtu.be\/|v\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match?.[2] ?? "";
+}
+
+export function getKeyFromS3Url(url: string) {
+  try {
+    const u = new URL(url);
+    return decodeURIComponent(u.pathname.substring(1)); // remove leading "/"
+  } catch {
+    return "";
+  }
 }

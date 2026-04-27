@@ -4636,6 +4636,7 @@
     }
   },
   "mainSettings": {
+    "reminde-me": "Horas de recordatorio antes",
     "tabs": {
       "general": "Configuración general",
       "templates": "Plantillas de correo",
@@ -4862,6 +4863,97 @@
     },
     "loading": {
       "page": "Cargando"
+    }
+  },
+  "appearance_new": {
+    "fullMenuOrderToggle": "Menú completo y pedido en línea",
+    "fullMenuOrderToggle_description": "Alternar opcional — visible u oculto",
+
+    "openingStatusColors": "Colores del estado de apertura",
+    "openingStatusColors_description": "Personaliza los colores para abierto, cerrando pronto, abriendo pronto y cerrado",
+
+    "openTextColor": "Color de texto (Abierto)",
+    "openBgColor": "Color de fondo (Abierto)",
+
+    "closedTextColor": "Color de texto (Cerrado)",
+    "closedBgColor": "Color de fondo (Cerrado)",
+
+    "defaultLanguage": "Idioma predeterminado",
+    "selectLanguage": "Seleccionar idioma",
+
+    "languages": {
+      "en": "Inglés",
+      "de": "Alemán",
+      "es": "Español",
+      "fr": "Francés",
+      "it": "Italiano",
+      "nl": "Neerlandés"
+    }
+  },
+  "GalleryPage": {
+    "title": "Gestión de Galería",
+    "subtitle": "Administra las fotos y videos de tu restaurante para mostrar tu marca, platos y ambiente.",
+    "saveOrder": "Guardar orden",
+    "addMedia": "Agregar contenido",
+    "searchPlaceholder": "Buscar por título...",
+    "searchDisabledMessage": "Arrastrar y soltar está deshabilitado mientras buscas. Borra la búsqueda para reordenar.",
+    "emptyTitle": "No se encontraron contenidos",
+    "emptySearchSuggestion": "Prueba con otro término de búsqueda",
+    "emptyDefaultSuggestion": "Haz clic en 'Agregar contenido' para subir tu primera foto o video",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar este elemento?",
+    "toasts": {
+      "deleteSuccess": "Eliminado correctamente",
+      "deleteError": "Error al eliminar",
+      "saveOrderSuccess": "Orden de la galería guardado correctamente",
+      "saveOrderError": "Error al guardar el orden de la galería"
+    }
+  },
+  "GalleryItemForm": {
+    "titleAdd": "Agregar nuevo contenido",
+    "titleEdit": "Editar contenido",
+    "imageButton": "Imagen",
+    "videoButton": "Video de YouTube",
+    "titleLabel": "Título",
+    "titlePlaceholder": "Ej., Pasta deliciosa, Interior del restaurante, Evento en vivo",
+    "titleRequired": "El título es obligatorio",
+    "mediaFileLabel": "Archivo multimedia",
+    "mediaFileRequired": "Se requiere al menos un archivo de imagen",
+    "youtubeUrlLabel": "URL de YouTube",
+    "youtubeUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "youtubeUrlRequired": "La URL de YouTube es obligatoria",
+    "youtubeUrlInvalid": "Ingresa una URL de YouTube válida",
+    "externalLinkLabel": "Enlace externo (opcional)",
+    "externalLinkPlaceholder": "https://...",
+    "externalLinkHint": "Se abre cuando el usuario hace clic en el contenido",
+    "cancelButton": "Cancelar",
+    "submitAdd": "Agregar contenido",
+    "submitUpdate": "Actualizar contenido",
+    "toasts": {
+      "addSuccess": "Agregado correctamente",
+      "updateSuccess": "Actualizado correctamente",
+      "saveError": "Error al guardar"
+    }
+  },
+  "StoryLine": {
+    "title": "Historia",
+    "subtitle": "Crea o actualiza tu historia con una imagen atractiva, título y descripción. Este contenido se mostrará de forma destacada a tus visitantes.",
+    "imageLabel": "Imagen de la historia",
+    "imageRequired": "*",
+    "imageMaxHint": "(Máx. 1 archivo)",
+    "uploadButtonText": "Subir imagen",
+    "uploadHint": "PNG, JPG, WEBP hasta 5MB",
+    "recommendedRatio": "Relación recomendada 16:9 para una mejor visualización",
+    "showToggleLabel": "Mostrar historia",
+    "showToggleHint": "Activa para mostrar esta sección en tu página",
+    "titleFieldLabel": "Texto del botón",
+    "titleFieldPlaceholder": "ej. Pasta deliciosa, Interior del restaurante, Evento en vivo",
+    "contentFieldLabel": "Contenido",
+    "contentFieldPlaceholder": "Escribe aquí el contenido de tu historia...",
+    "saveButton": "Guardar historia",
+    "savingButton": "Guardando...",
+    "toasts": {
+      "saveSuccess": "Guardado con éxito",
+      "saveError": "Error al guardar"
     }
   }
 }

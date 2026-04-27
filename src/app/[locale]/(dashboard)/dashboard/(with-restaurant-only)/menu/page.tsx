@@ -59,6 +59,7 @@ import {
 import { motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { UploadedFile } from "@/components/shared/image-upader";
 
 export default function MenuPage() {
   const { restaurants, selectedRestaurant } = useRestaurantStore();
@@ -81,6 +82,8 @@ export default function MenuPage() {
   const [newCategoryshow_in_quick_menu, setNewCategoryshow_in_quick_menu] =
     useState(false);
   const [newItemName, setNewItemName] = useState("");
+  const [itemImage, setItemImage] = useState<UploadedFile[]>([]);
+
   const [newItemDescription, setNewItemDescription] = useState("");
   const [newItemshow_in_quick_menu, setNewItemshow_in_quick_menu] =
     useState(false);
@@ -193,7 +196,7 @@ export default function MenuPage() {
           allergens: allergens,
           is_halal: isHalal,
           show_in_quick_menu: newItemshow_in_quick_menu,
-          image: "",
+          image: itemImage[0].url ?? "",
           allergen_info: allergenInfo.trim() || undefined,
           addons: validAddons.length > 0 ? validAddons : undefined, // Optional: omit if empty
         },
@@ -235,7 +238,7 @@ export default function MenuPage() {
           allergens: allergens,
           is_halal: isHalal,
           show_in_quick_menu: newItemshow_in_quick_menu,
-          image: "",
+          image: itemImage[0].url ?? "",
           addons: validAddons.length > 0 ? validAddons : undefined, // Optional: omit if empty
           allergen_info: allergenInfo.trim() || undefined,
         },
@@ -258,6 +261,7 @@ export default function MenuPage() {
     setNewCategoryName("");
     setNewCategoryDescription("");
     setNewItemName("");
+    setItemImage([])
     setNewItemDescription("");
     setNewItemPrice("");
     setAllergens([]);
@@ -514,6 +518,7 @@ export default function MenuPage() {
                             setSelectedCategory(category);
                             setSelectedItem(null);
                             setNewItemName("");
+                            setItemImage([]);
                             setNewItemDescription("");
                             setNewItemPrice("");
                             setAllergens([]);
@@ -533,6 +538,7 @@ export default function MenuPage() {
                     )}
                     <MenuCategoryComponent
                       category={category}
+                      setItemImage={setItemImage}
                       selectedRestaurant={selectedRestaurant}
                       setSelectedCategory={setSelectedCategory}
                       setSelectedItem={setSelectedItem}
@@ -606,6 +612,8 @@ export default function MenuPage() {
 
       {/* Edit Item Dialog */}
       <EditItemDialog
+        setItemImage={setItemImage}
+        itemImage={itemImage}
         isOpen={isEditItemDialogOpen}
         onOpenChange={setIsEditItemDialogOpen}
         onSubmit={handleEditItem}
@@ -651,6 +659,8 @@ export default function MenuPage() {
         showInQuickMenu={newItemshow_in_quick_menu}
         setShowInQuickMenu={setNewItemshow_in_quick_menu}
         isUploading={isUploading}
+        setItemImage={setItemImage}
+        itemImage={itemImage}
         onClose={() => {
           setIsAddItemDialogOpen(false);
           resetForm();

@@ -94,7 +94,25 @@ const MainSettings = ({ settings, updateSettingsSection }: Props) => {
                                     </div>
                                 </div>
                             </label>
-
+                            {settings.email_24h_reminder_enabled && (
+                                <div className="mt-3">
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                                        {t("reminde-me")}
+                                    </label>
+                                    <input
+                                        type="number"
+                                        min={1}
+                                        value={settings.reminder_hours_before ?? ""}
+                                        onChange={(e) =>
+                                            setSettings({
+                                                reminder_hours_before: Number(e.target.value),
+                                            })
+                                        }
+                                        placeholder="e.g. 24"
+                                        className="w-full px-4 no-spinner py-2 border border-slate-300 rounded-lg"
+                                    />
+                                </div>
+                            )}
                             {/* Cancellation */}
                             <label className="flex items-center gap-3 p-4 border hover:bg-gray-100 border-slate-200 rounded-lg cursor-pointer">
                                 <button

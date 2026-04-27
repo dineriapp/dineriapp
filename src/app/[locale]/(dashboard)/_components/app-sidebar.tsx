@@ -7,6 +7,7 @@ import {
   Dot,
   HelpCircle,
   Home,
+  ImageIcon,
   LinkIcon,
   Loader2,
   Palette,
@@ -17,6 +18,7 @@ import {
   Utensils,
   UtensilsCrossed,
   Zap,
+  BookOpen
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -74,6 +76,8 @@ const navigationGroups = {
         { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
         { href: "/dashboard/events", label: "Events", icon: Calendar },
         { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/gallery", label: "Gallery", icon: ImageIcon },
+        { href: "/dashboard/story-line", label: "Story line", icon: BookOpen },
         { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
       ],
     },
@@ -124,6 +128,8 @@ const navigationGroups = {
         { href: "/dashboard/menu", label: "Menü", icon: UtensilsCrossed },
         { href: "/dashboard/events", label: "Veranstaltungen", icon: Calendar },
         { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/gallery", label: "Galerie", icon: ImageIcon },
+        { href: "/dashboard/story-line", label: "Storylinie", icon: BookOpen },
         { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
       ],
     },
@@ -174,6 +180,8 @@ const navigationGroups = {
         { href: "/dashboard/menu", label: "Menú", icon: UtensilsCrossed },
         { href: "/dashboard/events", label: "Eventos", icon: Calendar },
         { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/gallery", label: "Galería", icon: ImageIcon },
+        { href: "/dashboard/story-line", label: "Historia", icon: BookOpen },
         { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
       ],
     },
@@ -222,6 +230,8 @@ const navigationGroups = {
         { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
         { href: "/dashboard/events", label: "Événements", icon: Calendar },
         { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/gallery", label: "Galerie", icon: ImageIcon },
+        { href: "/dashboard/story-line", label: "Scénario", icon: BookOpen },
         { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
       ],
     },
@@ -268,6 +278,8 @@ const navigationGroups = {
         { href: "/dashboard/menu", label: "Menù", icon: UtensilsCrossed },
         { href: "/dashboard/events", label: "Eventi", icon: Calendar },
         { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/gallery", label: "Galleria", icon: ImageIcon },
+        { href: "/dashboard/story-line", label: "Trama", icon: BookOpen },
         { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
       ],
     },
@@ -320,6 +332,8 @@ const navigationGroups = {
         { href: "/dashboard/menu", label: "Menu", icon: UtensilsCrossed },
         { href: "/dashboard/events", label: "Evenementen", icon: Calendar },
         { href: "/dashboard/faq", label: "FAQ", icon: HelpCircle },
+        { href: "/dashboard/gallery", label: "Galerij", icon: ImageIcon },
+        { href: "/dashboard/story-line", label: "Verhaallijn", icon: BookOpen },
         { href: "/dashboard/settings/popups", label: "Popups", icon: Zap },
       ],
     },
@@ -494,7 +508,8 @@ export function AppSidebar() {
               <SidebarMenu className="gap-0.5">
                 {group.items.map((item) => {
                   const Icon = item.icon;
-                  const isActive = pathname === item.href;
+                  const isStoryLine = item.href.includes("story-line")
+                  const isActive = isStoryLine ? pathname === `${item.href}/${selectedRestaurant?.id}` : pathname === item.href;
                   const isLocked =
                     !isPremium &&
                     (item.href === "/dashboard/stats" ||
@@ -521,7 +536,7 @@ export function AppSidebar() {
                         className="group/btn rounded-none !py-5"
                       >
                         <Link
-                          href={isLocked ? "#" : item.href}
+                          href={isLocked ? "#" : isStoryLine ? `${item.href}/${selectedRestaurant?.id}` : item.href}
                           onClick={handleClick}
                           className={`
                                                         flex items-center space-x-1 w-full

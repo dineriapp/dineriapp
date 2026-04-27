@@ -1,6 +1,6 @@
 import { checkAuth } from "@/lib/auth/utils";
 import prisma from "@/lib/prisma";
-import { sendEmailUsingResend } from "@/lib/resend";
+import { publishEmailToQueue } from "@/lib/email-publisher";
 import { getTranslations } from "next-intl/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
         }
 
         // Email sending
-        const emailResult = await sendEmailUsingResend({
+        const emailResult = await publishEmailToQueue({
             type: "restaurant",
             apiKey: data.resend_api_key,
             to: data.email_test_to,

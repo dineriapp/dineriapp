@@ -5,7 +5,7 @@ import {
     getRenderedReservationEmailTemplates,
 } from "@/lib/email-utils";
 import prisma from "@/lib/prisma";
-import { sendEmailUsingResend } from "@/lib/resend";
+import { publishEmailToQueue } from "@/lib/email-publisher";
 import { textToSimpleHtml } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import { after, NextRequest, NextResponse } from "next/server";
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
 
         after(async () => {
             try {
-                await sendEmailUsingResend({
+                await publishEmailToQueue({
                     apiKey: extracted.config.apiKey,
                     to: reservation.customer_email!,
                     fromEmail: extracted.config.fromEmail,

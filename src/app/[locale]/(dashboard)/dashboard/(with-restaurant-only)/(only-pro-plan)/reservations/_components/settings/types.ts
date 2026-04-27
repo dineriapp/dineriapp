@@ -59,7 +59,7 @@ export interface NotificationSettings {
     email_confirmation_enabled: boolean;
     email_24h_reminder_enabled: boolean;
     email_cancellation_enabled: boolean;
-
+    reminder_hours_before?: number;
     // Management notifications
     owner_notifications_enabled: boolean;
     owner_emails: string[];

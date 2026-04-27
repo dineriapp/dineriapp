@@ -58,10 +58,12 @@ export default function AppearancePage() {
   const { selectedRestaurant, updateSelectedRestaurant } = useRestaurantStore();
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const t = useTranslations("appearance");
+  const t2 = useTranslations("appearance_new");
 
   // Form state
   const [formData, setFormData] = useState<AppearanceFormData>({
     bg_color: "#ffffff",
+    language: "en",
     accent_color: "#10b981",
     headings_text_color: "#ffffff",
     button_text_icons_color: "#000000",
@@ -73,6 +75,7 @@ export default function AppearancePage() {
     food_heading: "Food & Drinks",
     about_heading: "About",
     social_icon_bg_show: false,
+    full_menu_btn_show: false,
     social_icon_bg_color: "#FFFFFF",
     social_icon_color: "#000000",
     buttons_gap_in_px: 16,
@@ -82,6 +85,10 @@ export default function AppearancePage() {
     gradient_direction: "bottom_right",
     button_variant: "solid",
     bg_image_url: "",
+    openTextColor: "#065f46",
+    openBgColor: "#d1fae5",
+    closedTextColor: "#991b1b",
+    closedBgColor: "#fee2e2",
   });
 
   const [initialData, setInitialData] = useState<AppearanceFormData>(formData);
@@ -96,6 +103,7 @@ export default function AppearancePage() {
       const initialFormData: AppearanceFormData = {
         bg_color: selectedRestaurant.bg_color || "#ffffff",
         accent_color: selectedRestaurant.accent_color || "#10b981",
+        language: selectedRestaurant.language || "en",
         headings_text_color:
           selectedRestaurant.headings_text_color || "#ffffff",
         button_text_icons_color:
@@ -104,6 +112,7 @@ export default function AppearancePage() {
         font_family: selectedRestaurant.font_family || "Inter",
         bg_type: selectedRestaurant.bg_type || "color",
         button_icons_show: selectedRestaurant.button_icons_show,
+        full_menu_btn_show: selectedRestaurant.full_menu_btn_show ?? false,
         buttons_gap_in_px: selectedRestaurant.buttons_gap_in_px,
         social_icon_bg_show: selectedRestaurant.social_icon_bg_show,
         social_icon_bg_color: selectedRestaurant.social_icon_bg_color,
@@ -118,6 +127,11 @@ export default function AppearancePage() {
         about_heading: selectedRestaurant.about_heading || "About",
         food_heading: selectedRestaurant.food_heading || "Food & Drinks",
         use_headings_in_buttons: selectedRestaurant.use_headings_in_buttons,
+
+        openTextColor: selectedRestaurant.openTextColor ?? "#065f46",
+        openBgColor: selectedRestaurant.openBgColor ?? "#d1fae5",
+        closedTextColor: selectedRestaurant.closedTextColor ?? "#ffffff",
+        closedBgColor: selectedRestaurant.closedBgColor ?? "#ff0000",
       };
 
       setFormData(initialFormData);
@@ -388,6 +402,25 @@ export default function AppearancePage() {
                           setFormData((prev) => ({
                             ...prev,
                             button_icons_show: checked,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="flex items-center justify-between border rounded-lg px-4 py-3">
+                      <div className="space-y-1">
+                        <Label className="text-slate-700 text-sm font-medium">
+                          {t2("fullMenuOrderToggle")}
+                        </Label>
+                        <p className="text-sm text-muted-foreground">
+                          {t2("fullMenuOrderToggle_description")}
+                        </p>
+                      </div>
+                      <Switch
+                        checked={formData.full_menu_btn_show}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            full_menu_btn_show: checked,
                           }))
                         }
                       />
@@ -886,6 +919,66 @@ export default function AppearancePage() {
                   </CardContent>
                 </Card>
 
+                <Card className="border-slate-200 gap-0 pt-0 box-shad-every-2">
+                  <CardHeader className="py-4 font-poppins bg-gray-100/50">
+                    <CardTitle className="text-slate-900">
+                      {t2("openingStatusColors")}
+                    </CardTitle>
+                    <CardDescription className="text-slate-500">
+                      {t2("openingStatusColors_description")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="gap-4 pt-4 grid grid-cols-2">
+
+                    {/* OPEN */}
+                    <div className="space-y-4">
+                      <Label className="text-slate-700">
+                        {t2("openTextColor")}
+                      </Label>
+                      <ColorSelector
+                        value={formData.openTextColor}
+                        colors={colorPresets.map((item) => item.color)}
+                        onChange={(val) => updateFormData({ openTextColor: val })}
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <Label className="text-slate-700">
+                        {t2("openBgColor")}
+                      </Label>
+                      <ColorSelector
+                        value={formData.openBgColor}
+                        colors={colorPresets.map((item) => item.color)}
+                        onChange={(val) => updateFormData({ openBgColor: val })}
+                      />
+                    </div>
+                    {/* CLOSED */}
+                    <div className="space-y-4">
+                      <Label className="text-slate-700">
+                        {t2("closedTextColor")}
+                      </Label>
+                      <ColorSelector
+                        value={formData.closedTextColor}
+                        colors={colorPresets.map((item) => item.color)}
+                        onChange={(val) =>
+                          updateFormData({ closedTextColor: val })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <Label className="text-slate-700">
+                        {t2("closedBgColor")}
+                      </Label>
+                      <ColorSelector
+                        value={formData.closedBgColor}
+                        colors={colorPresets.map((item) => item.color)}
+                        onChange={(val) =>
+                          updateFormData({ closedBgColor: val })
+                        }
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
                 <Card className="border-slate-200 gap-0 !pt-0 box-shad-every-2">
                   <CardHeader className="py-4 font-poppins bg-gray-100/50">
                     <CardTitle className="text-slate-900">
@@ -952,6 +1045,31 @@ export default function AppearancePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-slate-700">
+                        {t2("defaultLanguage")}
+                      </Label>
+
+                      <Select
+                        value={formData.language || "en"}
+                        onValueChange={(value) =>
+                          updateFormData({ language: value })
+                        }
+                      >
+                        <SelectTrigger className="border-slate-200 !h-[50px] w-full">
+                          <SelectValue placeholder={t2("selectLanguage")} />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                          <SelectItem value="en">{t2("languages.en")}</SelectItem>
+                          <SelectItem value="de">{t2("languages.de")}</SelectItem>
+                          <SelectItem value="es">{t2("languages.es")}</SelectItem>
+                          <SelectItem value="fr">{t2("languages.fr")}</SelectItem>
+                          <SelectItem value="it">{t2("languages.it")}</SelectItem>
+                          <SelectItem value="nl">{t2("languages.nl")}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                     <div className="space-y-2">
                       <Label className="text-slate-700">{t("font")}</Label>
                       <Select

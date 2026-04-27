@@ -1,16 +1,19 @@
+import { GalleryItemType } from "@/lib/gallery-queries"
 import prisma from "@/lib/prisma"
-import { notFound } from "next/navigation"
-import ClientPage from "./client-page"
-import type { Restaurant, Link, MenuCategory, Event, FaqCategory, User } from "@prisma/client"
 import { ReviewsInfo } from "@/types"
+import type { Event, FaqCategory, Link, MenuCategory, Restaurant, StoryLine, User } from "@prisma/client"
+import { notFound, redirect } from "next/navigation"
+import ClientPage from "./client-page"
+import { cookies } from "next/headers"
 
 interface PageProps {
-    params: Promise<{ slug: string }>
+    params: Promise<{ slug: string, locale: string }> // locale = en | es | de | fr | it | nl 
 }
 
 // Define the complete types with relations
 type RestaurantWithRelations = Restaurant & {
     links: Link[]
+    StoryLine: StoryLine[]
     menuCategories: (MenuCategory & {
         items: Array<{
             id: string
@@ -29,6 +32,7 @@ type RestaurantWithRelations = Restaurant & {
         }>
     })[]
     events: Event[]
+    galleryItems: GalleryItemType[]
     user: User
     faqCategories: (FaqCategory & {
         faqs: Array<{
@@ -46,9 +50,28 @@ type RestaurantWithRelations = Restaurant & {
 }
 
 export default async function RestaurantPage({ params }: PageProps) {
-    const { slug } = await params
+    const { slug, locale } = await params
+
+    const restaurantLangData = await prisma.restaurant.findUnique({
+        where: { slug },
+        select: { language: true },
+    });
+
+    if (!restaurantLangData) {
+        notFound();
+    }
+
+    const restaurantLang = restaurantLangData.language || "en";
+
+    const cookieStore = await cookies();
+    const hasVisited = cookieStore.get(`restaurant_locale_set_${slug}`);
+
+    if (!hasVisited && locale !== restaurantLang) {
+        return redirect(`/${restaurantLang}/${slug}`);
+    }
 
     try {
+
         // Fetch restaurant with all related data
         const restaurant = await prisma.restaurant.findUnique({
             where: { slug },
@@ -81,7 +104,13 @@ export default async function RestaurantPage({ params }: PageProps) {
                     },
                     orderBy: { sort_order: "asc" },
                 },
-                user: true
+                galleryItems: {
+                    orderBy: { sort_order: "asc" }
+                },
+                user: true,
+                StoryLine: {
+                    take: 1
+                }
             },
         })
 

@@ -122,8 +122,8 @@ export default async function OrderSuccessContent({
                                     {t("estimated_ready_time")}
                                 </p>
                                 <p className="text-sm text-gray-600">
-                                    {order.estimated_ready_time
-                                        ? new Date(order.estimated_ready_time).toLocaleString()
+                                    {order.preferredISO
+                                        ? new Date(order.preferredISO).toLocaleString()
                                         : t("notify_when_ready")}
                                 </p>
                             </div>

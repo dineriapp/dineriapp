@@ -4,8 +4,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { X, Leaf } from "lucide-react"
+import { X, Leaf, UploadIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { MultiImageUploader, UploadedFile } from "@/components/shared/image-upader"
+import { Dispatch, SetStateAction, useState } from "react"
 
 interface Addon {
     name: string
@@ -18,6 +20,8 @@ interface EditItemDialogProps {
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
     newItemName: string
     setNewItemName: (val: string) => void
+    itemImage: UploadedFile[];
+    setItemImage: Dispatch<SetStateAction<UploadedFile[]>>;
     newItemPrice: string
     setNewItemPrice: (val: string) => void
     newItemDescription: string
@@ -62,8 +66,11 @@ export default function EditItemDialog({
     updateItemMutation,
     resetForm,
     setSelectedItem,
+    itemImage,
+    setItemImage
 }: EditItemDialogProps) {
     const t = useTranslations("MenuPage.AddAndEditItemDialog")
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -79,6 +86,25 @@ export default function EditItemDialog({
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label>Item Image (optional)</Label>
+                            <MultiImageUploader
+                                value={itemImage}
+                                onChange={setItemImage}
+                                maxFiles={1}
+                                showLimit={false}
+                                onUploadingChange={setIsUploadingImage}
+                                className="w-full max-w-45"
+                                gridClassName="grid-col-1"
+                                PreviewItemClassName=" aspect-square!"
+                                triggerClassName="w-full bg-white rounded-xl hover:bg-gray-100"
+                            >
+                                <div className="w-full rounded-xl aspect-square! border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-2 cursor-pointer">
+                                    <UploadIcon className="size-5 text-gray-500" />
+                                    <span className="text-sm text-gray-500">Upload image</span>
+                                </div>
+                            </MultiImageUploader>
+                        </div>
                         {/* Item Name + Price */}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
@@ -259,7 +285,7 @@ export default function EditItemDialog({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={!newItemName || !newItemPrice || updateItemMutation.isPending}
+                            disabled={!newItemName || !newItemPrice || updateItemMutation.isPending || isUploadingImage}
                             className="hover:opacity-75 !bg-main-blue h-[40px] cursor-pointer rounded-full font-poppins !px-5"
                         >
                             {isUploading ? t("uploading") : updateItemMutation.isPending ? t("saving") : t("saveChanges")}

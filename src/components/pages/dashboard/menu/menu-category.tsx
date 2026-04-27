@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 import {
   AlertDialog,
@@ -24,6 +24,8 @@ import {
   Trash2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { UploadedFile } from "@/components/shared/image-upader";
+import { getKeyFromS3Url } from "@/lib/utils";
 
 interface Addon {
   name: string;
@@ -41,6 +43,7 @@ interface MenuCategoryProps {
   setSelectedItem: (item: MenuItem | null) => void;
   setNewItemName: (name: string) => void;
   setNewItemDescription: (desc: string) => void;
+  setItemImage: Dispatch<SetStateAction<UploadedFile[]>>;
   setNewItemPrice: (price: string) => void;
   setAllergens: (allergens: string[]) => void;
   setIsHalal: (val: boolean) => void;
@@ -69,6 +72,7 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
   setIsEditItemDialogOpen,
   setIsAddItemDialogOpen,
   deleteItemMutation,
+  setItemImage,
   reorderItemMutation,
 }) => {
   const t = useTranslations("MenuPage");
@@ -88,6 +92,10 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
               >
                 <div className="min-w-0 flex-grow max-md:w-full ">
                   <div className="flex items-center gap-2 mb-1 max-md:justify-between">
+                    {item.image &&
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={item.image} alt="sd" className="size-10 rounded-sm aspect-square! mr-1 mb-1" />
+                    }
                     <h3 className="font-medium">{item.name}</h3>
                     {item.is_halal && (
                       <span
@@ -152,6 +160,7 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
                       setNewItemDescription(item.description || "");
                       setNewItemPrice(item.price.toString());
                       setAllergens(item.allergens || []);
+                      setItemImage(item.image ? [{ url: item.image, key: getKeyFromS3Url(item.image), }] : [])
                       setIsHalal(item.is_halal || false);
                       setAllergenInfo(item.allergen_info || "");
                       setIsEditItemDialogOpen(true);
@@ -254,6 +263,7 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
               setNewItemName("");
               setNewItemDescription("");
               setNewItemPrice("");
+              setItemImage([]);
               setAllergens([]);
               setIsHalal(false);
               setAllergenInfo("");

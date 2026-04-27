@@ -3,7 +3,7 @@ import { checkAuth } from "@/lib/auth/utils";
 import { decrypt_key } from "@/lib/crypto-encrypt-and-decrypt";
 import { getRenderedReservationEmailTemplates } from "@/lib/email-utils";
 import prisma from "@/lib/prisma";
-import { sendEmailUsingResend } from "@/lib/resend";
+import { publishEmailToQueue } from "@/lib/email-publisher";
 import { textToSimpleHtml } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import { NextResponse } from "next/server";
@@ -85,7 +85,7 @@ export async function POST(req: Request) {
                 const text = t.rendered_body || "";
                 const html = textToSimpleHtml(text);
 
-                await sendEmailUsingResend({
+                await publishEmailToQueue({
                     type: "restaurant",
                     apiKey: apiKey,
                     to: data.sendTo,

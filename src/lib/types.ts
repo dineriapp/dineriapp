@@ -130,6 +130,7 @@ export interface FAQ {
 
 export interface AppearanceFormData {
     bg_color: string
+    language: string
     accent_color: string
     food_heading: string
     about_heading: string
@@ -143,13 +144,19 @@ export interface AppearanceFormData {
     social_icon_color: string
     use_headings_in_buttons: boolean
     button_icons_show: boolean
+    full_menu_btn_show: boolean
     buttons_gap_in_px: number
     social_icon_gap: number
     social_icon_bg_show: boolean
     bg_gradient_end: string
     gradient_direction: GradientDirection
     button_variant: "solid" | "outline"
-    bg_image_url?: string
+    bg_image_url?: string,
+    // opening hours data 
+    openTextColor: string;
+    openBgColor: string;
+    closedTextColor: string;
+    closedBgColor: string;
 }
 
 export interface Template {

@@ -4,16 +4,16 @@ import AccessCheker from "./access-cheker";
 
 export default async function Page() {
 
-    // ✅ Get the authenticated user
+    // Get the authenticated user
     const session = await auth.api.getSession({
         headers: await headers()
     })
 
-    // ✅ If no user is logged in, block access early
+    // If no user is logged in, block access early
     if (!session?.user) {
         return <>Not Authorized</>;
     }
 
-    // ✅ Render secured component
+    // Render secured component
     return <AccessCheker />;
 }

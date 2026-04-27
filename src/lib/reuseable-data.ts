@@ -29,6 +29,12 @@ export const templates: Template[] = [
             about_heading: "About Us",
             food_heading: "Our Menu",
             use_headings_in_buttons: true,
+            closedBgColor: "",
+            closedTextColor: "",
+            full_menu_btn_show: false,
+            language: "en",
+            openBgColor: "",
+            openTextColor: ""
         }
     },
     {
@@ -58,6 +64,12 @@ export const templates: Template[] = [
             about_heading: "About Us",
             food_heading: "Our Menu",
             use_headings_in_buttons: true,
+            closedBgColor: "",
+            closedTextColor: "",
+            full_menu_btn_show: false,
+            language: "en",
+            openBgColor: "",
+            openTextColor: ""
         }
     },
     {
@@ -87,6 +99,12 @@ export const templates: Template[] = [
             about_heading: "About Us",
             food_heading: "Our Menu",
             use_headings_in_buttons: true,
+            closedBgColor: "",
+            closedTextColor: "",
+            full_menu_btn_show: false,
+            language: "en",
+            openBgColor: "",
+            openTextColor: ""
         }
     },
     {
@@ -116,6 +134,12 @@ export const templates: Template[] = [
             about_heading: "About Us",
             food_heading: "Our Menu",
             use_headings_in_buttons: true,
+            closedBgColor: "",
+            closedTextColor: "",
+            full_menu_btn_show: false,
+            language: "en",
+            openBgColor: "",
+            openTextColor: ""
         }
     },
     {
@@ -145,6 +169,12 @@ export const templates: Template[] = [
             about_heading: "About Us",
             food_heading: "Our Menu",
             use_headings_in_buttons: true,
+            closedBgColor: "",
+            closedTextColor: "",
+            full_menu_btn_show: false,
+            language: "en",
+            openBgColor: "",
+            openTextColor: ""
         }
     },
     {
@@ -174,6 +204,12 @@ export const templates: Template[] = [
             about_heading: "About Us",
             food_heading: "Our Menu",
             use_headings_in_buttons: true,
+            closedBgColor: "",
+            closedTextColor: "",
+            full_menu_btn_show: false,
+            language: "en",
+            openBgColor: "",
+            openTextColor: ""
         }
     }
 ]

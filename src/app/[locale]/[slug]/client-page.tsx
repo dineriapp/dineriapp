@@ -1,5 +1,6 @@
 "use client";
 
+import { UploadedFile } from "@/components/shared/image-upader";
 import SocialIcons from "@/components/social-icons";
 import {
   Dialog,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Link } from "@/i18n/navigation";
+import { GalleryItemType } from "@/lib/gallery-queries";
 import { getLucideIconBySlug } from "@/lib/get-icons";
 import { itemSlugPage } from "@/lib/reuseable-data";
 import { getBackgroundStyle } from "@/lib/utils";
@@ -21,6 +23,7 @@ import type {
   MenuItem,
   Link as PrismaLink,
   Restaurant,
+  StoryLine,
   User,
 } from "@prisma/client";
 import {
@@ -40,24 +43,28 @@ import { BsPatchCheckFill } from "react-icons/bs";
 import { toast } from "sonner";
 import { SettingsState } from "../(dashboard)/dashboard/(with-restaurant-only)/(only-pro-plan)/reservations/_components/settings/types";
 import { FAQSection } from "./_components/faq-section";
+import { GalleryCarousel } from "./_components/gallery";
 import { GoogleRating } from "./_components/google-rating";
 import { OpeningHoursDialog } from "./_components/opening-hours-dialog";
 import { OpeningHoursStatus } from "./_components/opening-hours-status";
 import { WelcomePopup } from "./_components/welcome-popup";
 import { HorizontalDragScrollTabs } from "./horizontal-drag-scroll-tabs";
 import { MenuItems } from "./menu-items";
+import LocaleSwitcher from "@/components/locale-switcher";
 
 // Define the complete types with relations using Prisma types
-type RestaurantWithRelations = Restaurant & {
+export type RestaurantWithRelations = Restaurant & {
   links: PrismaLink[];
   menuCategories: (MenuCategory & {
     items: MenuItem[];
   })[];
   events: Event[];
+  galleryItems: GalleryItemType[]
   user: User;
   faqCategories: (FaqCategory & {
     faqs: Faq[];
   })[];
+  StoryLine: StoryLine[]
   reservation_settings: { settings: SettingsState };
 };
 
@@ -103,6 +110,7 @@ export default function ClientPage({
   const [showMenuDialog, setShowMenuDialog] = useState(false);
   const [showEventsDialog, setShowEventsDialog] = useState(false);
   const [showFAQDialog, setShowFAQDialog] = useState(false);
+  const [showStoryLine, setShowStoryLine] = useState(false);
   const [showWelcomePopup, setShowWelcomePopup] = useState(false);
   const [showOpeningHoursDialog, setShowOpeningHoursDialog] = useState(false);
   const [selectedMenuCategory, setSelectedMenuCategory] =
@@ -238,9 +246,15 @@ export default function ClientPage({
   const hasFoodSection =
     hasReservation || hasCustomLinks || hasMenu || hasEvents;
 
-  const hasAboutSection = hasFaq || hasCustomLinks || hasEvents;
+  const hasStoryLine = restaurant?.StoryLine?.length > 0
+
+  const hasAboutSection = hasFaq || hasCustomLinks || hasEvents || hasStoryLine;
 
   const isCompletelyEmpty = !hasFoodSection && !hasAboutSection;
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/set-locale/${restaurant.slug}`);
+  }, [restaurant.slug])
 
   return (
     <>
@@ -261,6 +275,16 @@ export default function ClientPage({
       >
         <div className="relative w-full mx-auto flex max-w-[930px] flex-grow flex-col px-4 pb-8 pt-5 sm:pt-12">
           <div className="w-full flex justify-end">
+            <LocaleSwitcher
+              SizeClassName="!size-[52px] !bg-transparent"
+              IconSizeClassName="size-[25px] !text-black"
+              backgroundColor={restaurant.button_variant === "solid"
+                ? restaurant.accent_color || "#10b981"
+                : "transparent"}
+              textColor={restaurant.button_variant === "solid"
+                ? buttonTextColor
+                : restaurant.accent_color || "#10b981"}
+            />
             <button
               onClick={handleShare}
               title={t("share_title")}
@@ -359,6 +383,10 @@ export default function ClientPage({
                       className="text-white cursor-pointer text-center"
                       accentColor={restaurant.headings_text_color || "#10b981"}
                       onClick={() => setShowOpeningHoursDialog(true)}
+                      openTextColor={restaurant.openTextColor || "#065f46"}
+                      openBgColor={restaurant.openBgColor || "#d1fae5"}
+                      closedTextColor={restaurant.closedTextColor || "#991b1b"}
+                      closedBgColor={restaurant.closedBgColor || "#fee2e2"}
                     />
                   </motion.div>
                 )}
@@ -785,6 +813,83 @@ export default function ClientPage({
                   )}
                 </motion.button>
               )}
+              {
+                hasStoryLine && restaurant?.StoryLine?.[0]?.show &&
+                <>
+                  <motion.button
+                    variants={itemSlugPage}
+                    onClick={() => setShowStoryLine(true)}
+                    className={`group flex items-center justify-center  text-center ${restaurant?.button_icons_show ? "px-14 sm:px-16" : "px-4"} w-full py-4 sm:py-5 transition-all hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden ${restaurant.button_style === "pill"
+                      ? "rounded-full"
+                      : restaurant.button_style === "square"
+                        ? "rounded-md"
+                        : "rounded-xl"
+                      }`}
+                    style={{
+                      backgroundColor:
+                        restaurant.button_variant === "solid"
+                          ? restaurant.accent_color || "#10b981"
+                          : "transparent",
+                      backdropFilter: "blur(8px)",
+                      border: `2px solid ${restaurant.accent_color || "#10b981"}`,
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                      color:
+                        restaurant.button_variant === "solid"
+                          ? buttonTextColor
+                          : restaurant.accent_color || "#10b981",
+                      letterSpacing: "0.01em",
+                    }}
+                  >
+                    {restaurant?.button_icons_show && (
+                      <div
+                        className="flex aspect-square absolute left-[7px] sm:left-[9px] shrink-0 size-[54px] sm:size-[62px]! items-center justify-center rounded-full "
+                        style={{
+                          backgroundColor:
+                            restaurant.button_text_icons_color || "transparent",
+                        }}
+                      >
+                        {getLucideIconBySlug("story-line", {
+                          className: "w-5 sm:w-6 h-5 sm:h-6",
+                          style: {
+                            color: restaurant.accent_color || "transparent",
+                          },
+                        })}
+                      </div>
+                    )}
+                    <span
+                      className={`relative w-full text-[26px] ${restaurant.button_variant === "outline"
+                        ? "group-hover:text-white"
+                        : ""
+                        } transition-colors duration-300 font-semibold break-all`}
+                      style={{
+                        color:
+                          restaurant.button_variant === "outline"
+                            ? restaurant.accent_color || "#10b981"
+                            : buttonTextColor,
+                      }}
+                    >
+                      {restaurant?.StoryLine?.[0]?.title}
+                    </span>
+                    {restaurant?.button_icons_show && (
+                      <div className="absolute  right-[5px] flex items-center justify-center size-[35px] rounded-full hover:bg-gray-100/10">
+                        <MoreVertical className="size-4" />
+                      </div>
+                    )}
+                  </motion.button>
+                </>
+              }
+              {
+                restaurant.galleryItems.length > 0 &&
+                <>
+                  <GalleryCarousel items={restaurant.galleryItems} restaurant={{
+                    accent_color: restaurant?.accent_color ?? undefined,
+                    button_style: restaurant.button_style,
+                    button_text_icons_color: restaurant.button_text_icons_color ?? undefined,
+                    button_variant: restaurant.button_variant,
+                    buttons_gap_in_px: restaurant.buttons_gap_in_px
+                  }} />
+                </>
+              }
 
               {(restaurant.instagram ||
                 restaurant.facebook ||
@@ -872,8 +977,29 @@ export default function ClientPage({
                     selectedCategory={selectedMenuCategory}
                   />
                 </div>
-
-
+                {
+                  restaurant.full_menu_btn_show && (
+                    <div className="mt-4 pt-2">
+                      <Link
+                        href={`/${restaurant.slug}/menu`}
+                        className={`flex w-full items-center justify-center py-3 text-center text-base font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] ${restaurant.button_style === "pill"
+                          ? "rounded-xl"
+                          : restaurant.button_style === "square"
+                            ? "rounded-xl"
+                            : "rounded-xl"
+                          }`}
+                        style={{
+                          backgroundColor: "#ffffff",
+                          color: "#000000",
+                          border: "none",
+                          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+                        }}
+                      >
+                        See full menu & order online
+                      </Link>
+                    </div>
+                  )
+                }
               </DialogContent>
             </Dialog>
 
@@ -888,6 +1014,7 @@ export default function ClientPage({
                   WebkitBackdropFilter: "blur(14px)",
                   color: "#ffffff",
                 }}
+
               >
                 <DialogHeader>
                   <DialogTitle className="flex text-start items-center gap-2">
@@ -1001,6 +1128,39 @@ export default function ClientPage({
                   cardstextColor={restaurant.button_text_icons_color || "black"}
                   accentColor={restaurant.accent_color || "#10b981"}
                 />
+              </DialogContent>
+            </Dialog>
+            {/* StoryLine Dialog */}
+            <Dialog open={showStoryLine} onOpenChange={setShowStoryLine}>
+              <DialogContent className="max-h-[90vh] max-w-[90vw] sm:!max-w-[570px] overflow-y-auto border-transparent">
+                <div className="py-6 space-y-4">
+
+                  {/* Image */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={(restaurant?.StoryLine?.[0].file as UploadedFile)?.url ?? ""}
+                    alt=""
+                    className="w-full aspect-video object-cover rounded-xl"
+                  />
+
+                  {/* Content */}
+                  <div className="space-y-2 text-start">
+
+                    {/* Title */}
+                    <h2 className="text-lg sm:text-xl font-semibold text-slate-800 leading-snug">
+                      {restaurant?.StoryLine?.[0].title}
+                    </h2>
+
+                    {/* Divider (optional but nice) */}
+                    <div className="w-20 h-[2px] bg-teal-500 mr-auto rounded-full" />
+
+                    {/* Description */}
+                    <p className="text-slate-600 leading-relaxed px-2">
+                      {restaurant?.StoryLine?.[0].description}
+                    </p>
+
+                  </div>
+                </div>
               </DialogContent>
             </Dialog>
             <div className="mt-13 pb-6">

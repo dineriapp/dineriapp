@@ -5,8 +5,19 @@ import { CheckIcon } from 'lucide-react';
 import { useLocale, } from 'next-intl';
 import { Suspense } from 'react';
 import LocaleSwitcherSelect from './locale-switcher-select';
+import { cn } from '@/lib/utils';
 
-export default function LocaleSwitcher({ SizeClassName = "!size-10 lg:!size-12", IconSizeClassName = "size-[22px] lg:size-[26px]" }: { SizeClassName?: string, IconSizeClassName?: string }) {
+export default function LocaleSwitcher({
+    SizeClassName = "!size-10 lg:!size-12",
+    IconSizeClassName = "size-[22px] lg:size-[26px]",
+    backgroundColor,
+    textColor
+}: {
+    SizeClassName?: string,
+    IconSizeClassName?: string,
+    backgroundColor?: string
+    textColor?: string
+}) {
     const locale = useLocale();
     const labels = {
         "en": "🇺🇸 English",
@@ -18,21 +29,27 @@ export default function LocaleSwitcher({ SizeClassName = "!size-10 lg:!size-12",
     }
     return (
         <Suspense fallback={null}>
-            <LocaleSwitcherSelect defaultValue={locale} SizeClassName={SizeClassName} IconSizeClassName={IconSizeClassName}>
+            <LocaleSwitcherSelect defaultValue={locale} SizeClassName={SizeClassName} IconSizeClassName={IconSizeClassName} backgroundColor={backgroundColor}>
 
                 {routing.locales.map((item) => (
                     <Select.Item
                         key={item}
 
-                        className="flex group  cursor-pointer items-center px-3 py-2 text-base  data-[highlighted]:bg-main-green "
+                        className={cn("flex group  cursor-pointer items-center px-3 py-2 text-base   ", !backgroundColor && "data-[highlighted]:bg-main-green")}
                         value={item}
                     >
                         <div className="mr-2 w-[1rem]">
                             {item === locale && (
-                                <CheckIcon className="h-5 w-5 text-slate-600 group-data-[highlighted]:text-white" />
+                                <CheckIcon className={cn("h-5 w-5", !textColor && " text-slate-600 group-data-[highlighted]:text-white")} style={{
+                                    color: textColor ?? ""
+                                }} />
                             )}
                         </div>
-                        <span className="text-slate-900 group-data-[highlighted]:text-white">
+                        <span className={cn(!textColor && "text-slate-900 group-data-[highlighted]:text-white")}
+                            style={{
+                                color: textColor ?? ""
+                            }}
+                        >
                             {labels[item]}
                         </span>
                     </Select.Item>

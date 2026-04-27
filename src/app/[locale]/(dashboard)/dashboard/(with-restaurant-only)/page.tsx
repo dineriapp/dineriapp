@@ -151,6 +151,12 @@ export default function DashboardPage() {
                         bg_image_url: selectedRestaurant?.bg_image_url ?? "",
                         about_heading: selectedRestaurant?.about_heading ?? "",
                         food_heading: selectedRestaurant?.food_heading ?? "",
+                        language: selectedRestaurant?.language ?? "",
+                        full_menu_btn_show: selectedRestaurant?.full_menu_btn_show ?? "",
+                        openTextColor: selectedRestaurant?.openTextColor ?? "",
+                        openBgColor: selectedRestaurant?.openBgColor ?? "",
+                        closedBgColor: selectedRestaurant?.closedBgColor ?? "",
+                        closedTextColor: selectedRestaurant?.closedTextColor ?? "",
                         use_headings_in_buttons: selectedRestaurant?.use_headings_in_buttons ?? false,
                     }} />
                 </motion.div>

@@ -1,6 +1,6 @@
 "use server";
 
-import { sendEmailUsingResend } from "../resend";
+import { publishEmailToQueue } from "../email-publisher";
 
 
 type SendEmailParams = {
@@ -12,7 +12,7 @@ type SendEmailParams = {
 export async function sendEmailAction(params: SendEmailParams) {
   const { to, subject, html } = params;
 
-  const result = await sendEmailUsingResend({
+  const result = await publishEmailToQueue({
     type: "platform",
     to,
     subject,
