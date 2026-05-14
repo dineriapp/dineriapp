@@ -40,6 +40,7 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
+    disableSignUp: true,
     minPasswordLength: 8,
     autoSignIn: true,
     resetPasswordTokenExpiresIn: 60 * 60, // 1 hour
@@ -190,6 +191,7 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      disableSignUp: true,
     },
   },
   trustedOrigins: [String(process.env.BETTER_AUTH_URL)],

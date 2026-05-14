@@ -212,7 +212,8 @@ export default function DemoPage() {
                             <div className="flex justify-center">
 
                                 <Button type="submit"
-                                    disabled={form.formState.isSubmitting}
+                                    // disabled={form.formState.isSubmitting}
+                                    disabled
                                     className="bg-[#009A5E] hover:bg-[#104e37] hover:scale-105 font-poppins h-[62px] transition-transform text-lg px-10 cursor-pointer rounded-full">
                                     {t("submit")}
                                 </Button>

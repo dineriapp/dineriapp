@@ -114,6 +114,22 @@ export default function LoginForm() {
                             </div>
                         </div>
                     )}
+                    {error === "signup_disabled" && (
+                        <div
+                            className={clsx(
+                                "w-full max-w-lg mx-auto px-4 py-3 rounded-md border border-red-300 bg-red-50 text-red-700 flex items-start gap-3 shadow-sm"
+                            )}
+                        >
+                            <AlertCircle className="h-5 w-5 text-red-500" />
+                            <div>
+                                <h3 className="font-semibold text-sm">Sign Up Disabled</h3>
+                                <p className="text-sm mt-1">
+                                    New account registration is currently disabled.
+                                    Please sign in with an existing account to continue.
+                                </p>
+                            </div>
+                        </div>
+                    )}
                     <div className="space-y-1 mb-4 text-start">
                         <h1 className="text-2xl font-bold tracking-tight text-slate-900">
                             Welcome back
