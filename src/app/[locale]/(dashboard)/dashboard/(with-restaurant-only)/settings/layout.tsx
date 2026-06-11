@@ -7,9 +7,6 @@ import { useLocale } from "next-intl"
 import { SettingsSidebarTabs } from "@/lib/reuseable-data"
 import { Locale } from "@/i18n/routing"
 
-
-
-
 export default function SettingsLayout({
     children,
 }: {
